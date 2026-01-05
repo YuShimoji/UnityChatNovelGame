@@ -1,0 +1,60 @@
+using UnityEngine;
+
+namespace ProjectFoundPhone.Data
+{
+    /// <summary>
+    /// 推論ボードで使用するトピック（手がかり）のデータ定義
+    /// ScriptableObjectとして作成し、エディタから管理可能にする
+    /// </summary>
+    [CreateAssetMenu(fileName = "NewTopic", menuName = "Project FoundPhone/Topic Data", order = 1)]
+    public class TopicData : ScriptableObject
+    {
+        #region Private Fields
+        [SerializeField] private string m_TopicID;
+        [SerializeField] private Sprite m_Icon;
+        [SerializeField] private string m_Title;
+        [SerializeField, TextArea(3, 10)] private string m_Description;
+        #endregion
+
+        #region Public Properties
+        /// <summary>
+        /// トピックの一意な識別子
+        /// </summary>
+        public string TopicID => m_TopicID;
+
+        /// <summary>
+        /// トピックのアイコン画像
+        /// </summary>
+        public Sprite Icon => m_Icon;
+
+        /// <summary>
+        /// トピックのタイトル
+        /// </summary>
+        public string Title => m_Title;
+
+        /// <summary>
+        /// トピックの詳細説明
+        /// </summary>
+        public string Description => m_Description;
+        #endregion
+
+        #region Unity Lifecycle
+        private void OnValidate()
+        {
+            // TODO: TopicIDの重複チェックやバリデーション処理を実装
+        }
+        #endregion
+
+        #region Public Methods
+        /// <summary>
+        /// トピックが有効かどうかを判定
+        /// </summary>
+        /// <returns>有効な場合true</returns>
+        public bool IsValid()
+        {
+            // TODO: TopicID、Title、Descriptionが適切に設定されているかチェック
+            return !string.IsNullOrEmpty(m_TopicID) && !string.IsNullOrEmpty(m_Title);
+        }
+        #endregion
+    }
+}

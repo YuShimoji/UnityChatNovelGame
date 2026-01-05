@@ -12,15 +12,15 @@
 
 ## 現在のミッション
 
-- **タイトル**: プロジェクト初期セットアップ
-- **Issue**: #0
+- **タイトル**: Unity Core System Skeleton Implementation
+- **Issue**: TASK_001_UnityCoreSystemSkeleton
 - **ブランチ**: main
 - **関連PR**: なし
-- **進捗**: セットアップ中
+- **進捗**: 完了（Status: DONE）
 
 ## 次の中断可能点
 
-- セットアップ完了後
+- ロジック実装タスク起票後
 
 ## 決定事項
 
@@ -39,22 +39,29 @@
 
 ### 短期（Next）
 
-- [ ] セットアップ完了後の動作確認
-- [ ] SSOT ファイルの確認
+- [x] Unity Core System Skeleton実装完了（TASK_001）
+- [ ] ロジック実装タスク起票（ChatController, ScenarioManagerのTODO実装）
+- [ ] Prefab作成タスク起票（MessageBubble, TypingIndicator）
 
 ### 中期（Later）
 
-- [ ] プロジェクト構造の整理
+- [ ] Yarn Spinner連携の詳細実装
+- [ ] テストコード作成
+- [ ] 統合テスト
 
 ### 長期（Someday）
 
+- [ ] プロジェクト構造の整理
 - [ ] 継続的な運用フローの確立
 
 ## 備考（自由記述）
 
-- Unity プロジェクト（ChatNovelGame）の初期セットアップを実施中
-- shared-workflows サブモジュールを導入し、以降の Orchestrator/Worker が自律的に動作できる環境を構築
+- Unity プロジェクト（ChatNovelGame）のコアシステムスケルトンコード実装完了
+- 4つの主要クラス（TopicData, SynthesisRecipe, ChatController, ScenarioManager）を作成
+- SOLID原則に基づいた設計で拡張性を確保
+- 次のステップ: ロジック実装、Prefab作成、Yarn Spinner連携
 
 ## 履歴
 
 - 2026-01-06 06:45: AI_CONTEXT.md を初期化
+- 2026-01-06 08:10: TASK_001完了（Unity Core System Skeleton実装）
