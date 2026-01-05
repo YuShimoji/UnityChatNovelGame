@@ -1,0 +1,75 @@
+# Role
+あなたはUnity (C#) のエキスパート開発者です。「Duskwood」や「Simulacra」のような、没入型ホラー・チャットノベルゲーム（Found Phoneジャンル）のコアシステムを構築してください。
+
+# Project Overview
+* **タイトル:** Project_FoundPhone (仮)
+* **ジャンル:** ホラー / ミステリー / チャットシミュレーター
+* **コア体験:** 拾ったスマホを通じて、チャット、画像解析、推論（手がかりの合成）を行いながら謎を解く。
+* **特徴:** メインとサブの垣根がないトピック駆動型進行。
+
+# Tech Stack & Libraries
+1.  **Engine:** Unity 6 (or 2022 LTS)
+2.  **Scenario:** Yarn Spinner (必須。会話分岐とフラグ管理に使用)
+3.  **Tweening:** DOTween Pro (UIアニメーションに使用)
+4.  **Data:** ScriptableObject (静的データ), Newtonsoft.Json (セーブデータ)
+5.  **Text:** TextMeshPro (必須)
+
+# Architecture & Directory Structure
+MVCパターンを採用し、以下のディレクトリ構造を前提としてください。
+- Assets/
+  - Scripts/
+    - Core/ (GameManager, SaveManager, TimeManager)
+    - UI/ (ChatController, DeductionBoard, NotificationManager)
+    - Data/ (ScriptableObjects definitions)
+    - Logic/ (Minigames, ExplorationThreads)
+  - Resources/
+    - Yarn/ (Scenario files)
+    - Topics/ (Topic ScriptableObjects)
+
+# Core Features Implementation Guidelines
+
+## 1. Chat System (UI/ChatController.cs)
+* uGUIの`ScrollRect` + `VerticalLayoutGroup` + `ContentSizeFitter`を使用。
+* **Bubbles:**
+    * 9-Slice設定された背景画像を使用。
+    * 自分（右寄せ）と相手（左寄せ）をPrefabで出し分ける。
+    * テキスト量に応じて高さが自動調整されること。
+* **Typing Indicator:**
+    * 相手が入力中の場合、3点リーダーのアニメーションを表示する。
+* **Auto Scroll:**
+    * 新規メッセージ受信時に自動スクロール。ただし、ユーザーが過去ログを見ている（スクロール位置が上）場合は強制スクロールしない。
+
+## 2. Scenario Integration (Core/ScenarioManager.cs)
+* Yarn Spinnerの`DialogueRunner`をラップする。
+* **Custom Commands:** 以下のYarnコマンドを処理するハンドラを実装すること。
+    * `<<Message "CharID" "Text">>`: メッセージ表示
+    * `<<Image "CharID" "ImageID">>`: 画像送信
+    * `<<StartWait 15>>`: 15秒間の待機タイマー開始（入力ロック）
+    * `<<UnlockTopic "TopicID">>`: 推論用トピックの獲得
+    * `<<Glitch "Level">>`: 画面ノイズ演出のトリガー
+
+## 3. Deduction Board (UI/DeductionBoard.cs)
+* **Concept:** 手がかり（Topic）同士をドラッグ＆ドロップで重ねて合成する。
+* **Data Structure:**
+    * `TopicData`: ID, Icon, Title, Descriptionを持つScriptableObject。
+    * `SynthesisRecipe`: Topic A + Topic B = Topic C (Result) を定義するScriptableObject。
+* **Logic:**
+    * 合成成功時、Yarnの変数を更新（例: `$has_evidence_A = true`）し、新しいトピックをInventoryに追加する。
+
+## 4. Exploration Threads (Logic/ExplorationManager.cs)
+* テキストアドベンチャー形式の探索パート。
+* **Data:** `ExplorationData` (SO) でタイトル、難易度、Yarnの開始ノード名を管理。
+* **Logic:** HP/Sanity/Batteryの変数を管理し、0になったら失敗扱いとする。
+
+## 5. Horror/Meta Effects (UI/MetaEffectController.cs)
+* **Ghost Typing:** InputFieldへの入力を乗っ取り、事前定義されたホラーテキスト（例: "逃げろ"）を強制的に入力させる機能。
+* **Fake Glitch:** ShaderまたはOverlay画像を使用して、画面にノイズを走らせる機能。
+
+# Task
+まずは、上記の設計に基づき、**以下の3つの主要スクリプトのスケルトンコード（クラス定義、主要メソッド、変数の定義）**を作成してください。中身のロジックはTODOコメントで構いません。
+
+1.  `TopicData.cs` (ScriptableObject) & `SynthesisRecipe.cs`
+2.  `ChatController.cs` (UI制御の基盤)
+3.  `ScenarioManager.cs` (Yarn連携とカスタムコマンド登録)
+
+コードは、SOLID原則を意識し、拡張性のある書き方をしてください。
