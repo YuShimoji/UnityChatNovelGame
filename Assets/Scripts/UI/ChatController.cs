@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 
 namespace ProjectFoundPhone.UI
 {
@@ -56,7 +57,16 @@ namespace ProjectFoundPhone.UI
                 m_LayoutGroup = m_ScrollRect.content.GetComponent<VerticalLayoutGroup>();
             }
 
-            // TODO: m_MessageBubblePrefab、m_TypingIndicatorのnullチェックと警告
+            // m_MessageBubblePrefab、m_TypingIndicatorのnullチェックと警告
+            if (m_MessageBubblePrefab == null)
+            {
+                Debug.LogWarning("ChatController: m_MessageBubblePrefab is not assigned. Message bubbles cannot be created.");
+            }
+
+            if (m_TypingIndicator == null)
+            {
+                Debug.LogWarning("ChatController: m_TypingIndicator is not assigned. Typing indicator will not be displayed.");
+            }
         }
 
         /// <summary>
@@ -64,8 +74,25 @@ namespace ProjectFoundPhone.UI
         /// </summary>
         private void CheckUserScrollInput()
         {
-            // TODO: スクロール位置の変化を監視し、ユーザーが過去ログを見ているか判定
-            // スクロール位置が下から一定以上離れている場合、m_IsUserScrolling = true
+            if (m_ScrollRect == null)
+            {
+                return;
+            }
+
+            float currentScrollPosition = m_ScrollRect.verticalNormalizedPosition;
+
+            // スクロール位置が下から一定以上離れている場合、ユーザーが過去ログを見ていると判定
+            if (currentScrollPosition < (1.0f - m_AutoScrollThreshold))
+            {
+                m_IsUserScrolling = true;
+            }
+            // スクロール位置が1.0に近い場合、ユーザーは最新メッセージを見ている
+            else if (currentScrollPosition >= 0.99f)
+            {
+                m_IsUserScrolling = false;
+            }
+
+            m_LastScrollPosition = currentScrollPosition;
         }
 
         /// <summary>
@@ -76,11 +103,60 @@ namespace ProjectFoundPhone.UI
         /// <returns>生成されたGameObject</returns>
         private GameObject CreateMessageBubble(string charID, string text)
         {
-            // TODO: m_MessageBubblePrefabからインスタンスを生成
-            // TODO: charIDに応じて右寄せ/左寄せを設定
-            // TODO: TextMeshProコンポーネントにtextを設定
-            // TODO: ContentSizeFitterで高さを自動調整
-            return null;
+            if (m_MessageBubblePrefab == null)
+            {
+                Debug.LogError("ChatController: Cannot create message bubble. Prefab is not assigned.");
+                return null;
+            }
+
+            if (m_ScrollRect == null || m_ScrollRect.content == null)
+            {
+                Debug.LogError("ChatController: Cannot create message bubble. ScrollRect or content is not assigned.");
+                return null;
+            }
+
+            // Prefabからインスタンスを生成
+            GameObject messageBubble = Instantiate(m_MessageBubblePrefab, m_ScrollRect.content);
+
+            // charIDに応じて右寄せ/左寄せを設定（"player"の場合は右寄せ、それ以外は左寄せ）
+            RectTransform rectTransform = messageBubble.GetComponent<RectTransform>();
+            if (rectTransform != null)
+            {
+                if (charID == "player")
+                {
+                    // 右寄せ: Anchorを右側に設定
+                    rectTransform.anchorMin = new Vector2(1.0f, 1.0f);
+                    rectTransform.anchorMax = new Vector2(1.0f, 1.0f);
+                    rectTransform.pivot = new Vector2(1.0f, 1.0f);
+                }
+                else
+                {
+                    // 左寄せ: Anchorを左側に設定
+                    rectTransform.anchorMin = new Vector2(0.0f, 1.0f);
+                    rectTransform.anchorMax = new Vector2(0.0f, 1.0f);
+                    rectTransform.pivot = new Vector2(0.0f, 1.0f);
+                }
+            }
+
+            // TextMeshProコンポーネントにtextを設定
+            TextMeshProUGUI textComponent = messageBubble.GetComponentInChildren<TextMeshProUGUI>();
+            if (textComponent != null)
+            {
+                textComponent.text = text;
+            }
+            else
+            {
+                Debug.LogWarning("ChatController: TextMeshProUGUI component not found in message bubble prefab.");
+            }
+
+            // ContentSizeFitterで高さを自動調整
+            ContentSizeFitter sizeFitter = messageBubble.GetComponent<ContentSizeFitter>();
+            if (sizeFitter != null)
+            {
+                sizeFitter.SetLayoutVertical();
+            }
+
+            return messageBubble;
         }
         #endregion
 
@@ -92,9 +168,24 @@ namespace ProjectFoundPhone.UI
         /// <param name="text">メッセージテキスト</param>
         public void AddMessage(string charID, string text)
         {
-            // TODO: CreateMessageBubble()でメッセージバブルを生成
-            // TODO: m_ScrollRect.contentの子として追加
-            // TODO: ユーザーが過去ログを見ていない場合のみAutoScroll()を実行
+            if (string.IsNullOrEmpty(text))
+            {
+                Debug.LogWarning("ChatController: Attempted to add empty message.");
+                return;
+            }
+
+            // CreateMessageBubble()でメッセージバブルを生成（既にcontentの子として追加済み）
+            GameObject messageBubble = CreateMessageBubble(charID, text);
+            if (messageBubble == null)
+            {
+                return;
+            }
+
+            // ユーザーが過去ログを見ていない場合のみAutoScroll()を実行
+            if (!m_IsUserScrolling)
+            {
+                AutoScroll();
+            }
         }
 
         /// <summary>
@@ -108,7 +199,7 @@ namespace ProjectFoundPhone.UI
                 m_TypingIndicator.SetActive(show);
             }
 
-            // TODO: 表示時はAutoScroll()を実行してインジケーターが見えるようにする
+            // 表示時はAutoScroll()を実行してインジケーターが見えるようにする
             if (show)
             {
                 AutoScroll();
@@ -126,9 +217,17 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            // TODO: ScrollRectのverticalNormalizedPositionを1.0に設定
-            // TODO: スクロールアニメーション（DOTweenを使用）を実装
-            // TODO: スクロール完了後にm_LastScrollPositionを更新
+            // DOTweenを使用したスクロールアニメーション（0.3秒）
+            DOTween.To(
+                () => m_ScrollRect.verticalNormalizedPosition,
+                x => m_ScrollRect.verticalNormalizedPosition = x,
+                1.0f,
+                0.3f
+            ).OnComplete(() =>
+            {
+                // スクロール完了後にm_LastScrollPositionを更新
+                m_LastScrollPosition = 1.0f;
+            });
         }
 
         /// <summary>
@@ -136,7 +235,21 @@ namespace ProjectFoundPhone.UI
         /// </summary>
         public void ClearMessages()
         {
-            // TODO: m_ScrollRect.contentの子オブジェクト（メッセージバブル）を全て削除
+            if (m_ScrollRect == null || m_ScrollRect.content == null)
+            {
+                return;
+            }
+
+            // m_ScrollRect.contentの子オブジェクト（メッセージバブル）を全て削除
+            int childCount = m_ScrollRect.content.childCount;
+            for (int i = childCount - 1; i >= 0; i--)
+            {
+                Transform child = m_ScrollRect.content.GetChild(i);
+                if (child != null)
+                {
+                    Destroy(child.gameObject);
+                }
+            }
         }
         #endregion
     }

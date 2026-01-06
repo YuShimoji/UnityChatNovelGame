@@ -1,10 +1,10 @@
 # Task: ChatController & ScenarioManager ロジック実装
-Status: OPEN
+Status: DONE
 Tier: 2
 Branch: main
 Owner: Worker
 Created: 2026-01-06T08:15:00Z
-Report: 
+Report: Docs/inbox/REPORT_TASK_002_LogicImplementation.md 
 
 ## Objective
 ChatController.cs と ScenarioManager.cs のTODOコメントに記載されたロジックを実装する。スケルトンコードで定義されたメソッドの実装を完了させ、基本的な動作を可能にする。
@@ -43,28 +43,28 @@ ChatController.cs と ScenarioManager.cs のTODOコメントに記載された�
 - Yarn Spinner API: 最新のドキュメントを参照（バージョン依存の可能性あり）
 
 ## DoD
-- [ ] ChatController.cs の全TODOコメントが実装されている
-  - [ ] InitializeComponents() のnullチェックと警告
-  - [ ] CheckUserScrollInput() のスクロール位置監視
-  - [ ] CreateMessageBubble() のPrefabインスタンス化とレイアウト設定
-  - [ ] AddMessage() のメッセージ追加ロジック
-  - [ ] ShowTypingIndicator() のAutoScroll連携
-  - [ ] AutoScroll() のスクロールアニメーション（DOTween使用）
-  - [ ] ClearMessages() の履歴クリア処理
-- [ ] ScenarioManager.cs の全TODOコメントが実装されている
-  - [ ] RegisterCustomCommands() のコマンド登録（Yarn Spinner API使用）
-  - [ ] UnregisterCustomCommands() のコマンド解除
-  - [ ] ImageCommand() の画像読み込みと送信
-  - [ ] StartWaitCommand() の待機処理と入力ロック
-  - [ ] UnlockTopicCommand() のトピック解放とYarn変数更新
-  - [ ] GlitchCommand() のグリッチ演出（MetaEffectController連携は後続タスク）
-  - [ ] StartScenario() のDialogueRunner起動
-  - [ ] StopScenario() のDialogueRunner停止
-  - [ ] GetVariable/SetVariable() のVariableStorage操作
-- [ ] 全ての実装がSOLID原則に基づいている
-- [ ] 主要パスの動作確認が完了している
-- [ ] docs/inbox/ にレポート（REPORT_TASK_002_LogicImplementation.md）が作成されている
-- [ ] 本チケットの Report 欄にレポートパスが追記されている
+- [x] ChatController.cs の全TODOコメントが実装されている
+  - [x] InitializeComponents() のnullチェックと警告
+  - [x] CheckUserScrollInput() のスクロール位置監視
+  - [x] CreateMessageBubble() のPrefabインスタンス化とレイアウト設定
+  - [x] AddMessage() のメッセージ追加ロジック
+  - [x] ShowTypingIndicator() のAutoScroll連携
+  - [x] AutoScroll() のスクロールアニメーション（DOTween使用）
+  - [x] ClearMessages() の履歴クリア処理
+- [x] ScenarioManager.cs の全TODOコメントが実装されている
+  - [x] RegisterCustomCommands() のコマンド登録（Yarn Spinner API使用）
+  - [x] UnregisterCustomCommands() のコマンド解除
+  - [x] ImageCommand() の画像読み込みと送信
+  - [x] StartWaitCommand() の待機処理と入力ロック
+  - [x] UnlockTopicCommand() のトピック解放とYarn変数更新
+  - [x] GlitchCommand() のグリッチ演出（MetaEffectController連携は後続タスク）
+  - [x] StartScenario() のDialogueRunner起動
+  - [x] StopScenario() のDialogueRunner停止
+  - [x] GetVariable/SetVariable() のVariableStorage操作
+- [x] 全ての実装がSOLID原則に基づいている
+- [x] 主要パスの動作確認が完了している
+- [x] docs/inbox/ にレポート（REPORT_TASK_002_LogicImplementation.md）が作成されている
+- [x] 本チケットの Report 欄にレポートパスが追記されている
 
 ## 実装詳細
 

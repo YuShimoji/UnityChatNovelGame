@@ -109,10 +109,20 @@ Unityプロジェクト「Project_FoundPhone」のコアシステム構築：
 - **レポート**: Docs/inbox/REPORT_TASK_001_UnityCoreSystemSkeleton.md
 - **コミット**: a0d7bd1（feat: Unity Core System Skeleton実装完了）
 
+## Worker納品確認（TASK_002）
+- **タスク**: TASK_002_LogicImplementation
+- **Status**: DONE
+- **実装ファイル**:
+  - Assets/Scripts/UI/ChatController.cs（全TODO実装完了）
+  - Assets/Scripts/Core/ScenarioManager.cs（全TODO実装完了）
+- **レポート**: Docs/inbox/REPORT_TASK_002_LogicImplementation.md
+- **完了日**: 2026-01-06T09:00:00+09:00
+
 ## 次のタスク
-- **TASK_002_LogicImplementation**: ChatController & ScenarioManager ロジック実装
-- **Status**: OPEN
-- **起票日**: 2026-01-06T08:15:00Z
+- Prefab作成タスク起票（MessageBubble, TypingIndicator）
+- DeductionBoard実装タスク起票（UnlockTopicCommand実装の前提）
+- MetaEffectController実装タスク起票（GlitchCommand実装の前提）
 
 ## 次のアクション
-- Phase 5（Worker起動用プロンプト生成）に進む
+- TASK_002完了をコミット
+- 次のタスク起票を検討

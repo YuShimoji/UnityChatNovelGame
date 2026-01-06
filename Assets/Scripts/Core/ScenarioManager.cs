@@ -1,7 +1,9 @@
 using UnityEngine;
+using System.Collections;
 using Yarn.Unity;
 using ProjectFoundPhone.UI;
 using ProjectFoundPhone.Data;
+using DG.Tweening;
 
 namespace ProjectFoundPhone.Core
 {
@@ -15,6 +17,8 @@ namespace ProjectFoundPhone.Core
         [SerializeField] private DialogueRunner m_DialogueRunner;
         [SerializeField] private ChatController m_ChatController;
         [SerializeField] private string m_StartNode = "Start";
+
+        private bool m_IsInputLocked = false;
         #endregion
 
         #region Unity Lifecycle
@@ -72,12 +76,13 @@ namespace ProjectFoundPhone.Core
                 return;
             }
 
-            // TODO: DialogueRunnerにカスタムコマンドハンドラを登録
-            // m_DialogueRunner.AddCommandHandler<...>("Message", MessageCommand);
-            // m_DialogueRunner.AddCommandHandler<...>("Image", ImageCommand);
-            // m_DialogueRunner.AddCommandHandler<...>("StartWait", StartWaitCommand);
-            // m_DialogueRunner.AddCommandHandler<...>("UnlockTopic", UnlockTopicCommand);
-            // m_DialogueRunner.AddCommandHandler<...>("Glitch", GlitchCommand);
+            // DialogueRunnerにカスタムコマンドハンドラを登録
+            // Yarn Spinnerのコマンドハンドラは通常、string[]配列で引数を受け取る
+            m_DialogueRunner.AddCommandHandler<string, string>("Message", MessageCommand);
+            m_DialogueRunner.AddCommandHandler<string, string>("Image", ImageCommand);
+            m_DialogueRunner.AddCommandHandler<int>("StartWait", StartWaitCommand);
+            m_DialogueRunner.AddCommandHandler<string>("UnlockTopic", UnlockTopicCommand);
+            m_DialogueRunner.AddCommandHandler<int>("Glitch", GlitchCommand);
         }
 
         /// <summary>
@@ -85,7 +90,17 @@ namespace ProjectFoundPhone.Core
         /// </summary>
         private void UnregisterCustomCommands()
         {
-            // TODO: 登録したコマンドハンドラを解除
+            if (m_DialogueRunner == null)
+            {
+                return;
+            }
+
+            // 登録したコマンドハンドラを解除
+            m_DialogueRunner.RemoveCommandHandler("Message");
+            m_DialogueRunner.RemoveCommandHandler("Image");
+            m_DialogueRunner.RemoveCommandHandler("StartWait");
+            m_DialogueRunner.RemoveCommandHandler("UnlockTopic");
+            m_DialogueRunner.RemoveCommandHandler("Glitch");
         }
         #endregion
 
@@ -116,9 +131,26 @@ namespace ProjectFoundPhone.Core
         /// <param name="imageID">画像リソースのID</param>
         private void ImageCommand(string charID, string imageID)
         {
-            // TODO: Resourcesフォルダから画像を読み込み
-            // TODO: ChatControllerに画像メッセージとして送信
-            Debug.Log($"ScenarioManager: Image command - CharID: {charID}, ImageID: {imageID}");
+            // Resourcesフォルダから画像を読み込み
+            Sprite imageSprite = Resources.Load<Sprite>($"Images/{imageID}");
+            
+            if (imageSprite == null)
+            {
+                Debug.LogWarning($"ScenarioManager: Failed to load image from Resources/Images/{imageID}");
+                return;
+            }
+
+            // ChatControllerに画像メッセージとして送信
+            // 現在のAddMessage()はテキストのみ対応のため、画像IDを含むテキストとして送信
+            // 後続タスクで画像メッセージ専用のメソッドを追加する予定
+            if (m_ChatController != null)
+            {
+                m_ChatController.AddMessage(charID, $"[Image: {imageID}]");
+            }
+            else
+            {
+                Debug.LogWarning($"ScenarioManager: ChatController not available. Image from {charID}: {imageID}");
+            }
         }
 
         /// <summary>
@@ -129,11 +161,40 @@ namespace ProjectFoundPhone.Core
         /// <param name="seconds">待機秒数</param>
         private void StartWaitCommand(int seconds)
         {
-            // TODO: タイピングインジケーターを表示
-            // TODO: 入力ロックを有効化
-            // TODO: 指定秒数後に待機を解除
-            // TODO: タイピングインジケーターを非表示
-            Debug.Log($"ScenarioManager: StartWait command - {seconds} seconds");
+            // タイピングインジケーターを表示
+            if (m_ChatController != null)
+            {
+                m_ChatController.ShowTypingIndicator(true);
+            }
+
+            // 入力ロックを有効化
+            m_IsInputLocked = true;
+            if (m_DialogueRunner != null)
+            {
+                // DialogueRunnerの進行を一時停止（DialogueRunnerのAPIに応じて調整が必要な可能性あり）
+                // 一般的には、DialogueRunnerのOnDialogueCompleteイベントや進行制御を使用
+            }
+
+            // 指定秒数後に待機を解除（CoroutineまたはDOTween.DelayedCallを使用）
+            StartCoroutine(WaitAndUnlock(seconds));
+        }
+
+        /// <summary>
+        /// 待機処理のコルーチン
+        /// </summary>
+        /// <param name="seconds">待機秒数</param>
+        private IEnumerator WaitAndUnlock(int seconds)
+        {
+            yield return new WaitForSeconds(seconds);
+
+            // タイピングインジケーターを非表示
+            if (m_ChatController != null)
+            {
+                m_ChatController.ShowTypingIndicator(false);
+            }
+
+            // 入力ロックを解除
+            m_IsInputLocked = false;
         }
 
         /// <summary>
@@ -144,10 +205,24 @@ namespace ProjectFoundPhone.Core
         /// <param name="topicID">解放するトピックのID</param>
         private void UnlockTopicCommand(string topicID)
         {
-            // TODO: ResourcesフォルダからTopicDataを読み込み
-            // TODO: 推論ボード（DeductionBoard）にトピックを追加
-            // TODO: Yarn変数を更新（例: $has_topic_{topicID} = true）
-            Debug.Log($"ScenarioManager: UnlockTopic command - TopicID: {topicID}");
+            // ResourcesフォルダからTopicDataを読み込み
+            TopicData topicData = Resources.Load<TopicData>($"Topics/{topicID}");
+            
+            if (topicData == null)
+            {
+                Debug.LogWarning($"ScenarioManager: Failed to load TopicData from Resources/Topics/{topicID}");
+                return;
+            }
+
+            // 推論ボード（DeductionBoard）にトピックを追加
+            // DeductionBoardは後続タスクで実装予定のため、現在はDebug.Logのみで対応
+            Debug.Log($"ScenarioManager: Topic unlocked - {topicData.Title} (ID: {topicID})");
+            // TODO: DeductionBoardが実装されたら、以下のように呼び出す
+            // DeductionBoard.Instance.AddTopic(topicData);
+
+            // Yarn変数を更新: $has_topic_{topicID} = true
+            string variableName = $"has_topic_{topicID}";
+            SetVariable<bool>(variableName, true);
         }
 
         /// <summary>
@@ -158,9 +233,11 @@ namespace ProjectFoundPhone.Core
         /// <param name="level">グリッチの強度レベル（1-5程度を想定）</param>
         private void GlitchCommand(int level)
         {
-            // TODO: MetaEffectControllerまたは専用のGlitchEffectコンポーネントにグリッチ効果を要求
-            // TODO: レベルに応じた強度でノイズを表示
+            // MetaEffectControllerまたは専用のGlitchEffectコンポーネントにグリッチ効果を要求
+            // MetaEffectControllerが未実装の場合は、Debug.Logのみで対応（後続タスクで実装）
             Debug.Log($"ScenarioManager: Glitch command - Level: {level}");
+            // TODO: MetaEffectControllerが実装されたら、以下のように呼び出す
+            // MetaEffectController.Instance.PlayGlitchEffect(level);
         }
         #endregion
 
@@ -178,7 +255,7 @@ namespace ProjectFoundPhone.Core
             }
 
             string targetNode = nodeName ?? m_StartNode;
-            // TODO: DialogueRunner.StartDialogue(targetNode)を呼び出し
+            m_DialogueRunner.StartDialogue(targetNode);
         }
 
         /// <summary>
@@ -188,7 +265,7 @@ namespace ProjectFoundPhone.Core
         {
             if (m_DialogueRunner != null)
             {
-                // TODO: DialogueRunner.Stop()を呼び出し
+                m_DialogueRunner.Stop();
             }
         }
 
@@ -200,7 +277,30 @@ namespace ProjectFoundPhone.Core
         /// <returns>変数の値</returns>
         public T GetVariable<T>(string variableName)
         {
-            // TODO: DialogueRunner.VariableStorageから変数を取得
+            if (m_DialogueRunner == null || m_DialogueRunner.VariableStorage == null)
+            {
+                Debug.LogWarning($"ScenarioManager: Cannot get variable {variableName}. DialogueRunner or VariableStorage is not initialized.");
+                return default(T);
+            }
+
+            // DialogueRunner.VariableStorageから変数を取得
+            if (m_DialogueRunner.VariableStorage.TryGetValue(variableName, out var value))
+            {
+                // Yarn SpinnerのVariableStorageは通常、object型で値を返すため、キャストが必要
+                if (value is T typedValue)
+                {
+                    return typedValue;
+                }
+                else
+                {
+                    Debug.LogWarning($"ScenarioManager: Variable {variableName} type mismatch. Expected {typeof(T)}, got {value?.GetType()}");
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"ScenarioManager: Variable {variableName} not found in VariableStorage.");
+            }
+
             return default(T);
         }
 
@@ -212,7 +312,14 @@ namespace ProjectFoundPhone.Core
         /// <param name="value">設定する値</param>
         public void SetVariable<T>(string variableName, T value)
         {
-            // TODO: DialogueRunner.VariableStorageに変数を設定
+            if (m_DialogueRunner == null || m_DialogueRunner.VariableStorage == null)
+            {
+                Debug.LogWarning($"ScenarioManager: Cannot set variable {variableName}. DialogueRunner or VariableStorage is not initialized.");
+                return;
+            }
+
+            // DialogueRunner.VariableStorageに変数を設定
+            m_DialogueRunner.VariableStorage.SetValue(variableName, value);
         }
         #endregion
     }
