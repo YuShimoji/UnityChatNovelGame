@@ -2,8 +2,8 @@
 
 ## 基本情報
 
-- **最終更新**: 2026-01-06T06:45:00+09:00
-- **更新者**: AI Agent (Kickstart Setup)
+- **最終更新**: 2026-01-06T08:20:00+09:00
+- **更新者**: AI Agent (Orchestrator)
 
 ## レポート設定（推奨）
 
@@ -12,15 +12,15 @@
 
 ## 現在のミッション
 
-- **タイトル**: Unity Core System Skeleton Implementation
-- **Issue**: TASK_001_UnityCoreSystemSkeleton
+- **タイトル**: ChatController & ScenarioManager ロジック実装
+- **Issue**: TASK_002_LogicImplementation
 - **ブランチ**: main
 - **関連PR**: なし
-- **進捗**: 完了（Status: DONE）
+- **進捗**: Worker実装中（Status: OPEN）
 
 ## 次の中断可能点
 
-- ロジック実装タスク起票後
+- Worker納品回収後
 
 ## 決定事項
 
@@ -40,7 +40,8 @@
 ### 短期（Next）
 
 - [x] Unity Core System Skeleton実装完了（TASK_001）
-- [ ] ロジック実装タスク起票（ChatController, ScenarioManagerのTODO実装）
+- [x] ロジック実装タスク起票完了（TASK_002）
+- [ ] ロジック実装完了待ち（Worker実装中）
 - [ ] Prefab作成タスク起票（MessageBubble, TypingIndicator）
 
 ### 中期（Later）
@@ -59,9 +60,11 @@
 - Unity プロジェクト（ChatNovelGame）のコアシステムスケルトンコード実装完了
 - 4つの主要クラス（TopicData, SynthesisRecipe, ChatController, ScenarioManager）を作成
 - SOLID原則に基づいた設計で拡張性を確保
-- 次のステップ: ロジック実装、Prefab作成、Yarn Spinner連携
+- TASK_002（ロジック実装）を起票し、Workerに委譲済み
+- 次のステップ: Worker納品待ち、Prefab作成、Yarn Spinner連携
 
 ## 履歴
 
 - 2026-01-06 06:45: AI_CONTEXT.md を初期化
 - 2026-01-06 08:10: TASK_001完了（Unity Core System Skeleton実装）
+- 2026-01-06 08:20: TASK_002起票完了（ロジック実装タスク）
