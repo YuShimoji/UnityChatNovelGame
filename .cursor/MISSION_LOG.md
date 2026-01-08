@@ -7,7 +7,7 @@ KICKSTART_2026-01-08T13:43:09Z
 2026-01-08T13:43:09Z
 
 ## 現在のフェーズ
-Phase 4: チケット発行
+Phase 5: Worker起動用プロンプト生成
 
 ## ステータス
 COMPLETED
@@ -74,6 +74,10 @@ COMPLETED
 - [x] `docs/tasks/TASK_001_UnityProjectStructure.md` 作成: 完了
 - [x] Status: OPEN で登録: 完了
 - [x] DoD チェックリスト定義: 完了
+
+### Phase 5: Worker起動用プロンプト生成
+- [x] TASK_001 用 Worker プロンプト生成: 完了（`docs/inbox/WORKER_PROMPT_TASK_001.md`）
+- [x] チケット情報、Focus Area、Forbidden Area、DoD、停止条件を包含: 完了
 
 ## エラー・復旧ログ
 - PowerShell の文字エンコーディング問題でコミットメッセージが失敗したが、シンプルなメッセージで再試行して成功
