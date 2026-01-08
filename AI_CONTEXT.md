@@ -41,7 +41,7 @@
 
 ### 短期（Next）
 
-- [x] プロジェクト初期セットアップ完了
+- [done] 未完了タスクなし（docs/tasks/ に OPEN / IN_PROGRESS なし）
 
 ### 中期（Later）
 

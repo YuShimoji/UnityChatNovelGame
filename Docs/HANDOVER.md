@@ -18,10 +18,12 @@ GitHubAutoApprove: false
 
 - プロジェクト初期セットアップ完了
 - Orchestrator/Worker が自律的に動作できる環境構築
+- Unity チャットノベルゲームの開発開始準備
 
 ## 進捗
 
 - **初期セットアップ**: DONE — `.shared-workflows` Submodule 導入、SSOT 配置、運用ディレクトリ作成完了
+- **Phase 2（状況把握）**: DONE — プロジェクト現状確認完了、仕様書確認完了
 
 ## ブロッカー
 
@@ -29,8 +31,9 @@ GitHubAutoApprove: false
 
 ## バックログ
 
-- Unity プロジェクト構造の整理
-- ドキュメントの体系化
+- Unity プロジェクト構造の整理（優先度: High）
+- ドキュメントの体系化（優先度: Medium）
+- コアシステム実装（ChatManager, ChatUIController, ScenarioManager等）（優先度: High）
 
 ## Verification
 
@@ -38,7 +41,7 @@ GitHubAutoApprove: false
 
 ## Latest Orchestrator Report
 
-- なし（初期セットアップ完了後、次回 Orchestrator 実行時に生成）
+- `docs/inbox/REPORT_ORCH_2026-01-08T135356.md` — Phase 2（状況把握）完了、プロジェクト現状確認完了
 
 ## Integration Notes
 
