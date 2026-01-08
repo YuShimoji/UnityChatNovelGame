@@ -41,6 +41,7 @@ GitHubAutoApprove: false
 ## Verification
 
 - `node .shared-workflows/scripts/sw-doctor.js --profile shared-orch-bootstrap --format text` → All Pass (基本構造確認完了、警告: REPORT_CONFIG.yml と .cursorrules は任意)
+- `git push origin main` → 成功（7コミットをpush完了）
 
 ## Latest Orchestrator Report
 
