@@ -7,7 +7,7 @@ KICKSTART_2026-01-08T13:43:09Z
 2026-01-08T13:43:09Z
 
 ## 現在のフェーズ
-Phase 2: 状況把握
+Phase 4: チケット発行
 
 ## ステータス
 COMPLETED
@@ -64,6 +64,17 @@ COMPLETED
 - [x] プロジェクト仕様書の確認: 完了（Unity チャットノベルゲーム、Yarn Spinnerベース）
 - [x] Phase 6（Orchestrator Report）実行: 完了
 
+### Phase 3: 分割と戦略
+- [x] タスク Tier 分類: 完了（TASK_001: Tier 1）
+- [x] 並列化可能性の判断: 完了（単一タスクのため、Worker-1に割り当て）
+- [x] Worker 数の決定: 完了（1 Worker）
+- [x] Focus Area / Forbidden Area 定義: 完了
+
+### Phase 4: チケット発行
+- [x] `docs/tasks/TASK_001_UnityProjectStructure.md` 作成: 完了
+- [x] Status: OPEN で登録: 完了
+- [x] DoD チェックリスト定義: 完了
+
 ## エラー・復旧ログ
 - PowerShell の文字エンコーディング問題でコミットメッセージが失敗したが、シンプルなメッセージで再試行して成功
 
@@ -76,8 +87,20 @@ COMPLETED
 - Phase 2（状況把握）完了、プロジェクト現状確認完了
 - Orchestrator Report作成完了（`docs/inbox/REPORT_ORCH_2026-01-08T135356.md`）
 
+## タスク一覧
+
+### アクティブタスク
+| チケットID | タイトル | Tier | Status | Worker | 進捗 |
+|-----------|---------|------|--------|--------|------|
+| TASK_001 | Unity プロジェクト構造の整理 | 1 | OPEN | Worker-1 | 0% |
+
+### 完了タスク
+| チケットID | タイトル | 完了時刻 | Report |
+|-----------|---------|---------|--------|
+
+### ブロックタスク
+| チケットID | タイトル | ブロック理由 | 次手 |
+
 ## 次のアクション
-- バックログ項目をタスク化（Phase 3-4へ移行）
-  - Unity プロジェクト構造の整理（優先度: High）
-  - ドキュメントの体系化（優先度: Medium）
-  - コアシステム実装（優先度: High）
+- Phase 5（Worker起動用プロンプト生成）へ移行
+- TASK_001 の Worker プロンプトを生成し、実装を開始する準備を行う

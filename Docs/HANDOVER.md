@@ -31,9 +31,12 @@ GitHubAutoApprove: false
 
 ## バックログ
 
-- Unity プロジェクト構造の整理（優先度: High）
 - ドキュメントの体系化（優先度: Medium）
 - コアシステム実装（ChatManager, ChatUIController, ScenarioManager等）（優先度: High）
+
+## アクティブタスク
+
+- **TASK_001**: Unity プロジェクト構造の整理（Status: OPEN, Tier: 1, Owner: Worker-1）
 
 ## Verification
 
