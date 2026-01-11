@@ -1,10 +1,10 @@
 # Task: Unityパッケージインストール
-Status: OPEN
+Status: IN_PROGRESS
 Tier: 2
 Branch: main
 Owner: Worker
 Created: 2026-01-06T10:15:00Z
-Report: 
+Report: Docs/inbox/REPORT_TASK_004_PackageInstallation.md 
 
 ## Objective
 Unityプロジェクトに必要なパッケージ（Yarn Spinner, DOTween, TextMeshPro）をインストールする。コンパイルエラーを解消し、実装済みコードが正常に動作する環境を整える。
