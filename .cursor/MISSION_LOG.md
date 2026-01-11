@@ -49,6 +49,9 @@ IN_PROGRESS
 - [x] TASK_004_PackageInstallation.md 作成完了
 - [x] DoD 定義完了
 - [x] Phase 4 完了（TASK_004）
+- [x] TASK_005_PackageInstallationFix.md 作成完了
+- [x] DoD 定義完了
+- [x] Phase 4 完了（TASK_005）
 
 ### Phase 5: Worker起動用プロンプト生成
 - [x] WORKER_PROMPT_TASK_001.md 作成完了
@@ -59,6 +62,8 @@ IN_PROGRESS
 - [x] Phase 5 完了（TASK_003）
 - [x] WORKER_PROMPT_TASK_004.md 作成完了
 - [x] Phase 5 完了（TASK_004）
+- [x] WORKER_PROMPT_TASK_005.md 作成完了
+- [x] Phase 5 完了（TASK_005）
 
 ### Phase 6: Orchestrator Report
 - [x] Worker納品確認完了（REPORT_TASK_001_UnityCoreSystemSkeleton.md）
@@ -76,7 +81,7 @@ Unityプロジェクト「Project_FoundPhone」のコアシステム構築：
 3. ScenarioManager.cs (Yarn連携とカスタムコマンド登録)
 
 ## ブロッカー
-- **TASK_004**: 必要なパッケージ（Yarn Spinner, DOTween, TextMeshPro）が未インストールのため、コンパイルエラーが発生
+- **TASK_005**: Git URLのパス指定エラーが発生（Yarn Spinner, DOTween）
 - **TASK_003**: Unityエディタが起動していないため、Prefab作成が不可能（Status: BLOCKED）
 
 ## タスク分類結果
@@ -134,8 +139,11 @@ Unityプロジェクト「Project_FoundPhone」のコアシステム構築：
 - **完了日**: 2026-01-06T09:00:00+09:00
 
 ## 次のタスク
-- **TASK_004_PackageInstallation**: Unityパッケージインストール（優先度: High）
+- **TASK_005_PackageInstallationFix**: パッケージインストールエラー修正（優先度: High）
 - **Status**: OPEN
+- **起票日**: 2026-01-06T13:00:00Z
+- **TASK_004_PackageInstallation**: Unityパッケージインストール（優先度: High）
+- **Status**: IN_PROGRESS（Git URLパス指定エラー発生）
 - **起票日**: 2026-01-06T10:15:00Z
 - **TASK_003_PrefabCreation**: Chat UI Prefab作成
 - **Status**: BLOCKED（Unityエディタ未起動）
@@ -144,5 +152,5 @@ Unityプロジェクト「Project_FoundPhone」のコアシステム構築：
 - MetaEffectController実装タスク起票（GlitchCommand実装の前提）
 
 ## 次のアクション
-- TASK_004起票完了をコミット
-- Worker実装待ち（パッケージインストール）
+- TASK_005起票完了をコミット
+- Worker実装待ち（パッケージインストールエラー修正）
