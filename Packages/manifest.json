@@ -35,8 +35,7 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0",
-    "dev.yarnspinner.unity": "https://github.com/YarnSpinnerTool/YarnSpinner-Unity.git?path=/YarnSpinner-Unity",
-    "com.demigiant.dotween": "https://github.com/Demigiant/dotween.git?path=/DOTween",
+    "dev.yarnspinner.unity": "https://github.com/YarnSpinnerTool/YarnSpinner-Unity.git",
     "com.unity.ugui": "2.0.0"
   }
 }
