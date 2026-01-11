@@ -18,6 +18,9 @@ namespace ProjectFoundPhone.Core
         [SerializeField] private ChatController m_ChatController;
         [SerializeField] private string m_StartNode = "Start";
 
+        /// <summary>
+        /// 入力ロック状態（StartWaitCommandで使用）
+        /// </summary>
         private bool m_IsInputLocked = false;
         #endregion
 
@@ -57,7 +60,8 @@ namespace ProjectFoundPhone.Core
 
             if (m_ChatController == null)
             {
-                m_ChatController = FindObjectOfType<ChatController>();
+                // Unity 6の非推奨APIを新しいAPIに置き換え
+                m_ChatController = FindFirstObjectByType<ChatController>();
             }
 
             if (m_ChatController == null)
@@ -284,16 +288,17 @@ namespace ProjectFoundPhone.Core
             }
 
             // DialogueRunner.VariableStorageから変数を取得
-            if (m_DialogueRunner.VariableStorage.TryGetValue(variableName, out var value))
+            // TryGetValue<T>の型引数を明示的に指定
+            if (m_DialogueRunner.VariableStorage.TryGetValue<T>(variableName, out var value))
             {
                 // Yarn SpinnerのVariableStorageは通常、object型で値を返すため、キャストが必要
-                if (value is T typedValue)
+                if (value != null)
                 {
-                    return typedValue;
+                    return value;
                 }
                 else
                 {
-                    Debug.LogWarning($"ScenarioManager: Variable {variableName} type mismatch. Expected {typeof(T)}, got {value?.GetType()}");
+                    Debug.LogWarning($"ScenarioManager: Variable {variableName} is null.");
                 }
             }
             else
@@ -318,8 +323,26 @@ namespace ProjectFoundPhone.Core
                 return;
             }
 
-            // DialogueRunner.VariableStorageに変数を設定
-            m_DialogueRunner.VariableStorage.SetValue(variableName, value);
+            // Yarn SpinnerのVariableStorageは型ごとに異なるSetValueオーバーロードを持つ
+            // string, float, bool型に対応
+            if (value is string stringValue)
+            {
+                m_DialogueRunner.VariableStorage.SetValue(variableName, stringValue);
+            }
+            else if (value is float floatValue)
+            {
+                m_DialogueRunner.VariableStorage.SetValue(variableName, floatValue);
+            }
+            else if (value is bool boolValue)
+            {
+                m_DialogueRunner.VariableStorage.SetValue(variableName, boolValue);
+            }
+            else
+            {
+                // その他の型は文字列に変換して設定
+                m_DialogueRunner.VariableStorage.SetValue(variableName, value?.ToString() ?? string.Empty);
+                Debug.LogWarning($"ScenarioManager: Variable {variableName} set as string (type: {typeof(T).Name})");
+            }
         }
         #endregion
     }

@@ -1,10 +1,10 @@
 # Task: コンパイルエラー修正（ScenarioManager.cs）
-Status: OPEN
+Status: DONE
 Tier: 2
 Branch: main
 Owner: Worker
 Created: 2026-01-06T14:30:00Z
-Report: 
+Report: Docs/inbox/REPORT_TASK_006_CompileErrorFix.md 
 
 ## Objective
 ScenarioManager.csのコンパイルエラーを修正する。Yarn SpinnerのVariableStorage APIの正しい使用方法を実装し、非推奨APIの警告を解消する。
