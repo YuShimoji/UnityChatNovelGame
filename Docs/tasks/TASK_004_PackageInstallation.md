@@ -1,5 +1,5 @@
 # Task: Unityパッケージインストール
-Status: IN_PROGRESS
+Status: DONE
 Tier: 2
 Branch: main
 Owner: Worker

@@ -39,11 +39,9 @@
 
 ### 短期（Next）
 
-- [x] Unity Core System Skeleton実装完了（TASK_001）
-- [x] ロジック実装完了（TASK_002）
-- [ ] Prefab作成タスク起票（MessageBubble, TypingIndicator）
-- [ ] DeductionBoard実装タスク起票
-- [ ] MetaEffectController実装タスク起票
+- [pending] Unity プロジェクト構造の整理 (ref: docs/tasks/TASK_001_UnityProjectStructure.md, Status: OPEN)
+- [pending] Chat UI Prefab作成 (ref: docs/tasks/TASK_003_PrefabCreation.md, Status: OPEN)
+- [completed] Unityパッケージインストール (ref: docs/tasks/TASK_004_PackageInstallation.md, Status: DONE)
 
 ### 中期（Later）
 
