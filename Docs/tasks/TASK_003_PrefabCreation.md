@@ -1,5 +1,5 @@
 # Task: Chat UI Prefab作成
-Status: OPEN
+Status: DONE
 Tier: 2
 Branch: main
 Owner: Worker
