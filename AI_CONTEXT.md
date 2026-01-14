@@ -40,7 +40,7 @@
 ### 短期（Next）
 
 - [pending] Unity プロジェクト構造の整理 (ref: docs/tasks/TASK_001_UnityProjectStructure.md, Status: OPEN)
-- [pending] Chat UI Prefab作成 (ref: docs/tasks/TASK_003_PrefabCreation.md, Status: OPEN)
+- [completed] Chat UI Prefab作成 (ref: docs/tasks/TASK_003_PrefabCreation.md, Status: DONE)
 - [completed] Unityパッケージインストール (ref: docs/tasks/TASK_004_PackageInstallation.md, Status: DONE)
 
 ### 中期（Later）
