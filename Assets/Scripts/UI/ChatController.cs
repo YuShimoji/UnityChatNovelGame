@@ -17,6 +17,8 @@ namespace ProjectFoundPhone.UI
         [SerializeField] private VerticalLayoutGroup m_LayoutGroup;
         [SerializeField] private GameObject m_MessageBubblePrefab;
         [SerializeField] private GameObject m_TypingIndicator;
+        [SerializeField] private TMP_InputField m_InputField;
+        [SerializeField] private Button m_SendButton;
         [SerializeField] private float m_AutoScrollThreshold = 0.1f; // 自動スクロールを実行する閾値（0.0-1.0）
 
         private bool m_IsUserScrolling = false;
@@ -31,7 +33,16 @@ namespace ProjectFoundPhone.UI
 
         private void Start()
         {
-            // TODO: 初期化処理（既存メッセージの読み込みなど）
+            if (m_SendButton != null)
+            {
+                m_SendButton.onClick.AddListener(OnSubmit);
+            }
+
+            if (m_InputField != null)
+            {
+                // Enterキーでも送信できるようにする (Optional)
+                m_InputField.onSubmit.AddListener((text) => OnSubmit());
+            }
         }
 
         private void Update()
@@ -197,15 +208,20 @@ namespace ProjectFoundPhone.UI
             if (m_TypingIndicator != null)
             {
                 m_TypingIndicator.SetActive(show);
-            }
-
-            // 表示時はAutoScroll()を実行してインジケーターが見えるようにする
-            if (show)
-            {
-                AutoScroll();
+                
+                if (show)
+                {
+                    // 常に最後尾に表示
+                    m_TypingIndicator.transform.SetAsLastSibling();
+                    AutoScroll();
+                }
             }
         }
 
+        /// <summary>
+        /// チャットを最下部に自動スクロール
+        /// ユーザーが過去ログを見ている場合は強制スクロールしない
+        /// </summary>
         /// <summary>
         /// チャットを最下部に自動スクロール
         /// ユーザーが過去ログを見ている場合は強制スクロールしない
@@ -217,17 +233,38 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            // DOTweenを使用したスクロールアニメーション（0.3秒）
-            DOTween.To(
-                () => m_ScrollRect.verticalNormalizedPosition,
-                x => m_ScrollRect.verticalNormalizedPosition = x,
-                1.0f,
-                0.3f
-            ).OnComplete(() =>
-            {
-                // スクロール完了後にm_LastScrollPositionを更新
-                m_LastScrollPosition = 1.0f;
+            // Canvasの更新を待ってからスクロールするためにコルーチンか遅延実行を使うのが一般的だが、
+            // ここでは簡易的にDOTweenで遅延させる
+            DOVirtual.DelayedCall(0.1f, () => {
+                if(m_ScrollRect == null) return;
+                
+                // DOTweenを使用したスクロールアニメーション（0.3秒）
+                DOTween.To(
+                    () => m_ScrollRect.verticalNormalizedPosition,
+                    x => m_ScrollRect.verticalNormalizedPosition = x,
+                    0.0f, // 0.0f is bottom for vertical scroll rect
+                    0.3f
+                ).OnComplete(() =>
+                {
+                    // スクロール完了後にm_LastScrollPositionを更新
+                    m_LastScrollPosition = 0.0f;
+                });
             });
+        }
+
+        public void OnSubmit()
+        {
+            if (m_InputField == null) return;
+
+            string text = m_InputField.text;
+            if (!string.IsNullOrWhiteSpace(text))
+            {
+                AddMessage("player", text);
+                m_InputField.text = "";
+                
+                // 入力欄にフォーカスを戻す
+                m_InputField.ActivateInputField();
+            }
         }
 
         /// <summary>

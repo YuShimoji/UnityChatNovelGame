@@ -19,8 +19,8 @@ GitHubAutoApprove: false
 - ✅ プロジェクト初期セットアップ完了
 - ✅ shared-workflows サブモジュール導入完了
 - ✅ 以降の Orchestrator/Worker が自律的に動作できる環境構築完了
-- ✅ Unity Core System Skeleton実装完了（TASK_001）
-- 🔄 ChatController & ScenarioManager ロジック実装中（TASK_002）
+- ✅ Unity Core System Skeleton実装完了（TASK_001~006）
+- 🔄 Chat UI 実装準備中（TASK_007）
 
 ## 進捗
 
@@ -36,12 +36,13 @@ GitHubAutoApprove: false
   - [x] セットアップ差分のコミット（コミットハッシュ: d65e60d）
 
 - **Unity Core System**: COMPLETED
-  - [x] TASK_001完了（スケルトンコード実装）
-  - [x] コミット完了（a0d7bd1）
-  - [x] TASK_002起票完了（ロジック実装）
-  - [x] Workerプロンプト生成完了
-  - [x] コミット完了（3263c24）
-  - [ ] TASK_002実装中（Worker納品待ち）
+  - [x] TASK_001 UnityCoreSystemSkeleton (DONE)
+  - [x] TASK_002 LogicImplementation (DONE)
+  - [x] TASK_003 PrefabCreation (DONE)
+  - [x] TASK_004 PackageInstallation (DONE)
+  - [x] TASK_005 PackageInstallationFix (DONE)
+  - [x] TASK_006 CompileErrorFix (DONE)
+  - [x] TASK_007 ChatUI_Implementation (DONE)
 
 ## ブロッカー
 
@@ -53,12 +54,12 @@ GitHubAutoApprove: false
 
 ## 統合レポート
 
-- （初期セットアップ中、レポートなし）
+- docs/reports/REPORT_ORCH_2026-01-16T134000.md
 
 ## Latest Orchestrator Report
 
-- File: （レポートファイル未作成）
-- Summary: TASK_001完了、TASK_002起票完了、Worker実装中
+- File: docs/reports/REPORT_ORCH_2026-01-16T134000.md
+- Summary: TASK_007 (Chat UI) 実装完了。次フェーズへ移行準備完了。
 
 ## Outlook
 
