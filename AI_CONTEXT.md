@@ -12,11 +12,11 @@
 
 ## 現在のミッション
 
-- **タイトル**: ロジック実装完了、次のタスク準備
-- **Issue**: TASK_002_LogicImplementation（完了）
+- **タイトル**: プロジェクトセットアップ改善 & 次期機能開発（Chat UI）準備
+- **Issue**: なし（準備フェーズ）
 - **ブランチ**: main
 - **関連PR**: なし
-- **進捗**: TASK_002完了、次のタスク起票準備中
+- **進捗**: Orchestrator Audit (Phase 1.5) 実施中。Inbox整理とリンク切れ修正完了。次のタスク（Chat UI）計画へ移行予定。
 
 ## 次の中断可能点
 
@@ -40,8 +40,6 @@
 ### 短期（Next）
 
 - [pending] Unity プロジェクト構造の整理 (ref: docs/tasks/TASK_001_UnityProjectStructure.md, Status: OPEN)
-- [completed] Chat UI Prefab作成 (ref: docs/tasks/TASK_003_PrefabCreation.md, Status: DONE)
-- [completed] Unityパッケージインストール (ref: docs/tasks/TASK_004_PackageInstallation.md, Status: DONE)
 
 ### 中期（Later）
 

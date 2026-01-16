@@ -4,7 +4,7 @@ Tier: 2
 Branch: main
 Owner: Worker
 Created: 2026-01-06T09:15:00Z
-Report: Docs/inbox/REPORT_TASK_003_PrefabCreation.md
+Report: docs/reports/REPORT_TASK_003_PrefabCreation.md
 
 ## 停止理由（解消済み）
 - **事実**: Unityエディタが起動していることを確認済み

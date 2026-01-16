@@ -4,7 +4,7 @@ Tier: 2
 Branch: main
 Owner: Worker
 Created: 2026-01-06T13:00:00Z
-Report: Docs/inbox/REPORT_TASK_005_PackageInstallationFix.md 
+Report: docs/reports/REPORT_TASK_005_PackageInstallationFix.md 
 
 ## Objective
 Git URLからのパッケージインストールエラーを修正する。Yarn SpinnerとDOTweenの正しいインストール方法を実装し、コンパイルエラーを解消する。
