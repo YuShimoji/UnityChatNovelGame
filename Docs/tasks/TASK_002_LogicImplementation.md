@@ -4,7 +4,7 @@ Tier: 2
 Branch: main
 Owner: Worker
 Created: 2026-01-06T08:15:00Z
-Report: Docs/inbox/REPORT_TASK_002_LogicImplementation.md 
+Report: docs/reports/REPORT_TASK_002_LogicImplementation.md 
 
 ## Objective
 ChatController.cs と ScenarioManager.cs のTODOコメントに記載されたロジックを実装する。スケルトンコードで定義されたメソッドの実装を完了させ、基本的な動作を可能にする。

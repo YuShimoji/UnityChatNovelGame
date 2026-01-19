@@ -1,13 +1,13 @@
 # Project Handover & Status
 
-**Timestamp**: 2026-01-19T23:55:00+09:00
+**Timestamp**: 2026-01-19T23:58:00+09:00
 **Actor**: Orchestrator
 **Type**: Handover
 **Mode**: implementation
 
 ## 基本情報
 
-- **最終更新**: 2026-01-19T23:55:00+09:00
+- **最終更新**: 2026-01-19T23:58:00+09:00
 - **更新者**: Orchestrator
 
 ## GitHubAutoApprove
@@ -17,8 +17,6 @@ GitHubAutoApprove: false
 ## 現在の目標
 
 - ✅ プロジェクト初期セットアップ完了
-- ✅ shared-workflows サブモジュール導入完了
-- ✅ 以降の Orchestrator/Worker が自律的に動作できる環境構築完了
 - ✅ Unity Core System Skeleton実装完了（TASK_001）
 - ✅ ChatController & ScenarioManager ロジック実装完了（TASK_002）
 - ✅ Prefab作成完了（TASK_003: MessageBubble, TypingIndicator）
@@ -81,29 +79,20 @@ GitHubAutoApprove: false
 
 ## 統合レポート
 
-- （初期セットアップ中、レポートなし）
+- File: docs/reports/REPORT_TASK_015_FixDebugSceneBuilderReflection.md
+- Summary: TASK_015完了。DebugSceneBuilderのリフレクションエラーを修正し、デバッグシーン構築が正常化。
 
 ## Latest Orchestrator Report
 
-- File: docs/inbox/REPORT_TASK_015_FixDebugSceneBuilderReflection.md
+- File: docs/reports/REPORT_TASK_015_FixDebugSceneBuilderReflection.md
 - Summary: TASK_015完了。DebugSceneBuilderのリフレクションエラーを修正し、デバッグシーン構築が正常化。
 
 ## Outlook
 
-- Short-term: TASK_002完了待ち、Prefab作成タスク起票、DeductionBoard実装タスク起票
-- Mid-term: Yarn Spinner連携の詳細実装、テストコード作成、統合テスト
-- Long-term: プロジェクト構造の整理（Docs と docs の統合検討）、継続的な運用フローの確立
+- Short-term: Verification of integrated features (MetaEffect, Inference Board, Chat).
+- Mid-term: Full Playthrough Test.
+- Long-term: Content Production.
 
 ## Proposals
 
-- Prefab作成タスク起票（MessageBubble, TypingIndicator） -> DONE (TASK_003)
-- DeductionBoard実装タスク起票（UnlockTopicCommand実装の前提）
-- MetaEffectController実装タスク起票（GlitchCommand実装の前提）
-
-## リスク
-
-- 既存の `Docs/` ディレクトリ（大文字）と `docs/` ディレクトリ（小文字）が混在している可能性
-
-## 所要時間
-
-- セットアップ作業: 進行中
+- Implement Inference Board UI (TASK_008/011 follow-up).

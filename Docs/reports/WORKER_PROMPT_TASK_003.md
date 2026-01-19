@@ -1,30 +1,17 @@
-# Task: Chat UI Prefab作成
-Status: DONE
-Tier: 2
-Branch: main
-Owner: Worker
-Created: 2026-01-06T09:15:00Z
-Report: docs/reports/REPORT_TASK_003_PrefabCreation.md
+# Worker Prompt: TASK_003_PrefabCreation
 
-## 停止理由（解消済み）
-- **事実**: Unityエディタが起動していることを確認済み
-- **根拠**: ユーザー確認により、Unityエディタが起動しており、コンパイルエラーも解消されている
-- **次手**: TASK_003の実装を開始可能 
+## 参照
+- チケット: Docs/tasks/TASK_003_PrefabCreation.md
+- SSOT: Docs/Windsurf_AI_Collab_Rules_latest.md
+- HANDOVER: Docs/HANDOVER.md
+- AI_CONTEXT: AI_CONTEXT.md
+- MISSION_LOG: .cursor/MISSION_LOG.md
+- 前タスクレポート: Docs/inbox/REPORT_TASK_002_LogicImplementation.md
+- プロジェクト仕様: 最初のプロンプト（プロジェクトルート）
 
-## Objective
-ChatController.csで使用するPrefab（MessageBubble, TypingIndicator）を作成する。Unityエディタ上でPrefabを作成し、必要なコンポーネントを設定する。
+## 境界
 
-実装対象：
-1. **MessageBubble Prefab**: メッセージバブルのPrefab
-2. **TypingIndicator Prefab**: タイピングインジケーターのPrefab
-
-## Context
-- 前タスク（TASK_002）でChatController.csの実装が完了
-- ChatControllerは`m_MessageBubblePrefab`と`m_TypingIndicator`のPrefabを必要とする
-- 必須パッケージ: TextMeshPro（既に前提）
-- 参照ドキュメント: `最初のプロンプト`（プロジェクトルート）、`Docs/inbox/REPORT_TASK_002_LogicImplementation.md`
-
-## Focus Area
+### Focus Area
 - `Assets/Prefabs/UI/` 配下: MessageBubble.prefab, TypingIndicator.prefab
 - UnityエディタでのPrefab作成とコンポーネント設定
 - TextMeshProを使用したテキスト表示
@@ -32,7 +19,7 @@ ChatController.csで使用するPrefab（MessageBubble, TypingIndicator）を作
 - ContentSizeFitterによる高さ自動調整
 - 右寄せ/左寄せレイアウト対応
 
-## Forbidden Area
+### Forbidden Area
 - 既存ファイルの削除・破壊的変更
 - Unityプロジェクト設定の変更
 - パッケージの追加（TextMeshProは既に前提）
@@ -40,12 +27,9 @@ ChatController.csで使用するPrefab（MessageBubble, TypingIndicator）を作
 - Sceneの作成（Prefab作成のみ）
 - アニメーションの作成（後続タスクへ分離）
 
-## Constraints
-- テスト: 主要パスのみ（網羅テストは後続タスクへ分離）
-- フォールバック: 新規追加禁止（Prefab作成のみ）
-- ディレクトリ構造: `Assets/Prefabs/UI/` を作成してからPrefabを配置
-- コードスタイル: Unityエディタの標準的なPrefab作成手順に従う
-- 命名規則: MessageBubble.prefab, TypingIndicator.prefab
+## Tier / Branch
+- Tier: 2（機能実装）
+- Branch: main
 
 ## DoD
 - [ ] MessageBubble.prefab が作成されている
@@ -60,6 +44,23 @@ ChatController.csで使用するPrefab（MessageBubble, TypingIndicator）を作
 - [ ] ChatController.csで参照可能な状態になっている
 - [ ] docs/inbox/ にレポート（REPORT_TASK_003_PrefabCreation.md）が作成されている
 - [ ] 本チケットの Report 欄にレポートパスが追記されている
+
+## 停止条件
+- Forbidden Area に触れないと完遂できない
+- 仕様の仮定が 3 つ以上必要
+- 依存追加/更新、破壊的Git操作、GitHubAutoApprove不明での push が必要
+- SSOT不足を `ensure-ssot.js` で解決できない
+- 長時間待機が必要（定義したタイムアウト超過）
+- Unityエディタが起動していない、またはPrefab作成が不可能な環境
+
+停止時は以下を実施：
+1. チケットのStatusをBLOCKEDに更新
+2. 事実/根拠/次手（候補）をチケット本文に追記
+3. docs/inbox/REPORT_TASK_003_PrefabCreation.md を作成し、停止理由を記録
+4. チケットのReport欄にレポートパスを追記
+
+## 納品先
+- docs/inbox/REPORT_TASK_003_PrefabCreation.md
 
 ## 実装詳細
 
@@ -119,8 +120,20 @@ ChatController.csで使用するPrefab（MessageBubble, TypingIndicator）を作
   - 後続タスクで実装予定の場合は、プレースホルダーとして静的表示のみ
   - または、DOTweenを使用した簡単なフェードイン/アウトアニメーションを実装
 
-## Notes
-- Status は OPEN / IN_PROGRESS / BLOCKED / DONE を想定
-- BLOCKED の場合は、事実/根拠/次手（候補）を本文に追記し、Report に docs/inbox/REPORT_...md を必ず設定
-- 9-Slice設定された背景画像が存在しない場合は、一時的に通常のSpriteを使用し、後続タスクで9-Slice画像を作成する旨をレポートに記録する
-- アニメーションは後続タスクで実装予定の場合は、静的表示のみで対応し、後続タスクで実装する旨をレポートに記録する
+## コーディング規約
+- Unityエディタの標準的なPrefab作成手順に従う
+- Prefab名: MessageBubble.prefab, TypingIndicator.prefab
+- ディレクトリ構造: `Assets/Prefabs/UI/` を作成してからPrefabを配置
+
+## 参考情報
+- 前タスクレポート: `Docs/inbox/REPORT_TASK_002_LogicImplementation.md` を参照
+- プロジェクト仕様: `最初のプロンプト`（プロジェクトルート）を参照
+- Unityバージョン: Unity 6 (or 2022 LTS)
+- 必須パッケージ: TextMeshPro
+- ChatController.cs: `Assets/Scripts/UI/ChatController.cs` を参照（Prefabの使用方法）
+
+## 注意事項
+1. **9-Slice画像**: 9-Slice設定された背景画像が存在しない場合は、一時的に通常のSpriteを使用し、後続タスクで9-Slice画像を作成する旨をレポートに記録してください。
+2. **アニメーション**: TypingIndicatorのアニメーションは後続タスクで実装予定の場合は、静的表示のみで対応し、後続タスクで実装する旨をレポートに記録してください。
+3. **Prefab配置**: Prefabは`Assets/Prefabs/UI/`配下に配置し、ChatController.csのInspectorから参照可能な状態にしてください。
+4. **Unityエディタ**: Unityエディタが起動していない場合は、Prefab作成が不可能なため、BLOCKEDとして報告してください。

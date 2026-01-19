@@ -4,7 +4,7 @@ Tier: 2
 Branch: main
 Owner: Worker
 Created: 2026-01-06T07:00:00Z
-Report: Docs/inbox/REPORT_TASK_001_UnityCoreSystemSkeleton.md
+Report: docs/reports/REPORT_TASK_001_UnityCoreSystemSkeleton.md
 
 ## Objective
 Unityプロジェクト「Project_FoundPhone」のコアシステムのスケルトンコード（クラス定義、主要メソッド、変数の定義）を作成する。中身のロジックはTODOコメントで構いません。

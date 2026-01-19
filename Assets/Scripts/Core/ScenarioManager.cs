@@ -26,6 +26,9 @@ namespace ProjectFoundPhone.Core
         #pragma warning disable CS0414 // フィールドは割り当てられているが、値が使用されていない
         private bool m_IsInputLocked = false;
         #pragma warning restore CS0414
+
+        [Header("Debug")]
+        [SerializeField] private string m_DebugScenarioID;
         #endregion
 
         #region Unity Lifecycle
@@ -37,7 +40,12 @@ namespace ProjectFoundPhone.Core
         private void Start()
         {
             RegisterCustomCommands();
-            // TODO: 初期シナリオノードの開始処理
+            
+            // デバッグ用: IDが設定されていれば自動再生
+            if (!string.IsNullOrEmpty(m_DebugScenarioID))
+            {
+                PlayScenario(m_DebugScenarioID);
+            }
         }
 
         private void OnDestroy()
@@ -223,10 +231,14 @@ namespace ProjectFoundPhone.Core
             }
 
             // 推論ボード（DeductionBoard）にトピックを追加
-            // DeductionBoardは後続タスクで実装予定のため、現在はDebug.Logのみで対応
-            Debug.Log($"ScenarioManager: Topic unlocked - {topicData.Title} (ID: {topicID})");
-            // TODO: DeductionBoardが実装されたら、以下のように呼び出す
-            // DeductionBoard.Instance.AddTopic(topicData);
+            if (DeductionBoard.Instance != null)
+            {
+                DeductionBoard.Instance.AddTopic(topicData);
+            }
+            else
+            {
+                Debug.LogWarning($"ScenarioManager: DeductionBoard not found. Topic unlocked - {topicData.Title} (ID: {topicID})");
+            }
 
             // Yarn変数を更新: $has_topic_{topicID} = true
             string variableName = $"has_topic_{topicID}";
@@ -238,12 +250,13 @@ namespace ProjectFoundPhone.Core
         /// Yarnスクリプトから呼び出される: <<Glitch 3>>
         /// 画面にノイズ演出を適用する
         /// </summary>
-        /// <param name="level">グリッチの強度レベル（1-5程度を想定）</param>
+        /// <param name="level">グリッチの強度レベル（0-3程度を想定）</param>
         private void GlitchCommand(int level)
         {
             // MetaEffectControllerにグリッチ効果を要求
             if (MetaEffectController.Instance != null)
             {
+                // Local implementation uses PlayGlitchEffect
                 MetaEffectController.Instance.PlayGlitchEffect(level);
                 Debug.Log($"ScenarioManager: Glitch command executed - Level: {level}");
             }
@@ -251,6 +264,110 @@ namespace ProjectFoundPhone.Core
             {
                 Debug.LogWarning($"ScenarioManager: MetaEffectController instance is not available. Glitch level: {level}");
             }
+        }
+        #endregion
+
+        #region ScriptableObject Scenario System
+        /// <summary>
+        /// ID指定でシナリオをロードして再生
+        /// </summary>
+        /// <param name="scenarioID">Resources/ChatScenarios/以下のパス</param>
+        public void PlayScenario(string scenarioID)
+        {
+            ChatScenarioData data = Resources.Load<ChatScenarioData>($"ChatScenarios/{scenarioID}");
+            if (data != null)
+            {
+                PlayScenario(data);
+            }
+            else
+            {
+                Debug.LogError($"ScenarioManager: Could not find ChatScenarioData at Resources/ChatScenarios/{scenarioID}");
+            }
+        }
+
+        /// <summary>
+        /// ScriptableObjectベースのシナリオデータの再生を開始
+        /// </summary>
+        /// <param name="data">再生するシナリオデータ</param>
+        public void PlayScenario(ChatScenarioData data)
+        {
+            if (data == null)
+            {
+                Debug.LogWarning("ScenarioManager: PlayScenario called with null data.");
+                return;
+            }
+
+            StartCoroutine(PlayScenarioRoutine(data));
+        }
+
+        private IEnumerator PlayScenarioRoutine(ChatScenarioData data)
+        {
+            // 入力をロック
+            m_IsInputLocked = true;
+
+            foreach (var message in data.Messages)
+            {
+                // タイピング演出
+                if (message.TypingDelay > 0)
+                {
+                    if (m_ChatController != null) m_ChatController.ShowTypingIndicator(true);
+                    yield return new WaitForSeconds(message.TypingDelay);
+                    if (m_ChatController != null) m_ChatController.ShowTypingIndicator(false);
+                }
+
+                // メッセージ表示
+                if (m_ChatController != null)
+                {
+                    m_ChatController.AddMessage(message.SenderID, message.Text);
+                }
+
+                // 選択肢がある場合
+                if (message.Choices != null && message.Choices.Count > 0)
+                {
+                    bool choiceMade = false;
+                    ChatScenarioData nextScenario = null;
+
+                    List<string> choiceTexts = new List<string>();
+                    foreach (var choice in message.Choices)
+                    {
+                        choiceTexts.Add(choice.Text);
+                    }
+
+                    if (m_ChatController != null)
+                    {
+                        m_ChatController.ShowChoices(choiceTexts, (index) =>
+                        {
+                            // 選択された次のシナリオを取得
+                            if (index >= 0 && index < message.Choices.Count)
+                            {
+                                nextScenario = message.Choices[index].NextScenario;
+                            }
+                            choiceMade = true;
+                        });
+                    }
+                    else
+                    {
+                        // UIがない場合は強制進行（またはエラー）
+                        Debug.LogError("ScenarioManager: ChatController missing for choices.");
+                        choiceMade = true;
+                    }
+
+                    // 選択待ち
+                    yield return new WaitUntil(() => choiceMade);
+
+                    // 次のシナリオがあれば再生（現在のループは終了）
+                    if (nextScenario != null)
+                    {
+                        // 再帰的に呼び出すのではなく、コルーチンを新しく開始して現在のコルーチンを終了
+                        StartCoroutine(PlayScenarioRoutine(nextScenario));
+                        yield break;
+                    }
+                }
+            }
+
+            // シナリオ終了時の処理（必要なら）
+            m_IsInputLocked = false;
+>>>>>>> origin/main
         }
         #endregion
 
