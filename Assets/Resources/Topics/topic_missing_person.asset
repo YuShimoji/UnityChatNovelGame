@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88cc88b8365a0794b9698889aff97e99, type: 3}
+  m_Name: topic_missing_person
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFoundPhone.Data.TopicData
+  m_TopicID: topic_missing_person
+  m_Icon: {fileID: 0}
+  m_Title: Missing Person
+  m_Description: "\u884C\u65B9\u4E0D\u660E\u8005\u306B\u95A2\u3059\u308B\u60C5\u5831\u3002\u30B9\u30DE\u30DB\u306E\u6301\u3061\u4E3B\u304B\u3082\u3057\u308C\u306A\u3044\u3002\u8A73\u7D30\u3092\u8ABF\u3079\u308B\u5FC5\u8981\u304C\u3042\u308B\u3002"

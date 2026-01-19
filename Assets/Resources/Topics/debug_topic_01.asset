@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88cc88b8365a0794b9698889aff97e99, type: 3}
+  m_Name: debug_topic_01
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFoundPhone.Data.TopicData
+  m_TopicID: debug_topic_01
+  m_Icon: {fileID: 0}
+  m_Title: Strange Signal
+  m_Description: "\u62FE\u3063\u305F\u30B9\u30DE\u30DB\u304B\u3089\u53D7\u4FE1\u3057\u305F\u4E0D\u5BE9\u306A\u4FE1\u53F7\u3002\u30CE\u30A4\u30BA\u304C\u591A\u304F\u3001\u5185\u5BB9\u306F\u4E0D\u660E\u77AD\u3060\u304C\u3001\u4F55\u304B\u91CD\u8981\u306A\u60C5\u5831\u304C\u96A0\u3055\u308C\u3066\u3044\u308B\u6C17\u304C\u3059\u308B\u3002"

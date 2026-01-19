@@ -3,6 +3,7 @@ using System.Collections;
 using Yarn.Unity;
 using ProjectFoundPhone.UI;
 using ProjectFoundPhone.Data;
+using ProjectFoundPhone.Effects;
 using DG.Tweening;
 
 namespace ProjectFoundPhone.Core
@@ -15,13 +16,16 @@ namespace ProjectFoundPhone.Core
     {
         #region Private Fields
         [SerializeField] private DialogueRunner m_DialogueRunner;
-        [SerializeField] private ChatController m_ChatController;
+        [SerializeField] private ProjectFoundPhone.UI.ChatController m_ChatController;
         [SerializeField] private string m_StartNode = "Start";
 
         /// <summary>
         /// 入力ロック状態（StartWaitCommandで使用）
+        /// 将来的にDialogueRunnerの進行制御で使用予定
         /// </summary>
+        #pragma warning disable CS0414 // フィールドは割り当てられているが、値が使用されていない
         private bool m_IsInputLocked = false;
+        #pragma warning restore CS0414
         #endregion
 
         #region Unity Lifecycle
@@ -61,7 +65,7 @@ namespace ProjectFoundPhone.Core
             if (m_ChatController == null)
             {
                 // Unity 6の非推奨APIを新しいAPIに置き換え
-                m_ChatController = FindFirstObjectByType<ChatController>();
+                m_ChatController = FindFirstObjectByType<ProjectFoundPhone.UI.ChatController>();
             }
 
             if (m_ChatController == null)
@@ -237,11 +241,16 @@ namespace ProjectFoundPhone.Core
         /// <param name="level">グリッチの強度レベル（1-5程度を想定）</param>
         private void GlitchCommand(int level)
         {
-            // MetaEffectControllerまたは専用のGlitchEffectコンポーネントにグリッチ効果を要求
-            // MetaEffectControllerが未実装の場合は、Debug.Logのみで対応（後続タスクで実装）
-            Debug.Log($"ScenarioManager: Glitch command - Level: {level}");
-            // TODO: MetaEffectControllerが実装されたら、以下のように呼び出す
-            // MetaEffectController.Instance.PlayGlitchEffect(level);
+            // MetaEffectControllerにグリッチ効果を要求
+            if (MetaEffectController.Instance != null)
+            {
+                MetaEffectController.Instance.PlayGlitchEffect(level);
+                Debug.Log($"ScenarioManager: Glitch command executed - Level: {level}");
+            }
+            else
+            {
+                Debug.LogWarning($"ScenarioManager: MetaEffectController instance is not available. Glitch level: {level}");
+            }
         }
         #endregion
 

@@ -174,6 +174,8 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
+            // メッセージバブルの生成と追加
+
             // CreateMessageBubble()でメッセージバブルを生成（既にcontentの子として追加済み）
             GameObject messageBubble = CreateMessageBubble(charID, text);
             if (messageBubble == null)

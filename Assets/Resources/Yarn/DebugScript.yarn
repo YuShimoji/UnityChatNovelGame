@@ -1,0 +1,31 @@
+title: Start
+---
+<<declare $has_topic_debug_topic_01 = false>>
+
+// Initial Message
+<<Message "player" "Hello? Is anyone there?">>
+<<StartWait 2>>
+<<Message "unknown" "I am here. Reception is bad.">>
+
+// Image Test
+<<Message "player" "Can you see this image?">>
+<<Image "player" "debug_image_01">>
+<<StartWait 1>>
+<<Message "unknown" "[Image Received] I see it. Uniform noise pattern.">>
+
+// Topic Unlock Test
+<<Message "player" "I found something interesting about the signal.">>
+<<UnlockTopic "debug_topic_01">>
+<<Message "system" "New topic unlocked: Strange Signal">>
+
+// Glitch Test
+<<Message "unknown" "Wait, something is interfering...">>
+<<Glitch 1>>
+<<StartWait 1>>
+<<Glitch 3>>
+<<Message "unknown" "Losing connec... tion...">>
+<<Glitch 5>>
+
+// End
+<<Message "player" "Hello?!">>
+===

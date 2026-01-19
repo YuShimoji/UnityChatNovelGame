@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88cc88b8365a0794b9698889aff97e99, type: 3}
+  m_Name: topic_found_phone
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFoundPhone.Data.TopicData
+  m_TopicID: topic_found_phone
+  m_Icon: {fileID: 0}
+  m_Title: Found Phone
+  m_Description: "\u9053\u7AEF\u3067\u62FE\u3063\u305F\u30B9\u30DE\u30FC\u30C8\u30D5\u30A9\u30F3\u3002\u753B\u9762\u306F\u5272\u308C\u3066\u3044\u308B\u304C\u3001\u307E\u3060\u52D5\u4F5C\u3057\u3066\u3044\u308B\u3002\u8AB0\u306E\u3082\u306E\u3060\u308D\u3046\u304B\uFF1F"
