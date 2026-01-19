@@ -40,6 +40,10 @@
 ### 短期（Next）
 
 - [pending] Unity プロジェクト構造の整理 (ref: docs/tasks/TASK_001_UnityProjectStructure.md, Status: OPEN)
+- [pending] Chat UI Implementation (ref: docs/tasks/TASK_007_ChatUI_Implementation.md, Status: CLOSED)
+- [pending] Chat UI Data Integration (ref: docs/tasks/TASK_008_ChatUI_Integration.md, Status: OPEN)
+- [pending] DeductionBoard (推論ボード) 実装 (ref: docs/tasks/TASK_009_DeductionBoard.md, Status: OPEN)
+- [pending] MetaEffectController (演出エフェクト) 実装 (ref: docs/tasks/TASK_010_MetaEffectController.md, Status: OPEN)
 
 ### 中期（Later）
 

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
+using System.Collections.Generic;
 
 namespace ProjectFoundPhone.UI
 {
@@ -20,6 +21,11 @@ namespace ProjectFoundPhone.UI
         [SerializeField] private TMP_InputField m_InputField;
         [SerializeField] private Button m_SendButton;
         [SerializeField] private float m_AutoScrollThreshold = 0.1f; // 自動スクロールを実行する閾値（0.0-1.0）
+
+        [Header("Choice Settings")]
+        [SerializeField] private GameObject m_ChoiceButtonPrefab;
+        [SerializeField] private Transform m_ChoiceContainer;
+
 
         private bool m_IsUserScrolling = false;
         private float m_LastScrollPosition = 1.0f;
@@ -226,6 +232,78 @@ namespace ProjectFoundPhone.UI
         /// チャットを最下部に自動スクロール
         /// ユーザーが過去ログを見ている場合は強制スクロールしない
         /// </summary>
+        }
+
+        /// <summary>
+        /// 選択肢を表示する
+        /// </summary>
+        /// <param name="options">選択肢のテキストリスト</param>
+        /// <param name="onSelected">選択時のコールバック (index)</param>
+        public void ShowChoices(List<string> options, System.Action<int> onSelected)
+        {
+            if (m_ChoiceButtonPrefab == null || m_ChoiceContainer == null)
+            {
+                Debug.LogError("ChatController: ChoiceButtonPrefab or ChoiceContainer is not assigned.");
+                return;
+            }
+
+            // 既存の選択肢をクリア
+            HideChoices();
+
+            m_ChoiceContainer.gameObject.SetActive(true);
+
+            // 入力欄を非表示にする（オプション）
+            if (m_InputField != null) m_InputField.gameObject.SetActive(false);
+            if (m_SendButton != null) m_SendButton.gameObject.SetActive(false);
+
+            for (int i = 0; i < options.Count; i++)
+            {
+                int index = i; // キャプチャ用
+                GameObject buttonObj = Instantiate(m_ChoiceButtonPrefab, m_ChoiceContainer);
+                
+                // ボタンのテキスト設定
+                TextMeshProUGUI btnText = buttonObj.GetComponentInChildren<TextMeshProUGUI>();
+                if (btnText != null)
+                {
+                    btnText.text = options[i];
+                }
+
+                // クリックイベント設定
+                Button btn = buttonObj.GetComponent<Button>();
+                if (btn != null)
+                {
+                    btn.onClick.AddListener(() =>
+                    {
+                        HideChoices();
+                        onSelected?.Invoke(index);
+                    });
+                }
+            }
+
+            // 選択肢が表示されたら最下部へスクロール
+            AutoScroll();
+        }
+
+        /// <summary>
+        /// 選択肢を非表示にする
+        /// </summary>
+        public void HideChoices()
+        {
+            if (m_ChoiceContainer != null)
+            {
+                // 子要素を全て削除
+                foreach (Transform child in m_ChoiceContainer)
+                {
+                    Destroy(child.gameObject);
+                }
+                m_ChoiceContainer.gameObject.SetActive(false);
+            }
+
+            // 入力欄を再表示
+            if (m_InputField != null) m_InputField.gameObject.SetActive(true);
+            if (m_SendButton != null) m_SendButton.gameObject.SetActive(true);
+        }
+
         public void AutoScroll()
         {
             if (m_ScrollRect == null || m_IsUserScrolling)
