@@ -1,47 +1,38 @@
-# Worker Prompt: TASK_007_ChatUI_Implementation
+# Worker Prompt: TASK_007 Core System Verification
 
-あなたは Worker Agent です。以下の指示に従い、タスクを遂行してください。
-Orchestrator によって定義された境界（Focus/Forbidden）を遵守することが求められます。
+## Request
+あなたは Unity クライアントエンジニアとして、実装済みの **Core System (ChatController, ScenarioManager)** の動作検証を行ってください。実装作業は完了していますが、「動作する証拠 (Evidence)」が不足しています。
 
-## 参照情報
-- **チケット**: `docs/tasks/TASK_007_ChatUI_Implementation.md` (必読)
-- **SSOT**: `docs/Windsurf_AI_Collab_Rules_latest.md`
-- **HANDOVER**: `docs/HANDOVER.md`
-- **Context**: `AI_CONTEXT.md`
+## Context
+- **Current State**: コード実装完了、コンパイルエラーなし。
+- **Goal**: `DebugChatScene` で会話が正常に行われることを検証し、スクリーンショットを撮る。
+- **Blocking**: Evidence がないため Phase 1.75 を真に完了できない。
 
-## ミッション
-**Chat UI の実装 (Asset/Scene/Script)**
+## Focus Area
+1. **Scene**: `Assets/Scenes/DebugChatScene.unity` (なければ作成/Setup)
+2. **Script**: `Assets/Resources/Yarn/DebugScript.yarn` (全機能テスト用)
+3. **Action**: Unity Editor で Play し、以下の動作を確認する:
+   - メッセージ表示 (Left/Right)
+   - 画像表示 (`<<Image>>`)
+   - 待機 (`<<StartWait>>`)
+   - ログ出力 (`<<UnlockTopic>>`, `<<Glitch>>`)
 
-- `ChatDevScene` を作成し、チャット画面（スクロールビュー、入力欄、送信ボタン）を構築する。
-- 既存の `ChatController` を活用し、UIイベントと連携させる。
-- PlayMode でチャット送信・表示が機能することを確認する。
+## Tasks (Step-by-Step)
+1. `Assets/Scenes/DebugChatScene.unity` を開く (存在しない場合は `Tools > FoundPhone > Setup Debug Scene` を試すか、手動作成)。
+2. `ScenarioManager` に `Assets/Resources/Yarn/DebugScript.yarn` をアタッチする。
+3. Unity Editor で Play する。
+4. シナリオを最後まで進める。
+5. **Evidence 取得 (必須)**:
+   - 会話中の **Game View スクリーンショット** を撮る (`docs/evidence/task007_chat_ui.png`)
+   - **Console View スクリーンショット** (エラーがないこと、コマンドログが出ていること) を撮る (`docs/evidence/task007_console.png`)
+6. `docs/tasks/TASK_007_Verification.md` の DoD チェックボックスを埋める。
+7. レポート `docs/inbox/REPORT_TASK_007_Verification.md` を作成する (Evidence パスを明記)。
 
-## 境界 (Boundaries)
+## Forbidden Area
+- プロダクションコード (`ChatController.cs` 等) のロジック変更
+- 新機能の追加
 
-### Focus Area（変更許可）
-- `Assets/Scenes/ChatDevScene.unity` (新規)
-- `Assets/Scripts/Core/ChatController.cs` (UI連携追加のみ)
-- `Assets/Prefabs/UI/` (調整が必要な場合)
-
-### Forbidden Area（変更禁止）
-- `Assets/Scripts/Core/` のその他ロジック（`ScenarioManager` 等）
-- 既存のPrefabを理由なく破壊すること
-- プロジェクト設定（ProjectSettings）
-
-## Definition of Done (DoD)
-- [ ] `ChatDevScene` が作成され、エラーなく再生できる
-- [ ] 画面下部にテキスト入力欄と送信ボタンがある
-- [ ] 送信ボタン押下で、入力されたテキストが `ChatController` に渡される
-- [ ] `ChatController` が `MessageBubble` を ScrollView 内に生成する
-- [ ] タイピング演出（ `TypingIndicator` ）が表示・非表示される
-- [ ] 自動スクロール（簡易実装）が機能する
-- [ ] レポート `docs/reports/REPORT_TASK_007_ChatUI_Implementation.md` が作成されている
-
-## 停止条件 (Stop & Report)
-- `ChatController` のロジックに重大な欠陥があり、UI連携が不可能な場合
-- Unity Editor がクラッシュする場合
-- 依存する Prefab (`MessageBubble` 等) が破損している場合
-
-## 納品物
-- 変更されたコード/シーン
-- `docs/reports/REPORT_TASK_007_ChatUI_Implementation.md` (実行結果のスクショあるいはログを含むこと)
+## Output
+- `docs/evidence/task007_chat_ui.png`
+- `docs/evidence/task007_console.png`
+- `docs/inbox/REPORT_TASK_007_Verification.md`
