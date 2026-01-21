@@ -6,7 +6,7 @@ Tier: 2
 Branch: feat/meta-effect-controller
 Owner: Worker
 Created: 2026-01-17T02:00:00+09:00
-Report: docs/inbox/REPORT_TASK_010_MetaEffectController.md 
+Report: docs/reports/REPORT_TASK_010_MetaEffectController.md 
 
 ## Objective
 メタ演出（グリッチ効果等）を制御する `MetaEffectController` を実装する。

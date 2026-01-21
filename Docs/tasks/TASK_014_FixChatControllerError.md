@@ -5,7 +5,7 @@ Tier: 2
 Branch: feat/fix-chatcontroller-error
 Owner: Worker
 Created: 2026-01-17T06:30:00+09:00
-Report: docs/inbox/REPORT_TASK_014_FixChatControllerError.md
+Report: docs/reports/REPORT_TASK_014_FixChatControllerError.md
 
 ## Objective
 DebugChatSceneで発生しているChatControllerのNullReferenceExceptionを修正する。

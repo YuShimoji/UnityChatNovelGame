@@ -5,7 +5,7 @@ Tier: 2
 Branch: feat/fix-debug-scene-builder-reflection
 Owner: Worker
 Created: 2026-01-17T07:00:00+09:00
-Report: docs/inbox/REPORT_TASK_015_FixDebugSceneBuilderReflection.md
+Report: docs/reports/REPORT_TASK_015_FixDebugSceneBuilderReflection.md
 
 ## Objective
 DebugSceneBuilderのセットアップ時に発生しているリフレクションエラーを修正する。

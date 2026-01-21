@@ -5,7 +5,7 @@ Tier: 2
 Branch: main
 Owner: Worker
 Created: 2026-01-17T04:30:00+09:00
-Report: docs/inbox/REPORT_TASK_012_CompileErrorFix.md
+Report: docs/reports/REPORT_TASK_012_CompileErrorFix.md
 
 ## Objective
 TASK_010 と TASK_011 の実装後に発生したコンパイルエラーと NullReferenceException を修正する。

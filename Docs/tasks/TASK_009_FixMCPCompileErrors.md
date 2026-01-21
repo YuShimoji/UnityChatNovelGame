@@ -6,7 +6,7 @@ Branch: fix/mcp-compile-errors
 Owner: Worker
 Created: 2026-01-17T01:45:00+09:00
 Completed: 2026-01-17T01:50:00+09:00
-Report: docs/inbox/REPORT_TASK_009_FixMCPCompileErrors.md
+Report: docs/reports/REPORT_TASK_009_FixMCPCompileErrors.md
 
 ## Objective
 `Assets/MCPForUnity/Editor/` 配下のスクリプトで発生している大量のコンパイルエラー（CS0234, CS0246）を修正する。
