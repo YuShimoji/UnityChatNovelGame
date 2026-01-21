@@ -7,10 +7,10 @@ KICKSTART_2026-01-15T13:26:07+09:00
 2026-01-15T13:26:07+09:00
 
 ## 現在のフェーズ
-Phase 1.75: Complete Gate
+Phase 2: Status Check
 
 ## ステータス
-GATE_CHECK_PENDING
+STATUS_CHECK_PENDING
 
 ## 進捗記録
 

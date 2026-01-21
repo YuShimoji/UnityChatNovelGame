@@ -96,3 +96,7 @@ GitHubAutoApprove: false
 ## Proposals
 
 - Implement Inference Board UI (TASK_008/011 follow-up).
+
+## Verification
+
+- `node scripts/report-validator.js` (2026-01-21 17:59:20): ✅ OK
