@@ -2,11 +2,12 @@
 
 ## Request
 あなたは Unity クライアントエンジニアとして、**Topic System (ScriptableObjects, UnlockTopicCommand)** の動作検証を行ってください。
-アセットは作成済み(TASK_011)ですが、Unity Editor 上での正しい設定確認と動作ログ確認(TASK_013)が未完了です。
+TASK_011 (Asset作成) と TASK_013 (検証) が「Evidence 待ち」で停止しています。
 
 ## Context
-- **Current State**: `TopicData` クラスとアセット(Resources/Topics/)は存在。
-- **Goal**: アセットが Inspector で正しく表示されるか、`UnlockTopicCommand` でエラーが出ないか確認する。
+- **Current State**: アセット作成済み。コード実装済み。Phase 3 戦略により「Verification First」が決定。
+- **Goal**: アセットの Inspector 表示と、コマンド実行ログの**スクリーンショットを提出すること**。
+- **Blocking**: これが完了しない限り、Deduction Board (TASK_008/009) の実装を再開できない。
 
 ## Focus Area
 1. **Assets**: `Assets/Resources/Topics/*.asset`

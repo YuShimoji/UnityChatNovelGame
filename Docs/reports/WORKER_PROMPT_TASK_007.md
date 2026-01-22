@@ -1,12 +1,12 @@
 # Worker Prompt: TASK_007 Core System Verification
 
 ## Request
-あなたは Unity クライアントエンジニアとして、実装済みの **Core System (ChatController, ScenarioManager)** の動作検証を行ってください。実装作業は完了していますが、「動作する証拠 (Evidence)」が不足しています。
+あなたは Unity クライアントエンジニアとして、**Core System (ChatController, ScenarioManager)** の動作検証（再試行）を行ってください。前回の検証では Evidence が提出されず、タスクが完了できませんでした。
 
 ## Context
-- **Current State**: コード実装完了、コンパイルエラーなし。
-- **Goal**: `DebugChatScene` で会話が正常に行われることを検証し、スクリーンショットを撮る。
-- **Blocking**: Evidence がないため Phase 1.75 を真に完了できない。
+- **Current State**: コード実装完了。Phase 1.75 通過済みだが、タスクは OPEN 状態。
+- **Goal**: `DebugChatScene` を実際に動かし、**スクリーンショットを提出すること**。
+- **Blocking**: これが完了しない限り、次の機能実装（Deduction Board）に着手できない（Verification First 戦略）。
 
 ## Focus Area
 1. **Scene**: `Assets/Scenes/DebugChatScene.unity` (なければ作成/Setup)
