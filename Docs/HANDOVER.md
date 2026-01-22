@@ -73,6 +73,10 @@ GitHubAutoApprove: false
 
 - なし
 
+## リスク
+
+- Evidence収集の遅れによる検証フェーズの停滞（TASK_007, 011, 013）
+
 ## バックログ
 
 - プロジェクト構造の整理（Docs と docs の統合検討）

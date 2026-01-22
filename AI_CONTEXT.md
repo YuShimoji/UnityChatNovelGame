@@ -56,6 +56,11 @@
 - TASK_002（ロジック実装）完了
 - 次のステップ: Prefab作成、DeductionBoard実装、MetaEffectController実装
 
+## Worker Status
+
+- **Active Workers**: 0
+- **Blocked Tasks**: TASK_007, TASK_011, TASK_013 (Waiting for Evidence)
+
 ## 履歴
 
 - 2026-01-06 06:45: AI_CONTEXT.md を初期化
