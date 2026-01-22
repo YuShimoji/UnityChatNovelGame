@@ -286,5 +286,14 @@ RP_REPORT_CREATED
 - [x] コンパイルエラー修正:
   - `ScenarioManager.cs`: Git マージコンフリクトマーカー `>>>>>>> origin/main` を削除
   - `ChatController.cs`: 重複 XML コメントと不正な閉じ括弧を削除
-- [ ] 変更をコミット
+- [x] 変更をコミット (4b0ccd8)
+
+## 次のアクション (2026-01-23)
+- **並行進行可能なタスク**:
+  - TASK_007 (Verification): Evidence 取得 (Unity Editor 検証)
+  - TASK_013 (TopicDataVerification): Evidence 取得 + UnlockTopicCommand 確認
+- **リファクタリング**: 現時点で緊急性なし
+- **プロジェクト総点検**: sw-doctor + todo-sync で定期実行
+- **エラー修正**: 完了 (マージコンフリクトマーカー除去済み)
+- **新規実装案**: Deduction Board UI (TASK_011 完了後)
 

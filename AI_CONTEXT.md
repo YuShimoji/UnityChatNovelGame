@@ -32,10 +32,10 @@
 - [pending] Chat UI Implementation (ref: docs/tasks/TASK_007_ChatUI_Implementation.md, Status: CLOSED)
 - [pending] Core System Proof of Concept (Verification) (ref: docs/tasks/TASK_007_Verification.md, Status: OPEN)
 - [pending] Chat UI Data Integration (ref: docs/tasks/TASK_008_ChatUI_Integration.md, Status: RESOLVED)
-- [pending] Deduction Board Implementation (ref: docs/tasks/TASK_008_DeductionBoard.md, Status: OPEN)
-- [pending] DeductionBoard (推論ボード) 実装 (ref: docs/tasks/TASK_009_DeductionBoard.md, Status: OPEN)
 - [in_progress] Topic ScriptableObjects Creation (ref: docs/tasks/TASK_011_TopicScriptableObjects.md, Status: IN_PROGRESS)
 - [in_progress] TopicData Verification and Evidence Collection (ref: docs/tasks/TASK_013_TopicDataVerification.md, Status: IN_PROGRESS)
+- [pending] Deduction Board Implementation (ref: docs/tasks/TASK_016_DeductionBoard_Conflict.md, Status: OPEN)
+- [pending] DeductionBoard (推論ボード) 実装 (ref: docs/tasks/TASK_017_DeductionBoard_Conflict.md, Status: OPEN)
 
 ### 中期（Later）
 
