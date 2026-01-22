@@ -7,7 +7,7 @@ TASK_011 (Asset作成) と TASK_013 (検証) が「Evidence 待ち」で停止�
 ## Context
 - **Current State**: アセット作成済み。コード実装済み。Phase 3 戦略により「Verification First」が決定。
 - **Goal**: アセットの Inspector 表示と、コマンド実行ログの**スクリーンショットを提出すること**。
-- **Blocking**: これが完了しない限り、Deduction Board (TASK_008/009) の実装を再開できない。
+- **Blocking**: これが完了しない限り、Deduction Board (TASK_008/009 -> Renamed to 016/017 for conflict resolution) の実装を再開できない。
 
 ## Focus Area
 1. **Assets**: `Assets/Resources/Topics/*.asset`
