@@ -10,7 +10,7 @@ KICKSTART_2026-01-15T13:26:07+09:00
 Phase 6: Orchestrator Report
 
 ## ステータス
-REPORTINGISPATCH
+REPORTING
 
 ## 進捗記録
 
@@ -40,7 +40,31 @@ REPORTINGISPATCH
   - **Strategy Update**: 
     - Instruct Workers (TASK_007, TASK_013) to implement **Automated Verification Script** (PlayMode Test) instead of Manual Capture.
 
-### Phase 1: Sync & Audit (2026-01-21)
+### Phase 3: Strategy (Verification Fix - 2026-01-22)
+- [x] Issue Analysis:
+  - Problem: MCP cannot take screenshots. Manual user verification is unreliable/blocking.
+  - Solution: **Automated Verification** (Code-based).
+- [x] Strategy Defined:
+  - **Concept**: Use a Unity C# script (`VerificationCapture.cs`) to auto-capture screen/logs on Start/Update.
+  - **Execution**: Worker implements this script -> Worker runs Scene (or asks User to run) -> Script saves file to `docs/evidence` -> Worker verifies file existence.
+  - **Target Task**: TASK_008 (integration) should include this mechanism as a standard.
+  - **New Task**: Create a shared utility script for future tasks.
+- [x] Next Actions:
+  - Create Ticket: `TASK_016_VerificationTools` (Tier 3: Tooling).
+  - Update `TASK_008` requirements to use these tools.
+
+### Phase 4: Ticket Creation (Verification Fix - 2026-01-22)
+- [x] TASK_016 (Tier 3: Verification Tools) Created
+  - DoD: `VerificationCapture.cs` created & tested.
+- [x] TASK_008 Updated
+  - Added dependency on `VerificationCapture` for evidence.
+
+### Phase 5: Worker Activation (2026-01-22)
+- [x] Worker Prompt Created:
+  - `docs/reports/WORKER_PROMPT_TASK_016.md`
+- [x] Ready for Worker Dispatch
+
+### Phase 1: Sync (2026-01-21 13:45)
 - [x] Remote Sync Executed (P1)
   - Pulled from origin main (behind 4 commits)
   - Integrated `docs/inbox` reports to `docs/reports`
