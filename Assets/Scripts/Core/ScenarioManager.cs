@@ -367,7 +367,6 @@ namespace ProjectFoundPhone.Core
 
             // シナリオ終了時の処理（必要なら）
             m_IsInputLocked = false;
->>>>>>> origin/main
         }
         #endregion
 
