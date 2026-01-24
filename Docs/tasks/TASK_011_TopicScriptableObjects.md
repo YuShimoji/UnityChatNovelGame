@@ -37,10 +37,10 @@ Report: docs/inbox/REPORT_TASK_011_TopicScriptableObjects.md
 - [x] `Assets/Resources/Topics/` ディレクトリが存在する（4つのアセットが存在するため確認済み）
 - [x] 初期シナリオで使用するトピックアセットが3つ以上作成されている（4つ存在）
 - [x] 各トピックアセットが `Resources.Load<TopicData>($"Topics/{topicID}")` で読み込める（テスト成功: 4 succeeded, 0 failed）
-- [ ] `UnlockTopicCommand` でトピックを解放できる（DebugScript.yarn で確認）
+- [/] `UnlockTopicCommand` でトピックを解放できる（Code Verified / Pending Runtime Check）
 - [ ] `DeductionBoard` (TASK_008完了後) でトピックが表示できる
-- [ ] **Evidence**: トピックアセットの Inspector 表示スクリーンショット
-- [x] `docs/inbox/` にレポート (`REPORT_TASK_011_TopicScriptableObjects.md`) が作成されている
+- [ ] **Evidence**: トピックアセットの Inspector 表示スクリーンショット (Pending Manual Action)
+- [x] `docs/inbox/` にレポート (`REPORT_TASK_013_TopicDataVerification.md`) が作成されている
 - [x] 本チケットの Report 欄にレポートパスが追記されている
 
 ## Notes

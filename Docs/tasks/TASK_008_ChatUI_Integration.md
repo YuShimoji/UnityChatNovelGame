@@ -40,4 +40,6 @@ Report: docs/reports/REPORT_TASK_008_ChatUI_Integration.md
 - [ ] シナリオデータを読み込み、`ChatController` で順次表示できる
 - [ ] 相手側のメッセージには適切なディレイ（Typing演出）が入る
 - [ ] ユーザー入力（選択肢または自由入力）待ちの状態を作れる
+- [ ] **Evidence**: Implement automated verification using `VerificationCapture` (TASK_016).
+  - Screenshots of Chat UI in action saved to `docs/evidence/`.
 - [ ] `docs/reports/REPORT_TASK_008_ChatUI_Integration.md` に動作確認のログ/スクショがある

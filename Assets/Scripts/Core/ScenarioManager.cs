@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using Yarn.Unity;
 using ProjectFoundPhone.UI;
 using ProjectFoundPhone.Data;
@@ -367,7 +368,7 @@ namespace ProjectFoundPhone.Core
 
             // シナリオ終了時の処理（必要なら）
             m_IsInputLocked = false;
->>>>>>> origin/main
+
         }
         #endregion
 

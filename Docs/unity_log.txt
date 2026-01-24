@@ -1,0 +1,1124 @@
+[Licensing::Module] Trying to connect to existing licensing client channel...
+[Licensing::IpcConnector] Successfully connected to the License Client on channel: "LicenseClient-PLANNER007" at "2026-01-24T04:14:55.0719993Z"
+[Licensing::Client] Error: Code 10 while verifying Licensing Client signature (process Id: 14576, path: "C:/Program Files/Unity Hub/UnityLicensingClient_V1/Unity.Licensing.Client.exe")
+[Licensing::Module] Error: LicensingClient has failed validation; ignoring
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.17.4+4293ba1
+  Session Id:              9d8550bfb41f4cc58fce1bf86dbef571
+  Correlation Id:          5667f6ed93ad3e492a10e3caef2bc6ae
+  External correlation Id: 7155015486150371564
+  Machine Id:              k5hMss0vS9wcACLBEUyPQVk9pVo=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-PLANNER007" (connect: 0.00s, validation: 0.01s, handshake: 0.03s)
+[Licensing::IpcConnector] Successfully connected to the License Notification on channel: "LicenseClient-PLANNER007-notifications" at "2026-01-24T04:14:55.1158515Z"
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Successfully updated license
+Built from '6000.0/staging' branch; Version is '6000.0.32f1 (b2e806cf271c) revision 11724806'; Using compiler version '193933523'; Build Type 'Release'
+OS: 'Windows 11  (10.0.26200) 64bit Core' Language: 'ja' Physical Memory: 65464 MB
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] Serial number assigned to: "F4-85J9-FNUU-T9SC-PSQB-XXXX"
+[Licensing::Module] Serial number assigned to: "15669603193341-UnityPersXXXX"
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] Serial number assigned to: "F4-85J9-FNUU-T9SC-PSQB-XXXX"
+[Licensing::Module] Serial number assigned to: "15669603193341-UnityPersXXXX"
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Unity.exe
+-batchmode
+-projectPath
+c:\Users\PLANNER007\UnityChatNovelGame
+-executeMethod
+VerificationTool.RunVerification
+-logFile
+docs/unity_log.txt
+Successfully changed project path to: c:\Users\PLANNER007\UnityChatNovelGame
+C:/Users/PLANNER007/UnityChatNovelGame
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gfx=262144"
+Player connection [37284]  Target information:
+
+Player connection [37284]  * "[IP] 192.168.10.109 [Port] 55505 [Flags] 2 [Guid] 3435502489 [EditorId] 3435502489 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-U9P4LKJ) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [37284] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [37284] Host joined alternative multi-casting on [225.0.0.222:34997]...
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+[Package Manager] Connected to IPC stream "Upm-37228" after 0.3 seconds.
+Library Redirect Path: Library/
+[Package Manager] Restoring resolved packages state from cache
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Registered 40 packages:
+  Packages from [https://packages.unity.com]:
+    com.unity.test-framework@1.4.5 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.test-framework)
+    com.unity.nuget.newtonsoft-json@3.2.2 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.nuget.newtonsoft-json)
+    com.unity.ext.nunit@2.0.5 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.ext.nunit)
+  Built-in packages:
+    com.unity.multiplayer.center@1.0.1 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.multiplayer.center)
+    com.unity.ugui@2.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.ugui)
+    com.unity.modules.accessibility@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.accessibility)
+    com.unity.modules.ai@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.ai)
+    com.unity.modules.androidjni@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.androidjni)
+    com.unity.modules.animation@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.animation)
+    com.unity.modules.assetbundle@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.assetbundle)
+    com.unity.modules.audio@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.audio)
+    com.unity.modules.cloth@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.cloth)
+    com.unity.modules.director@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.director)
+    com.unity.modules.imageconversion@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.imageconversion)
+    com.unity.modules.imgui@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.imgui)
+    com.unity.modules.jsonserialize@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.jsonserialize)
+    com.unity.modules.particlesystem@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.particlesystem)
+    com.unity.modules.physics@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.physics)
+    com.unity.modules.physics2d@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.physics2d)
+    com.unity.modules.screencapture@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.screencapture)
+    com.unity.modules.terrain@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.terrain)
+    com.unity.modules.terrainphysics@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.terrainphysics)
+    com.unity.modules.tilemap@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.tilemap)
+    com.unity.modules.ui@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.ui)
+    com.unity.modules.uielements@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.uielements)
+    com.unity.modules.umbra@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.umbra)
+    com.unity.modules.unityanalytics@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.unityanalytics)
+    com.unity.modules.unitywebrequest@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.unitywebrequest)
+    com.unity.modules.unitywebrequestassetbundle@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.unitywebrequestassetbundle)
+    com.unity.modules.unitywebrequestaudio@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.unitywebrequestaudio)
+    com.unity.modules.unitywebrequesttexture@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.unitywebrequesttexture)
+    com.unity.modules.unitywebrequestwww@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.unitywebrequestwww)
+    com.unity.modules.vehicles@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.vehicles)
+    com.unity.modules.video@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.video)
+    com.unity.modules.vr@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.vr)
+    com.unity.modules.wind@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.wind)
+    com.unity.modules.xr@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.xr)
+    com.unity.modules.subsystems@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.subsystems)
+    com.unity.modules.hierarchycore@1.0.0 (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\com.unity.modules.hierarchycore)
+  Git packages:
+    dev.yarnspinner.unity@https://github.com/YarnSpinnerTool/YarnSpinner-Unity.git (location: C:\Users\PLANNER007\UnityChatNovelGame\Library\PackageCache\dev.yarnspinner.unity)
+[Physics::Module] Selected backend.
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+[Subsystems] No new subsystems found in resolved package list.
+Package Manager log level set to [2]
+[Package Manager] Done registering packages in 0.06 seconds
+Refreshing native plugins compatible for Editor in 0.00 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 6000.0.32f1 (b2e806cf271c)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/6000.0.32f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/Users/PLANNER007/UnityChatNovelGame/Assets
+GfxDevice: creating device client; kGfxThreadingModeNonThreaded
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: NVIDIA GeForce RTX 4060 Ti (ID=0x2803)
+    Vendor:   NVIDIA
+    VRAM:     7949 MB
+    Driver:   32.0.15.8097
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] Serial number assigned to: "F4-85J9-FNUU-T9SC-PSQB-XXXX"
+[Licensing::Module] Serial number assigned to: "15669603193341-UnityPersXXXX"
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/6000.0.32f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/6000.0.32f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/6000.0.32f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56228
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+ImportWorker Server TCP listen port: 0
+AcceleratorClientConnectionCallback - disconnected - :0
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.0.32f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.002202 seconds.
+- Loaded All Assemblies, in  0.312 seconds
+Native extension for WindowsStandalone target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.268 seconds
+Domain Reload Profiling: 577ms
+	BeginReloadAssembly (105ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (0ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (1ms)
+	RebuildCommonClasses (31ms)
+	RebuildNativeTypeToScriptingClass (11ms)
+	initialDomainReloadingComplete (42ms)
+	LoadAllAssembliesAndSetupDomain (120ms)
+		LoadAssemblies (103ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (117ms)
+			TypeCache.Refresh (116ms)
+				TypeCache.ScanAssembly (105ms)
+			BuildScriptInfoCaches (0ms)
+			ResolveRequiredComponents (0ms)
+	FinalizeReload (269ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (240ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (24ms)
+			SetLoadedEditorAssemblies (3ms)
+			BeforeProcessingInitializeOnLoad (41ms)
+			ProcessInitializeOnLoadAttributes (121ms)
+			ProcessInitializeOnLoadMethodAttributes (51ms)
+			AfterProcessingInitializeOnLoad (0ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (0ms)
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] Serial number assigned to: "F4-85J9-FNUU-T9SC-PSQB-XXXX"
+[Licensing::Module] Serial number assigned to: "15669603193341-UnityPersXXXX"
+Application.AssetDatabase Initial Refresh Start
+[ScriptCompilation] Requested script compilation because: Assetdatabase observed changes in script compilation related files
+Starting: C:\Program Files\Unity\Hub\Editor\6000.0.32f1\Editor\Data\bee_backend.exe --dont-print-to-structured-log --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: C:/Users/PLANNER007/UnityChatNovelGame
+DisplayProgressbar: Compiling Scripts
+ExitCode: 0 Duration: 0s318ms
+[254/257    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.dll (+2 others)
+[255/257    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.pdb
+[256/257    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.dll
+*** Tundra build success (0.29 seconds), 3 items updated, 257 evaluated
+AssetDatabase: script compilation time: 0.658605s
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  2.809 seconds
+Start importing Assets/Editor using Guid(70042ed2dc123124d8e54ce04b5f9402) (DefaultImporter) -> (artifact id: '3e44ec03c8392b54dfab14897dc1eaf6') in 0.0186401 seconds
+Start importing Packages/com.unity.ugui using Guid(72cbd669f67592ad8c30dbb265dbdc57) (DefaultImporter) -> (artifact id: '6847807d4b9a048f034d267d7911181f') in 0.0006683 seconds
+Start importing Assets/Tests using Guid(749afd1447d4daa42b32c1d58c9aaac3) (DefaultImporter) -> (artifact id: 'f0bc7d54991471c48a1911a72ccc008f') in 0.0152362 seconds
+Start importing Packages/com.unity.multiplayer.center using Guid(85815b39ecc4b547432acfa3d04f5690) (DefaultImporter) -> (artifact id: '504f7157a440bde97fe1f481e8e52516') in 0.000483 seconds
+Start importing Assets/TextMesh Pro using Guid(f54d1bd14bd3ca042bd867b519fee8cc) (DefaultImporter) -> (artifact id: '7e1f54d64cf3f27930ca18617e535d88') in 0.0062417 seconds
+Start importing Packages/com.unity.ext.nunit using Guid(0d12b5e71a9f2fbd5925dc0f3150b707) (DefaultImporter) -> (artifact id: 'ac17012f7214adc8ef63145f3efb8e83') in 0.0003391 seconds
+Start importing Assets/Scenes using Guid(6e05ca463412af746aa8b4abf916e2a4) (DefaultImporter) -> (artifact id: 'a9aac99d3c32b0ad5898ae2dc7984fa1') in 0.0054289 seconds
+Start importing Packages/com.unity.test-framework using Guid(4f67b639702c1492f57c9d0bd47d3ede) (DefaultImporter) -> (artifact id: 'c74de4d7ac4d0242c98fd72f51acbf34') in 0.0003757 seconds
+Start importing Assets/TextMesh Pro/Sprites using Guid(d0603b6d5186471b96c778c3949c7ce2) (DefaultImporter) -> (artifact id: 'ff76960570277fbd034f646459b3b808') in 0.0048922 seconds
+Start importing Assets/Scripts/Utils using Guid(52b1e208dceb75042b1600f558afba5d) (DefaultImporter) -> (artifact id: 'fb055db4b750eef89bcedca28a2a6930') in 0.014081 seconds
+Start importing Assets/Resources/Topics using Guid(d2568cb0333338d499d5d0701ce2650c) (DefaultImporter) -> (artifact id: '20bfa911cac784e365817a0b5a307346') in 0.0080173 seconds
+Start importing Assets/TextMesh Pro/Resources using Guid(243e06394e614e5d99fab26083b707fa) (DefaultImporter) -> (artifact id: '492a8f99d56e0ec2e4a76145520dd2c7') in 0.0063426 seconds
+Start importing Packages/com.unity.test-framework/UnityEngine.TestRunner using Guid(950890083f4907541a6ed06d70959e49) (DefaultImporter) -> (artifact id: 'b2380b0eb08023ce063c7b7396ba8e5e') in 0.0066534 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner using Guid(95cdf27b47eb82747ba9e51f41e72a35) (DefaultImporter) -> (artifact id: '77f76be7513a4e9a3b3e2eeeb0b13cad') in 0.0070034 seconds
+Start importing Assets/Tests/Integration using Guid(c55a1984304bd934db4f1a7e7b00ffba) (DefaultImporter) -> (artifact id: '2f7336bb53291a2dcc198613189aa8ef') in 0.0154128 seconds
+Start importing Assets/TextMesh Pro/Shaders using Guid(e9f693669af91aa45ad615fc681ed29f) (DefaultImporter) -> (artifact id: 'a6cbbc51cecdec7ef9d1947d55f4f6c4') in 0.0056262 seconds
+Start importing Assets/TextMesh Pro/Fonts using Guid(6ab70aee4d56447429c680537fbf93ed) (DefaultImporter) -> (artifact id: 'c251e92955171044e7f709e755488c1e') in 0.0059086 seconds
+Start importing Assets/Scripts/Debug using Guid(2b8c5df6c403e4548910e0e3224b2616) (DefaultImporter) -> (artifact id: '0901dcb1201770ae19ad8ea0368b93a6') in 0.0057188 seconds
+Start importing Assets/Scripts/Dev using Guid(eb9f5464d57b5064cbd83e47cfd64f06) (DefaultImporter) -> (artifact id: 'd9e359a3f3f83c5a666e2ebad6c0eb90') in 0.0115936 seconds
+Start importing Assets/Scripts/Editor using Guid(0c6846da4e67f854a85d126b61e55ac5) (DefaultImporter) -> (artifact id: '7da96eed2e4dc0c6c8f3cc2d1046bac8') in 0.0119661 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras using Guid(ce51c8e33b734b4db6086586558c53a3) (DefaultImporter) -> (artifact id: '3b6fd729ef36031968c63bcb3c217b85') in 0.006834 seconds
+Start importing Assets/Scripts/Effects using Guid(ceb69f5e792bf5f48ac3f1a3f8f89391) (DefaultImporter) -> (artifact id: 'a3fe32b4596f8e5bdb60396f4a1d59c4') in 0.0064236 seconds
+Start importing Assets/Resources/Yarn using Guid(af87a952602f4e94ba8b6feb7c8cfacc) (DefaultImporter) -> (artifact id: '2759b01f90dd69288f8292fabce20b78') in 0.0072302 seconds
+Start importing Packages/com.unity.ext.nunit/net40 using Guid(af19581c6078849139e0671f575e4b7c) (DefaultImporter) -> (artifact id: '175ce47e3b9f6b1f8e46871af618f5a7') in 0.0084944 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Sprites using Guid(701e577af2ba48b689972d42efb95456) (DefaultImporter) -> (artifact id: '226994f9e628d8e16c10806656d25eff') in 0.0080675 seconds
+Start importing Packages/com.unity.ext.nunit/net40/unity-custom using Guid(c0673f99c7a5d42e081a6f88c5a37862) (DefaultImporter) -> (artifact id: '604c033b13b664392993be9f07c4c7fc') in 0.0069231 seconds
+Start importing Assets/TextMesh Pro/Resources/Sprite Assets using Guid(512a49d95c0c4332bdd98131869c23c9) (DefaultImporter) -> (artifact id: '99c80ca869fb34ad86b8bf697bdd76d1') in 0.0075654 seconds
+Start importing Assets/Scripts/UI/Effects using Guid(7152051e2752dcb4a8a43330fffec5ea) (DefaultImporter) -> (artifact id: '766562d48db5608c447b2244c4e3bb5f') in 0.0166299 seconds
+Start importing Assets/TextMesh Pro/Resources/Fonts & Materials using Guid(731f1baa9d144a9897cb1d341c2092b8) (DefaultImporter) -> (artifact id: '7c46c9dc79cf2ed854752bbad7792141') in 0.0085796 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/UnityTestProtocol using Guid(936c6340f3468444ebb1785b4c311126) (DefaultImporter) -> (artifact id: '483d26fa6f42e15acd6790bf9c72ba8c') in 0.0080105 seconds
+Start importing Assets/Scripts/Debug/Editor using Guid(14fbd807ee338c04d9ae539c197ad95a) (DefaultImporter) -> (artifact id: 'f852d0842093f3cc3b233f5bc24c3c61') in 0.005869 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/CommandLineTest using Guid(b477d1f29b65a674e9d5cdab4eb72b01) (DefaultImporter) -> (artifact id: 'd7abe359a1b05afd93dcd5b5d76cf33e') in 0.0065594 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/TestSettings using Guid(95b719082a664ea45bb56759eed1f271) (DefaultImporter) -> (artifact id: '4d0b04fada6b6a6a34a84bcd27e10c97') in 0.0082875 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/CommandLineParser using Guid(7602252bdb82b8d45ae3483c3a00d3e1) (DefaultImporter) -> (artifact id: '7f4042be8b266d41f83337d8fd3e2897') in 0.0060254 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Fonts using Guid(b63e0053080646b9819789bf3bf9fa17) (DefaultImporter) -> (artifact id: 'ffb9700983c8fe5ccd5a448765c5c609') in 0.0071933 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources using Guid(d6d3a169ad794942a21da6a552d62f6f) (DefaultImporter) -> (artifact id: '81e6b7ea05b1535c85a8a412aa3e0f51') in 0.0063788 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/TestLaunchers using Guid(d64d92e4f04a13e4b99ea8d48e9e8ae9) (DefaultImporter) -> (artifact id: '3292843884b5f7b4874453a902cfa1e0') in 0.0075107 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/TestRun using Guid(8721cb2237d4a564a94a51f56243bdac) (DefaultImporter) -> (artifact id: '878b6064979e1990108a77cb392d64d1') in 0.0062695 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Materials using Guid(5808953df7a24274a851aa6dee52d30e) (DefaultImporter) -> (artifact id: 'fe7e7d68f4441757e0c11cfbfdc8f6c0') in 0.0048708 seconds
+Start importing Packages/com.unity.test-framework/UnityEngine.TestRunner/UnityTestProtocol using Guid(19e1940646874613a076c6b01d1f3404) (DefaultImporter) -> (artifact id: 'e62a4d5776733de3dd284c7bda3e08bd') in 0.0054867 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scripts using Guid(3979ce59e55144c89a2b3b3f8dcf7fd3) (DefaultImporter) -> (artifact id: '9d8416ef6f5a5ec7d970ec301c602024') in 0.0055927 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/TestRunner using Guid(49d4c2ab7ff0f4442af256bad7c9d57c) (DefaultImporter) -> (artifact id: '2c2a8c762103d2c2092be30ecefdc9a7') in 0.0054952 seconds
+Start importing Packages/com.unity.test-framework/UnityEngine.TestRunner/Assertions using Guid(1ad55f5ad04d1d045a1f287409c650dd) (DefaultImporter) -> (artifact id: '6bdaa59d84691a380c3ba7c1d8bfa849') in 0.0062157 seconds
+Start importing Assets/TextMesh Pro/Resources/Style Sheets using Guid(4aecb92fff08436c8303b10eab8da368) (DefaultImporter) -> (artifact id: '846264113985254ee4f528e49a6b454b') in 0.0056452 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/Api using Guid(fa423365b1ce06a4dbdc6fb4a8597bfa) (DefaultImporter) -> (artifact id: '4f9583793d5edc94661340236f21f4e3') in 0.007765 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Prefabs using Guid(5bff2544887143f5807c7d5059d07f79) (DefaultImporter) -> (artifact id: '1cb7510c7eba7c99adf87a1e054cce0f') in 0.0076842 seconds
+Start importing Packages/com.unity.test-framework/UnityEngine.TestRunner/Utils using Guid(bb32bccaf32a6db448d1c0cc99c78688) (DefaultImporter) -> (artifact id: 'b9ac2eaa7c139997734a4cfd1edbf73e') in 0.0061984 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes using Guid(db1090641b3241f6995b587eb21637bc) (DefaultImporter) -> (artifact id: 'd36bbf3552b624c03587183e31c2ded0') in 0.0076703 seconds
+Start importing Packages/com.unity.test-framework/UnityEngine.TestRunner/TestRunner using Guid(1ddb9e1c877ea80479d1eab4ddaa5d0d) (DefaultImporter) -> (artifact id: '6a7e2bf038898dc9a9d8427c931ca44c') in 0.0057738 seconds
+Start importing Packages/com.unity.test-framework/UnityEngine.TestRunner/NUnitExtensions using Guid(3e8d6af343b383544ba5743d119f4062) (DefaultImporter) -> (artifact id: '3f6e2ec14976a9de8c44a24fd5a1df3a') in 0.0071597 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Textures using Guid(6e5c6d5e25574122a7a12dbdbbeed156) (DefaultImporter) -> (artifact id: '68bf97d2160997b29c89ef8334ac2800') in 0.0062841 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/GUI using Guid(7e609b27ad2caa14c83dd9951b6c13c6) (DefaultImporter) -> (artifact id: '112f12c0c6681ccaea11688622ebb526') in 0.0054487 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/NUnitExtension using Guid(3f9202a39620f51418046c7754f215f0) (DefaultImporter) -> (artifact id: 'ab112e9ad4c0d836ad3545dea28bc266') in 0.0076528 seconds
+Start importing Packages/com.unity.test-framework/UnityEngine.TestRunner/Utils/AssemblyProvider using Guid(51557afa652635743b264a309f0a5c60) (DefaultImporter) -> (artifact id: '8a639915519a692529fdf384c74138af') in 0.0062183 seconds
+Start importing Packages/com.unity.test-framework/UnityEngine.TestRunner/TestRunner/Callbacks using Guid(61e236e8570a95e4eb754fb291e102e0) (DefaultImporter) -> (artifact id: 'd55b575d8e5d473cc2e43dbbdeaeff7c') in 0.0072845 seconds
+Start importing Packages/com.unity.test-framework/UnityEngine.TestRunner/TestRunner/RemoteHelpers using Guid(91c20d2c22b8b3a4cb6c816bd225591a) (DefaultImporter) -> (artifact id: '30fb2d9dd2eecdb696675b50955e4ebc') in 0.0062954 seconds
+Start importing Packages/com.unity.test-framework/UnityEngine.TestRunner/Assertions/LogScope using Guid(b1d8465ba1376b148bdab58965101f47) (DefaultImporter) -> (artifact id: 'aac2509859303379c698e7a61b119125') in 0.0058596 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/GUI/TestAssets using Guid(92e3104769da143888a712cdea27d950) (DefaultImporter) -> (artifact id: '1c339984e4f7b537284cfc59f8240800') in 0.0080138 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/TestLaunchers/Helpers using Guid(a3cb89150b8a4060b89a32725a8e267e) (DefaultImporter) -> (artifact id: '1c6550e824ea391f5fd50f57247dd2be') in 0.0057511 seconds
+Start importing Packages/com.unity.test-framework/UnityEngine.TestRunner/NUnitExtensions/Filters using Guid(c3de99f9efc582a48995bc8e8c2df418) (DefaultImporter) -> (artifact id: '6a3e6215aa297c9a4e3c7159efb1015c') in 0.0074435 seconds
+Start importing Packages/com.unity.test-framework/UnityEngine.TestRunner/TestRunner/Messages using Guid(256a0ca37fa972840bce7fca446e75e7) (DefaultImporter) -> (artifact id: '49c9fa09840fad3e17b412376a8dcf2a') in 0.0061613 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/GUI/Views using Guid(c5535d742ea2e4941850b421f9c70a1f) (DefaultImporter) -> (artifact id: 'd8974548c2c7ab5d5ad7599c432a1bc7') in 0.0076975 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/UnityTestProtocol/Data using Guid(3610673068254436ac90019f46e09f01) (DefaultImporter) -> (artifact id: 'edf71b33f3965ea27aa0f561aefe6dce') in 0.0064056 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/NUnitExtension/Attributes using Guid(96c503bf059df984c86eecf572370347) (DefaultImporter) -> (artifact id: '2e346665254194df03f2d47ad0a2e81b') in 0.0058951 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/GUI/TestListBuilder using Guid(07ea0326ed848fb4489187cb58f96113) (DefaultImporter) -> (artifact id: 'c9ef4e1b8c0b54cbe4a5a11c696e4b78') in 0.0081453 seconds
+Start importing Packages/com.unity.test-framework/UnityEngine.TestRunner/NUnitExtensions/Runner using Guid(37888acc09d9ee848bf9559f06645c45) (DefaultImporter) -> (artifact id: 'ee1e527b3560111b8f9aa3c43ad7e9a9') in 0.0064524 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/28 - HDRP Shader Example using Guid(a7eaeb4188c60454faf0a41c253b505c) (DefaultImporter) -> (artifact id: '584c80c5a1bc787b2441d4ae4e2b4a0e') in 0.0064087 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/GUI/TestListTreeView using Guid(68cb547af0187634aad591a09c01cd5b) (DefaultImporter) -> (artifact id: 'bcc7fabbc19415c35b0572cf2f2337a5') in 0.0071694 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/GUI/Controls using Guid(e88eef57957d4440c8a7ff2ef9dd3d97) (DefaultImporter) -> (artifact id: 'c4f64d42392877fbc9299e30e3929089') in 0.0070966 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/TestRun/Data using Guid(4926c06156894939ba0a2680f1b0aa7a) (DefaultImporter) -> (artifact id: 'e85e5880a8fb926656c64ebb007116bd') in 0.0064979 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/Api/Analytics using Guid(891bb6b9f5094c36b59c3788e21c8213) (DefaultImporter) -> (artifact id: '7afc1f32db95c3782cc44b8be1b1fdd2') in 0.0083436 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/TestRunner/Messages using Guid(d9682e749d3efc642af54d789d9090a6) (DefaultImporter) -> (artifact id: '34a2da094325aea95250bbc91b3bacfc') in 0.0071759 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Sprite Assets using Guid(3ac6db30e75b49b282a3564110579f27) (DefaultImporter) -> (artifact id: 'b22898e81fedf7dfb391d6c61021d5b1') in 0.005514 seconds
+Start importing Packages/com.unity.test-framework/UnityEngine.TestRunner/NUnitExtensions/Commands using Guid(6b72875690e0f7343911e06af3145bd5) (DefaultImporter) -> (artifact id: 'f36e7cf57d57bd868768c4d06537389c') in 0.0066066 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/TestLaunchers/PlatformSetup using Guid(ebc4d20cc106cea49b1df1153f0b3b5e) (DefaultImporter) -> (artifact id: 'b557b5aa3ee3c1d394dd361be2918e20') in 0.008064 seconds
+Start importing Packages/com.unity.test-framework/UnityEngine.TestRunner/NUnitExtensions/Attributes using Guid(0cb14878543cf3d4f8472b15f7ecf0e3) (DefaultImporter) -> (artifact id: '75903ed02331572f0967609c7b7f1e1c') in 0.0062433 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/TestRunner/Callbacks using Guid(5d7f0d6acfced954682a89e7002c04d9) (DefaultImporter) -> (artifact id: '0dec5c1fe4d62597a6f06205aa5984cd') in 0.0070691 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/TestRun/Tasks using Guid(6dba53789da15814387fa5b1445e81e0) (DefaultImporter) -> (artifact id: '72f33cfefcd167ac88b3efeb6da24af6') in 0.0060494 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/UnityTestProtocol/Messages using Guid(9ea154c33fd8466f973f004e5c962df7) (DefaultImporter) -> (artifact id: 'd8ce3e034bebd7e36b2b6ecc121483da') in 0.0067267 seconds
+Start importing Packages/com.unity.test-framework/UnityEngine.TestRunner/Utils/MonoBehaviourTest using Guid(ce8da628f68c7594b8b9a597fa52db7b) (DefaultImporter) -> (artifact id: '2d38e1309f0ea79159d19d1fe0eb6c3d') in 0.0063462 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/TestRunner/Utils using Guid(1f5bbb88ca730434483440cbc0278ef6) (DefaultImporter) -> (artifact id: 'd5d79cd3d4288070e6bddcbfc9c58d29') in 0.0053653 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials using Guid(4f1e85c79acf49968737939ce8b445c7) (DefaultImporter) -> (artifact id: 'c0bcd5015981499ff6095568b244acc4') in 0.0090959 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Color Gradient Presets using Guid(7f422cd1388b01047a58cd07c7a23d9d) (DefaultImporter) -> (artifact id: '7849b86aa73f52561c73ee85abc7c7fd') in 0.0059375 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/TestRun/Tasks/Player using Guid(94a6220ee1a442249702c9df66e0fe1b) (DefaultImporter) -> (artifact id: 'f827ae25f95ca0b2387aab13d0de9e87') in 0.0079496 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/TestRun/Tasks/Scene using Guid(692476ac695e7b74a8d9eabd48862009) (DefaultImporter) -> (artifact id: 'c93fad50921024025a405a0a862090ff') in 0.0058718 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/TestRun/Tasks/Platform using Guid(d973b7805df545bdae3986ab72a6c2e8) (DefaultImporter) -> (artifact id: '20a6de28fd8aedef407457a6ca2d05cd') in 0.0076104 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/TestRun/Tasks/Events using Guid(cca5935142d6c754f9ecdce1294f7079) (DefaultImporter) -> (artifact id: '1f81049cc8c4f238fec5f2b1ea887709') in 0.0061838 seconds
+Start importing Packages/com.unity.ugui/Runtime/TMP/Unity.TextMeshPro.asmdef using Guid(6055be8ebefd69e48b49212b09b47b2f) (AssemblyDefinitionImporter) -> (artifact id: '4e96139a71d8eeea7a2262da3fc03891') in 0.0072684 seconds
+Start importing Packages/com.unity.ugui/Editor/TMP/Unity.TextMeshPro.Editor.asmdef using Guid(6546d7765b4165b40850b3667f981c26) (AssemblyDefinitionImporter) -> (artifact id: '1f9e68e65a89d864e608d8f22b5bd4c4') in 0.0083347 seconds
+Start importing Packages/com.unity.test-framework/UnityEngine.TestRunner/UnityEngine.TestRunner.asmdef using Guid(27619889b8ba8c24980f49ee34dbb44a) (AssemblyDefinitionImporter) -> (artifact id: '4e99211f6fa79279dcc82bfb5cb90702') in 0.0067142 seconds
+Start importing Assets/MCPForUnity/Editor/MCPForUnity.Editor.asmdef using Guid(98f702da6ca044be59a864a9419c4eab) (AssemblyDefinitionImporter) -> (artifact id: 'bbab8ffcd4c2222e95d95bfa039aef4b') in 0.0085523 seconds
+Start importing Packages/com.unity.test-framework/UnityEditor.TestRunner/UnityEditor.TestRunner.asmdef using Guid(0acc523941302664db1f4e527237feb3) (AssemblyDefinitionImporter) -> (artifact id: 'a37885b78cc3bc346b8ba1ba7dd76b0c') in 0.0072412 seconds
+Start importing Packages/com.unity.ugui/Runtime/UGUI/UnityEngine.UI.asmdef using Guid(2bafac87e7f4b9b418d9448d219b01ab) (AssemblyDefinitionImporter) -> (artifact id: 'ae336cb81789e16129f7ac7efd5e66ac') in 0.0081166 seconds
+Refreshing native plugins compatible for Editor in 0.00 ms, found 0 plugins.
+Native extension for WindowsStandalone target not found
+Added Assets/Scenes/DebugChatScene.unity to Build Settings.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+BuildSettingsHelper:EnsureDebugChatSceneInBuildSettings () (at Assets/Scripts/Editor/BuildSettingsHelper.cs:22)
+BuildSettingsHelper:.cctor () (at Assets/Scripts/Editor/BuildSettingsHelper.cs:9)
+System.Runtime.CompilerServices.RuntimeHelpers:RunClassConstructor (System.RuntimeTypeHandle)
+UnityEditor.EditorAssemblies:ProcessInitializeOnLoadAttributes (System.Type[])
+
+(Filename: Assets/Scripts/Editor/BuildSettingsHelper.cs Line: 22)
+
+<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Auto-discovered 18 tools and 14 resources (32 total handlers)
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MCPForUnity.Editor.Helpers.McpLog:Info (string,bool) (at Assets/MCPForUnity/Editor/Helpers/McpLog.cs:40)
+MCPForUnity.Editor.Tools.CommandRegistry:AutoDiscoverCommands () (at Assets/MCPForUnity/Editor/Tools/CommandRegistry.cs:101)
+MCPForUnity.Editor.Tools.CommandRegistry:Initialize () (at Assets/MCPForUnity/Editor/Tools/CommandRegistry.cs:50)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:EnsureInitialised () (at Assets/MCPForUnity/Editor/Services/Transport/TransportCommandDispatcher.cs:200)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:.cctor () (at Assets/MCPForUnity/Editor/Services/Transport/TransportCommandDispatcher.cs:73)
+System.Runtime.CompilerServices.RuntimeHelpers:RunClassConstructor (System.RuntimeTypeHandle)
+UnityEditor.EditorAssemblies:ProcessInitializeOnLoadAttributes (System.Type[])
+
+(Filename: Assets/MCPForUnity/Editor/Helpers/McpLog.cs Line: 40)
+
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.061 seconds
+Domain Reload Profiling: 3868ms
+	BeginReloadAssembly (284ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (30ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (140ms)
+	RebuildCommonClasses (27ms)
+	RebuildNativeTypeToScriptingClass (9ms)
+	initialDomainReloadingComplete (28ms)
+	LoadAllAssembliesAndSetupDomain (2457ms)
+		LoadAssemblies (2388ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (150ms)
+			TypeCache.Refresh (135ms)
+				TypeCache.ScanAssembly (127ms)
+			BuildScriptInfoCaches (10ms)
+			ResolveRequiredComponents (3ms)
+	FinalizeReload (1062ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (971ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (15ms)
+			SetLoadedEditorAssemblies (2ms)
+			BeforeProcessingInitializeOnLoad (74ms)
+			ProcessInitializeOnLoadAttributes (850ms)
+			ProcessInitializeOnLoadMethodAttributes (27ms)
+			AfterProcessingInitializeOnLoad (5ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (6ms)
+Start importing Assets/Scenes/DebugChatScene.unity using Guid(7ce437333c780944c90e7e315a1429bb) (DefaultImporter) -> (artifact id: '6d158e9203426dd93620426df3b82f9c') in 0.0077476 seconds
+Start importing Assets/TextMesh Pro/Shaders/TMP_SDF-URP Unlit.shadergraph using Guid(124c112a6e8f1a54e8b0870e881b56d8) (DefaultImporter) -> (artifact id: '806294498e2c8af6f72cf331c285a657') in 0.018861 seconds
+Start importing Assets/TextMesh Pro/Shaders/TMP_SDF-URP Lit.shadergraph using Guid(a3d800b099a06e0478fb790c5e79057a) (DefaultImporter) -> (artifact id: '0e75bf3d33b81e882472fa8fccc7f7df') in 0.0081899 seconds
+Start importing Assets/TextMesh Pro/Shaders/TMP_SDF-HDRP UNLIT.shadergraph using Guid(f63d574838ccfb44f84acc05fed0af48) (DefaultImporter) -> (artifact id: 'fb16b7fbebd5ecf591ab5406f546157d') in 0.006628 seconds
+Start importing Assets/TextMesh Pro/Shaders/TMP_SDF-HDRP LIT.shadergraph using Guid(ca2ed216f98028c4dae6c5224a952b3c) (DefaultImporter) -> (artifact id: '4953d0ed6254d161248e031ff14193e8') in 0.0067328 seconds
+Start importing Packages/com.unity.ugui/Package Resources/TMP Examples & Extras.unitypackage using Guid(bc00e25696e4132499f56528d3fed2e3) (DefaultImporter) -> (artifact id: '42846bd9089fc65f52775351b7b1da9b') in 0.0243351 seconds
+Start importing Packages/com.unity.ugui/Package Resources/TMP Essential Resources.unitypackage using Guid(ce4ff17ca867d2b48b5c8a4181611901) (DefaultImporter) -> (artifact id: 'cf55dcab668a2668f2b6cdad2599fda0') in 0.0092506 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/21 - Script Example.unity using Guid(50f52f9274434ecfb34dd87f0836f323) (DefaultImporter) -> (artifact id: '37981060a85d644717b92caf45fa84ba') in 0.0065359 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/05 - Style Tags.unity using Guid(70615243e2be4a81afaab9bf5d273d65) (DefaultImporter) -> (artifact id: '3bf43f9f32291dc9b66554531a9117b7') in 0.006234 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/03 - Line Justification.unity using Guid(21a509e1d3cd49978623fa564adb6f02) (DefaultImporter) -> (artifact id: 'e7c9bcf9473cab16f2b7adf857584393') in 0.0077735 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/14 - Multi Font & Sprites.unity using Guid(22a2fba786ad4c40ac0ba09f0b933100) (DefaultImporter) -> (artifact id: 'bd34da37a58afa615ef10f77c3568cf4') in 0.0065116 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/22 - Basic Scripting Example.unity using Guid(6250f98e58fe4abbaada5d84b7ca846d) (DefaultImporter) -> (artifact id: 'bb9afe09d29a1a4e87a23df136938684') in 0.0069216 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/18 - ScrollRect & Masking & Layout.unity using Guid(03f9d74cec8e4b94a29d2dfd177c821b) (DefaultImporter) -> (artifact id: '0c70c8126f6b2485112eced6898b30ff') in 0.0055771 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/07 - Superscript & Subscript Example.unity using Guid(03ec435d4b7140e9b2d87f79136d8374) (DefaultImporter) -> (artifact id: '56badedfad643d503461b1923bb65dd2') in 0.0061711 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/20 - Input Field with Scrollbar.unity using Guid(337f92480dd24675aae9e79210fb1ad9) (DefaultImporter) -> (artifact id: '0be273055546fca3390c43a33dd9d7a6') in 0.0066757 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/10 - Bullets & Numbered List Example.unity using Guid(c3f814e1d12c45568daf3dd9a86a0e61) (DefaultImporter) -> (artifact id: 'f2e8dba40c978cdc84e563a9f71c6cc5') in 0.0055595 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/09 - Margin Tag Example.unity using Guid(349f38d3606449708c7340d26740e1e2) (DefaultImporter) -> (artifact id: '94022dd919dc0c69e01b5e436a7e58a9') in 0.0064913 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/23 - Animating Vertex Attributes.unity using Guid(54e994244b4b467e8583cf2da6dcc716) (DefaultImporter) -> (artifact id: 'b3182bba94983a7a6228fcfe9a862388') in 0.0057853 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/11 - The Style Tag.unity using Guid(84ed36ad77dd4956b2ffe3769f759879) (DefaultImporter) -> (artifact id: 'eae0e07bd544356dd8bb5e31484b0c77') in 0.0050364 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/16 - Linked text overflow mode example.unity using Guid(9442cda25baa4a0bb544c4d095b00caa) (DefaultImporter) -> (artifact id: '9d777f9798dc1d3638f2890fd9bc5ce5') in 0.0076675 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/02 - Multi-line TextMesh Pro.unity using Guid(251716609f634449bfe8ce75c0ed78fe) (DefaultImporter) -> (artifact id: '1d8934e8f70bc8ce82070de6d4a0ae46') in 0.0063141 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/Benchmark (Floating Text).unity using Guid(16177da2e3254cee91944756d5f8ddd3) (DefaultImporter) -> (artifact id: '90a1b1b341980cb3df9f74efc8000bf6') in 0.006977 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/Recommendations/RecommendationData_6000.0.recommendations using Guid(b66d076cdcfe3b14388de66307a0e7ff) (DefaultImporter) -> (artifact id: '1b3459ae4f98f07b813c3fa223d78525') in 0.0089045 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/24 - Surface Shader Example URP.unity using Guid(57694ed9d1cd1e340a4924c0f2eac8e3) (DefaultImporter) -> (artifact id: 'd63c8fd2dec2c2f6c1477204295e8aea') in 0.0075573 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/13 - Soft Hyphenation.unity using Guid(875684baf40f4d008ce806d03e2a81b2) (DefaultImporter) -> (artifact id: '8539e98051e5331060173509c32350a4') in 0.0070644 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/12 - Link Example.unity using Guid(9747140c28254be2adc582210dfb89b8) (DefaultImporter) -> (artifact id: '8e06d89622d23de585ce10d33d53c2d6') in 0.0071052 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/15 - Inline Graphics & Sprites.unity using Guid(e76e6c0f81964cbda3fe0b7d26ed8060) (DefaultImporter) -> (artifact id: 'c40e427ea57c6fbb723f757c92ba13b6') in 0.0070063 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/26 - Dropdown Placeholder Example.unity using Guid(0851605490a599b46b6ac5cb681d93ea) (DefaultImporter) -> (artifact id: 'dcc4aadac6d428c51417338757b14495') in 0.0071161 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/12a - Text Interactions.unity using Guid(08572ab7713642c8a60789750f0bce5c) (DefaultImporter) -> (artifact id: '25f227a9611856a4bb751a0ecd853f02') in 0.0087641 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/06 - Extra Rich Text Examples.unity using Guid(39a1fa96ad2a449b908fca29d4297a74) (DefaultImporter) -> (artifact id: 'f79097d320737966257e9c7e178a99fd') in 0.0062876 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/25 - Sunny Days Example.unity using Guid(f9b4c22e15cff344ba9fc6542a58dd07) (DefaultImporter) -> (artifact id: 'f5a3ad18d7c260dced3dcc11e1c6879d') in 0.0088999 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/01-  Single Line TextMesh Pro.unity using Guid(2ac8cf212df6445e8aebbe3cb832e993) (DefaultImporter) -> (artifact id: '309159dc5305b694c1fe7ac85d0f9519') in 0.0066804 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/19 - Masking Texture & Soft Mask.unity using Guid(9abcd5bd764646568a6ea70d00f9264c) (DefaultImporter) -> (artifact id: 'b87cece098ec48238f1e383b39cd9e0e') in 0.0081819 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/27 - Double Pass Shader Example.unity using Guid(3b38a6ba32b869f48812e595baf39746) (DefaultImporter) -> (artifact id: '1bf4981a3b4f78acb00f722b4d7ead82') in 0.0064573 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/24 - Surface Shader Example.unity using Guid(8c4969fd8ba94a68b07cf11f3e7a5137) (DefaultImporter) -> (artifact id: 'a15b3ad1b474530a3ccd6935812ea924') in 0.0072486 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/17 - Old Computer Terminal.unity using Guid(3e2e4d7b0bed4cf9ab827e9f32448f69) (DefaultImporter) -> (artifact id: 'f1d3c937864d7137325460f7ad0bd01e') in 0.0077422 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/28 - HDRP Shader Example.unity using Guid(eea2b7206368b444e84fbec4ec32b64a) (DefaultImporter) -> (artifact id: 'b8ec6b1f452873f11e447df409c7c064') in 0.0069732 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/08 - Improved Text Alignment.unity using Guid(5fe2257128d9401fad0790f581dc8a6f) (DefaultImporter) -> (artifact id: '90813c81e3fddb41dcbb53a3490bc2d2') in 0.0076308 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/04 - Word Wrapping.unity using Guid(8f7137eacd7042d5b17ef0efe5e744f5) (DefaultImporter) -> (artifact id: '0d3d10ed11acb460f794698b6796ab40') in 0.0061616 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Textures/Wipe Pattern - Circle.psd using Guid(10c49fcd9c64421db7c0133e61e55f97) (TextureImporter) -> (artifact id: '923efd1c6509955fa065a73db216a268') in 0.0308673 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/project/ico_heart.png using Guid(20794834c0a413f408b80110d0fc73b8) (TextureImporter) -> (artifact id: '1faf08eac4a028cf2fe660c6ebfabc85') in 0.0134071 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_foldout_closed.png using Guid(301c130dbb4bbba4e87072804939c861) (TextureImporter) -> (artifact id: '4c1fe7748aef79663bdf8fc463cb35b0') in 0.0102062 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Textures/Small Crate_diffuse.jpg using Guid(602cb87b6a29443b8636370ea0751574) (TextureImporter) -> (artifact id: 'ed8765544a38cb5ee4f75166bada3fa4') in 0.0149725 seconds
+Start importing Assets/Plugins/Demigiant/DOTween/Editor/Imgs/Footer.png using Guid(7051dba417b3d53409f2918f1ea4938d) (TextureImporter) -> (artifact id: 'd3facd81c72ba7c22c5140b03538d050') in 0.0092856 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/project/ico_particles.png using Guid(8003873ab749935489bb11f23f830856) (TextureImporter) -> (artifact id: '7f4d96507ac6008ebf086565ea947f56') in 0.0105262 seconds
+Start importing Packages/dev.yarnspinner.unity/Runtime/Views/Textures/NextLineIndicator.png using Guid(a044d296f0c964ed8856be08c527238d) (TextureImporter) -> (artifact id: 'ddd4ee437f949fb046d3bc47733123ea') in 0.0169293 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Sprites/Default Sprites.png using Guid(a0fc465d6cf04254a2938578735e2383) (TextureImporter) -> (artifact id: '546a2038dcd7b0fa80d9440ffd45b6e8') in 0.0388649 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_ui_border.png using Guid(c0c40ceac3c6df146a0fcd4e6b226540) (TextureImporter) -> (artifact id: '8670a8c95f53dd67eaae945e14359c89') in 0.0100616 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/squareBorderEmpty03.png using Guid(c0a56b88a1b449045b3fe5f561aa12fa) (TextureImporter) -> (artifact id: '36b050822b83f6b2e49af61814dc3310') in 0.0094742 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/project/ico_materials.png using Guid(e02713e10d7aced44a7a651231f0adef) (TextureImporter) -> (artifact id: '76e5b0fc51451af8882e6f893caf0c18') in 0.0093202 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/btn_AlignRight_Light.psd using Guid(e05ace3bd15740cda0bad60d89092a5b) (TextureImporter) -> (artifact id: 'd0c84a3fb9fd683a8af6935085be39d6') in 0.0175441 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_alignTR.png using Guid(e01c0b07c87513844ab88bb432bcf85a) (TextureImporter) -> (artifact id: 'a0c23b77c31a87bb4588f0d16655dffa') in 0.0097814 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_skull.png using Guid(01976ad42d31f494e8040d3e32e283dc) (TextureImporter) -> (artifact id: '5b6355a20b7ad5e9bf002d423657884f') in 0.0083893 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/tileBars_slanted_alpha.png using Guid(018a5623a46db1d49b1e6ff2482b07ab) (TextureImporter) -> (artifact id: 'a867c565ccce3ecd0f6ed58af752ab95') in 0.009797 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/whiteSquareAlpha80.png using Guid(11848dd30e516d846a02cd302634d317) (TextureImporter) -> (artifact id: '551d542308fc008fd612e3c44de0e4db') in 0.0081895 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/project/ico_star.png using Guid(21820ec6fc9dd0b4fbf42a3b93fdad4e) (TextureImporter) -> (artifact id: 'caa72719fe59e7cfea5901f5d9ffba2f') in 0.0090367 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/d_PackageInstalled@2x.png using Guid(318df756abab5463e9aa361360784865) (TextureImporter) -> (artifact id: '26bbafe216bf1ced645ac8f05cccc3cb') in 0.0155411 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/btn_AlignMiddle.psd using Guid(41b96614b2e6494ba995ddcd252d11ae) (TextureImporter) -> (artifact id: 'f37a40c1e680cd07b98aed079b0c2148') in 0.0173942 seconds
+Start importing Assets/Plugins/Demigiant/DOTween/Editor/Imgs/Footer_dark.png using Guid(519694efe2bb2914788b151fbd8c01f4) (TextureImporter) -> (artifact id: 'e2ba901177461c176560746f333c0300') in 0.0102171 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/yellowSquare.png using Guid(517a5bfe18f2ee04d9925db10be034e2) (TextureImporter) -> (artifact id: '94a995bbe48b3cb235c9d2b02206c982') in 0.0097093 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/whiteSquareAlpha25.png using Guid(511f6b24c50557a40a09633b12b8b8ef) (TextureImporter) -> (artifact id: '2d25f44915217d704edb01636ed1e0ab') in 0.0099867 seconds
+Start importing Assets/Plugins/Demigiant/DOTween/Editor/Imgs/DOTweenMiniIcon.png using Guid(61521df2e071645488ba3d05e49289ae) (TextureImporter) -> (artifact id: '7967adfbd737cc847caee6de5b499d29') in 0.0089033 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/btn_AlignCenter.psd using Guid(81ed8c76d2bc4a4c95d092c98af4e58f) (TextureImporter) -> (artifact id: '64f8760414b777803d59759ab11e2c8e') in 0.0165579 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/squareBorderCurvedAlpha.png using Guid(a1606d34a052ed3449da93edd229743e) (TextureImporter) -> (artifact id: '0216cc4f36e8f2963f5df35a441c696b') in 0.0091036 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_heart.png using Guid(d173388c1d9c32a418b5b777dd89d71a) (TextureImporter) -> (artifact id: 'e26f4108db3798649282fe8b661500d1') in 0.0082216 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_alignVC.png using Guid(d1d45eadab0e41c4a82cdffb6396b1d7) (TextureImporter) -> (artifact id: '1294cf20e6e35490ff6707f9e2f48e8e') in 0.0106577 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/tileBars_empty.png using Guid(d1278357b25e10442b6ca6c24edc9781) (TextureImporter) -> (artifact id: 'ead7ad4fea1d27ad0e5e0ff0d828c743') in 0.0094082 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_alignL.png using Guid(d18ceface0c20014b8db4bba05a41b83) (TextureImporter) -> (artifact id: 'a77c244562cbd4283006771ed68b53bb') in 0.0088513 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/project/ico_audio.png using Guid(e1af8927fb6f5634896d59aed409a589) (TextureImporter) -> (artifact id: 'a5d8af07bd5030116d93806394a75926') in 0.0088921 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/btn_AlignLeft_Light.psd using Guid(12736c98af174f91827a26b66d2b01b9) (TextureImporter) -> (artifact id: '04a9824666a0a374d1ca49de06283add') in 0.0174199 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_demigiant.png using Guid(229d0d11465a822449f78a50dbf7104d) (TextureImporter) -> (artifact id: 'd09ed093c60b982309489f1bcc763844') in 0.0085466 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_distributeVAlignL.png using Guid(32eaa0efb2b38774ea9705b40fdcc00a) (TextureImporter) -> (artifact id: 'cbcd52195dd1a7fe4f37c2f92340e551') in 0.0089934 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/Loading.png using Guid(424a8de5def3b46dcb08edd00ad1c7bd) (TextureImporter) -> (artifact id: 'e88d4d355216a72f88b315d11c7d9f8b') in 0.0146733 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/d_Package.png using Guid(525a6cca8dd9a4d28875a8fe824710d9) (TextureImporter) -> (artifact id: 'd29594278abb14431ab5522a72284324') in 0.0161742 seconds
+Start importing Packages/dev.yarnspinner.unity/Editor/Editors/Icons/YarnSpinnerLogo.png using Guid(528a6dd601766934abb8b1053bd798ef) (TextureImporter) -> (artifact id: '13bbbff4ae94204ddf7439ecf00b5c07') in 0.0295602 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/circle_dashedBorderEmpty.png using Guid(522b0133a9838674ca9a12e0c6e5a59c) (TextureImporter) -> (artifact id: 'fe48329b2cf27b441a684cb1ece76535') in 0.0108564 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_optionsDropdown.png using Guid(62a48d93e78c63b4ea9b46537c7c0091) (TextureImporter) -> (artifact id: 'b2bf5a64e94e0b588db9a0eb8b024ad1') in 0.0092048 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_comment.png using Guid(622fdb780ae13e840938631c5ed708f2) (TextureImporter) -> (artifact id: '727beae1521baf982464bda89632989b') in 0.0082878 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_alignR.png using Guid(727ba41e4cc95fe4a98b07301e3ebfc8) (TextureImporter) -> (artifact id: '5cfbf7b4f59cf808e00fb3241e1bdeaa') in 0.0080644 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/btn_AlignJustified.psd using Guid(92027f7f8cfc4feaa477da0dc38d3d46) (TextureImporter) -> (artifact id: '5668cbeda8d2bad49bb6af432caa4613') in 0.0180625 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/btn_AlignLeft.psd using Guid(9288066c33474b94b6ee5465f4df1cc0) (TextureImporter) -> (artifact id: '4fee63289e41f77ab30eb51582891e6a') in 0.0163786 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_end.png using Guid(a248c8288afb9184f953d9aa07a696b0) (TextureImporter) -> (artifact id: '8c3f7554df436a56586e90d3947a8d52') in 0.0085917 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/CloudCode@2x.png using Guid(a23c0dd570fd44b57a03a8880002fcca) (TextureImporter) -> (artifact id: '456c95355a45abe4a6bb8f35c5e9af5a') in 0.0143389 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/ClientHosted.png using Guid(b2ce704e56cc84fb3b347499263c6244) (TextureImporter) -> (artifact id: '1b09bba3f64572b3527000f0145f764f') in 0.0152046 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/btn_AlignMidLine.psd using Guid(c2f7f6a88b4c4f20a53deb72f3d9144c) (TextureImporter) -> (artifact id: '672c8970bc587c9b9c93e0bb372c5c9b') in 0.0180317 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/project/ico_atlas.png using Guid(e2279677842a8064fbae0bc889fb85ab) (TextureImporter) -> (artifact id: '76581d33b0b923bac28e1759196127f7') in 0.0090272 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/project/ico_shaders.png using Guid(f252c69cd0163714eba038403f61b09e) (TextureImporter) -> (artifact id: '39e18f86e9e89e8cf2f0adb362bea717') in 0.0088943 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Textures/Gradient Vertical (Color).jpg using Guid(03d0538de6e24c0f819bfc9ce084dfa9) (TextureImporter) -> (artifact id: '5a3c37420c4d5be5de17c9962cca2b3e') in 0.0100769 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/DistributedAuthority@2x.png using Guid(0354877031b64465ea7e5cafea1a2653) (TextureImporter) -> (artifact id: '677bb664c7866a5fcec9bdacbe4217f5') in 0.0154043 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/whiteDot_whiteBorderAlpha.png using Guid(039dc89c76661c344b7776f8a47cc5a4) (TextureImporter) -> (artifact id: '178844a964002b62d78b9c34f3742f4e') in 0.008092 seconds
+Start importing Packages/dev.yarnspinner.unity/Runtime/Views/Textures/OptionSelected.png using Guid(33e9636a699f04c3ab383160b1904a2d) (TextureImporter) -> (artifact id: '477c42b9ab357335f74e4c375aab3b79') in 0.0206038 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/blackSquareAlpha15.png using Guid(53d696c01f6ca524383f11fcc34dd13c) (TextureImporter) -> (artifact id: '021efb1354b1ff81a2a4f2eeaa1ab8d9') in 0.0094095 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/NGO@2x.png using Guid(83b28bcaaf34b4fd580114fb05d9f160) (TextureImporter) -> (artifact id: '916c85e4b25e4fb43dfb73ddac4d22f0') in 0.0158316 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/grid_bright.png using Guid(93b1287b4a087f84c95c72f49ec94e83) (TextureImporter) -> (artifact id: '33161c851dbb985fb1a099174cfe42eb') in 0.0098275 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/whiteSquareAlpha10.png using Guid(93b68213089b05943a651574eb7e2fb5) (TextureImporter) -> (artifact id: 'a01339299e2a0b057e18771c253604a6') in 0.008305 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/SectionHeader_Light.psd using Guid(e3b0f810fdea84e40ab4ba20f256f7e8) (TextureImporter) -> (artifact id: '5fc1258821ea59f04b185a1ae52d0afd') in 0.0165154 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_lock.png using Guid(e3d0592dad579e141924133869455c53) (TextureImporter) -> (artifact id: '7fed8e42028de12f5867e7fdfc3e71cd') in 0.0103168 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/squareBorderCurved02_darkBorders.png using Guid(e3ae01f12865ad54ba365963bda55759) (TextureImporter) -> (artifact id: '31e69844db878f52fb3c8e7d1dd1b812') in 0.0080789 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/project/ico_demigiant.png using Guid(f36ab42cc6fcdfd4187033279d3d14a9) (TextureImporter) -> (artifact id: 'cade085d633ae12319e724da641ea601') in 0.0089508 seconds
+Start importing Packages/dev.yarnspinner.unity/Runtime/Views/Textures/LastLineSeparator.png using Guid(04a26af393c8742a3bdf84b43bed6c16) (TextureImporter) -> (artifact id: '97df69f32320c774312119197fbb9bed') in 0.0147426 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/PackageInstalled@2x.png using Guid(0423146d9f51c4563a0f2a8200b6cd38) (TextureImporter) -> (artifact id: 'fbec57b3f653c3bbcbf4ff250c6d4565') in 0.0144935 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_ok.png using Guid(34f39b5a760ddbb4d8b8749852868335) (TextureImporter) -> (artifact id: '76d25fc96c53c28e22027f53d7c24ab7') in 0.0084808 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/btn_AlignRight.psd using Guid(342a0f8aca7f4f0691338912faec0494) (TextureImporter) -> (artifact id: 'fe2ae34d4683381a7b6d71953e88f37d') in 0.0181191 seconds
+Start importing Assets/Plugins/Demigiant/DOTweenPro Examples/Examples Assets/dotweenpro_logo.png using Guid(44a054df1702e39458b7072b08d0f212) (TextureImporter) -> (artifact id: 'f8484c0eecefdd0343888dd75fe9b266') in 0.0174491 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/btn_AlignFlush_Light.psd using Guid(64b9fad609434c489c32b1cdf2004a1c) (TextureImporter) -> (artifact id: '525aac97eaf48fddbd00414e0abe519f') in 0.0177247 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_star.png using Guid(645aafe2260b2884a9df05b4bc01b1ec) (TextureImporter) -> (artifact id: '82627c8d1e1d7dbf16c42a58e11073e8') in 0.0089873 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/d_Questionnaire.png using Guid(741761e72e6f24446bd8ba03ea3d0261) (TextureImporter) -> (artifact id: '448e267be0c914e94ab41fc73587cfee') in 0.0175126 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/EmptyViewIcon.png using Guid(84e4bbd00035e4671bf14e0380a89001) (TextureImporter) -> (artifact id: '0b28ebc21d05877b3c72c309016de04e') in 0.0180855 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/PackageManager@2x.png using Guid(9431e8221045c4af189b2fa7174b9e9f) (TextureImporter) -> (artifact id: '9e9020a8a2a2af1722940474be650776') in 0.0151958 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/whiteSquare_fadeOut_bt.png using Guid(a40dc0d6372a9084fb45976308087290) (TextureImporter) -> (artifact id: '9eb049f528fad67b58dc54e094b6bb0e') in 0.0100196 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_alignT.png using Guid(b4785ec6d937dab4fa59da70b69afc9d) (TextureImporter) -> (artifact id: '5a508fdaaa0ef2430a7c769b0bfd2760') in 0.0101589 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/squareBorderThickEmpty.png using Guid(c456d5ac01d2aa843a63985497b04931) (TextureImporter) -> (artifact id: '0356551b5789c913d6e48a462e858603') in 0.0102672 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_flipV.png using Guid(c44ae4a96937e2c4b8be481648364682) (TextureImporter) -> (artifact id: 'c1dcd669a7b222fe8310cc74f349af6e') in 0.0083974 seconds
+Start importing Packages/dev.yarnspinner.unity/Runtime/Views/Textures/Divider.png using Guid(05af27d2817f5413ea5ba715b8378151) (TextureImporter) -> (artifact id: '56d30045d73d6bd16a068f638c88d521') in 0.0147187 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/blueSquare.png using Guid(05cfe010378336646ad6c721f66543d1) (TextureImporter) -> (artifact id: '8f67e629b79fd6f7f264c53ba211f612') in 0.0103714 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/squareBorderCurved_darkBorders.png using Guid(25da15ac84743244ab4c860cf8798ec8) (TextureImporter) -> (artifact id: 'b32e96a417919bcc84d41ad50f5ff5ed') in 0.0091618 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_light_border.png using Guid(252f207d01ecc87419cdba1d1c0ab1ea) (TextureImporter) -> (artifact id: 'f3256a73f270b4259350e19a8a5711e6') in 0.0087775 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_camera_border.png using Guid(358cddede8023574191e0aae610a4645) (TextureImporter) -> (artifact id: 'cfc48761fbd650f24761ad6e8d990d9c') in 0.010042 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/btn_AlignCenterGeo_Light.psd using Guid(35ff0937876540d3bd4b6a941df62a92) (TextureImporter) -> (artifact id: '89179ee0455c5fa1817bf49d0c669548') in 0.0174456 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_play_border.png using Guid(45e128e1cf00555479ee7934ab11cadf) (TextureImporter) -> (artifact id: 'c2ef934770f8aeda6e1c99e3295b03ae') in 0.0088545 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/squareBorderCurvedEmpty.png using Guid(4578222ee7a511446b0c340551bf8740) (TextureImporter) -> (artifact id: 'd2adebd2ea2f9a6a4bb5d7c3ae080b5a') in 0.0092547 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/whiteSquareAlpha15.png using Guid(5510cdd48a6aaaa439c95ef5b2fe9e28) (TextureImporter) -> (artifact id: '4e7e163b73cec3e2d955ddf6315a8cb9') in 0.0082924 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_visibility.png using Guid(55c2b426022dac44f9b25f0cba28aa45) (TextureImporter) -> (artifact id: '255a253a4bf1eb3ef20e69416760fac8') in 0.0096633 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Textures/Floor Tiles 1 - diffuse.jpg using Guid(85ac55597b97403c82fc6601a93cf241) (TextureImporter) -> (artifact id: 'adc37756eee7629b73933c2e6d44b5eb') in 0.01798 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/NoNetcode@2x.png using Guid(b58a826ca804e4c67bab4283ad5a6102) (TextureImporter) -> (artifact id: 'e1d74f598241e8a73fdfc649a416d3a0') in 0.0172685 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_todo.png using Guid(c561c878c05ceb1448966fe706740008) (TextureImporter) -> (artifact id: '17fe09a292676a79417dfa5902e00ef3') in 0.0093992 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/grid_dark.png using Guid(d542f997a51000946873268e3546b6ba) (TextureImporter) -> (artifact id: '46f42fd305c09e8595359e0c2e13c586') in 0.0086372 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/project/ico_skull.png using Guid(d563d6ce25cd2ca48b185ec47a74a3fb) (TextureImporter) -> (artifact id: '6bbb9f7c2288740a37859a8d08fce05f') in 0.009943 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/squareBorderCurved_darkBordersAlpha.png using Guid(f536c51d3da3f2e4ca93ac8773ec2ad8) (TextureImporter) -> (artifact id: '59e25def64cd0b62c36def70b4d3993b') in 0.0104249 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/btn_AlignMiddle_Light.psd using Guid(066619c9c9c84f89acb1b48c11a7efe2) (TextureImporter) -> (artifact id: 'a68ea88901e25eb38e02808746152783') in 0.0226131 seconds
+Start importing Packages/dev.yarnspinner.unity/Editor/Editors/Icons/YarnSpinnerLogoFull.png using Guid(16f8cd23bf0d0480bb8ecc39be853cda) (TextureImporter) -> (artifact id: '79e221293705d3a90cf7a059918f1c31') in 0.0202335 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/PackageInstalled.png using Guid(4616b2fa4acd1429e931835b80966c2a) (TextureImporter) -> (artifact id: '8af7918eeb10b9e2c9b1b44a3408d3a3') in 0.0165805 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_heart_border.png using Guid(669c487f3c9c5fe4abb6459f9c2628f0) (TextureImporter) -> (artifact id: '5844ad4a3e3c5386d6dca0a6d4299e4c') in 0.0104061 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Textures/Wipe Pattern - Radial Double.psd using Guid(7631f4eff8f74ed38eb3eb9db17134e1) (TextureImporter) -> (artifact id: '9479f27b1b9974f8698fa93931891d5b') in 0.0213625 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/project/ico_scripts.png using Guid(96cbdf605b8ddb34da384703f2d0b849) (TextureImporter) -> (artifact id: 'f977b3e56377d095ab5e9fbfe08f5049') in 0.0101229 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/d_PackageManager@2x.png using Guid(a6fd0c627f5aa48fa81512221e70a11e) (TextureImporter) -> (artifact id: '5d35046e5870c033ff1d3faaf7e96a29') in 0.0178528 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/DistributedAuthority.png using Guid(d63245ece6d8f476c8c7ca24da9937f6) (TextureImporter) -> (artifact id: 'b44ac27a1716b54742b80f5ea32e38a4') in 0.0158804 seconds
+Start importing Packages/dev.yarnspinner.unity/Editor/Editors/Icons/Asset Icons/YarnProject Icon.png using Guid(f6a533d9225cd40ea9ded31d4f686e3b) (TextureImporter) -> (artifact id: 'd936776f0f5edd81d3fd1411ccab9791') in 0.017661 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/whiteSquareCurved.png using Guid(070edb62059c27b408e16f28cb87f941) (TextureImporter) -> (artifact id: '13b744bb68e899d7b215fa9451aef386') in 0.0100565 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Textures/Sunny Days - Seamless.jpg using Guid(17c350171f7a3ca479f830547c66d187) (TextureImporter) -> (artifact id: '315f4b1ee412cbdbb40819a61d891819') in 0.0417834 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/whiteDot_darkBorder.png using Guid(27df4ca974a8eaf40803907859421506) (TextureImporter) -> (artifact id: '0e4908b7153f9945963737de3b5a4eda') in 0.0111166 seconds
+Start importing Packages/dev.yarnspinner.unity/Editor/Editors/Icons/Asset Icons/LineMetadata Icon.png using Guid(37811d3829b0bfc42bfcd782271d279f) (TextureImporter) -> (artifact id: 'e360a735817f304945ef7d75667f489b') in 0.0232243 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_camera.png using Guid(37639be6148186645bca3fce45d5aa22) (TextureImporter) -> (artifact id: '32964cea6780e2707b6a7a6ed3c894be') in 0.0159684 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/PackageManager.png using Guid(679f9999c6f8f497e806a2d5d0511879) (TextureImporter) -> (artifact id: 'd0db9cd40724a15177ff117a729f5da2') in 0.0201443 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/d_PackageInstalled.png using Guid(77be953cf28de42a4ad8532539fef3f5) (TextureImporter) -> (artifact id: '081e5adbde036422c1250884d4edacc4') in 0.0192931 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Gizmos/TMP - Dropdown Icon.psd using Guid(a7ec9e7ad8b847b7ae4510af83c5d868) (TextureImporter) -> (artifact id: 'b6a6e3f823c47cb17173aaceeaf6d801') in 0.0201204 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/ClientHosted@2x.png using Guid(c7a38e6eccbfc49778cb8b77f594a971) (TextureImporter) -> (artifact id: '82164b4f6b50175723b47cdabb5dbc80') in 0.0164644 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/btn_AlignCenterGeo.psd using Guid(c76700ea0062413d9f69409b4e9e151b) (TextureImporter) -> (artifact id: '014df9aecd9c8f93ffbfe210a4aa5216') in 0.0165697 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Textures/Text Overflow - Linked Text UI Screenshot.png using Guid(c76d18757a194d618355f05f815cb0a1) (TextureImporter) -> (artifact id: '59340618471ff0d7683453cf75747d35') in 0.0141425 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/CustomNetcode@2x.png using Guid(d7711b0cc806d430b8a95f1e33ec3649) (TextureImporter) -> (artifact id: '83a9eeac864c4794a161c72995ad4634') in 0.0167732 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_audio_border.png using Guid(e79d03aaa0883d44ebf5ba732febde10) (TextureImporter) -> (artifact id: 'd485498edfce1539f96e6b38e4445160') in 0.0090954 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/blackSquareAlpha25.png using Guid(f7ff421f40d548444864a01cd7f47112) (TextureImporter) -> (artifact id: '290e1329eb4d7f9e263c7da7bec186c3') in 0.0088463 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_star_border.png using Guid(18f3a26aa87fccc4cb5e211d4c6de662) (TextureImporter) -> (artifact id: '6fadf16e6b07c9b833cdade4d2fbba66') in 0.009019 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_foldout_open.png using Guid(18a5a7cde794cc04b9b446f0feedb3a0) (TextureImporter) -> (artifact id: '55a6639ff2b693bf29c19f0f3dd6ecaf') in 0.0090257 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/btn_AlignBaseLine_Light.psd using Guid(18775b51e3bd42299fd30bd036ea982f) (TextureImporter) -> (artifact id: '2337da6fb8fedaa4ae6ed111b29ba6f3') in 0.0172466 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/whiteSquareCurved02.png using Guid(282d742ce2ddf9f458812ab84ea6fa88) (TextureImporter) -> (artifact id: '04733296a737571c4b9d80c18b5f6430') in 0.0087795 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Textures/Floor Cement.jpg using Guid(283f897e4925411ebbaa758b4cb13fc2) (TextureImporter) -> (artifact id: 'a39bedf8fcfc9092c5ac3e3f22893e78') in 0.015785 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/DedicatedServer@2x.png using Guid(38b78df4a34c94fa6a52c90239606ff1) (TextureImporter) -> (artifact id: '6baa3adafd5d928bd47df3a1e4059e37') in 0.0184733 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/btn_AlignTop.psd using Guid(48d034c499ee4697af9dd6e327110249) (TextureImporter) -> (artifact id: '3588187dd6c2c6bb013a62f352fb9873') in 0.017737 seconds
+Start importing Packages/dev.yarnspinner.unity/Runtime/Views/Textures/LastLineBalloon.png using Guid(48f24bb86f008479ab5e103ef81a0b49) (TextureImporter) -> (artifact id: '87cd20694df3fa10f9624ab08f6a1052') in 0.0186536 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/squareBorderCurved.png using Guid(4896b5aa9d63dec498136c21ffce735b) (TextureImporter) -> (artifact id: 'efde6181184c5aef60839cf95a6c814c') in 0.0099024 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/project/ico_bundle.png using Guid(58676a985ae875646b7be748cf4499fd) (TextureImporter) -> (artifact id: '73046c0b1e4706838131165289809744') in 0.0101088 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/btn_AlignBottom_Light.psd using Guid(585b70cb75dd43efbfead809c30a1731) (TextureImporter) -> (artifact id: 'd7ec8751e0ab2cadcbe4f4d1e5a6f9a2') in 0.0178447 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_cog_border.png using Guid(6862027f2176eae40a3143c562466a1b) (TextureImporter) -> (artifact id: '6470b655191f077130911397dbad656b') in 0.0096821 seconds
+Start importing Assets/Plugins/Demigiant/DOTween/Editor/Imgs/Header.jpg using Guid(78a59ca99f8987941adb61f9e14a06a7) (TextureImporter) -> (artifact id: 'd1bd1758ab9bd1b123f16792fc0af547') in 0.0103125 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/greenSquare.png using Guid(789ef07ba2573f6448fa8b5dc5224c44) (TextureImporter) -> (artifact id: 'cbd79899c5a26034860c043f64a257d3') in 0.0094587 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Textures/Small Crate_normal.jpg using Guid(8878a782f4334ecbbcf683b3ac780966) (TextureImporter) -> (artifact id: '4fa271fa79d1aced91a92bc9ac31e28d') in 0.0135152 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/project/ico_play.png using Guid(d8306b1e159c72c4ebc9a4fc31debe60) (TextureImporter) -> (artifact id: '6834813b4aa6d6ad6551af441c7d6c1c') in 0.0092891 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Textures/Brushed Metal 3.jpg using Guid(f88677df267a41d6be1e7a6133e7d227) (TextureImporter) -> (artifact id: 'b9840aaf24d635ae0395bcaa8c46ff13') in 0.0131145 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/project/ico_models.png using Guid(09a0cde07b4d75f49b4c817932791b81) (TextureImporter) -> (artifact id: '9b81d8acb144f432f4d739e9d56e1b99') in 0.0094378 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/tileCheckerboard.png using Guid(1954196ce2bc5c3478b215b39212c3cd) (TextureImporter) -> (artifact id: 'dcbc671bc94585f909233a93ddff1bae') in 0.011564 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/squareBorderEmpty02.png using Guid(29b0e8156f6fb774faf129c83bc9ee33) (TextureImporter) -> (artifact id: '52e9ea62ed03b35793dd091854c84a10') in 0.0111187 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_alert.png using Guid(39cacc93c6c183f44992bf2421362f78) (TextureImporter) -> (artifact id: 'fe015481eb4637c5ec9fc0a2c62c1d30') in 0.0072188 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/btn_AlignCapLine_Light.psd using Guid(49679f302ac6408697f6b9314a38985c) (TextureImporter) -> (artifact id: '20905224a842a3469ae12d6ca99b9726') in 0.0167273 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/blackSquareAlpha80.png using Guid(595b166389c8db546a199430284ebc9b) (TextureImporter) -> (artifact id: '45711a0792a0ad0f47c7954a6f594e85') in 0.0095975 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/btn_AlignFlush.psd using Guid(691475c57a824010be0c6f474caeb7e1) (TextureImporter) -> (artifact id: '0204ef554561bc1a86be94feb49de10e') in 0.0147874 seconds
+Start importing Packages/dev.yarnspinner.unity/Runtime/Views/Textures/OptionDot.png using Guid(997a4571b48144fd7be9c547b769c11d) (TextureImporter) -> (artifact id: '6f341ca5a0b146934be6949d5b41f678') in 0.0104256 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/NGO.png using Guid(99da7b3894f364efdb5fa1443952a55d) (TextureImporter) -> (artifact id: 'ece1a78420f07a18d01aa8bf1b6c320f') in 0.0139796 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_alignHC.png using Guid(b9e0e5a8836018e4c810fbceba55a1b4) (TextureImporter) -> (artifact id: 'a39ac04691a9d9a0c2b27cde95adfa0a') in 0.0096993 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/tileBars_slanted.png using Guid(c99a391f381fe534c80a193fe9f307a0) (TextureImporter) -> (artifact id: '5546e4968837dee4cbba6114342894ed') in 0.0088404 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_comment_border.png using Guid(d98b8847646169c4fb5af28dd84c4179) (TextureImporter) -> (artifact id: 'ca44773f2c9667267da7febdb39035bd') in 0.0090055 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/N4E.png using Guid(e9669051ff70449b5923861e0e0b8838) (TextureImporter) -> (artifact id: 'a6b05c43da9a029205d559f2ec8bdf83') in 0.0144008 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_alignCL.png using Guid(2a8208d8e80f90944b8ff2978292b03b) (TextureImporter) -> (artifact id: '5f64fd10e0fc6918bacdc74bbe99a53e') in 0.009047 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_play.png using Guid(2a563a43c33f0f3428d02b3a43886fc2) (TextureImporter) -> (artifact id: 'ac8e004d0bfc71605a359f50ccc49bb6') in 0.0083833 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/EmptyViewIcon@2x.png using Guid(2adffcc506285402aa795dee6f3166d0) (TextureImporter) -> (artifact id: '650cdb6e423c6945dde1a76ecbc949a5') in 0.0288163 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_nodeArrow.png using Guid(4aa34055b1d36ef479af3d7b5701b28a) (TextureImporter) -> (artifact id: '1b718cb0734b0d73b2bb30537dcd82e2') in 0.0090596 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/project/ico_terrains.png using Guid(4a091a7609ef2d34bbdfaa1a886deb18) (TextureImporter) -> (artifact id: 'f52413b2f625448322ec72f19edf2383') in 0.0115248 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/btn_AlignCenter_Light.psd using Guid(6ace62d30f494c948b71d5594afce11d) (TextureImporter) -> (artifact id: 'd566b0fd32b4e086bbc4007513119f42') in 0.0191902 seconds
+Start importing Packages/dev.yarnspinner.unity/Runtime/Views/Textures/ContinueArrow.png using Guid(7a184148437294a7b8d96378a700727d) (TextureImporter) -> (artifact id: '4621b2de72d29d12af59cd698fb47e9e') in 0.0152393 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/squareBorderThickerEmpty.png using Guid(7acc6bd588627b046bc1c9b3cd78a6c7) (TextureImporter) -> (artifact id: '31c7140a04f02bdd2dab241ed99051c1') in 0.0087321 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/blackSquareAlpha50.png using Guid(aa1d42dc6ff3e894da2208c6929d2165) (TextureImporter) -> (artifact id: 'c65d2292a45eb758401cc34635bd239b') in 0.0086597 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/squareBorderEmpty01.png using Guid(aa8dc9238ab21e54ca88fa22698e4679) (TextureImporter) -> (artifact id: '5c29b253d53142d6dd2dc2880084e6ec') in 0.0084462 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/btn_AlignBottom.psd using Guid(ca51b19024094d1b87f3e07edb0a75fb) (TextureImporter) -> (artifact id: 'c57b6c68c7d71062109b769ff5c7d812') in 0.0165519 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/squareCornersEmpty02.png using Guid(ca2f91cc405eb144dad970eb23db2f72) (TextureImporter) -> (artifact id: '4ff5994adcfb7f417e5c71d25c68eae1') in 0.008782 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/d_Loading.png using Guid(dab91f148d99946e7b3c3a87ecf4b973) (TextureImporter) -> (artifact id: 'a047ee303d6680a4009166ad53f24e30') in 0.0148047 seconds
+Start importing Packages/dev.yarnspinner.unity/Runtime/Views/Textures/Selector-Off.png using Guid(eaa71f36e30cb45f1876a4832d45cac4) (TextureImporter) -> (artifact id: '301d2523f2397275cb23ee3372258855') in 0.0145164 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/btn_AlignJustified_Light.psd using Guid(fa6bd40a216346b783a4cce741d277a5) (TextureImporter) -> (artifact id: 'ccced1e17485ecbf57bcdd6f2c0d7873') in 0.0180358 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/d_PackageManager.png using Guid(1b4c88814ec6241eb8e327515399c006) (TextureImporter) -> (artifact id: '40e2b773b80dc7302243fbc236781d33') in 0.0150178 seconds
+Start importing Packages/dev.yarnspinner.unity/Runtime/Views/Textures/CharacterBubble.png using Guid(2b62f169ad6c04c2d9a3fa4e8c3aa694) (TextureImporter) -> (artifact id: '2b3183904dc7d94ec4b2e4d2fc9da30f') in 0.0170191 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Textures/Wipe Pattern - Radial Quad.psd using Guid(2b5e9ae96c5644d8bae932f8b4ca68a2) (TextureImporter) -> (artifact id: '74f17c626ef19af358fc4c729c0464ef') in 0.0169221 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/project/ico_cross.png using Guid(3b67e53c8c2f8114b966c0e70d452419) (TextureImporter) -> (artifact id: 'cbaee24bb1c52afac490960a5aa774dc') in 0.0093358 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_delete.png using Guid(6b1f9e1e1c2cf004b8e3bdd3033a8e75) (TextureImporter) -> (artifact id: 'd7a058adc6ade916fd105266921dd579') in 0.0078807 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/blackSquare.png using Guid(7ba4b2810f605d945af87e032ca2957b) (TextureImporter) -> (artifact id: 'e815e1026f6b8dd472b78f232c11d0b2') in 0.0088536 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/btn_AlignBaseLine.psd using Guid(8bc445bb79654bf496c92d0407840a92) (TextureImporter) -> (artifact id: '9edf5fbdfa0a4480bfbfb1775203d171') in 0.0155839 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_alignB.png using Guid(8b6b31f71cd528243b053cfc488e73f5) (TextureImporter) -> (artifact id: 'a22363b03f07e43769819856c970b600') in 0.0090498 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_alignBL.png using Guid(abf8a615f379ef44b9ac872a13b7712f) (TextureImporter) -> (artifact id: '2934c680a2a22ebf70fce08bdbb371a7') in 0.0110725 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/btn_AlignMidline_Light.psd using Guid(bb42b2d967d6427983c901a4ffc8ecd9) (TextureImporter) -> (artifact id: '99794481cd9bedfe84365463c00f159e') in 0.0184323 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Textures/Mask Zig-n-Zag.psd using Guid(bb8dfcd263ad4eb383a33d74a720be6f) (TextureImporter) -> (artifact id: 'a6666c1cee0f0d5263ed400013377556') in 0.0162176 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_ui.png using Guid(cb46e1d925af22d43a6f8bf0e1d459e6) (TextureImporter) -> (artifact id: 'b774ea52b0d365529f3cc3b8d2144f39') in 0.008811 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/project/ico_cog.png using Guid(fb605a2688b31194887f2e7a6769235b) (TextureImporter) -> (artifact id: 'feea099ff0d326f4b567990d684fd918') in 0.0079986 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/SectionHeader_Dark.psd using Guid(fb5730e24283d0c489e5c7d0bee023d9) (TextureImporter) -> (artifact id: '486cc542269b4f588e9ec20fb3bac131') in 0.0185344 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/redSquare.png using Guid(fbdd7ecf39c13bf48a5bd02a1159c90b) (TextureImporter) -> (artifact id: '40189a60d02f504e2cb782dc59af3b77') in 0.0093095 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_visibility_off.png using Guid(0c0132429106c8a4d89d9d0a6b723ec3) (TextureImporter) -> (artifact id: 'b290365dcf359896dfbdf13e3dd31e02') in 0.0093086 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_distributeHAlignT.png using Guid(1ccb12a4b0bf8f447b2cc114851732f5) (TextureImporter) -> (artifact id: '2f5ee4a212512d964bc10d29eeb380ee') in 0.0089739 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Textures/Fruit Jelly (B&W).jpg using Guid(1cdc5b506b1a4a33a53c30669ced1f51) (TextureImporter) -> (artifact id: 'f3c10be58facd071827fc9c4f541fe8d') in 0.014235 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/N4E@2x.png using Guid(2cb589d4e01184d928bb698f06e77561) (TextureImporter) -> (artifact id: 'abac31dec0aeef30c574c668d7bae915') in 0.0148907 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Textures/Gradient Diagonal (Color).jpg using Guid(2ce5c55e85304b819a1826ecbc839aa5) (TextureImporter) -> (artifact id: '98aacf7746e4dd9dc1777e6ba51be24c') in 0.0090871 seconds
+Start importing Packages/dev.yarnspinner.unity/Editor/Editors/Icons/Asset Icons/Localization Icon.png using Guid(2cbba4ddd142149b0a38697070990deb) (TextureImporter) -> (artifact id: 'ec1114c1e580ab49ffb54adfcf085a9c') in 0.0169391 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_alignBC.png using Guid(2cdc0bc527f7a434496c6be9236e636f) (TextureImporter) -> (artifact id: 'bf9a2d8fcd7f193ebda71c9a12299762') in 0.0098421 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Textures/Text Overflow - Linked Text Image 1.png using Guid(4ccf43d26c4748c792174516f4a8fcef) (TextureImporter) -> (artifact id: '320c9cfb27fa2bd602809e0685de7be6') in 0.0162761 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_cog.png using Guid(7c83a08052c9e2f49b47897a637994de) (TextureImporter) -> (artifact id: '8bcaa9f48f6ce85df9406119824b380c') in 0.0095688 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_audio.png using Guid(7ca5908fd6c3dd34181c26e6d543ab70) (TextureImporter) -> (artifact id: '3be39123c2a96450412221c68f3bf08a') in 0.0088086 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/blackSquareAlpha10.png using Guid(8c9cfa1dbe00a1d41ae9d14f5ac543ec) (TextureImporter) -> (artifact id: '1ab0b53fc56019495c102cba324818e5') in 0.0074292 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/CustomNetcode.png using Guid(dce12af736e0a4a1ba35d6424f897dc9) (TextureImporter) -> (artifact id: '4453daebcc979751be637c2d07673ae3') in 0.0135295 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/purpleSquare.png using Guid(dc0ca9b32ae9fd049911671cf1a480bf) (TextureImporter) -> (artifact id: 'a90345691ece0e61843f9b481b7cd06f') in 0.0084025 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Gizmos/TMP - Sprite Asset Icon.psd using Guid(ec7c645d93308c04d8840982af12101e) (TextureImporter) -> (artifact id: '0342a3c88e9979c3ea1828986bf34d3d') in 0.0189622 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/squareBorderCurvedEmptyThick.png using Guid(fc3b86627d5fe1c4d865b80627e2e37c) (TextureImporter) -> (artifact id: '6c2960e0396cc747f3178d3fa16d91d8') in 0.0103492 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/btn_AlignCapLine.psd using Guid(0d9a36012a224080966c7b55896aa0f9) (TextureImporter) -> (artifact id: '06a76228ed175a3a0a7d549d5085a43a') in 0.0170892 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/NoNetcode.png using Guid(1daed49eec0f94f7ebb36dfef6159884) (TextureImporter) -> (artifact id: 'bd4a14320a5c0a50b43a3b424b770833') in 0.0132062 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_doing.png using Guid(4dd24a9f658e7a3438d4fa08fb85aba3) (TextureImporter) -> (artifact id: 'dfb3b79e906aa6b09dd717683a0494a0') in 0.0102732 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/transparentSquare.png using Guid(4d338c631fa36f345b72a36f1c91ff9a) (TextureImporter) -> (artifact id: 'b5cb05741c8daab56190a495b42b9c4d') in 0.0074568 seconds
+Start importing Packages/dev.yarnspinner.unity/Runtime/Views/Textures/OptionNotSelected.png using Guid(4de89c03b6297472d82b0d925ee6fcd3) (TextureImporter) -> (artifact id: '0b85a028966a99520c191742ecaa880b') in 0.0185324 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_skull_border.png using Guid(6dfd924c0ba23844fb5d04ad1560de22) (TextureImporter) -> (artifact id: '5e2eb622d9619ea89e1f864f27a6ecee') in 0.0089868 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/squareBorderCurvedEmpty02.png using Guid(7d504312fad10f040b95bd8836dc6fc6) (TextureImporter) -> (artifact id: '3eb41ef0a70bfea14c335dfc39b8b145') in 0.0079212 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_lock_open.png using Guid(8d60feae84bdb2d4eb16a0037056c588) (TextureImporter) -> (artifact id: '7f9227d7a98ce63754386cf068aca670') in 0.0088787 seconds
+Start importing Assets/Plugins/Demigiant/DOTween/Editor/Imgs/DOTweenIcon.png using Guid(8da095e39e9b4df488dfd436f81116d6) (TextureImporter) -> (artifact id: '653ca963d33ce21373694f1bf17d5e41') in 0.0084824 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/squareBorderEmpty.png using Guid(8db54efcce998554c86b796b37a7cdfa) (TextureImporter) -> (artifact id: '08b3dd0c083700e844dcec1e2e31102f') in 0.0073235 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/Package.png using Guid(9d9689eab72c8480c90679f4dcf18820) (TextureImporter) -> (artifact id: 'b091b6cbaf3c39d6e437566b7c3a3a2b') in 0.0156407 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/CloudCode.png using Guid(ad1d29f4654194951a3c8bf507914d05) (TextureImporter) -> (artifact id: 'e743b244d69d21632a4c3f40e5918eb7') in 0.0156213 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/Questionnaire.png using Guid(dd70cd654275d47db807e918055e004f) (TextureImporter) -> (artifact id: 'b7d35593123a52c5927fd6da6eaa9d72') in 0.0151691 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Textures/Wipe Pattern - Diagonal.psd using Guid(ed5290d8df18488780e2996b9b882f01) (TextureImporter) -> (artifact id: 'bb352f590448976294c6629f2425667e') in 0.0156835 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Textures/btn_AlignTop_Light.psd using Guid(ed041e68439749a69d0efa0e3d896c2e) (TextureImporter) -> (artifact id: '0afa80fd2431035e7dc47ef32bba7a5e') in 0.0158043 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/project/ico_prefab.png using Guid(ed3789262161efa4fa33c85ca534590e) (TextureImporter) -> (artifact id: '18619de30b9cea9ed231636c9e126a84') in 0.0084864 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/whiteDot.png using Guid(ed7cb8f9a27664e48896c904189f0e2c) (TextureImporter) -> (artifact id: 'c42eca3c501a86cf43a32ee590e6b572') in 0.0092253 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Sprites/DropCap Numbers.psd using Guid(fd09957580ac4326916010f1f260975b) (TextureImporter) -> (artifact id: '7776a96db8d08520dbe2d83a4b6f1f5c') in 0.0207487 seconds
+Start importing Packages/dev.yarnspinner.unity/Editor/Editors/Icons/Asset Icons/LocalizationDatabase Icon.png using Guid(fd59b44bd3514406197f8ceb53547969) (TextureImporter) -> (artifact id: 'a0218610fc02d02447eb24f0ae4ac82d') in 0.0162946 seconds
+Start importing Packages/dev.yarnspinner.unity/Editor/Editors/Icons/Asset Icons/YarnScript Icon.png using Guid(0ed312066ea6f40f6af965f21c818b34) (TextureImporter) -> (artifact id: 'e790013f2eb1e082444069d752848b89') in 0.0162738 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/orangeSquare.png using Guid(3e730492361eb6e45be5c5fdafac23be) (TextureImporter) -> (artifact id: '75eb4f0a6911cdc1b33605e9919f62c2') in 0.0097839 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Gizmos/TMP - Input Field Icon.psd using Guid(3ee40aa79cd242a5b53b0b0ca4f13f0f) (TextureImporter) -> (artifact id: 'e21df5d9bfe19498b1dcb1e9fdfe0371') in 0.0173679 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/project/ico_textures.png using Guid(3e6b96a975eba1c43b2bad66fb7f8b4a) (TextureImporter) -> (artifact id: 'baf456f8b5c2211b6c6c5fd3c8074dfe') in 0.0093356 seconds
+Start importing Packages/dev.yarnspinner.unity/Editor/Editors/Icons/YarnSpinnerEditorWindow.psd using Guid(5eb29ddb696b54505b296d1c7a049150) (TextureImporter) -> (artifact id: 'b9f03dc408c51e3af2194b8d95385133') in 0.0148473 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Textures/Gradient Horizontal (Color).jpg using Guid(6eb184de103d4b3f812b38561065192f) (TextureImporter) -> (artifact id: 'a82beb26fafa07bb6652699f814745eb') in 0.0091607 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_alignTL.png using Guid(6efe1c8569d975640ba0c9f2ac4a9d61) (TextureImporter) -> (artifact id: 'fa99dd9a4bcbc19b7eec40e4cf7fd3c9') in 0.0073829 seconds
+Start importing Packages/dev.yarnspinner.unity/Runtime/Views/Textures/Selector-On.png using Guid(7e9a80d90823e4648b6cfa68e570fad1) (TextureImporter) -> (artifact id: '3bbd53315a37574e994545170aff1ce4') in 0.0145969 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/squareCorners03.png using Guid(dec3ea647707588408ec0d11ab130b73) (TextureImporter) -> (artifact id: '345fd6084872d069359deef3fc62e658') in 0.0094036 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Gizmos/TMP - Font Asset Icon.psd using Guid(ee148e281f3c41c5b4ff5f8a5afe5a6c) (TextureImporter) -> (artifact id: '6a4829ee5194c64674cde4f338623797') in 0.015772 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_alignBR.png using Guid(eeac3acbf7d1cd54fabfb1c4a12f9fc8) (TextureImporter) -> (artifact id: 'aab838dae1946dac20d576e6c197c6c8') in 0.0078944 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_alignTC.png using Guid(0f79253104349f44cb73978f6c8e93de) (TextureImporter) -> (artifact id: 'aca2f39ac0676c06560128ef58b395b3') in 0.0085234 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Gizmos/TMP - Text Component Icon.psd using Guid(2fd6421f253b4ef1a19526541f9ffc0c) (TextureImporter) -> (artifact id: '870fdec1e2f3d016d0df86ee32da9a81') in 0.0170275 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/DedicatedServer.png using Guid(3fe892784421e47f5aa40c2784a6cb3e) (TextureImporter) -> (artifact id: '25d047273f7d8df802e9d7d4aa6b713e') in 0.0165585 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/Icons/Check.png using Guid(4f78a544322c742b89e63fb68557b1d2) (TextureImporter) -> (artifact id: '5cc387dfe2bc87ec82ef2c0dfe95eed1') in 0.0161688 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_light.png using Guid(4f69b96f9308d8f4ea239773ef5b55c4) (TextureImporter) -> (artifact id: 'd23aeece5cfa0413eae8c6b48b1e77a9') in 0.0095883 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/project/ico_folder.png using Guid(4f2c4b43188596b47866d41e1dc13c8a) (TextureImporter) -> (artifact id: '36e3b7d056ca73f8419fca6ec6f4aaea') in 0.0106826 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_alignCR.png using Guid(6f504a3fa8848264bb4fb9bb7d582dd5) (TextureImporter) -> (artifact id: 'df2666d5307a4a2c8575f72eeabd20fb') in 0.0091978 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/ico_alignCC.png using Guid(8f0cb66458819764b94b93250bae94b6) (TextureImporter) -> (artifact id: 'f2a0fdd19da36967966e3c1ce8486f43') in 0.0089558 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/squareBorder.png using Guid(afd7d0ddb1d6c744b9cb87ae49b2ce62) (TextureImporter) -> (artifact id: '1b4306119e2c0095cdc71d62fc5ee6d7') in 0.0091994 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/circle.png using Guid(af28470bd0e2e9543a6dfa9a1a4b348d) (TextureImporter) -> (artifact id: '275ce6e370303cf18136bf64602dd977') in 0.0089978 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/project/ico_fonts.png using Guid(cf986943c88c2254780c17b2b5e3bc2f) (TextureImporter) -> (artifact id: '4fc9cc896c9e8cc0e24da84e149bf64b') in 0.009081 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/squareBorderAlpha15.png using Guid(dfd33662d9f6f3849bd92f6e159ca226) (TextureImporter) -> (artifact id: '05b78a0e23d1b532dd039cb92a59eb69') in 0.0077961 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/whiteSquare.png using Guid(dfe6e0ac3e5f24740a17e14b65e08406) (TextureImporter) -> (artifact id: '7232e9f4fa19901e2a70088e551b4c4f') in 0.0091441 seconds
+Start importing Assets/TextMesh Pro/Sprites/EmojiOne.png using Guid(dffef66376be4fa480fb02b19edbe903) (TextureImporter) -> (artifact id: '1948f2aaa9692147205dcaf2c0894874') in 0.0160753 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/whiteSquareAlpha50.png using Guid(ef40b00a83f7bd34f84851386b3321f0) (TextureImporter) -> (artifact id: 'a7b425d79f69ea5078847eb7fe833128') in 0.0091054 seconds
+Start importing Assets/Plugins/Demigiant/DemiLib/Core/Editor/Imgs/squareBorderCurved02.png using Guid(ff88be84254fb1f4b9a81a27ae0b2e81) (TextureImporter) -> (artifact id: '242af36a51c7c8c69a4683bd73952263') in 0.0085527 seconds
+Start importing Assets/TextMesh Pro/Shaders/TMPro.cginc using Guid(407bc68d299748449bbf7f48ee690f8d) (ShaderIncludeImporter) -> (artifact id: '8c9477f89b60945c0a304e941925d0aa') in 0.013051 seconds
+Start importing Assets/TextMesh Pro/Shaders/TMPro_Mobile.cginc using Guid(c334973cef89a9840b0b0c507e0377ab) (ShaderIncludeImporter) -> (artifact id: 'd7124c43777c8df827fb12547bcdd65b') in 0.015803 seconds
+Start importing Assets/TextMesh Pro/Shaders/SDFFunctions.hlsl using Guid(96de908384869cd409c75efa351d5edf) (ShaderIncludeImporter) -> (artifact id: '237f5ce3483566009ae122a2ddd8a6d3') in 0.01261 seconds
+Start importing Assets/TextMesh Pro/Shaders/TMPro_Properties.cginc using Guid(3997e2241185407d80309a82f9148466) (ShaderIncludeImporter) -> (artifact id: '3fcb7dfcebbd8a17585c5d6bab3b93f6') in 0.016022 seconds
+Start importing Assets/TextMesh Pro/Shaders/TMPro_Surface.cginc using Guid(d930090c0cd643c7b55f19a38538c162) (ShaderIncludeImporter) -> (artifact id: '65d59a971f64411f9981b6a49b996118') in 0.0147334 seconds
+Start importing Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile Overlay.shader using Guid(a02a7d8c237544f1962732b55a9aebf1) (ShaderImporter)Launched and connected shader compiler UnityShaderCompiler.exe after 0.01 seconds
+ -> (artifact id: '99ec1b594a059e9e8e69efb1ec8f1e38') in 0.0445033 seconds
+Start importing Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile-2-Pass.shader using Guid(0178fcb869bafef4690d177d31d17db8) (ShaderImporter) -> (artifact id: 'e1b38393f3c49c22ac3124f6e1fddbc2') in 0.0188684 seconds
+Start importing Assets/TextMesh Pro/Shaders/TMP_Bitmap.shader using Guid(128e987d567d4e2c824d754223b3f3b0) (ShaderImporter) -> (artifact id: 'b35b759b3934daf47a4e2ba05c3c6cec') in 0.0172228 seconds
+Start importing Assets/TextMesh Pro/Shaders/TMP_SDF SSD.shader using Guid(14eb328de4b8eb245bb7cea29e4ac00b) (ShaderImporter) -> (artifact id: 'e6bdb8763ec0837d5627c5db3a488b4f') in 0.0187461 seconds
+Start importing Assets/TextMesh Pro/Shaders/TMP_SDF-Surface-Mobile.shader using Guid(85187c2149c549c5b33f0cdb02836b17) (ShaderImporter) -> (artifact id: 'a6d54a9153bdc685412e080bade5101c') in 0.1621854 seconds
+Start importing Assets/TextMesh Pro/Shaders/TMP_SDF-Surface.shader using Guid(f7ada0af4f174f0694ca6a487b8f543d) (ShaderImporter) -> (artifact id: '06ff7dfd8fd54a64fd21966014c097fc') in 0.3262842 seconds
+Start importing Assets/TextMesh Pro/Shaders/TMP_Bitmap-Custom-Atlas.shader using Guid(48bb5f55d8670e349b6e614913f9d910) (ShaderImporter) -> (artifact id: '6a370d0309a21ed48aa4f8a44e3ab0bd') in 0.0163644 seconds
+Start importing Assets/TextMesh Pro/Shaders/TMP_SDF.shader using Guid(68e6db2ebdc24f95958faec2be5558d6) (ShaderImporter) -> (artifact id: '57699d79e35b5470da727664cf6c74da') in 0.0154144 seconds
+Start importing Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile SSD.shader using Guid(c8d12adcee749c344b8117cf7c7eb912) (ShaderImporter) -> (artifact id: '46b6553a83075064adc43411945687cc') in 0.0178406 seconds
+Start importing Packages/com.unity.ugui/Editor Resources/Shaders/TMP_SDF Internal Editor.shader using Guid(9c442dc870b456e48b615cd8add0e9ef) (ShaderImporter) -> (artifact id: '9934d921df827015fc58ea774750df12') in 0.0395988 seconds
+Start importing Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile Masking.shader using Guid(bc1ede39bf3643ee8e493720e4259791) (ShaderImporter) -> (artifact id: 'b9d9a1b7060f762211bff385b9c66637') in 0.0188146 seconds
+Start importing Assets/TextMesh Pro/Shaders/TMP_SDF Overlay.shader using Guid(dd89cf5b9246416f84610a006f916af7) (ShaderImporter) -> (artifact id: 'c31f3b11cf837456b782f6e69c0238ca') in 0.016422 seconds
+Start importing Assets/TextMesh Pro/Shaders/TMP_Bitmap-Mobile.shader using Guid(1e3b057af24249748ff873be7fafee47) (ShaderImporter) -> (artifact id: '140dd0bd8085b2307e01cf60b474fcd8') in 0.0153876 seconds
+Start importing Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile.shader using Guid(fe393ace9b354375a9cb14cdbbc28be4) (ShaderImporter) -> (artifact id: 'f57f38a3353bddb804109db297c327ec') in 0.0180587 seconds
+Start importing Assets/TextMesh Pro/Shaders/TMP_Sprite.shader using Guid(cf81c85f95fe47e1a27f6ae460cf182c) (ShaderImporter) -> (artifact id: '9a03b18da7789cef0712f0f8458761a6') in 0.0147226 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Roboto-Bold SDF - URP.mat using Guid(90722b8bd74d9aa49958562aff7bdf76) (NativeFormatImporter) -> (artifact id: '136ba4bbf51dcbfcd15d7b1b8ec3c0be') in 0.0130808 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Anton SDF - Outline.mat using Guid(a00013af81304728b2be1f4309ee2433) (NativeFormatImporter) -> (artifact id: 'a76634c669c27169cfb9bbcaf09d7f56') in 0.0142914 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Materials/Ground - URP.mat using Guid(71529b88994c1a341b22bc57c038674a) (NativeFormatImporter) -> (artifact id: '385f6a983123e0877286c04215732b51') in 0.0165969 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Materials/Small Crate_diffuse.mat using Guid(22262639920f43d6be32430e4e58350d) (NativeFormatImporter) -> (artifact id: '52ab11af817c04091cb241677a2b7253') in 0.0201285 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/LiberationSans SDF - Soft Mask.mat using Guid(42df1c7856584b6b8db9a509b6b10074) (NativeFormatImporter) -> (artifact id: 'f62e7fa1fcc1d284f775fc92da82da1f') in 0.0140944 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Roboto-Bold SDF - Drop Shadow.mat using Guid(b246c4190f4e46ec9352fe15a7b09ce0) (NativeFormatImporter) -> (artifact id: '991b0ef713cdf384b18f270a485df18e') in 0.0150272 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Bangers SDF - Drop Shadow.mat using Guid(f2dcf029949142e28b974630369c8b4e) (NativeFormatImporter) -> (artifact id: 'c0f4863324dc1fb51ffd362de13f37f4') in 0.0168722 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Anton SDF - Drop Shadow.mat using Guid(749b9069dc4742c5bfa5c74644049926) (NativeFormatImporter) -> (artifact id: '3ec97836d04c144c387253091138aa18') in 0.01603 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Bangers SDF - Drop Shadow - 2 Pass.mat using Guid(947a44964e53bf0448ff698b2a2219c0) (NativeFormatImporter) -> (artifact id: 'a141c82c13d751243ff633b928699fed') in 0.0159504 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Bangers SDF Logo.mat using Guid(f4e195ac1e204eff960149d1cb34e18c) (NativeFormatImporter) -> (artifact id: '7076915a86b676c72d6b40c681d4bd74') in 0.0152944 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Anton SDF - Sunny Days.mat using Guid(6522f30e342599e4e9dd4cc2cc03c830) (NativeFormatImporter)Shader 'TextMeshPro/Distance Field': fallback shader 'TextMeshPro/Mobile/Distance Field' not found
+ -> (artifact id: 'ab88dd04733d6f1ca1ac6db736ca68eb') in 0.0148346 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Unity SDF - HDRP LIT - Outline.mat using Guid(967f61bb1e3e28645a39e0cb647cc79e) (NativeFormatImporter) -> (artifact id: '419112ab369ffc4fd472206cfcb42f0a') in 0.0137962 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Roboto-Bold SDF - Surface.mat using Guid(e6b276ec991f467aa14ef1f3cc665993) (NativeFormatImporter) -> (artifact id: '186cb4dcc36fc8b192e5b16ee31a3c15') in 0.0141386 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Materials/Crate - Surface Shader Scene.mat using Guid(e6b9b44320f4448d9d5e0ee634259966) (NativeFormatImporter) -> (artifact id: '5c5a1e9eff789991220fcccf10ecc3c5') in 0.0136804 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Bangers SDF - Outline.mat using Guid(f629c6e43dba4bf38cb74d8860150664) (NativeFormatImporter) -> (artifact id: 'd5767fd8b6be1f4b34c154f7dad8574e') in 0.0132524 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Bangers SDF Logo - URP.mat using Guid(6751ce1a4611b3940812c13a6847d94f) (NativeFormatImporter) -> (artifact id: 'c12f9c0121df406410fb4d9d83713d43') in 0.0153259 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Materials/Ground - Logo Scene.mat using Guid(c719e38f25a9480abd2480ab621a2949) (NativeFormatImporter) -> (artifact id: 'f69c713a19cec39d9368fd23dd048743') in 0.0145719 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Bangers SDF Glow.mat using Guid(d75b8f41e959450c84ac6e967084d3e1) (NativeFormatImporter) -> (artifact id: 'b5ab63ade2e5e92e3eca5c827c5f8284') in 0.0133392 seconds
+Start importing Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Drop Shadow.mat using Guid(e73a58f6e2794ae7b1b7e50b7fb811b0) (NativeFormatImporter) -> (artifact id: '53cd7411e8ddcc0d67023915d3374914') in 0.0146631 seconds
+Start importing Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Outline.mat using Guid(79459efec17a4d00a321bdcc27bbc385) (NativeFormatImporter) -> (artifact id: 'b4a32ea08af8e5f658044d3fd454ceeb') in 0.0139017 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/LiberationSans SDF - Overlay.mat using Guid(9ad269c99dcf42b7aedefd83dd5a7b9d) (NativeFormatImporter) -> (artifact id: '3f8799c1915503fc3aad5d93a463a1a9') in 0.0149783 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Materials/Ground - Surface Shader Scene.mat using Guid(aadd5a709a48466c887296bb5b1b8110) (NativeFormatImporter) -> (artifact id: '9dff00763edb8fe027871f2ed0adbd07') in 0.0138654 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Materials/Crate - URP.mat using Guid(3b5cc91c3bf8cf74391252247f52fb59) (NativeFormatImporter) -> (artifact id: '4c41a20560ee5c7ca481579880198c2e') in 0.0138596 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/LiberationSans SDF - Metalic Green.mat using Guid(8b29aaa3eec7468097ff07adfcf29ac9) (NativeFormatImporter) -> (artifact id: 'df1e53cabc929cc95c71bdb088b30906') in 0.0143535 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Roboto-Bold SDF - HDRP Unlit.mat using Guid(2ddca8f46aa0838419d568affb0ca6b4) (NativeFormatImporter) -> (artifact id: 'a27e78665f763319087aa9a165d94b6a') in 0.0141438 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Unity SDF - HDRP LIT - Bloom.mat using Guid(8d176c01131de8f46ad61094e29d79b2) (NativeFormatImporter) -> (artifact id: '516784c93bcc7a09d1799f0d6a4b1c2a') in 0.0147639 seconds
+Start importing Assets/TextMesh Pro/Fonts/LiberationSans.ttf using Guid(e3265ab4bf004d28a9537516768c1c75) (TrueTypeFontImporter) -> (artifact id: '7bfa1cd481c818508c449ddd365d6cf3') in 0.317828 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Fonts/Unity.ttf using Guid(f4eec857a4fdf2f43be0e9f3d1a984e7) (TrueTypeFontImporter) -> (artifact id: '04b222bd5ca14c06fbfa16977529c011') in 0.0190333 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Fonts/Anton.ttf using Guid(997a43b767814dd0a7642ec9b78cba41) (TrueTypeFontImporter) -> (artifact id: 'fdb802b016465b226b68b6d8926b63ad') in 0.014193 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Fonts/Oswald-Bold.ttf using Guid(c9f6d0e7bc8541498c9a4799ba184ede) (TrueTypeFontImporter) -> (artifact id: '03e88d8f5982fcfbed75049099e02005') in 0.0149531 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Fonts/Electronic Highway Sign.TTF using Guid(8a2b9e2a607dd2143b58c44bc32410b4) (TrueTypeFontImporter) -> (artifact id: 'dc42f8d37fdfeee995fa0e4cbd333415') in 0.0148054 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Fonts/Roboto-Bold.ttf using Guid(4beb055f07aaff244873dec698d0363e) (TrueTypeFontImporter) -> (artifact id: '32c10d4685c34ba737f7d694b0cf896e') in 0.0149047 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Fonts/Bangers.ttf using Guid(5dd49b3eacc540408c98eee0de38e0f1) (TrueTypeFontImporter) -> (artifact id: '946e5d3c4459e4ca268e59f05d6680e0') in 0.0145573 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Oswald Bold SDF.asset using Guid(0161d805a3764c089bef00bfe00793f5) (NativeFormatImporter) -> (artifact id: '4bc00de7a078f5ac374c8fcc0d4b583a') in 0.0177708 seconds
+Start importing Assets/Resources/Topics/debug_topic_01.asset using Guid(e1025900953433e458f33df878c4c665) (NativeFormatImporter) -> (artifact id: '8043c0297cc2bc2330d010e7ae476d2d') in 0.0144807 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Bangers SDF.asset using Guid(125cb55b44b24c4393181402bc6200e6) (NativeFormatImporter) -> (artifact id: '73acbd1246a1aaeff95956e38f14e51e') in 0.0139657 seconds
+Start importing Assets/Resources/Topics/topic_found_phone.asset using Guid(425c4c615b4d0b544b68535bc9bc9432) (NativeFormatImporter) -> (artifact id: '316128d57d692b1138b08f8bfd3878cf') in 0.0126465 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Roboto-Bold SDF.asset using Guid(5302535af1044152a457ed104f1f4b91) (NativeFormatImporter) -> (artifact id: '0996ad70a81c22c566b7572532511782') in 0.0163708 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Scenes/28 - HDRP Shader Example/Sky and Fog Volume Profile.asset using Guid(83ba2e375bed45f48bce43e5a5f7c88a) (NativeFormatImporter) -> (artifact id: 'de10abd65fb6f76ee31245b3d8bad9ad') in 0.015497 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Sprite Assets/DropCap Numbers.asset using Guid(14aa93acbb234d16aaef0e8b46814db6) (NativeFormatImporter) -> (artifact id: '48412c7b25a36a2aa3c7072cdfed0f1e') in 0.0180834 seconds
+Start importing Assets/TextMesh Pro/Resources/Sprite Assets/EmojiOne.asset using Guid(c41005c129ba4d66911b75229fd70b45) (NativeFormatImporter) -> (artifact id: '8df7cf665830f22ab29d1c7b38a9e98a') in 0.0174048 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Color Gradient Presets/Blue to Purple - Vertical.asset using Guid(479a66fa4b094512a62b0a8e553ad95a) (NativeFormatImporter) -> (artifact id: '986c6ab248fe0da95003d2fb2579c15c') in 0.0144344 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Color Gradient Presets/Yellow to Orange - Vertical.asset using Guid(69a525efa7e6472eab268f6ea605f06e) (NativeFormatImporter) -> (artifact id: '2ecea9d533654a588185091af305c52a') in 0.0128883 seconds
+Start importing Assets/Resources/Topics/topic_missing_person.asset using Guid(79899c30ea6865c43a2dbef8c9adc587) (NativeFormatImporter) -> (artifact id: '7e710a65f46556b4349b834970455ae8') in 0.0138253 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Unity SDF.asset using Guid(c9adb1f542a93ae489bacfeae21e8394) (NativeFormatImporter) -> (artifact id: 'f7ea99fb2909d346dd25fc1736463388') in 0.0283903 seconds
+Start importing Assets/TextMesh Pro/Resources/Style Sheets/Default Style Sheet.asset using Guid(f952c082cb03451daed3ee968ac6c63e) (NativeFormatImporter) -> (artifact id: 'a3363971b5e466e626144f73934a1458') in 0.0199819 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Anton SDF.asset using Guid(8a89fa14b10d46a99122fd4f73fca9a2) (NativeFormatImporter) -> (artifact id: '0f9de894ea15a863968f70505959f09c') in 0.0192529 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Sprite Assets/Default Sprite Asset.asset using Guid(fbef3c704dce48f08a44612d6c856c8d) (NativeFormatImporter) -> (artifact id: '1cde498d491154829f76b68ffa5f5f0d') in 0.0169448 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Color Gradient Presets/Dark to Light Green - Vertical.asset using Guid(4c86a3366cd840348ebe8dc438570ee4) (NativeFormatImporter) -> (artifact id: '9a034a840af98ec011aa764106a094a9') in 0.0150335 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Color Gradient Presets/Light to Dark Green - Vertical.asset using Guid(5cf8ae092ca54931b443bec5148f3c59) (NativeFormatImporter) -> (artifact id: '20674d6b8262d357e799ed290bbee8ac') in 0.0137615 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Resources/Fonts & Materials/Electronic Highway Sign SDF.asset using Guid(dc36b3fdc14f47ebb36fd484a67e268a) (NativeFormatImporter) -> (artifact id: 'e1fcdde1205200d481953d6e8bcefdd1') in 0.0170173 seconds
+Start importing Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset using Guid(2e498d1c8094910479dc3e1b768306a4) (NativeFormatImporter) -> (artifact id: '904ebae6ee4474c266c74cd8e9f372b7') in 0.0181772 seconds
+Start importing Assets/Resources/Topics/topic_suspicious_message.asset using Guid(ae12610ab7d4aa54cad73af1df3b75ad) (NativeFormatImporter) -> (artifact id: 'aa40be787020330ac55da12e99f87ce1') in 0.0154875 seconds
+Start importing Assets/TextMesh Pro/Resources/TMP Settings.asset using Guid(3f5b5dff67a942289a9defa416b206f3) (NativeFormatImporter) -> (artifact id: '9c34c12a95bbf274e19b5e126261cf93') in 0.0351188 seconds
+Start importing Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset using Guid(8f586378b4e144a9851e7b34d9b748ee) (NativeFormatImporter) -> (artifact id: '7055972fc60a7912ea5976ba5c66435a') in 0.0081071 seconds
+Start importing Assets/Resources/Yarn/DebugScript.yarn using Guid(f413bcdc9b2cbe34494e985ba27779a2) (ScriptedImporter) -> (artifact id: 'acb7fe283ad8869f4757d896db87ad7e') in 0.0393257 seconds
+Start importing Packages/com.unity.ugui/README.md using Guid(e0ae6629cc70b514889df37fccb76832) (TextScriptImporter) -> (artifact id: '15b1fe6ee2db93eaf5190afe794bb3a0') in 0.0165027 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Fonts/Roboto-Bold - License.txt using Guid(f0303f887b8fa7243a51432c478ff2f3) (TextScriptImporter) -> (artifact id: '1b7072c9bb1581bf2a6102da341b5177') in 0.0122199 seconds
+Start importing Packages/com.unity.ugui/package.json using Guid(319b8889f363f5947acf209c17a94149) (PackageManifestImporter) -> (artifact id: 'bf7e0fbd011f8026b6b193a54b486a2a') in 0.0086552 seconds
+Start importing Packages/com.unity.ext.nunit/package.json using Guid(8143d3a8390f2c64685e3bc272bd9e90) (PackageManifestImporter) -> (artifact id: '2858b4528214f4b77b0b6eeaba20a6a8') in 0.0136781 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Fonts/Unity - OFL.txt using Guid(0251f66ebc602a944b35bccd13be2738) (TextScriptImporter) -> (artifact id: 'e8a481e435c0ff4a4c21f9048dbd9c8b') in 0.013925 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Fonts/Oswald-Bold - OFL.txt using Guid(d2cf87a8a7a94aa8b80dff1c807c1178) (TextScriptImporter) -> (artifact id: 'c0e7eb903c6c3809405d1959c82e9376') in 0.0144023 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Fonts/Roboto-Bold - AFL.txt using Guid(f28c334d44214474d9702d3ad79ecb0a) (TextScriptImporter) -> (artifact id: 'ee77bee4b666fc1036bbba9b0053b1c5') in 0.0140237 seconds
+Start importing Packages/com.unity.modules.accessibility/package.json using Guid(43674d438e19b89d7fe6af07234f3252) (PackageManifestImporter) -> (artifact id: '18ee965e811994fd35edf1fec93e0d64') in 0.0117663 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Fonts/Anton OFL.txt using Guid(73a79399807f4e8388c2cbb5494681ca) (TextScriptImporter) -> (artifact id: '0ca8c0ce1c5508390a97d68b94442eac') in 0.0150713 seconds
+Start importing Packages/com.unity.ext.nunit/CHANGELOG.md using Guid(f49bbe06ffa5ae24abe32abdab430c24) (TextScriptImporter) -> (artifact id: 'c683778479dc55f8b6a0ce0a35fbf174') in 0.0144409 seconds
+Start importing Packages/com.unity.test-framework/CHANGELOG.md using Guid(d691174143fd3774ba63d7c493633b99) (TextScriptImporter) -> (artifact id: 'bc32b6cc9658fe6084cb0e4c1b5a32a0') in 0.0153594 seconds
+Start importing Packages/com.unity.test-framework/package.json using Guid(d6a2e6e4803de7b43baacdc355fc144d) (PackageManifestImporter) -> (artifact id: '8a4d3dbbf07682ae1e001bf1170f3be8') in 0.0162312 seconds
+Start importing Packages/com.unity.test-framework/CONTRIBUTING.md using Guid(57d2ac5c7d5786e499d4794973fe0d4e) (TextScriptImporter) -> (artifact id: '63694e76b1ca54b4e27e69ea0117021a') in 0.0147772 seconds
+Start importing Packages/com.unity.modules.vr/package.json using Guid(18a4fadfef534684d5af39ca8dc48fe9) (PackageManifestImporter) -> (artifact id: 'b5caa374997d1a6b1a334be36d0889dd') in 0.007863 seconds
+Start importing Assets/TextMesh Pro/Sprites/EmojiOne Attribution.txt using Guid(381dcb09d5029d14897e55f98031fca5) (TextScriptImporter) -> (artifact id: '2c0255cc5fad2caf6023c999258bc595') in 0.0133229 seconds
+Start importing Assets/TextMesh Pro/Resources/LineBreaking Leading Characters.txt using Guid(d82c1b31c7e74239bff1220585707d2b) (TextScriptImporter) -> (artifact id: '585e0226f7f9b94bdc8d28dde0973cb7') in 0.0154676 seconds
+Start importing Packages/com.unity.ext.nunit/LICENSE.md using Guid(f91a00d2dca52b843b2d50ccf750737d) (TextScriptImporter) -> (artifact id: '196f85a7d75e4f65be5b02ead21b2123') in 0.0143915 seconds
+Start importing Assets/TextMesh Pro/Resources/LineBreaking Following Characters.txt using Guid(fade42e8bc714b018fac513c043d323b) (TextScriptImporter) -> (artifact id: '77f9cecdb60ef9d63271c01a62cc879f') in 0.0138103 seconds
+Start importing Packages/com.unity.multiplayer.center/CHANGELOG.md using Guid(3bbd27b3dd7be4a74aeab8da6b0af5cc) (TextScriptImporter) -> (artifact id: 'b633de2c55fc0e0c2c63bfabd12d98df') in 0.0165749 seconds
+Start importing Packages/com.unity.ext.nunit/README.md using Guid(5da62a0c1c5218c4aa16b74546a7822d) (TextScriptImporter) -> (artifact id: 'e5d4775216715c7fbe31fc505cc93565') in 0.0131425 seconds
+Start importing Packages/com.unity.test-framework/LICENSE.md using Guid(3ec7596410385054a9e0bc90377fbe63) (TextScriptImporter) -> (artifact id: '87d8e3318e95b53aae66303333c84160') in 0.0117403 seconds
+Start importing Assets/TextMesh Pro/Fonts/LiberationSans - OFL.txt using Guid(6e59c59b81ab47f9b6ec5781fa725d2c) (TextScriptImporter) -> (artifact id: '82179502bf8a47e16c55a05f30788e14') in 0.0134522 seconds
+Start importing Packages/com.unity.modules.uielements/package.json using Guid(4f0f9b9f3ed97ad2b9ba8f1a8e4666c2) (PackageManifestImporter) -> (artifact id: 'cc3454a6874bf9fdc20707a52facedc0') in 0.0134714 seconds
+Start importing Assets/TextMesh Pro/Sprites/EmojiOne.json using Guid(8f05276190cf498a8153f6cbe761d4e6) (TextScriptImporter) -> (artifact id: 'c087afcd9fdb46f879f61f3f92c1b05c') in 0.0129212 seconds
+Start importing Packages/com.unity.ext.nunit/Third Party Notices.md using Guid(bfcb3ba499f7d452b92d9a9cc3378788) (TextScriptImporter) -> (artifact id: '2e0df5249d5ebc357d7939dbc87504c3') in 0.0133594 seconds
+Start importing Packages/com.unity.multiplayer.center/package.json using Guid(df0857f6a11054383be91b1f8e1b5800) (PackageManifestImporter) -> (artifact id: '420d7615b2d3001980cf56a88fccaca2') in 0.0075222 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Fonts/Bangers - OFL.txt using Guid(efe0bf4ac872451e91612d1ae593f480) (TextScriptImporter) -> (artifact id: 'bff6b7c90249f1cd355bbaee699958ce') in 0.0153612 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Prefabs/Text Popup.prefab using Guid(b06f0e6c1dfa4356ac918da1bb32c603) (PrefabImporter) -> (artifact id: 'd621a6ffc6e8304725f336e8b133217c') in 0.016866 seconds
+Start importing Packages/dev.yarnspinner.unity/Prefabs/Dialogue System.prefab using Guid(52571f68872914e24837210513edea1d) (PrefabImporter) -> (artifact id: 'ed9818504a63dd8b842e4d5f862eb709') in 0.0354351 seconds
+Start importing Assets/Prefabs/UI/MessageBubble.prefab using Guid(26b7b210afd94b68a720bb0a31a0b517) (PrefabImporter)Creating missing CanvasRenderer component for TextMeshProUGUI in Text (TMP).
+Problem detected while importing the Prefab file: 'Assets/Prefabs/UI/MessageBubble.prefab'.
+The file might be corrupt or have a missing Variant parent or nested Prefabs. See details below.
+Errors:
+	Component (CanvasRenderer) has a broken GameObject reference. Fixing.
+ -> (artifact id: '270737d5e423ec556010e2c8a09d3fed') in 0.0092884 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Prefabs/TextMeshPro - Prefab 1.prefab using Guid(a6e39ced0ea046bcb636c3f0b2e2a745) (PrefabImporter) -> (artifact id: '22ac9a0e49c1ce1f957c60578597f0ee') in 0.0097695 seconds
+Start importing Packages/dev.yarnspinner.unity/Prefabs/Option Item.prefab using Guid(e605972137b0b4c1399ffb07beae9a9b) (PrefabImporter) -> (artifact id: '8a484baae8f8818a663cd7df219c3aed') in 0.0088321 seconds
+Start importing Assets/TextMesh Pro/Examples & Extras/Prefabs/TextMeshPro - Prefab 2.prefab using Guid(fdad9d952ae84cafb74c63f2e694d042) (PrefabImporter) -> (artifact id: 'c9f58cf61b684a5e21cbf98e549dd45b') in 0.0078159 seconds
+Start importing Assets/Prefabs/UI/TypingIndicator.prefab using Guid(0fd4467a6a384bee9a3bdcb1e4557e38) (PrefabImporter)Creating missing CanvasRenderer component for TextMeshProUGUI in TypingIndicator.
+ -> (artifact id: '1611ba02d2805b50b06238d19e0949c3') in 0.0077825 seconds
+Start importing Assets/Resources/Yarn/Project.yarnproject using Guid(a47e6935cb6cadf4d9247e39c563dd95) (ScriptedImporter) -> (artifact id: 'd986517fe70444c91f5951ef14c2cbb8') in 0.1994872 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/light.uss using Guid(f1ac2efb1bcd4dfd95dc196ed3c11367) (ScriptedImporter) -> (artifact id: '0c9d3b3e94d5afb866c3cf018db94a20') in 0.0471528 seconds
+Start importing Assets/MCPForUnity/Editor/Windows/MCPSetupWindow.uss using Guid(b4426760e34ff484a8ed955e588b570b) (ScriptedImporter) -> (artifact id: '4f85d656356062509a536cf0e7295efc') in 0.0174911 seconds
+Start importing Packages/dev.yarnspinner.unity/Editor/Editors/YarnSpinnerEditorWindow.uss using Guid(b4f2c0e54086641babbe5855064e2c88) (ScriptedImporter) -> (artifact id: 'f5178a15c05a668acaa52302d661a8ed') in 0.0082398 seconds
+Start importing Packages/dev.yarnspinner.unity/Editor/Editors/Commands/CommandsWindow.uss using Guid(f8653a3e6bb8c4c45aa986ef57baedbb) (ScriptedImporter) -> (artifact id: 'c17f51ad39d341484832ba5587a68bd3') in 0.0098346 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/dark.uss using Guid(1984cd07fe96417f9e88f5771f6b4b32) (ScriptedImporter) -> (artifact id: '127023244548a0f0c4b7460a6f1077e5') in 0.0125207 seconds
+Start importing Assets/MCPForUnity/Editor/Windows/EditorPrefs/EditorPrefsWindow.uss using Guid(3980375ed546e47abafcafe11e953e87) (ScriptedImporter) -> (artifact id: '459ff35f526c859c9e1c3c2df2ae5f9e') in 0.0149243 seconds
+Start importing Packages/com.unity.multiplayer.center/Editor/MultiplayerCenterWindow/UI/MultiplayerCenterWindow.uss using Guid(bac00d6e07f0b4305bb395363c89d92b) (ScriptedImporter) -> (artifact id: 'cab34ed09a4b94e471baff1d9347742c') in 0.0224432 seconds
+Start importing Packages/dev.yarnspinner.unity/Editor/Editors/USS/YarnSpinner.uss using Guid(cb55d9cdb86eb461d9bf7e96af6e9c1e) (ScriptedImporter) -> (artifact id: '437e3c60b9600481a2ece3f9199e1573') in 0.0096072 seconds
+Start importing Assets/MCPForUnity/Editor/Windows/Components/Common.uss using Guid(2cccfdd3f4371f140902a54e247cf979) (ScriptedImporter) -> (artifact id: '2439ea97a22d9177c9cc3406d44b17df') in 0.0126503 seconds
+Start importing Assets/MCPForUnity/Editor/Windows/MCPForUnityEditorWindow.uss using Guid(8f9b5e0c2d3c4e5f6a7b8c9d0e1f2a3c) (ScriptedImporter) -> (artifact id: 'a434d676fe81205a6768e38a3a88ad33') in 0.0087524 seconds
+Start importing Assets/MCPForUnity/Editor/Windows/Components/Settings/McpSettingsSection.uxml using Guid(405ae4db7c048f542ac9b8f83099bc45) (ScriptedImporter) -> (artifact id: '69b1e82b9f9ca6347ebcc5be0ebc7b8a') in 0.0322091 seconds
+Start importing Packages/dev.yarnspinner.unity/Editor/Editors/Commands/CommandElement.uxml using Guid(90cfaddaa17c84dc79cd95f4448553b2) (ScriptedImporter) -> (artifact id: '2def8a336dfbe0326b5de264cf95346d') in 0.0107186 seconds
+Start importing Packages/dev.yarnspinner.unity/Editor/Editors/YarnSpinnerEditorWindow.uxml using Guid(1184c485a8e5249aeb9253ff925af9c7) (ScriptedImporter) -> (artifact id: '2fae7a66f61c2a4652a40794119bcedd') in 0.0148057 seconds
+Start importing Packages/dev.yarnspinner.unity/Editor/Editors/USS/SourceFile.uxml using Guid(538a1dbae42414629a134a058c8848d9) (ScriptedImporter) -> (artifact id: 'bbde68d976a7314cb8d11b51609c2b8f') in 0.0102597 seconds
+Start importing Assets/MCPForUnity/Editor/Windows/EditorPrefs/EditorPrefItem.uxml using Guid(06c99d6b0c7fa4fd3842e4d3b2a7407f) (ScriptedImporter) -> (artifact id: '4b8473a107c872f624b31a28495f3f16') in 0.0099556 seconds
+Start importing Packages/dev.yarnspinner.unity/Editor/Editors/Commands/CommandsWindow.uxml using Guid(e71e992188faa4d22b8bdd4b60f0b7bf) (ScriptedImporter) -> (artifact id: 'ce5aa40dc951c80b2a99e42eb80c38a9') in 0.0137229 seconds
+Start importing Assets/MCPForUnity/Editor/Windows/Components/Connection/McpConnectionSection.uxml using Guid(9943fa234c3a76a4198d2983bf96ab26) (ScriptedImporter) -> (artifact id: 'c616cec463151d9f56ed6d7cc03b3f61') in 0.0116227 seconds
+Start importing Assets/MCPForUnity/Editor/Windows/Components/Tools/McpToolsSection.uxml using Guid(5a94c7afd72c4dcf9f8a611d85c9a1e4) (ScriptedImporter) -> (artifact id: '73170ed2b034eea15a58125605105906') in 0.0103065 seconds
+Start importing Assets/MCPForUnity/Editor/Windows/Components/ClientConfig/McpClientConfigSection.uxml using Guid(abdb7edaa375af049bd795c7a8b8a613) (ScriptedImporter) -> (artifact id: '39e4437c8463ddb7a9cdf3d3b3be9ab3') in 0.0100111 seconds
+Start importing Assets/MCPForUnity/Editor/Windows/EditorPrefs/EditorPrefsWindow.uxml using Guid(0cfa716884c1445d8a5e9581bbe2e9ce) (ScriptedImporter) -> (artifact id: 'f603935d79324e14180fa49f95d0ae21') in 0.0114671 seconds
+Start importing Packages/dev.yarnspinner.unity/Editor/Editors/USS/Localization.uxml using Guid(de04e2bdef0b44420ace51d11acb9a26) (ScriptedImporter) -> (artifact id: '7312f6ae73602c14a83a631d167420c9') in 0.010496 seconds
+Start importing Assets/MCPForUnity/Editor/Windows/MCPForUnityEditorWindow.uxml using Guid(7f8a4e9c1d2b3e4f5a6b7c8d9e0f1a2b) (ScriptedImporter) -> (artifact id: '43e91fcf72938437bb0696f3e86b3238') in 0.0092815 seconds
+Start importing Assets/MCPForUnity/Editor/Windows/MCPSetupWindow.uxml using Guid(bf9567b4c9d76a14e9476c2d47c4b017) (ScriptedImporter) -> (artifact id: 'cb8ad35d1995be79b8c1633d20c36c41') in 0.0123741 seconds
+Shader 'TextMeshPro/Distance Field Overlay': fallback shader 'TextMeshPro/Mobile/Distance Field' not found
+Shader 'TextMeshPro/Distance Field SSD': fallback shader 'TextMeshPro/Mobile/Distance Field' not found
+Shader 'TextMeshPro/Distance Field': fallback shader 'TextMeshPro/Mobile/Distance Field' not found
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.01 seconds
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.01 seconds
+Loading style catalogs (6)
+	StyleSheets/Extensions/base/common.uss
+	UIPackageResources/StyleSheets/Default/Variables/Public/common.uss
+	StyleSheets/Northstar/common.uss
+	StyleSheets/Extensions/fonts/inter.uss
+	StyleSheets/Extensions/base/dark.uss
+	UIPackageResources/StyleSheets/Default/Northstar/Palette/dark.uss
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.01 seconds
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.01 seconds
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.01 seconds
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.01 seconds
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.02 seconds
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.02 seconds
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.01 seconds
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.01 seconds
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.01 seconds
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.01 seconds
+Refreshing native plugins compatible for Editor in 0.00 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=96b458654b826524188e934984e09988): Total: 12.783 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+	Summary:
+		Imports: total=500 (actual=500, local cache=0, cache server=0)
+		Asset DB Process Time: managed=35 ms, native=8631 ms
+		Asset DB Callback time: managed=258 ms, native=361 ms
+		Scripting: domain reloads=1, domain reload time=2824 ms, compile time=660 ms, other=12 ms
+		Project Asset Count: scripts=367, non-scripts=492
+		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 1.751ms
+	ApplyChangesToAssetFolders: 0.358ms
+	Scan: 50.380ms
+	OnSourceAssetsModified: 0.857ms
+	CategorizeAssetsWithTransientArtifact: 20.405ms
+	ProcessAssetsWithTransientArtifactChanges: 19.287ms
+	CategorizeAssets: 5.826ms
+	ImportOutOfDateAssets: 8498.838ms (394.988ms without children)
+		ImportManagerImport: 7435.736ms (336.238ms without children)
+			ImportInProcess: 7098.752ms
+			UpdateCategorizedAssets: 0.746ms
+		CompileScripts: 659.722ms
+		ReloadNativeAssets: 0.001ms
+		UnloadImportedAssets: 0.289ms
+		ReloadImportedAssets: 7.832ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.086ms
+		InitializingProgressBar: 0.005ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.000ms
+		OnDemandSchedulerStart: 0.179ms
+	PostProcessAllAssets: 617.657ms
+	Hotreload: 1.635ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.001ms
+	UnloadStreamsBegin: 0.232ms
+	PersistCurrentRevisions: 0.436ms
+	UnloadStreamsEnd: 0.000ms
+	GenerateScriptTypeHashes: 1.459ms
+	Untracked: 3565.639ms
+
+Application.AssetDatabase Initial Refresh End
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.01 seconds
+Scanning for USB devices : 17.600ms
+Initializing Unity extensions:
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.01 seconds
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.01 seconds
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] Serial number assigned to: "F4-85J9-FNUU-T9SC-PSQB-XXXX"
+[Licensing::Module] Serial number assigned to: "15669603193341-UnityPersXXXX"
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-UnityChatNovelGame
+Unloading 94 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 1246 unused Assets / (7.5 MB). Loaded Objects now: 1666.
+Memory consumption went from 111.7 MB to 104.2 MB.
+Total: 12.255700 ms (FindLiveObjects: 0.173400 ms CreateObjectMapping: 0.113300 ms MarkObjects: 7.452800 ms  DeleteObjects: 4.515300 ms)
+
+VerificationTool: RunVerification called from CLI.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+VerificationTool:RunVerification () (at Assets/Scripts/Editor/VerificationTool.cs:13)
+
+(Filename: Assets/Scripts/Editor/VerificationTool.cs Line: 13)
+
+Unloading 1 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 0 unused Assets / (37.1 KB). Loaded Objects now: 1670.
+Memory consumption went from 101.7 MB to 101.7 MB.
+Total: 5.732900 ms (FindLiveObjects: 0.083900 ms CreateObjectMapping: 0.026700 ms MarkObjects: 5.615400 ms  DeleteObjects: 0.006300 ms)
+
+Start importing ProjectSettings/EditorBuildSettings.asset using Guid(0000000000000000b000000000000000) (LibraryAssetImporter) -> (artifact id: 'db6cccd640a3a2bca71ed0561de63009') in 0.0021375 seconds
+Refreshing native plugins compatible for Editor in 0.00 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=400c61d9b2bc49742ba3f39c83898e25): Total: 0.023 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing Assets/Scenes/VerificationScene.unity using Guid(700680d04ed84d845b4256c9c463aea1) (DefaultImporter) -> (artifact id: '158a267f14ff43e267cd1d13b497b35f') in 0.0007343 seconds
+Refreshing native plugins compatible for Editor in 0.00 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=e667fded74ae2c647a334e50f3e899fc): Total: 0.022 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+VerificationTool: VerificationScene created.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+VerificationTool:SetupVerificationEnvironment () (at Assets/Scripts/Editor/VerificationTool.cs:28)
+VerificationTool:RunVerification () (at Assets/Scripts/Editor/VerificationTool.cs:14)
+
+(Filename: Assets/Scripts/Editor/VerificationTool.cs Line: 28)
+
+[Project] Loading completed in 16.085 seconds
+	Project init time: 				14.329 seconds
+		Template init time: 		0.000 seconds
+		Package Manager init time: 		0.250 seconds
+		Asset Database init time: 		0.162 seconds
+		Global illumination init time: 	0.002 seconds
+		Assemblies load time: 			0.597 seconds
+		Unity extensions init time: 	0.002 seconds
+		Asset Database refresh time: 	12.783 seconds
+	Scene opening time: 			0.226 seconds
+##utp:{"type":"ProjectInfo","version":2,"phase":"Immediate","time":1769228110999,"processId":37228,"projectLoad":16.0850492,"projectInit":14.3286054,"templateInit":0.0,"packageManagerInit":0.2501357,"assetDatabaseInit":0.1616058,"globalIlluminationInit":0.001765,"assembliesLoad":0.5968557,"unityExtensionsInit":0.0018948,"assetDatabaseRefresh":12.783471,"sceneOpening":0.2260984}
+##utp:{"type":"EditorInfo","version":2,"phase":"Immediate","time":1769228110999,"processId":37228,"editorVersion":"6000.0.32f1 (b2e806cf271c)","branch":"6000.0/staging","buildType":"Release","platform":"Windows"}
+Reloading assemblies for play mode.
+Reloading assemblies after forced synchronous recompile.
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  0.359 seconds
+Refreshing native plugins compatible for Editor in 0.00 ms, found 0 plugins.
+Native extension for WindowsStandalone target not found
+<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Auto-discovered 18 tools and 14 resources (32 total handlers)
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MCPForUnity.Editor.Helpers.McpLog:Info (string,bool) (at Assets/MCPForUnity/Editor/Helpers/McpLog.cs:40)
+MCPForUnity.Editor.Tools.CommandRegistry:AutoDiscoverCommands () (at Assets/MCPForUnity/Editor/Tools/CommandRegistry.cs:101)
+MCPForUnity.Editor.Tools.CommandRegistry:Initialize () (at Assets/MCPForUnity/Editor/Tools/CommandRegistry.cs:50)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:EnsureInitialised () (at Assets/MCPForUnity/Editor/Services/Transport/TransportCommandDispatcher.cs:200)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:.cctor () (at Assets/MCPForUnity/Editor/Services/Transport/TransportCommandDispatcher.cs:73)
+System.Runtime.CompilerServices.RuntimeHelpers:RunClassConstructor (System.RuntimeTypeHandle)
+UnityEditor.EditorAssemblies:ProcessInitializeOnLoadAttributes (System.Type[])
+
+(Filename: Assets/MCPForUnity/Editor/Helpers/McpLog.cs Line: 40)
+
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.899 seconds
+Domain Reload Profiling: 1256ms
+	BeginReloadAssembly (175ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (15ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (52ms)
+	RebuildCommonClasses (29ms)
+	RebuildNativeTypeToScriptingClass (10ms)
+	initialDomainReloadingComplete (27ms)
+	LoadAllAssembliesAndSetupDomain (117ms)
+		LoadAssemblies (101ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (99ms)
+			TypeCache.Refresh (4ms)
+				TypeCache.ScanAssembly (0ms)
+			BuildScriptInfoCaches (91ms)
+			ResolveRequiredComponents (2ms)
+	FinalizeReload (899ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (717ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (15ms)
+			SetLoadedEditorAssemblies (2ms)
+			BeforeProcessingInitializeOnLoad (63ms)
+			ProcessInitializeOnLoadAttributes (600ms)
+			ProcessInitializeOnLoadMethodAttributes (31ms)
+			AfterProcessingInitializeOnLoad (5ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (24ms)
+Asset Pipeline Refresh (id=c1ace464125072f44b3bec7c20568c0e): Total: 1.329 seconds - Initiated by StopAssetImportingV2(ForceSynchronousImport | ForceDomainReload)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=925 ms
+		Asset DB Callback time: managed=30 ms, native=0 ms
+		Scripting: domain reloads=1, domain reload time=371 ms, compile time=1 ms, other=0 ms
+		Project Asset Count: scripts=367, non-scripts=493
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 1.472ms
+	ApplyChangesToAssetFolders: 0.191ms
+	Scan: 0.001ms
+	OnSourceAssetsModified: 0.002ms
+	CategorizeAssetsWithTransientArtifact: 0.002ms
+	ProcessAssetsWithTransientArtifactChanges: 0.651ms
+	CategorizeAssets: 7.968ms
+	ImportOutOfDateAssets: 899.918ms (898.680ms without children)
+		CompileScripts: 1.017ms
+		CollectScriptTypesHashes: 0.001ms
+		ReloadNativeAssets: 0.001ms
+		UnloadImportedAssets: 0.001ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.088ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.000ms
+		OnDemandSchedulerStart: 0.130ms
+	PostProcessAllAssets: 30.976ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.027ms
+	UnloadStreamsBegin: 0.037ms
+	PersistCurrentRevisions: 0.019ms
+	UnloadStreamsEnd: 0.001ms
+	GenerateScriptTypeHashes: 2.253ms
+	Untracked: 387.593ms
+
+Loaded scene 'Temp/__Backupscenes/0.backup'
+	Deserialize:            0.436 ms
+	Integration:            13.740 ms
+	Integration of assets:  0.002 ms
+	Thread Wait Time:       22.345 ms
+	Total Operation Time:   36.523 ms
+VerificationAutomator: Started.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Assets.Scripts.Dev.VerificationAutomator/<Start>d__1:MoveNext () (at Assets/Scripts/Dev/VerificationAutomator.cs:18)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/Scripts/Dev/VerificationAutomator.cs Line: 18)
+
+VerificationAutomator: Loading DebugChatScene...
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Assets.Scripts.Dev.VerificationAutomator/<Start>d__1:MoveNext () (at Assets/Scripts/Dev/VerificationAutomator.cs:21)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/Scripts/Dev/VerificationAutomator.cs Line: 21)
+
+The referenced script (Unknown) on this Behaviour is missing!
+Unloading 6 Unused Serialized files (Serialized files now loaded: 0)
+Asset Pipeline Refresh (id=d17bf85aaadc3174aba1d753737f605e): Total: 0.022 seconds - Initiated by RefreshV2(NoUpdateAssetOptions)
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+Created GICache directory at C:/Users/PLANNER007/AppData/LocalLow/Unity/Caches/GiCache. Took: 0.016s, timestamps: [17.513 - 17.529]
+UnloadTime: 0.036300 ms
+Loaded scene 'Assets/Scenes/DebugChatScene.unity'
+	Deserialize:            36.153 ms
+	Integration:            35.542 ms
+	Integration of assets:  0.004 ms
+	Thread Wait Time:       150.543 ms
+	Total Operation Time:   222.241 ms
+VerificationAutomator: Scene loaded. Waiting for logic...
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Assets.Scripts.Dev.VerificationAutomator/<Start>d__1:MoveNext () (at Assets/Scripts/Dev/VerificationAutomator.cs:24)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/Scripts/Dev/VerificationAutomator.cs Line: 24)
+
+Unloading 11 unused Assets / (5.1 KB). Loaded Objects now: 1781.
+Memory consumption went from 103.2 MB to 103.2 MB.
+Total: 4.439100 ms (FindLiveObjects: 0.104300 ms CreateObjectMapping: 0.032100 ms MarkObjects: 4.266800 ms  DeleteObjects: 0.035500 ms)
+
+VerificationCapture not found! Creating fallback...
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogWarning (object)
+Assets.Scripts.Dev.VerificationAutomator/<Start>d__1:MoveNext () (at Assets/Scripts/Dev/VerificationAutomator.cs:35)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/Scripts/Dev/VerificationAutomator.cs Line: 35)
+
+VerificationAutomator: Triggering Capture...
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Assets.Scripts.Dev.VerificationAutomator/<Start>d__1:MoveNext () (at Assets/Scripts/Dev/VerificationAutomator.cs:42)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/Scripts/Dev/VerificationAutomator.cs Line: 42)
+
+VerificationAutomator: Done. Exiting.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Assets.Scripts.Dev.VerificationAutomator/<Start>d__1:MoveNext () (at Assets/Scripts/Dev/VerificationAutomator.cs:47)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/Scripts/Dev/VerificationAutomator.cs Line: 47)
+
+VerificationAutomator: Batchmode detected. Exiting Editor.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Assets.Scripts.Dev.VerificationAutomator/<Start>d__1:MoveNext () (at Assets/Scripts/Dev/VerificationAutomator.cs:52)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/Scripts/Dev/VerificationAutomator.cs Line: 52)
+
+[Physics::Module] Cleanup current backned.
+[Physics::Module] Id: 0xf2b8ea05
+[Licensing::IpcConnector] License Notification channel disconnected successfully.
+[Licensing::IpcConnector] License Client channel disconnected successfully.
+AcceleratorClientConnectionCallback - disconnected - :0
+Cleanup mono
+Checking for leaked weakptr:
+  Found no leaked weakptrs.
+[Package Manager] Server process was shutdown
+##utp:{"type":"MemoryLeaks","version":2,"phase":"Immediate","time":1769228117036,"processId":37228,"allocatedMemory":12410304,"memoryLabels":[{"Default":26733},{"Permanent":15356},{"NewDelete":84033},{"Thread":4230344},{"Manager":30042},{"VertexData":8},{"Geometry":816},{"Texture":160},{"Shader":83595},{"Material":24},{"GfxDevice":55392},{"Animation":328},{"Audio":4040},{"Font":731173},{"FreeType":28004},{"FontEngine":256},{"Physics":929},{"Serialization":968},{"Input":14816},{"JobScheduler":33024},{"TextLib":32},{"Mono":32},{"ScriptingNativeRuntime":155060},{"BaseObject":1620944},{"Resource":1304},{"Renderer":2928},{"Transform":4646},{"File":13934},{"WebCam":752},{"Culling":32},{"Terrain":11394},{"Wind":24},{"STL":40},{"String":277769},{"DynamicArray":108213},{"HashMap":90371},{"Utility":2664222},{"Curl":48},{"PoolAlloc":1768},{"AI":104},{"TypeTree":5005},{"ScriptManager":512},{"RuntimeInitializeOnLoadManager":64},{"SpriteAtlas":112},{"GI":7888},{"Director":8240},{"CloudService":86480},{"WebRequest":808},{"VR":45961},{"SceneManager":496},{"Video":64},{"LazyScriptCache":32},{"SceneLoad":296},{"NativeArray":8},{"Camera":17},{"Secure":1},{"Image":270336},{"SerializationCache":1576},{"APIUpdating":10320},{"Subsystems":336},{"VirtualTexturing":57888},{"StaticSafetyDebugInfo":278528},{"Analytics":560},{"Hierarchy":272},{"Gui":80},{"EditorUtility":49947},{"VersionControl":4},{"Undo":912},{"AssetDatabase":1234915},{"EditorGi":328},{"UnityConnect":24208},{"Upm":1996},{"DrivenProperties":72},{"LocalIPC":270},{"ProfilerEditor":9738},{"CoreBusinessMetrics":14688},{"Licensing":3624},{"AssetReference":32},{"IPCStream":32}]}

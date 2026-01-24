@@ -210,7 +210,7 @@ namespace ProjectFoundPhone.Editor
             GameObject typingPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/UI/TypingIndicator.prefab");
             
             if (bubblePrefab != null) so.FindProperty("m_MessageBubblePrefab").objectReferenceValue = bubblePrefab;
-            else Debug.LogError("MessageBubble prefab not found at Assets/Prefabs/UI/MessageBubble.prefab");
+            else UnityEngine.Debug.LogError("MessageBubble prefab not found at Assets/Prefabs/UI/MessageBubble.prefab");
             
             if (typingPrefab != null) {
                  // Instantiate typing indicator as child of content
@@ -218,13 +218,13 @@ namespace ProjectFoundPhone.Editor
                  typingInstance.SetActive(false);
                  so.FindProperty("m_TypingIndicator").objectReferenceValue = typingInstance;
             }
-            else Debug.LogError("TypingIndicator prefab not found at Assets/Prefabs/UI/TypingIndicator.prefab");
+            else UnityEngine.Debug.LogError("TypingIndicator prefab not found at Assets/Prefabs/UI/TypingIndicator.prefab");
             
             so.ApplyModifiedProperties();
 
             // Save and Open
             EditorSceneManager.SaveScene(scene, scenePath);
-            Debug.Log($"Created new scene at {scenePath}");
+            UnityEngine.Debug.Log($"Created new scene at {scenePath}");
         }
     }
 }

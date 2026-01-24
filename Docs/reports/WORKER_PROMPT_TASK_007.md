@@ -23,8 +23,10 @@
 3. Unity Editor で Play する。
 4. シナリオを最後まで進める。
 5. **Evidence 取得 (必須)**:
-   - 会話中の **Game View スクリーンショット** を撮る (`docs/evidence/task007_chat_ui.png`)
-   - **Console View スクリーンショット** (エラーがないこと、コマンドログが出ていること) を撮る (`docs/evidence/task007_console.png`)
+   - `Assets/Scripts/Utils/VerificationCapture.cs` をシーン内のGameObject（例: Camera）にアタッチする。
+   - `CaptureOnStart` を true に設定。
+   - PlayMode を実行し、`Docs/evidence/` に `Capture_...png` が生成されることを確認する。
+   - 生成された画像を証拠として採用する。
 6. `docs/tasks/TASK_007_Verification.md` の DoD チェックボックスを埋める。
 7. レポート `docs/inbox/REPORT_TASK_007_Verification.md` を作成する (Evidence パスを明記)。
 
