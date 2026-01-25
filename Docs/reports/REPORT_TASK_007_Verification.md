@@ -40,3 +40,21 @@ Since the AI cannot run the Unity Editor GUI to take screenshots, please perform
 
 ## 4. Next Steps
 - Proceed to Task 008 (Deduction Board) once verification is confirmed.
+
+---
+
+## 5. Final Verification (2026-01-23)
+
+| Item | Requirement | Status | Note |
+|---|---|---|---|
+| **Scene Setup** | `DebugChatScene` loads without error | PASS | Verified by User |
+| **Conversation** | Bubbles appear for Player (Right) and Unknown (Left) | PASS | Verified by User |
+| **Image Display** | `<<Image>>` command shows "Uniform noise pattern" | PASS | Verified by User |
+| **Wait Command** | `<<StartWait>>` shows typing indicator and pauses | PASS | Verified by User |
+| **Topic Unlock** | Console logs "New topic unlocked" | PASS | Verified by User |
+| **Glitch Effect** | Console logs "Glitch command executed" | PASS | Verified by User |
+| **Stability** | Scenario completes without exceptions | PASS | Verified by User |
+
+**Result**: All critical functions verified. Evidence waived by user (confirmation via chat).
+
+**Status**: **DONE**

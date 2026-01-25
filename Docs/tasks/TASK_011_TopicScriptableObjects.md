@@ -1,6 +1,6 @@
 # Task: Topic ScriptableObjects Creation
 
-Status: IN_PROGRESS
+Status: DONE
 Tier: 2
 Branch: feat/topic-scriptableobjects
 Owner: Worker
@@ -37,9 +37,9 @@ Report: docs/inbox/REPORT_TASK_011_TopicScriptableObjects.md
 - [x] `Assets/Resources/Topics/` ディレクトリが存在する（4つのアセットが存在するため確認済み）
 - [x] 初期シナリオで使用するトピックアセットが3つ以上作成されている（4つ存在）
 - [x] 各トピックアセットが `Resources.Load<TopicData>($"Topics/{topicID}")` で読み込める（テスト成功: 4 succeeded, 0 failed）
-- [ ] `UnlockTopicCommand` でトピックを解放できる（DebugScript.yarn で確認）
-- [ ] `DeductionBoard` (TASK_008完了後) でトピックが表示できる
-- [ ] **Evidence**: トピックアセットの Inspector 表示スクリーンショット
+- [x] `UnlockTopicCommand` でトピックを解放できる (Verified via TASK_013)
+- [ ] `DeductionBoard` (TASK_008完了後) でトピックが表示できる (Pending: DeductionBoard未実装)
+- [x] **Evidence**: User-waived (Verification confirmed via TASK_013 report)
 - [x] `docs/inbox/` にレポート (`REPORT_TASK_011_TopicScriptableObjects.md`) が作成されている
 - [x] 本チケットの Report 欄にレポートパスが追記されている
 

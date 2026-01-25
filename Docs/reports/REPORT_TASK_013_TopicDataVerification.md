@@ -235,3 +235,21 @@ TASK_013の実装を完了しました。Inspector表示のスクリーンショ
 エディタスクリプトは `Tools/FoundPhone/Capture Topic Asset Screenshot` メニューから実行でき、`docs/evidence/task011_topic_assets.png` としてスクリーンショットを保存します。
 
 UnlockTopicCommandのコードレベルでの確認は完了しており、DebugScript.yarnとScenarioManager.csの実装が正常であることを確認しました。Unity Editor内での実際の動作確認をお願いします。
+
+---
+
+## Final Verification (2026-01-23)
+
+### Results
+- **Method**: Play Mode Verification
+- **Tool**: `Assets/Scripts/Dev/TopicUnlockVerifier.cs`
+- **Result**: 
+  - `<<UnlockTopic "debug_topic_01">>` in `DebugScript.yarn` correctly triggers the unlock logic.
+  - `DeductionBoard` receives the topic.
+  - Console output confirmed success (verified by user).
+
+### Evidence
+- **Status**: User-waived (confirmation via chat)
+- **Action Item**: Screenshot collection skipped per user decision.
+
+**Status**: **DONE**

@@ -297,3 +297,26 @@ RP_REPORT_CREATED
 - **エラー修正**: 完了 (マージコンフリクトマーカー除去済み)
 - **新規実装案**: Deduction Board UI (TASK_011 完了後)
 
+### Session: 2026-01-25 タスク回収
+- [x] Phase 1: Sync 完了
+  - [x] inbox からレポート回収 (TASK_007, TASK_013)
+  - [x] 既存 reports/ にマージ（最終検証結果を追記）
+  - [x] inbox 整理完了
+- [x] タスクファイル更新:
+  - [x] TASK_007: OPEN -> DONE (Verified by User)
+  - [x] TASK_011: IN_PROGRESS -> DONE (UnlockTopicCommand Verified)
+  - [x] TASK_013: DONE (DoD 更新完了)
+- [x] HANDOVER.md 更新
+- [x] 新規アセット追加（untracked ファイル多数）
+- [ ] 変更をコミット
+
+## 現在のフェーズ
+Phase 1.5: Audit (Post-Collection)
+
+## 次のアクション (2026-01-25)
+- **新規実装候補**:
+  - Deduction Board UI (TASK_008 後続)
+  - Chat Scenario Tester 統合
+- **プロジェクト総点検**: sw-doctor + todo-sync 実行
+- **Untracked アセット**: git add で追跡開始
+
