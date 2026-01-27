@@ -1,6 +1,6 @@
 # Task: Deduction Board Implementation
 
-Status: OPEN
+Status: CLOSED (Merged to TASK_018)
 Tier: 2
 Branch: feat/deduction-board
 Owner: Worker
