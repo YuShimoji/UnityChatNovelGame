@@ -1,5 +1,5 @@
 # Task: DeductionBoard (推論ボード) 実装
-Status: OPEN
+Status: DONE
 Tier: 2
 Branch: main
 Owner: Worker

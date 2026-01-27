@@ -13,7 +13,7 @@ namespace ProjectFoundPhone.EditorTools
         {
             CreateTopicCardPrefab();
             CreateDeductionBoardPrefab();
-            Debug.Log("Deduction Board Setup Complete!");
+            UnityEngine.Debug.Log("Deduction Board Setup Complete!");
         }
 
         private static void CreateTopicCardPrefab()
@@ -23,7 +23,7 @@ namespace ProjectFoundPhone.EditorTools
             // Check if prefab exists
              if (AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath) != null)
             {
-                Debug.Log($"TopicCard prefab already exists at {prefabPath}");
+                UnityEngine.Debug.Log($"TopicCard prefab already exists at {prefabPath}");
                 return;
             }
 
@@ -47,14 +47,29 @@ namespace ProjectFoundPhone.EditorTools
             SerializedObject so = new SerializedObject(card);
             so.FindProperty("m_IconImage").objectReferenceValue = iconGo.GetComponent<Image>();
             so.FindProperty("m_TitleText").objectReferenceValue = titleGo.GetComponent<TextMeshProUGUI>();
-            so.FindProperty("m_Button").objectReferenceValue = go.GetComponent<Button>();
+            // m_Button does not exist in TopicCard, removing assignment
             so.ApplyModifiedProperties();
 
             // Save as Prefab
-            System.IO.Directory.CreateDirectory("Assets/Prefabs/UI");
-            PrefabUtility.SaveAsPrefabAsset(go, prefabPath);
-            DestroyImmediate(go);
-            Debug.Log($"Created TopicCard prefab at {prefabPath}");
+            // Try/Catch to handle file locks gracefully
+            try
+            {
+                if (!System.IO.Directory.Exists("Assets/Prefabs/UI"))
+                {
+                    System.IO.Directory.CreateDirectory("Assets/Prefabs/UI");
+                }
+                
+                PrefabUtility.SaveAsPrefabAsset(go, prefabPath);
+                UnityEngine.Debug.Log($"[Success] Created TopicCard prefab at {prefabPath}");
+                
+                // Optional: Destroy only if successful
+                // DestroyImmediate(go); 
+            }
+            catch (System.Exception e)
+            {
+                UnityEngine.Debug.LogError($"[Error] Failed to save Prefab: {e.Message}. The object 'TopicCard' remains in the scene.");
+            }
+            Selection.activeGameObject = go;
         }
 
         private static void CreateDeductionBoardPrefab()
@@ -63,7 +78,7 @@ namespace ProjectFoundPhone.EditorTools
 
              if (AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath) != null)
             {
-                 Debug.Log($"DeductionBoard prefab already exists at {prefabPath}");
+                 UnityEngine.Debug.Log($"DeductionBoard prefab already exists at {prefabPath}");
                 return;
             }
 
@@ -98,8 +113,8 @@ namespace ProjectFoundPhone.EditorTools
             // Assign References
             DeductionBoard board = go.GetComponent<DeductionBoard>();
             SerializedObject so = new SerializedObject(board);
-            so.FindProperty("m_Panel").objectReferenceValue = panel.GetComponent<RectTransform>();
-            so.FindProperty("m_TopicContainer").objectReferenceValue = content.transform;
+            // m_Panel does not exist in DeductionBoard, removing assignment
+            so.FindProperty("m_CardContainer").objectReferenceValue = content.transform; // Renamed from m_TopicContainer
             
             // Assign TopicCard Prefab
             GameObject cardPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/UI/TopicCard.prefab");
@@ -111,9 +126,27 @@ namespace ProjectFoundPhone.EditorTools
             so.ApplyModifiedProperties();
 
             // Save as Prefab
-            PrefabUtility.SaveAsPrefabAsset(go, prefabPath);
-            DestroyImmediate(go);
-             Debug.Log($"Created DeductionBoard prefab at {prefabPath}");
+            // Try/Catch to handle file locks gracefully
+            try
+            {
+                if (!System.IO.Directory.Exists("Assets/Prefabs/UI"))
+                {
+                    System.IO.Directory.CreateDirectory("Assets/Prefabs/UI");
+                }
+                
+                PrefabUtility.SaveAsPrefabAsset(go, prefabPath);
+                UnityEngine.Debug.Log($"[Success] Created DeductionBoard prefab at {prefabPath}");
+                
+                // Optional: Destroy only if successful, but for now let's keep it to be sure
+                // DestroyImmediate(go); 
+            }
+            catch (System.Exception e)
+            {
+                UnityEngine.Debug.LogError($"[Error] Failed to save Prefab: {e.Message}. The object 'DeductionBoard' remains in the scene. Please drag it to 'Assets/Prefabs/UI/' manually.");
+            }
+            
+            // Select it so the user sees it
+            Selection.activeGameObject = go;
         }
     }
 }

@@ -7,10 +7,10 @@ KICKSTART_2026-01-15T13:26:07+09:00
 2026-01-15T13:26:07+09:00
 
 ## 現在のフェーズ
-Phase 1: Sync (2026-01-24)
+Phase 5: Worker Activation (2026-01-25)
 
 ## ステータス
-SYNC_PENDING
+WORKER_DISPATCH
 
 ## 進捗記録
 
@@ -217,6 +217,17 @@ SYNC_PENDING
 - [x] sw-doctor 実行完了 (Warnings detected: Missing reports for TASK_009/010/012/014/015)
 - [x] Phase 1.75 完了
 
+### Phase 2: Status Check (2026-01-27 13:30)
+- [x] Task 017 (Compiler Fix): DONE (Verified `DeductionBoardSetup.cs`)
+- [x] Task 008 (Chat UI):
+  - Logic: Implemented (`TestScenario` asset found).
+  - Evidence: MISSING (`docs/evidence` only has text log).
+  - User Action: Ran `TopicAssetScreenshotTool` (Wrong tool for Chat UI).
+- [x] Next Actions:
+  - Explain the difference between Task 013 (Topic) and Task 008 (Chat) evidence.
+  - Request Chat UI capture.
+- [x] Phase 2 完了
+
 ### Phase 2: Status Check
 - [x] todo-sync.js 実行完了:
   - Active: TASK_007(Verification), TASK_011(Topic), TASK_013(Verif)
@@ -347,6 +358,71 @@ SYNC_PENDING
 - **TASK_008 (Chat UI Integration)** にWorkerを投入する。
 - 自動検証ツール (`VerificationCapture`) を活用し、Evidenceを確実に取得させる。
 
-### Phase 1: Sync (Next Cycle)
-- [ ] Remote Sync
-- [ ] Status Check
+- [x] Phase 6 完了
+
+### Phase 1: Sync (2026-01-25)
+- [x] Inbox Processed
+  - `REPORT_ORCH_...` -> `docs/reports/`
+  - `REPORT_TASK_008_DeductionBoard.md` -> `docs/reports/REPORT_TASK_009_DeductionBoard_20260124.md` (Renamed to fix ID conflict)
+- [x] Phase 1 完了
+
+### Phase 5: Worker Activation (2026-01-25)
+- [x] Worker Prompt Verified (`docs/reports/WORKER_PROMPT_TASK_008.md`)
+- [x] Dispatch Executed (User Choice 1)
+
+### Phase 1: Sync (2026-01-26 13:50)
+- [x] Checks:
+  - `docs/inbox`: Empty.
+  - `Assets/Resources/ChatScenarios`: Exists (Impl Done).
+  - `docs/evidence`: No new screenshots.
+- [x] Status:
+  - TASK_008: Logic merged (untracked), Evidence missing.
+- [x] Phase 1 完了
+
+### Phase 1.5: Audit (2026-01-26 13:50)
+- [x] Discrepancy Found:
+  - User reported "Completed", but Evidence is missing.
+  - `REPORT_TASK_008` is "Pending Verification".
+- [x] Correction:
+  - Task 008 Status: IN_PROGRESS (Verification Needed).
+- [x] Phase 1.5 完了
+
+### Phase 3: Strategy (Compilation Fix - 2026-01-26 13:55)
+- [x] Blocker Analysis:
+  - **Issue**: `CS0234: 'Log' does not exist in 'ProjectFoundPhone.Debug'`.
+  - **Cause**: Namespace collision. `ProjectFoundPhone.Debug` (namespace) exists, shadowing `UnityEngine.Debug`.
+  - **Affected File**: `Assets/Scripts/Editor/DeductionBoardSetup.cs`.
+- [x] Strategy:
+  - **Action**: Fix `DeductionBoardSetup.cs` to use `UnityEngine.Debug`.
+  - **Task**: Create `TASK_017_FixEditorCompilation` (Hotfix).
+- [x] Phase 3 完了
+
+
+### Phase 1: Sync (2026-01-27 13:35)
+- [x] Inbox Processed
+  - Archived `REPORT_TASK_008_ChatUI_Integration.md` (to `docs/reports/REPORT_TASK_008_ChatUI_Integration_20260127.md`)
+- [x] Evidence Verification
+  - Found new evidence in `docs/evidence`:
+    - `Capture_20260127_132911_DebugChatScene.png`
+    - `Capture_20260127_133033_DebugChatScene.png`
+  - Confirms TASK_008 is DONE.
+- [x] Phase 1 完了
+
+### Phase 2: Status Check (2026-01-27 13:35)
+- [x] Task Status Updates
+  - TASK_008: DONE
+  - TASK_017: DONE (Verified Fix)
+- [x] Next Actions
+  - Check DeductionBoard State (TASK_009).
+  - User reported running setup. Expecting Prefabs to exist.
+- [x] Phase 2 完了
+
+### Phase 2: Status Check (2026-01-27 14:05)
+- [x] Verification
+  - `Assets/Prefabs/UI/DeductionBoard.prefab` Confirmed.
+  - `Assets/Prefabs/UI/TopicCard.prefab` Confirmed.
+- [x] Task Status Update
+  - TASK_009: DONE (Prefab Created, Logic Implemented)
+- [x] Sync Execution
+  - `node scripts/todo-sync.js` Executed.
+- [x] Phase 2 完了

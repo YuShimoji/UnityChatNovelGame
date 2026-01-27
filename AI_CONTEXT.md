@@ -28,12 +28,13 @@
 
 ### 短期（Next）
 
-- [DONE] Unity プロジェクト構造の整理 (ref: docs/tasks/TASK_001_UnityProjectStructure.md)
-- [DONE] Chat UI Implementation (TASK_007 - Verified)
-- [DONE] Chat UI Data Integration (TASK_008)
-- [DONE] DeductionBoard (推論ボード) 実装 (TASK_009/011/013)
-- [DONE] MetaEffectController (演出エフェクト) 実装 (TASK_010)
-- [DONE] Compile Error Fixes (TASK_012, 014, 015)
+- [pending] Unity プロジェクト構造の整理 (ref: docs/tasks/TASK_001_UnityProjectStructure.md, Status: OPEN)
+- [pending] Chat UI Implementation (ref: docs/tasks/TASK_007_ChatUI_Implementation.md, Status: CLOSED)
+- [pending] Chat UI Data Integration (ref: docs/tasks/TASK_008_ChatUI_Integration.md, Status: RESOLVED)
+- [pending] Deduction Board Implementation (ref: docs/tasks/TASK_008_DeductionBoard.md, Status: OPEN)
+- [in_progress] Topic ScriptableObjects Creation (ref: docs/tasks/TASK_011_TopicScriptableObjects.md, Status: IN_PROGRESS)
+- [in_progress] TopicData Verification and Evidence Collection (ref: docs/tasks/TASK_013_TopicDataVerification.md, Status: IN_PROGRESS)
+- [pending] Fix Compilation Error in DeductionBoardSetup (ref: docs/tasks/TASK_017_FixEditorCompilation.md, Status: OPEN)
 
 ### 中期（Later）
 
