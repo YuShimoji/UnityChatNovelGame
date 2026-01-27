@@ -4,6 +4,9 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/DebugChatScene.unity
+    guid: 7ce437333c780944c90e7e315a1429bb
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

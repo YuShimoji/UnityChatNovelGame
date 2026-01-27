@@ -31,9 +31,9 @@ Report: docs/inbox/REPORT_TASK_008_DeductionBoard.md
 - 合成（Synthesis）成功時に新しいトピックを解放すること
 
 ## DoD (Definition of Done)
-- [ ] `DeductionBoard.cs` が実装されている
-- [ ] `TopicNode.prefab` が作成されている
-- [ ] `UnlockTopic` コマンドを実行すると、ボード上にトピックが表示される
-- [ ] 2つのトピックを合成して新しいトピックを作成できる（SynthesisRecipeごとの判定）
-- [ ] **Evidence**: ボード操作のGIF/動画 または スクリーンショット
-- [ ] Report 作成
+- [x] `DeductionBoard.cs` が実装されている
+- [x] `TopicNode.prefab` が作成されている (Implemented `TopicCard.cs`)
+- [x] `UnlockTopic` コマンドを実行すると、ボード上にトピックが表示される
+- [x] 2つのトピックを合成して新しいトピックを作成できる（SynthesisRecipeごとの判定）
+- [ ] **Evidence**: ボード操作のGIF/動画 または スクリーンショット (Pending User Verification)
+- [x] Report 作成

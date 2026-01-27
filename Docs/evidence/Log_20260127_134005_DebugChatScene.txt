@@ -1,0 +1,2 @@
+Verification event at 2026/01/27 13:40:05 in scene DebugChatScene
+See Unity Console or Player.log for details.

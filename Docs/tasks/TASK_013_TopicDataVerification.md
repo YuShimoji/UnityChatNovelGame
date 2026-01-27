@@ -1,11 +1,11 @@
 # Task: TopicData Verification and Evidence Collection
 
-Status: DONE
+Status: IN_PROGRESS
 Tier: 3
 Branch: feat/topic-verification
 Owner: Worker
 Created: 2026-01-17T06:00:00+09:00
-Report: docs/reports/REPORT_TASK_013_TopicDataVerification.md
+Report: docs/inbox/REPORT_TASK_013_TopicDataVerification.md
 
 ## Objective
 TASK_011で作成したTopicDataアセットの動作確認とEvidence取得を行う。
@@ -39,18 +39,18 @@ TASK_011で作成したTopicDataアセットの動作確認とEvidence取得を�
 - 動作確認: Consoleログで「Topic unlocked: debug_topic_01」が表示されることを確認
 
 ## DoD (Definition of Done)
-- [ ] トピックアセットのInspector表示スクリーンショットを取得
+- [/] トピックアセットのInspector表示スクリーンショットを取得 (Pending Manual Action)
   - [ ] `Assets/Resources/Topics/debug_topic_01.asset` を選択
   - [ ] Inspectorウィンドウでトピック情報を表示
   - [ ] スクリーンショットを `docs/evidence/task011_topic_assets.png` として保存
-- [x] UnlockTopicCommandの動作確認 (Verified 2026-01-23)
-  - [x] `Assets/Scenes/DebugChatScene.unity` を開く
-  - [x] `ScenarioManager` が `DebugScript.yarn` を実行するように設定
-  - [x] Playボタンで実行し、`<<UnlockTopic "debug_topic_01">>` コマンドが正常に動作することを確認
-  - [x] Consoleウィンドウに「Topic unlocked: debug_topic_01」のログが表示されることを確認
-  - [x] エラーが発生しないことを確認
-- [x] TASK_011のStatusをDONEに更新
-- [x] `docs/reports/` にレポート (`REPORT_TASK_013_TopicDataVerification.md`) が移動済み
+- [/] UnlockTopicCommandの動作確認 (Code Verified / Pending Runtime Check)
+  - [ ] `Assets/Scenes/DebugChatScene.unity` を開く
+  - [ ] `ScenarioManager` が `DebugScript.yarn` を実行するように設定
+  - [ ] Playボタンで実行し、`<<UnlockTopic "debug_topic_01">>` コマンドが正常に動作することを確認
+  - [ ] Consoleウィンドウに「Topic unlocked: debug_topic_01」のログが表示されることを確認
+  - [ ] エラーが発生しないことを確認 (Static Check Passed)
+- [/] TASK_011のStatusをDONEに更新（Evidence取得とUnlockTopicCommand確認完了後）
+- [x] `docs/inbox/` にレポート (`REPORT_TASK_013_TopicDataVerification.md`) が作成されている
 - [x] 本チケットの Report 欄にレポートパスが追記されている
 
 ## スクリーンショット取得方法

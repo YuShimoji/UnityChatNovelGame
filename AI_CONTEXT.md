@@ -31,8 +31,10 @@
 - [pending] Unity プロジェクト構造の整理 (ref: docs/tasks/TASK_001_UnityProjectStructure.md, Status: OPEN)
 - [pending] Chat UI Implementation (ref: docs/tasks/TASK_007_ChatUI_Implementation.md, Status: CLOSED)
 - [pending] Chat UI Data Integration (ref: docs/tasks/TASK_008_ChatUI_Integration.md, Status: RESOLVED)
-- [pending] Deduction Board Implementation (ref: docs/tasks/TASK_016_DeductionBoard_Conflict.md, Status: OPEN)
-- [pending] DeductionBoard (推論ボード) 実装 (ref: docs/tasks/TASK_017_DeductionBoard_Conflict.md, Status: OPEN)
+- [pending] Deduction Board Implementation (ref: docs/tasks/TASK_008_DeductionBoard.md, Status: OPEN)
+- [in_progress] Topic ScriptableObjects Creation (ref: docs/tasks/TASK_011_TopicScriptableObjects.md, Status: IN_PROGRESS)
+- [in_progress] TopicData Verification and Evidence Collection (ref: docs/tasks/TASK_013_TopicDataVerification.md, Status: IN_PROGRESS)
+- [pending] Fix Compilation Error in DeductionBoardSetup (ref: docs/tasks/TASK_017_FixEditorCompilation.md, Status: OPEN)
 
 ### 中期（Later）
 
@@ -52,11 +54,6 @@
 - SOLID原則に基づいた設計で拡張性を確保
 - TASK_002（ロジック実装）完了
 - 次のステップ: Prefab作成、DeductionBoard実装、MetaEffectController実装
-
-## Worker Status
-
-- **Active Workers**: 0
-- **Blocked Tasks**: TASK_007, TASK_011, TASK_013 (Waiting for Evidence)
 
 ## 履歴
 

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using ProjectFoundPhone.Data;
+using ProjectFoundPhone.Core; // ScenarioManagerのために追加
 
 namespace ProjectFoundPhone.UI
 {
@@ -40,6 +41,7 @@ namespace ProjectFoundPhone.UI
 
         [Header("Settings")]
         [SerializeField] private bool m_ShowOnTopicAdded = true;
+        [SerializeField] private string m_RecipeLoadPath = "Recipes"; // Resources/Recipes
 
         /// <summary>
         /// 獲得済みトピックのリスト
@@ -50,6 +52,11 @@ namespace ProjectFoundPhone.UI
         /// 生成されたTopicCardのリスト
         /// </summary>
         private List<TopicCard> m_TopicCards = new List<TopicCard>();
+
+        /// <summary>
+        /// ロードされた合成レシピのリスト
+        /// </summary>
+        private List<SynthesisRecipe> m_Recipes = new List<SynthesisRecipe>();
         #endregion
 
         #region Public Properties
@@ -70,6 +77,8 @@ namespace ProjectFoundPhone.UI
                 return;
             }
             s_Instance = this;
+
+            LoadRecipes();
         }
 
         private void OnDestroy()
@@ -175,9 +184,37 @@ namespace ProjectFoundPhone.UI
 
             Debug.Log("DeductionBoard: All topics cleared.");
         }
+
+        /// <summary>
+        /// トピックドラッグ＆ドロップ時の処理
+        /// </summary>
+        /// <param name="droppedCard">ドラッグされたカード</param>
+        /// <param name="targetCard">ドロップ先のカード</param>
+        /// <returns>処理が成功（合成成功など）した場合はtrue</returns>
+        public bool OnTopicDropped(TopicCard droppedCard, TopicCard targetCard)
+        {
+            if (droppedCard == null || targetCard == null) return false;
+            if (droppedCard == targetCard) return false;
+
+            return CheckSynthesis(droppedCard.TopicData, targetCard.TopicData);
+        }
         #endregion
 
         #region Private Methods
+        /// <summary>
+        /// Resourcesから合成レシピをロードする
+        /// </summary>
+        private void LoadRecipes()
+        {
+            m_Recipes.Clear();
+            var loadedRecipes = Resources.LoadAll<SynthesisRecipe>(m_RecipeLoadPath);
+            if (loadedRecipes != null)
+            {
+                m_Recipes.AddRange(loadedRecipes);
+                Debug.Log($"DeductionBoard: Loaded {m_Recipes.Count} synthesis recipes.");
+            }
+        }
+
         /// <summary>
         /// TopicCardを生成してコンテナに追加する
         /// </summary>
@@ -199,6 +236,53 @@ namespace ProjectFoundPhone.UI
             TopicCard newCard = Instantiate(m_TopicCardPrefab, m_CardContainer);
             newCard.Setup(topicData);
             m_TopicCards.Add(newCard);
+        }
+
+        /// <summary>
+        /// 2つのトピックから合成を試みる
+        /// </summary>
+        /// <param name="topicA">トピックA</param>
+        /// <param name="topicB">トピックB</param>
+        /// <returns>合成成功ならtrue</returns>
+        private bool CheckSynthesis(TopicData topicA, TopicData topicB)
+        {
+            foreach (var recipe in m_Recipes)
+            {
+                if (recipe.Matches(topicA, topicB))
+                {
+                    // 合成成功！
+                    Debug.Log($"DeductionBoard: Synthesis Successful! {topicA.Title} + {topicB.Title} = {recipe.Result.Title}");
+                    
+                    // 結果トピックをアンロック
+                    // 重複チェックはAddTopic内で行われるのでそのまま呼ぶ
+                    if (HasTopic(recipe.Result.TopicID))
+                    {
+                        // 既に持ってる
+                        Debug.Log("DeductionBoard: Result topic already exists.");
+                        // エフェクトだけ出すなどの処理をここに追加可能
+                        return false; 
+                    }
+                    else
+                    {
+                         AddTopic(recipe.Result);
+
+                        // ScenarioManager側にフラグを立てるなどの通知が必要ならここで行う
+                        // 例: ScenarioManager.Instance.SetVariable($"has_topic_{recipe.Result.TopicID}", true);
+                        var scenarioManager = FindFirstObjectByType<ScenarioManager>();
+                        if (scenarioManager != null)
+                        {
+                            scenarioManager.SetVariable<bool>($"has_topic_{recipe.Result.TopicID}", true);
+                        }
+
+                        // 材料となったトピックを消すかどうかは仕様次第
+                        // ここでは「消さない」仕様とする（手がかりは残り続ける）
+                        return true;
+                    }
+                }
+            }
+
+            Debug.Log("DeductionBoard: No matching recipe found.");
+            return false;
         }
         #endregion
     }

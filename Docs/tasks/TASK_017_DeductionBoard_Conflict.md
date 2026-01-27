@@ -1,5 +1,5 @@
 # Task: DeductionBoard (推論ボード) 実装
-Status: CLOSED (Merged to TASK_018)
+Status: DONE
 Tier: 2
 Branch: main
 Owner: Worker

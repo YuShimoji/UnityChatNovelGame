@@ -50,9 +50,16 @@ namespace ProjectFoundPhone.Data
         /// <returns>一致する場合true</returns>
         public bool Matches(TopicData topicA, TopicData topicB)
         {
-            // TODO: topicAとtopicBがIngredientAとIngredientBと一致するか判定
-            // 順序を考慮しない（A+B と B+A の両方を許容）
-            return false;
+            if (topicA == null || topicB == null || m_IngredientA == null || m_IngredientB == null)
+            {
+                return false;
+            }
+
+            // A+B または B+A の組み合わせで一致するかチェック
+            bool case1 = topicA.TopicID == m_IngredientA.TopicID && topicB.TopicID == m_IngredientB.TopicID;
+            bool case2 = topicA.TopicID == m_IngredientB.TopicID && topicB.TopicID == m_IngredientA.TopicID;
+
+            return case1 || case2;
         }
 
         /// <summary>

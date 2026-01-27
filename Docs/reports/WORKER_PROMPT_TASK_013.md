@@ -20,13 +20,20 @@ TASK_011 (Asset作成) と TASK_013 (検証) が「Evidence 待ち」で停止�
 1. **Topic Asset Inspection**:
    - `Assets/Resources/Topics/` 以下の適当なアセット (例: `debug_topic_01.asset`) を選択。
    - Inspector にプロパティ (ID, Title, Description, Icon) が表示されているか確認。
-   - **Evidence 取得**: Inspector のスクリーンショットを撮る (`docs/evidence/task011_topic_inspector.png`)。
+   - **Evidence 取得 (Automated)**:
+     - `DebugChatScene` に `VerificationCapture` コンポーネントがあることを確認。
+     - PlayMode で実行し、`Docs/evidence/` に画像が生成されることを確認。
+     - (Optional) `Topic unlocked` ログが確認できるタイミングで `VerificationCapture.TriggerCapture()` を呼ぶように調整してもよいが、基本は起動時キャプチャでシーンが動作している証明があればよしとする（ログはテキスト保存機能があればそちらを確認）。
+     - 生成された画像（およびログファイル）を納品物とする。
 
 2. **Command Execution**:
    - `Assets/Scenes/DebugChatScene.unity` を Play する (TASK_007 と同じシーンで可)。
    - `DebugScript.yarn` 内で `<<UnlockTopic "debug_topic_01">>` が呼ばれた時、Console に `Topic unlocked: debug_topic_01` (または類似の成功ログ) が出るか確認。
    - エラーが出ていないことを確認。
-   - **Evidence 取得**: Console ログのスクリーンショット (`docs/evidence/task013_unlock_log.png`)。
+   - **Evidence 取得 (Automated)**:
+     - コンソールログは `VerificationCapture` の `CaptureLogs` 機能により `docs/evidence/Log_*.txt` に保存される。
+     - このログファイルに `Topic unlocked` の記述があることを確認する。
+     - 生成されたログファイルを証拠として採用する。
 
 3. **Report**:
    - `docs/tasks/TASK_011_TopicScriptableObjects.md` の DoD 更新。
