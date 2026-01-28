@@ -1,5 +1,5 @@
 # Task: Chat UI Data Integration
-Status: RESOLVED
+Status: DONE
 Tier: 2
 Branch: main
 Owner: Worker
@@ -36,10 +36,10 @@ Report: docs/reports/REPORT_TASK_008_ChatUI_Integration.md
 5. **結合テスト**: `ChatDevScene` でシナリオデータを流し込み、一連の会話が成立することを確認。
 
 ## DoD (Definition of Done)
-- [ ] チャットシナリオデータ（テスト用含む）が定義されている
-- [ ] シナリオデータを読み込み、`ChatController` で順次表示できる
-- [ ] 相手側のメッセージには適切なディレイ（Typing演出）が入る
-- [ ] ユーザー入力（選択肢または自由入力）待ちの状態を作れる
-- [ ] **Evidence**: Implement automated verification using `VerificationCapture` (TASK_016).
+- [x] チャットシナリオデータ（テスト用含む）が定義されている
+- [x] シナリオデータを読み込み、`ChatController` で順次表示できる
+- [x] 相手側のメッセージには適切なディレイ（Typing演出）が入る
+- [x] ユーザー入力（選択肢または自由入力）待ちの状態を作れる
+- [x] **Evidence**: Implement automated verification using `VerificationCapture` (TASK_016).
   - Screenshots of Chat UI in action saved to `docs/evidence/`.
-- [ ] `docs/reports/REPORT_TASK_008_ChatUI_Integration.md` に動作確認のログ/スクショがある
+- [x] `docs/reports/REPORT_TASK_008_ChatUI_Integration.md` に動作確認のログ/スクショがある
