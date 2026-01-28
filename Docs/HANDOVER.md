@@ -80,6 +80,11 @@ GitHubAutoApprove: false
 
 - プロジェクト構造の整理（Docs と docs の統合検討）
 
+## リスク
+
+- **Evidence Missing**: 手動検証の負担増により、スクリーンショット取得がスキップされがちである。自動化ツールの徹底が必要。
+- **Git Context Divergence**: 複数セッション間でのコンテキスト同期にズレが生じやすい（Sync必須）。
+
 ## 統合レポート
 
 - File: docs/reports/REPORT_TASK_015_FixDebugSceneBuilderReflection.md

@@ -31,10 +31,10 @@
 - [pending] Unity プロジェクト構造の整理 (ref: docs/tasks/TASK_001_UnityProjectStructure.md, Status: OPEN)
 - [pending] Chat UI Implementation (ref: docs/tasks/TASK_007_ChatUI_Implementation.md, Status: CLOSED)
 - [pending] Chat UI Data Integration (ref: docs/tasks/TASK_008_ChatUI_Integration.md, Status: RESOLVED)
-- [pending] Deduction Board Implementation (ref: docs/tasks/TASK_008_DeductionBoard.md, Status: OPEN)
 - [in_progress] Topic ScriptableObjects Creation (ref: docs/tasks/TASK_011_TopicScriptableObjects.md, Status: IN_PROGRESS)
 - [in_progress] TopicData Verification and Evidence Collection (ref: docs/tasks/TASK_013_TopicDataVerification.md, Status: IN_PROGRESS)
-- [pending] Fix Compilation Error in DeductionBoardSetup (ref: docs/tasks/TASK_017_FixEditorCompilation.md, Status: OPEN)
+- [pending] Deduction Board Implementation (ref: docs/tasks/TASK_016_DeductionBoard_Conflict.md, Status: CLOSED (Merged to TASK_018))
+- [pending] Deduction Board Implementation (ref: docs/tasks/TASK_018_DeductionBoard_Implementation.md, Status: OPEN)
 
 ### 中期（Later）
 
@@ -54,6 +54,12 @@
 - SOLID原則に基づいた設計で拡張性を確保
 - TASK_002（ロジック実装）完了
 - 次のステップ: Prefab作成、DeductionBoard実装、MetaEffectController実装
+
+## 運用ルール (Non-Negotiable)
+
+- **スクリーンショット報告義務**: UI/Visual な変更を含むタスク完了時は、必ず `docs/evidence/` にスクリーンショット（または動画）を保存し、レポートに添付すること。
+  - Evidence なき完了報告は「未完了」とみなす。
+  - ブロッカーになる場合は「速度優先」で進行してよいが、必ず Issue/Task に「Evidence Missing」と明記すること。
 
 ## 履歴
 

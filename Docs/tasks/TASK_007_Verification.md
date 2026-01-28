@@ -5,7 +5,7 @@ Tier: 3
 Branch: feat/verify-core-system
 Owner: Worker
 Created: 2026-01-16T02:00:00Z
-Report: docs/inbox/REPORT_TASK_007_Verification.md
+Report: docs/reports/REPORT_TASK_007_Verification.md
 
 ## Objective
 現在実装されている Unity Core System (ChatController, ScenarioManager, Commands) が、Unity Editor 上で正しく連携して動作することを確認する。
