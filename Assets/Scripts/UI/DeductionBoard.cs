@@ -276,6 +276,11 @@ namespace ProjectFoundPhone.UI
 
                         // 材料となったトピックを消すかどうかは仕様次第
                         // ここでは「消さない」仕様とする（手がかりは残り続ける）
+                        // 演出：MetaEffect再生
+                        // 画面中央などで祝福エフェクトを出す
+                        // "Sparkle" or "Success"などのエフェクト名を使用
+                        ProjectFoundPhone.Effects.MetaEffectController.Instance?.PlayEffect("Sparkle", Vector3.zero);
+
                         return true;
                     }
                 }

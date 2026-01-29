@@ -1,6 +1,6 @@
 # Task: Deduction Board Polish (Effects)
 
-Status: OPEN
+Status: DONE
 Tier: 3 (Polish)
 Branch: feat/deduction-polish
 Owner: Worker

@@ -151,6 +151,31 @@ namespace ProjectFoundPhone.Effects
             // レベルが高いほど長く表示
             return 0.2f + (level * 0.1f);
         }
+        /// <summary>
+        /// 指定した名前のエフェクトを再生する
+        /// </summary>
+        /// <param name="effectName">Resources/Effects/内のPrefab名</param>
+        /// <param name="position">再生位置（ワールド座標）</param>
+        /// <param name="duration">自動破壊までの時間（0ならパーティクル等の設定に従う/手動破壊）</param>
+        public void PlayEffect(string effectName, Vector3 position, float duration = 2.0f)
+        {
+            // 簡易実装: Resourcesからロードしてインスタンス化
+            GameObject prefab = Resources.Load<GameObject>($"Effects/{effectName}");
+            if (prefab != null)
+            {
+                GameObject instance = Instantiate(prefab, position, Quaternion.identity);
+                // Canvas内かWorldか... いったんWorld座標で生成
+                
+                if (duration > 0f)
+                {
+                    Destroy(instance, duration);
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"MetaEffectController: Effect '{effectName}' not found in Resources/Effects/");
+            }
+        }
         #endregion
     }
 }
