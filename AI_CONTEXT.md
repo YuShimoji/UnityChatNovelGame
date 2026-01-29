@@ -30,11 +30,9 @@
 
 - [pending] Unity プロジェクト構造の整理 (ref: docs/tasks/TASK_001_UnityProjectStructure.md, Status: OPEN)
 - [pending] Chat UI Implementation (ref: docs/tasks/TASK_007_ChatUI_Implementation.md, Status: CLOSED)
-- [pending] Chat UI Data Integration (ref: docs/tasks/TASK_008_ChatUI_Integration.md, Status: RESOLVED)
 - [in_progress] Topic ScriptableObjects Creation (ref: docs/tasks/TASK_011_TopicScriptableObjects.md, Status: IN_PROGRESS)
 - [in_progress] TopicData Verification and Evidence Collection (ref: docs/tasks/TASK_013_TopicDataVerification.md, Status: IN_PROGRESS)
 - [pending] Deduction Board Implementation (ref: docs/tasks/TASK_016_DeductionBoard_Conflict.md, Status: CLOSED (Merged to TASK_018))
-- [pending] Deduction Board Implementation (ref: docs/tasks/TASK_018_DeductionBoard_Implementation.md, Status: OPEN)
 
 ### 中期（Later）
 
