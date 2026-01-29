@@ -22,7 +22,7 @@ namespace Assets.Scripts.Utils
         [Tooltip("Capture logs?")]
         public bool CaptureLogs = true;
 
-        private const string EvidencePath = "Docs/evidence";
+        private const string EvidencePath = "VerificationResults";
 
         private void Start()
         {
