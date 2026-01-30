@@ -34,7 +34,7 @@ GitHubAutoApprove: false
 - ✅ ChatUI Integration完了（TASK_008） - (Verified with Evidence)
 - ✅ Deduction Board実装完了（TASK_018）
 - ✅ Performance Baseline完了（TASK_022）- (Report Generated)
-- ✅ GC Alloc削減（TASK_025 起票済み）
+- 🚧 GC Alloc削減（TASK_025 起票済み）
 
 ## 進捗
 
