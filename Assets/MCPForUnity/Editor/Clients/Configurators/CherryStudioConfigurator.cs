@@ -26,7 +26,7 @@ namespace MCPForUnity.Editor.Clients.Configurators
         public override IList<string> GetInstallationSteps() => new List<string>
         {
             "Open Cherry Studio",
-            "Go to Settings (⚙︁E ↁEMCP Server",
+            "Go to Settings (⚙️) → MCP Server",
             "Click 'Add Server' button",
             "For STDIO mode (recommended):",
             "  - Name: unity-mcp",
@@ -78,7 +78,7 @@ namespace MCPForUnity.Editor.Clients.Configurators
                    "# \n" +
                    "# To configure:\n" +
                    "# 1. Open Cherry Studio\n" +
-                   "# 2. Go to Settings (⚙︁E ↁEMCP Server\n" +
+                   "# 2. Go to Settings (⚙️) → MCP Server\n" +
                    "# 3. Click 'Add Server'\n" +
                    "# 4. Enter the following values from the JSON above:\n" +
                    "#    - Name: unity-mcp\n" +

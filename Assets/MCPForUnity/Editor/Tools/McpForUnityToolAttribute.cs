@@ -55,8 +55,8 @@ namespace MCPForUnity.Editor.Tools
 
         /// <summary>
         /// Create an MCP tool attribute with auto-generated command name.
-        /// The command name will be derived from the class name (PascalCase ↁEsnake_case).
-        /// Example: ManageAsset ↁEmanage_asset
+        /// The command name will be derived from the class name (PascalCase → snake_case).
+        /// Example: ManageAsset → manage_asset
         /// </summary>
         public McpForUnityToolAttribute()
         {

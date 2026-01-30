@@ -131,14 +131,14 @@ namespace MCPForUnity.Editor.Services.Transport.Transports
                         try
                         {
                             long seq = Interlocked.Increment(ref _ioSeq);
-                            IoInfo($"[IO] ➁Ewrite start seq={seq} tag={item.Tag} len={(item.Payload?.Length ?? 0)} reqId={(item.ReqId?.ToString() ?? "?")}");
+                            IoInfo($"[IO] ➜ write start seq={seq} tag={item.Tag} len={(item.Payload?.Length ?? 0)} reqId={(item.ReqId?.ToString() ?? "?")}");
                             var sw = System.Diagnostics.Stopwatch.StartNew();
                             sw.Stop();
-                            IoInfo($"[IO] ✁Ewrite end   tag={item.Tag} len={(item.Payload?.Length ?? 0)} reqId={(item.ReqId?.ToString() ?? "?")} durMs={sw.Elapsed.TotalMilliseconds:F1}");
+                            IoInfo($"[IO] ✓ write end   tag={item.Tag} len={(item.Payload?.Length ?? 0)} reqId={(item.ReqId?.ToString() ?? "?")} durMs={sw.Elapsed.TotalMilliseconds:F1}");
                         }
                         catch (Exception ex)
                         {
-                            IoInfo($"[IO] ✁Ewrite FAIL  tag={item.Tag} reqId={(item.ReqId?.ToString() ?? "?")} {ex.GetType().Name}: {ex.Message}");
+                            IoInfo($"[IO] ✗ write FAIL  tag={item.Tag} reqId={(item.ReqId?.ToString() ?? "?")} {ex.GetType().Name}: {ex.Message}");
                         }
                     }
                 })
@@ -637,11 +637,11 @@ namespace MCPForUnity.Editor.Services.Transport.Transports
                             try
                             {
                                 responseBytes = System.Text.Encoding.UTF8.GetBytes(response);
-                                IoInfo($"[IO] ➁Ewrite start seq={seq} tag=response len={responseBytes.Length} reqId=?");
+                                IoInfo($"[IO] ➜ write start seq={seq} tag=response len={responseBytes.Length} reqId=?");
                             }
                             catch (Exception ex)
                             {
-                                IoInfo($"[IO] ✁Eserialize FAIL tag=response reqId=? {ex.GetType().Name}: {ex.Message}");
+                                IoInfo($"[IO] ✗ serialize FAIL tag=response reqId=? {ex.GetType().Name}: {ex.Message}");
                                 throw;
                             }
 
@@ -650,11 +650,11 @@ namespace MCPForUnity.Editor.Services.Transport.Transports
                             {
                                 await WriteFrameAsync(stream, responseBytes);
                                 swDirect.Stop();
-                                IoInfo($"[IO] ✁Ewrite end   tag=response len={responseBytes.Length} reqId=? durMs={swDirect.Elapsed.TotalMilliseconds:F1}");
+                                IoInfo($"[IO] ✓ write end   tag=response len={responseBytes.Length} reqId=? durMs={swDirect.Elapsed.TotalMilliseconds:F1}");
                             }
                             catch (Exception ex)
                             {
-                                IoInfo($"[IO] ✁Ewrite FAIL  tag=response reqId=? {ex.GetType().Name}: {ex.Message}");
+                                IoInfo($"[IO] ✗ write FAIL  tag=response reqId=? {ex.GetType().Name}: {ex.Message}");
                                 throw;
                             }
                         }

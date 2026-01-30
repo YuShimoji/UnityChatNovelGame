@@ -17,8 +17,8 @@ namespace MCPForUnity.Editor.Resources
 
         /// <summary>
         /// Create an MCP resource attribute with auto-generated resource name.
-        /// The resource name will be derived from the class name (PascalCase ↁEsnake_case).
-        /// Example: ManageAsset ↁEmanage_asset
+        /// The resource name will be derived from the class name (PascalCase → snake_case).
+        /// Example: ManageAsset → manage_asset
         /// </summary>
         public McpForUnityResourceAttribute()
         {

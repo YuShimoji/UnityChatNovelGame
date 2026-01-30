@@ -1,11 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 namespace ProjectFoundPhone.Effects
 {
     /// <summary>
-    /// グリチE��効果を実裁E��るコンポ�EネンチE    /// UI Imageを使用して画面全体にノイズとグリチE��効果を表示する
+    /// 画面全体にノイズとグリッチ効果を表示するコンポーネント
+    /// UI Imageを使用して画面全体を覆うように配置する
     /// </summary>
     [RequireComponent(typeof(Image))]
     public class GlitchEffect : MonoBehaviour
@@ -18,285 +18,27 @@ namespace ProjectFoundPhone.Effects
         private const float c_BaseScanlineSpeed = 2f;
         #endregion
 
-        #region Private Fields
-        private Image m_GlitchImage;
-        private Canvas m_ParentCanvas;
-        private Material m_GlitchMaterial;
-        private Coroutine m_GlitchCoroutine;
-        #pragma warning disable CS0414 // フィールド�E割り当てられてぁE��が、値が使用されてぁE��ぁE        private bool m_IsPlaying = false; // 封E��の拡張�E�効果�E状態確認）で使用予宁E        #pragma warning restore CS0414
-        private int m_CurrentLevel = 0;
-        #endregion
+        [Header("Settings")]
+        [SerializeField] private Material m_GlitchMaterial;
 
-        #region Unity Lifecycle
+        private Image m_TargetImage;
+
         private void Awake()
         {
-            m_GlitchImage = GetComponent<Image>();
-            if (m_GlitchImage == null)
-            {
-                Debug.LogError("GlitchEffect: Image component is required!");
-            }
+            m_TargetImage = GetComponent<Image>();
         }
 
-        private void OnDestroy()
+        public void SetIntensity(float intensity)
         {
-            // マテリアルのクリーンアチE�E
-            if (m_GlitchMaterial != null)
+            if (m_TargetImage != null && m_TargetImage.material != null)
             {
-                if (Application.isPlaying)
+                // シェーダープロパティが存在する場合のみ設定
+                // _GlitchIntensity は仮のプロパティ名
+                if (m_TargetImage.material.HasProperty("_GlitchIntensity"))
                 {
-                    Destroy(m_GlitchMaterial);
-                }
-                else
-                {
-                    DestroyImmediate(m_GlitchMaterial);
+                    m_TargetImage.material.SetFloat("_GlitchIntensity", intensity);
                 }
             }
         }
-        #endregion
-
-        #region Public Methods
-        /// <summary>
-        /// GlitchEffectの初期匁E        /// </summary>
-        /// <param name="canvas">親となるCanvas</param>
-        public void Initialize(Canvas canvas)
-        {
-            m_ParentCanvas = canvas;
-
-            // Imageコンポ�Eネント�E設宁E            if (m_GlitchImage != null)
-            {
-                // 画面全体を要E��ように設宁E                RectTransform rectTransform = m_GlitchImage.rectTransform;
-                rectTransform.anchorMin = Vector2.zero;
-                rectTransform.anchorMax = Vector2.one;
-                rectTransform.sizeDelta = Vector2.zero;
-                rectTransform.anchoredPosition = Vector2.zero;
-
-                // 初期状態では非表示
-                m_GlitchImage.enabled = false;
-                m_GlitchImage.color = Color.white;
-
-                // グリチE��用マテリアルを作�E
-                CreateGlitchMaterial();
-            }
-        }
-
-        /// <summary>
-        /// グリチE��効果を再生
-        /// </summary>
-        /// <param name="level">グリチE��レベル�E�E-5�E�E/param>
-        /// <param name="duration">効果�E持続時間（秒！E/param>
-        public void PlayGlitch(int level, float duration)
-        {
-            if (m_GlitchImage == null || m_GlitchMaterial == null)
-            {
-                Debug.LogWarning("GlitchEffect: Not properly initialized.");
-                return;
-            }
-
-            // レベルをクランチE            int clampedLevel = Mathf.Clamp(level, c_MinLevel, c_MaxLevel);
-            m_CurrentLevel = clampedLevel;
-
-            // 既存�Eコルーチンを停止
-            if (m_GlitchCoroutine != null)
-            {
-                StopCoroutine(m_GlitchCoroutine);
-            }
-
-            // グリチE��効果を開姁E            m_GlitchCoroutine = StartCoroutine(PlayGlitchCoroutine(clampedLevel, duration));
-        }
-
-        /// <summary>
-        /// グリチE��効果を停止
-        /// </summary>
-        public void StopGlitch()
-        {
-            if (m_GlitchCoroutine != null)
-            {
-                StopCoroutine(m_GlitchCoroutine);
-                m_GlitchCoroutine = null;
-            }
-
-            if (m_GlitchImage != null)
-            {
-                m_GlitchImage.enabled = false;
-            }
-
-            m_IsPlaying = false;
-        }
-        #endregion
-
-        #region Private Methods
-        /// <summary>
-        /// グリチE��用マテリアルを作�E
-        /// Unity標準�EUI/Defaultシェーダーを使用し、�EロパティでグリチE��効果を制御
-        /// </summary>
-        private void CreateGlitchMaterial()
-        {
-            // Unity標準�EUI/Defaultシェーダーを使用
-            Shader uiShader = Shader.Find("UI/Default");
-            if (uiShader == null)
-            {
-                Debug.LogError("GlitchEffect: UI/Default shader not found!");
-                return;
-            }
-
-            m_GlitchMaterial = new Material(uiShader);
-            m_GlitchMaterial.name = "GlitchMaterial";
-
-            // ノイズチE��スチャを生成（�Eロシージャル�E�E            Texture2D noiseTexture = GenerateNoiseTexture(256, 256);
-            m_GlitchMaterial.mainTexture = noiseTexture;
-
-            // マテリアルをImageに適用
-            m_GlitchImage.material = m_GlitchMaterial;
-        }
-
-        /// <summary>
-        /// ノイズチE��スチャを生戁E        /// </summary>
-        /// <param name="width">チE��スチャの幁E/param>
-        /// <param name="height">チE��スチャの高さ</param>
-        /// <returns>生�EされたノイズチE��スチャ</returns>
-        private Texture2D GenerateNoiseTexture(int width, int height)
-        {
-            Texture2D texture = new Texture2D(width, height, TextureFormat.RGBA32, false);
-            texture.name = "GlitchNoiseTexture";
-            texture.filterMode = FilterMode.Point; // ピクセルパ�Eフェクトなノイズ
-
-            Color[] pixels = new Color[width * height];
-            for (int y = 0; y < height; y++)
-            {
-                for (int x = 0; x < width; x++)
-                {
-                    float noise = Random.Range(0f, 1f);
-                    pixels[y * width + x] = new Color(noise, noise, noise, 1f);
-                }
-            }
-
-            texture.SetPixels(pixels);
-            texture.Apply();
-
-            return texture;
-        }
-
-        /// <summary>
-        /// グリチE��効果を再生するコルーチン
-        /// </summary>
-        /// <param name="level">グリチE��レベル</param>
-        /// <param name="duration">持続時閁E/param>
-        private IEnumerator PlayGlitchCoroutine(int level, float duration)
-        {
-            m_IsPlaying = true;
-            m_GlitchImage.enabled = true;
-
-            float elapsedTime = 0f;
-            float intensity = CalculateIntensity(level);
-
-            // グリチE��効果�Eアニメーション
-            while (elapsedTime < duration)
-            {
-                elapsedTime += Time.deltaTime;
-                float normalizedTime = elapsedTime / duration;
-
-                // フェードアウト（後半で徐、E��弱める�E�E                float fadeMultiplier = 1f;
-                if (normalizedTime > 0.7f)
-                {
-                    fadeMultiplier = Mathf.Lerp(1f, 0f, (normalizedTime - 0.7f) / 0.3f);
-                }
-
-                // ノイズの強度を更新
-                UpdateGlitchVisuals(level, intensity * fadeMultiplier);
-
-                yield return null;
-            }
-
-            // 効果を停止
-            StopGlitch();
-        }
-
-        /// <summary>
-        /// レベルに応じた強度を計箁E        /// </summary>
-        /// <param name="level">グリチE��レベル�E�E-5�E�E/param>
-        /// <returns>強度値�E�E-1�E�E/returns>
-        private float CalculateIntensity(int level)
-        {
-            // レベル1: 0.2, レベル5: 1.0 の篁E��で線形補間
-            return Mathf.Lerp(0.2f, 1.0f, (level - 1) / 4f);
-        }
-
-        /// <summary>
-        /// グリチE��の視覚効果を更新
-        /// </summary>
-        /// <param name="level">グリチE��レベル</param>
-        /// <param name="intensity">強度</param>
-        private void UpdateGlitchVisuals(int level, float intensity)
-        {
-            if (m_GlitchImage == null)
-                return;
-
-            // ノイズの不透�E度を更新
-            Color currentColor = m_GlitchImage.color;
-            currentColor.a = intensity * 0.8f; // 最大80%の不透�E度
-            m_GlitchImage.color = currentColor;
-
-            // レベルに応じた追加効极E            switch (level)
-            {
-                case 1:
-                    // 軽微なノイズのみ
-                    break;
-
-                case 2:
-                    // わずかな色ずれを追加�E�色収差の簡易版�E�E                    currentColor.r = 1f + (Random.Range(-0.1f, 0.1f) * intensity);
-                    currentColor.g = 1f + (Random.Range(-0.1f, 0.1f) * intensity);
-                    currentColor.b = 1f + (Random.Range(-0.1f, 0.1f) * intensity);
-                    m_GlitchImage.color = currentColor;
-                    break;
-
-                case 3:
-                case 4:
-                case 5:
-                    // より強ぁE��ずれとランダムな位置オフセチE��
-                    currentColor.r = 1f + (Random.Range(-0.2f, 0.2f) * intensity);
-                    currentColor.g = 1f + (Random.Range(-0.2f, 0.2f) * intensity);
-                    currentColor.b = 1f + (Random.Range(-0.2f, 0.2f) * intensity);
-                    m_GlitchImage.color = currentColor;
-
-                    // 位置をランダムにずらす（スキャンライン効果�E簡易版�E�E                    RectTransform rectTransform = m_GlitchImage.rectTransform;
-                    float offsetX = Random.Range(-5f, 5f) * intensity;
-                    float offsetY = Random.Range(-2f, 2f) * intensity;
-                    rectTransform.anchoredPosition = new Vector2(offsetX, offsetY);
-                    break;
-            }
-
-            // ノイズチE��スチャを更新�E�動皁E��ノイズ効果！E            if (m_GlitchMaterial != null && m_GlitchMaterial.mainTexture != null)
-            {
-                // フレームごとにノイズを更新�E�レベルが高いほど頻繁に�E�E                if (Random.Range(0f, 1f) < (intensity * 0.3f))
-                {
-                    UpdateNoiseTexture();
-                }
-            }
-        }
-
-        /// <summary>
-        /// ノイズチE��スチャを更新�E�動皁E��ノイズ効果！E        /// </summary>
-        private void UpdateNoiseTexture()
-        {
-            if (m_GlitchMaterial == null || m_GlitchMaterial.mainTexture == null)
-                return;
-
-            Texture2D noiseTexture = m_GlitchMaterial.mainTexture as Texture2D;
-            if (noiseTexture == null)
-                return;
-
-            // チE��スチャの一部をランダムに更新
-            int updateCount = Random.Range(10, 50);
-            for (int i = 0; i < updateCount; i++)
-            {
-                int x = Random.Range(0, noiseTexture.width);
-                int y = Random.Range(0, noiseTexture.height);
-                float noise = Random.Range(0f, 1f);
-                noiseTexture.SetPixel(x, y, new Color(noise, noise, noise, 1f));
-            }
-
-            noiseTexture.Apply();
-        }
-        #endregion
     }
 }

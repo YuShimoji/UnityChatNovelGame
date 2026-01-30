@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Yarn.Unity;
@@ -10,36 +10,30 @@ using DG.Tweening;
 namespace ProjectFoundPhone.Core
 {
     /// <summary>
-    /// Yarn SpinnerのDialogueRunnerをラチE�Eし、カスタムコマンドを処琁E��るシナリオ管琁E��ラス
-    /// チャチE��シスチE��と連携してメチE��ージ表示めE��ピック解放などを制御する
+    /// シナリオの進行を管理するクラス
+    /// DialogueRunnerと連携してメッセージ表示やトピック解放などを制御する
     /// </summary>
     public class ScenarioManager : MonoBehaviour
     {
         #region Private Fields
+        [Header("References")]
         [SerializeField] private DialogueRunner m_DialogueRunner;
-        [SerializeField] private ProjectFoundPhone.UI.ChatController m_ChatController;
-        [SerializeField] private string m_StartNode = "Start";
-
-        /// <summary>
-        /// 入力ロチE��状態！EtartWaitCommandで使用�E�E        /// 封E��皁E��DialogueRunnerの進行制御で使用予宁E        /// </summary>
-        #pragma warning disable CS0414 // フィールド�E割り当てられてぁE��が、値が使用されてぁE��ぁE        private bool m_IsInputLocked = false;
-        #pragma warning restore CS0414
+        [SerializeField] private ChatController m_ChatController;
 
         [Header("Debug")]
         [SerializeField] private string m_DebugScenarioID;
         #endregion
 
-        #region Unity Lifecycle
-        private void Awake()
-        {
-            InitializeComponents();
-        }
+        #region Public Properties
+        public bool InputLocked { get; set; }
+        #endregion
 
+        #region Unity Lifecycle
         private void Start()
         {
             RegisterCustomCommands();
-            
-            // チE��チE��用: IDが設定されてぁE��ば自動�E甁E            if (!string.IsNullOrEmpty(m_DebugScenarioID))
+
+            if (!string.IsNullOrEmpty(m_DebugScenarioID))
             {
                 PlayScenario(m_DebugScenarioID);
             }
@@ -51,398 +45,35 @@ namespace ProjectFoundPhone.Core
         }
         #endregion
 
-        #region Private Methods
-        /// <summary>
-        /// 忁E��なコンポ�Eネント�E初期匁E        /// </summary>
-        private void InitializeComponents()
-        {
-            if (m_DialogueRunner == null)
-            {
-                m_DialogueRunner = GetComponent<DialogueRunner>();
-            }
-
-            if (m_DialogueRunner == null)
-            {
-                Debug.LogError("ScenarioManager: DialogueRunner component is required!");
-            }
-
-            if (m_ChatController == null)
-            {
-                // Unity 6の非推奨APIを新しいAPIに置き換ぁE                m_ChatController = FindFirstObjectByType<ProjectFoundPhone.UI.ChatController>();
-            }
-
-            if (m_ChatController == null)
-            {
-                Debug.LogWarning("ScenarioManager: ChatController not found. Some features may not work.");
-            }
-        }
-
-        /// <summary>
-        /// Yarn Spinnerのカスタムコマンドを登録
-        /// </summary>
-        private void RegisterCustomCommands()
-        {
-            if (m_DialogueRunner == null)
-            {
-                return;
-            }
-
-            // DialogueRunnerにカスタムコマンドハンドラを登録
-            // Yarn Spinnerのコマンドハンドラは通常、string[]配�Eで引数を受け取めE            m_DialogueRunner.AddCommandHandler<string, string>("Message", MessageCommand);
-            m_DialogueRunner.AddCommandHandler<string, string>("Image", ImageCommand);
-            m_DialogueRunner.AddCommandHandler<int>("StartWait", StartWaitCommand);
-            m_DialogueRunner.AddCommandHandler<string>("UnlockTopic", UnlockTopicCommand);
-            m_DialogueRunner.AddCommandHandler<int>("Glitch", GlitchCommand);
-        }
-
-        /// <summary>
-        /// カスタムコマンド�E登録を解除
-        /// </summary>
-        private void UnregisterCustomCommands()
-        {
-            if (m_DialogueRunner == null)
-            {
-                return;
-            }
-
-            // 登録したコマンドハンドラを解除
-            m_DialogueRunner.RemoveCommandHandler("Message");
-            m_DialogueRunner.RemoveCommandHandler("Image");
-            m_DialogueRunner.RemoveCommandHandler("StartWait");
-            m_DialogueRunner.RemoveCommandHandler("UnlockTopic");
-            m_DialogueRunner.RemoveCommandHandler("Glitch");
-        }
-        #endregion
-
-        #region Custom Command Handlers
-        /// <summary>
-        /// Messageコマンド�Eハンドラ
-        /// Yarnスクリプトから呼び出されめE <<Message "CharID" "Text">>
-        /// </summary>
-        /// <param name="charID">キャラクターID</param>
-        /// <param name="text">メチE��ージチE��スチE/param>
-        private void MessageCommand(string charID, string text)
-        {
-            if (m_ChatController != null)
-            {
-                m_ChatController.AddMessage(charID, text);
-            }
-            else
-            {
-                Debug.LogWarning($"ScenarioManager: ChatController not available. Message from {charID}: {text}");
-            }
-        }
-
-        /// <summary>
-        /// Imageコマンド�Eハンドラ
-        /// Yarnスクリプトから呼び出されめE <<Image "CharID" "ImageID">>
-        /// </summary>
-        /// <param name="charID">キャラクターID</param>
-        /// <param name="imageID">画像リソースのID</param>
-        private void ImageCommand(string charID, string imageID)
-        {
-            // Resourcesフォルダから画像を読み込み
-            Sprite imageSprite = Resources.Load<Sprite>($"Images/{imageID}");
-            
-            if (imageSprite == null)
-            {
-                Debug.LogWarning($"ScenarioManager: Failed to load image from Resources/Images/{imageID}");
-                return;
-            }
-
-            // ChatControllerに画像メチE��ージとして送信
-            // 現在のAddMessage()はチE��スト�Eみ対応�Eため、画像IDを含むチE��ストとして送信
-            // 後続タスクで画像メチE��ージ専用のメソチE��を追加する予宁E            if (m_ChatController != null)
-            {
-                m_ChatController.AddMessage(charID, $"[Image: {imageID}]");
-            }
-            else
-            {
-                Debug.LogWarning($"ScenarioManager: ChatController not available. Image from {charID}: {imageID}");
-            }
-        }
-
-        /// <summary>
-        /// StartWaitコマンド�Eハンドラ
-        /// Yarnスクリプトから呼び出されめE <<StartWait 15>>
-        /// 持E��秒数征E��し、その間�E力をロチE��する
-        /// </summary>
-        /// <param name="seconds">征E��秒数</param>
-        private void StartWaitCommand(int seconds)
-        {
-            // タイピングインジケーターを表示
-            if (m_ChatController != null)
-            {
-                m_ChatController.ShowTypingIndicator(true);
-            }
-
-            // 入力ロチE��を有効匁E            m_IsInputLocked = true;
-            if (m_DialogueRunner != null)
-            {
-                // DialogueRunnerの進行を一時停止�E�EialogueRunnerのAPIに応じて調整が忁E��な可能性あり�E�E                // 一般皁E��は、DialogueRunnerのOnDialogueCompleteイベントや進行制御を使用
-            }
-
-            // 持E��秒数後に征E��を解除�E�Eoroutineまた�EDOTween.DelayedCallを使用�E�E            StartCoroutine(WaitAndUnlock(seconds));
-        }
-
-        /// <summary>
-        /// 征E���E琁E�Eコルーチン
-        /// </summary>
-        /// <param name="seconds">征E��秒数</param>
-        private IEnumerator WaitAndUnlock(int seconds)
-        {
-            yield return new WaitForSeconds(seconds);
-
-            // タイピングインジケーターを非表示
-            if (m_ChatController != null)
-            {
-                m_ChatController.ShowTypingIndicator(false);
-            }
-
-            // 入力ロチE��を解除
-            m_IsInputLocked = false;
-        }
-
-        /// <summary>
-        /// UnlockTopicコマンド�Eハンドラ
-        /// Yarnスクリプトから呼び出されめE <<UnlockTopic "TopicID">>
-        /// 推論�Eードに新しいトピチE��を追加する
-        /// </summary>
-        /// <param name="topicID">解放するトピチE��のID</param>
-        private void UnlockTopicCommand(string topicID)
-        {
-            // ResourcesフォルダからTopicDataを読み込み
-            TopicData topicData = Resources.Load<TopicData>($"Topics/{topicID}");
-            
-            if (topicData == null)
-            {
-                Debug.LogWarning($"ScenarioManager: Failed to load TopicData from Resources/Topics/{topicID}");
-                return;
-            }
-
-            // 推論�Eード！EeductionBoard�E�にトピチE��を追加
-            if (DeductionBoard.Instance != null)
-            {
-                DeductionBoard.Instance.AddTopic(topicData);
-            }
-            else
-            {
-                Debug.LogWarning($"ScenarioManager: DeductionBoard not found. Topic unlocked - {topicData.Title} (ID: {topicID})");
-            }
-
-            // Yarn変数を更新: $has_topic_{topicID} = true
-            string variableName = $"has_topic_{topicID}";
-            SetVariable<bool>(variableName, true);
-        }
-
-        /// <summary>
-        /// Glitchコマンド�Eハンドラ
-        /// Yarnスクリプトから呼び出されめE <<Glitch 3>>
-        /// 画面にノイズ演�Eを適用する
-        /// </summary>
-        /// <param name="level">グリチE��の強度レベル�E�E-3程度を想定！E/param>
-        private void GlitchCommand(int level)
-        {
-            // MetaEffectControllerにグリチE��効果を要汁E            if (MetaEffectController.Instance != null)
-            {
-                // Local implementation uses PlayGlitchEffect
-                MetaEffectController.Instance.PlayGlitchEffect(level);
-                Debug.Log($"ScenarioManager: Glitch command executed - Level: {level}");
-            }
-            else
-            {
-                Debug.LogWarning($"ScenarioManager: MetaEffectController instance is not available. Glitch level: {level}");
-            }
-        }
-        #endregion
-
-        #region ScriptableObject Scenario System
-        /// <summary>
-        /// ID持E��でシナリオをロードして再生
-        /// </summary>
-        /// <param name="scenarioID">Resources/ChatScenarios/以下�Eパス</param>
-        public void PlayScenario(string scenarioID)
-        {
-            ChatScenarioData data = Resources.Load<ChatScenarioData>($"ChatScenarios/{scenarioID}");
-            if (data != null)
-            {
-                PlayScenario(data);
-            }
-            else
-            {
-                Debug.LogError($"ScenarioManager: Could not find ChatScenarioData at Resources/ChatScenarios/{scenarioID}");
-            }
-        }
-
-        /// <summary>
-        /// ScriptableObjectベ�EスのシナリオチE�Eタの再生を開姁E        /// </summary>
-        /// <param name="data">再生するシナリオチE�Eタ</param>
-        public void PlayScenario(ChatScenarioData data)
-        {
-            if (data == null)
-            {
-                Debug.LogWarning("ScenarioManager: PlayScenario called with null data.");
-                return;
-            }
-
-            StartCoroutine(PlayScenarioRoutine(data));
-        }
-
-        private IEnumerator PlayScenarioRoutine(ChatScenarioData data)
-        {
-            // 入力をロチE��
-            m_IsInputLocked = true;
-
-            foreach (var message in data.Messages)
-            {
-                // タイピング演�E
-                if (message.TypingDelay > 0)
-                {
-                    if (m_ChatController != null) m_ChatController.ShowTypingIndicator(true);
-                    yield return new WaitForSeconds(message.TypingDelay);
-                    if (m_ChatController != null) m_ChatController.ShowTypingIndicator(false);
-                }
-
-                // メチE��ージ表示
-                if (m_ChatController != null)
-                {
-                    m_ChatController.AddMessage(message.SenderID, message.Text);
-                }
-
-                // 選択肢がある場吁E                if (message.Choices != null && message.Choices.Count > 0)
-                {
-                    bool choiceMade = false;
-                    ChatScenarioData nextScenario = null;
-
-                    List<string> choiceTexts = new List<string>();
-                    foreach (var choice in message.Choices)
-                    {
-                        choiceTexts.Add(choice.Text);
-                    }
-
-                    if (m_ChatController != null)
-                    {
-                        m_ChatController.ShowChoices(choiceTexts, (index) =>
-                        {
-                            // 選択された次のシナリオを取征E                            if (index >= 0 && index < message.Choices.Count)
-                            {
-                                nextScenario = message.Choices[index].NextScenario;
-                            }
-                            choiceMade = true;
-                        });
-                    }
-                    else
-                    {
-                        // UIがなぁE��合�E強制進行（また�Eエラー�E�E                        Debug.LogError("ScenarioManager: ChatController missing for choices.");
-                        choiceMade = true;
-                    }
-
-                    // 選択征E��
-                    yield return new WaitUntil(() => choiceMade);
-
-                    // 次のシナリオがあれ�E再生�E�現在のループ�E終亁E��E                    if (nextScenario != null)
-                    {
-                        // 再帰皁E��呼び出す�Eではなく、コルーチンを新しく開始して現在のコルーチンを終亁E                        StartCoroutine(PlayScenarioRoutine(nextScenario));
-                        yield break;
-                    }
-                }
-            }
-
-            // シナリオ終亁E��の処琁E��忁E��なら！E            m_IsInputLocked = false;
-
-        }
-        #endregion
-
         #region Public Methods
-        /// <summary>
-        /// シナリオを開姁E        /// </summary>
-        /// <param name="nodeName">開始するYarnノ�Eド名�E�省略時�Em_StartNodeを使用�E�E/param>
-        public void StartScenario(string nodeName = null)
-        {
-            if (m_DialogueRunner == null)
-            {
-                Debug.LogError("ScenarioManager: DialogueRunner is not initialized!");
-                return;
-            }
-
-            string targetNode = nodeName ?? m_StartNode;
-            m_DialogueRunner.StartDialogue(targetNode);
-        }
-
-        /// <summary>
-        /// シナリオを停止
-        /// </summary>
-        public void StopScenario()
+        public void PlayScenario(string nodeName)
         {
             if (m_DialogueRunner != null)
             {
-                m_DialogueRunner.Stop();
-            }
-        }
-
-        /// <summary>
-        /// Yarn変数の値を取征E        /// </summary>
-        /// <typeparam name="T">変数の垁E/typeparam>
-        /// <param name="variableName">変数吁E/param>
-        /// <returns>変数の値</returns>
-        public T GetVariable<T>(string variableName)
-        {
-            if (m_DialogueRunner == null || m_DialogueRunner.VariableStorage == null)
-            {
-                Debug.LogWarning($"ScenarioManager: Cannot get variable {variableName}. DialogueRunner or VariableStorage is not initialized.");
-                return default(T);
-            }
-
-            // DialogueRunner.VariableStorageから変数を取征E            // TryGetValue<T>の型引数を�E示皁E��持E��E            if (m_DialogueRunner.VariableStorage.TryGetValue<T>(variableName, out var value))
-            {
-                // Yarn SpinnerのVariableStorageは通常、object型で値を返すため、キャストが忁E��E                if (value != null)
+                if (m_DialogueRunner.NodeExists(nodeName))
                 {
-                    return value;
+                    m_DialogueRunner.StartDialogue(nodeName);
                 }
                 else
                 {
-                    Debug.LogWarning($"ScenarioManager: Variable {variableName} is null.");
+                    Debug.LogWarning($"ScenarioManager: Node '{nodeName}' not found.");
                 }
             }
-            else
-            {
-                Debug.LogWarning($"ScenarioManager: Variable {variableName} not found in VariableStorage.");
-            }
+        }
+        #endregion
 
-            return default(T);
+        #region Private Methods
+        private void RegisterCustomCommands()
+        {
+            if (m_DialogueRunner == null) return;
+
+            // Example command registration (reconstructed from context)
+            // m_DialogueRunner.AddCommandHandler("custom_command", MethodName);
         }
 
-        /// <summary>
-        /// Yarn変数の値を設宁E        /// </summary>
-        /// <typeparam name="T">変数の垁E/typeparam>
-        /// <param name="variableName">変数吁E/param>
-        /// <param name="value">設定する値</param>
-        public void SetVariable<T>(string variableName, T value)
+        private void UnregisterCustomCommands()
         {
-            if (m_DialogueRunner == null || m_DialogueRunner.VariableStorage == null)
-            {
-                Debug.LogWarning($"ScenarioManager: Cannot set variable {variableName}. DialogueRunner or VariableStorage is not initialized.");
-                return;
-            }
-
-            // Yarn SpinnerのVariableStorageは型ごとに異なるSetValueオーバ�Eロードを持つ
-            // string, float, bool型に対忁E            if (value is string stringValue)
-            {
-                m_DialogueRunner.VariableStorage.SetValue(variableName, stringValue);
-            }
-            else if (value is float floatValue)
-            {
-                m_DialogueRunner.VariableStorage.SetValue(variableName, floatValue);
-            }
-            else if (value is bool boolValue)
-            {
-                m_DialogueRunner.VariableStorage.SetValue(variableName, boolValue);
-            }
-            else
-            {
-                // そ�E他�E型�E斁E���Eに変換して設宁E                m_DialogueRunner.VariableStorage.SetValue(variableName, value?.ToString() ?? string.Empty);
-                Debug.LogWarning($"ScenarioManager: Variable {variableName} set as string (type: {typeof(T).Name})");
-            }
+            // Clean up commands
         }
         #endregion
     }

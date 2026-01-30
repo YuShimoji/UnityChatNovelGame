@@ -50,7 +50,7 @@ namespace MCPForUnity.Editor.Services
                     configurator.CheckStatus(attemptAutoRewrite: false);
                     configurator.Configure();
                     summary.SuccessCount++;
-                    summary.Messages.Add($"✁E{configurator.DisplayName}: Configured successfully");
+                    summary.Messages.Add($"✓ {configurator.DisplayName}: Configured successfully");
                 }
                 catch (Exception ex)
                 {

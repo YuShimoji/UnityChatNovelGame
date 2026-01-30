@@ -170,7 +170,7 @@ namespace MCPForUnity.Editor.Helpers
                 case "_basemap": candidates = new[] { "_BaseMap", "_MainTex" }; break;
                 case "_glossiness": candidates = new[] { "_Glossiness", "_Smoothness" }; break;
                 case "_smoothness": candidates = new[] { "_Smoothness", "_Glossiness" }; break;
-                // Friendly names ↁEshader property names
+                // Friendly names → shader property names
                 case "metallic": candidates = new[] { "_Metallic" }; break;
                 case "smoothness": candidates = new[] { "_Smoothness", "_Glossiness" }; break;
                 case "albedo": candidates = new[] { "_BaseMap", "_MainTex" }; break;

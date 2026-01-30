@@ -3,53 +3,22 @@ using UnityEngine;
 namespace ProjectFoundPhone.Data
 {
     /// <summary>
-    /// 推論�Eードで使用するトピチE���E�手がかり）�EチE�Eタ定義
-    /// ScriptableObjectとして作�Eし、エチE��タから管琁E��能にする
+    /// 推論モードで使用するトピック（手がかり）のデータ定義
+    /// ScriptableObjectとして作成し、エディタから管理可能にする
     /// </summary>
     [CreateAssetMenu(fileName = "NewTopic", menuName = "Project FoundPhone/Topic Data", order = 1)]
     public class TopicData : ScriptableObject
     {
-        #region Private Fields
+        [Header("Basic Info")]
         [SerializeField] private string m_TopicID;
-        [SerializeField] private Sprite m_Icon;
         [SerializeField] private string m_Title;
-        [SerializeField, TextArea(3, 10)] private string m_Description;
-        #endregion
+        [TextArea(3, 10)]
+        [SerializeField] private string m_Description;
+        [SerializeField] private Sprite m_Icon;
 
-        #region Public Properties
-        /// <summary>
-        /// トピチE��の一意な識別孁E        /// </summary>
         public string TopicID => m_TopicID;
-
-        /// <summary>
-        /// トピチE��のアイコン画僁E        /// </summary>
-        public Sprite Icon => m_Icon;
-
-        /// <summary>
-        /// トピチE��のタイトル
-        /// </summary>
         public string Title => m_Title;
-
-        /// <summary>
-        /// トピチE��の詳細説昁E        /// </summary>
         public string Description => m_Description;
-        #endregion
-
-        #region Unity Lifecycle
-        private void OnValidate()
-        {
-            // TODO: TopicIDの重褁E��ェチE��めE��リチE�Eション処琁E��実裁E        }
-        #endregion
-
-        #region Public Methods
-        /// <summary>
-        /// トピチE��が有効かどぁE��を判宁E        /// </summary>
-        /// <returns>有効な場吁Erue</returns>
-        public bool IsValid()
-        {
-            // TODO: TopicID、Title、Descriptionが適刁E��設定されてぁE��かチェチE��
-            return !string.IsNullOrEmpty(m_TopicID) && !string.IsNullOrEmpty(m_Title);
-        }
-        #endregion
+        public Sprite Icon => m_Icon;
     }
 }
