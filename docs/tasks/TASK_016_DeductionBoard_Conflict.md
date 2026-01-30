@@ -8,32 +8,23 @@ Created: 2026-01-17T00:35:00+09:00
 Report: docs/inbox/REPORT_TASK_008_DeductionBoard.md
 
 ## Objective
-推理ボード（Deduction Board）の基本システムを実装する。
-プレイヤーが証拠（Topic）を収集し、それらを組み合わせて新しい結論（Synthesis）を導き出すUIとロジックを構築する。
-
+推琁E�Eード！Eeduction Board�E��E基本シスチE��を実裁E��る、Eプレイヤーが証拠�E�Eopic�E�を収集し、それらを絁E��合わせて新しい結論！Eynthesis�E�を導き出すUIとロジチE��を構築する、E
 ## Context
-- `UnlockTopicCommand` によって解放された `TopicData` を可視化する場所が必要。
-- `SynthesisRecipe` に基づいてトピックを合成する機能が必要。
-- Core System (Task 001-006) は実装済み。
-
+- `UnlockTopicCommand` によって解放されぁE`TopicData` を可視化する場所が忁E��、E- `SynthesisRecipe` に基づぁE��トピチE��を合成する機�Eが忁E��、E- Core System (Task 001-006) は実裁E��み、E
 ## Focus Area
-- `Assets/Scripts/UI/DeductionBoard.cs`: ボードの管理クラス
-- `Assets/Prefabs/UI/TopicNode.prefab`: トピックを表すUI要素
-- `Assets/Scripts/Core/ScenarioManager.cs` or `Commands`: `UnlockTopic` 時にボードへ通知する仕組み
-- Drag & Drop 操作の実装 (Unity `IDragHandler` 等)
+- `Assets/Scripts/UI/DeductionBoard.cs`: ボ�Eド�E管琁E��ラス
+- `Assets/Prefabs/UI/TopicNode.prefab`: トピチE��を表すUI要素
+- `Assets/Scripts/Core/ScenarioManager.cs` or `Commands`: `UnlockTopic` 時にボ�Eドへ通知する仕絁E��
+- Drag & Drop 操作�E実裁E(Unity `IDragHandler` 筁E
 
 ## Forbidden Area
-- 見た目の過度な作り込み（まずは機能疎通を優先）
-- 既存の `ChatController` の破壊
-
+- 見た目の過度な作り込み�E�まず�E機�E疎通を優先！E- 既存�E `ChatController` の破壁E
 ## Constraints
 - `TopicData` の `State` (Hidden, Unlocked, Solved) を反映すること
-- 合成（Synthesis）成功時に新しいトピックを解放すること
+- 合�E�E�Eynthesis�E��E功時に新しいトピチE��を解放すること
 
 ## DoD (Definition of Done)
-- [x] `DeductionBoard.cs` が実装されている
-- [x] `TopicNode.prefab` が作成されている (Implemented `TopicCard.cs`)
-- [x] `UnlockTopic` コマンドを実行すると、ボード上にトピックが表示される
-- [x] 2つのトピックを合成して新しいトピックを作成できる（SynthesisRecipeごとの判定）
-- [ ] **Evidence**: ボード操作のGIF/動画 または スクリーンショット (Pending User Verification)
-- [x] Report 作成
+- [x] `DeductionBoard.cs` が実裁E��れてぁE��
+- [x] `TopicNode.prefab` が作�EされてぁE�� (Implemented `TopicCard.cs`)
+- [x] `UnlockTopic` コマンドを実行すると、�Eード上にトピチE��が表示されめE- [x] 2つのトピチE��を合成して新しいトピチE��を作�Eできる�E�EynthesisRecipeごとの判定！E- [ ] **Evidence**: ボ�Eド操作�EGIF/動画 また�E スクリーンショチE�� (Pending User Verification)
+- [x] Report 作�E

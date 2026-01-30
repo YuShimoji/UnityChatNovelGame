@@ -13,7 +13,7 @@ namespace MCPForUnity.Editor.Helpers
     {
         private const string PrefClaude = EditorPrefKeys.ClaudeCliPathOverride;
 
-        // Resolve Claude CLI absolute path. Pref → env → common locations → PATH.
+        // Resolve Claude CLI absolute path. Pref ↁEenv ↁEcommon locations ↁEPATH.
         internal static string ResolveClaude()
         {
             try

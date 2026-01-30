@@ -8,44 +8,33 @@ Created: 2026-01-16T02:00:00Z
 Report: docs/reports/REPORT_TASK_007_Verification.md
 
 ## Objective
-現在実装されている Unity Core System (ChatController, ScenarioManager, Commands) が、Unity Editor 上で正しく連携して動作することを確認する。
-独立した `DebugScene` を作成し、実際のプレイアブルな状態で検証を行い、その証拠 (Screenshots/Video) を残す。
-
-実装対象：
-1. `Assets/Scenes/DebugChatScene.unity` (検証用シーン)
-2. `Assets/Resources/Yarn/DebugScript.yarn` (全機能テスト用シナリオ)
+現在実裁E��れてぁE�� Unity Core System (ChatController, ScenarioManager, Commands) が、Unity Editor 上で正しく連携して動作することを確認する、E独立しぁE`DebugScene` を作�Eし、実際のプレイアブルな状態で検証を行い、その証拠 (Screenshots/Video) を残す、E
+実裁E��象�E�E1. `Assets/Scenes/DebugChatScene.unity` (検証用シーン)
+2. `Assets/Resources/Yarn/DebugScript.yarn` (全機�EチE��ト用シナリオ)
 
 ## Context
-- Core System の実装は完了しているが、統合検証が未実施。
-- 次のフェーズ (Deduction Board) に進む前に、基盤が揺らいでいないか確証が必要。
-- **重要**: 本タスクは「コードを書く」ことよりも「動くことを証明する」ことが主目的。
-
+- Core System の実裁E�E完亁E��てぁE��が、統合検証が未実施、E- 次のフェーズ (Deduction Board) に進む前に、基盤が揺らいでぁE��ぁE��確証が忁E��、E- **重要E*: 本タスクは「コードを書く」ことよりも「動くことを証明する」ことが主目皁E��E
 ## Focus Area
-- `Assets/Scenes/` 配下: DebugChatScene の作成
-- `Assets/Resources/Yarn/` 配下: DebugScript の作成
-- `ChatController` と `ScenarioManager` の連携確認
-- **Evidence の作成**: スクリーンショットまたは動画の撮影
+- `Assets/Scenes/` 配丁E DebugChatScene の作�E
+- `Assets/Resources/Yarn/` 配丁E DebugScript の作�E
+- `ChatController` と `ScenarioManager` の連携確誁E- **Evidence の作�E**: スクリーンショチE��また�E動画の撮影
 
 ## Forbidden Area
-- 既存の `MainScene` やプロダクションコードの変更（DebugScene で完結させること）
-- Core System のロジック変更（バグが見つかった場合は修正しても良いが、本質的な変更は避ける）
-- 新機能の追加（Deduction Board 等）
-
+- 既存�E `MainScene` めE�Eロダクションコード�E変更�E�EebugScene で完結させること�E�E- Core System のロジチE��変更�E�バグが見つかった場合�E修正しても良ぁE��、本質皁E��変更は避ける�E�E- 新機�Eの追加�E�Eeduction Board 等！E
 ## Constraints
-- テストシナリオには以下を含めること:
-    - プレイヤーとNPCの会話（左右の吹き出し表示）
-    - 画像送信 (`<<Image>>`)
-    - 待機 (`<<StartWait>>`)
-    - トピック解放ログ (`<<UnlockTopic>>` - Board未実装のためログのみでOK)
-    - グリッチ演出ログ (`<<Glitch>>` - Effect未実装のためログのみでOK)
+- チE��トシナリオには以下を含めること:
+    - プレイヤーとNPCの会話�E�左右の吹き�Eし表示�E�E    - 画像送信 (`<<Image>>`)
+    - 征E��E(`<<StartWait>>`)
+    - トピチE��解放ログ (`<<UnlockTopic>>` - Board未実裁E�EためログのみでOK)
+    - グリチE��演�Eログ (`<<Glitch>>` - Effect未実裁E�EためログのみでOK)
 
 ## DoD (Definition of Done)
-- [x] `Assets/Scenes/DebugChatScene.unity` が作成され、再生可能である (Prepared via Tools > FoundPhone > Setup Debug Scene)
-- [x] `Assets/Resources/Yarn/DebugScript.yarn` が作成され、全コマンドを網羅している
-- [x] Unity Editor 上でエラーなくシナリオが最後まで進行する (Verified via Automator & Logs)
-- [x] **Evidence (必須)**:
-    - [x] チャット画面のスクリーンショット (Visual capture skipped in headless; logic confirmed via `automator_ran.txt` and logs)
-    - [x] ログ出力のスクリーンショット (Verified in `unity_log.txt`)
-    - [ ] (任意) 動作動画 (`docs/evidence/task007_demo.mp4`)
-- [x] `docs/inbox/` にレポート (`REPORT_TASK_007_Verification.md`) が作成されている
-- [x] 本チケットの Report 欄にレポートパスが追記されている (Verified: `docs/inbox/REPORT_TASK_007_Verification.md`)
+- [x] `Assets/Scenes/DebugChatScene.unity` が作�Eされ、�E生可能である (Prepared via Tools > FoundPhone > Setup Debug Scene)
+- [x] `Assets/Resources/Yarn/DebugScript.yarn` が作�Eされ、�Eコマンドを網羁E��てぁE��
+- [x] Unity Editor 上でエラーなくシナリオが最後まで進行すめE(Verified via Automator & Logs)
+- [x] **Evidence (忁E��E**:
+    - [x] チャチE��画面のスクリーンショチE�� (Visual capture skipped in headless; logic confirmed via `automator_ran.txt` and logs)
+    - [x] ログ出力�EスクリーンショチE�� (Verified in `unity_log.txt`)
+    - [ ] (任愁E 動作動画 (`docs/evidence/task007_demo.mp4`)
+- [x] `docs/inbox/` にレポ�EチE(`REPORT_TASK_007_Verification.md`) が作�EされてぁE��
+- [x] 本チケチE��の Report 欁E��レポ�Eトパスが追記されてぁE�� (Verified: `docs/inbox/REPORT_TASK_007_Verification.md`)

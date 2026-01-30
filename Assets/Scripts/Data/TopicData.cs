@@ -3,8 +3,8 @@ using UnityEngine;
 namespace ProjectFoundPhone.Data
 {
     /// <summary>
-    /// 推論ボードで使用するトピック（手がかり）のデータ定義
-    /// ScriptableObjectとして作成し、エディタから管理可能にする
+    /// 推論�Eードで使用するトピチE���E�手がかり）�EチE�Eタ定義
+    /// ScriptableObjectとして作�Eし、エチE��タから管琁E��能にする
     /// </summary>
     [CreateAssetMenu(fileName = "NewTopic", menuName = "Project FoundPhone/Topic Data", order = 1)]
     public class TopicData : ScriptableObject
@@ -18,41 +18,36 @@ namespace ProjectFoundPhone.Data
 
         #region Public Properties
         /// <summary>
-        /// トピックの一意な識別子
-        /// </summary>
+        /// トピチE��の一意な識別孁E        /// </summary>
         public string TopicID => m_TopicID;
 
         /// <summary>
-        /// トピックのアイコン画像
-        /// </summary>
+        /// トピチE��のアイコン画僁E        /// </summary>
         public Sprite Icon => m_Icon;
 
         /// <summary>
-        /// トピックのタイトル
+        /// トピチE��のタイトル
         /// </summary>
         public string Title => m_Title;
 
         /// <summary>
-        /// トピックの詳細説明
-        /// </summary>
+        /// トピチE��の詳細説昁E        /// </summary>
         public string Description => m_Description;
         #endregion
 
         #region Unity Lifecycle
         private void OnValidate()
         {
-            // TODO: TopicIDの重複チェックやバリデーション処理を実装
-        }
+            // TODO: TopicIDの重褁E��ェチE��めE��リチE�Eション処琁E��実裁E        }
         #endregion
 
         #region Public Methods
         /// <summary>
-        /// トピックが有効かどうかを判定
-        /// </summary>
-        /// <returns>有効な場合true</returns>
+        /// トピチE��が有効かどぁE��を判宁E        /// </summary>
+        /// <returns>有効な場吁Erue</returns>
         public bool IsValid()
         {
-            // TODO: TopicID、Title、Descriptionが適切に設定されているかチェック
+            // TODO: TopicID、Title、Descriptionが適刁E��設定されてぁE��かチェチE��
             return !string.IsNullOrEmpty(m_TopicID) && !string.IsNullOrEmpty(m_Title);
         }
         #endregion

@@ -1,38 +1,38 @@
 # Worker Prompt: TASK_007 Core System Verification
 
 ## Request
-あなたは Unity クライアントエンジニアとして、**Core System (ChatController, ScenarioManager)** の動作検証（再試行）を行ってください。前回の検証では Evidence が提出されず、タスクが完了できませんでした。
+あなた�E Unity クライアントエンジニアとして、E*Core System (ChatController, ScenarioManager)** の動作検証�E��E試行）を行ってください。前回�E検証では Evidence が提出されず、タスクが完亁E��きませんでした、E
 
 ## Context
-- **Current State**: コード実装完了。Phase 1.75 通過済みだが、タスクは OPEN 状態。
-- **Goal**: `DebugChatScene` を実際に動かし、**スクリーンショットを提出すること**。
-- **Blocking**: これが完了しない限り、次の機能実装（Deduction Board）に着手できない（Verification First 戦略）。
+- **Current State**: コード実裁E��亁E��Phase 1.75 通過済みだが、タスクは OPEN 状態、E
+- **Goal**: `DebugChatScene` を実際に動かし、E*スクリーンショチE��を提出すること**、E
+- **Blocking**: これが完亁E��なぁE��り、次の機�E実裁E��Eeduction Board�E�に着手できなぁE��Eerification First 戦略�E�、E
 
 ## Focus Area
-1. **Scene**: `Assets/Scenes/DebugChatScene.unity` (なければ作成/Setup)
-2. **Script**: `Assets/Resources/Yarn/DebugScript.yarn` (全機能テスト用)
-3. **Action**: Unity Editor で Play し、以下の動作を確認する:
-   - メッセージ表示 (Left/Right)
+1. **Scene**: `Assets/Scenes/DebugChatScene.unity` (なければ作�E/Setup)
+2. **Script**: `Assets/Resources/Yarn/DebugScript.yarn` (全機�EチE��ト用)
+3. **Action**: Unity Editor で Play し、以下�E動作を確認すめE
+   - メチE��ージ表示 (Left/Right)
    - 画像表示 (`<<Image>>`)
-   - 待機 (`<<StartWait>>`)
-   - ログ出力 (`<<UnlockTopic>>`, `<<Glitch>>`)
+   - 征E��E(`<<StartWait>>`)
+   - ログ出劁E(`<<UnlockTopic>>`, `<<Glitch>>`)
 
 ## Tasks (Step-by-Step)
-1. `Assets/Scenes/DebugChatScene.unity` を開く (存在しない場合は `Tools > FoundPhone > Setup Debug Scene` を試すか、手動作成)。
-2. `ScenarioManager` に `Assets/Resources/Yarn/DebugScript.yarn` をアタッチする。
-3. Unity Editor で Play する。
-4. シナリオを最後まで進める。
-5. **Evidence 取得 (必須)**:
-   - `Assets/Scripts/Utils/VerificationCapture.cs` をシーン内のGameObject（例: Camera）にアタッチする。
-   - `CaptureOnStart` を true に設定。
-   - PlayMode を実行し、`Docs/evidence/` に `Capture_...png` が生成されることを確認する。
-   - 生成された画像を証拠として採用する。
-6. `docs/tasks/TASK_007_Verification.md` の DoD チェックボックスを埋める。
-7. レポート `docs/inbox/REPORT_TASK_007_Verification.md` を作成する (Evidence パスを明記)。
+1. `Assets/Scenes/DebugChatScene.unity` を開ぁE(存在しなぁE��合�E `Tools > FoundPhone > Setup Debug Scene` を試すか、手動作�E)、E
+2. `ScenarioManager` に `Assets/Resources/Yarn/DebugScript.yarn` をアタチE��する、E
+3. Unity Editor で Play する、E
+4. シナリオを最後まで進める、E
+5. **Evidence 取征E(忁E��E**:
+   - `Assets/Scripts/Utils/VerificationCapture.cs` をシーン冁E�EGameObject�E�侁E Camera�E�にアタチE��する、E
+   - `CaptureOnStart` めEtrue に設定、E
+   - PlayMode を実行し、`docs/evidence/` に `Capture_...png` が生成されることを確認する、E
+   - 生�Eされた画像を証拠として採用する、E
+6. `docs/tasks/TASK_007_Verification.md` の DoD チェチE��ボックスを埋める、E
+7. レポ�EチE`docs/inbox/REPORT_TASK_007_Verification.md` を作�Eする (Evidence パスを�E訁E、E
 
 ## Forbidden Area
-- プロダクションコード (`ChatController.cs` 等) のロジック変更
-- 新機能の追加
+- プロダクションコーチE(`ChatController.cs` 筁E のロジチE��変更
+- 新機�Eの追加
 
 ## Output
 - `docs/evidence/task007_chat_ui.png`

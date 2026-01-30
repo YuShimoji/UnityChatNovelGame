@@ -7,8 +7,8 @@ using System.Collections.Generic;
 namespace ProjectFoundPhone.UI
 {
     /// <summary>
-    /// チャット画面のUI制御を行うコントローラー
-    /// ScrollRect + VerticalLayoutGroup + ContentSizeFitterを使用したメッセージ表示システム
+    /// チャチE��画面のUI制御を行うコントローラー
+    /// ScrollRect + VerticalLayoutGroup + ContentSizeFitterを使用したメチE��ージ表示シスチE��
     /// </summary>
     [RequireComponent(typeof(ScrollRect))]
     public class ChatController : MonoBehaviour
@@ -20,8 +20,7 @@ namespace ProjectFoundPhone.UI
         [SerializeField] private GameObject m_TypingIndicator;
         [SerializeField] private TMP_InputField m_InputField;
         [SerializeField] private Button m_SendButton;
-        [SerializeField] private float m_AutoScrollThreshold = 0.1f; // 自動スクロールを実行する閾値（0.0-1.0）
-
+        [SerializeField] private float m_AutoScrollThreshold = 0.1f; // 自動スクロールを実行する閾値�E�E.0-1.0�E�E
         [Header("Choice Settings")]
         [SerializeField] private GameObject m_ChoiceButtonPrefab;
         [SerializeField] private Transform m_ChoiceContainer;
@@ -53,15 +52,14 @@ namespace ProjectFoundPhone.UI
 
         private void Update()
         {
-            // TODO: スクロール位置の監視とユーザー操作の検知
+            // TODO: スクロール位置の監視とユーザー操作�E検知
             CheckUserScrollInput();
         }
         #endregion
 
         #region Private Methods
         /// <summary>
-        /// 必要なコンポーネントの初期化
-        /// </summary>
+        /// 忁E��なコンポ�Eネント�E初期匁E        /// </summary>
         private void InitializeComponents()
         {
             if (m_ScrollRect == null)
@@ -74,8 +72,7 @@ namespace ProjectFoundPhone.UI
                 m_LayoutGroup = m_ScrollRect.content.GetComponent<VerticalLayoutGroup>();
             }
 
-            // m_MessageBubblePrefab、m_TypingIndicatorのnullチェックと警告
-            if (m_MessageBubblePrefab == null)
+            // m_MessageBubblePrefab、m_TypingIndicatorのnullチェチE��と警呁E            if (m_MessageBubblePrefab == null)
             {
                 Debug.LogWarning("ChatController: m_MessageBubblePrefab is not assigned. Message bubbles cannot be created.");
             }
@@ -87,7 +84,7 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// ユーザーが手動でスクロールしているかを検知
+        /// ユーザーが手動でスクロールしてぁE��かを検知
         /// </summary>
         private void CheckUserScrollInput()
         {
@@ -98,12 +95,11 @@ namespace ProjectFoundPhone.UI
 
             float currentScrollPosition = m_ScrollRect.verticalNormalizedPosition;
 
-            // スクロール位置が下から一定以上離れている場合、ユーザーが過去ログを見ていると判定
-            if (currentScrollPosition < (1.0f - m_AutoScrollThreshold))
+            // スクロール位置が下から一定以上離れてぁE��場合、ユーザーが過去ログを見てぁE��と判宁E            if (currentScrollPosition < (1.0f - m_AutoScrollThreshold))
             {
                 m_IsUserScrolling = true;
             }
-            // スクロール位置が1.0に近い場合、ユーザーは最新メッセージを見ている
+            // スクロール位置ぁE.0に近い場合、ユーザーは最新メチE��ージを見てぁE��
             else if (currentScrollPosition >= 0.99f)
             {
                 m_IsUserScrolling = false;
@@ -113,11 +109,10 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// メッセージバブルのPrefabをインスタンス化
-        /// </summary>
-        /// <param name="charID">キャラクターID（自分/相手の判定に使用）</param>
-        /// <param name="text">メッセージテキスト</param>
-        /// <returns>生成されたGameObject</returns>
+        /// メチE��ージバブルのPrefabをインスタンス匁E        /// </summary>
+        /// <param name="charID">キャラクターID�E��E刁E相手�E判定に使用�E�E/param>
+        /// <param name="text">メチE��ージチE��スチE/param>
+        /// <returns>生�EされたGameObject</returns>
         private GameObject CreateMessageBubble(string charID, string text)
         {
             if (m_MessageBubblePrefab == null)
@@ -132,31 +127,26 @@ namespace ProjectFoundPhone.UI
                 return null;
             }
 
-            // Prefabからインスタンスを生成
-            GameObject messageBubble = Instantiate(m_MessageBubblePrefab, m_ScrollRect.content);
+            // Prefabからインスタンスを生戁E            GameObject messageBubble = Instantiate(m_MessageBubblePrefab, m_ScrollRect.content);
 
-            // charIDに応じて右寄せ/左寄せを設定（"player"の場合は右寄せ、それ以外は左寄せ）
-            RectTransform rectTransform = messageBubble.GetComponent<RectTransform>();
+            // charIDに応じて右寁E��/左寁E��を設定！Eplayer"の場合�E右寁E��、それ以外�E左寁E���E�E            RectTransform rectTransform = messageBubble.GetComponent<RectTransform>();
             if (rectTransform != null)
             {
                 if (charID == "player")
                 {
-                    // 右寄せ: Anchorを右側に設定
-                    rectTransform.anchorMin = new Vector2(1.0f, 1.0f);
+                    // 右寁E��: Anchorを右側に設宁E                    rectTransform.anchorMin = new Vector2(1.0f, 1.0f);
                     rectTransform.anchorMax = new Vector2(1.0f, 1.0f);
                     rectTransform.pivot = new Vector2(1.0f, 1.0f);
                 }
                 else
                 {
-                    // 左寄せ: Anchorを左側に設定
-                    rectTransform.anchorMin = new Vector2(0.0f, 1.0f);
+                    // 左寁E��: Anchorを左側に設宁E                    rectTransform.anchorMin = new Vector2(0.0f, 1.0f);
                     rectTransform.anchorMax = new Vector2(0.0f, 1.0f);
                     rectTransform.pivot = new Vector2(0.0f, 1.0f);
                 }
             }
 
-            // TextMeshProコンポーネントにtextを設定
-            TextMeshProUGUI textComponent = messageBubble.GetComponentInChildren<TextMeshProUGUI>();
+            // TextMeshProコンポ�Eネントにtextを設宁E            TextMeshProUGUI textComponent = messageBubble.GetComponentInChildren<TextMeshProUGUI>();
             if (textComponent != null)
             {
                 textComponent.text = text;
@@ -166,7 +156,7 @@ namespace ProjectFoundPhone.UI
                 Debug.LogWarning("ChatController: TextMeshProUGUI component not found in message bubble prefab.");
             }
 
-            // ContentSizeFitterで高さを自動調整
+            // ContentSizeFitterで高さを�E動調整
             ContentSizeFitter sizeFitter = messageBubble.GetComponent<ContentSizeFitter>();
             if (sizeFitter != null)
             {
@@ -179,10 +169,10 @@ namespace ProjectFoundPhone.UI
 
         #region Public Methods
         /// <summary>
-        /// 新しいメッセージをチャットに追加
+        /// 新しいメチE��ージをチャチE��に追加
         /// </summary>
-        /// <param name="charID">キャラクターID（例: "player", "npc_001"）</param>
-        /// <param name="text">メッセージテキスト</param>
+        /// <param name="charID">キャラクターID�E�侁E "player", "npc_001"�E�E/param>
+        /// <param name="text">メチE��ージチE��スチE/param>
         public void AddMessage(string charID, string text)
         {
             if (string.IsNullOrEmpty(text))
@@ -191,26 +181,23 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            // メッセージバブルの生成と追加
+            // メチE��ージバブルの生�Eと追加
 
-            // CreateMessageBubble()でメッセージバブルを生成（既にcontentの子として追加済み）
-            GameObject messageBubble = CreateMessageBubble(charID, text);
+            // CreateMessageBubble()でメチE��ージバブルを生成（既にcontentの子として追加済み�E�E            GameObject messageBubble = CreateMessageBubble(charID, text);
             if (messageBubble == null)
             {
                 return;
             }
 
-            // ユーザーが過去ログを見ていない場合のみAutoScroll()を実行
-            if (!m_IsUserScrolling)
+            // ユーザーが過去ログを見てぁE��ぁE��合�EみAutoScroll()を実衁E            if (!m_IsUserScrolling)
             {
                 AutoScroll();
             }
         }
 
         /// <summary>
-        /// タイピングインジケーターの表示/非表示を切り替え
-        /// </summary>
-        /// <param name="show">表示する場合true</param>
+        /// タイピングインジケーターの表示/非表示を�Eり替ぁE        /// </summary>
+        /// <param name="show">表示する場吁Erue</param>
         public void ShowTypingIndicator(bool show)
         {
             if (m_TypingIndicator != null)
@@ -231,7 +218,7 @@ namespace ProjectFoundPhone.UI
         /// <summary>
         /// 選択肢を表示する
         /// </summary>
-        /// <param name="options">選択肢のテキストリスト</param>
+        /// <param name="options">選択肢のチE��ストリスチE/param>
         /// <param name="onSelected">選択時のコールバック (index)</param>
         public void ShowChoices(List<string> options, System.Action<int> onSelected)
         {
@@ -241,13 +228,12 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            // 既存の選択肢をクリア
+            // 既存�E選択肢をクリア
             HideChoices();
 
             m_ChoiceContainer.gameObject.SetActive(true);
 
-            // 入力欄を非表示にする（オプション）
-            if (m_InputField != null) m_InputField.gameObject.SetActive(false);
+            // 入力欁E��非表示にする�E�オプション�E�E            if (m_InputField != null) m_InputField.gameObject.SetActive(false);
             if (m_SendButton != null) m_SendButton.gameObject.SetActive(false);
 
             for (int i = 0; i < options.Count; i++)
@@ -255,15 +241,13 @@ namespace ProjectFoundPhone.UI
                 int index = i; // キャプチャ用
                 GameObject buttonObj = Instantiate(m_ChoiceButtonPrefab, m_ChoiceContainer);
                 
-                // ボタンのテキスト設定
-                TextMeshProUGUI btnText = buttonObj.GetComponentInChildren<TextMeshProUGUI>();
+                // ボタンのチE��スト設宁E                TextMeshProUGUI btnText = buttonObj.GetComponentInChildren<TextMeshProUGUI>();
                 if (btnText != null)
                 {
                     btnText.text = options[i];
                 }
 
-                // クリックイベント設定
-                Button btn = buttonObj.GetComponent<Button>();
+                // クリチE��イベント設宁E                Button btn = buttonObj.GetComponent<Button>();
                 if (btn != null)
                 {
                     btn.onClick.AddListener(() =>
@@ -285,7 +269,7 @@ namespace ProjectFoundPhone.UI
         {
             if (m_ChoiceContainer != null)
             {
-                // 子要素を全て削除
+                // 子要素を�Eて削除
                 foreach (Transform child in m_ChoiceContainer)
                 {
                     Destroy(child.gameObject);
@@ -293,7 +277,7 @@ namespace ProjectFoundPhone.UI
                 m_ChoiceContainer.gameObject.SetActive(false);
             }
 
-            // 入力欄を再表示
+            // 入力欁E��再表示
             if (m_InputField != null) m_InputField.gameObject.SetActive(true);
             if (m_SendButton != null) m_SendButton.gameObject.SetActive(true);
         }
@@ -305,20 +289,17 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            // Canvasの更新を待ってからスクロールするためにコルーチンか遅延実行を使うのが一般的だが、
-            // ここでは簡易的にDOTweenで遅延させる
-            DOVirtual.DelayedCall(0.1f, () => {
+            // Canvasの更新を征E��てからスクロールするためにコルーチンか遅延実行を使ぁE�Eが一般皁E��が、E            // ここでは簡易的にDOTweenで遁E��させめE            DOVirtual.DelayedCall(0.1f, () => {
                 if(m_ScrollRect == null) return;
                 
-                // DOTweenを使用したスクロールアニメーション（0.3秒）
-                DOTween.To(
+                // DOTweenを使用したスクロールアニメーション�E�E.3秒！E                DOTween.To(
                     () => m_ScrollRect.verticalNormalizedPosition,
                     x => m_ScrollRect.verticalNormalizedPosition = x,
                     0.0f, // 0.0f is bottom for vertical scroll rect
                     0.3f
                 ).OnComplete(() =>
                 {
-                    // スクロール完了後にm_LastScrollPositionを更新
+                    // スクロール完亁E��にm_LastScrollPositionを更新
                     m_LastScrollPosition = 0.0f;
                 });
             });
@@ -334,13 +315,12 @@ namespace ProjectFoundPhone.UI
                 AddMessage("player", text);
                 m_InputField.text = "";
                 
-                // 入力欄にフォーカスを戻す
-                m_InputField.ActivateInputField();
+                // 入力欁E��フォーカスを戻ぁE                m_InputField.ActivateInputField();
             }
         }
 
         /// <summary>
-        /// チャット履歴をクリア
+        /// チャチE��履歴をクリア
         /// </summary>
         public void ClearMessages()
         {
@@ -349,7 +329,7 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            // m_ScrollRect.contentの子オブジェクト（メッセージバブル）を全て削除
+            // m_ScrollRect.contentの子オブジェクト（メチE��ージバブル�E�を全て削除
             int childCount = m_ScrollRect.content.childCount;
             for (int i = childCount - 1; i >= 0; i--)
             {

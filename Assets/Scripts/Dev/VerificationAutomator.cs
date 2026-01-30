@@ -24,7 +24,7 @@ namespace Assets.Scripts.Dev
             Debug.Log("VerificationAutomator: Scene loaded. Waiting for logic...");
             
             // Debug file to prove we ran
-            string markerPath = Path.Combine(Directory.GetParent(Application.dataPath).FullName, "Docs/evidence/automator_ran.txt");
+            string markerPath = Path.Combine(Directory.GetParent(Application.dataPath).FullName, "docs/evidence/automator_ran.txt");
             File.WriteAllText(markerPath, "Automator ran at " + System.DateTime.Now);
 
             yield return new WaitForSeconds(3.0f);

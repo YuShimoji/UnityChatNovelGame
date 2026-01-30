@@ -17,7 +17,7 @@ A dedicated verification environment was created to test these components in iso
 
 ### Automated Verification
 - **Execution**: `VerificationAutomator` successfully executed within the Unity Editor (Batchmode).
-- **Evidence**: `Docs/evidence/automator_ran.txt` generated, confirming:
+- **Evidence**: `docs/evidence/automator_ran.txt` generated, confirming:
     - Scene `DebugChatScene` loaded.
     - `VerificationAutomator` script initialized.
     - Core systems compiled without errors.

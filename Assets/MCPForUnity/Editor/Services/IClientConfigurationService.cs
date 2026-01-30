@@ -63,7 +63,7 @@ namespace MCPForUnity.Editor.Services
         /// </summary>
         public string GetSummaryMessage()
         {
-            return $"✓ {SuccessCount} configured, ⚠ {FailureCount} failed, ➜ {SkippedCount} skipped";
+            return $"✁E{SuccessCount} configured, ⚠ {FailureCount} failed, ➁E{SkippedCount} skipped";
         }
     }
 }

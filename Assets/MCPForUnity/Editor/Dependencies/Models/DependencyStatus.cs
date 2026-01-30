@@ -57,7 +57,7 @@ namespace MCPForUnity.Editor.Dependencies.Models
 
         public override string ToString()
         {
-            var status = IsAvailable ? "✓" : "✗";
+            var status = IsAvailable ? "✁E : "✁E;
             var version = !string.IsNullOrEmpty(Version) ? $" ({Version})" : "";
             return $"{status} {Name}{version}";
         }

@@ -1,4 +1,4 @@
-# Task: Unityパッケージインストール
+# Task: Unityパッケージインスト�Eル
 Status: DONE
 Tier: 2
 Branch: main
@@ -7,108 +7,76 @@ Created: 2026-01-06T10:15:00Z
 Report: docs/reports/REPORT_TASK_004_PackageInstallation.md 
 
 ## Objective
-Unityプロジェクトに必要なパッケージ（Yarn Spinner, DOTween, TextMeshPro）をインストールする。コンパイルエラーを解消し、実装済みコードが正常に動作する環境を整える。
-
-実装対象：
-1. **Yarn Spinner**: シナリオ管理とカスタムコマンド処理
-2. **DOTween Pro**: UIアニメーション（スクロールアニメーション等）
-3. **TextMeshPro**: テキスト表示（メッセージバブル、タイピングインジケーター）
-
+Unityプロジェクトに忁E��なパッケージ�E�Earn Spinner, DOTween, TextMeshPro�E�をインスト�Eルする。コンパイルエラーを解消し、実裁E��みコードが正常に動作する環墁E��整える、E
+実裁E��象�E�E1. **Yarn Spinner**: シナリオ管琁E��カスタムコマンド�E琁E2. **DOTween Pro**: UIアニメーション�E�スクロールアニメーション等！E3. **TextMeshPro**: チE��スト表示�E�メチE��ージバブル、タイピングインジケーター�E�E
 ## Context
-- 前タスク（TASK_001, TASK_002）でコード実装が完了
-- コンパイルエラーが発生している（必要なパッケージが未インストール）
-- エラー内容:
-  - `Yarn` 名前空間が見つからない
-  - `DG` (DOTween) 名前空間が見つからない
-  - `TMPro` (TextMeshPro) 名前空間が見つからない
-  - `UnityEngine.UI` が見つからない（Unity UIモジュール）
-- 参照ドキュメント: `最初のプロンプト`（プロジェクトルート）
-
+- 前タスク�E�EASK_001, TASK_002�E�でコード実裁E��完亁E- コンパイルエラーが発生してぁE���E�忁E��なパッケージが未インスト�Eル�E�E- エラー冁E��:
+  - `Yarn` 名前空間が見つからなぁE  - `DG` (DOTween) 名前空間が見つからなぁE  - `TMPro` (TextMeshPro) 名前空間が見つからなぁE  - `UnityEngine.UI` が見つからなぁE��Enity UIモジュール�E�E- 参�EドキュメンチE `最初�Eプロンプト`�E��Eロジェクトルート！E
 ## Focus Area
 - `Packages/manifest.json` の更新
-- Unity Package Managerを使用したパッケージインストール
-- パッケージバージョンの確認と互換性チェック
-- コンパイルエラーの解消確認
-
+- Unity Package Managerを使用したパッケージインスト�Eル
+- パッケージバ�Eジョンの確認と互換性チェチE��
+- コンパイルエラーの解消確誁E
 ## Forbidden Area
 - 既存ファイルの削除・破壊的変更
-- Unityプロジェクト設定の変更（パッケージインストール以外）
-- 実装済みコードの変更（パッケージインストールのみ）
-- 新規スクリプトの作成
+- Unityプロジェクト設定�E変更�E�パチE��ージインスト�Eル以外！E- 実裁E��みコード�E変更�E�パチE��ージインスト�Eルのみ�E�E- 新規スクリプトの作�E
 
 ## Constraints
-- テスト: コンパイルエラーが解消されることを確認
-- フォールバック: パッケージインストールのみ（コード変更なし）
-- パッケージバージョン: Unity 6 (or 2022 LTS) と互換性のあるバージョンを使用
-- インストール方法: Unity Package Managerまたはmanifest.jsonの直接編集
-
+- チE��チE コンパイルエラーが解消されることを確誁E- フォールバック: パッケージインスト�Eルのみ�E�コード変更なし！E- パッケージバ�Eジョン: Unity 6 (or 2022 LTS) と互換性のあるバ�Eジョンを使用
+- インスト�Eル方況E Unity Package Managerまた�Emanifest.jsonの直接編雁E
 ## DoD
-- [ ] Yarn Spinner がインストールされている
-  - [ ] `com.yarnspinner.yarnspinner` パッケージがmanifest.jsonに追加されている
-  - [ ] コンパイルエラー（Yarn名前空間）が解消されている
-- [ ] DOTween Pro がインストールされている
-  - [ ] `com.demigiant.dottweenpro` または `com.demigiant.dottween` パッケージがmanifest.jsonに追加されている
-  - [ ] コンパイルエラー（DG名前空間）が解消されている
-- [ ] TextMeshPro がインストールされている
-  - [ ] `com.unity.textmeshpro` パッケージがmanifest.jsonに追加されている
-  - [ ] コンパイルエラー（TMPro名前空間）が解消されている
-- [ ] UnityEngine.UI が利用可能であることを確認
-  - [ ] Unity UIモジュールが有効になっていることを確認
-- [ ] 全てのコンパイルエラーが解消されている
-- [ ] docs/inbox/ にレポート（REPORT_TASK_004_PackageInstallation.md）が作成されている
-- [ ] 本チケットの Report 欄にレポートパスが追記されている
+- [ ] Yarn Spinner がインスト�EルされてぁE��
+  - [ ] `com.yarnspinner.yarnspinner` パッケージがmanifest.jsonに追加されてぁE��
+  - [ ] コンパイルエラー�E�Earn名前空間）が解消されてぁE��
+- [ ] DOTween Pro がインスト�EルされてぁE��
+  - [ ] `com.demigiant.dottweenpro` また�E `com.demigiant.dottween` パッケージがmanifest.jsonに追加されてぁE��
+  - [ ] コンパイルエラー�E�EG名前空間）が解消されてぁE��
+- [ ] TextMeshPro がインスト�EルされてぁE��
+  - [ ] `com.unity.textmeshpro` パッケージがmanifest.jsonに追加されてぁE��
+  - [ ] コンパイルエラー�E�EMPro名前空間）が解消されてぁE��
+- [ ] UnityEngine.UI が利用可能であることを確誁E  - [ ] Unity UIモジュールが有効になってぁE��ことを確誁E- [ ] 全てのコンパイルエラーが解消されてぁE��
+- [ ] docs/inbox/ にレポ�Eト！EEPORT_TASK_004_PackageInstallation.md�E�が作�EされてぁE��
+- [ ] 本チケチE��の Report 欁E��レポ�Eトパスが追記されてぁE��
 
-## 実装詳細
+## 実裁E��細
 
-### 1. Yarn Spinner インストール
+### 1. Yarn Spinner インスト�Eル
 
-#### パッケージ情報
-- **パッケージ名**: `com.yarnspinner.yarnspinner`
-- **インストール方法**: 
-  - Unity Package Manager: `Window` → `Package Manager` → `+` → `Add package from git URL` → `https://github.com/YarnSpinner/YarnSpinner-Unity.git?path=/YarnSpinner-Unity`
-  - または manifest.jsonに直接追加: `"com.yarnspinner.yarnspinner": "https://github.com/YarnSpinner/YarnSpinner-Unity.git?path=/YarnSpinner-Unity"`
+#### パッケージ惁E��
+- **パッケージ吁E*: `com.yarnspinner.yarnspinner`
+- **インスト�Eル方況E*: 
+  - Unity Package Manager: `Window` ↁE`Package Manager` ↁE`+` ↁE`Add package from git URL` ↁE`https://github.com/YarnSpinner/YarnSpinner-Unity.git?path=/YarnSpinner-Unity`
+  - また�E manifest.jsonに直接追加: `"com.yarnspinner.yarnspinner": "https://github.com/YarnSpinner/YarnSpinner-Unity.git?path=/YarnSpinner-Unity"`
 
-#### 確認事項
-- `Yarn.Unity` 名前空間が利用可能
+#### 確認事頁E- `Yarn.Unity` 名前空間が利用可能
 - `DialogueRunner` クラスが利用可能
-- コンパイルエラーが解消されている
+- コンパイルエラーが解消されてぁE��
 
-### 2. DOTween Pro インストール
+### 2. DOTween Pro インスト�Eル
 
-#### パッケージ情報
-- **パッケージ名**: `com.demigiant.dottweenpro` (Pro版) または `com.demigiant.dottween` (Free版)
-- **インストール方法**: 
-  - Asset Storeからインストール（推奨）
-  - または manifest.jsonに直接追加（Asset Storeパッケージの場合は別途対応が必要）
-- **注意**: DOTween Proは有料パッケージのため、Asset Storeから購入・インストールが必要な場合があります
+#### パッケージ惁E��
+- **パッケージ吁E*: `com.demigiant.dottweenpro` (Pro牁E また�E `com.demigiant.dottween` (Free牁E
+- **インスト�Eル方況E*: 
+  - Asset Storeからインスト�Eル�E�推奨�E�E  - また�E manifest.jsonに直接追加�E�Esset Storeパッケージの場合�E別途対応が忁E��E��E- **注愁E*: DOTween Proは有料パッケージのため、Asset Storeから購入・インスト�Eルが忁E��な場合がありまぁE
+#### 確認事頁E- `DG.Tweening` 名前空間が利用可能
+- `DOTween.To()` メソチE��が利用可能
+- コンパイルエラーが解消されてぁE��
 
-#### 確認事項
-- `DG.Tweening` 名前空間が利用可能
-- `DOTween.To()` メソッドが利用可能
-- コンパイルエラーが解消されている
+### 3. TextMeshPro インスト�Eル
 
-### 3. TextMeshPro インストール
+#### パッケージ惁E��
+- **パッケージ吁E*: `com.unity.textmeshpro`
+- **インスト�Eル方況E*: 
+  - Unity Package Manager: `Window` ↁE`Package Manager` ↁE`Unity Registry` ↁE`TextMeshPro` を検索してインスト�Eル
+  - また�E manifest.jsonに直接追加: `"com.unity.textmeshpro": "3.0.6"` (Unity 2022 LTSの場吁E
 
-#### パッケージ情報
-- **パッケージ名**: `com.unity.textmeshpro`
-- **インストール方法**: 
-  - Unity Package Manager: `Window` → `Package Manager` → `Unity Registry` → `TextMeshPro` を検索してインストール
-  - または manifest.jsonに直接追加: `"com.unity.textmeshpro": "3.0.6"` (Unity 2022 LTSの場合)
-
-#### 確認事項
-- `TMPro` 名前空間が利用可能
+#### 確認事頁E- `TMPro` 名前空間が利用可能
 - `TextMeshProUGUI` クラスが利用可能
-- コンパイルエラーが解消されている
+- コンパイルエラーが解消されてぁE��
 
-### 4. UnityEngine.UI 確認
-
-#### 確認事項
-- Unity UIモジュールが有効になっていることを確認
-- `UnityEngine.UI` 名前空間が利用可能
+### 4. UnityEngine.UI 確誁E
+#### 確認事頁E- Unity UIモジュールが有効になってぁE��ことを確誁E- `UnityEngine.UI` 名前空間が利用可能
 - `ScrollRect`, `VerticalLayoutGroup` クラスが利用可能
 
 ## Notes
-- Status は OPEN / IN_PROGRESS / BLOCKED / DONE を想定
-- BLOCKED の場合は、事実/根拠/次手（候補）を本文に追記し、Report に docs/inbox/REPORT_...md を必ず設定
-- DOTween Proが有料パッケージの場合、Asset Storeから購入・インストールが必要です。Free版（DOTween）を使用する場合は、manifest.jsonに適切なパッケージIDを追加してください。
-- Unityエディタが起動していない場合は、manifest.jsonを直接編集してパッケージを追加することも可能です。ただし、Unityエディタで開いた際にパッケージが正しくインストールされることを確認してください。
+- Status は OPEN / IN_PROGRESS / BLOCKED / DONE を想宁E- BLOCKED の場合�E、事宁E根拠/次手（候補）を本斁E��追記し、Report に docs/inbox/REPORT_...md を忁E��設宁E- DOTween Proが有料パチE��ージの場合、Asset Storeから購入・インスト�Eルが忁E��です、Eree版！EOTween�E�を使用する場合�E、manifest.jsonに適刁E��パッケージIDを追加してください、E- UnityエチE��タが起動してぁE��ぁE��合�E、manifest.jsonを直接編雁E��てパッケージを追加することも可能です。ただし、UnityエチE��タで開いた際にパッケージが正しくインスト�Eルされることを確認してください、E

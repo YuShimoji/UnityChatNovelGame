@@ -1,5 +1,4 @@
-# Task: ChatController & ScenarioManager ロジック実装
-Status: DONE
+# Task: ChatController & ScenarioManager ロジチE��実裁EStatus: DONE
 Tier: 2
 Branch: main
 Owner: Worker
@@ -7,114 +6,77 @@ Created: 2026-01-06T08:15:00Z
 Report: docs/reports/REPORT_TASK_002_LogicImplementation.md 
 
 ## Objective
-ChatController.cs と ScenarioManager.cs のTODOコメントに記載されたロジックを実装する。スケルトンコードで定義されたメソッドの実装を完了させ、基本的な動作を可能にする。
-
-実装対象：
-1. **ChatController.cs**: メッセージ表示、スクロール制御、タイピングインジケーター制御のロジック
-2. **ScenarioManager.cs**: Yarn Spinner連携、カスタムコマンドハンドラの実装
-
+ChatController.cs と ScenarioManager.cs のTODOコメントに記載されたロジチE��を実裁E��る。スケルトンコードで定義されたメソチE��の実裁E��完亁E��せ、基本皁E��動作を可能にする、E
+実裁E��象�E�E1. **ChatController.cs**: メチE��ージ表示、スクロール制御、タイピングインジケーター制御のロジチE��
+2. **ScenarioManager.cs**: Yarn Spinner連携、カスタムコマンドハンドラの実裁E
 ## Context
-- 前タスク（TASK_001）でスケルトンコードが作成済み
-- ChatController.cs と ScenarioManager.cs に多数のTODOコメントが残っている
-- 必須パッケージ: Yarn Spinner, DOTween Pro, TextMeshPro（既に前提）
-- 参照ドキュメント: `最初のプロンプト`（プロジェクトルート）、`Docs/inbox/REPORT_TASK_001_UnityCoreSystemSkeleton.md`
+- 前タスク�E�EASK_001�E�でスケルトンコードが作�E済み
+- ChatController.cs と ScenarioManager.cs に多数のTODOコメントが残ってぁE��
+- 忁E��パチE��ージ: Yarn Spinner, DOTween Pro, TextMeshPro�E�既に前提�E�E- 参�EドキュメンチE `最初�Eプロンプト`�E��Eロジェクトルート）、`docs/inbox/REPORT_TASK_001_UnityCoreSystemSkeleton.md`
 
 ## Focus Area
-- `Assets/Scripts/UI/ChatController.cs` のTODO実装
-- `Assets/Scripts/Core/ScenarioManager.cs` のTODO実装
-- Unity C# コーディング規約（PascalCase, camelCase, #region使用）
-- SOLID原則に基づく設計の維持
-- DOTween Pro を使用したアニメーション実装
-- Yarn Spinner API の適切な使用
+- `Assets/Scripts/UI/ChatController.cs` のTODO実裁E- `Assets/Scripts/Core/ScenarioManager.cs` のTODO実裁E- Unity C# コーチE��ング規紁E��EascalCase, camelCase, #region使用�E�E- SOLID原則に基づく設計�E維持E- DOTween Pro を使用したアニメーション実裁E- Yarn Spinner API の適刁E��使用
 
 ## Forbidden Area
-- 既存ファイルの削除・破壊的変更（TODO実装のみ）
-- Unityプロジェクト設定の変更
-- パッケージの追加（Yarn Spinner, DOTween, TextMeshProは既に前提）
-- PrefabやSceneの作成（後続タスクへ分離）
-- テストコードの作成（後続タスクへ分離）
-- 完全なエラーハンドリング（主要パスのみ実装）
-
+- 既存ファイルの削除・破壊的変更�E�EODO実裁E�Eみ�E�E- Unityプロジェクト設定�E変更
+- パッケージの追加�E�Earn Spinner, DOTween, TextMeshProは既に前提�E�E- PrefabやSceneの作�E�E�後続タスクへ刁E���E�E- チE��トコード�E作�E�E�後続タスクへ刁E���E�E- 完�Eなエラーハンドリング�E�主要パスのみ実裁E��E
 ## Constraints
-- テスト: 主要パスのみ（網羅テストは後続タスクへ分離）
-- フォールバック: 新規追加禁止（既存ファイルのTODO実装のみ）
-- コードスタイル: Unity C# ベストプラクティスに従う
-- 命名規則: 変数名は m_VariableName, 定数は c_ConstantName, 静的は s_StaticName
-- Yarn Spinner API: 最新のドキュメントを参照（バージョン依存の可能性あり）
-
+- チE��チE 主要パスのみ�E�網羁E��スト�E後続タスクへ刁E���E�E- フォールバック: 新規追加禁止�E�既存ファイルのTODO実裁E�Eみ�E�E- コードスタイル: Unity C# ベスト�EラクチE��スに従う
+- 命名規則: 変数名�E m_VariableName, 定数は c_ConstantName, 静的は s_StaticName
+- Yarn Spinner API: 最新のドキュメントを参�E�E�バージョン依存�E可能性あり�E�E
 ## DoD
-- [x] ChatController.cs の全TODOコメントが実装されている
-  - [x] InitializeComponents() のnullチェックと警告
-  - [x] CheckUserScrollInput() のスクロール位置監視
-  - [x] CreateMessageBubble() のPrefabインスタンス化とレイアウト設定
-  - [x] AddMessage() のメッセージ追加ロジック
+- [x] ChatController.cs の全TODOコメントが実裁E��れてぁE��
+  - [x] InitializeComponents() のnullチェチE��と警呁E  - [x] CheckUserScrollInput() のスクロール位置監要E  - [x] CreateMessageBubble() のPrefabインスタンス化とレイアウト設宁E  - [x] AddMessage() のメチE��ージ追加ロジチE��
   - [x] ShowTypingIndicator() のAutoScroll連携
-  - [x] AutoScroll() のスクロールアニメーション（DOTween使用）
-  - [x] ClearMessages() の履歴クリア処理
-- [x] ScenarioManager.cs の全TODOコメントが実装されている
-  - [x] RegisterCustomCommands() のコマンド登録（Yarn Spinner API使用）
-  - [x] UnregisterCustomCommands() のコマンド解除
+  - [x] AutoScroll() のスクロールアニメーション�E�EOTween使用�E�E  - [x] ClearMessages() の履歴クリア処琁E- [x] ScenarioManager.cs の全TODOコメントが実裁E��れてぁE��
+  - [x] RegisterCustomCommands() のコマンド登録�E�Earn Spinner API使用�E�E  - [x] UnregisterCustomCommands() のコマンド解除
   - [x] ImageCommand() の画像読み込みと送信
-  - [x] StartWaitCommand() の待機処理と入力ロック
-  - [x] UnlockTopicCommand() のトピック解放とYarn変数更新
-  - [x] GlitchCommand() のグリッチ演出（MetaEffectController連携は後続タスク）
-  - [x] StartScenario() のDialogueRunner起動
-  - [x] StopScenario() のDialogueRunner停止
-  - [x] GetVariable/SetVariable() のVariableStorage操作
-- [x] 全ての実装がSOLID原則に基づいている
-- [x] 主要パスの動作確認が完了している
-- [x] docs/inbox/ にレポート（REPORT_TASK_002_LogicImplementation.md）が作成されている
-- [x] 本チケットの Report 欄にレポートパスが追記されている
+  - [x] StartWaitCommand() の征E���E琁E��入力ロチE��
+  - [x] UnlockTopicCommand() のトピチE��解放とYarn変数更新
+  - [x] GlitchCommand() のグリチE��演�E�E�EetaEffectController連携は後続タスク�E�E  - [x] StartScenario() のDialogueRunner起勁E  - [x] StopScenario() のDialogueRunner停止
+  - [x] GetVariable/SetVariable() のVariableStorage操佁E- [x] 全ての実裁E��SOLID原則に基づぁE��ぁE��
+- [x] 主要パスの動作確認が完亁E��てぁE��
+- [x] docs/inbox/ にレポ�Eト！EEPORT_TASK_002_LogicImplementation.md�E�が作�EされてぁE��
+- [x] 本チケチE��の Report 欁E��レポ�Eトパスが追記されてぁE��
 
-## 実装詳細
+## 実裁E��細
 
-### ChatController.cs の実装項目
+### ChatController.cs の実裁E��E��
 
 #### 1. InitializeComponents()
-- m_MessageBubblePrefab、m_TypingIndicatorのnullチェック
-- nullの場合の警告ログ出力
-
+- m_MessageBubblePrefab、m_TypingIndicatorのnullチェチE��
+- nullの場合�E警告ログ出劁E
 #### 2. CheckUserScrollInput()
-- ScrollRect.verticalNormalizedPositionを監視
-- スクロール位置が下から一定以上離れている場合、m_IsUserScrolling = true
-- 閾値: m_AutoScrollThreshold（デフォルト0.1）
-
+- ScrollRect.verticalNormalizedPositionを監要E- スクロール位置が下から一定以上離れてぁE��場合、m_IsUserScrolling = true
+- 閾値: m_AutoScrollThreshold�E�デフォルチE.1�E�E
 #### 3. CreateMessageBubble(string charID, string text)
-- m_MessageBubblePrefabからインスタンスを生成
-- charIDに応じて右寄せ/左寄せを設定（"player"の場合は右寄せ、それ以外は左寄せ）
-- TextMeshProコンポーネントにtextを設定
-- ContentSizeFitterで高さを自動調整
+- m_MessageBubblePrefabからインスタンスを生戁E- charIDに応じて右寁E��/左寁E��を設定！Eplayer"の場合�E右寁E��、それ以外�E左寁E���E�E- TextMeshProコンポ�Eネントにtextを設宁E- ContentSizeFitterで高さを�E動調整
 - m_ScrollRect.contentの子として追加
 
 #### 4. AddMessage(string charID, string text)
-- CreateMessageBubble()でメッセージバブルを生成
-- m_ScrollRect.contentの子として追加
-- m_IsUserScrollingがfalseの場合のみAutoScroll()を実行
-
+- CreateMessageBubble()でメチE��ージバブルを生戁E- m_ScrollRect.contentの子として追加
+- m_IsUserScrollingがfalseの場合�EみAutoScroll()を実衁E
 #### 5. ShowTypingIndicator(bool show)
-- 表示時はAutoScroll()を実行してインジケーターが見えるようにする
+- 表示時�EAutoScroll()を実行してインジケーターが見えるよぁE��する
 
 #### 6. AutoScroll()
-- ScrollRect.verticalNormalizedPositionを1.0に設定
-- DOTweenを使用したスクロールアニメーション（0.3秒程度）
-- スクロール完了後にm_LastScrollPositionを更新
-- m_IsUserScrollingがtrueの場合は実行しない
-
+- ScrollRect.verticalNormalizedPositionめE.0に設宁E- DOTweenを使用したスクロールアニメーション�E�E.3秒程度�E�E- スクロール完亁E��にm_LastScrollPositionを更新
+- m_IsUserScrollingがtrueの場合�E実行しなぁE
 #### 7. ClearMessages()
-- m_ScrollRect.contentの子オブジェクト（メッセージバブル）を全て削除
+- m_ScrollRect.contentの子オブジェクト（メチE��ージバブル�E�を全て削除
 - Destroy()を使用
 
-### ScenarioManager.cs の実装項目
+### ScenarioManager.cs の実裁E��E��
 
 #### 1. RegisterCustomCommands()
 - DialogueRunner.AddCommandHandler()を使用してコマンドを登録
-- 登録するコマンド:
+- 登録するコマンチE
   - "Message": MessageCommand(string, string)
   - "Image": ImageCommand(string, string)
   - "StartWait": StartWaitCommand(int)
   - "UnlockTopic": UnlockTopicCommand(string)
   - "Glitch": GlitchCommand(int)
-- Yarn SpinnerのAPIはバージョン依存の可能性があるため、最新ドキュメントを参照
+- Yarn SpinnerのAPIはバ�Eジョン依存�E可能性があるため、最新ドキュメントを参�E
 
 #### 2. UnregisterCustomCommands()
 - 登録したコマンドハンドラを解除
@@ -122,44 +84,28 @@ ChatController.cs と ScenarioManager.cs のTODOコメントに記載された�
 
 #### 3. ImageCommand(string charID, string imageID)
 - Resources.Load<Sprite>($"Images/{imageID}")で画像を読み込み
-- ChatControllerに画像メッセージとして送信（AddMessage()の拡張または新規メソッド）
-- 読み込み失敗時は警告ログを出力
-
+- ChatControllerに画像メチE��ージとして送信�E�EddMessage()の拡張また�E新規メソチE���E�E- 読み込み失敗時は警告ログを�E劁E
 #### 4. StartWaitCommand(int seconds)
 - m_ChatController.ShowTypingIndicator(true)でタイピングインジケーターを表示
-- 入力ロックを有効化（DialogueRunnerの入力無効化または専用フラグ）
-- CoroutineまたはDOTween.DelayedCall()で指定秒数待機
-- 待機解除後、タイピングインジケーターを非表示（ShowTypingIndicator(false)）
-
+- 入力ロチE��を有効化！EialogueRunnerの入力無効化また�E専用フラグ�E�E- Coroutineまた�EDOTween.DelayedCall()で持E��秒数征E��E- 征E��解除後、タイピングインジケーターを非表示�E�EhowTypingIndicator(false)�E�E
 #### 5. UnlockTopicCommand(string topicID)
 - Resources.Load<TopicData>($"Topics/{topicID}")でTopicDataを読み込み
-- 推論ボード（DeductionBoard）にトピックを追加（DeductionBoardは後続タスクで実装予定）
-- Yarn変数を更新: SetVariable($"has_topic_{topicID}", true)
-- 読み込み失敗時は警告ログを出力
-
+- 推論�Eード！EeductionBoard�E�にトピチE��を追加�E�EeductionBoardは後続タスクで実裁E��定！E- Yarn変数を更新: SetVariable($"has_topic_{topicID}", true)
+- 読み込み失敗時は警告ログを�E劁E
 #### 6. GlitchCommand(int level)
-- MetaEffectControllerまたは専用のGlitchEffectコンポーネントにグリッチ効果を要求
-- レベルに応じた強度でノイズを表示
-- MetaEffectControllerが未実装の場合は、Debug.Logのみで対応（後続タスクで実装）
-
+- MetaEffectControllerまた�E専用のGlitchEffectコンポ�EネントにグリチE��効果を要汁E- レベルに応じた強度でノイズを表示
+- MetaEffectControllerが未実裁E�E場合�E、Debug.Logのみで対応（後続タスクで実裁E��E
 #### 7. StartScenario(string nodeName)
-- DialogueRunner.StartDialogue(nodeName)を呼び出し
-- nodeNameがnullの場合はm_StartNodeを使用
+- DialogueRunner.StartDialogue(nodeName)を呼び出ぁE- nodeNameがnullの場合�Em_StartNodeを使用
 
 #### 8. StopScenario()
-- DialogueRunner.Stop()を呼び出し
-
+- DialogueRunner.Stop()を呼び出ぁE
 #### 9. GetVariable<T>(string variableName)
-- DialogueRunner.VariableStorageから変数を取得
-- VariableStorage.GetValue()を使用
+- DialogueRunner.VariableStorageから変数を取征E- VariableStorage.GetValue()を使用
 
 #### 10. SetVariable<T>(string variableName, T value)
-- DialogueRunner.VariableStorageに変数を設定
-- VariableStorage.SetValue()を使用
+- DialogueRunner.VariableStorageに変数を設宁E- VariableStorage.SetValue()を使用
 
 ## Notes
-- Status は OPEN / IN_PROGRESS / BLOCKED / DONE を想定
-- BLOCKED の場合は、事実/根拠/次手（候補）を本文に追記し、Report に docs/inbox/REPORT_...md を必ず設定
-- Yarn SpinnerのAPIが想定と異なる場合は、最新のドキュメントを参照して適切に実装する
-- MetaEffectControllerやDeductionBoardが未実装の場合は、Debug.Logで代替し、後続タスクで実装する旨をレポートに記録する
-- Prefab（MessageBubble, TypingIndicator）が未作成の場合は、nullチェックを適切に行い、警告ログを出力する
+- Status は OPEN / IN_PROGRESS / BLOCKED / DONE を想宁E- BLOCKED の場合�E、事宁E根拠/次手（候補）を本斁E��追記し、Report に docs/inbox/REPORT_...md を忁E��設宁E- Yarn SpinnerのAPIが想定と異なる場合�E、最新のドキュメントを参�Eして適刁E��実裁E��めE- MetaEffectControllerやDeductionBoardが未実裁E�E場合�E、Debug.Logで代替し、後続タスクで実裁E��る旨をレポ�Eトに記録する
+- Prefab�E�EessageBubble, TypingIndicator�E�が未作�Eの場合�E、nullチェチE��を適刁E��行い、警告ログを�E力すめE

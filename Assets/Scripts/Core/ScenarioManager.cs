@@ -10,8 +10,8 @@ using DG.Tweening;
 namespace ProjectFoundPhone.Core
 {
     /// <summary>
-    /// Yarn SpinnerのDialogueRunnerをラップし、カスタムコマンドを処理するシナリオ管理クラス
-    /// チャットシステムと連携してメッセージ表示やトピック解放などを制御する
+    /// Yarn SpinnerのDialogueRunnerをラチE�Eし、カスタムコマンドを処琁E��るシナリオ管琁E��ラス
+    /// チャチE��シスチE��と連携してメチE��ージ表示めE��ピック解放などを制御する
     /// </summary>
     public class ScenarioManager : MonoBehaviour
     {
@@ -21,11 +21,8 @@ namespace ProjectFoundPhone.Core
         [SerializeField] private string m_StartNode = "Start";
 
         /// <summary>
-        /// 入力ロック状態（StartWaitCommandで使用）
-        /// 将来的にDialogueRunnerの進行制御で使用予定
-        /// </summary>
-        #pragma warning disable CS0414 // フィールドは割り当てられているが、値が使用されていない
-        private bool m_IsInputLocked = false;
+        /// 入力ロチE��状態！EtartWaitCommandで使用�E�E        /// 封E��皁E��DialogueRunnerの進行制御で使用予宁E        /// </summary>
+        #pragma warning disable CS0414 // フィールド�E割り当てられてぁE��が、値が使用されてぁE��ぁE        private bool m_IsInputLocked = false;
         #pragma warning restore CS0414
 
         [Header("Debug")]
@@ -42,8 +39,7 @@ namespace ProjectFoundPhone.Core
         {
             RegisterCustomCommands();
             
-            // デバッグ用: IDが設定されていれば自動再生
-            if (!string.IsNullOrEmpty(m_DebugScenarioID))
+            // チE��チE��用: IDが設定されてぁE��ば自動�E甁E            if (!string.IsNullOrEmpty(m_DebugScenarioID))
             {
                 PlayScenario(m_DebugScenarioID);
             }
@@ -57,8 +53,7 @@ namespace ProjectFoundPhone.Core
 
         #region Private Methods
         /// <summary>
-        /// 必要なコンポーネントの初期化
-        /// </summary>
+        /// 忁E��なコンポ�Eネント�E初期匁E        /// </summary>
         private void InitializeComponents()
         {
             if (m_DialogueRunner == null)
@@ -73,8 +68,7 @@ namespace ProjectFoundPhone.Core
 
             if (m_ChatController == null)
             {
-                // Unity 6の非推奨APIを新しいAPIに置き換え
-                m_ChatController = FindFirstObjectByType<ProjectFoundPhone.UI.ChatController>();
+                // Unity 6の非推奨APIを新しいAPIに置き換ぁE                m_ChatController = FindFirstObjectByType<ProjectFoundPhone.UI.ChatController>();
             }
 
             if (m_ChatController == null)
@@ -94,8 +88,7 @@ namespace ProjectFoundPhone.Core
             }
 
             // DialogueRunnerにカスタムコマンドハンドラを登録
-            // Yarn Spinnerのコマンドハンドラは通常、string[]配列で引数を受け取る
-            m_DialogueRunner.AddCommandHandler<string, string>("Message", MessageCommand);
+            // Yarn Spinnerのコマンドハンドラは通常、string[]配�Eで引数を受け取めE            m_DialogueRunner.AddCommandHandler<string, string>("Message", MessageCommand);
             m_DialogueRunner.AddCommandHandler<string, string>("Image", ImageCommand);
             m_DialogueRunner.AddCommandHandler<int>("StartWait", StartWaitCommand);
             m_DialogueRunner.AddCommandHandler<string>("UnlockTopic", UnlockTopicCommand);
@@ -103,7 +96,7 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// カスタムコマンドの登録を解除
+        /// カスタムコマンド�E登録を解除
         /// </summary>
         private void UnregisterCustomCommands()
         {
@@ -123,11 +116,11 @@ namespace ProjectFoundPhone.Core
 
         #region Custom Command Handlers
         /// <summary>
-        /// Messageコマンドのハンドラ
-        /// Yarnスクリプトから呼び出される: <<Message "CharID" "Text">>
+        /// Messageコマンド�Eハンドラ
+        /// Yarnスクリプトから呼び出されめE <<Message "CharID" "Text">>
         /// </summary>
         /// <param name="charID">キャラクターID</param>
-        /// <param name="text">メッセージテキスト</param>
+        /// <param name="text">メチE��ージチE��スチE/param>
         private void MessageCommand(string charID, string text)
         {
             if (m_ChatController != null)
@@ -141,8 +134,8 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// Imageコマンドのハンドラ
-        /// Yarnスクリプトから呼び出される: <<Image "CharID" "ImageID">>
+        /// Imageコマンド�Eハンドラ
+        /// Yarnスクリプトから呼び出されめE <<Image "CharID" "ImageID">>
         /// </summary>
         /// <param name="charID">キャラクターID</param>
         /// <param name="imageID">画像リソースのID</param>
@@ -157,10 +150,9 @@ namespace ProjectFoundPhone.Core
                 return;
             }
 
-            // ChatControllerに画像メッセージとして送信
-            // 現在のAddMessage()はテキストのみ対応のため、画像IDを含むテキストとして送信
-            // 後続タスクで画像メッセージ専用のメソッドを追加する予定
-            if (m_ChatController != null)
+            // ChatControllerに画像メチE��ージとして送信
+            // 現在のAddMessage()はチE��スト�Eみ対応�Eため、画像IDを含むチE��ストとして送信
+            // 後続タスクで画像メチE��ージ専用のメソチE��を追加する予宁E            if (m_ChatController != null)
             {
                 m_ChatController.AddMessage(charID, $"[Image: {imageID}]");
             }
@@ -171,11 +163,11 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// StartWaitコマンドのハンドラ
-        /// Yarnスクリプトから呼び出される: <<StartWait 15>>
-        /// 指定秒数待機し、その間入力をロックする
+        /// StartWaitコマンド�Eハンドラ
+        /// Yarnスクリプトから呼び出されめE <<StartWait 15>>
+        /// 持E��秒数征E��し、その間�E力をロチE��する
         /// </summary>
-        /// <param name="seconds">待機秒数</param>
+        /// <param name="seconds">征E��秒数</param>
         private void StartWaitCommand(int seconds)
         {
             // タイピングインジケーターを表示
@@ -184,22 +176,19 @@ namespace ProjectFoundPhone.Core
                 m_ChatController.ShowTypingIndicator(true);
             }
 
-            // 入力ロックを有効化
-            m_IsInputLocked = true;
+            // 入力ロチE��を有効匁E            m_IsInputLocked = true;
             if (m_DialogueRunner != null)
             {
-                // DialogueRunnerの進行を一時停止（DialogueRunnerのAPIに応じて調整が必要な可能性あり）
-                // 一般的には、DialogueRunnerのOnDialogueCompleteイベントや進行制御を使用
+                // DialogueRunnerの進行を一時停止�E�EialogueRunnerのAPIに応じて調整が忁E��な可能性あり�E�E                // 一般皁E��は、DialogueRunnerのOnDialogueCompleteイベントや進行制御を使用
             }
 
-            // 指定秒数後に待機を解除（CoroutineまたはDOTween.DelayedCallを使用）
-            StartCoroutine(WaitAndUnlock(seconds));
+            // 持E��秒数後に征E��を解除�E�Eoroutineまた�EDOTween.DelayedCallを使用�E�E            StartCoroutine(WaitAndUnlock(seconds));
         }
 
         /// <summary>
-        /// 待機処理のコルーチン
+        /// 征E���E琁E�Eコルーチン
         /// </summary>
-        /// <param name="seconds">待機秒数</param>
+        /// <param name="seconds">征E��秒数</param>
         private IEnumerator WaitAndUnlock(int seconds)
         {
             yield return new WaitForSeconds(seconds);
@@ -210,16 +199,16 @@ namespace ProjectFoundPhone.Core
                 m_ChatController.ShowTypingIndicator(false);
             }
 
-            // 入力ロックを解除
+            // 入力ロチE��を解除
             m_IsInputLocked = false;
         }
 
         /// <summary>
-        /// UnlockTopicコマンドのハンドラ
-        /// Yarnスクリプトから呼び出される: <<UnlockTopic "TopicID">>
-        /// 推論ボードに新しいトピックを追加する
+        /// UnlockTopicコマンド�Eハンドラ
+        /// Yarnスクリプトから呼び出されめE <<UnlockTopic "TopicID">>
+        /// 推論�Eードに新しいトピチE��を追加する
         /// </summary>
-        /// <param name="topicID">解放するトピックのID</param>
+        /// <param name="topicID">解放するトピチE��のID</param>
         private void UnlockTopicCommand(string topicID)
         {
             // ResourcesフォルダからTopicDataを読み込み
@@ -231,7 +220,7 @@ namespace ProjectFoundPhone.Core
                 return;
             }
 
-            // 推論ボード（DeductionBoard）にトピックを追加
+            // 推論�Eード！EeductionBoard�E�にトピチE��を追加
             if (DeductionBoard.Instance != null)
             {
                 DeductionBoard.Instance.AddTopic(topicData);
@@ -247,15 +236,14 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// Glitchコマンドのハンドラ
-        /// Yarnスクリプトから呼び出される: <<Glitch 3>>
-        /// 画面にノイズ演出を適用する
+        /// Glitchコマンド�Eハンドラ
+        /// Yarnスクリプトから呼び出されめE <<Glitch 3>>
+        /// 画面にノイズ演�Eを適用する
         /// </summary>
-        /// <param name="level">グリッチの強度レベル（0-3程度を想定）</param>
+        /// <param name="level">グリチE��の強度レベル�E�E-3程度を想定！E/param>
         private void GlitchCommand(int level)
         {
-            // MetaEffectControllerにグリッチ効果を要求
-            if (MetaEffectController.Instance != null)
+            // MetaEffectControllerにグリチE��効果を要汁E            if (MetaEffectController.Instance != null)
             {
                 // Local implementation uses PlayGlitchEffect
                 MetaEffectController.Instance.PlayGlitchEffect(level);
@@ -270,9 +258,9 @@ namespace ProjectFoundPhone.Core
 
         #region ScriptableObject Scenario System
         /// <summary>
-        /// ID指定でシナリオをロードして再生
+        /// ID持E��でシナリオをロードして再生
         /// </summary>
-        /// <param name="scenarioID">Resources/ChatScenarios/以下のパス</param>
+        /// <param name="scenarioID">Resources/ChatScenarios/以下�Eパス</param>
         public void PlayScenario(string scenarioID)
         {
             ChatScenarioData data = Resources.Load<ChatScenarioData>($"ChatScenarios/{scenarioID}");
@@ -287,9 +275,8 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// ScriptableObjectベースのシナリオデータの再生を開始
-        /// </summary>
-        /// <param name="data">再生するシナリオデータ</param>
+        /// ScriptableObjectベ�EスのシナリオチE�Eタの再生を開姁E        /// </summary>
+        /// <param name="data">再生するシナリオチE�Eタ</param>
         public void PlayScenario(ChatScenarioData data)
         {
             if (data == null)
@@ -303,12 +290,12 @@ namespace ProjectFoundPhone.Core
 
         private IEnumerator PlayScenarioRoutine(ChatScenarioData data)
         {
-            // 入力をロック
+            // 入力をロチE��
             m_IsInputLocked = true;
 
             foreach (var message in data.Messages)
             {
-                // タイピング演出
+                // タイピング演�E
                 if (message.TypingDelay > 0)
                 {
                     if (m_ChatController != null) m_ChatController.ShowTypingIndicator(true);
@@ -316,14 +303,13 @@ namespace ProjectFoundPhone.Core
                     if (m_ChatController != null) m_ChatController.ShowTypingIndicator(false);
                 }
 
-                // メッセージ表示
+                // メチE��ージ表示
                 if (m_ChatController != null)
                 {
                     m_ChatController.AddMessage(message.SenderID, message.Text);
                 }
 
-                // 選択肢がある場合
-                if (message.Choices != null && message.Choices.Count > 0)
+                // 選択肢がある場吁E                if (message.Choices != null && message.Choices.Count > 0)
                 {
                     bool choiceMade = false;
                     ChatScenarioData nextScenario = null;
@@ -338,8 +324,7 @@ namespace ProjectFoundPhone.Core
                     {
                         m_ChatController.ShowChoices(choiceTexts, (index) =>
                         {
-                            // 選択された次のシナリオを取得
-                            if (index >= 0 && index < message.Choices.Count)
+                            // 選択された次のシナリオを取征E                            if (index >= 0 && index < message.Choices.Count)
                             {
                                 nextScenario = message.Choices[index].NextScenario;
                             }
@@ -348,35 +333,30 @@ namespace ProjectFoundPhone.Core
                     }
                     else
                     {
-                        // UIがない場合は強制進行（またはエラー）
-                        Debug.LogError("ScenarioManager: ChatController missing for choices.");
+                        // UIがなぁE��合�E強制進行（また�Eエラー�E�E                        Debug.LogError("ScenarioManager: ChatController missing for choices.");
                         choiceMade = true;
                     }
 
-                    // 選択待ち
+                    // 選択征E��
                     yield return new WaitUntil(() => choiceMade);
 
-                    // 次のシナリオがあれば再生（現在のループは終了）
-                    if (nextScenario != null)
+                    // 次のシナリオがあれ�E再生�E�現在のループ�E終亁E��E                    if (nextScenario != null)
                     {
-                        // 再帰的に呼び出すのではなく、コルーチンを新しく開始して現在のコルーチンを終了
-                        StartCoroutine(PlayScenarioRoutine(nextScenario));
+                        // 再帰皁E��呼び出す�Eではなく、コルーチンを新しく開始して現在のコルーチンを終亁E                        StartCoroutine(PlayScenarioRoutine(nextScenario));
                         yield break;
                     }
                 }
             }
 
-            // シナリオ終了時の処理（必要なら）
-            m_IsInputLocked = false;
+            // シナリオ終亁E��の処琁E��忁E��なら！E            m_IsInputLocked = false;
 
         }
         #endregion
 
         #region Public Methods
         /// <summary>
-        /// シナリオを開始
-        /// </summary>
-        /// <param name="nodeName">開始するYarnノード名（省略時はm_StartNodeを使用）</param>
+        /// シナリオを開姁E        /// </summary>
+        /// <param name="nodeName">開始するYarnノ�Eド名�E�省略時�Em_StartNodeを使用�E�E/param>
         public void StartScenario(string nodeName = null)
         {
             if (m_DialogueRunner == null)
@@ -401,10 +381,9 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// Yarn変数の値を取得
-        /// </summary>
-        /// <typeparam name="T">変数の型</typeparam>
-        /// <param name="variableName">変数名</param>
+        /// Yarn変数の値を取征E        /// </summary>
+        /// <typeparam name="T">変数の垁E/typeparam>
+        /// <param name="variableName">変数吁E/param>
         /// <returns>変数の値</returns>
         public T GetVariable<T>(string variableName)
         {
@@ -414,12 +393,9 @@ namespace ProjectFoundPhone.Core
                 return default(T);
             }
 
-            // DialogueRunner.VariableStorageから変数を取得
-            // TryGetValue<T>の型引数を明示的に指定
-            if (m_DialogueRunner.VariableStorage.TryGetValue<T>(variableName, out var value))
+            // DialogueRunner.VariableStorageから変数を取征E            // TryGetValue<T>の型引数を�E示皁E��持E��E            if (m_DialogueRunner.VariableStorage.TryGetValue<T>(variableName, out var value))
             {
-                // Yarn SpinnerのVariableStorageは通常、object型で値を返すため、キャストが必要
-                if (value != null)
+                // Yarn SpinnerのVariableStorageは通常、object型で値を返すため、キャストが忁E��E                if (value != null)
                 {
                     return value;
                 }
@@ -437,10 +413,9 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// Yarn変数の値を設定
-        /// </summary>
-        /// <typeparam name="T">変数の型</typeparam>
-        /// <param name="variableName">変数名</param>
+        /// Yarn変数の値を設宁E        /// </summary>
+        /// <typeparam name="T">変数の垁E/typeparam>
+        /// <param name="variableName">変数吁E/param>
         /// <param name="value">設定する値</param>
         public void SetVariable<T>(string variableName, T value)
         {
@@ -450,9 +425,8 @@ namespace ProjectFoundPhone.Core
                 return;
             }
 
-            // Yarn SpinnerのVariableStorageは型ごとに異なるSetValueオーバーロードを持つ
-            // string, float, bool型に対応
-            if (value is string stringValue)
+            // Yarn SpinnerのVariableStorageは型ごとに異なるSetValueオーバ�Eロードを持つ
+            // string, float, bool型に対忁E            if (value is string stringValue)
             {
                 m_DialogueRunner.VariableStorage.SetValue(variableName, stringValue);
             }
@@ -466,8 +440,7 @@ namespace ProjectFoundPhone.Core
             }
             else
             {
-                // その他の型は文字列に変換して設定
-                m_DialogueRunner.VariableStorage.SetValue(variableName, value?.ToString() ?? string.Empty);
+                // そ�E他�E型�E斁E���Eに変換して設宁E                m_DialogueRunner.VariableStorage.SetValue(variableName, value?.ToString() ?? string.Empty);
                 Debug.LogWarning($"ScenarioManager: Variable {variableName} set as string (type: {typeof(T).Name})");
             }
         }

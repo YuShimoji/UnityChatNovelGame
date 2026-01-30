@@ -497,7 +497,7 @@ namespace MCPForUnity.Editor.Tools
             changed = false;
             try
             {
-                // Phase 1.1: Normalize friendly path syntax (e.g., myList[5] → myList.Array.data[5])
+                // Phase 1.1: Normalize friendly path syntax (e.g., myList[5] ↁEmyList.Array.data[5])
                 string normalizedPath = NormalizePropertyPath(propertyPath);
                 string normalizedOp = op.Trim().ToLowerInvariant();
 
@@ -1213,10 +1213,10 @@ namespace MCPForUnity.Editor.Tools
         /// 
         /// <para><b>Format detection:</b></para>
         /// <list type="bullet">
-        ///   <item>3-element array → Interpreted as Euler angles (degrees)</item>
-        ///   <item>4-element array → Interpreted as raw quaternion [x, y, z, w]</item>
-        ///   <item>Object with euler → Uses euler array for rotation</item>
-        ///   <item>Object with x, y, z, w → Uses raw quaternion components</item>
+        ///   <item>3-element array ↁEInterpreted as Euler angles (degrees)</item>
+        ///   <item>4-element array ↁEInterpreted as raw quaternion [x, y, z, w]</item>
+        ///   <item>Object with euler ↁEUses euler array for rotation</item>
+        ///   <item>Object with x, y, z, w ↁEUses raw quaternion components</item>
         /// </list>
         /// </summary>
         /// <param name="prop">The SerializedProperty of type Quaternion to set</param>

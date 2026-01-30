@@ -8,43 +8,24 @@ Created: 2026-01-17T02:00:00+09:00
 Report: docs/inbox/REPORT_TASK_011_TopicScriptableObjects.md 
 
 ## Objective
-`TopicData` ScriptableObject のインスタンス（アセット）を作成する。
-`UnlockTopicCommand` や `DeductionBoard` で使用するトピックデータを準備する。
-
+`TopicData` ScriptableObject のインスタンス�E�アセチE���E�を作�Eする、E`UnlockTopicCommand` めE`DeductionBoard` で使用するトピチE��チE�Eタを準備する、E
 ## Context
-- `TopicData.cs` (ScriptableObject定義) は実装済み（TASK_001）
-- `UnlockTopicCommand` は `Resources.Load<TopicData>($"Topics/{topicID}")` で読み込む想定
-- `DeductionBoard` (TASK_008) でトピックを表示するために、実際のアセットが必要
-- プロジェクトの初期シナリオで使用するトピックを定義する必要がある
+- `TopicData.cs` (ScriptableObject定義) は実裁E��み�E�EASK_001�E�E- `UnlockTopicCommand` は `Resources.Load<TopicData>($"Topics/{topicID}")` で読み込む想宁E- `DeductionBoard` (TASK_008) でトピチE��を表示するために、実際のアセチE��が忁E��E- プロジェクト�E初期シナリオで使用するトピチE��を定義する忁E��がある
 
 ## Focus Area
-- `Assets/Resources/Topics/` 配下: TopicData アセットの作成
-- 初期トピックの定義（例: "Strange Signal", "Missing Person", "Found Phone" 等）
-- 各トピックの `State` (Hidden, Unlocked, Solved) の初期値設定
-- `SynthesisRecipe` との関連付け（合成レシピの定義）
-
+- `Assets/Resources/Topics/` 配丁E TopicData アセチE��の作�E
+- 初期トピチE��の定義�E�侁E "Strange Signal", "Missing Person", "Found Phone" 等！E- 吁E��ピックの `State` (Hidden, Unlocked, Solved) の初期値設宁E- `SynthesisRecipe` との関連付け�E�合成レシピ�E定義�E�E
 ## Forbidden Area
-- `TopicData.cs` の定義変更（既存の構造を維持）
-- 過度なトピック数の作成（初期シナリオに必要な最小限のみ）
-- 既存のアセットの破壊的変更
+- `TopicData.cs` の定義変更�E�既存�E構造を維持E��E- 過度なトピチE��数の作�E�E��E期シナリオに忁E��な最小限のみ�E�E- 既存�EアセチE��の破壊的変更
 
 ## Constraints
-- テスト: 主要パスのみ（Resources.Load での読み込み確認）
-- フォールバック: 新規追加禁止（既存の TopicData 構造に準拠）
-- Unity Editor での手動作成（ScriptableObject の CreateAssetMenu を使用）
-
+- チE��チE 主要パスのみ�E�Eesources.Load での読み込み確認！E- フォールバック: 新規追加禁止�E�既存�E TopicData 構造に準拠�E�E- Unity Editor での手動作�E�E�EcriptableObject の CreateAssetMenu を使用�E�E
 ## DoD (Definition of Done)
-- [x] `Assets/Resources/Topics/` ディレクトリが存在する（4つのアセットが存在するため確認済み）
-- [x] 初期シナリオで使用するトピックアセットが3つ以上作成されている（4つ存在）
-- [x] 各トピックアセットが `Resources.Load<TopicData>($"Topics/{topicID}")` で読み込める（テスト成功: 4 succeeded, 0 failed）
-- [/] `UnlockTopicCommand` でトピックを解放できる（Code Verified / Pending Runtime Check）
-- [ ] `DeductionBoard` (TASK_008完了後) でトピックが表示できる
-- [ ] **Evidence**: トピックアセットの Inspector 表示スクリーンショット (Pending Manual Action)
-- [x] `docs/inbox/` にレポート (`REPORT_TASK_013_TopicDataVerification.md`) が作成されている
-- [x] 本チケットの Report 欄にレポートパスが追記されている
+- [x] `Assets/Resources/Topics/` チE��レクトリが存在する�E�EつのアセチE��が存在するため確認済み�E�E- [x] 初期シナリオで使用するトピチE��アセチE��ぁEつ以上作�EされてぁE���E�Eつ存在�E�E- [x] 吁E��ピックアセチE��ぁE`Resources.Load<TopicData>($"Topics/{topicID}")` で読み込める�E�テスト�E劁E 4 succeeded, 0 failed�E�E- [/] `UnlockTopicCommand` でトピチE��を解放できる�E�Eode Verified / Pending Runtime Check�E�E- [ ] `DeductionBoard` (TASK_008完亁E��E でトピチE��が表示できる
+- [ ] **Evidence**: トピチE��アセチE��の Inspector 表示スクリーンショチE�� (Pending Manual Action)
+- [x] `docs/inbox/` にレポ�EチE(`REPORT_TASK_013_TopicDataVerification.md`) が作�EされてぁE��
+- [x] 本チケチE��の Report 欁E��レポ�Eトパスが追記されてぁE��
 
 ## Notes
-- Status は OPEN / IN_PROGRESS / BLOCKED / DONE を想定
-- BLOCKED の場合は、事実/根拠/次手（候補）を本文に追記し、Report に docs/inbox/REPORT_...md を必ず設定
-- トピックの内容はプロジェクトの仕様書（`Docs/Core Specification`）に基づいて定義すること
-- 将来的にシナリオが拡張されることを考慮し、トピックIDの命名規則を統一すること
+- Status は OPEN / IN_PROGRESS / BLOCKED / DONE を想宁E- BLOCKED の場合�E、事宁E根拠/次手（候補）を本斁E��追記し、Report に docs/inbox/REPORT_...md を忁E��設宁E- トピチE��の冁E��はプロジェクト�E仕様書�E�Edocs/Core Specification`�E�に基づぁE��定義すること
+- 封E��皁E��シナリオが拡張されることを老E�Eし、トピックIDの命名規則を統一すること

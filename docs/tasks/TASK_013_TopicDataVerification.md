@@ -8,85 +8,43 @@ Created: 2026-01-17T06:00:00+09:00
 Report: docs/inbox/REPORT_TASK_013_TopicDataVerification.md
 
 ## Objective
-TASK_011で作成したTopicDataアセットの動作確認とEvidence取得を行う。
-`UnlockTopicCommand` が正常に動作することを確認し、トピックアセットのInspector表示スクリーンショットを取得する。
-
-実装対象：
-1. **Evidence取得**: トピックアセットのInspector表示スクリーンショット
-2. **UnlockTopicCommand確認**: DebugScript.yarnでトピック解放を確認
-
+TASK_011で作�EしたTopicDataアセチE��の動作確認とEvidence取得を行う、E`UnlockTopicCommand` が正常に動作することを確認し、トピックアセチE��のInspector表示スクリーンショチE��を取得する、E
+実裁E��象�E�E1. **Evidence取征E*: トピチE��アセチE��のInspector表示スクリーンショチE��
+2. **UnlockTopicCommand確誁E*: DebugScript.yarnでトピチE��解放を確誁E
 ## Context
-- TASK_011でTopicDataアセットの作成とResources.Loadテストは完了
-- 4つのトピックアセットが正常に読み込まれることを確認済み（4 succeeded, 0 failed）
-- 残りの作業: Evidence取得とUnlockTopicCommandの動作確認
-- プロジェクトには `MCPForUnity.Runtime.Helpers.ScreenshotUtility` が存在し、スクリーンショット取得が可能
+- TASK_011でTopicDataアセチE��の作�EとResources.LoadチE��ト�E完亁E- 4つのトピチE��アセチE��が正常に読み込まれることを確認済み�E�E succeeded, 0 failed�E�E- 残りの作業: Evidence取得とUnlockTopicCommandの動作確誁E- プロジェクトには `MCPForUnity.Runtime.Helpers.ScreenshotUtility` が存在し、スクリーンショチE��取得が可能
 
 ## Focus Area
-- `docs/evidence/` 配下: スクリーンショットの保存
-- `Assets/Scenes/DebugChatScene.unity`: UnlockTopicCommandの動作確認
-- `Assets/Resources/Yarn/DebugScript.yarn`: トピック解放コマンドの実行確認
-- Unity Editor内での動作確認とEvidence取得
-
+- `docs/evidence/` 配丁E スクリーンショチE��の保孁E- `Assets/Scenes/DebugChatScene.unity`: UnlockTopicCommandの動作確誁E- `Assets/Resources/Yarn/DebugScript.yarn`: トピチE��解放コマンド�E実行確誁E- Unity Editor冁E��の動作確認とEvidence取征E
 ## Forbidden Area
-- TopicDataアセットの変更（既存のアセットを維持）
-- UnlockTopicCommandのロジック変更（動作確認のみ）
-- 新機能の追加（検証のみ）
-
+- TopicDataアセチE��の変更�E�既存�EアセチE��を維持E��E- UnlockTopicCommandのロジチE��変更�E�動作確認�Eみ�E�E- 新機�Eの追加�E�検証のみ�E�E
 ## Constraints
-- スクリーンショット取得: Unity Editor内で手動取得、または `ScreenshotUtility` を使用
-- Evidence保存先: `docs/evidence/task011_topic_assets.png`
-- UnlockTopicCommand確認: DebugScript.yarnで `<<UnlockTopic "debug_topic_01">>` を実行
-- 動作確認: Consoleログで「Topic unlocked: debug_topic_01」が表示されることを確認
-
+- スクリーンショチE��取征E Unity Editor冁E��手動取得、また�E `ScreenshotUtility` を使用
+- Evidence保存�E: `docs/evidence/task011_topic_assets.png`
+- UnlockTopicCommand確誁E DebugScript.yarnで `<<UnlockTopic "debug_topic_01">>` を実衁E- 動作確誁E Consoleログで「Topic unlocked: debug_topic_01」が表示されることを確誁E
 ## DoD (Definition of Done)
-- [/] トピックアセットのInspector表示スクリーンショットを取得 (Pending Manual Action)
-  - [ ] `Assets/Resources/Topics/debug_topic_01.asset` を選択
-  - [ ] Inspectorウィンドウでトピック情報を表示
-  - [ ] スクリーンショットを `docs/evidence/task011_topic_assets.png` として保存
-- [/] UnlockTopicCommandの動作確認 (Code Verified / Pending Runtime Check)
-  - [ ] `Assets/Scenes/DebugChatScene.unity` を開く
-  - [ ] `ScenarioManager` が `DebugScript.yarn` を実行するように設定
-  - [ ] Playボタンで実行し、`<<UnlockTopic "debug_topic_01">>` コマンドが正常に動作することを確認
-  - [ ] Consoleウィンドウに「Topic unlocked: debug_topic_01」のログが表示されることを確認
-  - [ ] エラーが発生しないことを確認 (Static Check Passed)
-- [/] TASK_011のStatusをDONEに更新（Evidence取得とUnlockTopicCommand確認完了後）
-- [x] `docs/inbox/` にレポート (`REPORT_TASK_013_TopicDataVerification.md`) が作成されている
-- [x] 本チケットの Report 欄にレポートパスが追記されている
+- [/] トピチE��アセチE��のInspector表示スクリーンショチE��を取征E(Pending Manual Action)
+  - [ ] `Assets/Resources/Topics/debug_topic_01.asset` を選抁E  - [ ] InspectorウィンドウでトピチE��惁E��を表示
+  - [ ] スクリーンショチE��めE`docs/evidence/task011_topic_assets.png` として保孁E- [/] UnlockTopicCommandの動作確誁E(Code Verified / Pending Runtime Check)
+  - [ ] `Assets/Scenes/DebugChatScene.unity` を開ぁE  - [ ] `ScenarioManager` ぁE`DebugScript.yarn` を実行するよぁE��設宁E  - [ ] Playボタンで実行し、`<<UnlockTopic "debug_topic_01">>` コマンドが正常に動作することを確誁E  - [ ] Consoleウィンドウに「Topic unlocked: debug_topic_01」�Eログが表示されることを確誁E  - [ ] エラーが発生しなぁE��とを確誁E(Static Check Passed)
+- [/] TASK_011のStatusをDONEに更新�E�Evidence取得とUnlockTopicCommand確認完亁E��！E- [x] `docs/inbox/` にレポ�EチE(`REPORT_TASK_013_TopicDataVerification.md`) が作�EされてぁE��
+- [x] 本チケチE��の Report 欁E��レポ�Eトパスが追記されてぁE��
 
-## スクリーンショット取得方法
-
-### 方法1: Unity Editor内で手動取得（推奨）
-1. Unity Editorで `Assets/Resources/Topics/debug_topic_01.asset` を選択
-2. Inspectorウィンドウでトピック情報を表示
-3. Windows: `Win + Shift + S` でスクリーンショットを取得
-4. `docs/evidence/task011_topic_assets.png` として保存
-
-### 方法2: ScreenshotUtilityを使用（Unity Editor内で実行）
-プロジェクトには `MCPForUnity.Runtime.Helpers.ScreenshotUtility` が存在しますが、これはUnity Editor内で実行する必要があります。
-エディタスクリプトを作成して、Inspector表示のスクリーンショットを自動取得することも可能です。
-
-## UnlockTopicCommand確認手順
-
+## スクリーンショチE��取得方況E
+### 方況E: Unity Editor冁E��手動取得（推奨�E�E1. Unity Editorで `Assets/Resources/Topics/debug_topic_01.asset` を選抁E2. InspectorウィンドウでトピチE��惁E��を表示
+3. Windows: `Win + Shift + S` でスクリーンショチE��を取征E4. `docs/evidence/task011_topic_assets.png` として保孁E
+### 方況E: ScreenshotUtilityを使用�E�Enity Editor冁E��実行！Eプロジェクトには `MCPForUnity.Runtime.Helpers.ScreenshotUtility` が存在しますが、これ�EUnity Editor冁E��実行する忁E��があります、EエチE��タスクリプトを作�Eして、Inspector表示のスクリーンショチE��を�E動取得することも可能です、E
+## UnlockTopicCommand確認手頁E
 1. **シーンの準備**
-   - Unity Editorで `Assets/Scenes/DebugChatScene.unity` を開く
-   - `ScenarioManager` コンポーネントが `DebugScript.yarn` を参照していることを確認
-
-2. **実行と確認**
-   - Playボタンを押してシーンを実行
-   - シナリオが進行し、`<<UnlockTopic "debug_topic_01">>` コマンドが実行されるタイミングで以下を確認:
-     - Consoleウィンドウに `Topic unlocked: debug_topic_01` のログが表示される
-     - エラーが発生しない
-     - トピックが正常に読み込まれる（Resources.Loadが成功する）
-
-3. **ログ確認**
-   - Consoleウィンドウで以下のログを確認:
+   - Unity Editorで `Assets/Scenes/DebugChatScene.unity` を開ぁE   - `ScenarioManager` コンポ�Eネントが `DebugScript.yarn` を参照してぁE��ことを確誁E
+2. **実行と確誁E*
+   - Playボタンを押してシーンを実衁E   - シナリオが進行し、`<<UnlockTopic "debug_topic_01">>` コマンドが実行されるタイミングで以下を確誁E
+     - Consoleウィンドウに `Topic unlocked: debug_topic_01` のログが表示されめE     - エラーが発生しなぁE     - トピチE��が正常に読み込まれる�E�Eesources.Loadが�E功する！E
+3. **ログ確誁E*
+   - Consoleウィンドウで以下�Eログを確誁E
      ```
      Topic unlocked: debug_topic_01
      ```
-   - エラーログが表示されないことを確認
-
+   - エラーログが表示されなぁE��とを確誁E
 ## Notes
-- Status は OPEN / IN_PROGRESS / BLOCKED / DONE を想定
-- BLOCKED の場合は、事実/根拠/次手（候補）を本文に追記し、Report に docs/inbox/REPORT_...md を必ず設定
-- Evidence取得は手動で行う必要があります（Unity Editor内での操作が必要）
-- UnlockTopicCommand確認後、TASK_011のStatusをDONEに更新すること
+- Status は OPEN / IN_PROGRESS / BLOCKED / DONE を想宁E- BLOCKED の場合�E、事宁E根拠/次手（候補）を本斁E��追記し、Report に docs/inbox/REPORT_...md を忁E��設宁E- Evidence取得�E手動で行う忁E��があります！Enity Editor冁E��の操作が忁E��E��E- UnlockTopicCommand確認後、TASK_011のStatusをDONEに更新すること

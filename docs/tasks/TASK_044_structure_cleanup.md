@@ -8,29 +8,29 @@ Created: 2026-01-30T11:15:00+09:00
 Report: docs/reports/REPORT_TASK_044_structure_cleanup.md
 
 ## Objective
-リポジトリ内に散在する `Docs/` (Capitalized) と `docs/` (Lowercase) を `docs/` に統合する。
-Windows 環境での大文字小文字の区別による混乱を防ぐ。
+リポジトリ冁E��散在する `docs/` (Capitalized) と `docs/` (Lowercase) めE`docs/` に統合する、E
+Windows 環墁E��の大斁E��小文字�E区別による混乱を防ぐ、E
 
 ## Context
-- 現状: `Docs/` と `docs/` が混在している（Git上は別ディレクトリとして扱われる場合がある）。
-- 目標: 全て `docs/` に統一する。
+- 現状: `docs/` と `docs/` が混在してぁE���E�Eit上�E別チE��レクトリとして扱われる場合がある�E�、E
+- 目樁E 全て `docs/` に統一する、E
 
 ## Focus Area
-- `Docs/` フォルダ
+- `docs/` フォルダ
 - `docs/` フォルダ
 - `README.md` (リンク修正)
 
 ## Forbidden Area
-- ドキュメントの中身自体の大幅な書き換え（移動とリンク修正のみ）
+- ドキュメント�E中身自体�E大幁E��書き換え（移動とリンク修正のみ�E�E
 
 ## Steps
-1. `git mv Docs/* docs/` を実行する。
-2. `Docs` フォルダを削除する。
-3. `README.md` や他のMarkdownファイル内の `Docs/` へのリンクを `docs/` に置換する。
-4. ローカルで `docs/` に全てのデータがあることを確認する。
+1. `git mv docs/* docs/` を実行する、E
+2. `Docs` フォルダを削除する、E
+3. `README.md` めE���EMarkdownファイル冁E�E `docs/` へのリンクめE`docs/` に置換する、E
+4. ローカルで `docs/` に全てのチE�Eタがあることを確認する、E
 
 ## DoD (Definition of Done)
-- [ ] `Docs/` ディレクトリが存在しない
-- [ ] `docs/` ディレクトリに全てのドキュメントが含まれている
+- [ ] `docs/` チE��レクトリが存在しなぁE
+- [ ] `docs/` チE��レクトリに全てのドキュメントが含まれてぁE��
 - [ ] `Usage: git ls-files Docs` が空である
-- [ ] Report 作成 (`docs/reports/REPORT_TASK_044_structure_cleanup.md`)
+- [ ] Report 作�E (`docs/reports/REPORT_TASK_044_structure_cleanup.md`)

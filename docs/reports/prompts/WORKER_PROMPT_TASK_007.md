@@ -1,63 +1,46 @@
 # Worker Prompt: TASK_007_Verification
 
-## 参照
-- チケット: docs/tasks/TASK_007_Verification.md
+## 参�E
+- チケチE��: docs/tasks/TASK_007_Verification.md
 - SSOT: docs/Windsurf_AI_Collab_Rules_latest.md
 - HANDOVER: docs/HANDOVER.md
 - AI_CONTEXT: AI_CONTEXT.md
 - MISSION_LOG: .cursor/MISSION_LOG.md
-- プロジェクト仕様: 最初のプロンプト（プロジェクトルート）
-
-## 境界
+- プロジェクト仕槁E 最初�Eプロンプト�E��Eロジェクトルート！E
+## 墁E��
 
 ### Focus Area
-- `Assets/Scenes/` 配下: DebugChatScene の作成
-- `Assets/Resources/Yarn/` 配下: DebugScript の作成
-- `ChatController` と `ScenarioManager` の連携確認 (実機動作)
-- **証拠作成**: スクリーンショットまたは動画の撮影と `docs/evidence/` への保存
-
+- `Assets/Scenes/` 配丁E DebugChatScene の作�E
+- `Assets/Resources/Yarn/` 配丁E DebugScript の作�E
+- `ChatController` と `ScenarioManager` の連携確誁E(実機動佁E
+- **証拠作�E**: スクリーンショチE��また�E動画の撮影と `docs/evidence/` への保孁E
 ### Forbidden Area
-- 既存の `MainScene` やプロダクションコードの破壊的変更
-- Core System のロジック変更（バグ修正は可だが、本質的変更は不可）
-- 新機能の追加（Deduction Board 等）
-
+- 既存�E `MainScene` めE�Eロダクションコード�E破壊的変更
+- Core System のロジチE��変更�E�バグ修正は可だが、本質皁E��更は不可�E�E- 新機�Eの追加�E�Eeduction Board 等！E
 ## Tier / Branch
-- Tier: 3（検証・修正）
-- Branch: feat/verify-core-system
+- Tier: 3�E�検証・修正�E�E- Branch: feat/verify-core-system
 
 ## DoD
-- [ ] `Assets/Scenes/DebugChatScene.unity` が作成され、再生可能である
-- [ ] `Assets/Resources/Yarn/DebugScript.yarn` が作成され、以下の機能を含んでいる
-    - [ ] `<<Message>>` (左右吹き出し)
+- [ ] `Assets/Scenes/DebugChatScene.unity` が作�Eされ、�E生可能である
+- [ ] `Assets/Resources/Yarn/DebugScript.yarn` が作�Eされ、以下�E機�Eを含んでぁE��
+    - [ ] `<<Message>>` (左右吹き�EぁE
     - [ ] `<<Image>>`
     - [ ] `<<StartWait>>` (タイピングインジケーター)
-    - [ ] `<<UnlockTopic>>` (ログ出力確認)
-    - [ ] `<<Glitch>>` (ログ出力確認)
-- [ ] Unity Editor 上でエラーなくシナリオが最後まで進行する
-- [ ] **Evidence (必須)**:
-    - [ ] `docs/evidence/task007_chat_ui.png` (チャット動作中スクショ)
+    - [ ] `<<UnlockTopic>>` (ログ出力確誁E
+    - [ ] `<<Glitch>>` (ログ出力確誁E
+- [ ] Unity Editor 上でエラーなくシナリオが最後まで進行すめE- [ ] **Evidence (忁E��E**:
+    - [ ] `docs/evidence/task007_chat_ui.png` (チャチE��動作中スクショ)
     - [ ] `docs/evidence/task007_console_logs.png` (コマンドログ出力スクショ)
-    - [ ] (任意) `docs/evidence/task007_demo.mp4`
-- [ ] docs/inbox/ にレポート（REPORT_TASK_007_Verification.md）が作成されている
-- [ ] 本チケットの Report 欄にレポートパスが追記されている
+    - [ ] (任愁E `docs/evidence/task007_demo.mp4`
+- [ ] docs/inbox/ にレポ�Eト！EEPORT_TASK_007_Verification.md�E�が作�EされてぁE��
+- [ ] 本チケチE��の Report 欁E��レポ�Eトパスが追記されてぁE��
 
 ## 停止条件
-- Unity Editor が起動できない
-- 既存のコンパイルエラーが再発し、解消不能
-- 仕様の仮定が 3 つ以上必要
-- 依存追加/更新、破壊的Git操作、GitHubAutoApprove不明での push が必要
-- SSOT不足を `ensure-ssot.js` で解決できない
+- Unity Editor が起動できなぁE- 既存�Eコンパイルエラーが�E発し、解消不�E
+- 仕様�E仮定が 3 つ以上忁E��E- 依存追加/更新、破壊的Git操作、GitHubAutoApprove不�Eでの push が忁E��E- SSOT不足めE`ensure-ssot.js` で解決できなぁE
+停止時�E以下を実施�E�E1. チケチE��のStatusをBLOCKEDに更新
+2. 事宁E根拠/次手（候補）をチケチE��本斁E��追訁E3. docs/inbox/REPORT_TASK_007_Verification.md を作�Eし、停止琁E��を記録
+4. チケチE��のReport欁E��レポ�Eトパスを追訁E
+## 納品允E- docs/inbox/REPORT_TASK_007_Verification.md
 
-停止時は以下を実施：
-1. チケットのStatusをBLOCKEDに更新
-2. 事実/根拠/次手（候補）をチケット本文に追記
-3. docs/inbox/REPORT_TASK_007_Verification.md を作成し、停止理由を記録
-4. チケットのReport欄にレポートパスを追記
-
-## 納品先
-- docs/inbox/REPORT_TASK_007_Verification.md
-
-## 実装ヒント
-- `DebugChatScene` には `ChatController` と `ScenarioManager` のインスタンスを配置し、Inspectorで適切に参照を設定してください。
-- `TopicData` や `SynthesisRecipe` はテスト用のダミーデータ (`Assets/Scripts/Data/Test/` 等) を一時的に作成しても構いません。
-- Evidence 用のディレクトリ `docs/evidence/` が存在しない場合は作成してください。
+## 実裁E��ンチE- `DebugChatScene` には `ChatController` と `ScenarioManager` のインスタンスを�E置し、Inspectorで適刁E��参�Eを設定してください、E- `TopicData` めE`SynthesisRecipe` はチE��ト用のダミ�EチE�Eタ (`Assets/Scripts/Data/Test/` 筁E を一時的に作�Eしても構いません、E- Evidence 用のチE��レクトリ `docs/evidence/` が存在しなぁE��合�E作�Eしてください、E

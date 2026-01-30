@@ -1,200 +1,145 @@
 # Worker Prompt: TASK_006_CompileErrorFix
 
-## 参照
-- チケット: Docs/tasks/TASK_006_CompileErrorFix.md
-- SSOT: Docs/Windsurf_AI_Collab_Rules_latest.md
-- HANDOVER: Docs/HANDOVER.md
+## 参�E
+- チケチE��: docs/tasks/TASK_006_CompileErrorFix.md
+- SSOT: docs/Windsurf_AI_Collab_Rules_latest.md
+- HANDOVER: docs/HANDOVER.md
 - AI_CONTEXT: AI_CONTEXT.md
 - MISSION_LOG: .cursor/MISSION_LOG.md
-- 前タスクレポート: Docs/inbox/REPORT_TASK_005_PackageInstallationFix.md
-- プロジェクト仕様: 最初のプロンプト（プロジェクトルート）
-
-## 境界
+- 前タスクレポ�EチE docs/inbox/REPORT_TASK_005_PackageInstallationFix.md
+- プロジェクト仕槁E 最初�Eプロンプト�E��Eロジェクトルート！E
+## 墁E��
 
 ### Focus Area
 - `Assets/Scripts/Core/ScenarioManager.cs` の修正
-- Yarn SpinnerのVariableStorage APIの正しい使用方法の実装
-- Unity 6の非推奨APIの置き換え
-
+- Yarn SpinnerのVariableStorage APIの正しい使用方法�E実裁E- Unity 6の非推奨APIの置き換ぁE
 ### Forbidden Area
 - 既存ファイルの削除・破壊的変更
-- Unityプロジェクト設定の変更
+- Unityプロジェクト設定�E変更
 - パッケージの追加・削除
-- 他のスクリプトファイルの変更
+- 他�Eスクリプトファイルの変更
 
 ## Tier / Branch
-- Tier: 2（機能実装）
-- Branch: main
+- Tier: 2�E�機�E実裁E��E- Branch: main
 
 ## DoD
-- [ ] TryGetValueエラーが解消されている
-  - [ ] 型引数を明示的に指定
-  - [ ] または、正しいAPIシグネチャを使用
-- [ ] SetValueエラーが解消されている
-  - [ ] 引数の型を正しく指定
-  - [ ] または、正しいAPIシグネチャを使用
-- [ ] FindObjectOfType警告が解消されている
-  - [ ] FindFirstObjectByTypeまたはFindAnyObjectByTypeに置き換え
-- [ ] m_IsInputLocked警告が解消されている
-  - [ ] 変数を使用するか、削除するか、#pragma warningで抑制
-- [ ] 全てのコンパイルエラーが解消されている
-- [ ] docs/inbox/ にレポート（REPORT_TASK_006_CompileErrorFix.md）が作成されている
-- [ ] 本チケットの Report 欄にレポートパスが追記されている
+- [ ] TryGetValueエラーが解消されてぁE��
+  - [ ] 型引数を�E示皁E��持E��E  - [ ] また�E、正しいAPIシグネチャを使用
+- [ ] SetValueエラーが解消されてぁE��
+  - [ ] 引数の型を正しく持E��E  - [ ] また�E、正しいAPIシグネチャを使用
+- [ ] FindObjectOfType警告が解消されてぁE��
+  - [ ] FindFirstObjectByTypeまた�EFindAnyObjectByTypeに置き換ぁE- [ ] m_IsInputLocked警告が解消されてぁE��
+  - [ ] 変数を使用するか、削除するか、Epragma warningで抑制
+- [ ] 全てのコンパイルエラーが解消されてぁE��
+- [ ] docs/inbox/ にレポ�Eト！EEPORT_TASK_006_CompileErrorFix.md�E�が作�EされてぁE��
+- [ ] 本チケチE��の Report 欁E��レポ�Eトパスが追記されてぁE��
 
 ## 停止条件
-- Forbidden Area に触れないと完遂できない
-- 仕様の仮定が 3 つ以上必要
-- 依存追加/更新、破壊的Git操作、GitHubAutoApprove不明での push が必要
-- SSOT不足を `ensure-ssot.js` で解決できない
-- 長時間待機が必要（定義したタイムアウト超過）
-- Yarn SpinnerのVariableStorage APIが確認できない場合（ドキュメントが不足している場合）
+- Forbidden Area に触れなぁE��完遂できなぁE- 仕様�E仮定が 3 つ以上忁E��E- 依存追加/更新、破壊的Git操作、GitHubAutoApprove不�Eでの push が忁E��E- SSOT不足めE`ensure-ssot.js` で解決できなぁE- 長時間征E��が忁E��E��定義したタイムアウト趁E���E�E- Yarn SpinnerのVariableStorage APIが確認できなぁE��合（ドキュメントが不足してぁE��場合！E
+停止時�E以下を実施�E�E1. チケチE��のStatusをBLOCKEDに更新
+2. 事宁E根拠/次手（候補）をチケチE��本斁E��追訁E3. docs/inbox/REPORT_TASK_006_CompileErrorFix.md を作�Eし、停止琁E��を記録
+4. チケチE��のReport欁E��レポ�Eトパスを追訁E
+## 納品允E- docs/inbox/REPORT_TASK_006_CompileErrorFix.md
 
-停止時は以下を実施：
-1. チケットのStatusをBLOCKEDに更新
-2. 事実/根拠/次手（候補）をチケット本文に追記
-3. docs/inbox/REPORT_TASK_006_CompileErrorFix.md を作成し、停止理由を記録
-4. チケットのReport欄にレポートパスを追記
+## 実裁E��細
 
-## 納品先
-- docs/inbox/REPORT_TASK_006_CompileErrorFix.md
-
-## 実装詳細
-
-### 1. TryGetValueエラー修正（287行目）
-
-#### 問題
-```csharp
+### 1. TryGetValueエラー修正�E�E87行目�E�E
+#### 問顁E```csharp
 if (m_DialogueRunner.VariableStorage.TryGetValue(variableName, out var value))
 ```
 - エラー: `CS0411: The type arguments for method 'VariableStorageBehaviour.TryGetValue<T>(string, out T?)' cannot be inferred from the usage.`
 
-#### 修正方法
-型引数を明示的に指定する必要があります。
-
-**推奨**: 型引数を明示的に指定
-```csharp
-// object型で取得してからキャスト
-if (m_DialogueRunner.VariableStorage.TryGetValue<object>(variableName, out var value))
+#### 修正方況E型引数を�E示皁E��持E��する忁E��があります、E
+**推奨**: 型引数を�E示皁E��持E��E```csharp
+// object型で取得してからキャスチEif (m_DialogueRunner.VariableStorage.TryGetValue<object>(variableName, out var value))
 {
-    // value is T typedValue のパターンでキャスト
-    if (value is T typedValue)
+    // value is T typedValue のパターンでキャスチE    if (value is T typedValue)
     {
         return typedValue;
     }
 }
 ```
 
-**代替**: 正しいAPIシグネチャを確認してから実装
-- Yarn SpinnerのVariableStorage APIは、通常 `TryGetValue<T>(string name, out T value)` の形式
-- 型引数 `<T>` を明示的に指定する必要がある
+**代替**: 正しいAPIシグネチャを確認してから実裁E- Yarn SpinnerのVariableStorage APIは、E��常 `TryGetValue<T>(string name, out T value)` の形弁E- 型引数 `<T>` を�E示皁E��持E��する忁E��がある
 
-#### 確認事項
-- コンパイルエラーが解消されている
-- 型安全性が保たれている
+#### 確認事頁E- コンパイルエラーが解消されてぁE��
+- 型安�E性が保たれてぁE��
 
-### 2. SetValueエラー修正（322行目）
-
-#### 問題
-```csharp
+### 2. SetValueエラー修正�E�E22行目�E�E
+#### 問顁E```csharp
 m_DialogueRunner.VariableStorage.SetValue(variableName, value);
 ```
 - エラー: `CS1503: Argument 2: cannot convert from 'T' to 'string'`
 
-#### 修正方法
-Yarn SpinnerのVariableStorage APIを確認し、正しいシグネチャを使用します。
-
-**推奨**: object型にキャストしてから設定
-```csharp
+#### 修正方況EYarn SpinnerのVariableStorage APIを確認し、正しいシグネチャを使用します、E
+**推奨**: object型にキャストしてから設宁E```csharp
 // SetValueは通常、object型を受け取る
 m_DialogueRunner.VariableStorage.SetValue(variableName, (object)value);
 ```
 
-**代替**: 型に応じた適切なメソッドを使用
-- Yarn SpinnerのVariableStorage APIは、通常 `SetValue(string name, object value)` の形式
-- ジェネリック型 `T` を `object` にキャストする必要がある
+**代替**: 型に応じた適刁E��メソチE��を使用
+- Yarn SpinnerのVariableStorage APIは、E��常 `SetValue(string name, object value)` の形弁E- ジェネリチE��垁E`T` めE`object` にキャストする忁E��がある
 
-#### 確認事項
-- コンパイルエラーが解消されている
-- 型安全性が保たれている
+#### 確認事頁E- コンパイルエラーが解消されてぁE��
+- 型安�E性が保たれてぁE��
 
-### 3. FindObjectOfType警告解消（60行目）
-
-#### 問題
-```csharp
+### 3. FindObjectOfType警告解消！E0行目�E�E
+#### 問顁E```csharp
 m_ChatController = FindObjectOfType<ChatController>();
 ```
-- 警告: `CS0618: 'Object.FindObjectOfType<T>()' is obsolete`
+- 警呁E `CS0618: 'Object.FindObjectOfType<T>()' is obsolete`
 
-#### 修正方法
-Unity 6の新しいAPIに置き換えます。
-
+#### 修正方況EUnity 6の新しいAPIに置き換えます、E
 **推奨**: FindFirstObjectByTypeを使用
 ```csharp
 m_ChatController = FindFirstObjectByType<ChatController>();
 ```
 
-**代替**: FindAnyObjectByTypeを使用（パフォーマンス重視の場合）
-```csharp
+**代替**: FindAnyObjectByTypeを使用�E�パフォーマンス重視�E場合！E```csharp
 m_ChatController = FindAnyObjectByType<ChatController>();
 ```
 
-#### 確認事項
-- 警告が解消されている
-- 動作が正しく保たれている
+#### 確認事頁E- 警告が解消されてぁE��
+- 動作が正しく保たれてぁE��
 
-### 4. m_IsInputLocked警告解消（21行目）
-
-#### 問題
-```csharp
+### 4. m_IsInputLocked警告解消！E1行目�E�E
+#### 問顁E```csharp
 private bool m_IsInputLocked = false;
 ```
-- 警告: `CS0414: The field 'ScenarioManager.m_IsInputLocked' is assigned but its value is never used`
+- 警呁E `CS0414: The field 'ScenarioManager.m_IsInputLocked' is assigned but its value is never used`
 
-#### 修正方法
-変数を使用するか、削除するか、#pragma warningで抑制します。
-
-**推奨**: #pragma warningで抑制（将来の実装用として保持）
-```csharp
+#### 修正方況E変数を使用するか、削除するか、Epragma warningで抑制します、E
+**推奨**: #pragma warningで抑制�E�封E��の実裁E��として保持�E�E```csharp
 #pragma warning disable CS0414
 private bool m_IsInputLocked = false;
 #pragma warning restore CS0414
 ```
 
-**代替1**: 変数を使用する（StartWaitCommandなどで使用）
-```csharp
+**代替1**: 変数を使用する�E�EtartWaitCommandなどで使用�E�E```csharp
 // StartWaitCommand()で使用
 private void StartWaitCommand(string[] args)
 {
     m_IsInputLocked = true;
-    // ... 待機処理 ...
+    // ... 征E���E琁E...
     m_IsInputLocked = false;
 }
 ```
 
-**代替2**: 変数を削除（使用予定がない場合）
-```csharp
+**代替2**: 変数を削除�E�使用予定がなぁE��合！E```csharp
 // 変数を削除
 ```
 
-#### 確認事項
-- 警告が解消されている
-- コードの意図が明確になっている
+#### 確認事頁E- 警告が解消されてぁE��
+- コード�E意図が�E確になってぁE��
 
-## コーディング規約
-- Unity C# コーディング規約に準拠
-- 変数名: `m_VariableName` (private field)
-- クラス/メソッド: PascalCase
-- `#region`を使用してコードを整理
+## コーチE��ング規紁E- Unity C# コーチE��ング規紁E��準拠
+- 変数吁E `m_VariableName` (private field)
+- クラス/メソチE��: PascalCase
+- `#region`を使用してコードを整琁E
+## 参老E��報
+- 前タスクレポ�EチE `docs/inbox/REPORT_TASK_005_PackageInstallationFix.md` を参照
+- プロジェクト仕槁E `最初�Eプロンプト`�E��Eロジェクトルート）を参�E
+- Unityバ�Eジョン: Unity 6 (or 2022 LTS)
+- Yarn Spinner API: 最新のドキュメントを参�E�E�バージョン依存�E可能性あり�E�E- エラー発生箁E��: `Assets/Scripts/Core/ScenarioManager.cs` (287行目, 322行目, 60行目, 21行目)
 
-## 参考情報
-- 前タスクレポート: `Docs/inbox/REPORT_TASK_005_PackageInstallationFix.md` を参照
-- プロジェクト仕様: `最初のプロンプト`（プロジェクトルート）を参照
-- Unityバージョン: Unity 6 (or 2022 LTS)
-- Yarn Spinner API: 最新のドキュメントを参照（バージョン依存の可能性あり）
-- エラー発生箇所: `Assets/Scripts/Core/ScenarioManager.cs` (287行目, 322行目, 60行目, 21行目)
-
-## 注意事項
-1. **Yarn Spinner API**: VariableStorage APIはバージョンによって異なる可能性があります。実装時は実際のAPIを確認してから実装してください。
-2. **型安全性**: TryGetValueとSetValueの修正時は、型安全性を保つように注意してください。
-3. **Unity 6 API**: FindObjectOfTypeは非推奨のため、FindFirstObjectByTypeまたはFindAnyObjectByTypeに置き換える必要があります。
-4. **未使用変数**: m_IsInputLockedは将来の実装用として保持する場合は、#pragma warningで抑制することを推奨します。
+## 注意事頁E1. **Yarn Spinner API**: VariableStorage APIはバ�Eジョンによって異なる可能性があります。実裁E��は実際のAPIを確認してから実裁E��てください、E2. **型安�E性**: TryGetValueとSetValueの修正時�E、型安�E性を保つように注意してください、E3. **Unity 6 API**: FindObjectOfTypeは非推奨のため、FindFirstObjectByTypeまた�EFindAnyObjectByTypeに置き換える忁E��があります、E4. **未使用変数**: m_IsInputLockedは封E��の実裁E��として保持する場合�E、Epragma warningで抑制することを推奨します、E

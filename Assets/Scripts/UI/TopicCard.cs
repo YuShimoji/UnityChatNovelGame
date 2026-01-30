@@ -7,9 +7,9 @@ using ProjectFoundPhone.Data;
 namespace ProjectFoundPhone.UI
 {
     /// <summary>
-    /// 推論ボードに表示する個別のトピックカードUI
-    /// TopicDataの情報（アイコン、タイトル、説明）を表示する
-    /// ドラッグ＆ドロップによる合成操作をサポート
+    /// 推論�Eードに表示する個別のトピチE��カードUI
+    /// TopicDataの惁E���E�アイコン、タイトル、説明）を表示する
+    /// ドラチE���E�E��ロチE�Eによる合�E操作をサポ�EチE
     /// </summary>
     public class TopicCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
@@ -23,7 +23,7 @@ namespace ProjectFoundPhone.UI
         [SerializeField] private CanvasGroup m_CanvasGroup;
 
         /// <summary>
-        /// このカードに設定されているTopicData
+        /// こ�Eカードに設定されてぁE��TopicData
         /// </summary>
         private TopicData m_TopicData;
 
@@ -35,7 +35,7 @@ namespace ProjectFoundPhone.UI
 
         #region Public Properties
         /// <summary>
-        /// このカードに設定されているTopicDataを取得
+        /// こ�Eカードに設定されてぁE��TopicDataを取征E
         /// </summary>
         public TopicData TopicData => m_TopicData;
         #endregion
@@ -58,7 +58,7 @@ namespace ProjectFoundPhone.UI
         /// <summary>
         /// TopicDataをカードに設定し、UIを更新する
         /// </summary>
-        /// <param name="topicData">表示するトピックデータ</param>
+        /// <param name="topicData">表示するトピチE��チE�Eタ</param>
         public void Setup(TopicData topicData)
         {
             if (topicData == null)
@@ -81,20 +81,20 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            // アイコンを設定
+            // アイコンを設宁E
             if (m_IconImage != null)
             {
                 m_IconImage.sprite = m_TopicData.Icon;
                 m_IconImage.enabled = m_TopicData.Icon != null;
             }
 
-            // タイトルを設定
+            // タイトルを設宁E
             if (m_TitleText != null)
             {
                 m_TitleText.text = m_TopicData.Title;
             }
 
-            // 説明を設定（オプション）
+            // 説明を設定（オプション�E�E
             if (m_DescriptionText != null)
             {
                 m_DescriptionText.text = m_TopicData.Description;
@@ -111,11 +111,11 @@ namespace ProjectFoundPhone.UI
             m_OriginalPosition = transform.position;
             m_OriginalSiblingIndex = transform.GetSiblingIndex();
 
-            // Canvasを検索して最前面に描画するためにルートに移動（またはオーバーレイ用レイヤーへ）
+            // Canvasを検索して最前面に描画するためにルートに移動（また�Eオーバ�Eレイ用レイヤーへ�E�E
             // ここでは簡易的にDeductionBoardのTransformを親にするか、Canvasのルートにする
             m_ParentCanvas = GetComponentInParent<Canvas>();
             
-            // ドラッグ中はRactCastを無効化してドロップ先の検出を可能にする
+            // ドラチE��中はRactCastを無効化してドロチE�E先�E検�Eを可能にする
             m_CanvasGroup.blocksRaycasts = false;
             m_CanvasGroup.alpha = 0.6f;
         }
@@ -124,7 +124,7 @@ namespace ProjectFoundPhone.UI
         {
             if (m_TopicData == null) return;
 
-            // マウス位置に追従
+            // マウス位置に追征E
             if (m_ParentCanvas != null && m_ParentCanvas.renderMode == RenderMode.ScreenSpaceOverlay)
             {
                 transform.position = eventData.position;
@@ -151,8 +151,8 @@ namespace ProjectFoundPhone.UI
             m_CanvasGroup.blocksRaycasts = true;
             m_CanvasGroup.alpha = 1.0f;
 
-            // ドロップ処理
-            // UI上の他のオブジェクト（TopicCard）にドロップされたか確認
+            // ドロチE�E処琁E
+            // UI上�E他�Eオブジェクト！EopicCard�E�にドロチE�Eされたか確誁E
             GameObject droppedObject = eventData.pointerEnter;
             
             bool handled = false;
@@ -160,7 +160,7 @@ namespace ProjectFoundPhone.UI
             if (droppedObject != null)
             {
                 TopicCard targetCard = droppedObject.GetComponent<TopicCard>();
-                // 親などを辿ってTopicCardを探す
+                // 親などを辿ってTopicCardを探ぁE
                 if (targetCard == null)
                 {
                     targetCard = droppedObject.GetComponentInParent<TopicCard>();
@@ -168,7 +168,7 @@ namespace ProjectFoundPhone.UI
 
                 if (targetCard != null && targetCard != this)
                 {
-                    // DeductionBoardに合成リクエスト
+                    // DeductionBoardに合�EリクエスチE
                     if (DeductionBoard.Instance != null)
                     {
                         handled = DeductionBoard.Instance.OnTopicDropped(this, targetCard);
@@ -176,12 +176,12 @@ namespace ProjectFoundPhone.UI
                 }
             }
 
-            // 合成に失敗、または無効な場所なら元の位置に戻す
+            // 合�Eに失敗、また�E無効な場所なら�Eの位置に戻ぁE
             if (!handled)
             {
                 // transform.position = m_OriginalPosition;
-               // レイアウトグループが効いている場合、位置リセットは自動で行われることが多いが
-               // 強制的に戻すなら以下
+               // レイアウトグループが効ぁE��ぁE��場合、位置リセチE��は自動で行われることが多いぁE
+               // 強制皁E��戻すなら以丁E
                transform.position = m_OriginalPosition;
             }
         }

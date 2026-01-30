@@ -1,4 +1,4 @@
-﻿// Author: Daniele Giardini - http://www.demigiant.com
+// Author: Daniele Giardini - http://www.demigiant.com
 // Created: 2015/03/12 16:03
 
 using System;
@@ -55,18 +55,18 @@ namespace DG.DOTweenEditor
                 isPreviewingThis || src.animationType == DOTweenAnimation.AnimationType.None
                 || !src.isActive || _previewOnlyIfSetToAutoPlay && !src.autoPlay
             );
-            if (GUILayout.Button("► Play", Styles.btPreview)) {
+            if (GUILayout.Button("? Play", Styles.btPreview)) {
                 if (!isPreviewing) StartupGlobalPreview();
                 AddAnimationToGlobalPreview(src);
             }
             EditorGUI.EndDisabledGroup();
             EditorGUI.BeginDisabledGroup(isPreviewing);
-            if (GUILayout.Button("► Play All <i>on GameObject</i>", Styles.btPreview)) {
+            if (GUILayout.Button("? Play All <i>on GameObject</i>", Styles.btPreview)) {
                 if (!isPreviewing) StartupGlobalPreview();
                 DOTweenAnimation[] anims = src.gameObject.GetComponents<DOTweenAnimation>();
                 foreach (DOTweenAnimation anim in anims) AddAnimationToGlobalPreview(anim);
             }
-            if (GUILayout.Button("► Play All <i>in Scene</i>", Styles.btPreview)) {
+            if (GUILayout.Button("? Play All <i>in Scene</i>", Styles.btPreview)) {
                 if (!isPreviewing) StartupGlobalPreview();
                 // DOTweenAnimation[] anims = Object.FindObjectsOfType<DOTweenAnimation>(); // OBSOLETE
                 DOTweenAnimation[] anims = DeEditorCompatibilityUtils.FindObjectsOfType<DOTweenAnimation>();
@@ -77,15 +77,15 @@ namespace DG.DOTweenEditor
             // Preview - Stop
             GUILayout.BeginHorizontal();
             EditorGUI.BeginDisabledGroup(!isPreviewingThis);
-            if (GUILayout.Button("■ Stop", Styles.btPreview)) {
+            if (GUILayout.Button("�� Stop", Styles.btPreview)) {
                 if (_AnimationToTween.ContainsKey(src)) StopPreview(_AnimationToTween[src].tween);
             }
             EditorGUI.EndDisabledGroup();
             EditorGUI.BeginDisabledGroup(!isPreviewing);
-            if (GUILayout.Button("■ Stop All <i>on GameObject</i>", Styles.btPreview)) {
+            if (GUILayout.Button("�� Stop All <i>on GameObject</i>", Styles.btPreview)) {
                 StopPreview(src.gameObject);
             }
-            if (GUILayout.Button("■ Stop All <i>in Scene</i>", Styles.btPreview)) {
+            if (GUILayout.Button("�� Stop All <i>in Scene</i>", Styles.btPreview)) {
                 StopAllPreviews();
             }
             EditorGUI.EndDisabledGroup();
@@ -188,7 +188,7 @@ namespace DG.DOTweenEditor
                 break;
             }
             if (tInfo == null) {
-                Debug.LogWarning("DOTween Preview ► Couldn't find tween to stop");
+                Debug.LogWarning("DOTween Preview ? Couldn't find tween to stop");
                 return;
             }
             if (tInfo.isFrom) {
@@ -224,9 +224,9 @@ namespace DG.DOTweenEditor
 
 #endregion
 
-        // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
-        // ███ INTERNAL CLASSES ████████████████████████████████████████████████████████████████████████████████████████████████
-        // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+        // ?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+        // ??? INTERNAL CLASSES ????????????????????????????????????????????????????????????????????????????????????????????????
+        // ?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
 
         class TweenInfo
         {

@@ -8,19 +8,16 @@ Created: 2026-01-28T23:10:00+09:00
 Report: docs/reports/REPORT_TASK_019_Synthesis_Implementation.md
 
 ## Objective
-DeductionBoard の核となる「推論（合成）」システムを稼働させる。
-`SynthesisRecipe` ScriptableObject のアセットを作成し、`Resources/Recipes` に配置して、DeductionBoard 上での合成動作を確認する。
-
+DeductionBoard の核となる「推論（合成）」シスチE��を稼働させる、E`SynthesisRecipe` ScriptableObject のアセチE��を作�Eし、`Resources/Recipes` に配置して、DeductionBoard 上での合�E動作を確認する、E
 ## Context
 - **Pre-requisites**:
   - `DeductionBoard.cs`: Implemented (TASK_018)
   - `SynthesisRecipe.cs`: Implemented (Data)
   - `TopicData`: Implemented.
 - **Missing**:
-  - `Assets/Resources/Recipes/` ディレクトリ
-  - 実際の Recipe アセット
-- **Goal**: 2つの証拠（Topic）を組み合わせて新しい証拠を得るゲームループを成立させる。
-
+  - `Assets/Resources/Recipes/` チE��レクトリ
+  - 実際の Recipe アセチE��
+- **Goal**: 2つの証拠�E�Eopic�E�を絁E��合わせて新しい証拠を得るゲームループを成立させる、E
 ## Focus Area
 - `Assets/Resources/Recipes/` (New Directory & Assets)
 - `Assets/Scripts/UI/DeductionBoard.cs` (Logic verification/fixes)
@@ -45,10 +42,7 @@ DeductionBoard の核となる「推論（合成）」システムを稼働さ�
 8. Capture Evidence.
 
 ## DoD (Definition of Done)
-- [ ] `Assets/Resources/Recipes` ディレクトリが作成されている
-- [ ] 少なくとも1つの動作する `SynthesisRecipe` アセットが作成されている
+- [ ] `Assets/Resources/Recipes` チE��レクトリが作�EされてぁE��
+- [ ] 少なくとめEつの動作すめE`SynthesisRecipe` アセチE��が作�EされてぁE��
 - [ ] **Verification**:
-  - [ ] ドラッグ＆ドロップで合成が成功し、新しいトピックが解放される
-  - [ ] 合成結果がログに表示される
-- [ ] Evidence (`docs/evidence/`) 取得
-- [ ] Report 作成
+  - [ ] ドラチE���E�E��ロチE�Eで合�Eが�E功し、新しいトピチE��が解放されめE  - [ ] 合�E結果がログに表示されめE- [ ] Evidence (`docs/evidence/`) 取征E- [ ] Report 作�E

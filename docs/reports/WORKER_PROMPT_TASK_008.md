@@ -4,13 +4,13 @@
 - Current Status: IN_PROGRESS
 - Goal: Complete implementation and provide Evidence.
 
-## 参照
-- チケット: `docs/tasks/TASK_008_ChatUI_Integration.md`
+## 参�E
+- チケチE��: `docs/tasks/TASK_008_ChatUI_Integration.md`
 - SSOT: `docs/Windsurf_AI_Collab_Rules_latest.md`
 - HANDOVER: `docs/HANDOVER.md`
 - Verification Tool: `Assets/Scripts/Utils/VerificationCapture.cs` (Usage: Run Scene -> Auto Capture)
 
-## 境界
+## 墁E��
 - **Focus Area**: 
   - `Assets/Scripts/Core/ScenarioManager.cs` (Data Loading)
   - `Assets/Scripts/UI/ChatController.cs` (UI Binding)
@@ -40,5 +40,5 @@
 - [ ] Evidence file exists in `docs/evidence/`.
 - [ ] Report created.
 
-## 納品先
+## 納品允E
 - `docs/inbox/REPORT_TASK_008_ChatUI_Integration.md`

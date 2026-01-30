@@ -3,7 +3,7 @@ using UnityEngine;
 namespace ProjectFoundPhone.Data
 {
     /// <summary>
-    /// トピック同士を合成して新しいトピックを生成するレシピの定義
+    /// トピチE��同士を合成して新しいトピチE��を生成するレシピ�E定義
     /// Topic A + Topic B = Topic C (Result) の関係を表現
     /// </summary>
     [CreateAssetMenu(fileName = "NewSynthesisRecipe", menuName = "Project FoundPhone/Synthesis Recipe", order = 2)]
@@ -17,17 +17,17 @@ namespace ProjectFoundPhone.Data
 
         #region Public Properties
         /// <summary>
-        /// 合成に必要な最初の材料トピック
+        /// 合�Eに忁E��な最初�E材料トピチE��
         /// </summary>
         public TopicData IngredientA => m_IngredientA;
 
         /// <summary>
-        /// 合成に必要な2番目の材料トピック
+        /// 合�Eに忁E��な2番目の材料トピチE��
         /// </summary>
         public TopicData IngredientB => m_IngredientB;
 
         /// <summary>
-        /// 合成結果として生成されるトピック
+        /// 合�E結果として生�Eされるトピック
         /// </summary>
         public TopicData Result => m_Result;
         #endregion
@@ -35,19 +35,17 @@ namespace ProjectFoundPhone.Data
         #region Unity Lifecycle
         private void OnValidate()
         {
-            // TODO: IngredientA、IngredientB、Resultが適切に設定されているかチェック
-            // TODO: 循環参照や自己参照のチェック
+            // TODO: IngredientA、IngredientB、Resultが適刁E��設定されてぁE��かチェチE��
+            // TODO: 循環参�EめE�E己参�EのチェチE��
         }
         #endregion
 
         #region Public Methods
         /// <summary>
-        /// 指定された2つのトピックがこのレシピの材料と一致するか判定
-        /// 順序は問わない（A+B と B+A の両方を許容）
-        /// </summary>
-        /// <param name="topicA">1つ目のトピック</param>
-        /// <param name="topicB">2つ目のトピック</param>
-        /// <returns>一致する場合true</returns>
+        /// 持E��された2つのトピチE��がこのレシピ�E材料と一致するか判宁E        /// 頁E���E問わなぁE��E+B と B+A の両方を許容�E�E        /// </summary>
+        /// <param name="topicA">1つ目のトピチE��</param>
+        /// <param name="topicB">2つ目のトピチE��</param>
+        /// <returns>一致する場吁Erue</returns>
         public bool Matches(TopicData topicA, TopicData topicB)
         {
             if (topicA == null || topicB == null || m_IngredientA == null || m_IngredientB == null)
@@ -55,7 +53,7 @@ namespace ProjectFoundPhone.Data
                 return false;
             }
 
-            // A+B または B+A の組み合わせで一致するかチェック
+            // A+B また�E B+A の絁E��合わせで一致するかチェチE��
             bool case1 = topicA.TopicID == m_IngredientA.TopicID && topicB.TopicID == m_IngredientB.TopicID;
             bool case2 = topicA.TopicID == m_IngredientB.TopicID && topicB.TopicID == m_IngredientA.TopicID;
 
@@ -63,13 +61,12 @@ namespace ProjectFoundPhone.Data
         }
 
         /// <summary>
-        /// レシピが有効かどうかを判定
-        /// </summary>
-        /// <returns>有効な場合true</returns>
+        /// レシピが有効かどぁE��を判宁E        /// </summary>
+        /// <returns>有効な場吁Erue</returns>
         public bool IsValid()
         {
-            // TODO: IngredientA、IngredientB、Resultが全てnullでないかチェック
-            // TODO: 各トピックがIsValid()を満たしているかチェック
+            // TODO: IngredientA、IngredientB、Resultが�EてnullでなぁE��チェチE��
+            // TODO: 吁E��ピックがIsValid()を満たしてぁE��かチェチE��
             return m_IngredientA != null && m_IngredientB != null && m_Result != null;
         }
         #endregion

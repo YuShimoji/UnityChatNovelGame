@@ -1,54 +1,54 @@
 # Worker Prompt: TASK_010_MetaEffectController
 
-あなたは Worker Agent です。以下の指示に従い、タスクを遂行してください。
-Orchestrator によって定義された境界(Focus/Forbidden)を遵守することが求められます。
+あなた�E Worker Agent です。以下�E持E��に従い、タスクを遂行してください、E
+Orchestrator によって定義された墁E��(Focus/Forbidden)を�E守することが求められます、E
 
-## 参照情報
-- **チケット**: `docs/tasks/TASK_010_MetaEffectController.md` (必読)
+## 参�E惁E��
+- **チケチE��**: `docs/tasks/TASK_010_MetaEffectController.md` (忁E��)
 - **SSOT**: `docs/Windsurf_AI_Collab_Rules_latest.md`
 - **HANDOVER**: `docs/HANDOVER.md`
 - **Context**: `AI_CONTEXT.md`
-- **関連実装**: `Assets/Scripts/Core/ScenarioManager.cs` (GlitchCommand)
+- **関連実裁E*: `Assets/Scripts/Core/ScenarioManager.cs` (GlitchCommand)
 
 ## ミッション
-**MetaEffectController (演出エフェクト) 実装**
+**MetaEffectController (演�EエフェクチE 実裁E*
 
-- `MetaEffectController.cs` を新規作成し、画面全体のエフェクト管理を実装する。
-- `GlitchEffect.cs` を新規作成し、グリッチ演出(ノイズ、画面揺れ等)を実装する。
-- `MetaEffectOverlay.prefab` を作成し、画面オーバーレイとして配置可能にする。
-- `ScenarioManager.GlitchCommand` から呼び出せるようにする。
+- `MetaEffectController.cs` を新規作�Eし、画面全体�Eエフェクト管琁E��実裁E��る、E
+- `GlitchEffect.cs` を新規作�Eし、グリチE��演�E(ノイズ、画面揺れ筁Eを実裁E��る、E
+- `MetaEffectOverlay.prefab` を作�Eし、画面オーバ�Eレイとして配置可能にする、E
+- `ScenarioManager.GlitchCommand` から呼び出せるようにする、E
 
-## 境界 (Boundaries)
+## 墁E�� (Boundaries)
 
 ### Focus Area(変更許可)
-- `Assets/Scripts/UI/MetaEffectController.cs` (新規)
-- `Assets/Scripts/UI/Effects/GlitchEffect.cs` (新規)
-- `Assets/Prefabs/UI/MetaEffectOverlay.prefab` (新規)
+- `Assets/Scripts/UI/MetaEffectController.cs` (新要E
+- `Assets/Scripts/UI/Effects/GlitchEffect.cs` (新要E
+- `Assets/Prefabs/UI/MetaEffectOverlay.prefab` (新要E
 - `Assets/Scripts/Core/ScenarioManager.cs` (GlitchCommand連携のみ)
 
 ### Forbidden Area(変更禁止)
 - `Assets/Scripts/UI/ChatController.cs`
 - `Assets/Scripts/UI/DeductionBoard.cs`
-- 既存Camera設定の破壊的変更
+- 既存Camera設定�E破壊的変更
 
 ## Definition of Done (DoD)
-- [ ] `MetaEffectController.cs` が実装され、エフェクトの開始/停止ができる
-- [ ] `GlitchEffect.cs` が実装され、レベルに応じたグリッチ演出ができる
-- [ ] `MetaEffectOverlay.prefab` が作成されている
-- [ ] `ScenarioManager.GlitchCommand` からエフェクト呼び出しが機能する
-- [ ] Unity Editorで動作確認が完了している
-- [ ] `docs/reports/REPORT_TASK_010_MetaEffectController.md` にレポートが作成されている
+- [ ] `MetaEffectController.cs` が実裁E��れ、エフェクト�E開姁E停止ができる
+- [ ] `GlitchEffect.cs` が実裁E��れ、レベルに応じたグリチE��演�Eができる
+- [ ] `MetaEffectOverlay.prefab` が作�EされてぁE��
+- [ ] `ScenarioManager.GlitchCommand` からエフェクト呼び出しが機�Eする
+- [ ] Unity Editorで動作確認が完亁E��てぁE��
+- [ ] `docs/reports/REPORT_TASK_010_MetaEffectController.md` にレポ�Eトが作�EされてぁE��
 
 ## 停止条件 (Stop & Report)
-- Post Processingが必須になった場合
-- パフォーマンス問題が発生した場合
+- Post Processingが忁E��になった場吁E
+- パフォーマンス問題が発生した場吁E
 
-## 技術ヒント
-- DOTweenを使用してアニメーション(画面揺れ、アルファ変更等)
+## 技術ヒンチE
+- DOTweenを使用してアニメーション(画面揺れ、アルファ変更筁E
 - UI Imageのcolor/materialを変更してノイズ表現
-- Canvasの最前面にオーバーレイを配置
+- Canvasの最前面にオーバ�Eレイを�E置
 
 ## 納品物
-- 新規作成されたコード(MetaEffectController.cs, GlitchEffect.cs)
+- 新規作�EされたコーチEMetaEffectController.cs, GlitchEffect.cs)
 - 新規Prefab
 - `docs/reports/REPORT_TASK_010_MetaEffectController.md`

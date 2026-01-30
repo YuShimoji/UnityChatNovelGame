@@ -7,39 +7,39 @@ Created: 2026-01-16T13:50:00Z
 Report: docs/reports/REPORT_TASK_008_ChatUI_Integration.md
 
 ## Objective
-`ChatController` と `ScenarioManager` (またはデータローダー) を連携させ、外部ファイル（JSON/CSV/ScriptableObject）からチャットデータを読み込み、UIに表示する機能を実装する。
-また、ユーザーの選択（ボタン押下など）に応じて次のメッセージを表示するフローを構築する。
+`ChatController` と `ScenarioManager` (また�EチE�Eタローダー) を連携させ、外部ファイル�E�ESON/CSV/ScriptableObject�E�からチャチE��チE�Eタを読み込み、UIに表示する機�Eを実裁E��る、E
+また、ユーザーの選択（�Eタン押下など�E�に応じて次のメチE��ージを表示するフローを構築する、E
 
 ## Context
-- **前工程**: TASK_007でChat UIの見た目と基本動作は完成済み。
-- **ゴール**: 定義されたシナリオデータに基づいて、チャットが自動・対話的に進行するようにする。
-- **参照**: `ChatController.cs`, `ScenarioManager.cs` (既存ロジックを確認)
+- **前工稁E*: TASK_007でChat UIの見た目と基本動作�E完�E済み、E
+- **ゴール**: 定義されたシナリオチE�Eタに基づぁE��、チャチE��が�E動�E対話皁E��進行するよぁE��する、E
+- **参�E**: `ChatController.cs`, `ScenarioManager.cs` (既存ロジチE��を確誁E
 
 ## Focus Area
-- `Assets/Scripts/Core/` (データ読み込み、進行管理)
-- `Assets/Scripts/UI/ChatController.cs` (外部からのデータ注入IF)
-- `Assets/Resources/Data/` (テスト用シナリオデータ作成)
+- `Assets/Scripts/Core/` (チE�Eタ読み込み、E��行管琁E
+- `Assets/Scripts/UI/ChatController.cs` (外部からのチE�Eタ注入IF)
+- `Assets/Resources/Data/` (チE��ト用シナリオチE�Eタ作�E)
 
 ## Forbidden Area
-- `Assets/Scripts/UI/` の見た目に関する大幅な変更（機能追加はOK）
-- 既存の他のシステム（探索パートなど）への影響
+- `Assets/Scripts/UI/` の見た目に関する大幁E��変更�E�機�E追加はOK�E�E
+- 既存�E他�EシスチE���E�探索パ�Eトなど�E�への影響
 
 ## Constraints
-- データ形式はプロジェクトの標準（JSONまたはScriptableObject）に従う。
-- 非同期読み込みが必要な場合は `UniTask` または `Coroutine` を使用する。
+- チE�Eタ形式�Eプロジェクト�E標準！ESONまた�EScriptableObject�E�に従う、E
+- 非同期読み込みが忁E��な場合�E `UniTask` また�E `Coroutine` を使用する、E
 
 ## Steps
-1. **データ定義**: チャットシナリオ用のデータ構造（Message, Sender, Delay, Choices等）を定義する（既に存在すれば再利用）。
-2. **ローダー実装**: `ChatScenarioLoader` または `ScenarioManager` にチャットデータ読み込み機能を追加。
-3. **コントローラー拡張**: `ChatController` に `PlayScenario(ScenarioData data)` のようなメソッドを追加。
-4. **分岐ロジック**: 選択肢（ボタン）が表示され、選択によって展開が変わる仕組みを実装（または既存利用）。
-5. **結合テスト**: `ChatDevScene` でシナリオデータを流し込み、一連の会話が成立することを確認。
+1. **チE�Eタ定義**: チャチE��シナリオ用のチE�Eタ構造�E�Eessage, Sender, Delay, Choices等）を定義する�E�既に存在すれば再利用�E�、E
+2. **ローダー実裁E*: `ChatScenarioLoader` また�E `ScenarioManager` にチャチE��チE�Eタ読み込み機�Eを追加、E
+3. **コントローラー拡張**: `ChatController` に `PlayScenario(ScenarioData data)` のようなメソチE��を追加、E
+4. **刁E��ロジチE��**: 選択肢�E��Eタン�E�が表示され、E��択によって展開が変わる仕絁E��を実裁E��また�E既存利用�E�、E
+5. **結合チE��チE*: `ChatDevScene` でシナリオチE�Eタを流し込み、一連の会話が�E立することを確認、E
 
 ## DoD (Definition of Done)
-- [x] チャットシナリオデータ（テスト用含む）が定義されている
-- [x] シナリオデータを読み込み、`ChatController` で順次表示できる
-- [x] 相手側のメッセージには適切なディレイ（Typing演出）が入る
-- [x] ユーザー入力（選択肢または自由入力）待ちの状態を作れる
+- [x] チャチE��シナリオチE�Eタ�E�テスト用含む�E�が定義されてぁE��
+- [x] シナリオチE�Eタを読み込み、`ChatController` で頁E��表示できる
+- [x] 相手�EのメチE��ージには適刁E��チE��レイ�E�Eyping演�E�E�が入めE
+- [x] ユーザー入力（選択肢また�E自由入力）征E��の状態を作れめE
 - [x] **Evidence**: Implement automated verification using `VerificationCapture` (TASK_016).
   - Screenshots of Chat UI in action saved to `docs/evidence/`.
-- [x] `docs/reports/REPORT_TASK_008_ChatUI_Integration.md` に動作確認のログ/スクショがある
+- [x] `docs/reports/REPORT_TASK_008_ChatUI_Integration.md` に動作確認�Eログ/スクショがあめE

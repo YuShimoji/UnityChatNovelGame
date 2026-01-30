@@ -4,9 +4,8 @@ using System.Collections;
 namespace ProjectFoundPhone.Effects
 {
     /// <summary>
-    /// メタ演出（グリッチ効果等）を制御するコントローラー
-    /// シングルトンパターンで実装され、ScenarioManagerから呼び出される
-    /// </summary>
+    /// メタ演�E�E�グリチE��効果等）を制御するコントローラー
+    /// シングルトンパターンで実裁E��れ、ScenarioManagerから呼び出されめE    /// </summary>
     public class MetaEffectController : MonoBehaviour
     {
         #region Singleton
@@ -14,7 +13,7 @@ namespace ProjectFoundPhone.Effects
 
         /// <summary>
         /// シングルトンインスタンスへのアクセス
-        /// インスタンスが存在しない場合は自動的に作成する
+        /// インスタンスが存在しなぁE��合�E自動的に作�Eする
         /// </summary>
         public static MetaEffectController Instance
         {
@@ -22,10 +21,10 @@ namespace ProjectFoundPhone.Effects
             {
                 if (s_Instance == null)
                 {
-                    // 既存のインスタンスを検索
+                    // 既存�Eインスタンスを検索
                     s_Instance = FindFirstObjectByType<MetaEffectController>();
 
-                    // 見つからない場合は新規作成
+                    // 見つからなぁE��合�E新規作�E
                     if (s_Instance == null)
                     {
                         GameObject controllerObject = new GameObject("MetaEffectController");
@@ -48,8 +47,7 @@ namespace ProjectFoundPhone.Effects
         #region Unity Lifecycle
         private void Awake()
         {
-            // シングルトンの初期化
-            if (s_Instance == null)
+            // シングルトンの初期匁E            if (s_Instance == null)
             {
                 s_Instance = this;
                 DontDestroyOnLoad(gameObject);
@@ -57,8 +55,7 @@ namespace ProjectFoundPhone.Effects
             }
             else if (s_Instance != this)
             {
-                // 既にインスタンスが存在する場合は破棄
-                Destroy(gameObject);
+                // 既にインスタンスが存在する場合�E破棁E                Destroy(gameObject);
             }
         }
 
@@ -73,11 +70,10 @@ namespace ProjectFoundPhone.Effects
 
         #region Private Methods
         /// <summary>
-        /// エフェクトシステムの初期化
-        /// </summary>
+        /// エフェクトシスチE��の初期匁E        /// </summary>
         private void InitializeEffects()
         {
-            // エフェクト用のCanvasを作成
+            // エフェクト用のCanvasを作�E
             if (m_EffectCanvas == null)
             {
                 GameObject canvasObject = new GameObject("EffectCanvas");
@@ -86,18 +82,15 @@ namespace ProjectFoundPhone.Effects
                 m_EffectCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
                 m_EffectCanvas.sortingOrder = m_GlitchEffectLayer;
 
-                // CanvasScalerを追加して画面サイズに対応
-                UnityEngine.UI.CanvasScaler scaler = canvasObject.AddComponent<UnityEngine.UI.CanvasScaler>();
+                // CanvasScalerを追加して画面サイズに対忁E                UnityEngine.UI.CanvasScaler scaler = canvasObject.AddComponent<UnityEngine.UI.CanvasScaler>();
                 scaler.uiScaleMode = UnityEngine.UI.CanvasScaler.ScaleMode.ScaleWithScreenSize;
                 scaler.referenceResolution = new Vector2(1920, 1080);
                 scaler.matchWidthOrHeight = 0.5f;
 
-                // GraphicRaycasterを追加（必要に応じて）
-                canvasObject.AddComponent<UnityEngine.UI.GraphicRaycaster>();
+                // GraphicRaycasterを追加�E�忁E��に応じて�E�E                canvasObject.AddComponent<UnityEngine.UI.GraphicRaycaster>();
             }
 
-            // GlitchEffectコンポーネントを初期化
-            if (m_GlitchEffect == null)
+            // GlitchEffectコンポ�Eネントを初期匁E            if (m_GlitchEffect == null)
             {
                 GameObject glitchObject = new GameObject("GlitchEffect");
                 glitchObject.transform.SetParent(m_EffectCanvas.transform, false);
@@ -109,10 +102,10 @@ namespace ProjectFoundPhone.Effects
 
         #region Public Methods
         /// <summary>
-        /// グリッチ効果を再生
+        /// グリチE��効果を再生
         /// </summary>
-        /// <param name="level">グリッチの強度レベル（1-5）</param>
-        /// <param name="duration">効果の持続時間（秒）。0以下の場合は自動的に計算される</param>
+        /// <param name="level">グリチE��の強度レベル�E�E-5�E�E/param>
+        /// <param name="duration">効果�E持続時間（秒）、E以下�E場合�E自動的に計算される</param>
         public void PlayGlitchEffect(int level, float duration = 0f)
         {
             if (m_GlitchEffect == null)
@@ -121,11 +114,9 @@ namespace ProjectFoundPhone.Effects
                 InitializeEffects();
             }
 
-            // レベルを1-5の範囲にクランプ
-            int clampedLevel = Mathf.Clamp(level, 1, 5);
+            // レベルめE-5の篁E��にクランチE            int clampedLevel = Mathf.Clamp(level, 1, 5);
 
-            // デフォルトの持続時間を計算（レベルに応じて）
-            if (duration <= 0f)
+            // チE��ォルト�E持続時間を計算（レベルに応じて�E�E            if (duration <= 0f)
             {
                 duration = CalculateDefaultDuration(clampedLevel);
             }
@@ -134,7 +125,7 @@ namespace ProjectFoundPhone.Effects
         }
 
         /// <summary>
-        /// グリッチ効果を停止
+        /// グリチE��効果を停止
         /// </summary>
         public void StopGlitchEffect()
         {
@@ -142,29 +133,27 @@ namespace ProjectFoundPhone.Effects
         }
 
         /// <summary>
-        /// レベルに応じたデフォルトの持続時間を計算
-        /// </summary>
-        /// <param name="level">グリッチレベル（1-5）</param>
-        /// <returns>持続時間（秒）</returns>
+        /// レベルに応じたデフォルト�E持続時間を計箁E        /// </summary>
+        /// <param name="level">グリチE��レベル�E�E-5�E�E/param>
+        /// <returns>持続時間（秒！E/returns>
         private float CalculateDefaultDuration(int level)
         {
             // レベルが高いほど長く表示
             return 0.2f + (level * 0.1f);
         }
         /// <summary>
-        /// 指定した名前のエフェクトを再生する
+        /// 持E��した名前�Eエフェクトを再生する
         /// </summary>
-        /// <param name="effectName">Resources/Effects/内のPrefab名</param>
-        /// <param name="position">再生位置（ワールド座標）</param>
-        /// <param name="duration">自動破壊までの時間（0ならパーティクル等の設定に従う/手動破壊）</param>
+        /// <param name="effectName">Resources/Effects/冁E�EPrefab吁E/param>
+        /// <param name="position">再生位置�E�ワールド座標！E/param>
+        /// <param name="duration">自動破壊までの時間�E�EならパーチE��クル等�E設定に従う/手動破壊！E/param>
         public void PlayEffect(string effectName, Vector3 position, float duration = 2.0f)
         {
-            // 簡易実装: Resourcesからロードしてインスタンス化
-            GameObject prefab = Resources.Load<GameObject>($"Effects/{effectName}");
+            // 簡易実裁E Resourcesからロードしてインスタンス匁E            GameObject prefab = Resources.Load<GameObject>($"Effects/{effectName}");
             if (prefab != null)
             {
                 GameObject instance = Instantiate(prefab, position, Quaternion.identity);
-                // Canvas内かWorldか... いったんWorld座標で生成
+                // Canvas冁E��WorldぁE.. ぁE��たんWorld座標で生�E
                 
                 if (duration > 0f)
                 {

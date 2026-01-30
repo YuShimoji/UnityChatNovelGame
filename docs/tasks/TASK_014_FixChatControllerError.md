@@ -8,64 +8,41 @@ Created: 2026-01-17T06:30:00+09:00
 Report: docs/reports/REPORT_TASK_014_FixChatControllerError.md
 
 ## Objective
-DebugChatSceneで発生しているChatControllerのNullReferenceExceptionを修正する。
-TextMesh ProのサンプルChatControllerが誤ってアタッチされている問題を解決し、正しいProjectFoundPhone.UI.ChatControllerを使用するように修正する。
-
-実装対象：
-1. **DebugChatSceneの修正**: TextMesh ProのサンプルChatControllerを削除し、正しいChatControllerを設定
-2. **DebugSceneBuilderの修正**: セットアップ時に正しいChatControllerをアタッチするように修正
+DebugChatSceneで発生してぁE��ChatControllerのNullReferenceExceptionを修正する、ETextMesh ProのサンプルChatControllerが誤ってアタチE��されてぁE��問題を解決し、正しいProjectFoundPhone.UI.ChatControllerを使用するように修正する、E
+実裁E��象�E�E1. **DebugChatSceneの修正**: TextMesh ProのサンプルChatControllerを削除し、正しいChatControllerを設宁E2. **DebugSceneBuilderの修正**: セチE��アチE�E時に正しいChatControllerをアタチE��するように修正
 
 ## Context
-- DebugChatSceneで以下のエラーが発生:
+- DebugChatSceneで以下�Eエラーが発甁E
   - `ScenarioManager: ChatController not found. Some features may not work.`
   - `NullReferenceException: Object reference not set to an instance of an object ChatController.OnEnable () (at Assets/TextMesh Pro/Examples & Extras/Scripts/ChatController.cs:16)`
-- 原因: DebugChatSceneのChatRootに、TextMesh ProのサンプルChatController（`Assets/TextMesh Pro/Examples & Extras/Scripts/ChatController.cs`）が誤ってアタッチされている
-- 正しくは、`ProjectFoundPhone.UI.ChatController`（`Assets/Scripts/UI/ChatController.cs`）を使用する必要がある
-- TextMesh ProのサンプルChatControllerは、`ChatInputField`、`ChatDisplayOutput`、`ChatScrollbar`がnullの状態でOnEnableが呼ばれ、NullReferenceExceptionが発生
-
+- 原因: DebugChatSceneのChatRootに、TextMesh ProのサンプルChatController�E�EAssets/TextMesh Pro/Examples & Extras/Scripts/ChatController.cs`�E�が誤ってアタチE��されてぁE��
+- 正しくは、`ProjectFoundPhone.UI.ChatController`�E�EAssets/Scripts/UI/ChatController.cs`�E�を使用する忁E��がある
+- TextMesh ProのサンプルChatControllerは、`ChatInputField`、`ChatDisplayOutput`、`ChatScrollbar`がnullの状態でOnEnableが呼ばれ、NullReferenceExceptionが発甁E
 ## Focus Area
-- `Assets/Scenes/DebugChatScene.unity`: ChatControllerコンポーネントの修正
-- `Assets/Scripts/Debug/Editor/DebugSceneBuilder.cs`: セットアップ時に正しいChatControllerをアタッチするように修正
+- `Assets/Scenes/DebugChatScene.unity`: ChatControllerコンポ�Eネント�E修正
+- `Assets/Scripts/Debug/Editor/DebugSceneBuilder.cs`: セチE��アチE�E時に正しいChatControllerをアタチE��するように修正
 
 ## Forbidden Area
-- TextMesh Proのサンプルスクリプトの削除（既存のサンプルを維持）
-- ProjectFoundPhone.UI.ChatControllerのロジック変更（シーンの修正のみ）
-- 新機能の追加（エラー修正のみ）
-
+- TextMesh Proのサンプルスクリプトの削除�E�既存�Eサンプルを維持E��E- ProjectFoundPhone.UI.ChatControllerのロジチE��変更�E�シーンの修正のみ�E�E- 新機�Eの追加�E�エラー修正のみ�E�E
 ## Constraints
-- DebugChatSceneは、Tools > FoundPhone > Setup Debug Sceneで再生成可能である必要がある
-- ChatRootには、正しいProjectFoundPhone.UI.ChatControllerがアタッチされている必要がある
-- TextMesh ProのサンプルChatControllerは削除するが、サンプルスクリプトファイル自体は削除しない
-
+- DebugChatSceneは、Tools > FoundPhone > Setup Debug Sceneで再生成可能である忁E��がある
+- ChatRootには、正しいProjectFoundPhone.UI.ChatControllerがアタチE��されてぁE��忁E��がある
+- TextMesh ProのサンプルChatControllerは削除するが、サンプルスクリプトファイル自体�E削除しなぁE
 ## DoD (Definition of Done)
 - [x] DebugChatSceneのChatRootからTextMesh ProのサンプルChatControllerを削除
-- [x] DebugChatSceneのChatRootに正しいProjectFoundPhone.UI.ChatControllerをアタッチ
-- [x] DebugSceneBuilder.csを確認（既に正しく実装されていることを確認）
-- [ ] Tools > FoundPhone > Setup Debug Sceneを実行して、正しくセットアップされることを確認（Unityエディタでの確認が必要）
-- [ ] Playボタンで実行し、NullReferenceExceptionが発生しないことを確認（Unityエディタでの確認が必要）
-- [ ] Consoleログで「ChatController not found」の警告が表示されないことを確認（Unityエディタでの確認が必要）
-- [x] `docs/inbox/` にレポート (`REPORT_TASK_014_FixChatControllerError.md`) が作成されている
-- [x] 本チケットの Report 欄にレポートパスが追記されている
+- [x] DebugChatSceneのChatRootに正しいProjectFoundPhone.UI.ChatControllerをアタチE��
+- [x] DebugSceneBuilder.csを確認（既に正しく実裁E��れてぁE��ことを確認！E- [ ] Tools > FoundPhone > Setup Debug Sceneを実行して、正しくセチE��アチE�Eされることを確認！EnityエチE��タでの確認が忁E��E��E- [ ] Playボタンで実行し、NullReferenceExceptionが発生しなぁE��とを確認！EnityエチE��タでの確認が忁E��E��E- [ ] Consoleログで「ChatController not found」�E警告が表示されなぁE��とを確認！EnityエチE��タでの確認が忁E��E��E- [x] `docs/inbox/` にレポ�EチE(`REPORT_TASK_014_FixChatControllerError.md`) が作�EされてぁE��
+- [x] 本チケチE��の Report 欁E��レポ�Eトパスが追記されてぁE��
 
-## 修正手順
-
+## 修正手頁E
 ### 1. DebugSceneBuilder.csの修正
-- `SetupChatController()` メソッドで、正しいChatControllerをアタッチするように修正
+- `SetupChatController()` メソチE��で、正しいChatControllerをアタチE��するように修正
 - TextMesh ProのサンプルChatControllerではなく、`ProjectFoundPhone.UI.ChatController` を使用
-- 必要なコンポーネント（ScrollRect、VerticalLayoutGroup等）を正しく設定
-
+- 忁E��なコンポ�Eネント！EcrollRect、VerticalLayoutGroup等）を正しく設宁E
 ### 2. DebugChatScene.unityの修正
-- ChatRootのGameObjectから、TextMesh ProのサンプルChatControllerコンポーネントを削除
-- ChatRootのGameObjectに、正しいProjectFoundPhone.UI.ChatControllerコンポーネントを追加
-- 必要な参照（ScrollRect、LayoutGroup、MessageBubblePrefab、TypingIndicator）を設定
-
-### 3. 動作確認
-- Tools > FoundPhone > Setup Debug Sceneを実行
-- シーンを保存
-- Playボタンで実行し、エラーが発生しないことを確認
-
+- ChatRootのGameObjectから、TextMesh ProのサンプルChatControllerコンポ�Eネントを削除
+- ChatRootのGameObjectに、正しいProjectFoundPhone.UI.ChatControllerコンポ�Eネントを追加
+- 忁E��な参�E�E�EcrollRect、LayoutGroup、MessageBubblePrefab、TypingIndicator�E�を設宁E
+### 3. 動作確誁E- Tools > FoundPhone > Setup Debug Sceneを実衁E- シーンを保孁E- Playボタンで実行し、エラーが発生しなぁE��とを確誁E
 ## Notes
-- Status は OPEN / IN_PROGRESS / BLOCKED / DONE を想定
-- BLOCKED の場合は、事実/根拠/次手（候補）を本文に追記し、Report に docs/inbox/REPORT_...md を必ず設定
-- TextMesh Proのサンプルスクリプトは、Examples & Extrasフォルダ内に残しておく（削除しない）
-- DebugSceneBuilderの修正により、今後セットアップする際に正しいChatControllerが自動的にアタッチされる
+- Status は OPEN / IN_PROGRESS / BLOCKED / DONE を想宁E- BLOCKED の場合�E、事宁E根拠/次手（候補）を本斁E��追記し、Report に docs/inbox/REPORT_...md を忁E��設宁E- TextMesh Proのサンプルスクリプトは、Examples & Extrasフォルダ冁E��残しておく�E�削除しなぁE��E- DebugSceneBuilderの修正により、今後セチE��アチE�Eする際に正しいChatControllerが�E動的にアタチE��されめE

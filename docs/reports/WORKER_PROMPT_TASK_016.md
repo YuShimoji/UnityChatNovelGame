@@ -1,29 +1,29 @@
 # Worker Prompt: TASK_016_VerificationTools
 
-## 目的
-MCP環境下で手動検証（操作・スクショ撮影）が困難な問題を解決するため、PlayMode実行時に証拠を自動生成するユーティリティを実装してください。
+## 目皁E
+MCP環墁E��で手動検証�E�操作�Eスクショ撮影�E�が困難な問題を解決するため、PlayMode実行時に証拠を�E動生成するユーチE��リチE��を実裁E��てください、E
 
-## 参照
-- チケット: `docs/tasks/TASK_016_VerificationTools.md`
-- SSOT: `docs/Windsurf_AI_Collab_Rules_latest.md` (または `.shared-workflows/docs/Windsurf_AI_Collab_Rules_latest.md`)
+## 参�E
+- チケチE��: `docs/tasks/TASK_016_VerificationTools.md`
+- SSOT: `docs/Windsurf_AI_Collab_Rules_latest.md` (また�E `.shared-workflows/docs/Windsurf_AI_Collab_Rules_latest.md`)
 
-## 行動指針
+## 行動持E�E
 - Focus Area: `Assets/Scripts/Utils/`
-- Forbidden Area: `Assets/Scripts/Core/` (ロジック実装を壊さないこと)
-- 探索: Unityの `ScreenCapture.CaptureScreenshot` や `Application.logMessageReceived` の仕様を調査してください。
+- Forbidden Area: `Assets/Scripts/Core/` (ロジチE��実裁E��壊さなぁE��と)
+- 探索: Unityの `ScreenCapture.CaptureScreenshot` めE`Application.logMessageReceived` の仕様を調査してください、E
 
-## 実装要件
+## 実裁E��件
 1. **VerificationCapture.cs**:
-   - シーン開始時 (`Start`) または指定タイミングでスクショ撮影
-   - 保存先は `docs/evidence/` 配下にすること（パス解決に注意）
-   - ファイル名はユニークに（タイムスタンプ推奨）
+   - シーン開始時 (`Start`) また�E持E��タイミングでスクショ撮影
+   - 保存�Eは `docs/evidence/` 配下にすること�E�パス解決に注意！E
+   - ファイル名�Eユニ�Eクに�E�タイムスタンプ推奨�E�E
 2. **検証用シーン**:
-   - `Assets/Scenes/DebugVerification.unity` (新規作成または既存利用)
-   - スクリプトをアタッチして PlayMode で動作確認
+   - `Assets/Scenes/DebugVerification.unity` (新規作�Eまた�E既存利用)
+   - スクリプトをアタチE��して PlayMode で動作確誁E
 
-## 停止と報告
-- **成功時**:
-  - `docs/evidence/` に生成された画像のファイル名を確認
+## 停止と報呁E
+- **成功晁E*:
+  - `docs/evidence/` に生�Eされた画像�Eファイル名を確誁E
   - `docs/inbox/REPORT_TASK_016_VerificationTools.md` に結果を記述
 - **失敗時**:
-  - エラーログと原因分析を報告
+  - エラーログと原因刁E��を報呁E

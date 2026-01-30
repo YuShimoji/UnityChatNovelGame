@@ -1,10 +1,10 @@
 # Worker Prompt: TASK_017_FixEditorCompilation
 
-## 参照
-- チケット: `docs/tasks/TASK_017_FixEditorCompilation.md`
+## 参�E
+- チケチE��: `docs/tasks/TASK_017_FixEditorCompilation.md`
 - SSOT: `docs/Windsurf_AI_Collab_Rules_latest.md`
 
-## 境界
+## 墁E��
 - **Focus Area**: `Assets/Scripts/Editor/DeductionBoardSetup.cs`
 - **Forbidden Area**: `Assets/Scripts/Debug/Editor/DebugSceneBuilder.cs` (Do not rename the namespace, just fix the usage site)
 
@@ -23,5 +23,5 @@
 - [ ] `DeductionBoardSetup.cs` uses `UnityEngine.Debug`.
 - [ ] Report created.
 
-## 納品先
+## 納品允E
 - `docs/inbox/REPORT_TASK_017_FixEditorCompilation.md`

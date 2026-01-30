@@ -1,338 +1,178 @@
 # Windsurf AI 協調開発ルール (v1.1)
 
 > [!WARNING]
-> **⚠️ 重要: 本ファイルはレガシー（非推奨）です。使用しないでください。**
+> **⚠�E�E重要E 本ファイルはレガシー�E�非推奨�E�です。使用しなぁE��ください、E*
 > 
-> **最新のルールおよび唯一のエントリポイント**: [Windsurf_AI_Collab_Rules_latest.md](./Windsurf_AI_Collab_Rules_latest.md)
+> **最新のルールおよび唯一のエントリポインチE*: [Windsurf_AI_Collab_Rules_latest.md](./Windsurf_AI_Collab_Rules_latest.md)
 > 
-> - 本ファイル（v1.1）は **参考資料としてのみ** 保持されています
-> - 新しいプロジェクトや既存プロジェクトの更新時は、必ず `latest.md` を参照してください
-> - 以降のアップデートは `latest.md` に対してのみ行われます
-> - 本ファイルへの変更は行わないでください
+> - 本ファイル�E�E1.1�E��E **参老E��E��としてのみ** 保持されてぁE��ぁE> - 新しいプロジェクトや既存�Eロジェクト�E更新時�E、忁E�� `latest.md` を参照してください
+> - 以降�EアチE�EチE�Eト�E `latest.md` に対してのみ行われまぁE> - 本ファイルへの変更は行わなぁE��ください
 
-## 0. 起動シーケンス（プロジェクト抽象化)
+## 0. 起動シーケンス�E��Eロジェクト抽象匁E
 
-- 規範（SSOT）は常に本リポジトリの `docs/Windsurf_AI_Collab_Rules_latest.md` を参照してください（本ドキュメントは旧版の参考資料）。
-- AI は「各プロジェクトの」リポジトリ直下にある `AI_CONTEXT.md` を起動時に読み込みます（中央リポジトリのファイルは参照しません）。
-- `AI_CONTEXT.md` が存在しない場合は、付録 A のテンプレートに従って最小構成を生成し、プロジェクト側へ追加することを推奨します。
-- ルール本文は常に本リポジトリの `docs/Windsurf_AI_Collab_Rules_latest.md` を参照し、各プロジェクト側のルールファイルは中央リポジトリへのリンクのみを保持します。
-- Pre-flight（プロジェクト側）では `AI_CONTEXT.md` の存在と必須フィールド（最終更新/ミッション/ブランチ/次の中断可能点等）を静的検証してください。
+- 規篁E��ESOT�E��E常に本リポジトリの `docs/Windsurf_AI_Collab_Rules_latest.md` を参照してください�E�本ドキュメント�E旧版�E参老E��E���E�、E- AI は「各プロジェクト�E」リポジトリ直下にある `AI_CONTEXT.md` を起動時に読み込みます（中央リポジトリのファイルは参�Eしません�E�、E- `AI_CONTEXT.md` が存在しなぁE��合�E、付録 A のチE��プレートに従って最小構�Eを生成し、�Eロジェクト�Eへ追加することを推奨します、E- ルール本斁E�E常に本リポジトリの `docs/Windsurf_AI_Collab_Rules_latest.md` を参照し、各プロジェクト�Eのルールファイルは中央リポジトリへのリンクのみを保持します、E- Pre-flight�E��Eロジェクト�E�E�では `AI_CONTEXT.md` の存在と忁E��フィールド（最終更新/ミッション/ブランチE次の中断可能点等）を静的検証してください、E
+## 1. 目皁E��適用篁E��
 
-## 1. 目的と適用範囲
-
-- 人間と AI エージェントが協調し、高速かつ安全に価値を継続提供するための原則・手順・監査要件を定義します。
-- 適用対象はコード生成、テスト、デプロイ、ドキュメント生成、インフラ操作など全ての開発活動です。
-
+- 人間と AI エージェントが協調し、E��速かつ安�Eに価値を継続提供するため�E原則・手頁E�E監査要件を定義します、E- 適用対象はコード生成、テスト、デプロイ、ドキュメント生成、インフラ操作など全ての開発活動です、E
 ## 2. 用語定義
 
-- AI: 本プロジェクトで自動化/支援を行うエージェント（actor_id を付与）。
-- Issue: すべての作業の起点となるトラッキング単位。
-- Tier: 実行リスク分類。Tier 1（低）/Tier 2（中）/Tier 3（高）。
-- Pre-flight Check: 実行前の自動検証群。
-- 複合ミッション: 実装・改善・リファクタ・リリース準備等を内包する、AI の長期作業単位。単一の Issue/ブランチ/PR に集約する。
-- AI_CONTEXT.md: リポジトリ直下で AI の状態を永続化/同期するための単一ソース。最終更新日時、現在ミッション、関連 Issue/PR、進捗、次の中断可能点、将来提案等を記録。
-- 中断可能点: 人間が介入/停止しやすい工程上の安全な区切り（例: PR 作成直後、CI 成功直後、デプロイ前）。
+- AI: 本プロジェクトで自動化/支援を行うエージェント！Ector_id を付与）、E- Issue: すべての作業の起点となるトラチE��ング単位、E- Tier: 実行リスク刁E��。Tier 1�E�低！ETier 2�E�中�E�ETier 3�E�高）、E- Pre-flight Check: 実行前の自動検証群、E- 褁E��ミッション: 実裁E�E改喁E�Eリファクタ・リリース準備等を冁E��する、AI の長期作業単位。単一の Issue/ブランチEPR に雁E��E��る、E- AI_CONTEXT.md: リポジトリ直下で AI の状態を永続化/同期するための単一ソース。最終更新日時、現在ミッション、E��連 Issue/PR、E��捗、次の中断可能点、封E��提案等を記録、E- 中断可能点: 人間が介�E/停止しやすい工程上�E安�Eな区刁E���E�侁E PR 作�E直後、CI 成功直後、デプロイ前）、E
+## 3. 原則�E�Erinciples�E�E
+### 3.1 段階的権限付与！Eiered Delegation�E�E
+- Tier 1�E�低！E ドキュメント更新、スタイル修正、軽微なチE��ト�ECI 設定、EI は自律実行可�E�要EPre-flight 合格�E�、E- Tier 2�E�中�E�E 機�E実裁E仕様追加等、EI ぁEPR を作�E。定義された品質ゲート（侁E チE��トカバレチE��≥90%、脆弱性 High/Critical=0�E�が満たされれば自動�Eージ可、E- Tier 3�E�高！E 本番チE�Eタ変更、DB マイグレーション、デプロイ/本番インフラ変更等、EI は提案�Eみ。シニア承認と二段階承認が忁E��、E
+### 3.2 自律性の篁E��
 
-## 3. 原則（Principles）
-
-### 3.1 段階的権限付与（Tiered Delegation）
-
-- Tier 1（低）: ドキュメント更新、スタイル修正、軽微なテスト・CI 設定。AI は自律実行可（要 Pre-flight 合格）。
-- Tier 2（中）: 機能実装/仕様追加等。AI が PR を作成。定義された品質ゲート（例: テストカバレッジ≥90%、脆弱性 High/Critical=0）が満たされれば自動マージ可。
-- Tier 3（高）: 本番データ変更、DB マイグレーション、デプロイ/本番インフラ変更等。AI は提案のみ。シニア承認と二段階承認が必須。
-
-### 3.2 自律性の範囲
-
-- Assume Yes は Tier 1 のみ適用。Tier 2/3 は承認フローに従う。
-- すべての AI 操作は PR/変更ログを自動生成し、理由・実行コマンドを記録する。
-- 「CI 連携マージ」: CI が成功した PR は AI が自動でマージする（自己 PR の承認は省略）。Tier 2 は品質ゲート合格が条件。品質ゲートを満たした PR は AI の判断で自律的にマージしてよい。
-
+- Assume Yes は Tier 1 のみ適用。Tier 2/3 は承認フローに従う、E- すべての AI 操作�E PR/変更ログを�E動生成し、理由・実行コマンドを記録する、E- 「CI 連携マ�Eジ、E CI が�E功しぁEPR は AI が�E動でマ�Eジする�E��E己 PR の承認�E省略�E�。Tier 2 は品質ゲート合格が条件。品質ゲートを満たしぁEPR は AI の判断で自律的にマ�Eジしてよい、E
 ### 3.3 可観測性と監査
 
-- すべての AI 操作は JSON 形式ログに記録（timestamp, actor, issue-id, action, diff/changes, preflight-result, environment, correlation-id）。
-- ログ保持: 90 日ホット、3 年アーカイブ。
+- すべての AI 操作�E JSON 形式ログに記録�E�Eimestamp, actor, issue-id, action, diff/changes, preflight-result, environment, correlation-id�E�、E- ログ保持: 90 日ホット、E 年アーカイブ、E
+### 3.4 運用標準（毎回の開発の進め方�E�E
+- 返信は忁E��日本語で行う、E- タスク化して進め、区刁E��の良ぁE��ころでこまめにプッシュまで行う、E- 大頁E��・中頁E��・小頁E��を設定し、各タスクの目皁E��完亁E��件を�E確化、E- 進捗と今後�E計画を�E度明示し、それに従って作業を進める、E- 自律的にチE��ト（単佁E統吁E静的�E�を実行し、正常性を確認、E- 手動チE��トが忁E��な場合�E、完�Eな手頁E��ドキュメント化、E- Issue とドキュメントを頻繁に点検�E更新し最新に保つ、E- 長朁E中朁E短期�E「開発の区刁E��」を意識し、状態を点検�E更新、E
+## 4. ワークフロー�E�Essue 駁E��開発�E�E
+1) 着想: AI はコード�E极E抽象要汁E封E��提案に基づぁEIssue を起票可、Essue には Goal/ToDo/受�E基溁E影響篁E��/推定リスク�E�Eier�E�を明記、E2) 計画: タスク刁E��/サブタスク化。Patch スコープ定義、E3) 実裁E ブランチ命名�Eコミット規紁E��従い進める、E4) 検証: CI でユニッチE統吁E静的解极EセキュリチE��スキャン。Pre-flight 合格を�Eージ条件、E5) 統吁E ルール 3.1/3.2 に従ってマ�Eジ�E��E動�Eージ条件を満たす場合�E AI が実行）、E6) 斁E��匁E 変更めEdocs/ に反映。ドキュメントへ「最終更新日時」「更新老E��を明記、E
+### 4.1 褁E��ミッション・ワークフロー
 
-### 3.4 運用標準（毎回の開発の進め方）
-
-- 返信は必ず日本語で行う。
-- タスク化して進め、区切りの良いところでこまめにプッシュまで行う。
-- 大項目・中項目・小項目を設定し、各タスクの目的と完了条件を明確化。
-- 進捗と今後の計画を都度明示し、それに従って作業を進める。
-- 自律的にテスト（単体/統合/静的）を実行し、正常性を確認。
-- 手動テストが必要な場合は、完全な手順をドキュメント化。
-- Issue とドキュメントを頻繁に点検・更新し最新に保つ。
-- 長期/中期/短期の「開発の区切り」を意識し、状態を点検・更新。
-
-## 4. ワークフロー（Issue 駆動開発）
-
-1) 着想: AI はコード分析/抽象要求/将来提案に基づき Issue を起票可。Issue には Goal/ToDo/受入基準/影響範囲/推定リスク（Tier）を明記。
-2) 計画: タスク分解/サブタスク化。Patch スコープ定義。
-3) 実装: ブランチ命名・コミット規約に従い進める。
-4) 検証: CI でユニット/統合/静的解析/セキュリティスキャン。Pre-flight 合格をマージ条件。
-5) 統合: ルール 3.1/3.2 に従ってマージ（自動マージ条件を満たす場合は AI が実行）。
-6) 文書化: 変更を docs/ に反映。ドキュメントへ「最終更新日時」「更新者」を明記。
-
-### 4.1 複合ミッション・ワークフロー
-
-- 関連タスク（実装/改善/リファクタ/リリース準備）を 1 つの「複合ミッション」として束ね、単一の Issue/ブランチ/PR に集約。
-- Issue 起票は AI が自律的に実施できる。必要な情報（Goal/Scope/DoD/リスク等）を満たす限り、事前承認なしで作成してよい。
-- 中間報告は原則不要。AI は AI_CONTEXT.md を更新し続け、工程の「中断可能点」を明示。
-- 例: Mission N を単一 PR で完成 → CI 成功 → AI が自動マージ。
-
+- 関連タスク�E�実裁E改喁Eリファクタ/リリース準備�E�を 1 つの「褁E��ミッション」として束�E、単一の Issue/ブランチEPR に雁E��E��E- Issue 起票は AI が�E律的に実施できる。忁E��な惁E���E�Eoal/Scope/DoD/リスク等）を満たす限り、事前承認なしで作�Eしてよい、E- 中間報告�E原則不要、EI は AI_CONTEXT.md を更新し続け、工程�E「中断可能点」を明示、E- 侁E Mission N を単一 PR で完�E ↁECI 成功 ↁEAI が�E動�Eージ、E
 ### 4.2 AI_CONTEXT.md 運用
 
-- 位置: リポジトリ直下に `AI_CONTEXT.md`。
-- 更新タイミング: 作業開始時の読込、作業の区切り（コミット前/PR 作成後/CI 完了後など）に更新。
-- 記載内容: 最終更新日時（ISO8601）、現在のミッション、関連 Issue/PR、進捗、次の中断可能点、決定事項、リスク、将来提案（Backlog）。
-- 端末間/会話セッション非依存で、どこからでも再開可能にする。
+- 位置: リポジトリ直下に `AI_CONTEXT.md`、E- 更新タイミング: 作業開始時の読込、作業の区刁E���E�コミット前/PR 作�E征ECI 完亁E��など�E�に更新、E- 記載�E容: 最終更新日時！ESO8601�E�、現在のミッション、E��連 Issue/PR、E��捗、次の中断可能点、決定事頁E��リスク、封E��提案！Eacklog�E�、E- 端末閁E会話セチE��ョン非依存で、どこからでも�E開可能にする、E
+### 4.3 対話皁E��琁E��中断可能点と提案！E
+- チャチE��報告時は「次の安�Eな中断可能点」を明示�E�侁E 「PR 作�E後」）、E- 封E��検討事頁E�E AI_CONTEXT.md の Backlog に蓁E��し、ミチE��ョン完亁E��告時に提案、E
+### 4.4 GitHub 自律操佁E
+- AI は Issue/ブランチEPR 作�E、ラベル付与、PR の自動�Eージ�E�ルール準拠�E�を実施、E- 自動�Eージは「CI 連携マ�Eジ」原剁E��従う。Tier 2 は品質ゲート合格時�Eみ自動。�Eージ後�E AI が�E律的に作業ブランチを削除する、E- 自己 PR は Approve 不可のため、承認を省略し、CI 成功後に直接マ�Eジする�E�EI 連携マ�Eジ�E�、E
+### 4.5 命吁Eコミット規紁E
+- ブランチE `feature/ISSUE-<id>-<slug>`�E�許容: `feature/#<id>-<slug>`�E�、E- コミッチE `type(scope): short description [closes #<issue>]`、E- type: feat/fix/chore/docs/refactor/test/build/ci/release など、E
+### 4.6 Pre-flight Check�E�忁E��！E
+1. 依存関係�E整合！Eock の整合）、E2. 忁E��環墁E��数の存在/妥当性、E3. Linter エラー 0、E4. チE��ト実行と閾値�E��E佁E≥80%、E��要モジュール ≥90% 推奨�E�、E5. セキュリチE��スキャン�E�Eigh/Critical=0、Medium は影響評価と承認）、E6. 影響篁E��レポ�Eト（本番影響: 変更ファイル一覧/DB 操佁E外部 API 影響�E�、E7. プロジェクト固有�E Smoke/静的検証�E�侁E `scripts/dev-check.js`�E�、E
+### 4.7 セキュリチE��/秘寁E��報
 
-### 4.3 対話的管理（中断可能点と提案）
+- API Key/賁E��惁E��はハ�Eドコード禁止。忁E��な場合�E安�Eなストアを使用、E
+### 4.8 バックアウチEロールバック
 
-- チャット報告時は「次の安全な中断可能点」を明示（例: 「PR 作成後」）。
-- 将来検討事項は AI_CONTEXT.md の Backlog に蓄積し、ミッション完了報告時に提案。
+- 影響が大きい変更はリリースノ�EチEロールバック手頁E�� PR に明記、E
+### 4.9 バ�Eジョニング/リリース
 
-### 4.4 GitHub 自律操作
-
-- AI は Issue/ブランチ/PR 作成、ラベル付与、PR の自動マージ（ルール準拠）を実施。
-- 自動マージは「CI 連携マージ」原則に従う。Tier 2 は品質ゲート合格時のみ自動。マージ後は AI が自律的に作業ブランチを削除する。
-- 自己 PR は Approve 不可のため、承認を省略し、CI 成功後に直接マージする（CI 連携マージ）。
-
-### 4.5 命名/コミット規約
-
-- ブランチ: `feature/ISSUE-<id>-<slug>`（許容: `feature/#<id>-<slug>`）。
-- コミット: `type(scope): short description [closes #<issue>]`。
-- type: feat/fix/chore/docs/refactor/test/build/ci/release など。
-
-### 4.6 Pre-flight Check（必須）
-
-1. 依存関係の整合（lock の整合）。
-2. 必須環境変数の存在/妥当性。
-3. Linter エラー 0。
-4. テスト実行と閾値（全体 ≥80%、重要モジュール ≥90% 推奨）。
-5. セキュリティスキャン（High/Critical=0、Medium は影響評価と承認）。
-6. 影響範囲レポート（本番影響: 変更ファイル一覧/DB 操作/外部 API 影響）。
-7. プロジェクト固有の Smoke/静的検証（例: `scripts/dev-check.js`）。
-
-### 4.7 セキュリティ/秘密情報
-
-- API Key/資格情報はハードコード禁止。必要な場合は安全なストアを使用。
-
-### 4.8 バックアウト/ロールバック
-
-- 影響が大きい変更はリリースノート/ロールバック手順を PR に明記。
-
-### 4.9 バージョニング/リリース
-
-- セマンティックに準拠し、CHANGELOG/VERSION を更新。リリース PR は CI 成功後に自動マージ可（Tier に応じて）。
-
-### 4.10 ドキュメント生成
-
-- Doxygen/PlantUML 等により設計/変更点を docs/ に反映。
-
+- セマンチE��チE��に準拠し、CHANGELOG/VERSION を更新。リリース PR は CI 成功後に自動�Eージ可�E�Eier に応じて�E�、E
+### 4.10 ドキュメント生戁E
+- Doxygen/PlantUML 等により設訁E変更点めEdocs/ に反映、E
 ## 5. 自動化・冪等性・リトライ
 
-- 冪等運用。失敗時は最大 3 回まで自動リトライ。3 回失敗で中断し、Issue にエラーレポート付与。
-
+- 冪等運用。失敗時は最大 3 回まで自動リトライ、E 回失敗で中断し、Issue にエラーレポ�Eト付与、E
 ## 6. 監査/ログ
 
-- 監査用 JSON ログ（3.3 参照）を生成。PR/Issue に紐づけ可能な correlation-id を使用。
-
+- 監査用 JSON ログ�E�E.3 参�E�E�を生�E。PR/Issue に紐づけ可能な correlation-id を使用、E
 ---
 
-## 0. マニュアルの使い方
+## 0. マニュアルの使ぁE��
 
-- **対象**: コード生成、テスト、CI/CD、ドキュメント、インフラ運用など、開発ライフサイクル全般で AI を活用するチーム。
-- **必読ファイル**:
-  - `AI_CONTEXT.md`: 作業状態とモード、レポートスタイルを同期するための現場用ファイル。
-  - `REPORT_CONFIG.yml`: レポーティング/創造性の既定値、禁止表現、トリガー、プロンプト上書きを定義。
-  - `docs/PROMPT_TEMPLATES.md`: スタイル別・リスク別に最適化されたプロンプトテンプレート集。
-  - `docs/CENTRAL_REPO_REF.md`: 中央リポジトリ（SSOT）の参照/導入手順。
-  - `AI_FEEDBACK_LOG.md`: 応答評価を記録し、適応学習に活用するログ。
-- **運用サイクル**: 「起動 → モード選択 → ワークフロー実施 → レポート生成 → フィードバック記録 → 改善」というループで継続的に自治度を高める。
-
+- **対象**: コード生成、テスト、CI/CD、ドキュメント、インフラ運用など、E��発ライフサイクル全般で AI を活用するチ�Eム、E- **忁E��ファイル**:
+  - `AI_CONTEXT.md`: 作業状態とモード、レポ�Eトスタイルを同期するため�E現場用ファイル、E  - `REPORT_CONFIG.yml`: レポ�EチE��ング/創造性の既定値、禁止表現、トリガー、�Eロンプト上書きを定義、E  - `docs/PROMPT_TEMPLATES.md`: スタイル別・リスク別に最適化されたプロンプトチE��プレート集、E  - `docs/CENTRAL_REPO_REF.md`: 中央リポジトリ�E�ESOT�E��E参�E/導�E手頁E��E  - `AI_FEEDBACK_LOG.md`: 応答評価を記録し、E��応学習に活用するログ、E- **運用サイクル**: 「起勁EↁEモード選抁EↁEワークフロー実施 ↁEレポ�Eト生戁EↁEフィードバチE��記録 ↁE改喁E��とぁE��ループで継続的に自治度を高める、E
 ---
 
-## 1. 起動手順と運用モード
-
-### 1.1 クイックスタート
-
-1. `AI_CONTEXT.md` を読み込み、`mode` と `report_style` を確認/設定する。
-2. `scripts/detect-project-type.js` を実行し、プロジェクトタイプ（`standard`/`web`/`unity` など）を判定。
-3. `scripts/report-style-hint.js <style>` を実行し、`REPORT_HINT.md` を生成。
-4. 必要に応じて `scripts/creativity-booster.js` と `scripts/adapt-response.js` を実行し、提示されたヒントを対話冒頭で共有。
-5. ワークフローに着手し、区切りごとに `AI_CONTEXT.md` とログ類を更新。
-
-### 1.2 運用モード
-
-- **Standard Mode**: Issue 駆動で着実に進める。Tier 2/3 作業の既定モード。
-- **Fast Mode**: Web/Unity 等でスピード重視。ダイレクトコミットとテスト閾値緩和を許容するが、`AI_CONTEXT.md` で合意が必要。
-- **Custom Mode**: `AI_CONTEXT.md` に `mode: custom` を記載し、`REPORT_CONFIG.yml` の `prompt_overrides` と `creativity_triggers` を組み合わせてプロジェクト特化モードを構築。
-
+## 1. 起動手頁E��運用モーチE
+### 1.1 クイチE��スターチE
+1. `AI_CONTEXT.md` を読み込み、`mode` と `report_style` を確誁E設定する、E2. `scripts/detect-project-type.js` を実行し、�Eロジェクトタイプ！Estandard`/`web`/`unity` など�E�を判定、E3. `scripts/report-style-hint.js <style>` を実行し、`REPORT_HINT.md` を生成、E4. 忁E��に応じて `scripts/creativity-booster.js` と `scripts/adapt-response.js` を実行し、提示されたヒントを対話冒頭で共有、E5. ワークフローに着手し、区刁E��ごとに `AI_CONTEXT.md` とログ類を更新、E
+### 1.2 運用モーチE
+- **Standard Mode**: Issue 駁E��で着実に進める。Tier 2/3 作業の既定モード、E- **Fast Mode**: Web/Unity 等でスピ�Eド重視。ダイレクトコミットとチE��ト閾値緩和を許容するが、`AI_CONTEXT.md` で合意が忁E��、E- **Custom Mode**: `AI_CONTEXT.md` に `mode: custom` を記載し、`REPORT_CONFIG.yml` の `prompt_overrides` と `creativity_triggers` を絁E��合わせてプロジェクト特化モードを構築、E
 ---
 
-## 2. 権限モデルとリスク管理
-
+## 2. 権限モチE��とリスク管琁E
 ### 2.1 Tiered Delegation
 
-- **Tier 1（低リスク）**: ドキュメント更新、軽微なリファクタ、スタイル修正。Pre-flight 合格時は AI が自律実行し、自動マージも許容。
-- **Tier 2（中リスク）**: 機能実装、仕様追加、主要リファクタ。AI は PR を作成し、品質ゲート（テスト ≥80%、脆弱性 High/Critical=0）を満たした場合に自動マージ可。
-- **Tier 3（高リスク）**: 本番データ操作、インフラ変更、リリース判断。AI は提案まで。人間による二段階承認とバックアウトプランが必須。
+- **Tier 1�E�低リスク�E�E*: ドキュメント更新、軽微なリファクタ、スタイル修正。Pre-flight 合格時�E AI が�E律実行し、�E動�Eージも許容、E- **Tier 2�E�中リスク�E�E*: 機�E実裁E��仕様追加、主要リファクタ、EI は PR を作�Eし、品質ゲート（テスチE≥80%、脆弱性 High/Critical=0�E�を満たした場合に自動�Eージ可、E- **Tier 3�E�高リスク�E�E*: 本番チE�Eタ操作、インフラ変更、リリース判断、EI は提案まで。人間による二段階承認とバックアウト�Eランが忁E��、E
+### 2.2 自律性と安�E裁E��
 
-### 2.2 自律性と安全装置
-
-- Assume Yes は Tier 1 に限定。Tier 2/3 では `AI_CONTEXT.md` に承認者・条件を記録する。
-- すべてのオペレーションは PR/ログで追跡し、緊急時は「例外条項」を記録して逸脱理由と是正策を残す。
-- `creativity_triggers` を適用する場合でも、セキュリティや規約違反が懸念される提案は自動的に抑制する（スクリプト側でフィルタリング）。
-
+- Assume Yes は Tier 1 に限定。Tier 2/3 では `AI_CONTEXT.md` に承認老E�E条件を記録する、E- すべてのオペレーションは PR/ログで追跡し、緊急時�E「例外条頁E��を記録して逸脱琁E��と是正策を残す、E- `creativity_triggers` を適用する場合でも、セキュリチE��めE��紁E��反が懸念される提案�E自動的に抑制する�E�スクリプト側でフィルタリング�E�、E
 ---
 
-## 3. エンドツーエンド ワークフロー
+## 3. エンドツーエンチEワークフロー
 
-1. **Ideation**: AI はコード分析/抽象要求/改善提案に基づき Issue を起票。`Goal`、`DoD`、`Tier`、影響範囲を必須記載。
-2. **Planning**: タスク分解、サブタスク化、Patch スコープ決定。`AI_CONTEXT.md` の Backlog を同期。
-3. **Implementation**: ガイドラインに従いブランチ作成、コミット、ドラフトコミット活用。
-4. **Verification**: Pre-flight（依存関係、Linter、テスト、セキュリティ、影響範囲）を実行。高速モード時はテスト閾値や Smoke を調整。
-5. **Integration**: Tier/モードに応じて自動マージまたは承認フローへ。CI 成功をトリガーに `scripts/adapt-response.js` を再実行すると、次ラウンドのヒントを自動生成。
-6. **Documentation**: `docs/` を更新し、`AI_CONTEXT.md` に中断可能点を記録。必要に応じて `AI_FEEDBACK_LOG.md` に評価を追記。
-
-### 3.1 Mission 管理
-
-- 長期タスクは「ミッション」と定義し、30 分以上の工程はサブミッションへ自動分割。
-- `AI_CONTEXT.md` の `Backlog` と `決定事項` を更新し、別端末/別会話でもスムーズに再開できるようにする。
-- **Worker同期強化**: WorkerAIの作業完了をOrchestratorが確認してから次のステップへ進む。`AI_CONTEXT.md` にWorker完了ステータスを記録し、未完了時は中断し、リトライまたは手動介入を促す。**非同期モードオプション**: `async_mode: true/false` を追加。true時はcritical Workerのみ同期、非criticalは並行実行。タイムアウト（デフォルト30分）超過時はerror扱い。
-
-### 3.2 対話的管理
-
-- チャット報告は「次の安全な中断ポイント」を明示（例: 「CI 成功後に区切り」）。
-- `REPORT_HINT.md` と `CREATIVITY_HINT.md` を参照し、スタイルとトリガーに従った進捗共有を実践。
-- 失敗リトライ 3 回で人間介入を促す（`AI_CONTEXT.md` と Issue にログ）。
-
+1. **Ideation**: AI はコード�E极E抽象要汁E改喁E��案に基づぁEIssue を起票。`Goal`、`DoD`、`Tier`、影響篁E��を忁E��記載、E2. **Planning**: タスク刁E��、サブタスク化、Patch スコープ決定。`AI_CONTEXT.md` の Backlog を同期、E3. **Implementation**: ガイドラインに従いブランチ作�E、コミット、ドラフトコミット活用、E4. **Verification**: Pre-flight�E�依存関係、Linter、テスト、セキュリチE��、影響篁E���E�を実行。高速モード時はチE��ト閾値めESmoke を調整、E5. **Integration**: Tier/モードに応じて自動�Eージまた�E承認フローへ、EI 成功をトリガーに `scripts/adapt-response.js` を�E実行すると、次ラウンド�Eヒントを自動生成、E6. **Documentation**: `docs/` を更新し、`AI_CONTEXT.md` に中断可能点を記録。忁E��に応じて `AI_FEEDBACK_LOG.md` に評価を追記、E
+### 3.1 Mission 管琁E
+- 長期タスクは「ミチE��ョン」と定義し、E0 刁E��上�E工程�EサブミチE��ョンへ自動�E割、E- `AI_CONTEXT.md` の `Backlog` と `決定事頁E を更新し、別端末/別会話でもスムーズに再開できるようにする、E- **Worker同期強匁E*: WorkerAIの作業完亁E��Orchestratorが確認してから次のスチE��プへ進む。`AI_CONTEXT.md` にWorker完亁E��チE�Eタスを記録し、未完亁E��は中断し、リトライまた�E手動介�Eを俁E��、E*非同期モードオプション**: `async_mode: true/false` を追加。true時�Ecritical Workerのみ同期、E��criticalは並行実行。タイムアウト（デフォルチE0刁E��趁E��時�Eerror扱ぁE��E
+### 3.2 対話皁E��琁E
+- チャチE��報告�E「次の安�Eな中断ポイント」を明示�E�侁E 「CI 成功後に区刁E��」）、E- `REPORT_HINT.md` と `CREATIVITY_HINT.md` を参照し、スタイルとトリガーに従った進捗�E有を実践、E- 失敗リトライ 3 回で人間介�Eを俁E���E�EAI_CONTEXT.md` と Issue にログ�E�、E
 ---
 
-## 4. レポーティングとプロンプト統制
+## 4. レポ�EチE��ングとプロンプト統制
 
-### 4.1 レポートスタイル
+### 4.1 レポ�Eトスタイル
 
-- `REPORT_CONFIG.yml` の `style_presets` に基づき、`standard`/`concise`/`narrative`/`creative` 等を選択。
-- `report_style` 未指定時は `default_style`（既定: `standard`）を使用。
-- 各スタイルは「目的・現状・次のアクション」を必須情報とし、表現方法のみ変化させる。
-
+- `REPORT_CONFIG.yml` の `style_presets` に基づき、`standard`/`concise`/`narrative`/`creative` 等を選択、E- `report_style` 未持E��時は `default_style`�E�既宁E `standard`�E�を使用、E- 吁E��タイルは「目皁E�E現状・次のアクション」を忁E��情報とし、表現方法�Eみ変化させる、E
 ### 4.2 創造性トリガー
 
-- `creativity_triggers` でスタイルごとの追加アクションを定義。
-- トリガーは `scripts/creativity-booster.js` によりランダム/重み付きで選択され、`CREATIVITY_HINT.md` に出力される。
-- ハイリスク作業では、安全性チェック後にトリガーを適用するか、人間が承認するかを判断。
-
-### 4.3 プロンプトテンプレート
-
-- `docs/PROMPT_TEMPLATES.md` にスタイル別・Tier別テンプレートを掲載。
-- `REPORT_CONFIG.yml` の `prompt_overrides` により、プロジェクト固有のプロンプトを上書き可能。
-- `scripts/report-style-hint.js` はテンプレ情報を反映し、ヒント内に推奨見出しと禁止表現を提示。
-
-### 4.4 フィードバックループ
-
-- 応答後は `AI_FEEDBACK_LOG.md` に創造性スコア、明瞭性スコア、改善点、次回試すトリガーを記録。
-- `scripts/adapt-response.js` がログを解析し、`ADAPTATION_HINT.md` に次回の推奨スタイル/トリガーを提案。
-
+- `creativity_triggers` でスタイルごとの追加アクションを定義、E- トリガーは `scripts/creativity-booster.js` によりランダム/重み付きで選択され、`CREATIVITY_HINT.md` に出力される、E- ハイリスク作業では、安�E性チェチE��後にトリガーを適用するか、人間が承認するかを判断、E
+### 4.3 プロンプトチE��プレーチE
+- `docs/PROMPT_TEMPLATES.md` にスタイル別・Tier別チE��プレートを掲載、E- `REPORT_CONFIG.yml` の `prompt_overrides` により、�Eロジェクト固有�Eプロンプトを上書き可能、E- `scripts/report-style-hint.js` はチE��プレ惁E��を反映し、ヒント�Eに推奨見�Eしと禁止表現を提示、E
+### 4.4 フィードバチE��ルーチE
+- 応答後�E `AI_FEEDBACK_LOG.md` に創造性スコア、�E瞭性スコア、改喁E��、次回試すトリガーを記録、E- `scripts/adapt-response.js` がログを解析し、`ADAPTATION_HINT.md` に次回�E推奨スタイル/トリガーを提案、E
 ---
 
 ## 5. 自動化とスクリプト
 
-- `scripts/detect-project-type.js`: プロジェクトタイプ判定。
-- `scripts/report-style-hint.js`: `REPORT_HINT.md` 生成（スタイル/禁止表現/推奨見出し）。
-- `scripts/creativity-booster.js`: `creativity_triggers` を基に `CREATIVITY_HINT.md` を生成。
-- `scripts/adapt-response.js`: `AI_FEEDBACK_LOG.md` を解析し、`ADAPTATION_HINT.md` を生成。
-- 追加の Pre-flight ツール（Lint/テスト/セキュリティ）はプロジェクト固有スクリプトに委譲し、本リポジトリからはガイドラインのみ提示。
-
+- `scripts/detect-project-type.js`: プロジェクトタイプ判定、E- `scripts/report-style-hint.js`: `REPORT_HINT.md` 生�E�E�スタイル/禁止表現/推奨見�Eし）、E- `scripts/creativity-booster.js`: `creativity_triggers` を基に `CREATIVITY_HINT.md` を生成、E- `scripts/adapt-response.js`: `AI_FEEDBACK_LOG.md` を解析し、`ADAPTATION_HINT.md` を生成、E- 追加の Pre-flight チE�Eル�E�Eint/チE��チEセキュリチE���E��Eプロジェクト固有スクリプトに委譲し、本リポジトリからはガイドラインのみ提示、E
 ---
 
-## 6. 監査・ログ・セキュリティ
+## 6. 監査・ログ・セキュリチE��
 
-- すべての操作は JSON 監査ログに記録（timestamp, actor, issue-id, command, preflight-result）。
-- ログ保持: 詳細ログ 90 日、要約ログ 長期保管。`AI_FEEDBACK_LOG.md` は長期保存推奨。
-- API Key/資格情報はハードコード禁止。Pre-flight に秘匿情報スキャンを含める。
-- 緊急対応時は「例外条項」をログし、逸脱理由と是正策を明記。
-
+- すべての操作�E JSON 監査ログに記録�E�Eimestamp, actor, issue-id, command, preflight-result�E�、E- ログ保持: 詳細ログ 90 日、要紁E��グ 長期保管。`AI_FEEDBACK_LOG.md` は長期保存推奨、E- API Key/賁E��惁E��はハ�Eドコード禁止。Pre-flight に秘匿惁E��スキャンを含める、E- 緊急対応時は「例外条頁E��をログし、E��脱琁E��と是正策を明記、E
 ---
 
-## 7. プロジェクトタイプ別ガイド
-
-- **Standard**: Issue 駆動、Tier ガード強化、CI 完了後の自動マージ。
-- **Web/Unity (Fast Mode)**:
-  - ダイレクトコミット許可。テスト閾値 50% まで緩和可。
-  - `creativity_triggers` を積極活用し、UI/UX 改善案や演出提案を促す。
-  - 高速モード時も `AI_CONTEXT.md` の更新を省略しない。
-- **Custom**: `PROJECT_TYPE` ファイルを用意し、特化ルールとスクリプトを組み合わせる。例: データサイエンス案件向けに `analysis` モードを追加。
-
+## 7. プロジェクトタイプ別ガイチE
+- **Standard**: Issue 駁E��、Tier ガード強化、CI 完亁E���E自動�Eージ、E- **Web/Unity (Fast Mode)**:
+  - ダイレクトコミット許可。テスト閾値 50% まで緩和可、E  - `creativity_triggers` を積極活用し、UI/UX 改喁E��や演�E提案を俁E��、E  - 高速モード時めE`AI_CONTEXT.md` の更新を省略しなぁE��E- **Custom**: `PROJECT_TYPE` ファイルを用意し、特化ルールとスクリプトを絁E��合わせる。侁E チE�Eタサイエンス案件向けに `analysis` モードを追加、E
 ---
 
-## 8. 継続的改善フレーム
+## 8. 継続的改喁E��レーム
 
-- **創造性メトリクス**: 新規提案数、多様性スコア、満足度（1-10）、再利用アイデア数。
-- **レビュー頻度**: 月次で `AI_FEEDBACK_LOG.md` と Issue を振り返り、`REPORT_CONFIG.yml` と `PROMPT_TEMPLATES.md` を更新。
-- **Issue 管理**: 改善アイデアは GitHub Issue として起票し、Kanban で進捗を可視化。`creativity_backlog` ラベルを推奨。
-- **モデル差異対策**: 異なる AI モデルで同一テンプレートをテストし、差分を `AI_FEEDBACK_LOG.md` に記録。`scripts/adapt-response.js` が推奨スタイルを調整。
-
+- **創造性メトリクス**: 新規提案数、多様性スコア、満足度�E�E-10�E�、�E利用アイチE��数、E- **レビュー頻度**: 月次で `AI_FEEDBACK_LOG.md` と Issue を振り返り、`REPORT_CONFIG.yml` と `PROMPT_TEMPLATES.md` を更新、E- **Issue 管琁E*: 改喁E��イチE��は GitHub Issue として起票し、Kanban で進捗を可視化。`creativity_backlog` ラベルを推奨、E- **モチE��差異対筁E*: 異なめEAI モチE��で同一チE��プレートをチE��トし、差刁E�� `AI_FEEDBACK_LOG.md` に記録。`scripts/adapt-response.js` が推奨スタイルを調整、E
 ---
 
-## 付録 A: `AI_CONTEXT.md` テンプレート
-
+## 付録 A: `AI_CONTEXT.md` チE��プレーチE
 ```markdown
 # AI Context
 - 最終更新: <ISO8601>
 - 現在のミッション: <title> (#<issue>)
-- ブランチ: <branch>
+- ブランチE <branch>
 - 関連: Issue <url>, PR <url>
-- 進捗: <percentage>% / ステータス: <phase>
+- 進捁E <percentage>% / スチE�Eタス: <phase>
 - 次の中断可能点: <when>
-- モード: <standard|fast|custom>
-- レポートスタイル: <standard|concise|narrative|creative|custom>
+- モーチE <standard|fast|custom>
+- レポ�Eトスタイル: <standard|concise|narrative|creative|custom>
 - 使用トリガー: <trigger ids>
 - **async_mode**: <true|false> (true: 非同期でcritical Workerのみ同期、false: 全同期)
-- **Worker完了ステータス**: <worker1: completed|pending|error, priority: critical|non-critical, timeout: <minutes>>, <worker2: ...> (未完了critical Workerがある場合、次ステップを中断)
+- **Worker完亁E��チE�Eタス**: <worker1: completed|pending|error, priority: critical|non-critical, timeout: <minutes>>, <worker2: ...> (未完亁Eritical Workerがある場合、次スチE��プを中断)
 
-## 決定事項
-- <decision/why>
+## 決定事頁E- <decision/why>
 
 ## リスク/懸念
 - <risk/mitigation>
 
-## Backlog（将来提案）
-- <idea/impact/rough-scope>
+## Backlog�E�封E��提案！E- <idea/impact/rough-scope>
 ```
 
 ---
 
-## 付録 B: Issue/PR テンプレート要約
-
-- **Issue**: Goal / Scope / DoD / Tier / 影響範囲 / 関連リンク / 想定スタイル。
-- **Pull Request**: 概要 / 変更点 / テスト / リスク / 関連 Issue / 中断可能点 / 適用トリガー。
-
+## 付録 B: Issue/PR チE��プレート要紁E
+- **Issue**: Goal / Scope / DoD / Tier / 影響篁E�� / 関連リンク / 想定スタイル、E- **Pull Request**: 概要E/ 変更点 / チE��チE/ リスク / 関連 Issue / 中断可能点 / 適用トリガー、E
 ---
 
-## 付録 C: スクリプト クイックリファレンス
+## 付録 C: スクリプト クイチE��リファレンス
 
 - `node scripts/detect-project-type.js`
 - `node scripts/report-style-hint.js <style?>`
 - `node scripts/creativity-booster.js <style?>`
 - `node scripts/adapt-response.js`
-- 実行結果の `.md` ファイルを対話冒頭で要約共有することを推奨。
-
+- 実行結果の `.md` ファイルを対話冒頭で要紁E�E有することを推奨、E
 ---
 
-## 付録 D: 創造性評価チェックリスト
-
-- **アイデアの幅**: 代替案が複数提示されているか。
-- **表現の工夫**: 比喩・ストーリーテリング・視覚的リストなど多様な表現が使われているか。
-- **リスク認識**: 大胆な提案にも安全策やバックアウト案が添えられているか。
-- **協調性**: 人間と AI の役割分担や次の介入ポイントが明確か。
-- **評価と学習**: フィードバックが `AI_FEEDBACK_LOG.md` に記録され、次回への示唆が抽出されているか。
-
+## 付録 D: 創造性評価チェチE��リスチE
+- **アイチE��の幁E*: 代替案が褁E��提示されてぁE��か、E- **表現の工夫**: 比喩・スト�EリーチE��ング・視覚的リストなど多様な表現が使われてぁE��か、E- **リスク認譁E*: 大胁E��提案にも安�E策やバックアウト案が添えられてぁE��か、E- **協調性**: 人間と AI の役割刁E��めE��の介�Eポイントが明確か、E- **評価と学翁E*: フィードバチE��ぁE`AI_FEEDBACK_LOG.md` に記録され、次回への示唁E��抽出されてぁE��か、E
 ---
 
-## 付録 E: 参考リンク
+## 付録 E: 参老E��ンク
 
 - `docs/PROMPT_TEMPLATES.md`
 - `REPORT_CONFIG.yml`
 - `AI_FEEDBACK_LOG.md`
-- プロジェクト固有のガイドライン（例: `docs/project-type/web.md` 等）
+- プロジェクト固有�Eガイドライン�E�侁E `docs/project-type/web.md` 等！E

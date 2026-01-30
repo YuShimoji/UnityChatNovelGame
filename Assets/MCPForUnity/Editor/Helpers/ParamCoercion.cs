@@ -219,10 +219,10 @@ namespace MCPForUnity.Editor.Helpers
         /// Normalizes a property name by removing separators and converting to camelCase.
         /// Handles common naming variations from LLMs and humans.
         /// Examples:
-        ///   "Use Gravity" → "useGravity"
-        ///   "is_kinematic" → "isKinematic"
-        ///   "max-angular-velocity" → "maxAngularVelocity"
-        ///   "Angular Drag" → "angularDrag"
+        ///   "Use Gravity" ↁE"useGravity"
+        ///   "is_kinematic" ↁE"isKinematic"
+        ///   "max-angular-velocity" ↁE"maxAngularVelocity"
+        ///   "Angular Drag" ↁE"angularDrag"
         /// </summary>
         /// <param name="input">The property name to normalize</param>
         /// <returns>The normalized camelCase property name</returns>

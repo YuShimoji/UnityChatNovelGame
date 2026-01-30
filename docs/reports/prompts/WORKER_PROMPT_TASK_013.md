@@ -1,83 +1,40 @@
 # Worker Prompt: TASK_013_TopicDataVerification
 
-## 参照
-- チケット: docs/tasks/TASK_013_TopicDataVerification.md
+## 参�E
+- チケチE��: docs/tasks/TASK_013_TopicDataVerification.md
 - SSOT: docs/Windsurf_AI_Collab_Rules_latest.md
 - HANDOVER: docs/HANDOVER.md
 - AI_CONTEXT: AI_CONTEXT.md
 - MISSION_LOG: .cursor/MISSION_LOG.md
-- プロジェクト仕様: 最初のプロンプト（プロジェクトルート）
-
-## 境界
+- プロジェクト仕槁E 最初�Eプロンプト�E��Eロジェクトルート！E
+## 墁E��
 
 ### Focus Area
-- `docs/evidence/` 配下: スクリーンショットの保存
-- `Assets/Scripts/Debug/Editor/` 配下: スクリーンショット自動取得エディタスクリプトの作成（新規）
-- `Assets/Scenes/DebugChatScene.unity`: UnlockTopicCommandの動作確認
-- `Assets/Resources/Yarn/DebugScript.yarn`: トピック解放コマンドの実行確認
-- Unity Editor内での動作確認とEvidence取得
-
+- `docs/evidence/` 配丁E スクリーンショチE��の保孁E- `Assets/Scripts/Debug/Editor/` 配丁E スクリーンショチE��自動取得エチE��タスクリプトの作�E�E�新規！E- `Assets/Scenes/DebugChatScene.unity`: UnlockTopicCommandの動作確誁E- `Assets/Resources/Yarn/DebugScript.yarn`: トピチE��解放コマンド�E実行確誁E- Unity Editor冁E��の動作確認とEvidence取征E
 ### Forbidden Area
-- TopicDataアセットの変更（既存のアセットを維持）
-- UnlockTopicCommandのロジック変更（動作確認のみ）
-- 新機能の追加（検証のみ、ただしスクリーンショット自動取得エディタスクリプトは許可）
-
+- TopicDataアセチE��の変更�E�既存�EアセチE��を維持E��E- UnlockTopicCommandのロジチE��変更�E�動作確認�Eみ�E�E- 新機�Eの追加�E�検証のみ、ただしスクリーンショチE��自動取得エチE��タスクリプトは許可�E�E
 ## Tier / Branch
-- Tier: 3（検証・修正）
-- Branch: feat/topic-verification
+- Tier: 3�E�検証・修正�E�E- Branch: feat/topic-verification
 
 ## DoD
-- [ ] スクリーンショット自動取得エディタスクリプトを作成
-  - [ ] `Assets/Scripts/Debug/Editor/TopicAssetScreenshotCapture.cs` を作成
-  - [ ] Unity Editorメニューから実行可能（`Tools/FoundPhone/Capture Topic Asset Screenshot`）
-  - [ ] `Assets/Resources/Topics/debug_topic_01.asset` を選択してInspector表示
-  - [ ] スクリーンショットを `docs/evidence/task011_topic_assets.png` として保存
-  - [ ] 保存成功時にコンソールログを出力
-- [ ] トピックアセットのInspector表示スクリーンショットを取得
-  - [ ] エディタスクリプトを実行してスクリーンショットを取得
-  - [ ] `docs/evidence/task011_topic_assets.png` が存在することを確認
-- [ ] UnlockTopicCommandの動作確認
-  - [ ] `Assets/Scenes/DebugChatScene.unity` を開く
-  - [ ] `ScenarioManager` が `DebugScript.yarn` を実行するように設定
-  - [ ] Playボタンで実行し、`<<UnlockTopic "debug_topic_01">>` コマンドが正常に動作することを確認
-  - [ ] Consoleウィンドウに「Topic unlocked: debug_topic_01」のログが表示されることを確認
-  - [ ] エラーが発生しないことを確認
-- [ ] TASK_011のStatusをDONEに更新（Evidence取得とUnlockTopicCommand確認完了後）
-- [ ] `docs/inbox/` にレポート (`REPORT_TASK_013_TopicDataVerification.md`) が作成されている
-- [ ] 本チケットの Report 欄にレポートパスが追記されている
+- [ ] スクリーンショチE��自動取得エチE��タスクリプトを作�E
+  - [ ] `Assets/Scripts/Debug/Editor/TopicAssetScreenshotCapture.cs` を作�E
+  - [ ] Unity Editorメニューから実行可能�E�ETools/FoundPhone/Capture Topic Asset Screenshot`�E�E  - [ ] `Assets/Resources/Topics/debug_topic_01.asset` を選択してInspector表示
+  - [ ] スクリーンショチE��めE`docs/evidence/task011_topic_assets.png` として保孁E  - [ ] 保存�E功時にコンソールログを�E劁E- [ ] トピチE��アセチE��のInspector表示スクリーンショチE��を取征E  - [ ] エチE��タスクリプトを実行してスクリーンショチE��を取征E  - [ ] `docs/evidence/task011_topic_assets.png` が存在することを確誁E- [ ] UnlockTopicCommandの動作確誁E  - [ ] `Assets/Scenes/DebugChatScene.unity` を開ぁE  - [ ] `ScenarioManager` ぁE`DebugScript.yarn` を実行するよぁE��設宁E  - [ ] Playボタンで実行し、`<<UnlockTopic "debug_topic_01">>` コマンドが正常に動作することを確誁E  - [ ] Consoleウィンドウに「Topic unlocked: debug_topic_01」�Eログが表示されることを確誁E  - [ ] エラーが発生しなぁE��とを確誁E- [ ] TASK_011のStatusをDONEに更新�E�Evidence取得とUnlockTopicCommand確認完亁E��！E- [ ] `docs/inbox/` にレポ�EチE(`REPORT_TASK_013_TopicDataVerification.md`) が作�EされてぁE��
+- [ ] 本チケチE��の Report 欁E��レポ�Eトパスが追記されてぁE��
 
 ## 停止条件
-- Unity Editor が起動できない
-- 既存のコンパイルエラーが再発し、解消不能
-- 仕様の仮定が 3 つ以上必要
-- 依存追加/更新、破壊的Git操作、GitHubAutoApprove不明での push が必要
-- SSOT不足を `ensure-ssot.js` で解決できない
+- Unity Editor が起動できなぁE- 既存�Eコンパイルエラーが�E発し、解消不�E
+- 仕様�E仮定が 3 つ以上忁E��E- 依存追加/更新、破壊的Git操作、GitHubAutoApprove不�Eでの push が忁E��E- SSOT不足めE`ensure-ssot.js` で解決できなぁE
+停止時�E以下を実施�E�E1. チケチE��のStatusをBLOCKEDに更新
+2. 事宁E根拠/次手（候補）をチケチE��本斁E��追訁E3. docs/inbox/REPORT_TASK_013_TopicDataVerification.md を作�Eし、停止琁E��を記録
+4. チケチE��のReport欁E��レポ�Eトパスを追訁E
+## 納品允E- docs/inbox/REPORT_TASK_013_TopicDataVerification.md
 
-停止時は以下を実施：
-1. チケットのStatusをBLOCKEDに更新
-2. 事実/根拠/次手（候補）をチケット本文に追記
-3. docs/inbox/REPORT_TASK_013_TopicDataVerification.md を作成し、停止理由を記録
-4. チケットのReport欄にレポートパスを追記
+## 実裁E��ンチE
+### スクリーンショチE��自動取得エチE��タスクリプト
+- Unity Editorの `Selection.activeObject` を使用して選択中のアセチE��を取征E- `EditorUtility.FocusProjectWindow()` でProjectウィンドウにフォーカス
+- `EditorGUIUtility.PingObject()` でアセチE��をハイライチE- `ScreenCapture.CaptureScreenshot()` また�E `MCPForUnity.Runtime.Helpers.ScreenshotUtility` を使用してスクリーンショチE��を取征E- `System.IO.File` を使用して `docs/evidence/task011_topic_assets.png` に保孁E- `AssetDatabase.Refresh()` でアセチE��チE�Eタベ�Eスを更新
 
-## 納品先
-- docs/inbox/REPORT_TASK_013_TopicDataVerification.md
-
-## 実装ヒント
-
-### スクリーンショット自動取得エディタスクリプト
-- Unity Editorの `Selection.activeObject` を使用して選択中のアセットを取得
-- `EditorUtility.FocusProjectWindow()` でProjectウィンドウにフォーカス
-- `EditorGUIUtility.PingObject()` でアセットをハイライト
-- `ScreenCapture.CaptureScreenshot()` または `MCPForUnity.Runtime.Helpers.ScreenshotUtility` を使用してスクリーンショットを取得
-- `System.IO.File` を使用して `docs/evidence/task011_topic_assets.png` に保存
-- `AssetDatabase.Refresh()` でアセットデータベースを更新
-
-### UnlockTopicCommand確認
-- DebugChatSceneを開き、GameManagerのScenarioManagerコンポーネントを確認
-- DialogueRunnerがDebugScript.yarnを参照していることを確認
-- Playボタンで実行し、Consoleログを確認
-
-## 注意事項
-- スクリーンショット取得は、Unity Editor内で実行する必要があります
-- Inspectorウィンドウが表示されている必要があります
-- スクリーンショットは、Unity Editorのウィンドウ全体をキャプチャする可能性があります
+### UnlockTopicCommand確誁E- DebugChatSceneを開き、GameManagerのScenarioManagerコンポ�Eネントを確誁E- DialogueRunnerがDebugScript.yarnを参照してぁE��ことを確誁E- Playボタンで実行し、Consoleログを確誁E
+## 注意事頁E- スクリーンショチE��取得�E、Unity Editor冁E��実行する忁E��がありまぁE- Inspectorウィンドウが表示されてぁE��忁E��がありまぁE- スクリーンショチE��は、Unity Editorのウィンドウ全体をキャプチャする可能性がありまぁE

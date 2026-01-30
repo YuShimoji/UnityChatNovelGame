@@ -8,48 +8,36 @@ Created: 2026-01-26T02:40:00+09:00
 Report: docs/reports/REPORT_TASK_018_DeductionBoard_Implementation.md
 
 ## Objective
-推理ボード（Deduction Board）の実装を検証し、完了させる。
-Script (`DeductionBoard.cs`, `TopicCard.cs`) と Prefab (`DeductionBoard.prefab`) は実装済み。
-これらが正しく連携し、`UnlockTopicCommand` によって動作することを確認する。
-
+推琁E�Eード！Eeduction Board�E��E実裁E��検証し、完亁E��せる、EScript (`DeductionBoard.cs`, `TopicCard.cs`) と Prefab (`DeductionBoard.prefab`) は実裁E��み、Eこれらが正しく連携し、`UnlockTopicCommand` によって動作することを確認する、E
 ## Context
 - **Implementation Status**:
   - `Assets/Scripts/UI/DeductionBoard.cs`: Implemented.
   - `Assets/Prefabs/UI/DeductionBoard.prefab`: Created.
 - **Pending**:
-  - Runtime Verification (PlayModeでの動作確認).
+  - Runtime Verification (PlayModeでの動作確誁E.
   - Evidence Capture.
 
 ## Focus Area
-- **Verification**: `Assets/Scenes/DebugChatScene` (または新規検証シーン)
-- **Fixes**: `Assets/Scripts/UI/DeductionBoard.cs` (バグがあれば)
+- **Verification**: `Assets/Scenes/DebugChatScene` (また�E新規検証シーン)
+- **Fixes**: `Assets/Scripts/UI/DeductionBoard.cs` (バグがあれ�E)
 
 ## Forbidden Area
-- `ChatController.cs` への変更（独立性の維持）
-
+- `ChatController.cs` への変更�E�独立性の維持E��E
 ## Constraints
 - **Data Source**: `TopicData` ScriptableObject
-- **Automation**: `VerificationCapture` ツールを使用して Evidence を取得すること。
-
+- **Automation**: `VerificationCapture` チE�Eルを使用して Evidence を取得すること、E
 ## Steps
-1. `DebugChatScene` (または適切なシーン) に `DeductionBoard` Prefab を配置する。
-2. テスト用 YARN script (`DebugScript.yarn` 等) から `<<UnlockTopic>>` コマンドを呼び出す。
-3. ボードに新しいカードが追加されることを確認する。
-4. `VerificationCapture` を使用して Evidence (Screenshot/Log) を保存する。
-5. Report を作成する。
-
+1. `DebugChatScene` (また�E適刁E��シーン) に `DeductionBoard` Prefab を�E置する、E2. チE��ト用 YARN script (`DebugScript.yarn` 筁E から `<<UnlockTopic>>` コマンドを呼び出す、E3. ボ�Eドに新しいカードが追加されることを確認する、E4. `VerificationCapture` を使用して Evidence (Screenshot/Log) を保存する、E5. Report を作�Eする、E
 ## DoD (Definition of Done)
-- [x] `DeductionBoard.cs` が実装されている
-  - [x] `AddTopic(TopicData data)` メソッドを持つ
-  - [x] 既に持っているトピックの重複追加を防ぐ
-- [x] `TopicCard.cs` が実装されている
+- [x] `DeductionBoard.cs` が実裁E��れてぁE��
+  - [x] `AddTopic(TopicData data)` メソチE��を持つ
+  - [x] 既に持ってぁE��トピチE��の重褁E��加を防ぁE- [x] `TopicCard.cs` が実裁E��れてぁE��
   - [x] `Setup(TopicData data)` でアイコンとタイトルを表示できる
-- [x] Prefab が作成されている (`DeductionBoard.prefab`, `TopicCard.prefab`)
+- [x] Prefab が作�EされてぁE�� (`DeductionBoard.prefab`, `TopicCard.prefab`)
 - [x] `ScenarioManager` の `UnlockTopicCommand` から `DeductionBoard.AddTopic` が呼ばれる
 - [x] **Verification**:
-  - [x] `DebugChatScene` で `<<UnlockTopic>>` コマンド実行時にボードにカードが追加されることを確認
-- [x] Report 作成 (`docs/reports/REPORT_TASK_018_DeductionBoard_Implementation.md`)
+  - [x] `DebugChatScene` で `<<UnlockTopic>>` コマンド実行時にボ�Eドにカードが追加されることを確誁E- [x] Report 作�E (`docs/reports/REPORT_TASK_018_DeductionBoard_Implementation.md`)
 
 
 ## Notes
-- TASK_016, TASK_017 は本タスクに統合済み。
+- TASK_016, TASK_017 は本タスクに統合済み、E

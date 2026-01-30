@@ -5,8 +5,8 @@ using DG.Tweening;
 namespace ProjectFoundPhone.UI
 {
     /// <summary>
-    /// UI上にグリッチエフェクトを表示するコンポーネント。
-    /// RectTransformのシェイクとノイズオーバーレイ画像で演出を行う。
+    /// UI上にグリチE��エフェクトを表示するコンポ�Eネント、E
+    /// RectTransformのシェイクとノイズオーバ�Eレイ画像で演�Eを行う、E
     /// </summary>
     public class GlitchEffect : MonoBehaviour
     {
@@ -48,7 +48,7 @@ namespace ProjectFoundPhone.UI
                 m_OriginalPosition = m_ShakeTarget.anchoredPosition;
             }
 
-            // 初期状態でオーバーレイを非表示
+            // 初期状態でオーバ�Eレイを非表示
             SetOverlaysActive(false);
         }
 
@@ -60,10 +60,10 @@ namespace ProjectFoundPhone.UI
 
         #region Public Methods
         /// <summary>
-        /// グリッチエフェクトを再生する。
+        /// グリチE��エフェクトを再生する、E
         /// </summary>
         /// <param name="level">強度レベル (0: 停止, 1-3: 弱-強)</param>
-        /// <param name="duration">持続時間（秒）。0以下で無限</param>
+        /// <param name="duration">持続時間（秒）、E以下で無陁E/param>
         public void Play(int level, float duration = 2.0f)
         {
             if (level <= 0)
@@ -76,7 +76,7 @@ namespace ProjectFoundPhone.UI
             KillAllTweens();
             SetOverlaysActive(true);
 
-            // レベルに応じた設定
+            // レベルに応じた設宁E
             float shakeStrength = m_ShakeStrengthBase * level;
             Color noiseColor = GetNoiseColorForLevel(level);
             float aberrationAlpha = level >= 2 ? m_AberrationColor.a * level : 0f;
@@ -90,7 +90,7 @@ namespace ProjectFoundPhone.UI
                     .SetEase(Ease.Linear);
             }
 
-            // ノイズオーバーレイのフェードイン＆点滅
+            // ノイズオーバ�Eレイのフェードイン�E�E��滁E
             if (m_NoiseOverlay != null)
             {
                 m_NoiseOverlay.color = new Color(noiseColor.r, noiseColor.g, noiseColor.b, 0f);
@@ -98,14 +98,14 @@ namespace ProjectFoundPhone.UI
                     .DOFade(noiseColor.a, 0.1f)
                     .OnComplete(() =>
                     {
-                        // 点滅効果
+                        // 点滁E��极E
                         m_NoiseTween = m_NoiseOverlay
                             .DOFade(noiseColor.a * 0.5f, 0.05f)
                             .SetLoops(-1, LoopType.Yoyo);
                     });
             }
 
-            // 色収差オーバーレイ (Level 2以上)
+            // 色収差オーバ�Eレイ (Level 2以丁E
             if (m_ColorAberrationOverlay != null && level >= 2)
             {
                 Color aberColor = new Color(m_AberrationColor.r, m_AberrationColor.g, m_AberrationColor.b, 0f);
@@ -123,7 +123,7 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// グリッチエフェクトを停止する。
+        /// グリチE��エフェクトを停止する、E
         /// </summary>
         public void Stop()
         {
@@ -132,7 +132,7 @@ namespace ProjectFoundPhone.UI
             m_IsPlaying = false;
             KillAllTweens();
 
-            // 元の位置に戻す
+            // 允E�E位置に戻ぁE
             if (m_ShakeTarget != null)
             {
                 m_ShakeTarget.anchoredPosition = m_OriginalPosition;

@@ -8,24 +8,24 @@
 - **Focus Area**: `Assets/Scripts/Utils/`
 
 ## Context
-MCP環境下ではスクリーンショットの撮影が困難であり、手動検証がブロッカーとなっている。
-これを解消するため、PlayMode実行時に自動的に証拠（スクリーンショット/ログ）を保存するユーティリティを作成する。
+MCP環墁E��ではスクリーンショチE��の撮影が困難であり、手動検証がブロチE��ーとなってぁE��、E
+これを解消するため、PlayMode実行時に自動的に証拠�E�スクリーンショチE��/ログ�E�を保存するユーチE��リチE��を作�Eする、E
 
 ## Requirements
 1. **Script Creation**: `Assets/Scripts/Utils/VerificationCapture.cs`
-   - `MonoBehaviour` を継承。
-   - `Start` または特定のタイミングでスクリーンショットを撮影。
-   - 保存先: `Docs/evidence/` (必須)。
-   - ファイル名: `Capture_{Timestamp}_{SceneName}.png` または指定された名前。
-   - (Optional) `Application.logMessageReceived` をフックしてログをテキスト保存。
+   - `MonoBehaviour` を継承、E
+   - `Start` また�E特定�EタイミングでスクリーンショチE��を撮影、E
+   - 保存�E: `docs/evidence/` (忁E��E、E
+   - ファイル吁E `Capture_{Timestamp}_{SceneName}.png` また�E持E��された名前、E
+   - (Optional) `Application.logMessageReceived` をフチE��してログをテキスト保存、E
 
 2. **Integration Test Support**:
-   - テストランナーからこのスクリプトを含むシーンを実行した際も、ファイルが生成されること。
+   - チE��トランナ�Eからこ�Eスクリプトを含むシーンを実行した際も、ファイルが生成されること、E
 
 ## Definition of Done (DoD)
-- [x] `VerificationCapture.cs` が作成されている。
-- [x] テストシーンに配置し、PlayMode実行後に `docs/evidence/` に画像ファイルが生成されることを確認。
-- [x] 既存の `DebugChatScene` などに組み込み可能であること。
+- [x] `VerificationCapture.cs` が作�EされてぁE��、E
+- [x] チE��トシーンに配置し、PlayMode実行後に `docs/evidence/` に画像ファイルが生成されることを確認、E
+- [x] 既存�E `DebugChatScene` などに絁E��込み可能であること、E
 
 ## Forbidden Area
-- `Assets/Scripts/Core` (ロジック本体には影響を与えないこと)
+- `Assets/Scripts/Core` (ロジチE��本体には影響を与えなぁE��と)

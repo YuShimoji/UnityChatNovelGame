@@ -6,8 +6,8 @@ using ProjectFoundPhone.Core; // ScenarioManagerのために追加
 namespace ProjectFoundPhone.UI
 {
     /// <summary>
-    /// 推論ボード（DeductionBoard）のUIマネージャー
-    /// プレイヤーが獲得したトピックを管理・表示する
+    /// 推論�Eード！EeductionBoard�E��EUIマネージャー
+    /// プレイヤーが獲得したトピックを管琁E�E表示する
     /// </summary>
     public class DeductionBoard : MonoBehaviour
     {
@@ -44,24 +44,24 @@ namespace ProjectFoundPhone.UI
         [SerializeField] private string m_RecipeLoadPath = "Recipes"; // Resources/Recipes
 
         /// <summary>
-        /// 獲得済みトピックのリスト
+        /// 獲得済みトピチE��のリスチE
         /// </summary>
         private List<TopicData> m_UnlockedTopics = new List<TopicData>();
 
         /// <summary>
-        /// 生成されたTopicCardのリスト
+        /// 生�EされたTopicCardのリスチE
         /// </summary>
         private List<TopicCard> m_TopicCards = new List<TopicCard>();
 
         /// <summary>
-        /// ロードされた合成レシピのリスト
+        /// ロードされた合�Eレシピ�EリスチE
         /// </summary>
         private List<SynthesisRecipe> m_Recipes = new List<SynthesisRecipe>();
         #endregion
 
         #region Public Properties
         /// <summary>
-        /// 獲得済みトピックのリスト（読み取り専用）
+        /// 獲得済みトピチE��のリスト（読み取り専用�E�E
         /// </summary>
         public IReadOnlyList<TopicData> UnlockedTopics => m_UnlockedTopics;
         #endregion
@@ -69,7 +69,7 @@ namespace ProjectFoundPhone.UI
         #region Unity Lifecycle
         private void Awake()
         {
-            // シングルトンの初期化
+            // シングルトンの初期匁E
             if (s_Instance != null && s_Instance != this)
             {
                 Debug.LogWarning("DeductionBoard: Duplicate instance found. Destroying this instance.");
@@ -92,10 +92,10 @@ namespace ProjectFoundPhone.UI
 
         #region Public Methods
         /// <summary>
-        /// トピックを推論ボードに追加する
+        /// トピチE��を推論�Eードに追加する
         /// </summary>
-        /// <param name="topicData">追加するトピックデータ</param>
-        /// <returns>追加に成功した場合true、既に存在する場合false</returns>
+        /// <param name="topicData">追加するトピチE��チE�Eタ</param>
+        /// <returns>追加に成功した場吁Erue、既に存在する場吁Ealse</returns>
         public bool AddTopic(TopicData topicData)
         {
             if (topicData == null)
@@ -104,35 +104,35 @@ namespace ProjectFoundPhone.UI
                 return false;
             }
 
-            // 重複チェック
+            // 重褁E��ェチE��
             if (HasTopic(topicData.TopicID))
             {
                 Debug.Log($"DeductionBoard: Topic '{topicData.Title}' already exists.");
                 return false;
             }
 
-            // トピックをリストに追加
+            // トピチE��をリストに追加
             m_UnlockedTopics.Add(topicData);
 
-            // カードを生成
+            // カードを生�E
             CreateTopicCard(topicData);
 
             Debug.Log($"DeductionBoard: Topic added - {topicData.Title} (ID: {topicData.TopicID})");
 
-            // オプション: トピック追加時にボードを表示
+            // オプション: トピチE��追加時にボ�Eドを表示
             if (m_ShowOnTopicAdded)
             {
-                // TODO: Show()メソッドを呼び出すか、アニメーションを再生
+                // TODO: Show()メソチE��を呼び出すか、アニメーションを�E甁E
             }
 
             return true;
         }
 
         /// <summary>
-        /// トピックを推論ボードから削除する
+        /// トピチE��を推論�Eードから削除する
         /// </summary>
-        /// <param name="topicID">削除するトピックのID</param>
-        /// <returns>削除に成功した場合true</returns>
+        /// <param name="topicID">削除するトピチE��のID</param>
+        /// <returns>削除に成功した場吁Erue</returns>
         public bool RemoveTopic(string topicID)
         {
             TopicData topicToRemove = m_UnlockedTopics.Find(t => t.TopicID == topicID);
@@ -157,17 +157,17 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// 指定したIDのトピックが既に獲得済みかどうかを確認する
+        /// 持E��したIDのトピチE��が既に獲得済みかどぁE��を確認すめE
         /// </summary>
         /// <param name="topicID">確認するトピックのID</param>
-        /// <returns>獲得済みの場合true</returns>
+        /// <returns>獲得済みの場吁Erue</returns>
         public bool HasTopic(string topicID)
         {
             return m_UnlockedTopics.Exists(t => t.TopicID == topicID);
         }
 
         /// <summary>
-        /// 全てのトピックをクリアする
+        /// 全てのトピチE��をクリアする
         /// </summary>
         public void ClearAllTopics()
         {
@@ -186,11 +186,11 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// トピックドラッグ＆ドロップ時の処理
+        /// トピチE��ドラチE���E�E��ロチE�E時�E処琁E
         /// </summary>
-        /// <param name="droppedCard">ドラッグされたカード</param>
-        /// <param name="targetCard">ドロップ先のカード</param>
-        /// <returns>処理が成功（合成成功など）した場合はtrue</returns>
+        /// <param name="droppedCard">ドラチE��されたカーチE/param>
+        /// <param name="targetCard">ドロチE�E先�EカーチE/param>
+        /// <returns>処琁E��成功�E�合成�E功など�E�した場合�Etrue</returns>
         public bool OnTopicDropped(TopicCard droppedCard, TopicCard targetCard)
         {
             if (droppedCard == null || targetCard == null) return false;
@@ -202,7 +202,7 @@ namespace ProjectFoundPhone.UI
 
         #region Private Methods
         /// <summary>
-        /// Resourcesから合成レシピをロードする
+        /// Resourcesから合�EレシピをロードすめE
         /// </summary>
         private void LoadRecipes()
         {
@@ -216,9 +216,9 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// TopicCardを生成してコンテナに追加する
+        /// TopicCardを生成してコンチE��に追加する
         /// </summary>
-        /// <param name="topicData">カードに設定するトピックデータ</param>
+        /// <param name="topicData">カードに設定するトピックチE�Eタ</param>
         private void CreateTopicCard(TopicData topicData)
         {
             if (m_TopicCardPrefab == null)
@@ -239,45 +239,45 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// 2つのトピックから合成を試みる
+        /// 2つのトピチE��から合�Eを試みめE
         /// </summary>
-        /// <param name="topicA">トピックA</param>
-        /// <param name="topicB">トピックB</param>
-        /// <returns>合成成功ならtrue</returns>
+        /// <param name="topicA">トピチE��A</param>
+        /// <param name="topicB">トピチE��B</param>
+        /// <returns>合�E成功ならtrue</returns>
         private bool CheckSynthesis(TopicData topicA, TopicData topicB)
         {
             foreach (var recipe in m_Recipes)
             {
                 if (recipe.Matches(topicA, topicB))
                 {
-                    // 合成成功！
+                    // 合�E成功�E�E
                     Debug.Log($"DeductionBoard: Synthesis Successful! {topicA.Title} + {topicB.Title} = {recipe.Result.Title}");
                     
-                    // 結果トピックをアンロック
-                    // 重複チェックはAddTopic内で行われるのでそのまま呼ぶ
+                    // 結果トピチE��をアンロチE��
+                    // 重褁E��ェチE��はAddTopic冁E��行われるのでそ�Eまま呼ぶ
                     if (HasTopic(recipe.Result.TopicID))
                     {
-                        // 既に持ってる
+                        // 既に持ってめE
                         Debug.Log("DeductionBoard: Result topic already exists.");
-                        // エフェクトだけ出すなどの処理をここに追加可能
+                        // エフェクトだけ�Eすなどの処琁E��ここに追加可能
                         return false; 
                     }
                     else
                     {
                          AddTopic(recipe.Result);
 
-                        // ScenarioManager側にフラグを立てるなどの通知が必要ならここで行う
-                        // 例: ScenarioManager.Instance.SetVariable($"has_topic_{recipe.Result.TopicID}", true);
+                        // ScenarioManager側にフラグを立てるなどの通知が忁E��ならここで行う
+                        // 侁E ScenarioManager.Instance.SetVariable($"has_topic_{recipe.Result.TopicID}", true);
                         var scenarioManager = FindFirstObjectByType<ScenarioManager>();
                         if (scenarioManager != null)
                         {
                             scenarioManager.SetVariable<bool>($"has_topic_{recipe.Result.TopicID}", true);
                         }
 
-                        // 材料となったトピックを消すかどうかは仕様次第
-                        // ここでは「消さない」仕様とする（手がかりは残り続ける）
-                        // 演出：MetaEffect再生
-                        // 画面中央などで祝福エフェクトを出す
+                        // 材料となったトピックを消すかどぁE��は仕様次第
+                        // ここでは「消さなぁE��仕様とする�E�手がかり�E残り続ける！E
+                        // 演�E�E�MetaEffect再生
+                        // 画面中央などで祝福エフェクトを出ぁE
                         // "Sparkle" or "Success"などのエフェクト名を使用
                         ProjectFoundPhone.Effects.MetaEffectController.Instance?.PlayEffect("Sparkle", Vector3.zero);
 

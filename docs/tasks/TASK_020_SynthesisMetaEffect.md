@@ -8,33 +8,22 @@ Created: 2026-01-29T09:00:00+09:00
 Report: docs/reports/REPORT_TASK_020_DeductionBoard_Effects.md
 
 ## Objective
-DeductionBoard でトピック合成が成功した際に、視覚的なフィードバック（MetaEffect）を再生し、ユーザー体験を向上させる。
-`MetaEffectController` (TASK_010) を使用して、画面全体または特定の座標にエフェクトを表示する。
-
+DeductionBoard でトピチE��合�Eが�E功した際に、視覚的なフィードバチE���E�EetaEffect�E�を再生し、ユーザー体験を向上させる、E`MetaEffectController` (TASK_010) を使用して、画面全体また�E特定�E座標にエフェクトを表示する、E
 ## Context
 - **Dependencies**:
   - `TASK_010`: MetaEffectController (Implemented)
   - `TASK_018`: DeductionBoard (Implemented)
   - `TASK_019`: Synthesis Logic (In Progress)
-- **Goal**: "新しい発見" の瞬間の喜びを演出する。
-
+- **Goal**: "新しい発要E の瞬間�E喜�Eを演�Eする、E
 ## Focus Area
-- `Assets/Scripts/UI/DeductionBoard.cs`: 合成成功判定箇所
-- `Assets/Resources/Effects/` (もし新規エフェクトが必要なら)
+- `Assets/Scripts/UI/DeductionBoard.cs`: 合�E成功判定箁E��
+- `Assets/Resources/Effects/` (もし新規エフェクトが忁E��なめE
 - `MetaEffectController` との連携
 
 ## Constraints
-- **Performance**: エフェクトがゲームプレイを阻害しないこと。
-- **Reusability**: 汎用的なエフェクト（"Sparkle", "Confetti" 等）を使用または作成する。
-
+- **Performance**: エフェクトがゲームプレイを阻害しなぁE��と、E- **Reusability**: 汎用皁E��エフェクト！ESparkle", "Confetti" 等）を使用また�E作�Eする、E
 ## Steps
-1. `DeductionBoard.cs` の `CheckSynthesis` メソッド（合成成功時）等の適切な箇所を特定する。
-2. `MetaEffectController.Instance.PlayEffect(...)` を呼び出す処理を追加する。
-3. エフェクト生成位置を調整する（ドラッグ&ドロップした地点、または画面中央）。
-4. 実機（Editor）で動作確認を行う。
-
+1. `DeductionBoard.cs` の `CheckSynthesis` メソチE���E�合成�E功時�E�等�E適刁E��箁E��を特定する、E2. `MetaEffectController.Instance.PlayEffect(...)` を呼び出す�E琁E��追加する、E3. エフェクト生成位置を調整する�E�ドラチE��&ドロチE�Eした地点、また�E画面中央�E�、E4. 実機！Editor�E�で動作確認を行う、E
 ## DoD (Definition of Done)
-- [ ] 合成成功時に MetaEffect が再生される
-- [ ] エフェクトが適切な位置で表示される
-- [ ] エラーが出ないこと（MetaEffectController が存在しない場合のカリング）
-- [ ] Report 作成
+- [ ] 合�E成功時に MetaEffect が�E生される
+- [ ] エフェクトが適刁E��位置で表示されめE- [ ] エラーが�EなぁE��と�E�EetaEffectController が存在しなぁE��合�Eカリング�E�E- [ ] Report 作�E

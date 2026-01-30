@@ -1,24 +1,24 @@
 # Worker Prompt for TASK_044: Structure Cleanup
 
-## 依頼内容
-リポジトリ内のディレクトリ構造を整理し、`Docs/` を `docs/` に統合してください。
+## 依頼冁E��
+リポジトリ冁E�EチE��レクトリ構造を整琁E��、`docs/` めE`docs/` に統合してください、E
 
-## コンテキスト
-- 現状: `Docs/` と `docs/` が混在。
-- ゴール: `docs/` に統一。
+## コンチE��スチE
+- 現状: `docs/` と `docs/` が混在、E
+- ゴール: `docs/` に統一、E
 
-## 手順
-1. Git コマンドを使用し、`Docs/` 以下の全てのファイルを `docs/` に移動する。
-   - `git mv Docs/your-file docs/your-file`
-2. `Docs/` フォルダが空になったら削除する。
-3. `README.md` や `MISSION_LOG.md` など、ドキュメント内のリンク（`Docs/`）を `docs/` に置換する。
-   - VSCode の全置換機能などを活用。
-4. 変更をステージングし、コミット準備をする。
+## 手頁E
+1. Git コマンドを使用し、`docs/` 以下�E全てのファイルめE`docs/` に移動する、E
+   - `git mv docs/your-file docs/your-file`
+2. `docs/` フォルダが空になったら削除する、E
+3. `README.md` めE`MISSION_LOG.md` など、ドキュメント�Eのリンク�E�Edocs/`�E�を `docs/` に置換する、E
+   - VSCode の全置換機�Eなどを活用、E
+4. 変更をスチE�Eジングし、コミット準備をする、E
 
 ## 注意点
-- Windows 環境では大文字小文字が区別されないため、`git mv` を使用しないとGitが移動を認識しない場合があります。
-- 必ず `git status` で `renamed` になっていることを確認してください。
+- Windows 環墁E��は大斁E��小文字が区別されなぁE��め、`git mv` を使用しなぁE��Gitが移動を認識しなぁE��合があります、E
+- 忁E�� `git status` で `renamed` になってぁE��ことを確認してください、E
 
-## 提出物
+## 提�E物
 - 修正されたファイル群
 - `docs/reports/REPORT_TASK_044_structure_cleanup.md`

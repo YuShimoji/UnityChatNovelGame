@@ -1,5 +1,4 @@
-# Task: パッケージインストールエラー修正（Git URLパス指定）
-Status: DONE
+# Task: パッケージインスト�Eルエラー修正�E�Eit URLパス持E��！EStatus: DONE
 Tier: 2
 Branch: main
 Owner: Worker
@@ -7,111 +6,80 @@ Created: 2026-01-06T13:00:00Z
 Report: docs/reports/REPORT_TASK_005_PackageInstallationFix.md 
 
 ## Objective
-Git URLからのパッケージインストールエラーを修正する。Yarn SpinnerとDOTweenの正しいインストール方法を実装し、コンパイルエラーを解消する。
-
-実装対象：
-1. **Yarn Spinner**: Git URLのパス指定を修正
-2. **DOTween**: 手動インポート済みのため、manifest.jsonから削除またはGit URLを修正
-3. **コンパイルエラー解消**: Yarn名前空間のエラーを解消
-
+Git URLからのパッケージインスト�Eルエラーを修正する、Earn SpinnerとDOTweenの正しいインスト�Eル方法を実裁E��、コンパイルエラーを解消する、E
+実裁E��象�E�E1. **Yarn Spinner**: Git URLのパス持E��を修正
+2. **DOTween**: 手動インポ�Eト済みのため、manifest.jsonから削除また�EGit URLを修正
+3. **コンパイルエラー解涁E*: Yarn名前空間�Eエラーを解涁E
 ## Context
-- 前タスク（TASK_004）でパッケージインストールを試みたが、Git URLのパス指定エラーが発生
-- エラー内容:
+- 前タスク�E�EASK_004�E�でパッケージインスト�Eルを試みたが、Git URLのパス持E��エラーが発甁E- エラー冁E��:
   - `com.demigiant.dotween: pathspec 'DOTween' did not match any file(s) known to git`
   - `dev.yarnspinner.unity: pathspec 'YarnSpinner-Unity' did not match any file(s) known to git`
-- DOTweenは既に手動でインポート済み（`Assets/Plugins/Demigiant/DOTween/` が存在）
-- Yarn Spinnerはインストールできていない（コンパイルエラーが発生）
-- 参照ドキュメント: `最初のプロンプト`（プロジェクトルート）、`Docs/inbox/REPORT_TASK_004_PackageInstallation_FIX.md`
+- DOTweenは既に手動でインポ�Eト済み�E�EAssets/Plugins/Demigiant/DOTween/` が存在�E�E- Yarn Spinnerはインスト�EルできてぁE��ぁE��コンパイルエラーが発生！E- 参�EドキュメンチE `最初�Eプロンプト`�E��Eロジェクトルート）、`docs/inbox/REPORT_TASK_004_PackageInstallation_FIX.md`
 
 ## Focus Area
 - `Packages/manifest.json` の修正
-- Git URLのパス指定の修正
-- DOTweenの手動インポート状態の確認と対応
-- Yarn Spinnerの正しいインストール方法の実装
-
+- Git URLのパス持E���E修正
+- DOTweenの手動インポ�Eト状態�E確認と対忁E- Yarn Spinnerの正しいインスト�Eル方法�E実裁E
 ## Forbidden Area
-- 既存のDOTweenファイルの削除（手動インポート済みのため）
-- Unityプロジェクト設定の変更（パッケージインストール以外）
-- 実装済みコードの変更（パッケージインストールのみ）
-- 新規スクリプトの作成
+- 既存�EDOTweenファイルの削除�E�手動インポ�Eト済みのため�E�E- Unityプロジェクト設定�E変更�E�パチE��ージインスト�Eル以外！E- 実裁E��みコード�E変更�E�パチE��ージインスト�Eルのみ�E�E- 新規スクリプトの作�E
 
 ## Constraints
-- テスト: コンパイルエラーが解消されることを確認
-- フォールバック: DOTweenは手動インポート済みのため、manifest.jsonから削除して手動管理
-- パッケージバージョン: Unity 6 (or 2022 LTS) と互換性のあるバージョンを使用
-- インストール方法: Git URLのパス指定を修正、または手動インポートを維持
-
+- チE��チE コンパイルエラーが解消されることを確誁E- フォールバック: DOTweenは手動インポ�Eト済みのため、manifest.jsonから削除して手動管琁E- パッケージバ�Eジョン: Unity 6 (or 2022 LTS) と互換性のあるバ�Eジョンを使用
+- インスト�Eル方況E Git URLのパス持E��を修正、また�E手動インポ�Eトを維持E
 ## DoD
-- [ ] Yarn Spinner が正しくインストールされている
-  - [ ] Git URLのパス指定を修正
-  - [ ] コンパイルエラー（Yarn名前空間）が解消されている
-- [ ] DOTween の状態を確認・修正
-  - [ ] 手動インポート済みのDOTweenが正しく動作することを確認
-  - [ ] manifest.jsonからDOTweenのGit URLを削除（手動管理に切り替え）
-  - [ ] コンパイルエラー（DG名前空間）が解消されている
-- [ ] 全てのコンパイルエラーが解消されている
-- [ ] docs/inbox/ にレポート（REPORT_TASK_005_PackageInstallationFix.md）が作成されている
-- [ ] 本チケットの Report 欄にレポートパスが追記されている
+- [ ] Yarn Spinner が正しくインスト�EルされてぁE��
+  - [ ] Git URLのパス持E��を修正
+  - [ ] コンパイルエラー�E�Earn名前空間）が解消されてぁE��
+- [ ] DOTween の状態を確認�E修正
+  - [ ] 手動インポ�Eト済みのDOTweenが正しく動作することを確誁E  - [ ] manifest.jsonからDOTweenのGit URLを削除�E�手動管琁E��刁E��替え！E  - [ ] コンパイルエラー�E�EG名前空間）が解消されてぁE��
+- [ ] 全てのコンパイルエラーが解消されてぁE��
+- [ ] docs/inbox/ にレポ�Eト！EEPORT_TASK_005_PackageInstallationFix.md�E�が作�EされてぁE��
+- [ ] 本チケチE��の Report 欁E��レポ�Eトパスが追記されてぁE��
 
-## 実装詳細
+## 実裁E��細
 
-### 1. Yarn Spinner インストール修正
+### 1. Yarn Spinner インスト�Eル修正
 
-#### 問題
-- Git URLのパス指定が間違っている
+#### 問顁E- Git URLのパス持E��が間違ってぁE��
 - `pathspec 'YarnSpinner-Unity' did not match any file(s) known to git`
 
-#### 修正方法
-Yarn Spinnerの正しいGit URLを確認し、修正する。
-
-**オプション1**: パス指定を削除してルートからインストール
+#### 修正方況EYarn Spinnerの正しいGit URLを確認し、修正する、E
+**オプション1**: パス持E��を削除してルートからインスト�Eル
 ```json
 "dev.yarnspinner.unity": "https://github.com/YarnSpinnerTool/YarnSpinner-Unity.git"
 ```
 
-**オプション2**: 正しいパスを指定（リポジトリ構造を確認）
-```json
+**オプション2**: 正しいパスを指定（リポジトリ構造を確認！E```json
 "dev.yarnspinner.unity": "https://github.com/YarnSpinnerTool/YarnSpinner-Unity.git?path=/YarnSpinner-Unity"
 ```
 
-**オプション3**: 特定のブランチ/タグを指定
-```json
+**オプション3**: 特定�EブランチEタグを指宁E```json
 "dev.yarnspinner.unity": "https://github.com/YarnSpinnerTool/YarnSpinner-Unity.git#main"
 ```
 
-#### 確認事項
-- `Yarn.Unity` 名前空間が利用可能
+#### 確認事頁E- `Yarn.Unity` 名前空間が利用可能
 - `DialogueRunner` クラスが利用可能
-- コンパイルエラーが解消されている
+- コンパイルエラーが解消されてぁE��
 
-### 2. DOTween 対応
-
+### 2. DOTween 対忁E
 #### 現状
-- DOTweenは既に手動でインポート済み（`Assets/Plugins/Demigiant/DOTween/` が存在）
-- API Updaterエラーが発生しているが、これはUnity 6への移行時の一時的な問題の可能性
+- DOTweenは既に手動でインポ�Eト済み�E�EAssets/Plugins/Demigiant/DOTween/` が存在�E�E- API Updaterエラーが発生してぁE��が、これ�EUnity 6への移行時の一時的な問題�E可能性
 
-#### 対応方法
-1. **manifest.jsonからDOTweenのGit URLを削除**
-   - 手動インポート済みのため、Package Managerでの管理は不要
-   - `com.demigiant.dotween` の行を削除
+#### 対応方況E1. **manifest.jsonからDOTweenのGit URLを削除**
+   - 手動インポ�Eト済みのため、Package Managerでの管琁E�E不要E   - `com.demigiant.dotween` の行を削除
 
-2. **API Updaterエラーの確認**
-   - エラーは警告レベルで、実際の動作には影響しない可能性
-   - もし問題がある場合は、DOTweenを再インポートする
-
-#### 確認事項
-- `DG.Tweening` 名前空間が利用可能
-- `DOTween.To()` メソッドが利用可能
-- コンパイルエラーが解消されている
+2. **API Updaterエラーの確誁E*
+   - エラーは警告レベルで、実際の動作には影響しなぁE��能性
+   - もし問題がある場合�E、DOTweenを�Eインポ�EトすめE
+#### 確認事頁E- `DG.Tweening` 名前空間が利用可能
+- `DOTween.To()` メソチE��が利用可能
+- コンパイルエラーが解消されてぁE��
 
 ### 3. TextMeshPro / UGUI
 
 #### 現状
 - `com.unity.ugui` がmanifest.jsonに追加済み
-- 問題なし
-
+- 問題なぁE
 ## Notes
-- Status は OPEN / IN_PROGRESS / BLOCKED / DONE を想定
-- BLOCKED の場合は、事実/根拠/次手（候補）を本文に追記し、Report に docs/inbox/REPORT_...md を必ず設定
-- DOTweenは手動インポート済みのため、manifest.jsonから削除して手動管理に切り替える
-- Yarn SpinnerのGit URLは、リポジトリの実際の構造を確認して正しいパスを指定する必要がある
+- Status は OPEN / IN_PROGRESS / BLOCKED / DONE を想宁E- BLOCKED の場合�E、事宁E根拠/次手（候補）を本斁E��追記し、Report に docs/inbox/REPORT_...md を忁E��設宁E- DOTweenは手動インポ�Eト済みのため、manifest.jsonから削除して手動管琁E��刁E��替える
+- Yarn SpinnerのGit URLは、リポジトリの実際の構造を確認して正しいパスを指定する忁E��がある

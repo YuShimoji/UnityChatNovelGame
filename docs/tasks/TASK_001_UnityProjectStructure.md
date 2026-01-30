@@ -1,4 +1,4 @@
-# Task: Unity プロジェクト構造の整理
+# Task: Unity プロジェクト構造の整琁E
 
 Status: OPEN
 Tier: 1
@@ -8,53 +8,53 @@ Created: 2026-01-08T13:55:40Z
 Report: 
 
 ## Objective
-- Unity プロジェクトのディレクトリ構造を仕様書に基づいて整理し、開発環境の基盤を構築する
-- MVCパターンに準拠したフォルダ構成を作成する
-- 必須パッケージ（Yarn Spinner, DOTween Pro, TextMeshPro）の導入準備を行う
-- コアシステム実装の前提条件を整える
+- Unity プロジェクト�EチE��レクトリ構造を仕様書に基づぁE��整琁E��、E��発環墁E�E基盤を構築すめE
+- MVCパターンに準拠したフォルダ構�Eを作�Eする
+- 忁E��パチE��ージ�E�Earn Spinner, DOTween Pro, TextMeshPro�E��E導�E準備を行う
+- コアシスチE��実裁E�E前提条件を整える
 
 ## Context
-- プロジェクトは Unity 2022.3 LTS 以降を使用
-- チャットノベルゲーム（Lost Phone系）の開発を開始する
-- 仕様書（`Docs/Core Specification`, `Docs/Core System仕様書`）に基づいた構造が必要
-- 現在、Unity プロジェクトのディレクトリ構造が未整備の状態
+- プロジェクト�E Unity 2022.3 LTS 以降を使用
+- チャチE��ノ�Eルゲーム�E�Eost Phone系�E��E開発を開始すめE
+- 仕様書�E�Edocs/Core Specification`, `docs/Core System仕様書`�E�に基づぁE��構造が忁E��E
+- 現在、Unity プロジェクト�EチE��レクトリ構造が未整備�E状慁E
 
 ## Focus Area
-- `Assets/Scripts/` 配下のディレクトリ構造作成:
-  - `Core/` (GameManager, SaveManager, TimeManager等)
-  - `UI/` (ChatController, DeductionBoard, NotificationManager等)
+- `Assets/Scripts/` 配下�EチE��レクトリ構造作�E:
+  - `Core/` (GameManager, SaveManager, TimeManager筁E
+  - `UI/` (ChatController, DeductionBoard, NotificationManager筁E
   - `Data/` (ScriptableObjects定義)
-  - `Logic/` (Minigames, ExplorationThreads等)
-- `Assets/Resources/` 配下のディレクトリ構造作成:
+  - `Logic/` (Minigames, ExplorationThreads筁E
+- `Assets/Resources/` 配下�EチE��レクトリ構造作�E:
   - `Yarn/` (シナリオファイル)
   - `Topics/` (Topic ScriptableObjects)
-- `Assets/Prefabs/` 配下の構造作成（UI Prefabs用）
-- `Assets/Sprites/` 配下の構造作成（UI素材用）
-- Unity プロジェクトの基本設定（レイヤー、タグ、シーン構成等）
+- `Assets/Prefabs/` 配下�E構造作�E�E�EI Prefabs用�E�E
+- `Assets/Sprites/` 配下�E構造作�E�E�EI素材用�E�E
+- Unity プロジェクト�E基本設定（レイヤー、タグ、シーン構�E等！E
 
 ## Forbidden Area
-- 既存のUnityプロジェクトファイル（存在する場合）の破壊的変更
-- コアシステムの実装（本タスクは構造整理のみ）
-- アセットの実制作（構造とプレースホルダーのみ）
+- 既存�EUnityプロジェクトファイル�E�存在する場合）�E破壊的変更
+- コアシスチE��の実裁E��本タスクは構造整琁E�Eみ�E�E
+- アセチE��の実制作（構造とプレースホルダーのみ�E�E
 
 ## Constraints
-- テスト: 主要パスのみ（ディレクトリ構造の確認、Unity Editorでの表示確認）
-- フォールバック: 新規追加禁止（既存の構造がある場合は確認してから調整）
-- Unity 2022.3 LTS 以降のバージョンに対応
+- チE��チE 主要パスのみ�E�ディレクトリ構造の確認、Unity Editorでの表示確認！E
+- フォールバック: 新規追加禁止�E�既存�E構造がある場合�E確認してから調整�E�E
+- Unity 2022.3 LTS 以降�Eバ�Eジョンに対忁E
 - MVCパターンに準拠した構造を維持すること
 
 ## DoD
-- [ ] `Assets/Scripts/` 配下に Core/, UI/, Data/, Logic/ ディレクトリが作成されている
-- [ ] `Assets/Resources/` 配下に Yarn/, Topics/ ディレクトリが作成されている
-- [ ] `Assets/Prefabs/`, `Assets/Sprites/` などの基本ディレクトリが作成されている
-- [ ] 各ディレクトリに `.gitkeep` または適切なプレースホルダーファイルが配置されている
-- [ ] Unity Editorでプロジェクト構造が正しく表示されることを確認
-- [ ] 仕様書に記載された構造要件を満たしていることを確認
-- [ ] `docs/inbox/` にレポート（REPORT_TASK_001_*.md）が作成されている
-- [ ] 本チケットの Report 欄にレポートパスが追記されている
+- [ ] `Assets/Scripts/` 配下に Core/, UI/, Data/, Logic/ チE��レクトリが作�EされてぁE��
+- [ ] `Assets/Resources/` 配下に Yarn/, Topics/ チE��レクトリが作�EされてぁE��
+- [ ] `Assets/Prefabs/`, `Assets/Sprites/` などの基本チE��レクトリが作�EされてぁE��
+- [ ] 吁E��ィレクトリに `.gitkeep` また�E適刁E��プレースホルダーファイルが�E置されてぁE��
+- [ ] Unity Editorでプロジェクト構造が正しく表示されることを確誁E
+- [ ] 仕様書に記載された構造要件を満たしてぁE��ことを確誁E
+- [ ] `docs/inbox/` にレポ�Eト！EEPORT_TASK_001_*.md�E�が作�EされてぁE��
+- [ ] 本チケチE��の Report 欁E��レポ�Eトパスが追記されてぁE��
 
 ## Notes
-- Status は OPEN / IN_PROGRESS / BLOCKED / DONE を想定
-- BLOCKED の場合は、事実/根拠/次手（候補）を本文に追記し、Report に docs/inbox/REPORT_...md を必ず設定
-- Unity プロジェクトが既に存在する場合は、既存構造を確認してから調整すること
-- 必須パッケージの導入は別タスクとする可能性がある（本タスクでは構造のみ）
+- Status は OPEN / IN_PROGRESS / BLOCKED / DONE を想宁E
+- BLOCKED の場合�E、事宁E根拠/次手（候補）を本斁E��追記し、Report に docs/inbox/REPORT_...md を忁E��設宁E
+- Unity プロジェクトが既に存在する場合�E、既存構造を確認してから調整すること
+- 忁E��パチE��ージの導�Eは別タスクとする可能性がある（本タスクでは構造のみ�E�E

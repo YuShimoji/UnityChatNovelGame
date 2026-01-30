@@ -6,21 +6,11 @@ Owner: Worker
 Date: 2026-01-29
 
 ## Summary
-DeductionBoard の基幹機能である「トピック合成（Synthesis）」システムを実装しました。
-`Assets/Resources/Recipes` に `SynthesisRecipe` アセットを配置することで、DeductionBoard がそれらを読み込み、ドラッグ＆ドロップによる合成が可能になりました。
-
+DeductionBoard の基幹機�Eである「トピック合�E�E�Eynthesis�E�」シスチE��を実裁E��ました、E`Assets/Resources/Recipes` に `SynthesisRecipe` アセチE��を�E置することで、DeductionBoard がそれらを読み込み、ドラチE���E�E��ロチE�Eによる合�Eが可能になりました、E
 ## Key Changes
-- **Directory**: `Assets/Resources/Recipes` を作成。
-- **Tools**:
-  - `Assets/Scripts/Editor/RecipeAssetCreator.cs`: テスト用レシピを自動生成するツール（`Tools > FoundPhone > Create Test Recipe`）。
-  - `Assets/Scripts/Tests/DeductionBoardSynthesisTest.cs`: 合成ロジックをPlayModeで検証するスクリプト。
-- **Process**:
-  - `RecipeAssetCreator` により `Recipe_Test_Phone_Message.asset` を生成。
-  - `DeductionBoardSynthesisTest` により、以下のフローが正常動作することを確認（ユーザー検証済み）。
-    1. Topic A, B をボードに追加。
-    2. A を B にドラッグ＆ドロップ。
-    3. 合成結果として Topic C (Result) がボードに追加される。
-
+- **Directory**: `Assets/Resources/Recipes` を作�E、E- **Tools**:
+  - `Assets/Scripts/Editor/RecipeAssetCreator.cs`: チE��ト用レシピを自動生成するツール�E�ETools > FoundPhone > Create Test Recipe`�E�、E  - `Assets/Scripts/Tests/DeductionBoardSynthesisTest.cs`: 合�EロジチE��をPlayModeで検証するスクリプト、E- **Process**:
+  - `RecipeAssetCreator` により `Recipe_Test_Phone_Message.asset` を生成、E  - `DeductionBoardSynthesisTest` により、以下�Eフローが正常動作することを確認（ユーザー検証済み�E�、E    1. Topic A, B を�Eードに追加、E    2. A めEB にドラチE���E�E��ロチE�E、E    3. 合�E結果として Topic C (Result) が�Eードに追加される、E
 ## Verification
 - **Method**: Unity Editor PlayMode Test (`DeductionBoardSynthesisTest`)
 - **Result**: SUCCESS (Confirmed by User)
@@ -34,4 +24,4 @@ DeductionBoard の基幹機能である「トピック合成（Synthesis）」�
 - `Assets/Scripts/Tests/DeductionBoardSynthesisTest.cs`
 
 ## Next Steps
-- **TASK_020**: 合成成功時に視覚的なフィードバック（MetaEffect）を追加し、UXを向上させる。
+- **TASK_020**: 合�E成功時に視覚的なフィードバチE���E�EetaEffect�E�を追加し、UXを向上させる、E

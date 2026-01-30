@@ -5,8 +5,8 @@ using ProjectFoundPhone.Data;
 namespace ProjectFoundPhone.Debug.Editor
 {
     /// <summary>
-    /// TopicData ScriptableObject アセットを自動生成するエディタスクリプト
-    /// 初期シナリオで使用するトピックアセットを作成する
+    /// TopicData ScriptableObject アセチE��を�E動生成するエチE��タスクリプト
+    /// 初期シナリオで使用するトピチE��アセチE��を作�Eする
     /// </summary>
     public static class TopicDataAssetCreator
     {
@@ -14,12 +14,12 @@ namespace ProjectFoundPhone.Debug.Editor
         private const string c_TopicsPath = "Assets/Resources/Topics";
 
         /// <summary>
-        /// 初期トピックアセットを作成する
+        /// 初期トピチE��アセチE��を作�Eする
         /// </summary>
         [MenuItem("Tools/FoundPhone/Create Initial Topic Assets")]
         public static void CreateInitialTopicAssets()
         {
-            // Topics ディレクトリが存在しない場合は作成
+            // Topics チE��レクトリが存在しなぁE��合�E作�E
             if (!AssetDatabase.IsValidFolder(c_TopicsPath))
             {
                 if (!AssetDatabase.IsValidFolder(c_ResourcesPath))
@@ -30,32 +30,32 @@ namespace ProjectFoundPhone.Debug.Editor
                 AssetDatabase.Refresh();
             }
 
-            // 初期トピックデータの定義
+            // 初期トピチE��チE�Eタの定義
             var topics = new[]
             {
                 new TopicDefinition
                 {
                     TopicID = "debug_topic_01",
                     Title = "Strange Signal",
-                    Description = "拾ったスマホから受信した不審な信号。ノイズが多く、内容は不明瞭だが、何か重要な情報が隠されている気がする。"
+                    Description = "拾ったスマ�Eから受信した不審な信号。ノイズが多く、�E容は不�E瞭だが、何か重要な惁E��が隠されてぁE��気がする、E
                 },
                 new TopicDefinition
                 {
                     TopicID = "topic_missing_person",
                     Title = "Missing Person",
-                    Description = "行方不明者に関する情報。スマホの持ち主かもしれない。詳細を調べる必要がある。"
+                    Description = "行方不�E老E��関する惁E��。スマ�Eの持ち主かもしれなぁE��詳細を調べる忁E��がある、E
                 },
                 new TopicDefinition
                 {
                     TopicID = "topic_found_phone",
                     Title = "Found Phone",
-                    Description = "道端で拾ったスマートフォン。画面は割れているが、まだ動作している。誰のものだろうか？"
+                    Description = "道端で拾ったスマ�Eトフォン。画面は割れてぁE��が、まだ動作してぁE��。誰のも�Eだろうか！E
                 },
                 new TopicDefinition
                 {
                     TopicID = "topic_suspicious_message",
                     Title = "Suspicious Message",
-                    Description = "受信トレイに残されていた不審なメッセージ。送信者の正体は不明だが、何か危険な計画が進行しているようだ。"
+                    Description = "受信トレイに残されてぁE��不審なメチE��ージ。送信老E�E正体�E不�Eだが、何か危険な計画が進行してぁE��ようだ、E
                 }
             };
 
@@ -66,7 +66,7 @@ namespace ProjectFoundPhone.Debug.Editor
             {
                 string assetPath = $"{c_TopicsPath}/{topicDef.TopicID}.asset";
 
-                // 既にアセットが存在する場合はスキップ
+                // 既にアセチE��が存在する場合�EスキチE�E
                 if (AssetDatabase.LoadAssetAtPath<TopicData>(assetPath) != null)
                 {
                     UnityEngine.Debug.LogWarning($"TopicData asset already exists: {assetPath}. Skipping...");
@@ -74,18 +74,16 @@ namespace ProjectFoundPhone.Debug.Editor
                     continue;
                 }
 
-                // TopicData インスタンスを作成
+                // TopicData インスタンスを作�E
                 TopicData topicData = ScriptableObject.CreateInstance<TopicData>();
 
-                // SerializedObject を使用して private フィールドを設定
-                SerializedObject serializedObject = new SerializedObject(topicData);
+                // SerializedObject を使用して private フィールドを設宁E                SerializedObject serializedObject = new SerializedObject(topicData);
                 serializedObject.FindProperty("m_TopicID").stringValue = topicDef.TopicID;
                 serializedObject.FindProperty("m_Title").stringValue = topicDef.Title;
                 serializedObject.FindProperty("m_Description").stringValue = topicDef.Description;
                 serializedObject.ApplyModifiedProperties();
 
-                // アセットとして保存
-                AssetDatabase.CreateAsset(topicData, assetPath);
+                // アセチE��として保孁E                AssetDatabase.CreateAsset(topicData, assetPath);
                 createdCount++;
 
                 UnityEngine.Debug.Log($"Created TopicData asset: {assetPath} (ID: {topicDef.TopicID}, Title: {topicDef.Title})");
@@ -98,7 +96,7 @@ namespace ProjectFoundPhone.Debug.Editor
         }
 
         /// <summary>
-        /// トピック定義のデータ構造
+        /// トピチE��定義のチE�Eタ構造
         /// </summary>
         private class TopicDefinition
         {
@@ -108,7 +106,7 @@ namespace ProjectFoundPhone.Debug.Editor
         }
 
         /// <summary>
-        /// Resources.Load での読み込み確認用のテストメソッド
+        /// Resources.Load での読み込み確認用のチE��トメソチE��
         /// </summary>
         [MenuItem("Tools/FoundPhone/Test TopicData Loading")]
         public static void TestTopicDataLoading()
@@ -125,12 +123,12 @@ namespace ProjectFoundPhone.Debug.Editor
                 
                 if (topicData != null)
                 {
-                    UnityEngine.Debug.Log($"✓ Successfully loaded: {topicID} - {topicData.Title}");
+                    UnityEngine.Debug.Log($"✁ESuccessfully loaded: {topicID} - {topicData.Title}");
                     successCount++;
                 }
                 else
                 {
-                    UnityEngine.Debug.LogError($"✗ Failed to load: Topics/{topicID}");
+                    UnityEngine.Debug.LogError($"✁EFailed to load: Topics/{topicID}");
                     failCount++;
                 }
             }

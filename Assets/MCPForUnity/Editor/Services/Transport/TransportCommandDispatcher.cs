@@ -335,7 +335,7 @@ namespace MCPForUnity.Editor.Services.Transport
 
                 if (result == null)
                 {
-                    // Async command – cleanup after completion on next editor frame to preserve order.
+                    // Async command  Ecleanup after completion on next editor frame to preserve order.
                     pending.CompletionSource.Task.ContinueWith(_ =>
                     {
                         EditorApplication.delayCall += () => RemovePending(id, pending);

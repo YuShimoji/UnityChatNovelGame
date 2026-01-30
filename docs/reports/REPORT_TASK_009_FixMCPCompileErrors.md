@@ -3,16 +3,14 @@
 **Timestamp**: 2026-01-17T01:50:00+09:00
 **Actor**: AI Agent (Worker)
 **Task**: TASK_009_FixMCPCompileErrors
-**Status**: ✅ COMPLETED
+**Status**: ✁ECOMPLETED
 
 ## Summary
 
-`Assets/MCPForUnity/Editor/` 配下のスクリプトで発生していたコンパイルエラー（CS0234, CS0246）を修正しました。
-
+`Assets/MCPForUnity/Editor/` 配下�Eスクリプトで発生してぁE��コンパイルエラー�E�ES0234, CS0246�E�を修正しました、E
 ## Root Cause
 
-1. `Packages/manifest.json` に Unity Test Framework パッケージ (`com.unity.test-framework`) が含まれていなかった
-2. `MCPForUnity.Editor.asmdef` に Test Runner アセンブリへの参照が不足していた
+1. `Packages/manifest.json` に Unity Test Framework パッケージ (`com.unity.test-framework`) が含まれてぁE��かっぁE2. `MCPForUnity.Editor.asmdef` に Test Runner アセンブリへの参�Eが不足してぁE��
 
 ## Changes Made
 
@@ -24,21 +22,17 @@
 
 ## Verification
 
-- ✅ Unity Editor でコンパイルエラー（CS0234, CS0246）が解消
-- ✅ MCP-FOR-UNITY: Auto-discovered 18 tools and 14 resources が正常にロード
-- ⚠️ 警告（CS0618）が残存するが、deprecated API に関するものでタスク範囲外
-
+- ✁EUnity Editor でコンパイルエラー�E�ES0234, CS0246�E�が解涁E- ✁EMCP-FOR-UNITY: Auto-discovered 18 tools and 14 resources が正常にローチE- ⚠�E�E警告！ES0618�E�が残存するが、deprecated API に関するも�Eでタスク篁E��夁E
 ## Remaining Warnings (Out of Scope)
 
-MCPForUnity 内で deprecated Unity API を使用しているファイル（9件）:
-- `EditorUtility.InstanceIDToObject` → `EditorUtility.EntityIdToObject`
-- `Selection.activeInstanceID` → `activeEntityId`
-- `Object.FindObjectsOfType` → `Object.FindObjectsByType`
+MCPForUnity 冁E�� deprecated Unity API を使用してぁE��ファイル�E�E件�E�E
+- `EditorUtility.InstanceIDToObject` ↁE`EditorUtility.EntityIdToObject`
+- `Selection.activeInstanceID` ↁE`activeEntityId`
+- `Object.FindObjectsOfType` ↁE`Object.FindObjectsByType`
 
-これらは MCPForUnity の内部実装に関わるため、別途検討が必要。
-
+これら�E MCPForUnity の冁E��実裁E��関わるため、別途検討が忁E��、E
 ## DoD Checklist
 
-- [x] Unity Editor でコンパイルエラー（CS0234, CS0246）が解消されている
-- [x] Task 007 の検証（PlayMode実行）が可能になっている
-- [x] Report 作成
+- [x] Unity Editor でコンパイルエラー�E�ES0234, CS0246�E�が解消されてぁE��
+- [x] Task 007 の検証�E�ElayMode実行）が可能になってぁE��
+- [x] Report 作�E

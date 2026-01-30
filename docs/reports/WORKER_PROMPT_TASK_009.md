@@ -1,51 +1,51 @@
 # Worker Prompt: TASK_009_DeductionBoard
 
-あなたは Worker Agent です。以下の指示に従い、タスクを遂行してください。
-Orchestrator によって定義された境界(Focus/Forbidden)を遵守することが求められます。
+あなた�E Worker Agent です。以下�E持E��に従い、タスクを遂行してください、E
+Orchestrator によって定義された墁E��(Focus/Forbidden)を�E守することが求められます、E
 
-## 参照情報
-- **チケット**: `docs/tasks/TASK_009_DeductionBoard.md` (必読)
+## 参�E惁E��
+- **チケチE��**: `docs/tasks/TASK_009_DeductionBoard.md` (忁E��)
 - **SSOT**: `docs/Windsurf_AI_Collab_Rules_latest.md`
 - **HANDOVER**: `docs/HANDOVER.md`
 - **Context**: `AI_CONTEXT.md`
-- **関連実装**: `Assets/Scripts/Core/ScenarioManager.cs` (UnlockTopicCommand)
-- **データモデル**: `Assets/Scripts/Data/TopicData.cs`
+- **関連実裁E*: `Assets/Scripts/Core/ScenarioManager.cs` (UnlockTopicCommand)
+- **チE�EタモチE��**: `Assets/Scripts/Data/TopicData.cs`
 
 ## ミッション
-**DeductionBoard (推論ボード) 実装**
+**DeductionBoard (推論�EーチE 実裁E*
 
-- `DeductionBoard.cs` を新規作成し、トピックの追加・表示・管理機能を実装する。
-- `TopicCard.cs` を新規作成し、TopicDataの視覚的表示を担当する。
-- 対応するPrefab (`DeductionBoard.prefab`, `TopicCard.prefab`) を作成する。
-- `ScenarioManager.UnlockTopicCommand` から呼び出せるようにする。
+- `DeductionBoard.cs` を新規作�Eし、トピックの追加・表示・管琁E���Eを実裁E��る、E
+- `TopicCard.cs` を新規作�Eし、TopicDataの視覚的表示を担当する、E
+- 対応するPrefab (`DeductionBoard.prefab`, `TopicCard.prefab`) を作�Eする、E
+- `ScenarioManager.UnlockTopicCommand` から呼び出せるようにする、E
 
-## 境界 (Boundaries)
+## 墁E�� (Boundaries)
 
 ### Focus Area(変更許可)
-- `Assets/Scripts/UI/DeductionBoard.cs` (新規)
-- `Assets/Scripts/UI/TopicCard.cs` (新規)
-- `Assets/Prefabs/UI/DeductionBoard.prefab` (新規)
-- `Assets/Prefabs/UI/TopicCard.prefab` (新規)
+- `Assets/Scripts/UI/DeductionBoard.cs` (新要E
+- `Assets/Scripts/UI/TopicCard.cs` (新要E
+- `Assets/Prefabs/UI/DeductionBoard.prefab` (新要E
+- `Assets/Prefabs/UI/TopicCard.prefab` (新要E
 - `Assets/Scripts/Core/ScenarioManager.cs` (UnlockTopicCommand連携のみ)
 
 ### Forbidden Area(変更禁止)
 - `Assets/Scripts/UI/ChatController.cs`
-- `Assets/Scripts/Core/` の他のファイルへの大幅変更
+- `Assets/Scripts/Core/` の他�Eファイルへの大幁E��更
 - 既存Prefabの破壊的変更
 
 ## Definition of Done (DoD)
-- [ ] `DeductionBoard.cs` が実装され、トピックの追加・表示ができる
-- [ ] `TopicCard.cs` が実装され、TopicDataの情報を表示できる
-- [ ] `DeductionBoard.prefab` と `TopicCard.prefab` が作成されている
-- [ ] `ScenarioManager.UnlockTopicCommand` からトピック追加が呼び出せる
-- [ ] Unity Editorで動作確認が完了している
-- [ ] `docs/reports/REPORT_TASK_009_DeductionBoard.md` にレポートが作成されている
+- [ ] `DeductionBoard.cs` が実裁E��れ、トピックの追加・表示ができる
+- [ ] `TopicCard.cs` が実裁E��れ、TopicDataの惁E��を表示できる
+- [ ] `DeductionBoard.prefab` と `TopicCard.prefab` が作�EされてぁE��
+- [ ] `ScenarioManager.UnlockTopicCommand` からトピチE��追加が呼び出せる
+- [ ] Unity Editorで動作確認が完亁E��てぁE��
+- [ ] `docs/reports/REPORT_TASK_009_DeductionBoard.md` にレポ�Eトが作�EされてぁE��
 
 ## 停止条件 (Stop & Report)
-- TopicData ScriptableObjectの構造変更が必要になった場合
-- 既存のScenarioManagerロジックとの競合が発生した場合
+- TopicData ScriptableObjectの構造変更が忁E��になった場吁E
+- 既存�EScenarioManagerロジチE��との競合が発生した場吁E
 
 ## 納品物
-- 新規作成されたコード(DeductionBoard.cs, TopicCard.cs)
+- 新規作�EされたコーチEDeductionBoard.cs, TopicCard.cs)
 - 新規Prefab
 - `docs/reports/REPORT_TASK_009_DeductionBoard.md`

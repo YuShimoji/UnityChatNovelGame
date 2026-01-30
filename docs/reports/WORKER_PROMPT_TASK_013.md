@@ -1,48 +1,26 @@
 # Worker Prompt: TASK_011 + TASK_013 Topic System Verification
 
 ## Request
-あなたは Unity クライアントエンジニアとして、**Topic System (ScriptableObjects, UnlockTopicCommand)** の動作検証を行ってください。
-TASK_011 (Asset作成) と TASK_013 (検証) が「Evidence 待ち」で停止しています。
-
+あなた�E Unity クライアントエンジニアとして、E*Topic System (ScriptableObjects, UnlockTopicCommand)** の動作検証を行ってください、ETASK_011 (Asset作�E) と TASK_013 (検証) が「Evidence 征E��」で停止してぁE��す、E
 ## Context
-- **Current State**: アセット作成済み。コード実装済み。Phase 3 戦略により「Verification First」が決定。
-- **Goal**: アセットの Inspector 表示と、コマンド実行ログの**スクリーンショットを提出すること**。
-- **Blocking**: これが完了しない限り、Deduction Board (TASK_008/009 -> Renamed to 016/017 for conflict resolution) の実装を再開できない。
-
+- **Current State**: アセチE��作�E済み。コード実裁E��み。Phase 3 戦略により「Verification First」が決定、E- **Goal**: アセチE��の Inspector 表示と、コマンド実行ログの**スクリーンショチE��を提出すること**、E- **Blocking**: これが完亁E��なぁE��り、Deduction Board (TASK_008/009 -> Renamed to 016/017 for conflict resolution) の実裁E��再開できなぁE��E
 ## Focus Area
 1. **Assets**: `Assets/Resources/Topics/*.asset`
-2. **Command**: `UnlockTopicCommand.cs` (動作確認のみ)
+2. **Command**: `UnlockTopicCommand.cs` (動作確認�Eみ)
 3. **Action**: 
-   - Inspector での目視確認
-   - DebugChatScene での `<<UnlockTopic>>` コマンド実行確認
-
+   - Inspector での目視確誁E   - DebugChatScene での `<<UnlockTopic>>` コマンド実行確誁E
 ## Tasks (Step-by-Step)
 1. **Topic Asset Inspection**:
-   - `Assets/Resources/Topics/` 以下の適当なアセット (例: `debug_topic_01.asset`) を選択。
-   - Inspector にプロパティ (ID, Title, Description, Icon) が表示されているか確認。
-   - **Evidence 取得 (Automated)**:
-     - `DebugChatScene` に `VerificationCapture` コンポーネントがあることを確認。
-     - PlayMode で実行し、`Docs/evidence/` に画像が生成されることを確認。
-     - (Optional) `Topic unlocked` ログが確認できるタイミングで `VerificationCapture.TriggerCapture()` を呼ぶように調整してもよいが、基本は起動時キャプチャでシーンが動作している証明があればよしとする（ログはテキスト保存機能があればそちらを確認）。
-     - 生成された画像（およびログファイル）を納品物とする。
-
+   - `Assets/Resources/Topics/` 以下�E適当なアセチE�� (侁E `debug_topic_01.asset`) を選択、E   - Inspector にプロパティ (ID, Title, Description, Icon) が表示されてぁE��か確認、E   - **Evidence 取征E(Automated)**:
+     - `DebugChatScene` に `VerificationCapture` コンポ�Eネントがあることを確認、E     - PlayMode で実行し、`docs/evidence/` に画像が生�Eされることを確認、E     - (Optional) `Topic unlocked` ログが確認できるタイミングで `VerificationCapture.TriggerCapture()` を呼ぶように調整してもよぁE��、基本は起動時キャプチャでシーンが動作してぁE��証明があればよしとする�E�ログはチE��スト保存機�Eがあれ�Eそちらを確認）、E     - 生�Eされた画像（およ�Eログファイル�E�を納品物とする、E
 2. **Command Execution**:
-   - `Assets/Scenes/DebugChatScene.unity` を Play する (TASK_007 と同じシーンで可)。
-   - `DebugScript.yarn` 内で `<<UnlockTopic "debug_topic_01">>` が呼ばれた時、Console に `Topic unlocked: debug_topic_01` (または類似の成功ログ) が出るか確認。
-   - エラーが出ていないことを確認。
-   - **Evidence 取得 (Automated)**:
-     - コンソールログは `VerificationCapture` の `CaptureLogs` 機能により `docs/evidence/Log_*.txt` に保存される。
-     - このログファイルに `Topic unlocked` の記述があることを確認する。
-     - 生成されたログファイルを証拠として採用する。
-
+   - `Assets/Scenes/DebugChatScene.unity` めEPlay する (TASK_007 と同じシーンで可)、E   - `DebugScript.yarn` 冁E�� `<<UnlockTopic "debug_topic_01">>` が呼ばれた時、Console に `Topic unlocked: debug_topic_01` (また�E類似の成功ログ) が�Eるか確認、E   - エラーが�EてぁE��ぁE��とを確認、E   - **Evidence 取征E(Automated)**:
+     - コンソールログは `VerificationCapture` の `CaptureLogs` 機�Eにより `docs/evidence/Log_*.txt` に保存される、E     - こ�Eログファイルに `Topic unlocked` の記述があることを確認する、E     - 生�Eされたログファイルを証拠として採用する、E
 3. **Report**:
-   - `docs/tasks/TASK_011_TopicScriptableObjects.md` の DoD 更新。
-   - `docs/tasks/TASK_013_TopicDataVerification.md` の DoD 更新。
-   - レポート `docs/inbox/REPORT_TASK_013_TopicDataVerification.md` を作成 (TASK_011 の完了報告も兼ねる)。
-
+   - `docs/tasks/TASK_011_TopicScriptableObjects.md` の DoD 更新、E   - `docs/tasks/TASK_013_TopicDataVerification.md` の DoD 更新、E   - レポ�EチE`docs/inbox/REPORT_TASK_013_TopicDataVerification.md` を作�E (TASK_011 の完亁E��告も兼ねめE、E
 ## Forbidden Area
 - `TopicData.cs` の構造変更
-- 新規アセットの大量作成
+- 新規アセチE��の大量作�E
 
 ## Output
 - `docs/evidence/task011_topic_inspector.png`

@@ -62,13 +62,13 @@ namespace MCPForUnity.Editor.Migrations
                 if (hasServerSrc)
                 {
                     EditorPrefs.DeleteKey(ServerSrcKey);
-                    McpLog.Info("  ✓ Removed legacy key: MCPForUnity.ServerSrc");
+                    McpLog.Info("  ✁ERemoved legacy key: MCPForUnity.ServerSrc");
                 }
 
                 if (hasUseEmbedded)
                 {
                     EditorPrefs.DeleteKey(UseEmbeddedKey);
-                    McpLog.Info("  ✓ Removed legacy key: MCPForUnity.UseEmbeddedServer");
+                    McpLog.Info("  ✁ERemoved legacy key: MCPForUnity.UseEmbeddedServer");
                 }
             }
             catch (Exception ex)

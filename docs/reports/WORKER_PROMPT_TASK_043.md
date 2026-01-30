@@ -1,31 +1,31 @@
 # Worker Prompt for TASK_043: Performance Benchmark
 
-## 依頼内容
-以下の手順に従い、アプリケーションのパフォーマンスベースライン（ロード時間、FPS、メモリ）を計測してください。
+## 依頼冁E��
+以下�E手頁E��従い、アプリケーションのパフォーマンスベ�Eスライン�E�ロード時間、FPS、メモリ�E�を計測してください、E
 
-## コンテキスト
-- プロジェクト: UnityChatNovelGame
-- 目的: 最適化前の現状（Baseline）を数値化する。
-- ターゲット: `DebugChatScene`
+## コンチE��スチE
+- プロジェクチE UnityChatNovelGame
+- 目皁E 最適化前の現状�E�Easeline�E�を数値化する、E
+- ターゲチE��: `DebugChatScene`
 
-## 手順
-1. `Assets/Scripts/Debug/PerformanceBenchmark.cs` を作成する。
-   - `Using UnityEngine.Profiling;` を使用。
-   - `Awake` で `Stopwatch` を開始。
-   - `Start` でロード時間を計測(`Stopwatch.ElapsedMilliseconds`)。
-   - `Update` で FPS を計測 (Time.deltaTime の平均)。
-   - `CapturedMetrics` クラス (struct) にデータを保持。
-2. Unity Editor で `DebugChatScene` を開き、空の GameObject に `PerformanceBenchmark` をアタッチする。
-3. Play モードを実行し、約10秒間待機（または自動終了）させて計測する。
-4. 計測結果を Markdown 形式で `docs/reports/PERFORMANCE_BASELINE_{YYYYMMDD}.md` に出力する。
-   - 項目: Date, BootTime(ms), AvgFPS, MemoryUsed(MB).
+## 手頁E
+1. `Assets/Scripts/Debug/PerformanceBenchmark.cs` を作�Eする、E
+   - `Using UnityEngine.Profiling;` を使用、E
+   - `Awake` で `Stopwatch` を開始、E
+   - `Start` でロード時間を計測(`Stopwatch.ElapsedMilliseconds`)、E
+   - `Update` で FPS を計測 (Time.deltaTime の平坁E、E
+   - `CapturedMetrics` クラス (struct) にチE�Eタを保持、E
+2. Unity Editor で `DebugChatScene` を開き、空の GameObject に `PerformanceBenchmark` をアタチE��する、E
+3. Play モードを実行し、紁E0秒間征E��（また�E自動終亁E��させて計測する、E
+4. 計測結果めEMarkdown 形式で `docs/reports/PERFORMANCE_BASELINE_{YYYYMMDD}.md` に出力する、E
+   - 頁E��: Date, BootTime(ms), AvgFPS, MemoryUsed(MB).
 
-## 禁止事項
-- 既存の `ChatController` や `ScenarioManager` を変更しない。
-- 計測用オブジェクトを Commit に含めない（Scriptのみ Commit する、Hierarchy変更は Revert する、または専用シーンを作る）。
-  - 推奨: 計測用シーン `Assets/Scenes/DebugPerformance.unity` を新規作成してもよい。
+## 禁止事頁E
+- 既存�E `ChatController` めE`ScenarioManager` を変更しなぁE��E
+- 計測用オブジェクトを Commit に含めなぁE��Ecriptのみ Commit する、Hierarchy変更は Revert する、また�E専用シーンを作る�E�、E
+  - 推奨: 計測用シーン `Assets/Scenes/DebugPerformance.unity` を新規作�EしてもよぁE��E
 
-## 提出物
+## 提�E物
 - `Assets/Scripts/Debug/PerformanceBenchmark.cs`
 - `docs/reports/PERFORMANCE_BASELINE_*.md`
 - `docs/reports/REPORT_TASK_043_performance_baseline.md` (Worker Report)

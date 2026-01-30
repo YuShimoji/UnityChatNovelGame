@@ -1,139 +1,87 @@
 # Worker Prompt: TASK_003_PrefabCreation
 
-## 参照
-- チケット: Docs/tasks/TASK_003_PrefabCreation.md
-- SSOT: Docs/Windsurf_AI_Collab_Rules_latest.md
-- HANDOVER: Docs/HANDOVER.md
+## 参�E
+- チケチE��: docs/tasks/TASK_003_PrefabCreation.md
+- SSOT: docs/Windsurf_AI_Collab_Rules_latest.md
+- HANDOVER: docs/HANDOVER.md
 - AI_CONTEXT: AI_CONTEXT.md
 - MISSION_LOG: .cursor/MISSION_LOG.md
-- 前タスクレポート: Docs/inbox/REPORT_TASK_002_LogicImplementation.md
-- プロジェクト仕様: 最初のプロンプト（プロジェクトルート）
-
-## 境界
+- 前タスクレポ�EチE docs/inbox/REPORT_TASK_002_LogicImplementation.md
+- プロジェクト仕槁E 最初�Eプロンプト�E��Eロジェクトルート！E
+## 墁E��
 
 ### Focus Area
-- `Assets/Prefabs/UI/` 配下: MessageBubble.prefab, TypingIndicator.prefab
-- UnityエディタでのPrefab作成とコンポーネント設定
-- TextMeshProを使用したテキスト表示
-- 9-Slice設定された背景画像（Sliced Sprite）
-- ContentSizeFitterによる高さ自動調整
-- 右寄せ/左寄せレイアウト対応
-
+- `Assets/Prefabs/UI/` 配丁E MessageBubble.prefab, TypingIndicator.prefab
+- UnityエチE��タでのPrefab作�Eとコンポ�Eネント設宁E- TextMeshProを使用したチE��スト表示
+- 9-Slice設定された背景画像！Eliced Sprite�E�E- ContentSizeFitterによる高さ自動調整
+- 右寁E��/左寁E��レイアウト対忁E
 ### Forbidden Area
 - 既存ファイルの削除・破壊的変更
-- Unityプロジェクト設定の変更
-- パッケージの追加（TextMeshProは既に前提）
-- スクリプトの作成（Prefab作成のみ）
-- Sceneの作成（Prefab作成のみ）
-- アニメーションの作成（後続タスクへ分離）
-
+- Unityプロジェクト設定�E変更
+- パッケージの追加�E�EextMeshProは既に前提�E�E- スクリプトの作�E�E�Erefab作�Eのみ�E�E- Sceneの作�E�E�Erefab作�Eのみ�E�E- アニメーションの作�E�E�後続タスクへ刁E���E�E
 ## Tier / Branch
-- Tier: 2（機能実装）
-- Branch: main
+- Tier: 2�E�機�E実裁E��E- Branch: main
 
 ## DoD
-- [ ] MessageBubble.prefab が作成されている
-  - [ ] TextMeshProUGUIコンポーネントが設定されている
-  - [ ] ContentSizeFitterコンポーネントが設定されている（Vertical Fit: Preferred Size）
-  - [ ] 背景Imageコンポーネントが設定されている（Sliced Sprite）
-  - [ ] RectTransformの設定（Anchor/Pivotはスクリプトで動的に変更される想定）
-- [ ] TypingIndicator.prefab が作成されている
-  - [ ] 3点リーダーのアニメーション用コンポーネント（TextMeshProUGUIまたはImage）
-  - [ ] アニメーション用のスクリプトまたはDOTween設定（後続タスクで実装予定の場合はプレースホルダー）
-- [ ] Prefabが`Assets/Prefabs/UI/`配下に配置されている
-- [ ] ChatController.csで参照可能な状態になっている
-- [ ] docs/inbox/ にレポート（REPORT_TASK_003_PrefabCreation.md）が作成されている
-- [ ] 本チケットの Report 欄にレポートパスが追記されている
+- [ ] MessageBubble.prefab が作�EされてぁE��
+  - [ ] TextMeshProUGUIコンポ�Eネントが設定されてぁE��
+  - [ ] ContentSizeFitterコンポ�Eネントが設定されてぁE���E�Eertical Fit: Preferred Size�E�E  - [ ] 背景Imageコンポ�Eネントが設定されてぁE���E�Eliced Sprite�E�E  - [ ] RectTransformの設定！Enchor/Pivotはスクリプトで動的に変更される想定！E- [ ] TypingIndicator.prefab が作�EされてぁE��
+  - [ ] 3点リーダーのアニメーション用コンポ�Eネント！EextMeshProUGUIまた�EImage�E�E  - [ ] アニメーション用のスクリプトまた�EDOTween設定（後続タスクで実裁E��定�E場合�Eプレースホルダー�E�E- [ ] Prefabが`Assets/Prefabs/UI/`配下に配置されてぁE��
+- [ ] ChatController.csで参�E可能な状態になってぁE��
+- [ ] docs/inbox/ にレポ�Eト！EEPORT_TASK_003_PrefabCreation.md�E�が作�EされてぁE��
+- [ ] 本チケチE��の Report 欁E��レポ�Eトパスが追記されてぁE��
 
 ## 停止条件
-- Forbidden Area に触れないと完遂できない
-- 仕様の仮定が 3 つ以上必要
-- 依存追加/更新、破壊的Git操作、GitHubAutoApprove不明での push が必要
-- SSOT不足を `ensure-ssot.js` で解決できない
-- 長時間待機が必要（定義したタイムアウト超過）
-- Unityエディタが起動していない、またはPrefab作成が不可能な環境
+- Forbidden Area に触れなぁE��完遂できなぁE- 仕様�E仮定が 3 つ以上忁E��E- 依存追加/更新、破壊的Git操作、GitHubAutoApprove不�Eでの push が忁E��E- SSOT不足めE`ensure-ssot.js` で解決できなぁE- 長時間征E��が忁E��E��定義したタイムアウト趁E���E�E- UnityエチE��タが起動してぁE��ぁE��また�EPrefab作�Eが不可能な環墁E
+停止時�E以下を実施�E�E1. チケチE��のStatusをBLOCKEDに更新
+2. 事宁E根拠/次手（候補）をチケチE��本斁E��追訁E3. docs/inbox/REPORT_TASK_003_PrefabCreation.md を作�Eし、停止琁E��を記録
+4. チケチE��のReport欁E��レポ�Eトパスを追訁E
+## 納品允E- docs/inbox/REPORT_TASK_003_PrefabCreation.md
 
-停止時は以下を実施：
-1. チケットのStatusをBLOCKEDに更新
-2. 事実/根拠/次手（候補）をチケット本文に追記
-3. docs/inbox/REPORT_TASK_003_PrefabCreation.md を作成し、停止理由を記録
-4. チケットのReport欄にレポートパスを追記
-
-## 納品先
-- docs/inbox/REPORT_TASK_003_PrefabCreation.md
-
-## 実装詳細
+## 実裁E��細
 
 ### 1. MessageBubble Prefab
 
-#### 構成要素
-- **GameObject名**: MessageBubble
-- **コンポーネント**:
-  - `RectTransform`: UI要素の基本コンポーネント
-  - `Image`: 背景画像（Sliced Sprite、9-Slice設定）
-  - `TextMeshProUGUI`: メッセージテキスト表示
-  - `ContentSizeFitter`: 高さ自動調整（Vertical Fit: Preferred Size）
-
+#### 構�E要素
+- **GameObject吁E*: MessageBubble
+- **コンポ�EネンチE*:
+  - `RectTransform`: UI要素の基本コンポ�EネンチE  - `Image`: 背景画像！Eliced Sprite、E-Slice設定！E  - `TextMeshProUGUI`: メチE��ージチE��スト表示
+  - `ContentSizeFitter`: 高さ自動調整�E�Eertical Fit: Preferred Size�E�E
 #### 設定詳細
 - **RectTransform**:
-  - Width: 適切な幅（例: 300-400px）
-  - Height: ContentSizeFitterで自動調整
-  - Anchor: スクリプトで動的に変更されるため、初期値は任意
-  - Pivot: スクリプトで動的に変更されるため、初期値は任意
-- **Image (Background)**:
+  - Width: 適刁E��幁E��侁E 300-400px�E�E  - Height: ContentSizeFitterで自動調整
+  - Anchor: スクリプトで動的に変更されるため、�E期値は任愁E  - Pivot: スクリプトで動的に変更されるため、�E期値は任愁E- **Image (Background)**:
   - Image Type: Sliced
-  - Source Image: 9-Slice設定された白い背景画像（後続タスクで着色）
-  - Color: 白色（スクリプトで動的に着色）
-- **TextMeshProUGUI**:
-  - Text: プレースホルダーテキスト（"Message"など）
-  - Font: TextMeshProのデフォルトフォントまたはプロジェクトフォント
-  - Font Size: 適切なサイズ（例: 14-16px）
-  - Alignment: Left（左寄せメッセージ用）、Right（右寄せメッセージ用）はスクリプトで設定
-  - Overflow: Vertical Overflow: Overflow
+  - Source Image: 9-Slice設定された白ぁE��景画像（後続タスクで着色�E�E  - Color: 白色�E�スクリプトで動的に着色�E�E- **TextMeshProUGUI**:
+  - Text: プレースホルダーチE��スト！EMessage"など�E�E  - Font: TextMeshProのチE��ォルトフォントまた�EプロジェクトフォンチE  - Font Size: 適刁E��サイズ�E�侁E 14-16px�E�E  - Alignment: Left�E�左寁E��メチE��ージ用�E�、Right�E�右寁E��メチE��ージ用�E��Eスクリプトで設宁E  - Overflow: Vertical Overflow: Overflow
 - **ContentSizeFitter**:
   - Horizontal Fit: Unconstrained
   - Vertical Fit: Preferred Size
 
-#### レイアウト
-- TextMeshProUGUIはImageの子要素として配置
-- Padding設定（例: 左右10px、上下8px）
-
+#### レイアウチE- TextMeshProUGUIはImageの子要素として配置
+- Padding設定（侁E 左右10px、上丁Epx�E�E
 ### 2. TypingIndicator Prefab
 
-#### 構成要素
-- **GameObject名**: TypingIndicator
-- **コンポーネント**:
-  - `RectTransform`: UI要素の基本コンポーネント
-  - `TextMeshProUGUI`または`Image`: 3点リーダー表示
-  - （オプション）`DOTween Animation`: アニメーション用（後続タスクで実装予定の場合はプレースホルダー）
-
+#### 構�E要素
+- **GameObject吁E*: TypingIndicator
+- **コンポ�EネンチE*:
+  - `RectTransform`: UI要素の基本コンポ�EネンチE  - `TextMeshProUGUI`また�E`Image`: 3点リーダー表示
+  - �E�オプション�E�`DOTween Animation`: アニメーション用�E�後続タスクで実裁E��定�E場合�Eプレースホルダー�E�E
 #### 設定詳細
 - **RectTransform**:
-  - Width: 適切な幅（例: 50-80px）
-  - Height: 適切な高さ（例: 30-40px）
-  - Anchor: 左下（左寄せメッセージ用）
-- **TextMeshProUGUI**:
-  - Text: "..."（3点リーダー）
-  - Font Size: 適切なサイズ（例: 16-20px）
-  - Alignment: Left
+  - Width: 適刁E��幁E��侁E 50-80px�E�E  - Height: 適刁E��高さ�E�侁E 30-40px�E�E  - Anchor: 左下（左寁E��メチE��ージ用�E�E- **TextMeshProUGUI**:
+  - Text: "..."�E�E点リーダー�E�E  - Font Size: 適刁E��サイズ�E�侁E 16-20px�E�E  - Alignment: Left
 - **アニメーション**:
-  - 後続タスクで実装予定の場合は、プレースホルダーとして静的表示のみ
-  - または、DOTweenを使用した簡単なフェードイン/アウトアニメーションを実装
+  - 後続タスクで実裁E��定�E場合�E、�Eレースホルダーとして静的表示のみ
+  - また�E、DOTweenを使用した簡単なフェードイン/アウトアニメーションを実裁E
+## コーチE��ング規紁E- UnityエチE��タの標準的なPrefab作�E手頁E��従う
+- Prefab吁E MessageBubble.prefab, TypingIndicator.prefab
+- チE��レクトリ構造: `Assets/Prefabs/UI/` を作�EしてからPrefabを�E置
 
-## コーディング規約
-- Unityエディタの標準的なPrefab作成手順に従う
-- Prefab名: MessageBubble.prefab, TypingIndicator.prefab
-- ディレクトリ構造: `Assets/Prefabs/UI/` を作成してからPrefabを配置
-
-## 参考情報
-- 前タスクレポート: `Docs/inbox/REPORT_TASK_002_LogicImplementation.md` を参照
-- プロジェクト仕様: `最初のプロンプト`（プロジェクトルート）を参照
-- Unityバージョン: Unity 6 (or 2022 LTS)
-- 必須パッケージ: TextMeshPro
-- ChatController.cs: `Assets/Scripts/UI/ChatController.cs` を参照（Prefabの使用方法）
-
-## 注意事項
-1. **9-Slice画像**: 9-Slice設定された背景画像が存在しない場合は、一時的に通常のSpriteを使用し、後続タスクで9-Slice画像を作成する旨をレポートに記録してください。
-2. **アニメーション**: TypingIndicatorのアニメーションは後続タスクで実装予定の場合は、静的表示のみで対応し、後続タスクで実装する旨をレポートに記録してください。
-3. **Prefab配置**: Prefabは`Assets/Prefabs/UI/`配下に配置し、ChatController.csのInspectorから参照可能な状態にしてください。
-4. **Unityエディタ**: Unityエディタが起動していない場合は、Prefab作成が不可能なため、BLOCKEDとして報告してください。
+## 参老E��報
+- 前タスクレポ�EチE `docs/inbox/REPORT_TASK_002_LogicImplementation.md` を参照
+- プロジェクト仕槁E `最初�Eプロンプト`�E��Eロジェクトルート）を参�E
+- Unityバ�Eジョン: Unity 6 (or 2022 LTS)
+- 忁E��パチE��ージ: TextMeshPro
+- ChatController.cs: `Assets/Scripts/UI/ChatController.cs` を参照�E�Erefabの使用方法！E
+## 注意事頁E1. **9-Slice画僁E*: 9-Slice設定された背景画像が存在しなぁE��合�E、一時的に通常のSpriteを使用し、後続タスクで9-Slice画像を作�Eする旨をレポ�Eトに記録してください、E2. **アニメーション**: TypingIndicatorのアニメーションは後続タスクで実裁E��定�E場合�E、E��皁E��示のみで対応し、後続タスクで実裁E��る旨をレポ�Eトに記録してください、E3. **Prefab配置**: Prefabは`Assets/Prefabs/UI/`配下に配置し、ChatController.csのInspectorから参�E可能な状態にしてください、E4. **UnityエチE��タ**: UnityエチE��タが起動してぁE��ぁE��合�E、Prefab作�Eが不可能なため、BLOCKEDとして報告してください、E

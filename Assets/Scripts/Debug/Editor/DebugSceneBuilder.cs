@@ -43,18 +43,15 @@ namespace ProjectFoundPhone.Debug.Editor
             }
 
             // 2. Setup Chat UI
-            // 既存のChatRootを削除（TextMesh ProのサンプルChatControllerも含む）
-            GameObject chatRoot = GameObject.Find("ChatRoot");
+            // 既存�EChatRootを削除�E�EextMesh ProのサンプルChatControllerも含む�E�E            GameObject chatRoot = GameObject.Find("ChatRoot");
             if (chatRoot != null)
             {
-                // TextMesh ProのサンプルChatControllerがアタッチされている可能性があるため、すべてのコンポーネントを確認
-                Component[] components = chatRoot.GetComponents<Component>();
+                // TextMesh ProのサンプルChatControllerがアタチE��されてぁE��可能性があるため、すべてのコンポ�Eネントを確誁E                Component[] components = chatRoot.GetComponents<Component>();
                 foreach (Component comp in components)
                 {
                     if (comp != null && comp.GetType().Name == "ChatController")
                     {
-                        // TextMesh ProのサンプルChatControllerかどうかを確認
-                        string scriptGuid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(MonoScript.FromMonoBehaviour(comp as MonoBehaviour)));
+                        // TextMesh ProのサンプルChatControllerかどぁE��を確誁E                        string scriptGuid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(MonoScript.FromMonoBehaviour(comp as MonoBehaviour)));
                         if (scriptGuid == "53d91f98a2664f5cb9af11de72ac54ec")
                         {
                             UnityEngine.Debug.LogWarning("DebugSceneBuilder: Found TextMesh Pro sample ChatController, removing it.");
@@ -104,9 +101,8 @@ namespace ProjectFoundPhone.Debug.Editor
             scrollRect.vertical = true;
             scrollRect.scrollSensitivity = 20;
 
-            // 明示的にProjectFoundPhone.UI.ChatControllerを追加
-            // TextMesh ProのサンプルChatControllerと区別するため、型を明示的に指定
-            ProjectFoundPhone.UI.ChatController chatController = chatRoot.AddComponent<ProjectFoundPhone.UI.ChatController>();
+            // 明示皁E��ProjectFoundPhone.UI.ChatControllerを追加
+            // TextMesh ProのサンプルChatControllerと区別するため、型を�E示皁E��持E��E            ProjectFoundPhone.UI.ChatController chatController = chatRoot.AddComponent<ProjectFoundPhone.UI.ChatController>();
             
             if (chatController == null)
             {
@@ -114,7 +110,7 @@ namespace ProjectFoundPhone.Debug.Editor
                 return;
             }
 
-            // 型の確認: 正しいChatControllerが取得されていることを検証
+            // 型�E確誁E 正しいChatControllerが取得されてぁE��ことを検証
             Type chatControllerType = chatController.GetType();
             string expectedTypeName = typeof(ProjectFoundPhone.UI.ChatController).FullName;
             if (chatControllerType.FullName != expectedTypeName)
@@ -124,11 +120,9 @@ namespace ProjectFoundPhone.Debug.Editor
             }
             UnityEngine.Debug.Log($"DebugSceneBuilder: Correct ChatController type confirmed: {chatControllerType.FullName}");
 
-            // リフレクションを使用して[SerializeField] privateフィールドを直接設定
-            BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public;
+            // リフレクションを使用して[SerializeField] privateフィールドを直接設宁E            BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public;
 
-            // デバッグ: 利用可能なフィールドをログ出力
-            FieldInfo[] allFields = chatControllerType.GetFields(flags);
+            // チE��チE��: 利用可能なフィールドをログ出劁E            FieldInfo[] allFields = chatControllerType.GetFields(flags);
             var fieldNames = new System.Collections.Generic.List<string>();
             var allFieldInfo = new System.Collections.Generic.Dictionary<string, FieldInfo>();
             foreach (var field in allFields)
@@ -142,8 +136,7 @@ namespace ProjectFoundPhone.Debug.Editor
             }
             UnityEngine.Debug.Log($"DebugSceneBuilder: Available fields in ChatController: {string.Join(", ", fieldNames)}");
 
-            // ヘルパー関数: フィールドを設定する
-            bool SetFieldValue(string fieldName, object value, string fieldDescription)
+            // ヘルパ�E関数: フィールドを設定すめE            bool SetFieldValue(string fieldName, object value, string fieldDescription)
             {
                 if (allFieldInfo.TryGetValue(fieldName, out FieldInfo fieldInfo))
                 {
@@ -210,7 +203,7 @@ namespace ProjectFoundPhone.Debug.Editor
                 UnityEngine.Debug.LogError("TypingIndicator prefab not found at Assets/Prefabs/UI/TypingIndicator.prefab");
             }
 
-            // 変更をUnityエディタに通知
+            // 変更をUnityエチE��タに通知
             EditorUtility.SetDirty(chatController);
 
             // 3. Setup Managers
@@ -248,9 +241,7 @@ namespace ProjectFoundPhone.Debug.Editor
                     yarnProjectProp.objectReferenceValue = yarnProject;
                     soRunner.ApplyModifiedProperties();
                     
-                    // YarnProjectが正しくコンパイルされているか確認
-                    // リフレクションを使用してProgramプロパティを確認
-                    try
+                    // YarnProjectが正しくコンパイルされてぁE��か確誁E                    // リフレクションを使用してProgramプロパティを確誁E                    try
                     {
                         Type yarnProjectType = yarnProject.GetType();
                         PropertyInfo programProp = yarnProjectType.GetProperty("Program");
@@ -259,23 +250,20 @@ namespace ProjectFoundPhone.Debug.Editor
                             object program = programProp.GetValue(yarnProject);
                             if (program != null)
                             {
-                                // Programが存在する場合、ノードが含まれているか確認
-                                Type programType = program.GetType();
+                                // Programが存在する場合、ノードが含まれてぁE��か確誁E                                Type programType = program.GetType();
                                 PropertyInfo nodesProp = programType.GetProperty("Nodes");
                                 if (nodesProp != null)
                                 {
                                     object nodes = nodesProp.GetValue(program);
                                     if (nodes != null)
                                     {
-                                        // ノードの数を確認
-                                        var nodesCollection = nodes as System.Collections.ICollection;
+                                        // ノ�Eド�E数を確誁E                                        var nodesCollection = nodes as System.Collections.ICollection;
                                         if (nodesCollection != null && nodesCollection.Count > 0)
                                         {
                                             yarnProjectValid = true;
                                             UnityEngine.Debug.Log($"DebugSceneBuilder: YarnProject is valid with {nodesCollection.Count} node(s).");
                                             
-                                            // Startノードが存在するか確認
-                                            MethodInfo containsNodeMethod = programType.GetMethod("Contains", new[] { typeof(string) });
+                                            // Startノ�Eドが存在するか確誁E                                            MethodInfo containsNodeMethod = programType.GetMethod("Contains", new[] { typeof(string) });
                                             if (containsNodeMethod != null)
                                             {
                                                 bool hasStartNode = (bool)containsNodeMethod.Invoke(program, new object[] { "Start" });
@@ -287,11 +275,10 @@ namespace ProjectFoundPhone.Debug.Editor
                                         }
                                         else
                                         {
-                                            // ノードが存在しない場合、YarnProjectアセットを再インポートして再試行
-                                            UnityEngine.Debug.LogWarning("DebugSceneBuilder: YarnProject has no nodes. Attempting to reimport the YarnProject asset...");
+                                            // ノ�Eドが存在しなぁE��合、YarnProjectアセチE��を�Eインポ�Eトして再試衁E                                            UnityEngine.Debug.LogWarning("DebugSceneBuilder: YarnProject has no nodes. Attempting to reimport the YarnProject asset...");
                                             AssetDatabase.ImportAsset(yarnProjectPath, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ForceSynchronousImport);
                                             
-                                            // 再インポート後、再度YarnProjectを取得して検証
+                                            // 再インポ�Eト後、�E度YarnProjectを取得して検証
                                             yarnProject = AssetDatabase.LoadAssetAtPath<YarnProject>(yarnProjectPath);
                                             if (yarnProject != null)
                                             {
@@ -307,7 +294,7 @@ namespace ProjectFoundPhone.Debug.Editor
                                                             yarnProjectValid = true;
                                                             UnityEngine.Debug.Log($"DebugSceneBuilder: YarnProject is now valid with {nodesCollection.Count} node(s) after reimport.");
                                                             
-                                                            // DialogueRunnerの参照を更新
+                                                            // DialogueRunnerの参�Eを更新
                                                             yarnProjectProp.objectReferenceValue = yarnProject;
                                                             soRunner.ApplyModifiedProperties();
                                                         }
@@ -329,11 +316,10 @@ namespace ProjectFoundPhone.Debug.Editor
                             }
                             else
                             {
-                                // Programがnullの場合、YarnProjectアセットを再インポートして再試行
-                                UnityEngine.Debug.LogWarning("DebugSceneBuilder: YarnProject Program is null. Attempting to reimport the YarnProject asset...");
+                                // Programがnullの場合、YarnProjectアセチE��を�Eインポ�Eトして再試衁E                                UnityEngine.Debug.LogWarning("DebugSceneBuilder: YarnProject Program is null. Attempting to reimport the YarnProject asset...");
                                 AssetDatabase.ImportAsset(yarnProjectPath, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ForceSynchronousImport);
                                 
-                                // 再インポート後、再度YarnProjectを取得して検証
+                                // 再インポ�Eト後、�E度YarnProjectを取得して検証
                                 yarnProject = AssetDatabase.LoadAssetAtPath<YarnProject>(yarnProjectPath);
                                 if (yarnProject != null)
                                 {
@@ -353,7 +339,7 @@ namespace ProjectFoundPhone.Debug.Editor
                                                     yarnProjectValid = true;
                                                     UnityEngine.Debug.Log($"DebugSceneBuilder: YarnProject is now valid with {nodesCollection.Count} node(s) after reimport.");
                                                     
-                                                    // DialogueRunnerの参照を更新
+                                                    // DialogueRunnerの参�Eを更新
                                                     yarnProjectProp.objectReferenceValue = yarnProject;
                                                     soRunner.ApplyModifiedProperties();
                                                 }
@@ -371,15 +357,13 @@ namespace ProjectFoundPhone.Debug.Editor
                         else
                         {
                             UnityEngine.Debug.LogWarning("DebugSceneBuilder: Could not verify YarnProject compilation status. Assuming it's valid.");
-                            yarnProjectValid = true; // 検証できない場合は有効とみなす
-                        }
+                            yarnProjectValid = true; // 検証できなぁE��合�E有効とみなぁE                        }
                     }
                     catch (Exception ex)
                     {
                         UnityEngine.Debug.LogWarning($"DebugSceneBuilder: Could not verify YarnProject compilation status due to reflection error: {ex.Message}. Attempting to reimport...");
                         
-                        // エラーが発生した場合も再インポートを試みる
-                        try
+                        // エラーが発生した場合も再インポ�Eトを試みめE                        try
                         {
                             AssetDatabase.ImportAsset(yarnProjectPath, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ForceSynchronousImport);
                             yarnProject = AssetDatabase.LoadAssetAtPath<YarnProject>(yarnProjectPath);
@@ -388,8 +372,7 @@ namespace ProjectFoundPhone.Debug.Editor
                                 yarnProjectProp.objectReferenceValue = yarnProject;
                                 soRunner.ApplyModifiedProperties();
                                 UnityEngine.Debug.Log("DebugSceneBuilder: YarnProject reimported. Please verify manually if it's working correctly.");
-                                yarnProjectValid = true; // 再インポート後は有効とみなす
-                            }
+                                yarnProjectValid = true; // 再インポ�Eト後�E有効とみなぁE                            }
                         }
                         catch (Exception reimportEx)
                         {
@@ -406,8 +389,7 @@ namespace ProjectFoundPhone.Debug.Editor
             {
                 UnityEngine.Debug.LogError($"YarnProject not found at {yarnProjectPath}. Please ensure the file exists.");
                 
-                // Yarnファイルが存在するか確認
-                string[] yarnFiles = System.IO.Directory.GetFiles("Assets/Resources/Yarn", "*.yarn", System.IO.SearchOption.TopDirectoryOnly);
+                // Yarnファイルが存在するか確誁E                string[] yarnFiles = System.IO.Directory.GetFiles("Assets/Resources/Yarn", "*.yarn", System.IO.SearchOption.TopDirectoryOnly);
                 if (yarnFiles.Length > 0)
                 {
                     UnityEngine.Debug.LogWarning($"DebugSceneBuilder: Found {yarnFiles.Length} Yarn file(s) in Assets/Resources/Yarn/, but YarnProject asset is missing or invalid.");
@@ -446,19 +428,15 @@ namespace ProjectFoundPhone.Debug.Editor
                 UnityEngine.Debug.LogWarning("DialogueRunner: 'startNode' property not found.");
             }
             
-            // Yarn Spinnerのバージョンによってプロパティ名が異なる可能性があるため、両方を試す
-            // YarnProjectが有効な場合のみautoStartをtrueに設定
-            SerializedProperty startAutomaticallyProp = soRunner.FindProperty("autoStart");
+            // Yarn Spinnerのバ�Eジョンによってプロパティ名が異なる可能性があるため、両方を試ぁE            // YarnProjectが有効な場合�EみautoStartをtrueに設宁E            SerializedProperty startAutomaticallyProp = soRunner.FindProperty("autoStart");
             if (startAutomaticallyProp == null)
             {
-                // 代替プロパティ名を試す
-                startAutomaticallyProp = soRunner.FindProperty("startAutomatically");
+                // 代替プロパティ名を試ぁE                startAutomaticallyProp = soRunner.FindProperty("startAutomatically");
             }
             
             if (startAutomaticallyProp != null)
             {
-                // YarnProjectが有効な場合のみautoStartをtrueに設定
-                // 無効な場合はfalseに設定し、手動で開始する必要がある
+                // YarnProjectが有効な場合�EみautoStartをtrueに設宁E                // 無効な場合�Efalseに設定し、手動で開始する忁E��がある
                 startAutomaticallyProp.boolValue = yarnProjectValid;
                 soRunner.ApplyModifiedProperties();
                 

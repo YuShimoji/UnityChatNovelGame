@@ -6,7 +6,7 @@ using ProjectFoundPhone.Data;
 namespace ProjectFoundPhone.Debug.Editor
 {
     /// <summary>
-    /// TopicDataアセットのInspector表示スクリーンショットを取得するエディタツール
+    /// TopicDataアセチE��のInspector表示スクリーンショチE��を取得するエチE��タチE�Eル
     /// TASK_013のEvidence取得用
     /// </summary>
     public static class TopicAssetScreenshotTool
@@ -15,12 +15,11 @@ namespace ProjectFoundPhone.Debug.Editor
         private const string c_EvidencePath = "docs/evidence/task011_topic_assets.png";
 
         /// <summary>
-        /// TopicDataアセットを選択し、Inspector表示のスクリーンショットを取得する
-        /// </summary>
+        /// TopicDataアセチE��を選択し、Inspector表示のスクリーンショチE��を取得すめE        /// </summary>
         [MenuItem("Tools/FoundPhone/Capture Topic Asset Screenshot")]
         public static void CaptureTopicAssetScreenshot()
         {
-            // アセットを読み込み
+            // アセチE��を読み込み
             TopicData topicAsset = AssetDatabase.LoadAssetAtPath<TopicData>(c_TopicAssetPath);
             
             if (topicAsset == null)
@@ -34,14 +33,14 @@ namespace ProjectFoundPhone.Debug.Editor
                 return;
             }
 
-            // アセットを選択してInspectorに表示
+            // アセチE��を選択してInspectorに表示
             Selection.activeObject = topicAsset;
             EditorUtility.FocusProjectWindow();
             
-            // プロジェクトウィンドウでアセットを選択状態にする
+            // プロジェクトウィンドウでアセチE��を選択状態にする
             EditorGUIUtility.PingObject(topicAsset);
 
-            // Evidenceディレクトリが存在しない場合は作成
+            // EvidenceチE��レクトリが存在しなぁE��合�E作�E
             string evidenceDir = Path.GetDirectoryName(c_EvidencePath);
             if (!string.IsNullOrEmpty(evidenceDir) && !Directory.Exists(evidenceDir))
             {
@@ -49,24 +48,19 @@ namespace ProjectFoundPhone.Debug.Editor
                 UnityEngine.Debug.Log($"Created evidence directory: {evidenceDir}");
             }
 
-            // スクリーンショットを取得
-            // 注意: Unity Editor APIではInspectorウィンドウの内容を直接取得できないため、
-            // スクリーン全体のスクリーンショットを取得します
-            // ユーザーは手動でInspectorウィンドウを表示してから実行してください
+            // スクリーンショチE��を取征E            // 注愁E Unity Editor APIではInspectorウィンドウの冁E��を直接取得できなぁE��め、E            // スクリーン全体�EスクリーンショチE��を取得しまぁE            // ユーザーは手動でInspectorウィンドウを表示してから実行してください
             
             string fullPath = Path.Combine(Application.dataPath, "..", c_EvidencePath);
             fullPath = Path.GetFullPath(fullPath);
             
-            // 既存のファイルがあれば削除
+            // 既存�Eファイルがあれ�E削除
             if (File.Exists(fullPath))
             {
                 File.Delete(fullPath);
             }
 
-            // スクリーンショットを取得（Unity 2022.1以降）
-#if UNITY_2022_1_OR_NEWER
-            // 相対パスで保存（プロジェクトルートからの相対パス）
-            string relativePath = c_EvidencePath.Replace('\\', '/');
+            // スクリーンショチE��を取得！Enity 2022.1以降！E#if UNITY_2022_1_OR_NEWER
+            // 相対パスで保存（�Eロジェクトルートから�E相対パス�E�E            string relativePath = c_EvidencePath.Replace('\\', '/');
             ScreenCapture.CaptureScreenshot(relativePath, 1);
             
             UnityEngine.Debug.Log($"Screenshot captured to: {fullPath}");
@@ -86,13 +80,11 @@ namespace ProjectFoundPhone.Debug.Editor
             );
 #endif
 
-            // アセットを再インポート（必要に応じて）
-            AssetDatabase.Refresh();
+            // アセチE��を�Eインポ�Eト（忁E��に応じて�E�E            AssetDatabase.Refresh();
         }
 
         /// <summary>
-        /// TopicDataアセットを選択する（スクリーンショット取得前の準備）
-        /// </summary>
+        /// TopicDataアセチE��を選択する（スクリーンショチE��取得前の準備�E�E        /// </summary>
         [MenuItem("Tools/FoundPhone/Select Topic Asset for Screenshot")]
         public static void SelectTopicAsset()
         {
@@ -109,8 +101,7 @@ namespace ProjectFoundPhone.Debug.Editor
                 return;
             }
 
-            // アセットを選択
-            Selection.activeObject = topicAsset;
+            // アセチE��を選抁E            Selection.activeObject = topicAsset;
             EditorUtility.FocusProjectWindow();
             EditorGUIUtility.PingObject(topicAsset);
             

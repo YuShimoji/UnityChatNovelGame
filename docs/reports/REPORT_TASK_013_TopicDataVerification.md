@@ -1,241 +1,150 @@
 # Report: TASK_013_TopicDataVerification
 
-**作成日時**: 2026-01-17T06:30:00+09:00  
+**作�E日晁E*: 2026-01-17T06:30:00+09:00  
 **タスク**: TASK_013_TopicDataVerification  
-**ステータス**: IN_PROGRESS（コード実装完了、Unity Editor実行待ち）  
-**実行者**: AI Agent (Worker)
+**スチE�Eタス**: IN_PROGRESS�E�コード実裁E��亁E��Unity Editor実行征E���E�E 
+**実行老E*: AI Agent (Worker)
 
-## 概要
-
-TASK_011で作成したTopicDataアセットの動作確認とEvidence取得を行うためのツールを実装しました。Inspector表示のスクリーンショット取得用エディタスクリプトを作成し、UnlockTopicCommandの動作確認準備を完了しました。
-
-## 実装ファイル一覧
+## 概要E
+TASK_011で作�EしたTopicDataアセチE��の動作確認とEvidence取得を行うためのチE�Eルを実裁E��ました、Enspector表示のスクリーンショチE��取得用エチE��タスクリプトを作�Eし、UnlockTopicCommandの動作確認準備を完亁E��ました、E
+## 実裁E��ァイル一覧
 
 ### 1. TopicAssetScreenshotTool.cs
 - **パス**: `Assets/Scripts/Debug/Editor/TopicAssetScreenshotTool.cs`
-- **役割**: TopicDataアセットのInspector表示スクリーンショットを取得するエディタツール
-- **実装内容**:
-  - `CaptureTopicAssetScreenshot()`: アセットを選択してスクリーンショットを取得
-  - `SelectTopicAsset()`: アセットを選択してInspectorに表示（準備用）
-  - `docs/evidence/` ディレクトリの自動作成
-  - Unity Editor メニューから実行可能（`Tools/FoundPhone/Capture Topic Asset Screenshot`）
-
-### 2. docs/evidence/ ディレクトリ
+- **役割**: TopicDataアセチE��のInspector表示スクリーンショチE��を取得するエチE��タチE�Eル
+- **実裁E�E容**:
+  - `CaptureTopicAssetScreenshot()`: アセチE��を選択してスクリーンショチE��を取征E  - `SelectTopicAsset()`: アセチE��を選択してInspectorに表示�E�準備用�E�E  - `docs/evidence/` チE��レクトリの自動作�E
+  - Unity Editor メニューから実行可能�E�ETools/FoundPhone/Capture Topic Asset Screenshot`�E�E
+### 2. docs/evidence/ チE��レクトリ
 - **パス**: `docs/evidence/`
-- **役割**: Evidence（スクリーンショット等）の保存先
-- **状態**: 作成済み
+- **役割**: Evidence�E�スクリーンショチE��等）�E保存�E
+- **状慁E*: 作�E済み
 
-## 実装詳細
+## 実裁E��細
 
-### エディタスクリプトの機能
+### エチE��タスクリプトの機�E
 
 #### 1. CaptureTopicAssetScreenshot()
 - **メニューパス**: `Tools/FoundPhone/Capture Topic Asset Screenshot`
-- **機能**:
+- **機�E**:
   - `Assets/Resources/Topics/debug_topic_01.asset` を読み込み
-  - アセットを選択してInspectorに表示
-  - `docs/evidence/` ディレクトリが存在しない場合は自動作成
-  - スクリーンショットを `docs/evidence/task011_topic_assets.png` として保存
-  - Unity 2022.1以降では自動スクリーンショット取得、それ以前では手動取得を案内
+  - アセチE��を選択してInspectorに表示
+  - `docs/evidence/` チE��レクトリが存在しなぁE��合�E自動作�E
+  - スクリーンショチE��めE`docs/evidence/task011_topic_assets.png` として保孁E  - Unity 2022.1以降では自動スクリーンショチE��取得、それ以前では手動取得を案�E
 
 #### 2. SelectTopicAsset()
 - **メニューパス**: `Tools/FoundPhone/Select Topic Asset for Screenshot`
-- **機能**:
-  - `Assets/Resources/Topics/debug_topic_01.asset` を選択
-  - Inspectorウィンドウに表示されるようにする
-  - スクリーンショット取得前の準備として使用
+- **機�E**:
+  - `Assets/Resources/Topics/debug_topic_01.asset` を選抁E  - Inspectorウィンドウに表示されるよぁE��する
+  - スクリーンショチE��取得前の準備として使用
 
 ### UnlockTopicCommandの動作確認準備
 
 #### コードレベルでの確認結果
 
-1. **DebugScript.yarn の確認**
+1. **DebugScript.yarn の確誁E*
    - **パス**: `Assets/Resources/Yarn/DebugScript.yarn`
-   - **18行目**: `<<UnlockTopic "debug_topic_01">>` コマンドが含まれている
-   - **状態**: ✅ 正常
+   - **18行目**: `<<UnlockTopic "debug_topic_01">>` コマンドが含まれてぁE��
+   - **状慁E*: ✁E正常
 
-2. **ScenarioManager.cs の確認**
+2. **ScenarioManager.cs の確誁E*
    - **パス**: `Assets/Scripts/Core/ScenarioManager.cs`
-   - **214-234行目**: `UnlockTopicCommand` メソッドが実装されている
-   - **実装内容**:
-     - `Resources.Load<TopicData>($"Topics/{topicID}")` でトピックを読み込み
-     - 読み込み成功時: `Debug.Log($"ScenarioManager: Topic unlocked - {topicData.Title} (ID: {topicID})");` を出力
-     - Yarn変数 `$has_topic_{topicID}` を `true` に設定
-   - **状態**: ✅ 正常
+   - **214-234行目**: `UnlockTopicCommand` メソチE��が実裁E��れてぁE��
+   - **実裁E�E容**:
+     - `Resources.Load<TopicData>($"Topics/{topicID}")` でトピチE��を読み込み
+     - 読み込み成功晁E `Debug.Log($"ScenarioManager: Topic unlocked - {topicData.Title} (ID: {topicID})");` を�E劁E     - Yarn変数 `$has_topic_{topicID}` めE`true` に設宁E   - **状慁E*: ✁E正常
 
-3. **コマンド登録の確認**
-   - **92行目**: `m_DialogueRunner.AddCommandHandler<string>("UnlockTopic", UnlockTopicCommand);` で登録されている
-   - **状態**: ✅ 正常
+3. **コマンド登録の確誁E*
+   - **92行目**: `m_DialogueRunner.AddCommandHandler<string>("UnlockTopic", UnlockTopicCommand);` で登録されてぁE��
+   - **状慁E*: ✁E正常
 
-## 動作確認方法（詳細手順）
-
-### 1. Inspector表示スクリーンショットの取得
-
-#### 方法1: エディタスクリプトを使用（推奨）
-
-1. Unity Editor を起動
-2. Unity Editor のメニューバーから `Tools > FoundPhone > Select Topic Asset for Screenshot` を選択
-   - `debug_topic_01.asset` が選択され、Inspectorウィンドウに表示される
-3. Inspectorウィンドウが表示されていることを確認
-4. Unity Editor のメニューバーから `Tools > FoundPhone > Capture Topic Asset Screenshot` を選択
-   - Unity 2022.1以降: 自動的にスクリーンショットが保存される
-   - Unity 2022.1未満: 手動取得の案内が表示される
-
-#### 方法2: 手動取得
-
-1. Unity Editor で `Assets/Resources/Topics/debug_topic_01.asset` を選択
-2. Inspectorウィンドウでトピック情報を表示
-3. Windows: `Win + Shift + S` でスクリーンショットを取得
-4. `docs/evidence/task011_topic_assets.png` として保存
-
-### 2. UnlockTopicCommandの動作確認
-
+## 動作確認方法（詳細手頁E��E
+### 1. Inspector表示スクリーンショチE��の取征E
+#### 方況E: エチE��タスクリプトを使用�E�推奨�E�E
+1. Unity Editor を起勁E2. Unity Editor のメニューバ�Eから `Tools > FoundPhone > Select Topic Asset for Screenshot` を選抁E   - `debug_topic_01.asset` が選択され、Inspectorウィンドウに表示されめE3. Inspectorウィンドウが表示されてぁE��ことを確誁E4. Unity Editor のメニューバ�Eから `Tools > FoundPhone > Capture Topic Asset Screenshot` を選抁E   - Unity 2022.1以陁E 自動的にスクリーンショチE��が保存される
+   - Unity 2022.1未満: 手動取得�E案�Eが表示されめE
+#### 方況E: 手動取征E
+1. Unity Editor で `Assets/Resources/Topics/debug_topic_01.asset` を選抁E2. InspectorウィンドウでトピチE��惁E��を表示
+3. Windows: `Win + Shift + S` でスクリーンショチE��を取征E4. `docs/evidence/task011_topic_assets.png` として保孁E
+### 2. UnlockTopicCommandの動作確誁E
 #### シーンの準備
 
-1. Unity Editor で `Assets/Scenes/DebugChatScene.unity` を開く
-2. `ScenarioManager` コンポーネントが `DebugScript.yarn` を参照していることを確認
-   - `ScenarioManager` の `DialogueRunner` が `DebugScript.yarn` を読み込むように設定されている必要がある
+1. Unity Editor で `Assets/Scenes/DebugChatScene.unity` を開ぁE2. `ScenarioManager` コンポ�Eネントが `DebugScript.yarn` を参照してぁE��ことを確誁E   - `ScenarioManager` の `DialogueRunner` ぁE`DebugScript.yarn` を読み込むように設定されてぁE��忁E��がある
 
-#### 実行と確認
-
-1. Playボタンを押してシーンを実行
-2. シナリオが進行し、`<<UnlockTopic "debug_topic_01">>` コマンドが実行されるタイミングで以下を確認:
-   - Consoleウィンドウに以下のログが表示される:
+#### 実行と確誁E
+1. Playボタンを押してシーンを実衁E2. シナリオが進行し、`<<UnlockTopic "debug_topic_01">>` コマンドが実行されるタイミングで以下を確誁E
+   - Consoleウィンドウに以下�Eログが表示されめE
      ```
      ScenarioManager: Topic unlocked - Strange Signal (ID: debug_topic_01)
      ```
-   - エラーが発生しない
-   - トピックが正常に読み込まれる（Resources.Loadが成功する）
-
-#### ログ確認
-
-Consoleウィンドウで以下のログを確認:
-- ✅ `ScenarioManager: Topic unlocked - Strange Signal (ID: debug_topic_01)` が表示される
-- ❌ エラーログが表示されない
-- ❌ `ScenarioManager: Failed to load TopicData from Resources/Topics/debug_topic_01` が表示されない
-
-## 期待される動作
-
-### スクリーンショット取得
-- `docs/evidence/task011_topic_assets.png` が作成される
-- スクリーンショットには `debug_topic_01.asset` のInspector表示が含まれる
-- 以下の情報が表示される:
+   - エラーが発生しなぁE   - トピチE��が正常に読み込まれる�E�Eesources.Loadが�E功する！E
+#### ログ確誁E
+Consoleウィンドウで以下�Eログを確誁E
+- ✁E`ScenarioManager: Topic unlocked - Strange Signal (ID: debug_topic_01)` が表示されめE- ❁Eエラーログが表示されなぁE- ❁E`ScenarioManager: Failed to load TopicData from Resources/Topics/debug_topic_01` が表示されなぁE
+## 期征E��れる動佁E
+### スクリーンショチE��取征E- `docs/evidence/task011_topic_assets.png` が作�EされめE- スクリーンショチE��には `debug_topic_01.asset` のInspector表示が含まれる
+- 以下�E惁E��が表示されめE
   - **Topic ID**: `debug_topic_01`
   - **Title**: `Strange Signal`
-  - **Description**: `拾ったスマホから受信した不審な信号。ノイズが多く、内容は不明瞭だが、何か重要な情報が隠されている気がする。`
+  - **Description**: `拾ったスマ�Eから受信した不審な信号。ノイズが多く、�E容は不�E瞭だが、何か重要な惁E��が隠されてぁE��気がする。`
 
 ### UnlockTopicCommand
-- `ScenarioManager.UnlockTopicCommand` が正常に動作する
-- トピックが `Resources.Load<TopicData>($"Topics/debug_topic_01")` で正常に読み込まれる
-- Consoleウィンドウに成功ログが表示される
-- Yarn変数 `$has_topic_debug_topic_01` が `true` に設定される
-- エラーが発生しない
+- `ScenarioManager.UnlockTopicCommand` が正常に動作すめE- トピチE��ぁE`Resources.Load<TopicData>($"Topics/debug_topic_01")` で正常に読み込まれる
+- Consoleウィンドウに成功ログが表示されめE- Yarn変数 `$has_topic_debug_topic_01` ぁE`true` に設定される
+- エラーが発生しなぁE
+## トラブルシューチE��ング
 
-## トラブルシューティング
-
-### スクリーンショットが取得できない場合
-
-1. **メニューが表示されない場合**
-   - Unity Editor を再起動
-   - コンパイルエラーがないことを確認
-
-2. **アセットが選択されない場合**
-   - `Assets/Resources/Topics/debug_topic_01.asset` が存在することを確認
-   - アセットが正しく読み込まれていることを確認
-
-3. **スクリーンショットが保存されない場合**
-   - `docs/evidence/` ディレクトリが存在することを確認
-   - ファイルの書き込み権限があることを確認
-   - Unity 2022.1以降を使用していることを確認（自動スクリーンショット取得の場合）
-
-### UnlockTopicCommandが動作しない場合
-
-1. **コマンドが実行されない場合**
-   - `DebugScript.yarn` が正しく読み込まれていることを確認
-   - `ScenarioManager` の `DialogueRunner` が `DebugScript.yarn` を参照していることを確認
-   - Yarnスクリプトの構文エラーがないことを確認
-
-2. **トピックが読み込まれない場合**
-   - `Assets/Resources/Topics/debug_topic_01.asset` が存在することを確認
-   - アセットのパスが正しいことを確認
-   - Consoleウィンドウでエラーログを確認
-
-3. **ログが表示されない場合**
-   - Consoleウィンドウが開いていることを確認
-   - ログレベルが適切に設定されていることを確認
-   - `ScenarioManager` が正しく初期化されていることを確認
-
+### スクリーンショチE��が取得できなぁE��吁E
+1. **メニューが表示されなぁE��吁E*
+   - Unity Editor を�E起勁E   - コンパイルエラーがなぁE��とを確誁E
+2. **アセチE��が選択されなぁE��吁E*
+   - `Assets/Resources/Topics/debug_topic_01.asset` が存在することを確誁E   - アセチE��が正しく読み込まれてぁE��ことを確誁E
+3. **スクリーンショチE��が保存されなぁE��吁E*
+   - `docs/evidence/` チE��レクトリが存在することを確誁E   - ファイルの書き込み権限があることを確誁E   - Unity 2022.1以降を使用してぁE��ことを確認（�E動スクリーンショチE��取得�E場合！E
+### UnlockTopicCommandが動作しなぁE��吁E
+1. **コマンドが実行されなぁE��吁E*
+   - `DebugScript.yarn` が正しく読み込まれてぁE��ことを確誁E   - `ScenarioManager` の `DialogueRunner` ぁE`DebugScript.yarn` を参照してぁE��ことを確誁E   - Yarnスクリプトの構文エラーがなぁE��とを確誁E
+2. **トピチE��が読み込まれなぁE��吁E*
+   - `Assets/Resources/Topics/debug_topic_01.asset` が存在することを確誁E   - アセチE��のパスが正しいことを確誁E   - Consoleウィンドウでエラーログを確誁E
+3. **ログが表示されなぁE��吁E*
+   - Consoleウィンドウが開ぁE��ぁE��ことを確誁E   - ログレベルが適刁E��設定されてぁE��ことを確誁E   - `ScenarioManager` が正しく初期化されてぁE��ことを確誁E
 ## 技術的詳細
 
-### エディタスクリプトの設計
+### エチE��タスクリプトの設訁E
+#### 名前空閁E- `ProjectFoundPhone.Debug.Editor` 名前空間を使用
+- Unity Editor 専用の機�Eのため、`#if UNITY_EDITOR` チE��レクチE��ブ�E不要E��EEditor/` フォルダ冁E�Eため自動的にEditor専用�E�E
+#### スクリーンショチE��取得�E実裁E- Unity 2022.1以陁E `ScreenCapture.CaptureScreenshot()` を使用
+- Unity 2022.1未満: 手動取得を案�E
+- プロジェクトルートから�E相対パスで保孁E
+#### アセチE��選択�E実裁E- `Selection.activeObject` でアセチE��を選抁E- `EditorUtility.FocusProjectWindow()` でプロジェクトウィンドウにフォーカス
+- `EditorGUIUtility.PingObject()` でアセチE��をハイライチE
+### 制限事頁E
+1. **Inspectorウィンドウの直接取征E*
+   - Unity Editor APIではInspectorウィンドウの冁E��を直接取得できなぁE   - スクリーン全体�EスクリーンショチE��を取得する方法を使用
+   - ユーザーはInspectorウィンドウを表示してから実行する忁E��がある
 
-#### 名前空間
-- `ProjectFoundPhone.Debug.Editor` 名前空間を使用
-- Unity Editor 専用の機能のため、`#if UNITY_EDITOR` ディレクティブは不要（`Editor/` フォルダ内のため自動的にEditor専用）
-
-#### スクリーンショット取得の実装
-- Unity 2022.1以降: `ScreenCapture.CaptureScreenshot()` を使用
-- Unity 2022.1未満: 手動取得を案内
-- プロジェクトルートからの相対パスで保存
-
-#### アセット選択の実装
-- `Selection.activeObject` でアセットを選択
-- `EditorUtility.FocusProjectWindow()` でプロジェクトウィンドウにフォーカス
-- `EditorGUIUtility.PingObject()` でアセットをハイライト
-
-### 制限事項
-
-1. **Inspectorウィンドウの直接取得**
-   - Unity Editor APIではInspectorウィンドウの内容を直接取得できない
-   - スクリーン全体のスクリーンショットを取得する方法を使用
-   - ユーザーはInspectorウィンドウを表示してから実行する必要がある
-
-2. **Unity Editor実行が必要**
-   - スクリーンショット取得はUnity Editor内での実行が必要
-   - 自動化（CI/CD等）には対応していない
-
-## 次のステップ
-
-1. **Unity Editor での実行**
-   - Unity Editor を起動
-   - `Tools/FoundPhone/Select Topic Asset for Screenshot` を実行
-   - Inspectorウィンドウでトピック情報を確認
-   - `Tools/FoundPhone/Capture Topic Asset Screenshot` を実行してスクリーンショットを取得
-
-2. **UnlockTopicCommandの動作確認**
-   - `Assets/Scenes/DebugChatScene.unity` を開く
-   - `ScenarioManager` が `DebugScript.yarn` を参照していることを確認
-   - Playボタンで実行し、`<<UnlockTopic "debug_topic_01">>` コマンドが正常に動作することを確認
-   - Consoleウィンドウに成功ログが表示されることを確認
-
+2. **Unity Editor実行が忁E��E*
+   - スクリーンショチE��取得�EUnity Editor冁E��の実行が忁E��E   - 自動化�E�EI/CD等）には対応してぁE��ぁE
+## 次のスチE��チE
+1. **Unity Editor での実衁E*
+   - Unity Editor を起勁E   - `Tools/FoundPhone/Select Topic Asset for Screenshot` を実衁E   - InspectorウィンドウでトピチE��惁E��を確誁E   - `Tools/FoundPhone/Capture Topic Asset Screenshot` を実行してスクリーンショチE��を取征E
+2. **UnlockTopicCommandの動作確誁E*
+   - `Assets/Scenes/DebugChatScene.unity` を開ぁE   - `ScenarioManager` ぁE`DebugScript.yarn` を参照してぁE��ことを確誁E   - Playボタンで実行し、`<<UnlockTopic "debug_topic_01">>` コマンドが正常に動作することを確誁E   - Consoleウィンドウに成功ログが表示されることを確誁E
 3. **TASK_011のStatus更新**
-   - Evidence取得とUnlockTopicCommand確認完了後、TASK_011のStatusをDONEに更新
+   - Evidence取得とUnlockTopicCommand確認完亁E��、TASK_011のStatusをDONEに更新
 
 4. **タスクファイルの更新**
    - TASK_013のStatusをDONEに更新
-   - Report欄にレポートパスを追記
-
-## 実装完了チェックリスト
-
-- [x] `docs/evidence/` ディレクトリの確認・作成
-- [x] Inspector表示スクリーンショット取得用エディタスクリプトの作成
-- [x] `TopicAssetScreenshotTool.cs` の実装完了
-- [x] DebugScript.yarn の確認（`<<UnlockTopic "debug_topic_01">>` が含まれている）
-- [x] ScenarioManager.cs の UnlockTopicCommand 実装確認
-- [ ] トピックアセットのInspector表示スクリーンショットを取得（Unity Editor実行待ち）
-- [ ] UnlockTopicCommandの動作確認（Unity Editor実行待ち）
-- [ ] TASK_011のStatusをDONEに更新（Evidence取得とUnlockTopicCommand確認完了後）
-- [x] `docs/inbox/` にレポート (`REPORT_TASK_013_TopicDataVerification.md`) が作成されている
-- [ ] 本チケットの Report 欄にレポートパスが追記されている（完了後に更新）
-
-## まとめ
-
-TASK_013の実装を完了しました。Inspector表示のスクリーンショット取得用エディタスクリプトを作成し、UnlockTopicCommandの動作確認準備を完了しました。
-
-エディタスクリプトは `Tools/FoundPhone/Capture Topic Asset Screenshot` メニューから実行でき、`docs/evidence/task011_topic_assets.png` としてスクリーンショットを保存します。
-
-UnlockTopicCommandのコードレベルでの確認は完了しており、DebugScript.yarnとScenarioManager.csの実装が正常であることを確認しました。Unity Editor内での実際の動作確認をお願いします。
-
+   - Report欁E��レポ�Eトパスを追訁E
+## 実裁E��亁E��ェチE��リスチE
+- [x] `docs/evidence/` チE��レクトリの確認�E作�E
+- [x] Inspector表示スクリーンショチE��取得用エチE��タスクリプトの作�E
+- [x] `TopicAssetScreenshotTool.cs` の実裁E��亁E- [x] DebugScript.yarn の確認！E<<UnlockTopic "debug_topic_01">>` が含まれてぁE���E�E- [x] ScenarioManager.cs の UnlockTopicCommand 実裁E��誁E- [ ] トピチE��アセチE��のInspector表示スクリーンショチE��を取得！Enity Editor実行征E���E�E- [ ] UnlockTopicCommandの動作確認！Enity Editor実行征E���E�E- [ ] TASK_011のStatusをDONEに更新�E�Evidence取得とUnlockTopicCommand確認完亁E��！E- [x] `docs/inbox/` にレポ�EチE(`REPORT_TASK_013_TopicDataVerification.md`) が作�EされてぁE��
+- [ ] 本チケチE��の Report 欁E��レポ�Eトパスが追記されてぁE���E�完亁E��に更新�E�E
+## まとめE
+TASK_013の実裁E��完亁E��ました、Enspector表示のスクリーンショチE��取得用エチE��タスクリプトを作�Eし、UnlockTopicCommandの動作確認準備を完亁E��ました、E
+エチE��タスクリプトは `Tools/FoundPhone/Capture Topic Asset Screenshot` メニューから実行でき、`docs/evidence/task011_topic_assets.png` としてスクリーンショチE��を保存します、E
+UnlockTopicCommandのコードレベルでの確認�E完亁E��ており、DebugScript.yarnとScenarioManager.csの実裁E��正常であることを確認しました。Unity Editor冁E��の実際の動作確認をお願いします、E
 ---
 
 ## Final Verification (2026-01-23)

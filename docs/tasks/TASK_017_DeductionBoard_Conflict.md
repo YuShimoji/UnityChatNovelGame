@@ -1,5 +1,4 @@
-# Task: DeductionBoard (推論ボード) 実装
-Status: DONE
+# Task: DeductionBoard (推論�EーチE 実裁EStatus: DONE
 Tier: 2
 Branch: main
 Owner: Worker
@@ -7,50 +6,44 @@ Created: 2026-01-16T13:55:00Z
 Report: docs/reports/REPORT_TASK_009_DeductionBoard.md
 
 ## Objective
-プレイヤーが獲得したトピック(TopicData)を表示・管理する「推論ボード(DeductionBoard)」UIを実装する。
-ScenarioManagerのUnlockTopicCommandから呼び出され、トピックの追加・表示を行う。
-
+プレイヤーが獲得したトピック(TopicData)を表示・管琁E��る「推論�EーチEDeductionBoard)」UIを実裁E��る、EScenarioManagerのUnlockTopicCommandから呼び出され、トピックの追加・表示を行う、E
 ## Context
-- **前工程**: TASK_002でUnlockTopicCommandのスケルトンが実装済み(Debug.Logで代替中)
-- **依存**: TopicData ScriptableObject (既に定義済み)
-- **ゴール**: トピックの視覚的管理と、将来のトピック合成(SynthesisRecipe)の基盤構築
-
+- **前工稁E*: TASK_002でUnlockTopicCommandのスケルトンが実裁E��み(Debug.Logで代替中)
+- **依孁E*: TopicData ScriptableObject (既に定義済み)
+- **ゴール**: トピチE��の視覚的管琁E��、封E��のトピチE��合�E(SynthesisRecipe)の基盤構篁E
 ## Focus Area
-- `Assets/Scripts/UI/DeductionBoard.cs` (新規)
-- `Assets/Scripts/UI/TopicCard.cs` (新規、表示用コンポーネント)
-- `Assets/Prefabs/UI/DeductionBoard.prefab` (新規)
-- `Assets/Prefabs/UI/TopicCard.prefab` (新規)
-- `Assets/Scripts/Core/ScenarioManager.cs` (UnlockTopicCommand連携部分のみ)
+- `Assets/Scripts/UI/DeductionBoard.cs` (新要E
+- `Assets/Scripts/UI/TopicCard.cs` (新規、表示用コンポ�EネンチE
+- `Assets/Prefabs/UI/DeductionBoard.prefab` (新要E
+- `Assets/Prefabs/UI/TopicCard.prefab` (新要E
+- `Assets/Scripts/Core/ScenarioManager.cs` (UnlockTopicCommand連携部刁E�Eみ)
 
 ## Forbidden Area
 - `Assets/Scripts/UI/ChatController.cs` への変更
-- `Assets/Scripts/Core/` の他のファイルへの大幅変更
-- 既存のPrefabの破壊的変更
+- `Assets/Scripts/Core/` の他�Eファイルへの大幁E��更
+- 既存�EPrefabの破壊的変更
 
 ## Constraints
 - TopicDataのScriptableObjectを使用すること
 - UIはCanvas上に配置可能な構造にすること
-- シンプルなリスト表示から開始(グリッドレイアウトは後続タスク)
+- シンプルなリスト表示から開姁EグリチE��レイアウト�E後続タスク)
 
 ## Steps
-1. DeductionBoard.cs の基本構造を実装(トピック追加/削除/表示)
-2. TopicCard.cs を実装(TopicDataの表示用)
-3. Prefabを作成(ScrollView + GridLayout)
+1. DeductionBoard.cs の基本構造を実裁EトピチE��追加/削除/表示)
+2. TopicCard.cs を実裁ETopicDataの表示用)
+3. Prefabを作�E(ScrollView + GridLayout)
 4. ScenarioManager.UnlockTopicCommandと連携
-5. テストシーンで動作確認
-
+5. チE��トシーンで動作確誁E
 ## DoD (Definition of Done)
-- [ ] `DeductionBoard.cs` が実装され、トピックの追加・表示ができる
-- [ ] `TopicCard.cs` が実装され、TopicDataの情報(名前、アイコン等)を表示できる
-- [ ] `DeductionBoard.prefab` と `TopicCard.prefab` が作成されている
-- [ ] `ScenarioManager.UnlockTopicCommand` からトピック追加が呼び出せる
-- [ ] Unity Editorで動作確認が完了している
-- [ ] `docs/reports/REPORT_TASK_009_DeductionBoard.md` にレポートが作成されている
+- [ ] `DeductionBoard.cs` が実裁E��れ、トピックの追加・表示ができる
+- [ ] `TopicCard.cs` が実裁E��れ、TopicDataの惁E��(名前、アイコン筁Eを表示できる
+- [ ] `DeductionBoard.prefab` と `TopicCard.prefab` が作�EされてぁE��
+- [ ] `ScenarioManager.UnlockTopicCommand` からトピチE��追加が呼び出せる
+- [ ] Unity Editorで動作確認が完亁E��てぁE��
+- [ ] `docs/reports/REPORT_TASK_009_DeductionBoard.md` にレポ�Eトが作�EされてぁE��
 
 ## 停止条件
-- TopicData ScriptableObjectの構造変更が必要になった場合
-- 既存のScenarioManagerロジックとの競合が発生した場合
-
+- TopicData ScriptableObjectの構造変更が忁E��になった場吁E- 既存�EScenarioManagerロジチE��との競合が発生した場吁E
 ## Notes
 - TASK_008 (ChatUI Integration) と並行実行可能
-- 将来的にはトピック合成(SynthesisRecipe)機能と連携予定
+- 封E��皁E��はトピチE��合�E(SynthesisRecipe)機�Eと連携予宁E
