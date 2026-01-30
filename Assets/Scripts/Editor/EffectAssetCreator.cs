@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEditor;
 
+// Avoid namespace conflict with ProjectFoundPhone.Debug
+using Debug = UnityEngine.Debug;
+
 namespace ProjectFoundPhone.EditorTools
 {
     public static class EffectAssetCreator

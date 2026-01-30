@@ -7,6 +7,9 @@ using Assets.Scripts.Utils;
 using UnityEditor;
 #endif
 
+// Avoid namespace conflict
+using Debug = UnityEngine.Debug;
+
 namespace Assets.Scripts.Dev
 {
     public class VerificationAutomator : MonoBehaviour
@@ -29,7 +32,8 @@ namespace Assets.Scripts.Dev
 
             yield return new WaitForSeconds(3.0f);
 
-            var capture = FindObjectOfType<VerificationCapture>();
+            // Updated to FindFirstObjectByType as FindObjectOfType is deprecated
+            var capture = FindFirstObjectByType<VerificationCapture>();
             if (capture == null)
             {
                 Debug.LogWarning("VerificationCapture not found! Creating fallback...");

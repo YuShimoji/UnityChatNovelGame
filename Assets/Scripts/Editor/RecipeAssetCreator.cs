@@ -2,6 +2,9 @@ using UnityEngine;
 using UnityEditor;
 using ProjectFoundPhone.Data;
 
+// Avoid namespace conflict with ProjectFoundPhone.Debug
+using Debug = UnityEngine.Debug;
+
 namespace ProjectFoundPhone.EditorTools
 {
     public static class RecipeAssetCreator

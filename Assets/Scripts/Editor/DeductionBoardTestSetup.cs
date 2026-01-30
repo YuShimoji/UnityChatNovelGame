@@ -4,6 +4,9 @@ using ProjectFoundPhone.UI;
 using ProjectFoundPhone.Tests;
 using Assets.Scripts.Utils;
 
+// Avoid namespace conflict with ProjectFoundPhone.Debug
+using Debug = UnityEngine.Debug;
+
 namespace ProjectFoundPhone.Editor
 {
     public class DeductionBoardTestSetup
@@ -60,24 +63,6 @@ namespace ProjectFoundPhone.Editor
                 verifier = testRunner.AddComponent<DeductionBoardVerification>();
                 Debug.Log("Added DeductionBoardVerification component.");
             }
-            
-            // Link References (using SerializedObject to avoid dirtying scene weirdly, though direct assign in editor is fine)
-            // We can't access private fields easily without reflection or making them public. 
-            // Since we made them [SerializeField], they are accessible to SerializedObject.
-            // But for simplicity in this script, let's just assume the user might need to assign if we can't.
-            // Actually, we can just use SerializedObject.
-            
-            /*
-            SerializedObject so = new SerializedObject(verifier);
-            so.FindProperty("m_VerificationCapture").objectReferenceValue = capture;
-            so.FindProperty("m_DelayBeforeCapture").floatValue = 15.0f;
-            so.FindProperty("m_TargetTopicID").stringValue = "debug_topic_01";
-            so.ApplyModifiedProperties();
-            */
-            
-            // However, since we defined the fields in the file we just wrote, we know they are private [SerializeField].
-            // To be safe and quick, let's just warn the user to check settings if we can't set them easily, 
-            // OR use reflection.
             
             // Let's use Reflection for robust setup.
             var type = typeof(DeductionBoardVerification);
