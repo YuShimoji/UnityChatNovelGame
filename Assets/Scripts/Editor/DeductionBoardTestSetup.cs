@@ -11,13 +11,13 @@ namespace ProjectFoundPhone.Editor
         [MenuItem("Project FoundPhone/Tests/Setup Deduction Board Verification")]
         public static void SetupVerificationScene()
         {
-            Debug.Log("Setting up Deduction Board Verification Scene...");
+            UnityEngine.Debug.Log("Setting up Deduction Board Verification Scene...");
 
             // 1. Ensure DeductionBoard Exists
             var deductionBoard = Object.FindFirstObjectByType<DeductionBoard>();
             if (deductionBoard == null)
             {
-                Debug.Log("DeductionBoard not found. Instantiating from Prefab...");
+                UnityEngine.Debug.Log("DeductionBoard not found. Instantiating from Prefab...");
                 var prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/UI/DeductionBoard.prefab");
                 if (prefab != null)
                 {
@@ -27,12 +27,12 @@ namespace ProjectFoundPhone.Editor
                 }
                 else
                 {
-                    Debug.LogError("Could not load DeductionBoard prefab at Assets/Prefabs/UI/DeductionBoard.prefab");
+                    UnityEngine.Debug.LogError("Could not load DeductionBoard prefab at Assets/Prefabs/UI/DeductionBoard.prefab");
                 }
             }
             else
             {
-                Debug.Log("DeductionBoard found in scene.");
+                UnityEngine.Debug.Log("DeductionBoard found in scene.");
             }
 
             // 2. Ensure Verification Tools Exist
@@ -40,7 +40,7 @@ namespace ProjectFoundPhone.Editor
             if (testRunner == null)
             {
                 testRunner = new GameObject("VerificationRunner");
-                Debug.Log("Created VerificationRunner object.");
+                UnityEngine.Debug.Log("Created VerificationRunner object.");
             }
 
             // Add VerificationCapture
@@ -50,7 +50,7 @@ namespace ProjectFoundPhone.Editor
                 capture = testRunner.AddComponent<VerificationCapture>();
                 capture.CaptureOnStart = false; // We want manual trigger from the test script
                 capture.CaptureLogs = true;
-                Debug.Log("Added VerificationCapture component.");
+                UnityEngine.Debug.Log("Added VerificationCapture component.");
             }
 
             // Add DeductionBoardVerification
@@ -58,7 +58,7 @@ namespace ProjectFoundPhone.Editor
             if (verifier == null)
             {
                 verifier = testRunner.AddComponent<DeductionBoardVerification>();
-                Debug.Log("Added DeductionBoardVerification component.");
+                UnityEngine.Debug.Log("Added DeductionBoardVerification component.");
             }
             
             // Link References (using SerializedObject to avoid dirtying scene weirdly, though direct assign in editor is fine)
@@ -87,9 +87,9 @@ namespace ProjectFoundPhone.Editor
             type.GetField("m_DelayBeforeCapture", flags)?.SetValue(verifier, 15.0f);
             type.GetField("m_TargetTopicID", flags)?.SetValue(verifier, "debug_topic_01");
 
-            Debug.Log("Linked components and configured settings.");
+            UnityEngine.Debug.Log("Linked components and configured settings.");
 
-            Debug.Log("Setup Complete! Please ensure you are in 'DebugChatScene' or 'VerificationScene'.");
+            UnityEngine.Debug.Log("Setup Complete! Please ensure you are in 'DebugChatScene' or 'VerificationScene'.");
         }
     }
 }

@@ -15,9 +15,9 @@ namespace ProjectFoundPhone.EditorTools
             TopicData ingredientB = Resources.Load<TopicData>("Topics/topic_suspicious_message");
             TopicData result = Resources.Load<TopicData>("Topics/topic_missing_person");
 
-            if (ingredientA == null) { Debug.LogError("Missing topic_found_phone"); return; }
-            if (ingredientB == null) { Debug.LogError("Missing topic_suspicious_message"); return; }
-            if (result == null) { Debug.LogError("Missing topic_missing_person"); return; }
+            if (ingredientA == null) { UnityEngine.Debug.LogError("Missing topic_found_phone"); return; }
+            if (ingredientB == null) { UnityEngine.Debug.LogError("Missing topic_suspicious_message"); return; }
+            if (result == null) { UnityEngine.Debug.LogError("Missing topic_missing_person"); return; }
 
             // Create Recipe
             SynthesisRecipe recipe = ScriptableObject.CreateInstance<SynthesisRecipe>();
@@ -33,7 +33,7 @@ namespace ProjectFoundPhone.EditorTools
             AssetDatabase.CreateAsset(recipe, path);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            Debug.Log($"[RecipeCreator] Created recipe at {path}");
+            UnityEngine.Debug.Log($"[RecipeCreator] Created recipe at {path}");
         }
     }
 }

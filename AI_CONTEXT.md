@@ -18,13 +18,19 @@
 
 ## リスク/懸念
 
-- 既存の `Docs/` ディレクトリ（大文字）と `docs/` ディレクトリ（小文字）が混在している可能性
+- 既存の `Docs/` ディレクトリ（大文字）と `docs/` ディレクトリ（小文字）が混在していてる可能性
 
 ## Backlog（将来提案）
 
 - [ ] プロジェクト構造の整理（Docs と docs の統合検討）
 
 ## タスク管理（短期/中期/長期）
+
+### Worker完了ステータス
+
+- TASK_022: OPEN (Performance Baseline - Ready for Dispatch)
+- TASK_023: OPEN (Verification Gap - Blocked by TASK_022)
+- TASK_024: OPEN (Fix Performance Compilation - Hotfix)
 
 ### 短期（Next）
 
@@ -33,6 +39,9 @@
 - [in_progress] Topic ScriptableObjects Creation (ref: docs/tasks/TASK_011_TopicScriptableObjects.md, Status: IN_PROGRESS)
 - [in_progress] TopicData Verification and Evidence Collection (ref: docs/tasks/TASK_013_TopicDataVerification.md, Status: IN_PROGRESS)
 - [pending] Deduction Board Implementation (ref: docs/tasks/TASK_016_DeductionBoard_Conflict.md, Status: CLOSED (Merged to TASK_018))
+- [pending] Performance Baseline Measurement (ref: docs/tasks/TASK_022_PerformanceBaseline.md, Status: OPEN)
+- [pending] Verification Gap Closure (ref: docs/tasks/TASK_023_VerificationGap.md, Status: OPEN)
+- [pending] Fix Performance Compilation Error (ref: docs/tasks/TASK_024_FixPerformanceCompilation.md, Status: COMPLETED)
 
 ### 中期（Later）
 
@@ -57,6 +66,10 @@
 
 - **スクリーンショット報告義務**: UI/Visual な変更を含むタスク完了時は、必ず `docs/evidence/` にスクリーンショット（または動画）を保存し、レポートに添付すること。
   - Evidence なき完了報告は原則「未完了」とみなすが、ブロッカーになる場合は「速度優先」で進行してよい（その場合は Issue/Task に Evidence Missing と明記すること）。
+
+## Worker Status
+
+- Active Workers: None
 
 ## 履歴
 

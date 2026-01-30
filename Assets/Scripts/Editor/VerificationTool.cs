@@ -10,8 +10,12 @@ public class VerificationTool
     [MenuItem("Tools/FoundPhone/Run Verification")]
     public static void RunVerification()
     {
-        Debug.Log("VerificationTool: RunVerification called from CLI.");
+        Debug.Log("VerificationTool: RunVerification called.");
         SetupVerificationEnvironment();
+        
+        string scenePath = "Assets/Scenes/VerificationScene.unity";
+        EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Single);
+        
         EditorApplication.EnterPlaymode();
     }
 

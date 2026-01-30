@@ -35,7 +35,7 @@ namespace ProjectFoundPhone.EditorTools
             // Cleanup
             GameObject.DestroyImmediate(go);
             
-            Debug.Log($"[EffectCreator] Created Sparkle prefab at {path}");
+            UnityEngine.Debug.Log($"[EffectCreator] Created Sparkle prefab at {path}");
         }
     }
 }

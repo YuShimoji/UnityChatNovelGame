@@ -29,7 +29,7 @@ namespace Assets.Scripts.Dev
 
             yield return new WaitForSeconds(3.0f);
 
-            var capture = FindObjectOfType<VerificationCapture>();
+            var capture = FindFirstObjectByType<VerificationCapture>();
             if (capture == null)
             {
                 Debug.LogWarning("VerificationCapture not found! Creating fallback...");

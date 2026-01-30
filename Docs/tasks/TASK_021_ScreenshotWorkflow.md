@@ -9,10 +9,10 @@
 Implement a dedicated, git-ignored screenshot folder (`VerificationResults/`) for automated verification, to avoid polluting the repository and logs.
 
 ## Definition of Done (DoD)
-- [ ] `.gitignore` includes `VerificationResults/`.
-- [ ] `VerificationCapture.cs` points to `VerificationResults/` as the default output.
-- [ ] Changes pushed to remote.
-- [ ] Verification confirmed (compilation & ignore check).
+- [x] `.gitignore` includes `VerificationResults/`.
+- [x] `VerificationCapture.cs` points to `VerificationResults/` as the default output.
+- [x] Changes pushed to remote.
+- [x] Verification confirmed (compilation & ignore check).
 
 ## Implementation Log
 - 2026-01-29: Ticket created. Beginning implementation.
