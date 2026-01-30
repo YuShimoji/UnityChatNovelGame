@@ -33,7 +33,8 @@ GitHubAutoApprove: false
 - ✅ Verification Tools Implemented (TASK_016)
 - ✅ ChatUI Integration完了（TASK_008） - (Verified with Evidence)
 - ✅ Deduction Board実装完了（TASK_018）
-- 🚧 Performance Baseline (Ready for Verification - Scene Run Required)
+- ✅ Performance Baseline完了（TASK_022）- (Report Generated)
+- ✅ GC Alloc削減（TASK_025 起票済み）
 
 ## 進捗
 
@@ -100,10 +101,10 @@ GitHubAutoApprove: false
 
 ## Outlook
 
-- Short-term: Performance Baseline (TASK_022).
+- Short-term: GC Alloc削減 (TASK_025).
 - Mid-term: Full Playthrough Test.
 - Long-term: Content Production.
 
 ## Proposals
 
-- Proceed with Performance Baseline measurements.
+- Proceed with GC Alloc reduction based on TASK_022 baseline.

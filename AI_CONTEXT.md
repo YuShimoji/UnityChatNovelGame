@@ -28,9 +28,10 @@
 
 ### Worker完了ステータス
 
-- TASK_022: OPEN (Performance Baseline - Ready for Dispatch)
-- TASK_023: OPEN (Verification Gap - Blocked by TASK_022)
-- TASK_024: OPEN (Fix Performance Compilation - Hotfix)
+- TASK_022: DONE (Performance Baseline - Report Generated)
+- TASK_023: OPEN (Verification Gap - Evidence Pending)
+- TASK_024: COMPLETED (Fix Performance Compilation - Hotfix Done)
+- TASK_025: OPEN (GC Alloc Reduction - Dispatched Ready)
 
 ### 短期（Next）
 
@@ -39,9 +40,10 @@
 - [in_progress] Topic ScriptableObjects Creation (ref: docs/tasks/TASK_011_TopicScriptableObjects.md, Status: IN_PROGRESS)
 - [in_progress] TopicData Verification and Evidence Collection (ref: docs/tasks/TASK_013_TopicDataVerification.md, Status: IN_PROGRESS)
 - [pending] Deduction Board Implementation (ref: docs/tasks/TASK_016_DeductionBoard_Conflict.md, Status: CLOSED (Merged to TASK_018))
-- [pending] Performance Baseline Measurement (ref: docs/tasks/TASK_022_PerformanceBaseline.md, Status: OPEN)
+- [completed] Performance Baseline Measurement (ref: docs/tasks/TASK_022_PerformanceBaseline.md, Status: DONE)
 - [pending] Verification Gap Closure (ref: docs/tasks/TASK_023_VerificationGap.md, Status: OPEN)
-- [pending] Fix Performance Compilation Error (ref: docs/tasks/TASK_024_FixPerformanceCompilation.md, Status: COMPLETED)
+- [completed] Fix Performance Compilation Error (ref: docs/tasks/TASK_024_FixPerformanceCompilation.md, Status: COMPLETED)
+- [pending] GC Alloc Reduction (ref: docs/tasks/TASK_025_GCAllocReduction.md, Status: OPEN)
 
 ### 中期（Later）
 
