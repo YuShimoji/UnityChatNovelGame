@@ -39,7 +39,13 @@ PROJECT_ASSESSMENT_COMPLETED
 - [x] report-validator: HANDOVER=OK, REPORT_ORCH=OK, WORKER_PROMPT_TASK_025=OK
 - [x] git status クリーン化（commit: 01e10b6）
 - [x] push pending（GitHubAutoApprove=false のため未push）
-- [x] commit: 01e10b6 → 1234567 (最新commitに補正)
+- [x] Phase 6 追記の反映（commit: 1d8c3ef）
+
+### Phase 6: Execution (TASK_025) (2026-01-31 02:00)
+- [x] TASK_025 対応: `ChatController` の GC Alloc 低減（AutoScroll のラムダ除去、Choice onClick のキャプチャ回避）
+- [x] レポート雛形作成: `Docs/reports/REPORT_TASK_025_GCAllocReduction.md`
+- [ ] Profiler 根拠（上位1-3箇所の alloc 発生源）: スクショ取得はできたが、CPU Hierarchy が `0 B` 表示のため発生源特定が未完了
+- [ ] After 計測（PerformanceMonitor, 10s/1s）: RAW出力/Avg値の回収待ち
 
 ### Phase 2: 状況把握 (2026-01-30 23:20)
 - [x] HANDOVER.md から目標/進捗/ブロッカー/バックログを把握

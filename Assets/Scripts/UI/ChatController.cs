@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
+using System;
 using System.Collections.Generic;
 
 namespace ProjectFoundPhone.UI
@@ -29,6 +30,9 @@ namespace ProjectFoundPhone.UI
 
         private bool m_IsUserScrolling = false;
         private float m_LastScrollPosition = 1.0f;
+
+        private bool m_AutoScrollScheduled = false;
+        private Tween m_ScrollTween;
         #endregion
 
         #region Unity Lifecycle
@@ -252,7 +256,6 @@ namespace ProjectFoundPhone.UI
 
             for (int i = 0; i < options.Count; i++)
             {
-                int index = i; // キャプチャ用
                 GameObject buttonObj = Instantiate(m_ChoiceButtonPrefab, m_ChoiceContainer);
                 
                 // ボタンのテキスト設定
@@ -266,11 +269,13 @@ namespace ProjectFoundPhone.UI
                 Button btn = buttonObj.GetComponent<Button>();
                 if (btn != null)
                 {
-                    btn.onClick.AddListener(() =>
+                    ChoiceButtonHandler handler = buttonObj.GetComponent<ChoiceButtonHandler>();
+                    if (handler == null)
                     {
-                        HideChoices();
-                        onSelected?.Invoke(index);
-                    });
+                        handler = buttonObj.AddComponent<ChoiceButtonHandler>();
+                    }
+                    handler.Initialize(this, i, onSelected);
+                    btn.onClick.AddListener(handler.OnClick);
                 }
             }
 
@@ -305,23 +310,78 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
+            if (m_AutoScrollScheduled)
+            {
+                return;
+            }
+
+            m_AutoScrollScheduled = true;
+
             // Canvasの更新を待ってからスクロールするためにコルーチンか遅延実行を使うのが一般的だが、
             // ここでは簡易的にDOTweenで遅延させる
-            DOVirtual.DelayedCall(0.1f, () => {
-                if(m_ScrollRect == null) return;
-                
-                // DOTweenを使用したスクロールアニメーション（0.3秒）
-                DOTween.To(
-                    () => m_ScrollRect.verticalNormalizedPosition,
-                    x => m_ScrollRect.verticalNormalizedPosition = x,
-                    0.0f, // 0.0f is bottom for vertical scroll rect
-                    0.3f
-                ).OnComplete(() =>
-                {
-                    // スクロール完了後にm_LastScrollPositionを更新
-                    m_LastScrollPosition = 0.0f;
-                });
+            Invoke(nameof(PerformAutoScroll), 0.1f);
+        }
+
+        private void PerformAutoScroll()
+        {
+            m_AutoScrollScheduled = false;
+
+            if (m_ScrollRect == null || m_IsUserScrolling)
+            {
+                return;
+            }
+
+            if (m_ScrollTween != null && m_ScrollTween.IsActive())
+            {
+                m_ScrollTween.Kill(false);
+            }
+
+            m_ScrollTween = DOTween.To(
+                () => m_ScrollRect.verticalNormalizedPosition,
+                x => m_ScrollRect.verticalNormalizedPosition = x,
+                0.0f,
+                0.3f
+            ).OnComplete(() =>
+            {
+                m_LastScrollPosition = 0.0f;
             });
+        }
+
+        private void OnDisable()
+        {
+            if (m_AutoScrollScheduled)
+            {
+                CancelInvoke(nameof(PerformAutoScroll));
+                m_AutoScrollScheduled = false;
+            }
+
+            if (m_ScrollTween != null && m_ScrollTween.IsActive())
+            {
+                m_ScrollTween.Kill(false);
+            }
+        }
+
+        private sealed class ChoiceButtonHandler : MonoBehaviour
+        {
+            private ChatController m_Owner;
+            private int m_Index;
+            private Action<int> m_OnSelected;
+
+            public void Initialize(ChatController owner, int index, Action<int> onSelected)
+            {
+                m_Owner = owner;
+                m_Index = index;
+                m_OnSelected = onSelected;
+            }
+
+            public void OnClick()
+            {
+                if (m_Owner != null)
+                {
+                    m_Owner.HideChoices();
+                }
+                m_OnSelected?.Invoke(m_Index);
+            }
         }
 
         public void OnSubmit()
