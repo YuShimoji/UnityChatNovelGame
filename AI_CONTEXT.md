@@ -31,7 +31,10 @@
 - TASK_022: DONE (Performance Baseline - Report Generated)
 - TASK_023: COMPLETED (Verification Gap - Evidence Confirmed)
 - TASK_024: COMPLETED (Fix Performance Compilation - Hotfix Done)
-- TASK_025: OPEN (GC Alloc Reduction - Dispatched Ready)
+- TASK_025: IN_PROGRESS (GC Alloc Reduction - Code Done, After計測待ち)
+- TASK_026: OPEN (Project Structure Cleanup - 起票済み)
+- TASK_027: OPEN (Full Playthrough Test - 起票済み)
+- TASK_028: OPEN (Save System - 起票済み)
 
 ### 短期（Next）
 
@@ -43,7 +46,10 @@
 - [completed] Performance Baseline Measurement (ref: docs/tasks/TASK_022_PerformanceBaseline.md, Status: DONE)
 - [completed] Verification Gap Closure (ref: docs/tasks/TASK_023_VerificationGap.md, Status: COMPLETED)
 - [completed] Fix Performance Compilation Error (ref: docs/tasks/TASK_024_FixPerformanceCompilation.md, Status: COMPLETED)
-- [pending] GC Alloc Reduction (ref: docs/tasks/TASK_025_GCAllocReduction.md, Status: OPEN)
+- [in_progress] GC Alloc Reduction (ref: Docs/tasks/TASK_025_GCAllocReduction.md, Status: IN_PROGRESS)
+- [pending] Project Structure Cleanup (ref: Docs/tasks/TASK_026_ProjectStructureCleanup.md, Status: OPEN)
+- [pending] Full Playthrough Test (ref: Docs/tasks/TASK_027_FullPlaythroughTest.md, Status: OPEN)
+- [pending] Save System (ref: Docs/tasks/TASK_028_SaveSystem.md, Status: OPEN)
 
 ### 中期（Later）
 

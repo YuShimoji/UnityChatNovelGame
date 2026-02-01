@@ -34,7 +34,10 @@ GitHubAutoApprove: false
 - ✅ ChatUI Integration完了（TASK_008） - (Verified with Evidence)
 - ✅ Deduction Board実装完了（TASK_018）
 - ✅ Performance Baseline完了（TASK_022）- (Report Generated)
-- 🚧 GC Alloc削減（TASK_025 起票済み）
+- 🚧 GC Alloc削減（TASK_025 実装完了・計測待ち）
+- 📋 プロジェクト構造整理（TASK_026 起票済み）
+- 📋 Full Playthrough Test（TASK_027 起票済み）
+- 📋 Save System（TASK_028 起票済み）
 
 ## 進捗
 
@@ -101,8 +104,8 @@ GitHubAutoApprove: false
 
 ## Outlook
 
-- Short-term: GC Alloc削減 (TASK_025).
-- Mid-term: Full Playthrough Test.
+- Short-term: GC Alloc削減 (TASK_025), プロジェクト構造整理 (TASK_026).
+- Mid-term: Full Playthrough Test (TASK_027), Save System (TASK_028).
 - Long-term: Content Production.
 
 ## Proposals
