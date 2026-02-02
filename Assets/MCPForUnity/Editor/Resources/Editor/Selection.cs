@@ -21,7 +21,11 @@ namespace MCPForUnity.Editor.Resources.Editor
                     activeObject = UnityEditor.Selection.activeObject?.name,
                     activeGameObject = UnityEditor.Selection.activeGameObject?.name,
                     activeTransform = UnityEditor.Selection.activeTransform?.name,
+<<<<<<< HEAD
                     activeEntityId = UnityEditor.Selection.activeEntityId,
+=======
+                    activeInstanceID = UnityEditor.Selection.activeEntityId,
+>>>>>>> 173b415 (fix(TASK_031): update deprecated Unity 6 APIs - InstanceIDToObject to EntityIdToObject)
                     count = UnityEditor.Selection.count,
                     objects = UnityEditor.Selection.objects
                         .Select(obj => new
