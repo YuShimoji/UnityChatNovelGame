@@ -68,7 +68,7 @@ namespace MCPForUnity.Editor.Helpers
         /// </summary>
         public static GameObject FindById(int instanceId)
         {
-            return EditorUtility.InstanceIDToObject(instanceId) as GameObject;
+            return EditorUtility.EntityIdToObject(instanceId) as GameObject;
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace MCPForUnity.Editor.Helpers
                 case SearchMethod.ById:
                     if (int.TryParse(searchTerm, out int instanceId))
                     {
-                        var obj = EditorUtility.InstanceIDToObject(instanceId) as GameObject;
+                        var obj = EditorUtility.EntityIdToObject(instanceId) as GameObject;
                         if (obj != null && (includeInactive || obj.activeInHierarchy))
                         {
                             results.Add(instanceId);
