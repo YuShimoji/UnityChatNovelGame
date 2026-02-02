@@ -60,9 +60,124 @@ namespace ProjectFoundPhone.Core
                 }
             }
         }
+
+        public T GetVariable<T>(string variableName)
+        {
+            if (m_DialogueRunner == null || m_DialogueRunner.VariableStorage == null)
+            {
+                return default;
+            }
+
+            string normalizedName = NormalizeVariableName(variableName);
+
+            if (typeof(T) == typeof(bool))
+            {
+                if (m_DialogueRunner.VariableStorage.TryGetValue(normalizedName, out bool boolValue))
+                {
+                    return (T)(object)boolValue;
+                }
+                return default;
+            }
+
+            if (typeof(T) == typeof(string))
+            {
+                if (m_DialogueRunner.VariableStorage.TryGetValue(normalizedName, out string stringValue))
+                {
+                    return (T)(object)stringValue;
+                }
+                return default;
+            }
+
+            if (typeof(T) == typeof(float))
+            {
+                if (m_DialogueRunner.VariableStorage.TryGetValue(normalizedName, out float floatValue))
+                {
+                    return (T)(object)floatValue;
+                }
+                return default;
+            }
+
+            if (typeof(T) == typeof(double))
+            {
+                if (m_DialogueRunner.VariableStorage.TryGetValue(normalizedName, out float floatValue))
+                {
+                    return (T)(object)(double)floatValue;
+                }
+                return default;
+            }
+
+            if (typeof(T) == typeof(int))
+            {
+                if (m_DialogueRunner.VariableStorage.TryGetValue(normalizedName, out float floatValue))
+                {
+                    return (T)(object)Mathf.RoundToInt(floatValue);
+                }
+                return default;
+            }
+
+            throw new System.NotSupportedException($"ScenarioManager.GetVariable does not support type {typeof(T).FullName}");
+        }
+
+        public void SetVariable<T>(string variableName, T value)
+        {
+            if (m_DialogueRunner == null || m_DialogueRunner.VariableStorage == null)
+            {
+                Debug.LogWarning("ScenarioManager: VariableStorage is not available.");
+                return;
+            }
+
+            string normalizedName = NormalizeVariableName(variableName);
+
+            if (value is bool boolValue)
+            {
+                m_DialogueRunner.VariableStorage.SetValue(normalizedName, boolValue);
+                return;
+            }
+
+            if (value is string stringValue)
+            {
+                m_DialogueRunner.VariableStorage.SetValue(normalizedName, stringValue);
+                return;
+            }
+
+            if (value is float floatValue)
+            {
+                m_DialogueRunner.VariableStorage.SetValue(normalizedName, floatValue);
+                return;
+            }
+
+            if (value is double doubleValue)
+            {
+                m_DialogueRunner.VariableStorage.SetValue(normalizedName, (float)doubleValue);
+                return;
+            }
+
+            if (value is int intValue)
+            {
+                m_DialogueRunner.VariableStorage.SetValue(normalizedName, (float)intValue);
+                return;
+            }
+
+            throw new System.NotSupportedException($"ScenarioManager.SetVariable does not support type {typeof(T).FullName}");
+        }
         #endregion
 
         #region Private Methods
+        private static string NormalizeVariableName(string variableName)
+        {
+            if (string.IsNullOrEmpty(variableName))
+            {
+                return variableName;
+            }
+
+            if (variableName[0] == '$')
+            {
+                return variableName;
+            }
+
+            return "$" + variableName;
+        }
+
         private void RegisterCustomCommands()
         {
             if (m_DialogueRunner == null) return;
