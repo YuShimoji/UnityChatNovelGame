@@ -396,8 +396,8 @@ namespace MCPForUnity.Editor.Tools
                     Camera cam = Camera.main;
                     if (cam == null)
                     {
-                        // Use FindObjectsOfType for Unity 2021 compatibility
-                        var cams = UnityEngine.Object.FindObjectsOfType<Camera>();
+                        // Use FindObjectsByType for Unity 6 compatibility
+                        var cams = UnityEngine.Object.FindObjectsByType<Camera>(FindObjectsSortMode.None);
                         cam = cams.FirstOrDefault();
                     }
 
