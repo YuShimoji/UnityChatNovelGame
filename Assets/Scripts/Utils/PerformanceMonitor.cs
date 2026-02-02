@@ -25,7 +25,7 @@ namespace Assets.Scripts.Utils
         public float InitialDelay = 2f;
 
         [Header("Output")]
-        public string ReportPath = "Docs/reports/REPORT_TASK_022_PerformanceBaseline_RAW.md";
+        public string ReportPath = "docs/reports/REPORT_TASK_022_PerformanceBaseline_RAW.md";
 
         private float _startTime;
         private bool _isMeasuring = false;

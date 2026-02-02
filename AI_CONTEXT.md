@@ -18,11 +18,11 @@
 
 ## リスク/懸念
 
-- 既存の `Docs/` ディレクトリ（大文字）と `docs/` ディレクトリ（小文字）が混在していてる可能性
+- ~~既存の `Docs/` ディレクトリ（大文字）と `docs/` ディレクトリ（小文字）が混在していてる可能性~~ → TASK_026で解消済み
 
 ## Backlog（将来提案）
 
-- [ ] プロジェクト構造の整理（Docs と docs の統合検討）
+- [x] プロジェクト構造の整理（Docs と docs の統合検討）→ TASK_026で完了
 
 ## タスク管理（短期/中期/長期）
 
@@ -46,10 +46,10 @@
 - [completed] Performance Baseline Measurement (ref: docs/tasks/TASK_022_PerformanceBaseline.md, Status: DONE)
 - [completed] Verification Gap Closure (ref: docs/tasks/TASK_023_VerificationGap.md, Status: COMPLETED)
 - [completed] Fix Performance Compilation Error (ref: docs/tasks/TASK_024_FixPerformanceCompilation.md, Status: COMPLETED)
-- [in_progress] GC Alloc Reduction (ref: Docs/tasks/TASK_025_GCAllocReduction.md, Status: IN_PROGRESS)
-- [pending] Project Structure Cleanup (ref: Docs/tasks/TASK_026_ProjectStructureCleanup.md, Status: OPEN)
-- [pending] Full Playthrough Test (ref: Docs/tasks/TASK_027_FullPlaythroughTest.md, Status: OPEN)
-- [pending] Save System (ref: Docs/tasks/TASK_028_SaveSystem.md, Status: OPEN)
+- [in_progress] GC Alloc Reduction (ref: docs/tasks/TASK_025_GCAllocReduction.md, Status: IN_PROGRESS)
+- [in_progress] Project Structure Cleanup (ref: docs/tasks/TASK_026_ProjectStructureCleanup.md, Status: IN_PROGRESS)
+- [pending] Full Playthrough Test (ref: docs/tasks/TASK_027_FullPlaythroughTest.md, Status: OPEN)
+- [pending] Save System (ref: docs/tasks/TASK_028_SaveSystem.md, Status: OPEN)
 
 ### 中期（Later）
 

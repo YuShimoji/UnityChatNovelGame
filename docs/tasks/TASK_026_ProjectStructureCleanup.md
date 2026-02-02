@@ -1,6 +1,6 @@
 # Task: Project Structure Cleanup
 
-Status: OPEN
+Status: IN_PROGRESS
 Tier: 3 (Maintenance)
 Branch: feature/structure-cleanup
 Owner: Worker

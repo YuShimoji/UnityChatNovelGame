@@ -85,7 +85,7 @@ GitHubAutoApprove: false
 
 ## バックログ
 
-- プロジェクト構造の整理（Docs と docs の統合検討）
+- ~~プロジェクト構造の整理（Docs と docs の統合検討）~~ → TASK_026で完了
 
 ## リスク
 
