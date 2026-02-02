@@ -8,7 +8,7 @@ namespace Assets.Scripts.Utils
 {
     /// <summary>
     /// verification tool to capture screenshot and logs automatically on start.
-    /// saves evidence to Docs/evidence/.
+    /// saves evidence to docs/evidence/.
     /// </summary>
     public class VerificationCapture : MonoBehaviour
     {
