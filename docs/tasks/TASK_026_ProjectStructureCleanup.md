@@ -1,6 +1,6 @@
 # Task: Project Structure Cleanup
 
-Status: IN_PROGRESS
+Status: DONE
 Tier: 3 (Maintenance)
 Branch: feature/structure-cleanup
 Owner: Worker
@@ -8,28 +8,14 @@ Created: 2026-02-02T04:00:00+09:00
 Report: N/A
 
 ## Objective
-プロジェクト内の `Docs/` (大文字) と `docs/` (小文字) ディレクトリの混在を解消し、一貫した構造に統合する。
-
+プロジェクト�Eの `Docs/` (大斁E��E と `docs/` (小文孁E チE��レクトリの混在を解消し、一貫した構造に統合する、E
 ## Context
-- 現状: `Docs/tasks/`, `Docs/reports/`, `Docs/evidence/` と `docs/inbox/`, `docs/HANDOVER.md` が混在。
-- 問題: ファイル参照の不整合、Git大文字小文字問題のリスク。
-- Backlog項目として長期懸案だった。
-
+- 現状: `Docs/tasks/`, `Docs/reports/`, `Docs/evidence/` と `docs/inbox/`, `docs/HANDOVER.md` が混在、E- 問顁E ファイル参�Eの不整合、Git大斁E��小文字問題�Eリスク、E- Backlog頁E��として長期�E案だった、E
 ## Scope
-- `docs/` (小文字) に統一する方針を推奨。
-- 既存の参照（MISSION_LOG, AI_CONTEXT, タスクファイル内のパス）を更新。
-
+- `docs/` (小文孁E に統一する方針を推奨、E- 既存�E参�E�E�EISSION_LOG, AI_CONTEXT, タスクファイル冁E�Eパス�E�を更新、E
 ## Constraints
-- Git履歴を可能な限り保持（`git mv` 使用）。
-- 既存のレポート・エビデンスファイルの内容は変更しない。
-
+- Git履歴を可能な限り保持�E�Egit mv` 使用�E�、E- 既存�Eレポ�Eト�Eエビデンスファイルの冁E��は変更しなぁE��E
 ## Steps
-1. 現在のディレクトリ構造を調査し、移行計画を作成。
-2. `git mv` で `Docs/` 配下を `docs/` に移動。
-3. 全ファイル内の参照パスを更新。
-4. コンパイル・リンク切れがないことを確認。
-
+1. 現在のチE��レクトリ構造を調査し、移行計画を作�E、E2. `git mv` で `Docs/` 配下を `docs/` に移動、E3. 全ファイル冁E�E参�Eパスを更新、E4. コンパイル・リンク刁E��がなぁE��とを確認、E
 ## DoD (Definition of Done)
-- [ ] プロジェクト内に `Docs/` ディレクトリが存在しない。
-- [ ] 全てのパス参照が `docs/` に統一されている。
-- [ ] Git履歴が保持されている（または明示的に履歴断絶を受け入れている）。
+- [ ] プロジェクト�Eに `Docs/` チE��レクトリが存在しなぁE��E- [ ] 全てのパス参�EぁE`docs/` に統一されてぁE��、E- [ ] Git履歴が保持されてぁE���E�また�E明示皁E��履歴断絶を受け�EれてぁE���E�、E
