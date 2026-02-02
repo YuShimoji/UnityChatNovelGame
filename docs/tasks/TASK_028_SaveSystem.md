@@ -1,6 +1,6 @@
 # Task: Save System Implementation
 
-Status: OPEN
+Status: COMPLETED
 Tier: 2 (Feature)
 Branch: feature/save-system
 Owner: Worker
@@ -35,7 +35,7 @@ Report: N/A
 5. 動作検証。
 
 ## DoD (Definition of Done)
-- [ ] SaveManager が実装されている。
-- [ ] Save/Load が正常に動作する（Evidence 添付）。
-- [ ] ゲーム再起動後もデータが保持される。
-- [ ] レポートが `docs/reports/REPORT_TASK_028_SaveSystem.md` に作成されている。
+- [x] SaveManager が実装されている。
+- [x] Save/Load が正常に動作する（Evidence 添付）。
+- [x] ゲーム再起動後もデータが保持される。
+- [x] レポートが `docs/reports/REPORT_TASK_028_SaveSystem.md` に作成されている。
