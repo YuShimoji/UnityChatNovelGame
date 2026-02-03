@@ -8,7 +8,7 @@ using System.Reflection;
 using System;
 using System.Linq;
 
-namespace ProjectFoundPhone.Debug.Editor
+namespace ProjectFoundPhone.Logging.Editor
 {
     public class DebugSceneBuilder : EditorWindow
     {

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEditor;
 using ProjectFoundPhone.Data;
 
-namespace ProjectFoundPhone.Debug.Editor
+namespace ProjectFoundPhone.Logging.Editor
 {
     /// <summary>
     /// TopicDataアセットのInspector表示スクリーンショットを取得するエディタツール

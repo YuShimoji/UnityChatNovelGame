@@ -1,0 +1,21 @@
+{
+    "name": "ProjectFoundPhone.Editor",
+    "rootNamespace": "ProjectFoundPhone.Editor",
+    "references": [
+        "ProjectFoundPhone",
+        "ProjectFoundPhone.Tests",
+        "Unity.TextMeshPro",
+        "YarnSpinner.Unity"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

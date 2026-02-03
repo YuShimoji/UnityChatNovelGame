@@ -1,0 +1,18 @@
+{
+    "name": "ProjectFoundPhone",
+    "rootNamespace": "ProjectFoundPhone",
+    "references": [
+        "Unity.TextMeshPro",
+        "YarnSpinner.Unity",
+        "Demigiant.DOTween"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

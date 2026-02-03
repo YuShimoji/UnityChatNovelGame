@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using ProjectFoundPhone.Data;
 
-namespace ProjectFoundPhone.Debug.Editor
+namespace ProjectFoundPhone.Logging.Editor
 {
     /// <summary>
     /// TopicData ScriptableObject アセットを自動生成するエディタスクリプト

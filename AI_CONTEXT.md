@@ -43,13 +43,11 @@
 - [in_progress] Topic ScriptableObjects Creation (ref: docs/tasks/TASK_011_TopicScriptableObjects.md, Status: IN_PROGRESS)
 - [in_progress] TopicData Verification and Evidence Collection (ref: docs/tasks/TASK_013_TopicDataVerification.md, Status: IN_PROGRESS)
 - [pending] Deduction Board Implementation (ref: docs/tasks/TASK_016_DeductionBoard_Conflict.md, Status: CLOSED (Merged to TASK_018))
-- [completed] Performance Baseline Measurement (ref: docs/tasks/TASK_022_PerformanceBaseline.md, Status: DONE)
-- [completed] Verification Gap Closure (ref: docs/tasks/TASK_023_VerificationGap.md, Status: COMPLETED)
-- [completed] Fix Performance Compilation Error (ref: docs/tasks/TASK_024_FixPerformanceCompilation.md, Status: COMPLETED)
-- [in_progress] GC Alloc Reduction (ref: docs/tasks/TASK_025_GCAllocReduction.md, Status: IN_PROGRESS)
-- [in_progress] Project Structure Cleanup (ref: docs/tasks/TASK_026_ProjectStructureCleanup.md, Status: IN_PROGRESS)
+- [pending] Verification Gap Closure (ref: docs/tasks/TASK_023_VerificationGap.md, Status: COMPLETED)
+- [pending] Fix Performance Compilation Error (ref: docs/tasks/TASK_024_FixPerformanceCompilation.md, Status: COMPLETED)
+- [pending] GC Alloc Reduction (Baseline Follow-up) (ref: docs/tasks/TASK_025_GCAllocReduction.md, Status: OPEN)
 - [pending] Full Playthrough Test (ref: docs/tasks/TASK_027_FullPlaythroughTest.md, Status: OPEN)
-- [pending] Save System (ref: docs/tasks/TASK_028_SaveSystem.md, Status: OPEN)
+- [pending] Save System Implementation (ref: docs/tasks/TASK_028_SaveSystem.md, Status: COMPLETED)
 
 ### 中期（Later）
 
