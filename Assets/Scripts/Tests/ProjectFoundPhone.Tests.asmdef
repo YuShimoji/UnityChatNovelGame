@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
     "name": "ProjectFoundPhone.Tests",
     "rootNamespace": "ProjectFoundPhone.Tests",
@@ -22,3 +23,27 @@
     "versionDefines": [],
     "noEngineReferences": false
 }
+=======
+{
+    "name": "ProjectFoundPhone.Tests",
+    "rootNamespace": "ProjectFoundPhone.Tests",
+    "references": [
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "ProjectFoundPhone.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
+>>>>>>> 96f118f (Save local progress (Task 40-43 artifacts))

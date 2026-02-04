@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
     "name": "ProjectFoundPhone.Editor",
     "rootNamespace": "ProjectFoundPhone.Editor",
@@ -19,3 +20,25 @@
     "versionDefines": [],
     "noEngineReferences": false
 }
+=======
+{
+    "name": "ProjectFoundPhone.Editor",
+    "rootNamespace": "ProjectFoundPhone.Editor",
+    "references": [
+        "ProjectFoundPhone.Runtime",
+        "ProjectFoundPhone.Tests",
+        "ProjectFoundPhone.Utils"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
+>>>>>>> 96f118f (Save local progress (Task 40-43 artifacts))

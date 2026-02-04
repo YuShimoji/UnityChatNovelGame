@@ -5,8 +5,7 @@ Tier: 3
 Branch: feat/topic-verification
 Owner: Worker
 Created: 2026-01-17T06:00:00+09:00
-Report: docs/inbox/REPORT_TASK_013_TopicDataVerification.md
-
+Report: docs/reports/REPORT_TASK_013_TopicDataVerification.md
 ## Objective
 TASK_011で作成したTopicDataアセットの動作確認とEvidence取得を行う。
 `UnlockTopicCommand` が正常に動作することを確認し、トピックアセットのInspector表示スクリーンショットを取得する。
