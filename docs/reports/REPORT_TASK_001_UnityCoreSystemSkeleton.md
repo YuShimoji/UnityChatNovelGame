@@ -1,4 +1,4 @@
-# Report: TASK_001_UnityCoreSystemSkeleton
+﻿# Report: TASK_001_UnityCoreSystemSkeleton
 
 **作成日時**: 2026-01-06T08:10:00+09:00  
 **タスク**: TASK_001_UnityCoreSystemSkeleton  
@@ -148,9 +148,9 @@ Unityプロジェクト「Project_FoundPhone」のコアシステムのスケル
 
 ## 関連ファイル
 
-- タスク定義: `Docs/tasks/TASK_001_UnityCoreSystemSkeleton.md`
-- Worker Prompt: `Docs/inbox/WORKER_PROMPT_TASK_001.md`
-- SSOT: `Docs/Windsurf_AI_Collab_Rules_latest.md`
+- タスク定義: `docs/tasks/TASK_001_UnityCoreSystemSkeleton.md`
+- Worker Prompt: `docs/inbox/WORKER_PROMPT_TASK_001.md`
+- SSOT: `docs/Windsurf_AI_Collab_Rules_latest.md`
 
 ---
 

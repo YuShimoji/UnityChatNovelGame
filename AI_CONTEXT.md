@@ -1,11 +1,10 @@
-## 現在のミッション
+﻿## 現在のミッション
 
 - **タイトル**: プロジェクトセットアップ改善 & 次期機能開発（Chat UI）準備
 - **Issue**: なし（準備フェーズ）
 - **ブランチ**: main
 - **関連PR**: なし
 - **進捗**: Phase 1.5 Audit (Post-Integration). Tasks 001-015 completed and integrated.
-
 
 ## 次の中断可能点
 
@@ -18,11 +17,11 @@
 
 ## リスク/懸念
 
-- ~~既存の `Docs/` ディレクトリ（大文字）と `docs/` ディレクトリ（小文字）が混在していてる可能性~~ → TASK_026で解消済み
+- ~~既存の `docs/` ディレクトリ（大文字）と `docs/` ディレクトリ（小文字）が混在していてる可能性~~ → 物理的には統一済み（Windows大文字小文字非区別）、パス参照も2026-02-06に統一完了
 
 ## Backlog（将来提案）
 
-- [x] プロジェクト構造の整理（Docs と docs の統合検討）→ TASK_026で完了
+- [x] プロジェクト構造の整理（docs と docs の統合検討）→ TASK_026完了（参照パス196ファイル更新）
 
 ## タスク管理（短期/中期/長期）
 
@@ -35,6 +34,7 @@
 - TASK_026: OPEN (Project Structure Cleanup - 起票済み)
 - TASK_027: OPEN (Full Playthrough Test - 起票済み)
 - TASK_028: OPEN (Save System - 起票済み)
+- TASK_031: DONE (Compile Error Fix)
 
 ### 短期（Next）
 
@@ -48,6 +48,7 @@
 - [pending] GC Alloc Reduction (Baseline Follow-up) (ref: docs/tasks/TASK_025_GCAllocReduction.md, Status: OPEN)
 - [pending] Full Playthrough Test (ref: docs/tasks/TASK_027_FullPlaythroughTest.md, Status: OPEN)
 - [pending] Save System Implementation (ref: docs/tasks/TASK_028_SaveSystem.md, Status: COMPLETED)
+- [x] Compile Error Fix (ref: docs/tasks/TASK_031_CompileErrorFix.md, Status: DONE)
 
 ### 中期（Later）
 
@@ -83,3 +84,4 @@
 - 2026-01-06 08:10: TASK_001完了（Unity Core System Skeleton実装）
 - 2026-01-06 08:20: TASK_002起票完了（ロジック実装タスク）
 - 2026-01-06 09:00: TASK_002完了（ロジック実装完了）
+- 2026-02-02 13:00: TASK_031完了（コンパイルエラー修正）

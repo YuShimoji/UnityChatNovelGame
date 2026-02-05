@@ -1,4 +1,4 @@
-# Task: Fix Performance Compilation Error
+﻿# Task: Fix Performance Compilation Error
 
 Status: COMPLETED
 Tier: 1

@@ -1,4 +1,4 @@
-# Worker Prompt: TASK_011 + TASK_013 Topic System Verification
+﻿# Worker Prompt: TASK_011 + TASK_013 Topic System Verification
 
 ## Request
 あなたは Unity クライアントエンジニアとして、**Topic System (ScriptableObjects, UnlockTopicCommand)** の動作検証を行ってください。
@@ -22,7 +22,7 @@ TASK_011 (Asset作成) と TASK_013 (検証) が「Evidence 待ち」で停止�
    - Inspector にプロパティ (ID, Title, Description, Icon) が表示されているか確認。
    - **Evidence 取得 (Automated)**:
      - `DebugChatScene` に `VerificationCapture` コンポーネントがあることを確認。
-     - PlayMode で実行し、`Docs/evidence/` に画像が生成されることを確認。
+     - PlayMode で実行し、`docs/evidence/` に画像が生成されることを確認。
      - (Optional) `Topic unlocked` ログが確認できるタイミングで `VerificationCapture.TriggerCapture()` を呼ぶように調整してもよいが、基本は起動時キャプチャでシーンが動作している証明があればよしとする（ログはテキスト保存機能があればそちらを確認）。
      - 生成された画像（およびログファイル）を納品物とする。
 

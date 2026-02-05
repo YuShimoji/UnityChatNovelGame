@@ -1,4 +1,4 @@
-# Report: TASK_008 Chat UI Data Integration
+﻿# Report: TASK_008 Chat UI Data Integration
 
 ## Status
 **RESOLVED / VERIFICATION READY**

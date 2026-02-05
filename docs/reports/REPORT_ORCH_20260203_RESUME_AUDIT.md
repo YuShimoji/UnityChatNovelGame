@@ -1,4 +1,4 @@
-# Project Audit Report: Resume Development
+﻿# Project Audit Report: Resume Development
 
 **Date**: 2026-02-03
 **Type**: Audit & Status Check
@@ -6,7 +6,7 @@
 ## 1. Synchronization Status
 - **Git**: Synced with remote (`origin/main`). Fast-forwarded 15 commits.
 - **Updates**:
-  - `Docs/` directory renamed to `docs/` (Fixed casing issue).
+  - `docs/` directory renamed to `docs/` (Fixed casing issue).
   - Unity 6 compatibility fixes applied (TASK_031).
   - Save System implemented (TASK_028).
 

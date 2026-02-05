@@ -1,4 +1,4 @@
-# GC Alloc Reduction Report (TASK_025)
+﻿# GC Alloc Reduction Report (TASK_025)
 
 - **Date**: TBD
 - **Scene**: DebugChatScene
@@ -10,7 +10,7 @@
 - **Result**: IN_PROGRESS
 
 ## Baseline (Before)
-- **Ref**: `Docs/reports/REPORT_TASK_022_PerformanceBaseline.md`
+- **Ref**: `docs/reports/REPORT_TASK_022_PerformanceBaseline.md`
 - **GC Alloc**: Avg 22 KB/frame, Max 23 KB/frame
 - **FPS**: Avg 184.8
 - **Memory Used**: Avg 336 MB
@@ -22,7 +22,7 @@
   - 3) TBD
 
 - **Screenshots / Captures**
-  - `Docs/evidence/TASK_025_3.png`
+  - `docs/evidence/TASK_025_3.png`
 
 - **Limitations**
   - This capture shows non-zero `GC Alloc` in CPU Hierarchy, but detailed call stack / metadata was not available in the Profiler UI at capture time.

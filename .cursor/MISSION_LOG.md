@@ -1,4 +1,4 @@
-# Mission Log
+﻿# Mission Log
 
 ## Mission ID
 KICKSTART_2026-01-15T13:26:07+09:00
@@ -43,7 +43,7 @@ PROJECT_ASSESSMENT_COMPLETED
 
 ### Phase 6: Execution (TASK_025) (2026-01-31 02:00)
 - [x] TASK_025 対応: `ChatController` の GC Alloc 低減（AutoScroll のラムダ除去、Choice onClick のキャプチャ回避）
-- [x] レポート雛形作成: `Docs/reports/REPORT_TASK_025_GCAllocReduction.md`
+- [x] レポート雛形作成: `docs/reports/REPORT_TASK_025_GCAllocReduction.md`
 - [ ] Profiler 根拠（上位1-3箇所の alloc 発生源）: スクショ取得はできたが、CPU Hierarchy が `0 B` 表示のため発生源特定が未完了
 - [ ] After 計測（PerformanceMonitor, 10s/1s）: RAW出力/Avg値の回収待ち
 
@@ -91,7 +91,7 @@ PROJECT_ASSESSMENT_COMPLETED
 ### Phase 1: Sync & Audit (2026-01-29 13:30)
 - [x] Remote Sync: Rebase merged with origin/main (Ahead 1, Behind 4).
 - [x] Conflict Resolution: Resolved `MISSION_LOG.md` and `TASK_018_DeductionBoard_Implementation.md`.
-- [x] Inbox Audit: Confirmed `TASK_019` and `TASK_020` reports in `Docs/reports`.
+- [x] Inbox Audit: Confirmed `TASK_019` and `TASK_020` reports in `docs/reports`.
 - [x] Implementation Audit:
   - Core/Chat/Deduction/Synthesis/Effects all 100% implemented.
 - [x] Phase 1 完了
@@ -737,13 +737,13 @@ PROJECT_ASSESSMENT_COMPLETED
 - [x] Phase 3 完了 (Phase 4 Skipped - Tickets exist)
 
 ### Phase 5: Worker Activation (2026-01-30 T22:40)
-- [x] Prompt Verified: `Docs/reports/WORKER_PROMPT_TASK_022.md`
+- [x] Prompt Verified: `docs/reports/WORKER_PROMPT_TASK_022.md`
 - [x] Dispatch Ready: TASK_022 (Performance Baseline)
 - [x] Phase 5 完了
 
 ### Phase 6: Orchestrator Report (2026-01-30 T22:45)
 - [x] Report Created
-  - `Docs/inbox/REPORT_ORCH_2026-01-30T224500.md`
+  - `docs/inbox/REPORT_ORCH_2026-01-30T224500.md`
 - [x] Phase 6 完了
 
 ### Phase 1: Sync (2026-01-30 T22:50)

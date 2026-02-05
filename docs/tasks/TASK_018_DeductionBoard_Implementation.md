@@ -1,4 +1,4 @@
-# Task: Deduction Board Implementation
+﻿# Task: Deduction Board Implementation
 
 Status: DONE
 Tier: 2

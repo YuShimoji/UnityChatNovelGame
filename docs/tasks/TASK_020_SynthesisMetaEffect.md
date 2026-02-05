@@ -1,4 +1,4 @@
-# Task: Deduction Board Polish (Effects)
+﻿# Task: Deduction Board Polish (Effects)
 
 Status: DONE
 Tier: 3 (Polish)

@@ -1,4 +1,4 @@
-# Task: ChatController NullReferenceException Fix
+﻿# Task: ChatController NullReferenceException Fix
 
 Status: DONE
 Tier: 2

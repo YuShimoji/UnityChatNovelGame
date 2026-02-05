@@ -1,4 +1,4 @@
-# Worker Prompt: TASK_007_Verification
+﻿# Worker Prompt: TASK_007_Verification
 
 ## 参照
 - チケット: docs/tasks/TASK_007_Verification.md

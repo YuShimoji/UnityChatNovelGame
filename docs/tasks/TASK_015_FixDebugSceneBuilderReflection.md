@@ -1,4 +1,4 @@
-# Task: DebugSceneBuilder Reflection Error Fix
+﻿# Task: DebugSceneBuilder Reflection Error Fix
 
 Status: DONE
 Tier: 2

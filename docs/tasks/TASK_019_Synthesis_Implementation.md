@@ -1,4 +1,4 @@
-# Task: Synthesis System Implementation
+﻿# Task: Synthesis System Implementation
 
 Status: DONE
 Tier: 2

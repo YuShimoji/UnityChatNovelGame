@@ -1,4 +1,4 @@
-# Worker Prompt: TASK_018 Deduction Board Implementation
+﻿# Worker Prompt: TASK_018 Deduction Board Implementation
 
 ## 🛡️ このプロンプトの役割
 あなたは **Worker** です。このプロンプトに従い、指定されたタスクを実装してください。

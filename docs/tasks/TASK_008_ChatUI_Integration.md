@@ -1,4 +1,4 @@
-# Task: Chat UI Data Integration
+﻿# Task: Chat UI Data Integration
 Status: DONE
 Tier: 2
 Branch: main

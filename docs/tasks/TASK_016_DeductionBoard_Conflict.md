@@ -1,4 +1,4 @@
-# Task: Deduction Board Implementation
+﻿# Task: Deduction Board Implementation
 
 Status: CLOSED (Merged to TASK_018)
 Tier: 2

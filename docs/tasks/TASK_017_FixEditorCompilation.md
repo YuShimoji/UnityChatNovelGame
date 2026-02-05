@@ -1,4 +1,4 @@
-# Task: Fix Compilation Error in DeductionBoardSetup
+﻿# Task: Fix Compilation Error in DeductionBoardSetup
 
 Status: DONE
 Tier: 3

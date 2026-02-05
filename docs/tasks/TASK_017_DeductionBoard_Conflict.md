@@ -1,4 +1,4 @@
-# Task: DeductionBoard (推論ボード) 実装
+﻿# Task: DeductionBoard (推論ボード) 実装
 Status: DONE
 Tier: 2
 Branch: main

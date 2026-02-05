@@ -1,4 +1,4 @@
-# Report: TASK_006_CompileErrorFix
+﻿# Report: TASK_006_CompileErrorFix
 
 **作成日時**: 2026-01-06T15:00:00+09:00  
 **タスク**: TASK_006_CompileErrorFix  
@@ -185,7 +185,7 @@ public void SetVariable<T>(string variableName, T value)
 
 ## 参考情報
 
-- **前タスクレポート**: `Docs/inbox/REPORT_TASK_005_PackageInstallationFix.md`
+- **前タスクレポート**: `docs/inbox/REPORT_TASK_005_PackageInstallationFix.md`
 - **プロジェクト仕様**: `最初のプロンプト`（プロジェクトルート）
 - **Unityバージョン**: Unity 6 (or 2022 LTS)
 - **Yarn Spinner API**: 最新のドキュメントを参照（バージョン依存の可能性あり）

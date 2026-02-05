@@ -1,4 +1,4 @@
-# Task: コンパイルエラー修正（ScenarioManager.cs）
+﻿# Task: コンパイルエラー修正（ScenarioManager.cs）
 Status: DONE
 Tier: 2
 Branch: main
@@ -22,7 +22,7 @@ ScenarioManager.csのコンパイルエラーを修正する。Yarn SpinnerのVa
   - `CS1503`: SetValueの引数2をstringに変換できない（322行目）
   - `CS0618`: FindObjectOfTypeが非推奨（60行目）
   - `CS0414`: m_IsInputLockedが使用されていない（21行目）
-- 参照ドキュメント: `最初のプロンプト`（プロジェクトルート）、`Docs/inbox/REPORT_TASK_005_PackageInstallationFix.md`
+- 参照ドキュメント: `最初のプロンプト`（プロジェクトルート）、`docs/inbox/REPORT_TASK_005_PackageInstallationFix.md`
 
 ## Focus Area
 - `Assets/Scripts/Core/ScenarioManager.cs` の修正

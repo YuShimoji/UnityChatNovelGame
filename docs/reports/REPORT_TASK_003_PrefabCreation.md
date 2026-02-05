@@ -1,4 +1,4 @@
-# Report: TASK_003_PrefabCreation
+﻿# Report: TASK_003_PrefabCreation
 
 **作成日時**: 2026-01-13T14:00:00+09:00  
 **タスク**: TASK_003_PrefabCreation  
@@ -143,9 +143,9 @@ UnityのPrefabファイルをYAML形式で手動作成しました。MessageBubb
 
 ## 関連ファイル
 
-- タスク定義: `Docs/tasks/TASK_003_PrefabCreation.md`
-- Worker Prompt: `Docs/inbox/WORKER_PROMPT_TASK_003.md`
-- 前タスクレポート: `Docs/inbox/REPORT_TASK_002_LogicImplementation.md`
+- タスク定義: `docs/tasks/TASK_003_PrefabCreation.md`
+- Worker Prompt: `docs/inbox/WORKER_PROMPT_TASK_003.md`
+- 前タスクレポート: `docs/inbox/REPORT_TASK_002_LogicImplementation.md`
 - ChatController.cs: `Assets/Scripts/UI/ChatController.cs`
 - MessageBubble.prefab: `Assets/Prefabs/UI/MessageBubble.prefab`
 - TypingIndicator.prefab: `Assets/Prefabs/UI/TypingIndicator.prefab`

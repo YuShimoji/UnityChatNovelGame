@@ -1,4 +1,4 @@
-# Worker Prompt: TASK_007 Core System Verification
+﻿# Worker Prompt: TASK_007 Core System Verification
 
 ## Request
 あなたは Unity クライアントエンジニアとして、**Core System (ChatController, ScenarioManager)** の動作検証（再試行）を行ってください。前回の検証では Evidence が提出されず、タスクが完了できませんでした。
@@ -25,7 +25,7 @@
 5. **Evidence 取得 (必須)**:
    - `Assets/Scripts/Utils/VerificationCapture.cs` をシーン内のGameObject（例: Camera）にアタッチする。
    - `CaptureOnStart` を true に設定。
-   - PlayMode を実行し、`Docs/evidence/` に `Capture_...png` が生成されることを確認する。
+   - PlayMode を実行し、`docs/evidence/` に `Capture_...png` が生成されることを確認する。
    - 生成された画像を証拠として採用する。
 6. `docs/tasks/TASK_007_Verification.md` の DoD チェックボックスを埋める。
 7. レポート `docs/inbox/REPORT_TASK_007_Verification.md` を作成する (Evidence パスを明記)。

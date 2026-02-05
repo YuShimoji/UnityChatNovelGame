@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+﻿<<<<<<< HEAD
 # Task: MetaEffectController Implementation
 
 Status: DONE

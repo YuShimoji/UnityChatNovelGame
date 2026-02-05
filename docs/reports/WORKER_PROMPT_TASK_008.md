@@ -1,4 +1,4 @@
-# Worker Prompt: TASK_008_ChatUI_Integration
+﻿# Worker Prompt: TASK_008_ChatUI_Integration
 
 ## Status
 - Current Status: IN_PROGRESS

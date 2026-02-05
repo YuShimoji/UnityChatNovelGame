@@ -1,4 +1,4 @@
-# Worker Prompt: Fix Performance Compilation Error (TASK_024)
+﻿# Worker Prompt: Fix Performance Compilation Error (TASK_024)
 
 ## あなたの役割
 あなたは「Build Engineer / Unity Specialist」です。

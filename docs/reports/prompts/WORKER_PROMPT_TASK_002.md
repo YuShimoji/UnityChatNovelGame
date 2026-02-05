@@ -1,12 +1,12 @@
-# Worker Prompt: TASK_002_LogicImplementation
+﻿# Worker Prompt: TASK_002_LogicImplementation
 
 ## 参照
-- チケット: Docs/tasks/TASK_002_LogicImplementation.md
-- SSOT: Docs/Windsurf_AI_Collab_Rules_latest.md
-- HANDOVER: Docs/HANDOVER.md
+- チケット: docs/tasks/TASK_002_LogicImplementation.md
+- SSOT: docs/Windsurf_AI_Collab_Rules_latest.md
+- HANDOVER: docs/HANDOVER.md
 - AI_CONTEXT: AI_CONTEXT.md
 - MISSION_LOG: .cursor/MISSION_LOG.md
-- 前タスクレポート: Docs/inbox/REPORT_TASK_001_UnityCoreSystemSkeleton.md
+- 前タスクレポート: docs/inbox/REPORT_TASK_001_UnityCoreSystemSkeleton.md
 - プロジェクト仕様: 最初のプロンプト（プロジェクトルート）
 
 ## 境界
@@ -176,7 +176,7 @@
 - Unity C# ベストプラクティスに従う
 
 ## 参考情報
-- 前タスクレポート: `Docs/inbox/REPORT_TASK_001_UnityCoreSystemSkeleton.md` を参照
+- 前タスクレポート: `docs/inbox/REPORT_TASK_001_UnityCoreSystemSkeleton.md` を参照
 - プロジェクト仕様: `最初のプロンプト`（プロジェクトルート）を参照
 - Unityバージョン: Unity 6 (or 2022 LTS)
 - 必須パッケージ: Yarn Spinner, DOTween Pro, TextMeshPro

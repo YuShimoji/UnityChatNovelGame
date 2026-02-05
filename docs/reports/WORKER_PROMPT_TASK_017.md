@@ -1,4 +1,4 @@
-# Worker Prompt: TASK_017_FixEditorCompilation
+﻿# Worker Prompt: TASK_017_FixEditorCompilation
 
 ## 参照
 - チケット: `docs/tasks/TASK_017_FixEditorCompilation.md`

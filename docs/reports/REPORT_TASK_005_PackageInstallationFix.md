@@ -1,4 +1,4 @@
-# Report: TASK_005_PackageInstallationFix
+﻿# Report: TASK_005_PackageInstallationFix
 
 **作成日時**: 2026-01-06T14:00:00+09:00  
 **タスク**: TASK_005_PackageInstallationFix  
@@ -159,7 +159,7 @@ manifest.jsonを直接編集したため、Unityエディタでプロジェク�
 
 ## 参考情報
 
-- 前タスクレポート: `Docs/inbox/REPORT_TASK_004_PackageInstallation_FIX.md`
+- 前タスクレポート: `docs/inbox/REPORT_TASK_004_PackageInstallation_FIX.md`
 - プロジェクト仕様: `最初のプロンプト`（プロジェクトルート）
 - Unityバージョン: Unity 6 (6000.3.3f1)
 - DOTweenの手動インポート状態: `Assets/Plugins/Demigiant/DOTween/` を確認済み

@@ -1,4 +1,4 @@
-# Implementation Plan - Deduction Board & Task Cleanup
+﻿# Implementation Plan - Deduction Board & Task Cleanup
 
 ## Goal Description
 重複している Deduction Board 関連タスク (TASK_016, TASK_017) を統合し、単一の明確な実装タスク (TASK_018) を定義する。

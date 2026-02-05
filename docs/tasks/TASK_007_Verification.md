@@ -1,4 +1,4 @@
-# Task: Core System Proof of Concept (Verification)
+﻿# Task: Core System Proof of Concept (Verification)
 
 Status: DONE
 Tier: 3

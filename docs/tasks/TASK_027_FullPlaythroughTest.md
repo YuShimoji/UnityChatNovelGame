@@ -1,4 +1,4 @@
-# Task: Full Playthrough Test
+﻿# Task: Full Playthrough Test
 
 Status: OPEN
 Tier: 2 (Verification)

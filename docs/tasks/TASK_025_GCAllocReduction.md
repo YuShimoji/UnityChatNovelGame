@@ -1,4 +1,4 @@
-# Task: GC Alloc Reduction (Baseline Follow-up)
+﻿# Task: GC Alloc Reduction (Baseline Follow-up)
 
 Status: OPEN
 Tier: 2 (Performance)

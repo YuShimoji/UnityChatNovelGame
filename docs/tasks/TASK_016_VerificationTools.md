@@ -1,4 +1,4 @@
-# Task 016: Verification Tools (Automated Capture)
+﻿# Task 016: Verification Tools (Automated Capture)
 
 ## Status
 - [x] **DONE**
@@ -15,7 +15,7 @@ MCP環境下ではスクリーンショットの撮影が困難であり、手�
 1. **Script Creation**: `Assets/Scripts/Utils/VerificationCapture.cs`
    - `MonoBehaviour` を継承。
    - `Start` または特定のタイミングでスクリーンショットを撮影。
-   - 保存先: `Docs/evidence/` (必須)。
+   - 保存先: `docs/evidence/` (必須)。
    - ファイル名: `Capture_{Timestamp}_{SceneName}.png` または指定された名前。
    - (Optional) `Application.logMessageReceived` をフックしてログをテキスト保存。
 

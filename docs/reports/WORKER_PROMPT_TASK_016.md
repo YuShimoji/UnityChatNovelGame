@@ -1,4 +1,4 @@
-# Worker Prompt: TASK_016_VerificationTools
+﻿# Worker Prompt: TASK_016_VerificationTools
 
 ## 目的
 MCP環境下で手動検証（操作・スクショ撮影）が困難な問題を解決するため、PlayMode実行時に証拠を自動生成するユーティリティを実装してください。

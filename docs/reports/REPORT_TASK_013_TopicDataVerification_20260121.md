@@ -1,4 +1,4 @@
-# Report: TASK_013 Topic System Verification
+﻿# Report: TASK_013 Topic System Verification
 
 ## Summary
 Performed static analysis and verification of Topic System assets and commands.

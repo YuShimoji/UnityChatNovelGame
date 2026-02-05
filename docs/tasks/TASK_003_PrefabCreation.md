@@ -1,4 +1,4 @@
-# Task: Chat UI Prefab作成
+﻿# Task: Chat UI Prefab作成
 Status: DONE
 Tier: 2
 Branch: main
@@ -22,7 +22,7 @@ ChatController.csで使用するPrefab（MessageBubble, TypingIndicator）を作
 - 前タスク（TASK_002）でChatController.csの実装が完了
 - ChatControllerは`m_MessageBubblePrefab`と`m_TypingIndicator`のPrefabを必要とする
 - 必須パッケージ: TextMeshPro（既に前提）
-- 参照ドキュメント: `最初のプロンプト`（プロジェクトルート）、`Docs/inbox/REPORT_TASK_002_LogicImplementation.md`
+- 参照ドキュメント: `最初のプロンプト`（プロジェクトルート）、`docs/inbox/REPORT_TASK_002_LogicImplementation.md`
 
 ## Focus Area
 - `Assets/Prefabs/UI/` 配下: MessageBubble.prefab, TypingIndicator.prefab

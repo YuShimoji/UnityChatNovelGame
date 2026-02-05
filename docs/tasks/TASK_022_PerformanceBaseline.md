@@ -1,4 +1,4 @@
-# Task: Performance Baseline Measurement
+﻿# Task: Performance Baseline Measurement
 
 Status: DONE
 Tier: 2 (Performance)
@@ -25,7 +25,7 @@ Created: 2026-01-30T21:00:00+09:00
    - Average FPS.
    - GC Alloc per frame (Check for spikes).
    - Heap Memory usage.
-4. Save report to `Docs/reports/REPORT_TASK_022_PerformanceBaseline.md`.
+4. Save report to `docs/reports/REPORT_TASK_022_PerformanceBaseline.md`.
 
 ## DoD (Definition of Done)
 - [x] `PerformanceMonitor` script created/used.

@@ -1,4 +1,4 @@
-# Task: パッケージインストールエラー修正（Git URLパス指定）
+﻿# Task: パッケージインストールエラー修正（Git URLパス指定）
 Status: DONE
 Tier: 2
 Branch: main
@@ -21,7 +21,7 @@ Git URLからのパッケージインストールエラーを修正する。Yarn
   - `dev.yarnspinner.unity: pathspec 'YarnSpinner-Unity' did not match any file(s) known to git`
 - DOTweenは既に手動でインポート済み（`Assets/Plugins/Demigiant/DOTween/` が存在）
 - Yarn Spinnerはインストールできていない（コンパイルエラーが発生）
-- 参照ドキュメント: `最初のプロンプト`（プロジェクトルート）、`Docs/inbox/REPORT_TASK_004_PackageInstallation_FIX.md`
+- 参照ドキュメント: `最初のプロンプト`（プロジェクトルート）、`docs/inbox/REPORT_TASK_004_PackageInstallation_FIX.md`
 
 ## Focus Area
 - `Packages/manifest.json` の修正

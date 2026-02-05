@@ -1,4 +1,4 @@
-# Worker Prompt: TASK_009_DeductionBoard
+﻿# Worker Prompt: TASK_009_DeductionBoard
 
 あなたは Worker Agent です。以下の指示に従い、タスクを遂行してください。
 Orchestrator によって定義された境界(Focus/Forbidden)を遵守することが求められます。

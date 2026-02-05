@@ -1,4 +1,4 @@
-# Task: Fix MCP Compile Errors
+﻿# Task: Fix MCP Compile Errors
 
 Status: DONE
 Tier: 1 (Bug Fix)

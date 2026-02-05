@@ -1,4 +1,4 @@
-# Task: Chat UI Implementation
+﻿# Task: Chat UI Implementation
 Status: CLOSED
 
 ... (keeping metadata) ...

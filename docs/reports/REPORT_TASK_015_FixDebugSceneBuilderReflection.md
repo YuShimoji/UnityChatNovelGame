@@ -1,4 +1,4 @@
-# Report: TASK_015_FixDebugSceneBuilderReflection
+﻿# Report: TASK_015_FixDebugSceneBuilderReflection
 
 **Task**: DebugSceneBuilder Reflection Error Fix  
 **Status**: DONE  

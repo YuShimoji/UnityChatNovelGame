@@ -1,4 +1,4 @@
-# Task: Topic ScriptableObjects Creation
+﻿# Task: Topic ScriptableObjects Creation
 
 Status: IN_PROGRESS
 Tier: 2
@@ -46,5 +46,5 @@ Report: docs/inbox/REPORT_TASK_011_TopicScriptableObjects.md
 ## Notes
 - Status は OPEN / IN_PROGRESS / BLOCKED / DONE を想定
 - BLOCKED の場合は、事実/根拠/次手（候補）を本文に追記し、Report に docs/inbox/REPORT_...md を必ず設定
-- トピックの内容はプロジェクトの仕様書（`Docs/Core Specification`）に基づいて定義すること
+- トピックの内容はプロジェクトの仕様書（`docs/Core Specification`）に基づいて定義すること
 - 将来的にシナリオが拡張されることを考慮し、トピックIDの命名規則を統一すること

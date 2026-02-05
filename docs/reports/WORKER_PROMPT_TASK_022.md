@@ -1,4 +1,4 @@
-# Worker Prompt: TASK_022_PerformanceBaseline
+﻿# Worker Prompt: TASK_022_PerformanceBaseline
 
 ## 参照
 - チケット: docs/tasks/TASK_022_PerformanceBaseline.md

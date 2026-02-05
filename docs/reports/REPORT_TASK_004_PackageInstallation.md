@@ -1,4 +1,4 @@
-# Report: TASK_004_PackageInstallation
+﻿# Report: TASK_004_PackageInstallation
 
 **作成日時**: 2026-01-06T12:00:00+09:00  
 **タスク**: TASK_004_PackageInstallation  

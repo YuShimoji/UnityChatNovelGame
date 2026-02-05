@@ -1,4 +1,4 @@
-# Project Handover & Status
+﻿# Project Handover & Status
 
 **Timestamp**: 2026-02-02T18:41:00+09:00
 **Actor**: Cascade AI Worker
@@ -98,7 +98,7 @@ GitHubAutoApprove: false
 ### TASK_026: プロジェクト構造整理
 
 - **Status**: COMPLETED
-- **内容**: `Docs/`と`docs/`の統合問題を解決
+- **内容**: `docs/`と`docs/`の統合問題を解決
 - **成果**: プロジェクト構造が統一され、Git履歴も保持
 
 ### TASK_027: Full Playthrough Test

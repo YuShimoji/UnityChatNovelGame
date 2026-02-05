@@ -1,12 +1,12 @@
-# Worker Prompt: TASK_003_PrefabCreation
+﻿# Worker Prompt: TASK_003_PrefabCreation
 
 ## 参照
-- チケット: Docs/tasks/TASK_003_PrefabCreation.md
-- SSOT: Docs/Windsurf_AI_Collab_Rules_latest.md
-- HANDOVER: Docs/HANDOVER.md
+- チケット: docs/tasks/TASK_003_PrefabCreation.md
+- SSOT: docs/Windsurf_AI_Collab_Rules_latest.md
+- HANDOVER: docs/HANDOVER.md
 - AI_CONTEXT: AI_CONTEXT.md
 - MISSION_LOG: .cursor/MISSION_LOG.md
-- 前タスクレポート: Docs/inbox/REPORT_TASK_002_LogicImplementation.md
+- 前タスクレポート: docs/inbox/REPORT_TASK_002_LogicImplementation.md
 - プロジェクト仕様: 最初のプロンプト（プロジェクトルート）
 
 ## 境界
@@ -126,7 +126,7 @@
 - ディレクトリ構造: `Assets/Prefabs/UI/` を作成してからPrefabを配置
 
 ## 参考情報
-- 前タスクレポート: `Docs/inbox/REPORT_TASK_002_LogicImplementation.md` を参照
+- 前タスクレポート: `docs/inbox/REPORT_TASK_002_LogicImplementation.md` を参照
 - プロジェクト仕様: `最初のプロンプト`（プロジェクトルート）を参照
 - Unityバージョン: Unity 6 (or 2022 LTS)
 - 必須パッケージ: TextMeshPro

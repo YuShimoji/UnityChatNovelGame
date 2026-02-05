@@ -1,4 +1,4 @@
-# Worker Prompt: TASK_013_TopicDataVerification
+﻿# Worker Prompt: TASK_013_TopicDataVerification
 
 ## 参照
 - チケット: docs/tasks/TASK_013_TopicDataVerification.md

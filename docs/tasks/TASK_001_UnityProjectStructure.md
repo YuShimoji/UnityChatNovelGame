@@ -1,4 +1,4 @@
-# Task: Unity プロジェクト構造の整理
+﻿# Task: Unity プロジェクト構造の整理
 
 Status: OPEN
 Tier: 1
@@ -16,7 +16,7 @@ Report:
 ## Context
 - プロジェクトは Unity 2022.3 LTS 以降を使用
 - チャットノベルゲーム（Lost Phone系）の開発を開始する
-- 仕様書（`Docs/Core Specification`, `Docs/Core System仕様書`）に基づいた構造が必要
+- 仕様書（`docs/Core Specification`, `docs/Core System仕様書`）に基づいた構造が必要
 - 現在、Unity プロジェクトのディレクトリ構造が未整備の状態
 
 ## Focus Area

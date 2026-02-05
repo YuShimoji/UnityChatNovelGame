@@ -1,4 +1,4 @@
-# Worker Prompt: TASK_023_VerificationGap
+﻿# Worker Prompt: TASK_023_VerificationGap
 
 ## 参照
 - チケット: docs/tasks/TASK_023_VerificationGap.md

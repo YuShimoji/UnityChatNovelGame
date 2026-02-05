@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+﻿<<<<<<< HEAD
 # Report: TASK_010_MetaEffectController
 
 **作成日時**: 2026-01-17T02:00:00+09:00  

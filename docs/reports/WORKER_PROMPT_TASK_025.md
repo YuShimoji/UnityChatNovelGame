@@ -1,4 +1,4 @@
-# Worker Prompt: TASK_025_GCAllocReduction
+﻿# Worker Prompt: TASK_025_GCAllocReduction
 
 ## 概要
 TASK_022 のベースライン計測で観測された GC Alloc（平均 22KB/frame）を、根拠（Profiler）に基づいて低減する。

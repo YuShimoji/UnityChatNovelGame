@@ -1,4 +1,4 @@
-# Task: ChatController & ScenarioManager ロジック実装
+﻿# Task: ChatController & ScenarioManager ロジック実装
 Status: DONE
 Tier: 2
 Branch: main
@@ -17,7 +17,7 @@ ChatController.cs と ScenarioManager.cs のTODOコメントに記載された�
 - 前タスク（TASK_001）でスケルトンコードが作成済み
 - ChatController.cs と ScenarioManager.cs に多数のTODOコメントが残っている
 - 必須パッケージ: Yarn Spinner, DOTween Pro, TextMeshPro（既に前提）
-- 参照ドキュメント: `最初のプロンプト`（プロジェクトルート）、`Docs/inbox/REPORT_TASK_001_UnityCoreSystemSkeleton.md`
+- 参照ドキュメント: `最初のプロンプト`（プロジェクトルート）、`docs/inbox/REPORT_TASK_001_UnityCoreSystemSkeleton.md`
 
 ## Focus Area
 - `Assets/Scripts/UI/ChatController.cs` のTODO実装
