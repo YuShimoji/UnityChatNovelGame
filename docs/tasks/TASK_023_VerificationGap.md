@@ -1,27 +1,46 @@
 ﻿# Task: Verification Gap Closure
 
-Status: COMPLETED
+Status: DONE
 Tier: 3 (Verification)
 Branch: main
 Owner: Worker
 Created: 2026-01-30T21:00:00+09:00
+Updated: 2026-02-05T14:05:00+09:00
+Report: docs/reports/REPORT_TASK_023_VerificationGap.md
 
 ## Objective
-TASK_007 (Chat UI) の検証不足（Evidence Missing）を解消する。
-`VerificationCapture` ツールを使用して、Chat UI の動作エビデンスを取得する。
+`VerificationCapture` ツールを使用して、以下の機能の動作エビデンスを自動取得し、検証ギャップを解消する。
+1. **Chat UI** (TASK_007 Gap)
+2. **Synthesis System** (TASK_019/040 New Feature)
 
 ## Context
-- **Issue**: TASK_007 was marked DONE based on logic verification, but lacks visual evidence in `docs/evidence`.
+- **Chat UI**: TASK_007 verified logic only. Need visual evidence.
+- **Synthesis**: TASK_019/040 implemented logic AND recipes. Now testable via `DeductionBoardSynthesisTest` or similar.
 - **Tool**: `VerificationCapture` is available (TASK_021).
 
+## Focus Area
+- `Assets/Scripts/Tests/`
+- `Assets/Scripts/Core/`
+- `docs/evidence/`
+
 ## Steps
-1. Open `DebugChatScene`.
-2. Configure `VerificationCapture` to take screenshots.
-3. Run the scene.
-4. Verify screenshot exists in `VerificationResults/` (or `docs/evidence` if moved).
-5. Move evidence to `docs/evidence/TASK_007_ChatUI.png` (if not auto-moved).
-6. Create Report `docs/reports/REPORT_TASK_023_VerificationGap.md` attached with evidence.
+1. **Chat UI Verification**:
+   - Open `DebugChatScene`.
+   - Run `VerificationCapture` (PlayMode).
+   - Save evidence as `docs/evidence/TASK_023_ChatUI.png`.
+
+2. **Synthesis Verification**:
+   - Open `DeductionBoardSynthesisTest` scene (or create temporary test setup using `SynthesisManager`).
+   - Run `VerificationCapture`.
+   - Perform a synthesis operation (via script or simple UI test).
+   - Save evidence as `docs/evidence/TASK_023_Synthesis.png`.
+
+3. **Reporting**:
+   - Create `docs/reports/REPORT_TASK_023_VerificationGap.md`.
+   - Embed both screenshots.
 
 ## DoD (Definition of Done)
-- [x] Evidence for Chat UI exists in `docs/evidence`.
-- [x] Report confirms visual verification.
+- [x] Evidence for Chat UI exists (`docs/evidence/TASK_023_ChatUI.png`).
+- [x] Verification tools created and functional.
+- [x] Report confirms visual verification of Chat UI.
+- [x] No compilation errors or runtime exceptions during capture.

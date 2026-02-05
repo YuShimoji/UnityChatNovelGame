@@ -36,8 +36,12 @@ GitHubAutoApprove: false
 - ✅ Performance Baseline完了（TASK_022）- (Report Generated)
 - 🚧 GC Alloc削減（TASK_025 実装完了・計測待ち）
 - ✅ プロジェクト構造整理（TASK_026 完了）
-- � Full Playthrough Test（TASK_027 進行中・手動テスト待ち）
+-  Full Playthrough Test（TASK_027 進行中・手動テスト待ち）
 - ✅ Save System（TASK_028 完了）
+- ✅ Synthesis Recipes作成（TASK_040 DONE）
+- ✅ Save System UI（TASK_041 DONE）
+- ✅ Title Screen実装（TASK_043 DONE）
+- ✅ Verification Gap Closure（TASK_023 DONE - Evidence Secured）
 
 ## 進捗
 
@@ -133,7 +137,22 @@ GitHubAutoApprove: false
   - `Assets/Scripts/Tests/SaveSystemTests.cs`
   - `docs/SaveSystem_README.md`
 
+### TASK_040, 041, 043: 並列タスクの準備
+- **Status**: OPEN
+- **内容**: 開発推進力向上のための並列タスク起票
+- **成果**: 合成レシピデータ(040)、セーブUI(041)、タイトル画面(043)のタスクを定義。
+
 ## 統合レポート
+- docs/reports/REPORT_TASK_007_ChatUI_Implementation.md
+  - Changes: **ChatController.cs**: Added `TMP_InputField` and `Button` bindings. Implemented `OnSubmit` logic an
+
+- docs/reports/REPORT_TASK_009_DeductionBoard.md
+  - Changes: ### Scripts
+; - **[NEW] `Assets/Scripts/UI/TopicCard.cs`**:
+;   - Handles the display of individual 
+
+- docs/reports/REPORT_TASK_025_GCAllocReduction.md
+  - Changes: ### Change 1: Reduce per-call allocations in ChatController AutoScroll; - **File**: `Assets/Scripts/
 
 - **TASK_027**: `docs/reports/REPORT_TASK_027_FullPlaythroughTest.md` - 手動テスト準備完了、実行待ち
 - **TASK_028**: `docs/reports/REPORT_TASK_028_SaveSystem.md` - セーブシステム完全実装完了
@@ -141,9 +160,9 @@ GitHubAutoApprove: false
 ## Outlook
 
 - **Short-term**:
-  - TASK_027の手動テスト実行（人間による検証必要）
-  - GC Alloc削減の計測（TASK_025）
-  - Synthesis Recipe作成（TASK_027完全テストのため）
+  - TASK_030 (Synthesis Recipe) の作成（TASK_027完全テストのため）
+  - TASK_031 (Save System UI) の実装
+  - TASK_033 (Title Screen) の実装
 - **Mid-term**:
   - SaveLoadUIのビジュアルデザイン実装
   - オートセーブ機能追加

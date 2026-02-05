@@ -1,0 +1,14 @@
+{
+    "name": "ProjectFoundPhone.Utils",
+    "rootNamespace": "Assets.Scripts.Utils",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -5,8 +5,7 @@ Tier: 2
 Branch: feat/topic-scriptableobjects
 Owner: Worker
 Created: 2026-01-17T02:00:00+09:00
-Report: docs/inbox/REPORT_TASK_011_TopicScriptableObjects.md 
-
+Report: docs/reports/REPORT_TASK_011_TopicScriptableObjects.md
 ## Objective
 `TopicData` ScriptableObject のインスタンス（アセット）を作成する。
 `UnlockTopicCommand` や `DeductionBoard` で使用するトピックデータを準備する。

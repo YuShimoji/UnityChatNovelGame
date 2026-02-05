@@ -2,8 +2,9 @@
     "name": "ProjectFoundPhone.Editor",
     "rootNamespace": "ProjectFoundPhone.Editor",
     "references": [
-        "ProjectFoundPhone",
+        "ProjectFoundPhone.Runtime",
         "ProjectFoundPhone.Tests",
+        "ProjectFoundPhone.Utils",
         "Unity.TextMeshPro",
         "YarnSpinner.Unity"
     ],

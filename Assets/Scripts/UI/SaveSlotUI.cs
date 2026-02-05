@@ -7,19 +7,17 @@ using System;
 namespace ProjectFoundPhone.UI
 {
     /// <summary>
-    /// 個別のセーブスロットUIを表すクラス
+    /// 蛟句挨縺ｮ繧ｻ繝ｼ繝悶せ繝ｭ繝・ヨUI繧定｡ｨ縺吶け繝ｩ繧ｹ
     /// </summary>
     public class SaveSlotUI : MonoBehaviour
     {
         #region Events
         /// <summary>
-        /// スロットがクリックされた時のイベント
-        /// </summary>
+        /// 繧ｹ繝ｭ繝・ヨ縺後け繝ｪ繝・け縺輔ｌ縺滓凾縺ｮ繧､繝吶Φ繝・        /// </summary>
         public event Action<int> OnSlotClicked;
 
         /// <summary>
-        /// 削除ボタンがクリックされた時のイベント
-        /// </summary>
+        /// 蜑企勁繝懊ち繝ｳ縺後け繝ｪ繝・け縺輔ｌ縺滓凾縺ｮ繧､繝吶Φ繝・        /// </summary>
         public event Action<int> OnDeleteClicked;
         #endregion
 
@@ -68,11 +66,11 @@ namespace ProjectFoundPhone.UI
 
         #region Public Methods
         /// <summary>
-        /// スロットUIをセットアップ
+        /// 繧ｹ繝ｭ繝・ヨUI繧偵そ繝・ヨ繧｢繝・・
         /// </summary>
-        /// <param name="slotNumber">スロット番号</param>
-        /// <param name="saveData">セーブデータ（存在しない場合null）</param>
-        /// <param name="mode">表示モード（Save/Load）</param>
+        /// <param name="slotNumber">繧ｹ繝ｭ繝・ヨ逡ｪ蜿ｷ</param>
+        /// <param name="saveData">繧ｻ繝ｼ繝悶ョ繝ｼ繧ｿ・亥ｭ伜惠縺励↑縺・ｴ蜷・ull・・/param>
+        /// <param name="mode">陦ｨ遉ｺ繝｢繝ｼ繝会ｼ・ave/Load・・/param>
         public void Setup(int slotNumber, SaveData saveData, SaveLoadUI.SaveLoadMode mode)
         {
             m_SlotNumber = slotNumber;
@@ -85,7 +83,7 @@ namespace ProjectFoundPhone.UI
 
         #region Private Methods
         /// <summary>
-        /// UIを更新
+        /// UI繧呈峩譁ｰ
         /// </summary>
         private void UpdateUI()
         {
@@ -140,16 +138,14 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// メインボタンがクリックされた時の処理
-        /// </summary>
+        /// 繝｡繧､繝ｳ繝懊ち繝ｳ縺後け繝ｪ繝・け縺輔ｌ縺滓凾縺ｮ蜃ｦ逅・        /// </summary>
         private void OnMainButtonClicked()
         {
             OnSlotClicked?.Invoke(m_SlotNumber);
         }
 
         /// <summary>
-        /// 削除ボタンがクリックされた時の処理
-        /// </summary>
+        /// 蜑企勁繝懊ち繝ｳ縺後け繝ｪ繝・け縺輔ｌ縺滓凾縺ｮ蜃ｦ逅・        /// </summary>
         private void OnDeleteButtonClicked()
         {
             OnDeleteClicked?.Invoke(m_SlotNumber);
