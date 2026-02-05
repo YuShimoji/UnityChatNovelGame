@@ -36,11 +36,12 @@ GitHubAutoApprove: false
 - ✅ Performance Baseline完了（TASK_022）- (Report Generated)
 - 🚧 GC Alloc削減（TASK_025 実装完了・計測待ち）
 - ✅ プロジェクト構造整理（TASK_026 完了）
-- � Full Playthrough Test（TASK_027 進行中・手動テスト待ち）
+-  Full Playthrough Test（TASK_027 進行中・手動テスト待ち）
 - ✅ Save System（TASK_028 完了）
 - ✅ Synthesis Recipes作成（TASK_040 DONE）
 - ✅ Save System UI（TASK_041 DONE）
 - ✅ Title Screen実装（TASK_043 DONE）
+- ✅ Verification Gap Closure（TASK_023 DONE - Evidence Secured）
 
 ## 進捗
 

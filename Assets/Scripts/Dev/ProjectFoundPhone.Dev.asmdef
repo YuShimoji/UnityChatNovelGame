@@ -2,7 +2,8 @@
     "name": "ProjectFoundPhone.Dev",
     "rootNamespace": "ProjectFoundPhone.Dev",
     "references": [
-        "ProjectFoundPhone.Runtime"
+        "ProjectFoundPhone",
+        "ProjectFoundPhone.Utils"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
