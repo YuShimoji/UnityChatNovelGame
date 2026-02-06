@@ -1,6 +1,6 @@
 {
     "name": "ProjectFoundPhone.Utils",
-    "rootNamespace": "Assets.Scripts.Utils",
+    "rootNamespace": "ProjectFoundPhone.Utils",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

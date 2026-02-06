@@ -2,7 +2,7 @@
     "name": "ProjectFoundPhone.Editor",
     "rootNamespace": "ProjectFoundPhone.Editor",
     "references": [
-        "ProjectFoundPhone.Runtime",
+        "ProjectFoundPhone",
         "ProjectFoundPhone.Tests",
         "ProjectFoundPhone.Utils",
         "Unity.TextMeshPro",

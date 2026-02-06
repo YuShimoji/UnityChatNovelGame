@@ -1,14 +1,14 @@
 ﻿## 現在のミッション
 
-- **タイトル**: プロジェクトセットアップ改善 & 次期機能開発（Chat UI）準備
-- **Issue**: なし（準備フェーズ）
+- **タイトル**: Phase 2 準備 — テストカバレッジ拡充 & Yarn Spinner連携
+- **Issue**: なし（クリーンアップ後、Phase 2着手準備）
 - **ブランチ**: main
 - **関連PR**: なし
-- **進捗**: Phase 1.5 Audit (Post-Integration). Tasks 001-015 completed and integrated.
+- **進捗**: Core System実装完了。クリーンアップ実施中（asmdef修正、重複解消、ドキュメント同期）。
 
 ## 次の中断可能点
 
-- 次のタスク起票後
+- クリーンアップ完了後（Phase 1テスト拡充着手前）
 
 ## 決定事項
 
@@ -31,43 +31,42 @@
 - TASK_023: COMPLETED (Verification Gap - Evidence Confirmed)
 - TASK_024: COMPLETED (Fix Performance Compilation - Hotfix Done)
 - TASK_025: IN_PROGRESS (GC Alloc Reduction - Code Done, After計測待ち)
-- TASK_026: OPEN (Project Structure Cleanup - 起票済み)
-- TASK_027: OPEN (Full Playthrough Test - 起票済み)
-- TASK_028: OPEN (Save System - 起票済み)
+- TASK_026: COMPLETED (Project Structure Cleanup)
+- TASK_027: IN_PROGRESS (Full Playthrough Test - 手動テスト待ち)
+- TASK_028: COMPLETED (Save System)
 - TASK_031: DONE (Compile Error Fix)
+- TASK_040: DONE (Synthesis Recipes作成)
+- TASK_041: DONE (Save System UI)
+- TASK_043: DONE (Title Screen実装)
 
 ### 短期（Next）
 
-- [pending] Unity プロジェクト構造の整理 (ref: docs/tasks/TASK_001_UnityProjectStructure.md, Status: OPEN)
-- [pending] Chat UI Implementation (ref: docs/tasks/TASK_007_ChatUI_Implementation.md, Status: CLOSED)
-- [in_progress] Topic ScriptableObjects Creation (ref: docs/tasks/TASK_011_TopicScriptableObjects.md, Status: IN_PROGRESS)
-- [in_progress] TopicData Verification and Evidence Collection (ref: docs/tasks/TASK_013_TopicDataVerification.md, Status: IN_PROGRESS)
-- [pending] Deduction Board Implementation (ref: docs/tasks/TASK_016_DeductionBoard_Conflict.md, Status: CLOSED (Merged to TASK_018))
-- [pending] Verification Gap Closure (ref: docs/tasks/TASK_023_VerificationGap.md, Status: COMPLETED)
-- [pending] Fix Performance Compilation Error (ref: docs/tasks/TASK_024_FixPerformanceCompilation.md, Status: COMPLETED)
-- [pending] GC Alloc Reduction (Baseline Follow-up) (ref: docs/tasks/TASK_025_GCAllocReduction.md, Status: OPEN)
-- [pending] Full Playthrough Test (ref: docs/tasks/TASK_027_FullPlaythroughTest.md, Status: OPEN)
-- [pending] Save System Implementation (ref: docs/tasks/TASK_028_SaveSystem.md, Status: COMPLETED)
-- [x] Compile Error Fix (ref: docs/tasks/TASK_031_CompileErrorFix.md, Status: DONE)
+- [in_progress] GC Alloc Reduction After計測 (ref: docs/tasks/TASK_025_GCAllocReduction.md)
+- [in_progress] Full Playthrough Test 手動実行 (ref: docs/tasks/TASK_027_FullPlaythroughTest.md)
+- [pending] Phase 1: テストカバレッジ拡充（EditMode Test中心）
+- [pending] Phase 2: Yarn Spinner連携準備
 
 ### 中期（Later）
 
-- [ ] Yarn Spinner連携の詳細実装
-- [ ] テストコード作成
-- [ ] 統合テスト
+- [ ] Phase 3: パフォーマンス最適化（静的レビュー・ObjectPool実装）
+- [ ] Phase 4: ドキュメント整備（ADR・Doxygen・Onboarding）
+- [ ] SaveLoadUIビジュアルデザイン
+- [ ] オートセーブ機能
 
 ### 長期（Someday）
 
-- [ ] プロジェクト構造の整理
+- [ ] コンテンツ制作
+- [ ] Phase 2機能（暗号化、クラウドセーブ等）
 - [ ] 継続的な運用フローの確立
 
 ## 備考（自由記述）
 
 - Unity プロジェクト（ChatNovelGame）のコアシステム実装完了
-- 4つの主要クラス（TopicData, SynthesisRecipe, ChatController, ScenarioManager）を作成・実装完了
+- 主要クラス: TopicData, SynthesisRecipe, ChatController, ScenarioManager, SaveManager, DeductionBoard, MetaEffectController, TitleScreenManager
 - SOLID原則に基づいた設計で拡張性を確保
-- TASK_002（ロジック実装）完了
-- 次のステップ: Prefab作成、DeductionBoard実装、MetaEffectController実装
+- Save System（3スロット対応）実装完了
+- Synthesis Recipes・Title Screen実装完了
+- 2026-02-06: プロジェクトクリーンアップ実施（asmdef修正、GlitchEffect重複解消、ドキュメント同期）
 
 ## 運用ルール (Non-Negotiable)
 
@@ -85,3 +84,5 @@
 - 2026-01-06 08:20: TASK_002起票完了（ロジック実装タスク）
 - 2026-01-06 09:00: TASK_002完了（ロジック実装完了）
 - 2026-02-02 13:00: TASK_031完了（コンパイルエラー修正）
+- 2026-02-02 18:41: TASK_026/027/028/040/041/043 ステータス更新
+- 2026-02-06 13:50: プロジェクトクリーンアップ（asmdef修正、GlitchEffect重複解消、AI_CONTEXT同期）
