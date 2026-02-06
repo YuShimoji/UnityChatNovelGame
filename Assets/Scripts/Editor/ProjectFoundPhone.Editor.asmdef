@@ -6,7 +6,8 @@
         "ProjectFoundPhone.Tests",
         "ProjectFoundPhone.Utils",
         "Unity.TextMeshPro",
-        "YarnSpinner.Unity"
+        "YarnSpinner.Unity",
+        "ProjectFoundPhone.Dev"
     ],
     "includePlatforms": [
         "Editor"
