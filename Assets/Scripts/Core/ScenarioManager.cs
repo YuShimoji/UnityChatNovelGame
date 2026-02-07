@@ -97,9 +97,10 @@ namespace ProjectFoundPhone.Core
             // Yarn Spinnerのコマンドハンドラは通常、string[]配列で引数を受け取る
             m_DialogueRunner.AddCommandHandler<string, string>("Message", MessageCommand);
             m_DialogueRunner.AddCommandHandler<string, string>("Image", ImageCommand);
-            m_DialogueRunner.AddCommandHandler<int>("StartWait", StartWaitCommand);
+            m_DialogueRunner.AddCommandHandler("StartWait", StartWaitCommandCoroutine);
             m_DialogueRunner.AddCommandHandler<string>("UnlockTopic", UnlockTopicCommand);
             m_DialogueRunner.AddCommandHandler<int>("Glitch", GlitchCommand);
+            m_DialogueRunner.AddCommandHandler<string>("SystemMessage", SystemMessageCommand);
         }
 
         /// <summary>
@@ -118,6 +119,7 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.RemoveCommandHandler("StartWait");
             m_DialogueRunner.RemoveCommandHandler("UnlockTopic");
             m_DialogueRunner.RemoveCommandHandler("Glitch");
+            m_DialogueRunner.RemoveCommandHandler("SystemMessage");
         }
         #endregion
 
@@ -154,15 +156,18 @@ namespace ProjectFoundPhone.Core
             if (imageSprite == null)
             {
                 Debug.LogWarning($"ScenarioManager: Failed to load image from Resources/Images/{imageID}");
+                // 画像が見つからない場合はテキストとしてフォールバック表示
+                if (m_ChatController != null)
+                {
+                    m_ChatController.AddMessage(charID, $"[Image: {imageID}]");
+                }
                 return;
             }
 
             // ChatControllerに画像メッセージとして送信
-            // 現在のAddMessage()はテキストのみ対応のため、画像IDを含むテキストとして送信
-            // 後続タスクで画像メッセージ専用のメソッドを追加する予定
             if (m_ChatController != null)
             {
-                m_ChatController.AddMessage(charID, $"[Image: {imageID}]");
+                m_ChatController.AddImageMessage(charID, imageSprite);
             }
             else
             {
@@ -171,12 +176,28 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// StartWaitコマンドのハンドラ
+        /// StartWaitコマンドのCoroutineハンドラ
         /// Yarnスクリプトから呼び出される: <<StartWait 15>>
         /// 指定秒数待機し、その間入力をロックする
+        /// Coroutineを返すことでDialogueRunnerの進行を自動的にブロックする
+        /// </summary>
+        /// <param name="parameters">コマンドパラメータ（[0]: 待機秒数）</param>
+        private Coroutine StartWaitCommandCoroutine(string[] parameters)
+        {
+            int seconds = 1;
+            if (parameters.Length > 0)
+            {
+                int.TryParse(parameters[0], out seconds);
+            }
+            return StartCoroutine(StartWaitRoutine(seconds));
+        }
+
+        /// <summary>
+        /// StartWaitの待機処理コルーチン
+        /// DialogueRunnerはこのCoroutine完了まで次の行に進まない
         /// </summary>
         /// <param name="seconds">待機秒数</param>
-        private void StartWaitCommand(int seconds)
+        private IEnumerator StartWaitRoutine(int seconds)
         {
             // タイピングインジケーターを表示
             if (m_ChatController != null)
@@ -186,22 +207,8 @@ namespace ProjectFoundPhone.Core
 
             // 入力ロックを有効化
             m_IsInputLocked = true;
-            if (m_DialogueRunner != null)
-            {
-                // DialogueRunnerの進行を一時停止（DialogueRunnerのAPIに応じて調整が必要な可能性あり）
-                // 一般的には、DialogueRunnerのOnDialogueCompleteイベントや進行制御を使用
-            }
 
-            // 指定秒数後に待機を解除（CoroutineまたはDOTween.DelayedCallを使用）
-            StartCoroutine(WaitAndUnlock(seconds));
-        }
-
-        /// <summary>
-        /// 待機処理のコルーチン
-        /// </summary>
-        /// <param name="seconds">待機秒数</param>
-        private IEnumerator WaitAndUnlock(int seconds)
-        {
+            // 指定秒数待機（DialogueRunnerの進行はCoroutine完了までブロックされる）
             yield return new WaitForSeconds(seconds);
 
             // タイピングインジケーターを非表示
@@ -264,6 +271,24 @@ namespace ProjectFoundPhone.Core
             else
             {
                 Debug.LogWarning($"ScenarioManager: MetaEffectController instance is not available. Glitch level: {level}");
+            }
+        }
+
+        /// <summary>
+        /// SystemMessageコマンドのハンドラ
+        /// Yarnスクリプトから呼び出される: <<SystemMessage "Text">>
+        /// チャット内にシステム通知（中央揃えグレーテキスト）を表示する
+        /// </summary>
+        /// <param name="text">表示するシステムメッセージ</param>
+        private void SystemMessageCommand(string text)
+        {
+            if (m_ChatController != null)
+            {
+                m_ChatController.AddSystemMessage(text);
+            }
+            else
+            {
+                Debug.LogWarning($"ScenarioManager: ChatController not available. System message: {text}");
             }
         }
         #endregion

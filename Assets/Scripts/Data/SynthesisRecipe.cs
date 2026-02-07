@@ -35,8 +35,37 @@ namespace ProjectFoundPhone.Data
         #region Unity Lifecycle
         private void OnValidate()
         {
-            // TODO: IngredientA、IngredientB、Resultが適切に設定されているかチェック
-            // TODO: 循環参照や自己参照のチェック
+            if (m_IngredientA == null)
+            {
+                Debug.LogWarning($"SynthesisRecipe '{name}': IngredientA is not set.");
+            }
+
+            if (m_IngredientB == null)
+            {
+                Debug.LogWarning($"SynthesisRecipe '{name}': IngredientB is not set.");
+            }
+
+            if (m_Result == null)
+            {
+                Debug.LogWarning($"SynthesisRecipe '{name}': Result is not set.");
+            }
+
+            // 自己参照チェック: 材料と結果が同じトピックでないか
+            if (m_IngredientA != null && m_Result != null && m_IngredientA == m_Result)
+            {
+                Debug.LogError($"SynthesisRecipe '{name}': IngredientA and Result reference the same TopicData.");
+            }
+
+            if (m_IngredientB != null && m_Result != null && m_IngredientB == m_Result)
+            {
+                Debug.LogError($"SynthesisRecipe '{name}': IngredientB and Result reference the same TopicData.");
+            }
+
+            // 同一材料チェック
+            if (m_IngredientA != null && m_IngredientB != null && m_IngredientA == m_IngredientB)
+            {
+                Debug.LogWarning($"SynthesisRecipe '{name}': IngredientA and IngredientB are the same TopicData.");
+            }
         }
         #endregion
 

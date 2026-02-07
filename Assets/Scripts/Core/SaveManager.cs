@@ -2,6 +2,8 @@ using UnityEngine;
 using System;
 using System.IO;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using ProjectFoundPhone.Data;
 using ProjectFoundPhone.UI;
 using Yarn.Unity;
@@ -101,7 +103,7 @@ namespace ProjectFoundPhone.Core
             try
             {
                 SaveData saveData = CreateSaveData(slotNumber);
-                string json = JsonUtility.ToJson(saveData, true);
+                string json = JsonConvert.SerializeObject(saveData, Formatting.Indented);
                 string filePath = GetSaveFilePath(slotNumber);
 
                 File.WriteAllText(filePath, json);
@@ -216,7 +218,7 @@ namespace ProjectFoundPhone.Core
             try
             {
                 string json = File.ReadAllText(filePath);
-                SaveData saveData = JsonUtility.FromJson<SaveData>(json);
+                SaveData saveData = JsonConvert.DeserializeObject<SaveData>(json);
 
                 if (saveData == null || !saveData.IsValid())
                 {
@@ -271,7 +273,26 @@ namespace ProjectFoundPhone.Core
             {
                 foreach (var kvp in saveData.YarnVariables)
                 {
-                    if (kvp.Value is bool boolValue)
+                    if (kvp.Value is JToken jToken)
+                    {
+                        switch (jToken.Type)
+                        {
+                            case JTokenType.Boolean:
+                                scenarioManager.SetVariable(kvp.Key, jToken.Value<bool>());
+                                break;
+                            case JTokenType.String:
+                                scenarioManager.SetVariable(kvp.Key, jToken.Value<string>());
+                                break;
+                            case JTokenType.Float:
+                            case JTokenType.Integer:
+                                scenarioManager.SetVariable(kvp.Key, jToken.Value<float>());
+                                break;
+                            default:
+                                Debug.LogWarning($"SaveManager: Unsupported Yarn variable type for '{kvp.Key}': {jToken.Type}");
+                                break;
+                        }
+                    }
+                    else if (kvp.Value is bool boolValue)
                     {
                         scenarioManager.SetVariable(kvp.Key, boolValue);
                     }
@@ -374,7 +395,7 @@ namespace ProjectFoundPhone.Core
             try
             {
                 string json = File.ReadAllText(filePath);
-                return JsonUtility.FromJson<SaveData>(json);
+                return JsonConvert.DeserializeObject<SaveData>(json);
             }
             catch (Exception e)
             {

@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
 
 namespace ProjectFoundPhone.Data
 {
     /// <summary>
     /// ゲームの保存データを表すクラス
-    /// JSON形式でシリアライズ可能
+    /// Newtonsoft.Json によるJSON形式シリアライズ対応
     /// </summary>
     [Serializable]
     public class SaveData

@@ -18,12 +18,21 @@
 ## リスク/懸念
 
 - ~~既存の `docs/` ディレクトリ（大文字）と `docs/` ディレクトリ（小文字）が混在していてる可能性~~ → 物理的には統一済み（Windows大文字小文字非区別）、パス参照も2026-02-06に統一完了
+- **SaveData.YarnVariables の Dictionary<string, object> が JsonUtility でシリアライズ不可**（要修正: Newtonsoft.Json切替 or 構造体変換）
+- **Yarn Spinner がGitHub直参照（バージョン固定なし）** — manifest.json で特定タグ指定を推奨
+- **シナリオシステムの二重構造**（Yarn Spinner方式 + ScriptableObject方式）— 方針明確化が必要
 
 ## Backlog（将来提案）
 
 - [x] プロジェクト構造の整理（docs と docs の統合検討）→ TASK_026完了（参照パス196ファイル更新）
+- [ ] CharacterProfile ScriptableObject 導入（仕様書定義済み・未実装）
+- [ ] ChatDialogueView (DialogueViewBase継承) の正式実装
+- [ ] 連絡先リスト（Contact List）機能
+- [ ] Addressables 移行（Resources.Load 脱却）
 
 ## タスク管理（短期/中期/長期）
+
+> **詳細ロードマップ**: `docs/PROJECT_ROADMAP.md` を参照（2026-02-07作成）
 
 ### Worker完了ステータス
 
@@ -39,34 +48,56 @@
 - TASK_041: DONE (Save System UI)
 - TASK_043: DONE (Title Screen実装)
 
-### 短期（Next）
+### 短期（Next: 1-2週間）— 品質基盤の確立
 
-- [in_progress] GC Alloc Reduction After計測 (ref: docs/tasks/TASK_025_GCAllocReduction.md)
-- [in_progress] Full Playthrough Test 手動実行 (ref: docs/tasks/TASK_027_FullPlaythroughTest.md)
-- [pending] Phase 1: テストカバレッジ拡充（EditMode Test中心）
-- [pending] Phase 2: Yarn Spinner連携準備
+- [in_progress] GC Alloc Reduction After計測 (TASK_025)
+- [in_progress] Full Playthrough Test 手動実行 (TASK_027)
+- [pending] **SaveData シリアライズ修正** — Dictionary<string, object> → Newtonsoft.Json or シリアライズ可能構造体
+- [pending] **CharacterProfile SO 作成** — characterID, displayName, icon, themeColor, isPlayer
+- [pending] テストカバレッジ拡充 — ChatController / ScenarioManager / DeductionBoard (各3ケース+)
+- [pending] ImageCommand 実装完了 — 画像バブルPrefab + 実Sprite表示
+- [pending] ChatDialogueView 実装 — DialogueViewBase 継承、Yarn Spinner正式連携
+- [pending] system_message コマンド / StartWait進行制御修正
 
-### 中期（Later）
+### 中期（Later: 2-6週間）— 機能拡充 & コンテンツ制作準備
 
-- [ ] Phase 3: パフォーマンス最適化（静的レビュー・ObjectPool実装）
-- [ ] Phase 4: ドキュメント整備（ADR・Doxygen・Onboarding）
-- [ ] SaveLoadUIビジュアルデザイン
-- [ ] オートセーブ機能
+- [ ] MessageBubble オブジェクトプーリング
+- [ ] CharacterProfile ベースのバブルカラーリング
+- [ ] メッセージアニメーション強化（Scale + Slide + Fade）
+- [ ] SaveLoadUI ビジュアルデザイン
+- [ ] Options パネル実装（音量、テキスト速度）
+- [ ] Safe Area / キーボード対応
+- [ ] 連絡先リスト（Contact List）+ add_contact / ChangeStatus コマンド
+- [ ] オートセーブ機能（OnApplicationPause + 重要ポイント）
+- [ ] Yarn スクリプトテンプレート / コンテンツ制作パイプライン
+- [ ] CharacterProfile / Topic / Recipe の本番マスターデータ設計
 
-### 長期（Someday）
+### 長期（Someday: 2-6ヶ月）— プロダクション & リリース
 
-- [ ] コンテンツ制作
-- [ ] Phase 2機能（暗号化、クラウドセーブ等）
-- [ ] 継続的な運用フローの確立
+- [ ] メインストーリー制作（3-5チャプター）
+- [ ] キャラクターアート / SE / BGM
+- [ ] Addressables 移行
+- [ ] セーブデータ暗号化 / クラウドセーブ
+- [ ] CI/CD パイプライン
+- [ ] ローカライズ基盤（日本語/英語）
+- [ ] QA / ストア申請準備
 
 ## 備考（自由記述）
 
 - Unity プロジェクト（ChatNovelGame）のコアシステム実装完了
-- 主要クラス: TopicData, SynthesisRecipe, ChatController, ScenarioManager, SaveManager, DeductionBoard, MetaEffectController, TitleScreenManager
+- 主要クラス: TopicData, SynthesisRecipe, ChatController, ScenarioManager, SaveManager, DeductionBoard, MetaEffectController, TitleScreenManager, **CharacterProfile**, **CharacterDatabase**
 - SOLID原則に基づいた設計で拡張性を確保
 - Save System（3スロット対応）実装完了
 - Synthesis Recipes・Title Screen実装完了
 - 2026-02-06: プロジェクトクリーンアップ実施（asmdef修正、GlitchEffect重複解消、ドキュメント同期）
+- 2026-02-07: Sprint S1/S2 実施—下記完了:
+  - SaveDataシリアライズをNewtonsoft.Jsonに切替（Dictionary<string,object>対応）
+  - CoreLogicTests.cs 作成（18テストケース: TopicData/SynthesisRecipe/DeductionBoard/SaveData）
+  - CharacterProfile SO + CharacterDatabase 作成、ChatController統合（テーマカラー適用）
+  - ImageCommand実装完了（AddImageMessage + Sprite実表示）
+  - SystemMessageコマンド実装（中央揃えグレーテキスト）
+  - StartWaitをCoroutineベースブロッキングに修正
+  - TopicData/SynthesisRecipeのOnValidate実装
 
 ## 運用ルール (Non-Negotiable)
 
@@ -86,3 +117,5 @@
 - 2026-02-02 13:00: TASK_031完了（コンパイルエラー修正）
 - 2026-02-02 18:41: TASK_026/027/028/040/041/043 ステータス更新
 - 2026-02-06 13:50: プロジェクトクリーンアップ（asmdef修正、GlitchEffect重複解消、AI_CONTEXT同期）
+- 2026-02-07 14:56: PROJECT_ROADMAP.md 作成（短期/中期/長期プラン策定、課題・技術的負債の洗い出し、AI_CONTEXT同期）
+- 2026-02-07 20:35: Sprint S1/S2 実装完了（S1-3,S1-4,S1-5/6,S2-1,S2-3,S2-4,S2-5）— 新規: CharacterProfile.cs, CharacterDatabase.cs, CoreLogicTests.cs 修正: SaveData.cs, SaveManager.cs, ChatController.cs, ScenarioManager.cs, TopicData.cs, SynthesisRecipe.cs, Tests.asmdef

@@ -4,6 +4,7 @@ using TMPro;
 using DG.Tweening;
 using System;
 using System.Collections.Generic;
+using ProjectFoundPhone.Data;
 
 namespace ProjectFoundPhone.UI
 {
@@ -22,6 +23,11 @@ namespace ProjectFoundPhone.UI
         [SerializeField] private TMP_InputField m_InputField;
         [SerializeField] private Button m_SendButton;
         [SerializeField] private float m_AutoScrollThreshold = 0.1f; // 自動スクロールを実行する閾値（0.0-1.0）
+
+        [Header("Image Bubble Settings")]
+        [SerializeField] private GameObject m_ImageBubblePrefab;
+        [SerializeField] private float m_ImageMaxWidth = 300f;
+        [SerializeField] private float m_ImageMaxHeight = 200f;
 
         [Header("Choice Settings")]
         [SerializeField] private GameObject m_ChoiceButtonPrefab;
@@ -139,11 +145,20 @@ namespace ProjectFoundPhone.UI
             // Prefabからインスタンスを生成
             GameObject messageBubble = Instantiate(m_MessageBubblePrefab, m_ScrollRect.content);
 
-            // charIDに応じて右寄せ/左寄せを設定（"player"の場合は右寄せ、それ以外は左寄せ）
+            // CharacterDatabaseからプロファイルを取得し、プレイヤー判定とテーマカラーを決定
+            bool isPlayer = CharacterDatabase.Instance != null
+                ? CharacterDatabase.Instance.IsPlayer(charID)
+                : charID == "player";
+
+            Color themeColor = CharacterDatabase.Instance != null
+                ? CharacterDatabase.Instance.GetThemeColor(charID)
+                : (isPlayer ? new Color(0.2f, 0.6f, 1.0f) : new Color(0.85f, 0.85f, 0.85f));
+
+            // charIDに応じて右寄せ/左寄せを設定
             RectTransform rectTransform = messageBubble.GetComponent<RectTransform>();
             if (rectTransform != null)
             {
-                if (charID == "player")
+                if (isPlayer)
                 {
                     // 右寄せ: Anchorを右側に設定
                     rectTransform.anchorMin = new Vector2(1.0f, 1.0f);
@@ -157,6 +172,13 @@ namespace ProjectFoundPhone.UI
                     rectTransform.anchorMax = new Vector2(0.0f, 1.0f);
                     rectTransform.pivot = new Vector2(0.0f, 1.0f);
                 }
+            }
+
+            // バブル背景にテーマカラーを適用
+            Image bubbleBackground = messageBubble.GetComponent<Image>();
+            if (bubbleBackground != null)
+            {
+                bubbleBackground.color = themeColor;
             }
 
             // TextMeshProコンポーネントにtextを設定
@@ -205,6 +227,186 @@ namespace ProjectFoundPhone.UI
             }
 
             // ユーザーが過去ログを見ていない場合のみAutoScroll()を実行
+            if (!m_IsUserScrolling)
+            {
+                AutoScroll();
+            }
+        }
+
+        /// <summary>
+        /// 画像メッセージをチャットに追加
+        /// </summary>
+        /// <param name="charID">キャラクターID</param>
+        /// <param name="imageSprite">表示する画像Sprite</param>
+        public void AddImageMessage(string charID, Sprite imageSprite)
+        {
+            if (imageSprite == null)
+            {
+                Debug.LogWarning("ChatController: Attempted to add image message with null sprite.");
+                return;
+            }
+
+            if (m_ScrollRect == null || m_ScrollRect.content == null)
+            {
+                Debug.LogError("ChatController: Cannot create image bubble. ScrollRect or content is not assigned.");
+                return;
+            }
+
+            // ImageBubblePrefabが設定されていない場合はテキストバブルにフォールバック
+            GameObject prefab = m_ImageBubblePrefab != null ? m_ImageBubblePrefab : m_MessageBubblePrefab;
+            if (prefab == null)
+            {
+                Debug.LogError("ChatController: No prefab available for image message.");
+                return;
+            }
+
+            GameObject imageBubble = Instantiate(prefab, m_ScrollRect.content);
+
+            // プレイヤー判定とテーマカラー
+            bool isPlayer = CharacterDatabase.Instance != null
+                ? CharacterDatabase.Instance.IsPlayer(charID)
+                : charID == "player";
+
+            Color themeColor = CharacterDatabase.Instance != null
+                ? CharacterDatabase.Instance.GetThemeColor(charID)
+                : (isPlayer ? new Color(0.2f, 0.6f, 1.0f) : new Color(0.85f, 0.85f, 0.85f));
+
+            // 右寄せ/左寄せ設定
+            RectTransform rectTransform = imageBubble.GetComponent<RectTransform>();
+            if (rectTransform != null)
+            {
+                if (isPlayer)
+                {
+                    rectTransform.anchorMin = new Vector2(1.0f, 1.0f);
+                    rectTransform.anchorMax = new Vector2(1.0f, 1.0f);
+                    rectTransform.pivot = new Vector2(1.0f, 1.0f);
+                }
+                else
+                {
+                    rectTransform.anchorMin = new Vector2(0.0f, 1.0f);
+                    rectTransform.anchorMax = new Vector2(0.0f, 1.0f);
+                    rectTransform.pivot = new Vector2(0.0f, 1.0f);
+                }
+            }
+
+            // バブル背景にテーマカラーを適用
+            Image bubbleBackground = imageBubble.GetComponent<Image>();
+            if (bubbleBackground != null)
+            {
+                bubbleBackground.color = themeColor;
+            }
+
+            // 画像を表示するImageコンポーネントを検索して設定
+            // ImageBubblePrefab内に "ImageContent" という名前の子オブジェクトを想定
+            Transform imageContentTransform = imageBubble.transform.Find("ImageContent");
+            Image imageContent = imageContentTransform != null
+                ? imageContentTransform.GetComponent<Image>()
+                : null;
+
+            if (imageContent == null)
+            {
+                // 子階層から最初のImage（背景以外）を探す
+                Image[] images = imageBubble.GetComponentsInChildren<Image>();
+                foreach (var img in images)
+                {
+                    if (img.gameObject != imageBubble)
+                    {
+                        imageContent = img;
+                        break;
+                    }
+                }
+            }
+
+            if (imageContent != null)
+            {
+                imageContent.sprite = imageSprite;
+                imageContent.preserveAspect = true;
+
+                // 画像サイズを制限
+                RectTransform imgRect = imageContent.GetComponent<RectTransform>();
+                if (imgRect != null)
+                {
+                    float aspectRatio = (float)imageSprite.texture.width / imageSprite.texture.height;
+                    float width = Mathf.Min(m_ImageMaxWidth, imageSprite.texture.width);
+                    float height = width / aspectRatio;
+                    if (height > m_ImageMaxHeight)
+                    {
+                        height = m_ImageMaxHeight;
+                        width = height * aspectRatio;
+                    }
+                    imgRect.sizeDelta = new Vector2(width, height);
+                }
+            }
+            else
+            {
+                // フォールバック: テキストとして画像名を表示
+                TextMeshProUGUI textComponent = imageBubble.GetComponentInChildren<TextMeshProUGUI>();
+                if (textComponent != null)
+                {
+                    textComponent.text = $"[Image: {imageSprite.name}]";
+                }
+            }
+
+            if (!m_IsUserScrolling)
+            {
+                AutoScroll();
+            }
+        }
+
+        /// <summary>
+        /// システムメッセージ（通知）をチャットに追加
+        /// キャラクターの発言ではなく、中央揃えのグレーテキストで表示する
+        /// 例: 「グループに参加しました」「新しいトピックが解放されました」
+        /// </summary>
+        /// <param name="text">システムメッセージのテキスト</param>
+        public void AddSystemMessage(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return;
+            }
+
+            if (m_ScrollRect == null || m_ScrollRect.content == null)
+            {
+                Debug.LogError("ChatController: Cannot create system message. ScrollRect or content is not assigned.");
+                return;
+            }
+
+            if (m_MessageBubblePrefab == null)
+            {
+                Debug.LogError("ChatController: Cannot create system message. MessageBubblePrefab is not assigned.");
+                return;
+            }
+
+            GameObject systemBubble = Instantiate(m_MessageBubblePrefab, m_ScrollRect.content);
+
+            // 中央揃え
+            RectTransform rectTransform = systemBubble.GetComponent<RectTransform>();
+            if (rectTransform != null)
+            {
+                rectTransform.anchorMin = new Vector2(0.5f, 1.0f);
+                rectTransform.anchorMax = new Vector2(0.5f, 1.0f);
+                rectTransform.pivot = new Vector2(0.5f, 1.0f);
+            }
+
+            // 背景を半透明グレーに設定
+            Image bubbleBackground = systemBubble.GetComponent<Image>();
+            if (bubbleBackground != null)
+            {
+                bubbleBackground.color = new Color(0.6f, 0.6f, 0.6f, 0.5f);
+            }
+
+            // テキストを中央揃え・小さめフォントで設定
+            TextMeshProUGUI textComponent = systemBubble.GetComponentInChildren<TextMeshProUGUI>();
+            if (textComponent != null)
+            {
+                textComponent.text = text;
+                textComponent.alignment = TextAlignmentOptions.Center;
+                textComponent.fontStyle = FontStyles.Italic;
+                textComponent.fontSize = textComponent.fontSize * 0.85f;
+                textComponent.color = new Color(0.4f, 0.4f, 0.4f, 1.0f);
+            }
+
             if (!m_IsUserScrolling)
             {
                 AutoScroll();

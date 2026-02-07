@@ -41,7 +41,19 @@ namespace ProjectFoundPhone.Data
         #region Unity Lifecycle
         private void OnValidate()
         {
-            // TODO: TopicIDの重複チェックやバリデーション処理を実装
+            if (string.IsNullOrEmpty(m_TopicID))
+            {
+                Debug.LogWarning($"TopicData '{name}': TopicID is empty. Please set a unique ID.");
+            }
+            else if (m_TopicID.Contains(" "))
+            {
+                Debug.LogWarning($"TopicData '{name}': TopicID '{m_TopicID}' contains spaces. Use underscores instead.");
+            }
+
+            if (string.IsNullOrEmpty(m_Title))
+            {
+                Debug.LogWarning($"TopicData '{name}': Title is empty.");
+            }
         }
         #endregion
 
