@@ -119,13 +119,28 @@ namespace ProjectFoundPhone.UI
 
             Debug.Log($"DeductionBoard: Topic added - {topicData.Title} (ID: {topicData.TopicID})");
 
-            // オプション: トピック追加時にボードを表示
             if (m_ShowOnTopicAdded)
             {
-                // TODO: Show()メソッドを呼び出すか、アニメーションを再生
+                Show();
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// 推論ボードを表示する
+        /// </summary>
+        public void Show()
+        {
+            gameObject.SetActive(true);
+        }
+
+        /// <summary>
+        /// 推論ボードを非表示にする
+        /// </summary>
+        public void Hide()
+        {
+            gameObject.SetActive(false);
         }
 
         /// <summary>

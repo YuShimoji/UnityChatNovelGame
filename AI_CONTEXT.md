@@ -18,14 +18,14 @@
 ## リスク/懸念
 
 - ~~既存の `docs/` ディレクトリ（大文字）と `docs/` ディレクトリ（小文字）が混在していてる可能性~~ → 物理的には統一済み（Windows大文字小文字非区別）、パス参照も2026-02-06に統一完了
-- **SaveData.YarnVariables の Dictionary<string, object> が JsonUtility でシリアライズ不可**（要修正: Newtonsoft.Json切替 or 構造体変換）
-- **Yarn Spinner がGitHub直参照（バージョン固定なし）** — manifest.json で特定タグ指定を推奨
+- ~~**SaveData.YarnVariables の Dictionary<string, object> が JsonUtility でシリアライズ不可**~~ → Newtonsoft.Json に切替済み
+- ~~**Yarn Spinner がGitHub直参照（バージョン固定なし）**~~ → コミットハッシュ `#a94063e96004` (v3.1.3) で固定済み
 - **シナリオシステムの二重構造**（Yarn Spinner方式 + ScriptableObject方式）— 方針明確化が必要
 
 ## Backlog（将来提案）
 
 - [x] プロジェクト構造の整理（docs と docs の統合検討）→ TASK_026完了（参照パス196ファイル更新）
-- [ ] CharacterProfile ScriptableObject 導入（仕様書定義済み・未実装）
+- [x] CharacterProfile ScriptableObject 導入 → Sprint S1/S2で実装済み、CharacterProfileCreator Editor ツール追加済み
 - [ ] ChatDialogueView (DialogueViewBase継承) の正式実装
 - [ ] 連絡先リスト（Contact List）機能
 - [ ] Addressables 移行（Resources.Load 脱却）
@@ -52,8 +52,8 @@
 
 - [in_progress] GC Alloc Reduction After計測 (TASK_025)
 - [in_progress] Full Playthrough Test 手動実行 (TASK_027)
-- [pending] **SaveData シリアライズ修正** — Dictionary<string, object> → Newtonsoft.Json or シリアライズ可能構造体
-- [pending] **CharacterProfile SO 作成** — characterID, displayName, icon, themeColor, isPlayer
+- [done] **SaveData シリアライズ修正** — Newtonsoft.Json に切替済み
+- [done] **CharacterProfile SO 基盤** — CharacterProfileCreator.cs で Editor メニューから生成可能
 - [pending] テストカバレッジ拡充 — ChatController / ScenarioManager / DeductionBoard (各3ケース+)
 - [pending] ImageCommand 実装完了 — 画像バブルPrefab + 実Sprite表示
 - [pending] ChatDialogueView 実装 — DialogueViewBase 継承、Yarn Spinner正式連携
@@ -119,3 +119,5 @@
 - 2026-02-06 13:50: プロジェクトクリーンアップ（asmdef修正、GlitchEffect重複解消、AI_CONTEXT同期）
 - 2026-02-07 14:56: PROJECT_ROADMAP.md 作成（短期/中期/長期プラン策定、課題・技術的負債の洗い出し、AI_CONTEXT同期）
 - 2026-02-07 20:35: Sprint S1/S2 実装完了（S1-3,S1-4,S1-5/6,S2-1,S2-3,S2-4,S2-5）— 新規: CharacterProfile.cs, CharacterDatabase.cs, CoreLogicTests.cs 修正: SaveData.cs, SaveManager.cs, ChatController.cs, ScenarioManager.cs, TopicData.cs, SynthesisRecipe.cs, Tests.asmdef
+- 2026-02-08: プロジェクト総点検実施 — 45課題を5カテゴリで識別、docs/tasks/AUDIT_*.md に記録
+- 2026-02-09: Phase A ブロッカー解消 — CQ-04/05(TODO解消), CQ-06(Show/Hide実装), CQ-10(YarnSpinnerバージョン固定), AS-01(Characters/フォルダ+CharacterProfileCreator作成)

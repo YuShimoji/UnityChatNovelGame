@@ -64,7 +64,6 @@ namespace ProjectFoundPhone.Data
         /// <returns>有効な場合true</returns>
         public bool IsValid()
         {
-            // TODO: TopicID、Title、Descriptionが適切に設定されているかチェック
             return !string.IsNullOrEmpty(m_TopicID) && !string.IsNullOrEmpty(m_Title);
         }
         #endregion

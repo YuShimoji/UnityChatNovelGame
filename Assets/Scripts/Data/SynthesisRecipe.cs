@@ -97,9 +97,8 @@ namespace ProjectFoundPhone.Data
         /// <returns>有効な場合true</returns>
         public bool IsValid()
         {
-            // TODO: IngredientA、IngredientB、Resultが全てnullでないかチェック
-            // TODO: 各トピックがIsValid()を満たしているかチェック
-            return m_IngredientA != null && m_IngredientB != null && m_Result != null;
+            return m_IngredientA != null && m_IngredientB != null && m_Result != null
+                && m_IngredientA.IsValid() && m_IngredientB.IsValid() && m_Result.IsValid();
         }
         #endregion
     }
