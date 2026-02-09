@@ -332,15 +332,15 @@ namespace ProjectFoundPhone.Tests
             // JToken から値を取得できることを確認
             if (boolVal is Newtonsoft.Json.Linq.JToken boolToken)
             {
-                Assert.AreEqual(true, boolToken.Value<bool>());
+                Assert.AreEqual(true, boolToken.ToObject<bool>());
             }
             if (stringVal is Newtonsoft.Json.Linq.JToken stringToken)
             {
-                Assert.AreEqual("hello", stringToken.Value<string>());
+                Assert.AreEqual("hello", stringToken.ToObject<string>());
             }
             if (floatVal is Newtonsoft.Json.Linq.JToken floatToken)
             {
-                Assert.AreEqual(1.5f, floatToken.Value<float>(), 0.001f);
+                Assert.AreEqual(1.5f, floatToken.ToObject<float>(), 0.001f);
             }
         }
         #endregion
