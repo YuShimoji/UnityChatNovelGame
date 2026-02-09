@@ -97,7 +97,7 @@ namespace ProjectFoundPhone.Core
             // Yarn Spinnerのコマンドハンドラは通常、string[]配列で引数を受け取る
             m_DialogueRunner.AddCommandHandler<string, string>("Message", MessageCommand);
             m_DialogueRunner.AddCommandHandler<string, string>("Image", ImageCommand);
-            m_DialogueRunner.AddCommandHandler("StartWait", StartWaitCommandCoroutine);
+            m_DialogueRunner.AddCommandHandler("StartWait", () => StartWaitCommandCoroutine(new string[0]));
             m_DialogueRunner.AddCommandHandler<string>("UnlockTopic", UnlockTopicCommand);
             m_DialogueRunner.AddCommandHandler<int>("Glitch", GlitchCommand);
             m_DialogueRunner.AddCommandHandler<string>("SystemMessage", SystemMessageCommand);
