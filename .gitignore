@@ -78,4 +78,4 @@ crashlytics-build.properties
 compile_test.log
 
 # Special files
-/Assets/Resources/Characters/nul
+**/nul
