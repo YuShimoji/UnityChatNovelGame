@@ -1,3 +1,4 @@
+#if YARN_SPINNER
 using Yarn.Unity;
 using UnityEngine;
 using System.Collections;
@@ -135,3 +136,4 @@ namespace ProjectFoundPhone.UI
         }
     }
 }
+#endif

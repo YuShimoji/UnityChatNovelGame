@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if YARN_SPINNER
+using System;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -26,3 +27,4 @@ public class EditorScript
         EditorSceneManager.SaveScene(scene);
     }
 }
+#endif

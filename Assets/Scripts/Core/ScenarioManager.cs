@@ -1,7 +1,9 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+#if YARN_SPINNER
 using Yarn.Unity;
+#endif
 using ProjectFoundPhone.UI;
 using ProjectFoundPhone.Data;
 using ProjectFoundPhone.Effects;
@@ -16,7 +18,9 @@ namespace ProjectFoundPhone.Core
     public class ScenarioManager : MonoBehaviour
     {
         #region Private Fields
+#if YARN_SPINNER
         [SerializeField] private DialogueRunner m_DialogueRunner;
+#endif
         [SerializeField] private ProjectFoundPhone.UI.ChatController m_ChatController;
         [SerializeField] private string m_StartNode = "Start";
 
@@ -55,6 +59,7 @@ namespace ProjectFoundPhone.Core
         /// </summary>
         private void InitializeComponents()
         {
+#if YARN_SPINNER
             if (m_DialogueRunner == null)
             {
                 m_DialogueRunner = GetComponent<DialogueRunner>();
@@ -64,6 +69,7 @@ namespace ProjectFoundPhone.Core
             {
                 Debug.LogError("ScenarioManager: DialogueRunner component is required!");
             }
+#endif
 
             if (m_ChatController == null)
             {
@@ -82,6 +88,7 @@ namespace ProjectFoundPhone.Core
         /// </summary>
         private void RegisterCustomCommands()
         {
+#if YARN_SPINNER
             if (m_DialogueRunner == null)
             {
                 return;
@@ -95,6 +102,7 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.AddCommandHandler<string>("UnlockTopic", UnlockTopicCommand);
             m_DialogueRunner.AddCommandHandler<int>("Glitch", GlitchCommand);
             m_DialogueRunner.AddCommandHandler<string>("SystemMessage", SystemMessageCommand);
+#endif
         }
 
         /// <summary>
@@ -102,6 +110,7 @@ namespace ProjectFoundPhone.Core
         /// </summary>
         private void UnregisterCustomCommands()
         {
+#if YARN_SPINNER
             if (m_DialogueRunner == null)
             {
                 return;
@@ -114,6 +123,7 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.RemoveCommandHandler("UnlockTopic");
             m_DialogueRunner.RemoveCommandHandler("Glitch");
             m_DialogueRunner.RemoveCommandHandler("SystemMessage");
+#endif
         }
         #endregion
 
@@ -415,6 +425,7 @@ namespace ProjectFoundPhone.Core
         /// <param name="nodeName">開始するYarnノード名（省略時はm_StartNodeを使用）</param>
         public void StartScenario(string nodeName = null)
         {
+#if YARN_SPINNER
             if (m_DialogueRunner == null)
             {
                 Debug.LogError("ScenarioManager: DialogueRunner is not initialized!");
@@ -423,6 +434,9 @@ namespace ProjectFoundPhone.Core
 
             string targetNode = nodeName ?? m_StartNode;
             m_DialogueRunner.StartDialogue(targetNode);
+#else
+            Debug.LogWarning("ScenarioManager: Yarn Spinner is not available. StartScenario is a no-op.");
+#endif
         }
 
         /// <summary>
@@ -430,10 +444,12 @@ namespace ProjectFoundPhone.Core
         /// </summary>
         public void StopScenario()
         {
+#if YARN_SPINNER
             if (m_DialogueRunner != null)
             {
                 m_DialogueRunner.Stop();
             }
+#endif
         }
 
         /// <summary>
@@ -444,6 +460,7 @@ namespace ProjectFoundPhone.Core
         /// <returns>変数の値</returns>
         public T GetVariable<T>(string variableName)
         {
+#if YARN_SPINNER
             if (m_DialogueRunner == null || m_DialogueRunner.VariableStorage == null)
             {
                 Debug.LogWarning($"ScenarioManager: Cannot get variable {variableName}. DialogueRunner or VariableStorage is not initialized.");
@@ -468,7 +485,7 @@ namespace ProjectFoundPhone.Core
             {
                 Debug.LogWarning($"ScenarioManager: Variable {variableName} not found in VariableStorage.");
             }
-
+#endif
             return default(T);
         }
 
@@ -480,6 +497,7 @@ namespace ProjectFoundPhone.Core
         /// <param name="value">設定する値</param>
         public void SetVariable<T>(string variableName, T value)
         {
+#if YARN_SPINNER
             if (m_DialogueRunner == null || m_DialogueRunner.VariableStorage == null)
             {
                 Debug.LogWarning($"ScenarioManager: Cannot set variable {variableName}. DialogueRunner or VariableStorage is not initialized.");
@@ -506,6 +524,7 @@ namespace ProjectFoundPhone.Core
                 m_DialogueRunner.VariableStorage.SetValue(variableName, value?.ToString() ?? string.Empty);
                 Debug.LogWarning($"ScenarioManager: Variable {variableName} set as string (type: {typeof(T).Name})");
             }
+#endif
         }
         #endregion
     }
