@@ -56,15 +56,14 @@ namespace ProjectFoundPhone.UI
 
             if (m_InputField != null)
             {
-                // Enterキーでも送信できるようにする (Optional)
                 m_InputField.onSubmit.AddListener((text) => OnSubmit());
             }
-        }
 
-        private void Update()
-        {
-            // TODO: スクロール位置の監視とユーザー操作の検知
-            CheckUserScrollInput();
+            // スクロール位置の変更をイベントで監視（毎フレームUpdate不要）
+            if (m_ScrollRect != null)
+            {
+                m_ScrollRect.onValueChanged.AddListener(OnScrollValueChanged);
+            }
         }
         #endregion
 
@@ -97,29 +96,58 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// ユーザーが手動でスクロールしているかを検知
+        /// ScrollRect.onValueChanged イベントハンドラ
+        /// ユーザーが手動でスクロールしているかを検知する
         /// </summary>
-        private void CheckUserScrollInput()
+        private void OnScrollValueChanged(Vector2 scrollPosition)
         {
-            if (m_ScrollRect == null)
-            {
-                return;
-            }
-
-            float currentScrollPosition = m_ScrollRect.verticalNormalizedPosition;
+            float verticalPos = scrollPosition.y;
 
             // スクロール位置が下から一定以上離れている場合、ユーザーが過去ログを見ていると判定
-            if (currentScrollPosition < (1.0f - m_AutoScrollThreshold))
+            if (verticalPos < (1.0f - m_AutoScrollThreshold))
             {
                 m_IsUserScrolling = true;
             }
-            // スクロール位置が1.0に近い場合、ユーザーは最新メッセージを見ている
-            else if (currentScrollPosition >= 0.99f)
+            // スクロール位置が最下部に近い場合、ユーザーは最新メッセージを見ている
+            else if (verticalPos >= 0.99f)
             {
                 m_IsUserScrolling = false;
             }
 
-            m_LastScrollPosition = currentScrollPosition;
+            m_LastScrollPosition = verticalPos;
+        }
+
+        /// <summary>
+        /// バブルGameObjectにキャラクターベースのレイアウトとテーマカラーを適用する
+        /// </summary>
+        /// <param name="bubble">設定対象のバブルGameObject</param>
+        /// <param name="charID">キャラクターID</param>
+        private void ConfigureBubble(GameObject bubble, string charID)
+        {
+            bool isPlayer = CharacterDatabase.Instance != null
+                ? CharacterDatabase.Instance.IsPlayer(charID)
+                : charID == "player";
+
+            Color themeColor = CharacterDatabase.Instance != null
+                ? CharacterDatabase.Instance.GetThemeColor(charID)
+                : (isPlayer ? new Color(0.2f, 0.6f, 1.0f) : new Color(0.85f, 0.85f, 0.85f));
+
+            // 右寄せ（プレイヤー）/ 左寄せ（NPC）を設定
+            RectTransform rectTransform = bubble.GetComponent<RectTransform>();
+            if (rectTransform != null)
+            {
+                float anchorX = isPlayer ? 1.0f : 0.0f;
+                rectTransform.anchorMin = new Vector2(anchorX, 1.0f);
+                rectTransform.anchorMax = new Vector2(anchorX, 1.0f);
+                rectTransform.pivot = new Vector2(anchorX, 1.0f);
+            }
+
+            // バブル背景にテーマカラーを適用
+            Image bubbleBackground = bubble.GetComponent<Image>();
+            if (bubbleBackground != null)
+            {
+                bubbleBackground.color = themeColor;
+            }
         }
 
         /// <summary>
@@ -145,41 +173,8 @@ namespace ProjectFoundPhone.UI
             // Prefabからインスタンスを生成
             GameObject messageBubble = Instantiate(m_MessageBubblePrefab, m_ScrollRect.content);
 
-            // CharacterDatabaseからプロファイルを取得し、プレイヤー判定とテーマカラーを決定
-            bool isPlayer = CharacterDatabase.Instance != null
-                ? CharacterDatabase.Instance.IsPlayer(charID)
-                : charID == "player";
-
-            Color themeColor = CharacterDatabase.Instance != null
-                ? CharacterDatabase.Instance.GetThemeColor(charID)
-                : (isPlayer ? new Color(0.2f, 0.6f, 1.0f) : new Color(0.85f, 0.85f, 0.85f));
-
-            // charIDに応じて右寄せ/左寄せを設定
-            RectTransform rectTransform = messageBubble.GetComponent<RectTransform>();
-            if (rectTransform != null)
-            {
-                if (isPlayer)
-                {
-                    // 右寄せ: Anchorを右側に設定
-                    rectTransform.anchorMin = new Vector2(1.0f, 1.0f);
-                    rectTransform.anchorMax = new Vector2(1.0f, 1.0f);
-                    rectTransform.pivot = new Vector2(1.0f, 1.0f);
-                }
-                else
-                {
-                    // 左寄せ: Anchorを左側に設定
-                    rectTransform.anchorMin = new Vector2(0.0f, 1.0f);
-                    rectTransform.anchorMax = new Vector2(0.0f, 1.0f);
-                    rectTransform.pivot = new Vector2(0.0f, 1.0f);
-                }
-            }
-
-            // バブル背景にテーマカラーを適用
-            Image bubbleBackground = messageBubble.GetComponent<Image>();
-            if (bubbleBackground != null)
-            {
-                bubbleBackground.color = themeColor;
-            }
+            // プレイヤー判定・テーマカラー・配置を共通処理で設定
+            ConfigureBubble(messageBubble, charID);
 
             // TextMeshProコンポーネントにtextを設定
             TextMeshProUGUI textComponent = messageBubble.GetComponentInChildren<TextMeshProUGUI>();
@@ -262,39 +257,8 @@ namespace ProjectFoundPhone.UI
 
             GameObject imageBubble = Instantiate(prefab, m_ScrollRect.content);
 
-            // プレイヤー判定とテーマカラー
-            bool isPlayer = CharacterDatabase.Instance != null
-                ? CharacterDatabase.Instance.IsPlayer(charID)
-                : charID == "player";
-
-            Color themeColor = CharacterDatabase.Instance != null
-                ? CharacterDatabase.Instance.GetThemeColor(charID)
-                : (isPlayer ? new Color(0.2f, 0.6f, 1.0f) : new Color(0.85f, 0.85f, 0.85f));
-
-            // 右寄せ/左寄せ設定
-            RectTransform rectTransform = imageBubble.GetComponent<RectTransform>();
-            if (rectTransform != null)
-            {
-                if (isPlayer)
-                {
-                    rectTransform.anchorMin = new Vector2(1.0f, 1.0f);
-                    rectTransform.anchorMax = new Vector2(1.0f, 1.0f);
-                    rectTransform.pivot = new Vector2(1.0f, 1.0f);
-                }
-                else
-                {
-                    rectTransform.anchorMin = new Vector2(0.0f, 1.0f);
-                    rectTransform.anchorMax = new Vector2(0.0f, 1.0f);
-                    rectTransform.pivot = new Vector2(0.0f, 1.0f);
-                }
-            }
-
-            // バブル背景にテーマカラーを適用
-            Image bubbleBackground = imageBubble.GetComponent<Image>();
-            if (bubbleBackground != null)
-            {
-                bubbleBackground.color = themeColor;
-            }
+            // プレイヤー判定・テーマカラー・配置を共通処理で設定
+            ConfigureBubble(imageBubble, charID);
 
             // 画像を表示するImageコンポーネントを検索して設定
             // ImageBubblePrefab内に "ImageContent" という名前の子オブジェクトを想定
@@ -410,6 +374,23 @@ namespace ProjectFoundPhone.UI
             if (!m_IsUserScrolling)
             {
                 AutoScroll();
+            }
+        }
+
+        /// <summary>
+        /// 入力欄と送信ボタンの有効/無効を切り替える
+        /// ScenarioManagerの入力ロック連動で使用
+        /// </summary>
+        /// <param name="enabled">有効にする場合true</param>
+        public void SetInputEnabled(bool enabled)
+        {
+            if (m_InputField != null)
+            {
+                m_InputField.interactable = enabled;
+            }
+            if (m_SendButton != null)
+            {
+                m_SendButton.interactable = enabled;
             }
         }
 

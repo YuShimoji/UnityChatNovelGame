@@ -20,13 +20,7 @@ namespace ProjectFoundPhone.Core
         [SerializeField] private ProjectFoundPhone.UI.ChatController m_ChatController;
         [SerializeField] private string m_StartNode = "Start";
 
-        /// <summary>
-        /// 入力ロック状態（StartWaitCommandで使用）
-        /// 将来的にDialogueRunnerの進行制御で使用予定
-        /// </summary>
-        #pragma warning disable CS0414 // フィールドは割り当てられているが、値が使用されていない
         private bool m_IsInputLocked = false;
-        #pragma warning restore CS0414
 
         [Header("Debug")]
         [SerializeField] private string m_DebugScenarioID;
@@ -206,7 +200,7 @@ namespace ProjectFoundPhone.Core
             }
 
             // 入力ロックを有効化
-            m_IsInputLocked = true;
+            SetInputLocked(true);
 
             // 指定秒数待機（DialogueRunnerの進行はCoroutine完了までブロックされる）
             yield return new WaitForSeconds(seconds);
@@ -218,7 +212,7 @@ namespace ProjectFoundPhone.Core
             }
 
             // 入力ロックを解除
-            m_IsInputLocked = false;
+            SetInputLocked(false);
         }
 
         /// <summary>
@@ -329,7 +323,7 @@ namespace ProjectFoundPhone.Core
         private IEnumerator PlayScenarioRoutine(ChatScenarioData data)
         {
             // 入力をロック
-            m_IsInputLocked = true;
+            SetInputLocked(true);
 
             foreach (var message in data.Messages)
             {
@@ -391,13 +385,30 @@ namespace ProjectFoundPhone.Core
                 }
             }
 
-            // シナリオ終了時の処理（必要なら）
-            m_IsInputLocked = false;
+            // シナリオ終了時の処理
+            SetInputLocked(false);
 
         }
         #endregion
 
         #region Public Methods
+        /// <summary>
+        /// 入力がロックされているかどうか
+        /// </summary>
+        public bool IsInputLocked => m_IsInputLocked;
+
+        /// <summary>
+        /// 入力ロック状態を設定し、ChatControllerの入力欄を連動制御する
+        /// </summary>
+        private void SetInputLocked(bool locked)
+        {
+            m_IsInputLocked = locked;
+            if (m_ChatController != null)
+            {
+                m_ChatController.SetInputEnabled(!locked);
+            }
+        }
+
         /// <summary>
         /// シナリオを開始
         /// </summary>

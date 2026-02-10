@@ -164,7 +164,7 @@ namespace ProjectFoundPhone.UI
             if (cardToRemove != null)
             {
                 m_TopicCards.Remove(cardToRemove);
-                Destroy(cardToRemove.gameObject);
+                SafeDestroy(cardToRemove.gameObject);
             }
 
             Debug.Log($"DeductionBoard: Topic removed - {topicToRemove.Title} (ID: {topicID})");
@@ -191,7 +191,7 @@ namespace ProjectFoundPhone.UI
             {
                 if (card != null)
                 {
-                    Destroy(card.gameObject);
+                    SafeDestroy(card.gameObject);
                 }
             }
             m_TopicCards.Clear();
@@ -216,6 +216,17 @@ namespace ProjectFoundPhone.UI
         #endregion
 
         #region Private Methods
+        /// <summary>
+        /// EditMode（テスト環境）でも安全にオブジェクトを破棄する
+        /// </summary>
+        private void SafeDestroy(Object obj)
+        {
+            if (Application.isPlaying)
+                Destroy(obj);
+            else
+                DestroyImmediate(obj);
+        }
+
         /// <summary>
         /// Resourcesから合成レシピをロードする
         /// </summary>

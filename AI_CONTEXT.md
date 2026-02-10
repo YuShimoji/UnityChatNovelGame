@@ -121,3 +121,4 @@
 - 2026-02-07 20:35: Sprint S1/S2 実装完了（S1-3,S1-4,S1-5/6,S2-1,S2-3,S2-4,S2-5）— 新規: CharacterProfile.cs, CharacterDatabase.cs, CoreLogicTests.cs 修正: SaveData.cs, SaveManager.cs, ChatController.cs, ScenarioManager.cs, TopicData.cs, SynthesisRecipe.cs, Tests.asmdef
 - 2026-02-08: プロジェクト総点検実施 — 45課題を5カテゴリで識別、docs/tasks/AUDIT_*.md に記録
 - 2026-02-09: Phase A ブロッカー解消 — CQ-04/05(TODO解消), CQ-06(Show/Hide実装), CQ-10(YarnSpinnerバージョン固定), AS-01(Characters/フォルダ+CharacterProfileCreator作成)
+- 2026-02-10: Phase B コード品質・テスト基盤 — CQ-09(空ファイル削除), CQ-07(IsInputLocked実機能化+SetInputEnabled), CQ-02(ConfigureBubble抽出), CQ-01(Update→onValueChanged), QA-07(CharacterProfile/Database テスト8件追加), テスト失敗修正(TopicCardPrefab設定, SafeDestroy)

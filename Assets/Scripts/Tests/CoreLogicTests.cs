@@ -160,11 +160,18 @@ namespace ProjectFoundPhone.Tests
             m_BoardObject = new GameObject("DeductionBoard");
             m_Board = m_BoardObject.AddComponent<DeductionBoard>();
 
-            // CardContainerを設定（Prefabなしでもロジックテストは可能）
+            // CardContainer と TopicCardPrefab を設定
+            // TopicCardPrefab が未設定だと Debug.LogError が発生しテスト失敗になる
             GameObject container = new GameObject("CardContainer");
             container.transform.SetParent(m_BoardObject.transform);
+
+            GameObject cardPrefabObj = new GameObject("TopicCardPrefab");
+            cardPrefabObj.transform.SetParent(m_BoardObject.transform);
+            TopicCard topicCardPrefab = cardPrefabObj.AddComponent<TopicCard>();
+
             SerializedObject so = new SerializedObject(m_Board);
             so.FindProperty("m_CardContainer").objectReferenceValue = container.transform;
+            so.FindProperty("m_TopicCardPrefab").objectReferenceValue = topicCardPrefab;
             so.ApplyModifiedPropertiesWithoutUndo();
         }
 
@@ -342,6 +349,129 @@ namespace ProjectFoundPhone.Tests
             {
                 Assert.AreEqual(1.5f, floatToken.ToObject<float>(), 0.001f);
             }
+        }
+        #endregion
+
+        #region CharacterProfile Tests
+        private CharacterProfile CreateCharacterProfile(string characterID, string displayName, Color themeColor, bool isPlayer)
+        {
+            CharacterProfile profile = ScriptableObject.CreateInstance<CharacterProfile>();
+            SerializedObject so = new SerializedObject(profile);
+            so.FindProperty("m_CharacterID").stringValue = characterID;
+            so.FindProperty("m_DisplayName").stringValue = displayName;
+            so.FindProperty("m_ThemeColor").colorValue = themeColor;
+            so.FindProperty("m_IsPlayer").boolValue = isPlayer;
+            so.ApplyModifiedPropertiesWithoutUndo();
+            return profile;
+        }
+
+        [Test]
+        public void CharacterProfile_IsValid_ReturnsTrueForValidProfile()
+        {
+            CharacterProfile profile = CreateCharacterProfile("player", "あなた", Color.blue, true);
+
+            Assert.IsTrue(profile.IsValid());
+            Assert.AreEqual("player", profile.CharacterID);
+            Assert.AreEqual("あなた", profile.DisplayName);
+            Assert.IsTrue(profile.IsPlayer);
+        }
+
+        [Test]
+        public void CharacterProfile_IsValid_ReturnsFalseForEmptyID()
+        {
+            CharacterProfile profile = CreateCharacterProfile("", "Name", Color.white, false);
+
+            Assert.IsFalse(profile.IsValid());
+        }
+
+        [Test]
+        public void CharacterProfile_IsValid_ReturnsFalseForEmptyName()
+        {
+            CharacterProfile profile = CreateCharacterProfile("id", "", Color.white, false);
+
+            Assert.IsFalse(profile.IsValid());
+        }
+
+        [Test]
+        public void CharacterProfile_ThemeColor_ReturnsSetValue()
+        {
+            Color expected = new Color(0.2f, 0.6f, 1.0f);
+            CharacterProfile profile = CreateCharacterProfile("test", "Test", expected, false);
+
+            Assert.AreEqual(expected, profile.ThemeColor);
+        }
+        #endregion
+
+        #region CharacterDatabase Tests
+        private GameObject m_DatabaseObject;
+        private CharacterDatabase m_Database;
+
+        private void SetupCharacterDatabase(params CharacterProfile[] profiles)
+        {
+            m_DatabaseObject = new GameObject("CharacterDatabase");
+            m_Database = m_DatabaseObject.AddComponent<CharacterDatabase>();
+
+            // LoadPathを空文字にしてResourcesロードを無効化（テスト対象のプロファイルのみ使用）
+            SerializedObject so = new SerializedObject(m_Database);
+            so.FindProperty("m_LoadPath").stringValue = "__test_nonexistent__";
+            so.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private void TeardownCharacterDatabase()
+        {
+            if (m_DatabaseObject != null)
+            {
+                Object.DestroyImmediate(m_DatabaseObject);
+            }
+        }
+
+        [Test]
+        public void CharacterDatabase_GetProfile_ReturnsNullForUnknownID()
+        {
+            SetupCharacterDatabase();
+
+            Assert.IsNull(m_Database.GetProfile("nonexistent"));
+            Assert.AreEqual(0, m_Database.ProfileCount);
+
+            TeardownCharacterDatabase();
+        }
+
+        [Test]
+        public void CharacterDatabase_IsPlayer_FallbackForUnknownID()
+        {
+            SetupCharacterDatabase();
+
+            // "player" という ID はプロファイルなしでもフォールバックで true を返す
+            Assert.IsTrue(m_Database.IsPlayer("player"));
+            Assert.IsFalse(m_Database.IsPlayer("npc_001"));
+
+            TeardownCharacterDatabase();
+        }
+
+        [Test]
+        public void CharacterDatabase_GetThemeColor_ReturnsFallbackColors()
+        {
+            SetupCharacterDatabase();
+
+            Color playerColor = m_Database.GetThemeColor("player");
+            Color npcColor = m_Database.GetThemeColor("npc_001");
+
+            // デフォルトのフォールバックカラーが返る
+            Assert.AreEqual(new Color(0.2f, 0.6f, 1.0f), playerColor);
+            Assert.AreEqual(new Color(0.85f, 0.85f, 0.85f), npcColor);
+
+            TeardownCharacterDatabase();
+        }
+
+        [Test]
+        public void CharacterDatabase_GetDisplayName_FallbackReturnsID()
+        {
+            SetupCharacterDatabase();
+
+            // プロファイルが見つからない場合、IDがそのまま返る
+            Assert.AreEqual("unknown_char", m_Database.GetDisplayName("unknown_char"));
+
+            TeardownCharacterDatabase();
         }
         #endregion
     }
