@@ -1,0 +1,82 @@
+title: Start
+---
+<<declare $has_topic_debug_topic_01 = false>>
+<<declare $speaker = "">>
+
+<<SystemMessage "接続を確認しています...">>
+<<StartWait 1.5>>
+<<SystemMessage "新しい連絡先が見つかりました">>
+
+<<set $speaker to "unknown">>
+...もしもし？ 聞こえますか？
+
+<<StartWait 1>>
+
+この番号に繋がるとは思わなかった。
+
+<<set $speaker to "player">>
+誰ですか？ どうしてこの番号を知ってるんですか？
+
+<<set $speaker to "unknown">>
+<<StartWait 1.5>>
+名前は... 今は言えない。でも、あなたに伝えたいことがある。
+
+<<set $speaker to "unknown">>
+このスマホの前の持ち主のこと、何か知ってる？
+
+-> 心当たりがある
+    <<jump BranchA>>
+-> 何も知らない
+    <<jump BranchB>>
+===
+
+title: BranchA
+---
+<<set $speaker to "player">>
+少しだけ。このスマホを拾った時、変な信号が入ってた。
+
+<<set $speaker to "unknown">>
+<<StartWait 1>>
+やっぱり... その信号、記録しておいて。重要な手がかりになるかもしれない。
+
+<<UnlockTopic "debug_topic_01">>
+<<SystemMessage "トピック「奇妙な信号」を獲得しました">>
+
+<<set $speaker to "unknown">>
+<<StartWait 1>>
+また連絡する。それまで気をつけて。
+
+<<jump End>>
+===
+
+title: BranchB
+---
+<<set $speaker to "player">>
+何も知らない。このスマホは道端で拾っただけだ。
+
+<<set $speaker to "unknown">>
+<<StartWait 1>>
+そう... でも、あなたがこの番号に出た時点で、もう関係ないとは言えない。
+
+<<set $speaker to "unknown">>
+一つだけ教えてあげる。そのスマホには変な信号が記録されてる。確認してみて。
+
+<<UnlockTopic "debug_topic_01">>
+<<SystemMessage "トピック「奇妙な信号」を獲得しました">>
+
+<<set $speaker to "unknown">>
+<<StartWait 1.5>>
+これ以上は危険だ。また連絡する。
+
+<<jump End>>
+===
+
+title: End
+---
+<<set $speaker to "unknown">>
+<<StartWait 2>>
+...
+
+<<SystemMessage "相手が通話を切りました">>
+<<SystemMessage "--- Chapter 0 END ---">>
+===

@@ -1,0 +1,22 @@
+﻿{
+    "name": "ProjectFoundPhone.PlayModeTests",
+    "rootNamespace": "ProjectFoundPhone.Tests",
+    "references": [
+        "ProjectFoundPhone",
+        "ProjectFoundPhone.Utils"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false,
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ]
+}

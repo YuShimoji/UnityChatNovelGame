@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using NUnit.Framework;
 using ProjectFoundPhone.Data;
@@ -7,13 +7,12 @@ using ProjectFoundPhone.UI;
 namespace ProjectFoundPhone.Tests
 {
     /// <summary>
-    /// TopicData, SynthesisRecipe, DeductionBoard のコアロジックテスト
-    /// </summary>
+    /// TopicData, SynthesisRecipe, DeductionBoard 縺ｮ繧ｳ繧｢繝ｭ繧ｸ繝・け繝・せ繝・    /// </summary>
     public class CoreLogicTests
     {
         #region Helper Methods
         /// <summary>
-        /// テスト用のTopicDataを作成する
+        /// 繝・せ繝育畑縺ｮTopicData繧剃ｽ懈・縺吶ｋ
         /// </summary>
         private TopicData CreateTopicData(string topicID, string title, string description = "")
         {
@@ -27,7 +26,7 @@ namespace ProjectFoundPhone.Tests
         }
 
         /// <summary>
-        /// テスト用のSynthesisRecipeを作成する
+        /// 繝・せ繝育畑縺ｮSynthesisRecipe繧剃ｽ懈・縺吶ｋ
         /// </summary>
         private SynthesisRecipe CreateRecipe(TopicData ingredientA, TopicData ingredientB, TopicData result)
         {
@@ -160,8 +159,7 @@ namespace ProjectFoundPhone.Tests
             m_BoardObject = new GameObject("DeductionBoard");
             m_Board = m_BoardObject.AddComponent<DeductionBoard>();
 
-            // CardContainer と TopicCardPrefab を設定
-            // TopicCardPrefab が未設定だと Debug.LogError が発生しテスト失敗になる
+            // CardContainer and TopicCardPrefab are required for board test setup.
             GameObject container = new GameObject("CardContainer");
             container.transform.SetParent(m_BoardObject.transform);
 
@@ -283,9 +281,9 @@ namespace ProjectFoundPhone.Tests
             original.CurrentNodeName = "Chapter2_Start";
             original.UnlockedTopicIDs.Add("topic_found_phone");
             original.UnlockedTopicIDs.Add("topic_missing_person");
-            original.YarnVariables["has_topic_found_phone"] = true;
-            original.YarnVariables["player_name"] = "Alex";
-            original.YarnVariables["trust_level"] = 3.5f;
+            original.YarnVariables["$has_topic_found_phone"] = true;
+            original.YarnVariables["$player_name"] = "Alex";
+            original.YarnVariables["$trust_level"] = 3.5f;
 
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(original, Newtonsoft.Json.Formatting.Indented);
             SaveData deserialized = Newtonsoft.Json.JsonConvert.DeserializeObject<SaveData>(json);
@@ -297,9 +295,9 @@ namespace ProjectFoundPhone.Tests
             Assert.AreEqual(original.UnlockedTopicIDs.Count, deserialized.UnlockedTopicIDs.Count);
             Assert.AreEqual("topic_found_phone", deserialized.UnlockedTopicIDs[0]);
             Assert.AreEqual("topic_missing_person", deserialized.UnlockedTopicIDs[1]);
-            Assert.IsTrue(deserialized.YarnVariables.ContainsKey("has_topic_found_phone"));
-            Assert.IsTrue(deserialized.YarnVariables.ContainsKey("player_name"));
-            Assert.IsTrue(deserialized.YarnVariables.ContainsKey("trust_level"));
+            Assert.IsTrue(deserialized.YarnVariables.ContainsKey("$has_topic_found_phone"));
+            Assert.IsTrue(deserialized.YarnVariables.ContainsKey("$player_name"));
+            Assert.IsTrue(deserialized.YarnVariables.ContainsKey("$trust_level"));
         }
 
         [Test]
@@ -336,7 +334,7 @@ namespace ProjectFoundPhone.Tests
             Assert.IsNotNull(stringVal);
             Assert.IsNotNull(floatVal);
 
-            // JToken から値を取得できることを確認
+            // Values are deserialized as JToken; cast before assertion.
             if (boolVal is Newtonsoft.Json.Linq.JToken boolToken)
             {
                 Assert.AreEqual(true, boolToken.ToObject<bool>());
@@ -368,11 +366,11 @@ namespace ProjectFoundPhone.Tests
         [Test]
         public void CharacterProfile_IsValid_ReturnsTrueForValidProfile()
         {
-            CharacterProfile profile = CreateCharacterProfile("player", "あなた", Color.blue, true);
+            CharacterProfile profile = CreateCharacterProfile("player", "Player", Color.blue, true);
 
             Assert.IsTrue(profile.IsValid());
             Assert.AreEqual("player", profile.CharacterID);
-            Assert.AreEqual("あなた", profile.DisplayName);
+            Assert.AreEqual("Player", profile.DisplayName);
             Assert.IsTrue(profile.IsPlayer);
         }
 
@@ -411,7 +409,7 @@ namespace ProjectFoundPhone.Tests
             m_DatabaseObject = new GameObject("CharacterDatabase");
             m_Database = m_DatabaseObject.AddComponent<CharacterDatabase>();
 
-            // LoadPathを空文字にしてResourcesロードを無効化（テスト対象のプロファイルのみ使用）
+            // Force fallback path to avoid loading Resources in unit tests.
             SerializedObject so = new SerializedObject(m_Database);
             so.FindProperty("m_LoadPath").stringValue = "__test_nonexistent__";
             so.ApplyModifiedPropertiesWithoutUndo();
@@ -441,7 +439,7 @@ namespace ProjectFoundPhone.Tests
         {
             SetupCharacterDatabase();
 
-            // "player" という ID はプロファイルなしでもフォールバックで true を返す
+            // "player" 縺ｨ縺・≧ ID 縺ｯ繝励Ο繝輔ぃ繧､繝ｫ縺ｪ縺励〒繧ゅヵ繧ｩ繝ｼ繝ｫ繝舌ャ繧ｯ縺ｧ true 繧定ｿ斐☆
             Assert.IsTrue(m_Database.IsPlayer("player"));
             Assert.IsFalse(m_Database.IsPlayer("npc_001"));
 
@@ -456,7 +454,7 @@ namespace ProjectFoundPhone.Tests
             Color playerColor = m_Database.GetThemeColor("player");
             Color npcColor = m_Database.GetThemeColor("npc_001");
 
-            // デフォルトのフォールバックカラーが返る
+            // 繝・ヵ繧ｩ繝ｫ繝医・繝輔か繝ｼ繝ｫ繝舌ャ繧ｯ繧ｫ繝ｩ繝ｼ縺瑚ｿ斐ｋ
             Assert.AreEqual(new Color(0.2f, 0.6f, 1.0f), playerColor);
             Assert.AreEqual(new Color(0.85f, 0.85f, 0.85f), npcColor);
 
@@ -468,7 +466,7 @@ namespace ProjectFoundPhone.Tests
         {
             SetupCharacterDatabase();
 
-            // プロファイルが見つからない場合、IDがそのまま返る
+            // 繝励Ο繝輔ぃ繧､繝ｫ縺瑚ｦ九▽縺九ｉ縺ｪ縺・ｴ蜷医！D縺後◎縺ｮ縺ｾ縺ｾ霑斐ｋ
             Assert.AreEqual("unknown_char", m_Database.GetDisplayName("unknown_char"));
 
             TeardownCharacterDatabase();
@@ -476,3 +474,7 @@ namespace ProjectFoundPhone.Tests
         #endregion
     }
 }
+
+
+
+

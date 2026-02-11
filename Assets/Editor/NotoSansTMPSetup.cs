@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.TextCore.LowLevel;
 
 public static class NotoSansTMPSetup
 {
@@ -43,11 +44,11 @@ public static class NotoSansTMPSetup
             return;
         }
 
-        var fallbackFonts = settings.fallbackFontAssets ?? new List<TMP_FontAsset>();
+        var fallbackFonts = TMP_Settings.fallbackFontAssets ?? new List<TMP_FontAsset>();
         if (!fallbackFonts.Contains(fontAsset))
         {
             fallbackFonts.Add(fontAsset);
-            settings.fallbackFontAssets = fallbackFonts;
+            TMP_Settings.fallbackFontAssets = fallbackFonts;
             EditorUtility.SetDirty(settings);
         }
 

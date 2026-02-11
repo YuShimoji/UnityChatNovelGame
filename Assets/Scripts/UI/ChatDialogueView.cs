@@ -1,21 +1,18 @@
 #if YARN_SPINNER
 using Yarn.Unity;
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace ProjectFoundPhone.UI
 {
     /// <summary>
-    /// Yarn Spinner の DialogueViewBase を継承したチャット専用ダイアログビュー。
-    /// DialogueRunner の出力を ChatController と連携して表示する。
+    /// Yarn Spinner の DialoguePresenterBase を継承したチャチE��専用ダイアログビュー、E
+    /// DialogueRunner の出力を ChatController と連携して表示する、E
     /// </summary>
-    public class ChatDialogueView : DialogueViewBase
+    public class ChatDialogueView : DialoguePresenterBase
     {
-        private Coroutine m_WaitCoroutine;
-        private bool m_IsWaitingForChoice = false;
-        private System.Action<int> m_OnOptionSelected;
-        private int[] m_CurrentOptionIDs;
+        [SerializeField] private float m_LineDisplayDelay = 0.5f;
+
         private DialogueRunner m_DialogueRunner;
 
         private void Awake()
@@ -23,12 +20,7 @@ namespace ProjectFoundPhone.UI
             m_DialogueRunner = GetComponent<DialogueRunner>();
         }
 
-        /// <summary>
-        /// テキスト行を表示する。
-        /// </summary>
-        /// <param name="dialogueLine">表示する行データ</param>
-        /// <param name="onDialogueLineFinished">表示終了時のコールバック</param>
-        public override void RunLine(LocalizedLine dialogueLine, System.Action onDialogueLineFinished)
+        public override async YarnTask RunLineAsync(LocalizedLine dialogueLine, LineCancellationToken token)
         {
             ChatController chatController = FindFirstObjectByType<ChatController>();
             string lineText = dialogueLine?.TextWithoutCharacterName.Text ?? string.Empty;
@@ -53,87 +45,82 @@ namespace ProjectFoundPhone.UI
                 Debug.LogWarning($"ChatDialogueView: ChatController not found. Line: {lineText}");
             }
 
-            onDialogueLineFinished?.Invoke();
+            // チャチE��らしぁE��ンポ�Eための遁E��
+            await YarnTask.Delay((int)(m_LineDisplayDelay * 1000), token.NextContentToken).SuppressCancellationThrow();
         }
 
         /// <summary>
-        /// 選択肢を表示し、選択が行われるまで待機する。
+        /// 選択肢を表示し、E��択が行われるまで征E��する、E
         /// </summary>
-        /// <param name="dialogueOptions">選択肢一覧</param>
-        /// <param name="onOptionSelected">選択時のコールバック (DialogueOptionID)</param>
-        public override void RunOptions(DialogueOption[] dialogueOptions, System.Action<int> onOptionSelected)
+        public override async YarnTask<DialogueOption?> RunOptionsAsync(DialogueOption[] dialogueOptions, LineCancellationToken cancellationToken)
         {
             ChatController chatController = FindFirstObjectByType<ChatController>();
             if (chatController != null)
             {
                 List<string> choiceTexts = new List<string>();
-                m_CurrentOptionIDs = new int[dialogueOptions.Length];
                 for (int i = 0; i < dialogueOptions.Length; i++)
                 {
                     choiceTexts.Add(dialogueOptions[i].Line.TextWithoutCharacterName.Text);
-                    m_CurrentOptionIDs[i] = dialogueOptions[i].DialogueOptionID;
                 }
 
-                m_OnOptionSelected = onOptionSelected;
-                m_IsWaitingForChoice = true;
+                DialogueOption selectedOption = null;
+                bool choiceMade = false;
 
-                chatController.ShowChoices(choiceTexts, OnChoiceSelected);
-                m_WaitCoroutine = StartCoroutine(WaitForChoice());
+                chatController.ShowChoices(choiceTexts, (index) =>
+                {
+                    if (index >= 0 && index < dialogueOptions.Length)
+                    {
+                        selectedOption = dialogueOptions[index];
+                    }
+                    choiceMade = true;
+                });
+
+                // 選択征E��
+                while (!choiceMade)
+                {
+                    if (cancellationToken.IsNextContentRequested)
+                    {
+                        chatController.HideChoices();
+                        return null;
+                    }
+                    await YarnTask.Yield();
+                }
+
+                return selectedOption;
             }
             else
             {
                 Debug.LogWarning("ChatDialogueView: ChatController not found. Selecting default option.");
-                onOptionSelected?.Invoke(dialogueOptions.Length > 0 ? dialogueOptions[0].DialogueOptionID : 0);
+                return dialogueOptions.Length > 0 ? dialogueOptions[0] : null;
             }
         }
 
         /// <summary>
-        /// 選択肢が選択された時の処理。
+        /// ダイアログ開始時の処琁E��E
         /// </summary>
-        /// <param name="index">選択された選択肢インデックス</param>
-        private void OnChoiceSelected(int index)
+        public override YarnTask OnDialogueStartedAsync()
         {
-            m_IsWaitingForChoice = false;
+            return YarnTask.CompletedTask;
+        }
 
-            if (m_WaitCoroutine != null)
+        /// <summary>
+        /// ダイアログ完亁E��の処琁E��E
+        /// </summary>
+        public override YarnTask OnDialogueCompleteAsync()
+        {
+            return YarnTask.CompletedTask;
+        }
+
+        public override void OnNodeEnter(string nodeName)
+        {
+            if (m_DialogueRunner != null && m_DialogueRunner.VariableStorage != null)
             {
-                StopCoroutine(m_WaitCoroutine);
-                m_WaitCoroutine = null;
+                m_DialogueRunner.VariableStorage.SetValue("$current_node", nodeName);
             }
-
-            int selectedOptionID = index;
-            if (m_CurrentOptionIDs != null && index >= 0 && index < m_CurrentOptionIDs.Length)
-            {
-                selectedOptionID = m_CurrentOptionIDs[index];
-            }
-
-            m_OnOptionSelected?.Invoke(selectedOptionID);
-        }
-
-        /// <summary>
-        /// 選択肢選択を待機するコルーチン。
-        /// </summary>
-        private IEnumerator WaitForChoice()
-        {
-            while (m_IsWaitingForChoice)
-            {
-                yield return null;
-            }
-        }
-
-        /// <summary>
-        /// ダイアログ開始時の処理。
-        /// </summary>
-        public override void DialogueStarted()
-        {
-        }
-
-        /// <summary>
-        /// ダイアログ完了時の処理。
-        /// </summary>
-        public override void DialogueComplete()
-        {
         }
     }
 }
 #endif
+
+
+

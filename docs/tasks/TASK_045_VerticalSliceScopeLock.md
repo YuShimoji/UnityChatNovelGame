@@ -1,11 +1,12 @@
 # Task: Vertical Slice Scope Lock
 
-Status: OPEN
+Status: DONE
 Tier: 1 (Planning)
 Branch: main
 Owner: Worker
 Created: 2026-02-11
 Updated: 2026-02-11
+Completed: 2026-02-11
 Report: docs/reports/REPORT_TASK_045_VerticalSliceScopeLock.md
 
 ## Objective

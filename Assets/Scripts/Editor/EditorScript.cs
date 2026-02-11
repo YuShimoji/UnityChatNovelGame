@@ -1,4 +1,4 @@
-﻿#if YARN_SPINNER
+#if YARN_SPINNER
 using System;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -19,9 +19,16 @@ public class EditorScript
         var runner = UnityEngine.Object.FindFirstObjectByType<DialogueRunner>();
         if (runner != null)
         {
-            int oldLength = runner.dialogueViews != null ? runner.dialogueViews.Length : 0;
-            Array.Resize(ref runner.dialogueViews, oldLength + 1);
-            runner.dialogueViews[oldLength] = view;
+            SerializedObject so = new SerializedObject(runner);
+            so.Update();
+            SerializedProperty presenters = so.FindProperty("dialoguePresenters");
+            if (presenters != null)
+            {
+                int index = presenters.arraySize;
+                presenters.arraySize = index + 1;
+                presenters.GetArrayElementAtIndex(index).objectReferenceValue = view;
+            }
+            so.ApplyModifiedProperties();
         }
 
         EditorSceneManager.SaveScene(scene);

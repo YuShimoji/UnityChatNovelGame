@@ -18,6 +18,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "dev.yarnspinner.unity",
+            "expression": "",
+            "define": "YARN_SPINNER"
+        }
+    ],
     "noEngineReferences": false
 }
