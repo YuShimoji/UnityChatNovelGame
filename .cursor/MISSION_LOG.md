@@ -7,13 +7,60 @@ KICKSTART_2026-01-15T13:26:07+09:00
 2026-01-15T13:26:07+09:00
 
 ## 現在のフェーズ
-Phase 1: Sync
+Phase 5: Worker Activation
 
 ## ステータス
-TASK_ORGANIZATION_COMPLETED
+TICKET_BOOTSTRAP_COMPLETED
 
 ## 進捗記録
 
+### Phase 4: チケット発行 (2026-02-11 00:20)
+- [x] Vertical Slice開始用チケットを起票:
+  - TASK_045_VerticalSliceScopeLock
+  - TASK_046_ChatDialogueView_VerticalSlice
+  - TASK_047_VerticalSliceSmokeGate
+- [x] 各チケットに Milestone / Test Plan / DoD / Stop Conditions を記載
+- [x] 次フェーズを Phase 5（Worker起動）へ設定
+
+### Phase 3: 分割と戦略（収束）(2026-02-11 00:15)
+- [x] Tier分類:
+  - TASK_045: Tier 1（Planning）
+  - TASK_046: Tier 2（Feature）
+  - TASK_047: Tier 2（Verification）
+- [x] Worker分割戦略: 直列実行（045 -> 046 -> 047）
+- [x] テスト戦略を確定（ドキュメントレビュー / EditMode / PlayMode / ビルド）
+- [x] リスク軽減策を定義（スコープ膨張抑止、導線破綻検知優先）
+
+### Phase 2.5: 発散思考 (2026-02-11 00:10)
+- [x] 3案比較を実施:
+  - A: テスト網羅先行
+  - B: 縦切り先行 + 最小スモーク
+  - C: 演出先行
+- [x] 推奨アプローチを B に決定（最短で動く導線を確保し、回帰検知を維持できるため）
+- [x] Devil's Advocate:
+  - リスク: テスト不足による見逃し
+  - 軽減策: TASK_047でスモークゲートを先行整備
+
+### Phase 2: 状況把握 (2026-02-11 00:05)
+- [x] HANDOVER から現状を抽出（旧方針由来の記述が多いことを確認）
+- [x] OPEN/IN_PROGRESS を確認
+- [x] node .shared-workflows/scripts/todo-sync.js 実行
+- [x] マイルストーン SSOT を新規整備: docs/MILESTONE_PLAN.md
+- [x] 目標アライメント:
+  - 短期: SG-1（Phase 0-2 Ticket Bootstrap）
+  - 中期: MG-1（Vertical Slice Completion）
+  - 長期: LG-1（Production Readiness）
+
+### Phase 1.5: 巡回監査 (2026-02-11 00:00)
+- [x] docs/tasks/, docs/inbox/, docs/HANDOVER.md を横断確認
+- [x] 監査結果: 旧タスク群に方針ズレがあるため、新方針タスクを別IDで起票する方針に決定
+- [x] Worker委譲方針: 旧タスクの再分析は行わず、縦切り導線タスクを優先
+
+### Phase 1: Sync & Merge (2026-02-10 23:55)
+- [x] git fetch origin 実行
+- [x] git status -sb 確認
+- [x] docs/inbox/ は .gitkeep のみ（新規統合対象なし）
+- [x] Sync 完了
 ### Phase 3: 分割と戦略 (2026-01-30 23:25)
 - [x] タスク分類完了:
   - TASK_022: Tier 2 (Performance Baseline) - 機能実装
@@ -916,5 +963,6 @@ TASK_ORGANIZATION_COMPLETED
 - [x] Deleted ProjectFoundPhone.Runtime.asmdef
 - [x] Removed ghost .meta files (Core, UI, Data, Effects)
 - [x] Verification: File System Clean
-- [x] Phase 6 ����
+- [x] Phase 6 ����
+
 
