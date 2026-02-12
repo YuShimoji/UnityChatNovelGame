@@ -18,3 +18,6 @@
 - Play Mode起動からENDまで到達
 - Console Error 0
 - クリック連打でも進行が破綻しない
+
+## Reference
+- 詳細ルール/チェックリストは `docs/AI_CONTEXT_MVP.md` を参照

@@ -10,6 +10,7 @@ public static class NotoSansTMPSetup
     private const string VariableFontPath = "Assets/Font/NotoSansJP-VariableFont_wght.ttf";
     private const string OutputFontAssetPath = "Assets/Font/NotoSansJP-Regular SDF.asset";
     private const string TmpSettingsPath = "Assets/TextMesh Pro/Resources/TMP Settings.asset";
+    private const string SeedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789あいうえおアイウエオ漢字仮名々（）「」『』、。！？ー・";
 
     [MenuItem("Tools/Font/Setup Noto Sans JP TMP")]
     public static void SetupNotoSansJpTmp()
@@ -22,8 +23,18 @@ public static class NotoSansTMPSetup
         }
 
         var fontAsset = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(OutputFontAssetPath);
-        if (fontAsset == null)
+        var needsRebuild = fontAsset == null
+                           || fontAsset.material == null
+                           || fontAsset.atlasTextures == null
+                           || fontAsset.atlasTextures.Length == 0
+                           || fontAsset.atlasTextures[0] == null;
+        if (needsRebuild)
         {
+            if (fontAsset != null)
+            {
+                AssetDatabase.DeleteAsset(OutputFontAssetPath);
+            }
+
             fontAsset = TMP_FontAsset.CreateFontAsset(
                 font,
                 90,
@@ -34,7 +45,28 @@ public static class NotoSansTMPSetup
                 AtlasPopulationMode.Dynamic
             );
             fontAsset.name = "NotoSansJP-Regular SDF";
+            fontAsset.atlasPopulationMode = AtlasPopulationMode.Dynamic;
             AssetDatabase.CreateAsset(fontAsset, OutputFontAssetPath);
+
+            fontAsset.TryAddCharacters(SeedCharacters);
+
+            if (fontAsset.material != null)
+            {
+                AssetDatabase.AddObjectToAsset(fontAsset.material, fontAsset);
+            }
+
+            if (fontAsset.atlasTextures != null)
+            {
+                foreach (var atlasTexture in fontAsset.atlasTextures)
+                {
+                    if (atlasTexture != null)
+                    {
+                        AssetDatabase.AddObjectToAsset(atlasTexture, fontAsset);
+                    }
+                }
+            }
+
+            EditorUtility.SetDirty(fontAsset);
         }
 
         var settings = AssetDatabase.LoadAssetAtPath<TMP_Settings>(TmpSettingsPath);
@@ -44,7 +76,10 @@ public static class NotoSansTMPSetup
             return;
         }
 
+        TMP_Settings.defaultFontAsset = fontAsset;
+
         var fallbackFonts = TMP_Settings.fallbackFontAssets ?? new List<TMP_FontAsset>();
+        fallbackFonts.RemoveAll(item => item == null);
         if (!fallbackFonts.Contains(fontAsset))
         {
             fallbackFonts.Add(fontAsset);

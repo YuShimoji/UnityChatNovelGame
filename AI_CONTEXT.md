@@ -1,89 +1,129 @@
-﻿# AI Context
+﻿## 現在のミッション
 
-## Update (2026-02-11)
+- **タイトル**: Phase 2 準備 — テストカバレッジ拡充 & Yarn Spinner連携
+- **Issue**: なし（クリーンアップ後、Phase 2着手準備）
+- **ブランチ**: main
+- **関連PR**: なし
+- **進捗**: Core System実装完了。クリーンアップ実施中（asmdef修正、重複解消、ドキュメント同期）。
 
-- TASK_046: ChatDialogueView/ScenarioManager integration updated (StartWait cancel + SkipWait, $current_node, $has_topic_*).
-- TASK_047: Vertical Slice Smoke Gate implementation added (PlayMode Smoke + Manual Checklist), test result artifacts still pending.
+## 次の中断可能点
 
-## 現在のミッション
+- クリーンアップ完了後（Phase 1テスト拡充着手前）
 
-- **繧ｿ繧､繝医Ν**: Vertical Slice蜆ｪ蜈・窶・繝√Ε繝・ヨ繝弱・繝ｫ繧ｲ繝ｼ繝繧ｨ繝ｳ繧ｸ繝ｳ蝓ｺ逶､縺ｮ遒ｺ螳・- **Issue**: 縺ｪ縺・- **繝悶Λ繝ｳ繝・*: main
-- **髢｢騾｣PR**: 縺ｪ縺・- **騾ｲ謐・*: Phase 0・医せ繧ｳ繝ｼ繝怜崋螳夲ｼ牙ｮ御ｺ・１hase 1・域怙蟆冗ｸｦ蛻・ｊ螳溯｣・ｼ臥捩謇句庄閭ｽ縲・
+## 決定事項
 
-## 谺｡縺ｮ荳ｭ譁ｭ蜿ｯ閭ｽ轤ｹ
+- `.shared-workflows` をサブモジュールとして導入
+- `docs/inbox/` と `docs/tasks/` を Git 管理対象として作成
 
-- TASK_047 縺ｮ PlayMode/Build 螳溯｡檎ｵ先棡縺ｮ險倬鹸蠕・■
+## リスク/懸念
 
-## 豎ｺ螳壻ｺ矩�・
+- ~~既存の `docs/` ディレクトリ（大文字）と `docs/` ディレクトリ（小文字）が混在していてる可能性~~ → 物理的には統一済み（Windows大文字小文字非区別）、パス参照も2026-02-06に統一完了
+- ~~**SaveData.YarnVariables の Dictionary<string, object> が JsonUtility でシリアライズ不可**~~ → Newtonsoft.Json に切替済み
+- ~~**Yarn Spinner がGitHub直参照（バージョン固定なし）**~~ → コミットハッシュ `#a94063e96004` (v3.1.3) で固定済み
+- **シナリオシステムの二重構造**（Yarn Spinner方式 + ScriptableObject方式）— 方針明確化が必要
 
-- **SSOT縺ｯ `docs/GAME_DESIGN_DOCUMENT.md`**縲Ａdocs/CONCEPT.md` 縺ｯ陬懷勧繝｡繝｢謇ｱ縺・・- 譌ｧ莉墓ｧ倥・ `docs/specs/_ARCHIVED_*.md` 縺ｫ繧｢繝ｼ繧ｫ繧､繝悶・- 繝励Ο繧ｸ繧ｧ繧ｯ繝域婿驥昴・ **繝√Ε繝・ヨ繝弱・繝ｫ繧ｲ繝ｼ繝�繧ｨ繝ｳ繧ｸ繝ｳ縺ｮ繧ｳ繧｢讖溯・蜆ｪ蜈・*縲・- 迚ｩ隱槭・謇倶ｽ懊ｊ蜑肴署・郁・蜍慕函謌舌↑縺暦ｼ峨・- 縲後Γ繧ｿ繝帙Λ繝ｼ縲阪熊oundPhone縲阪・繝・・繝槭→縺励※蛻・屬蜿ｯ閭ｽ縺ｫ縺吶ｋ縲・- 謗｢邏｢繧ｹ繝ｬ繝・ラ縺ｮ蛟呵｣懊Μ繧ｽ繝ｼ繧ｹ縺ｯ **譛ｪ螳夲ｼ・BD・・*縲ゅヰ繝・ユ繝ｪ繝ｼ邂｡逅・・蠖馴擇髯､螟悶∝ｾ後°繧牙ｾｩ蟶ｰ蜿ｯ閭ｽ縺ｪ險ｭ險医↓縺吶ｋ縲・- 繝・せ繝域婿驥昴ｒ螟画峩: 蜈ｨ髱｢繧ｫ繝舌Ξ繝・ず諡｡蜈・ｈ繧翫√∪縺壹・ **邵ｦ蛻・ｊ螳溯｣・+ 繧ｹ繝｢繝ｼ繧ｯ讀懆ｨｼ** 繧貞━蜈医・- **Vertical Slice 繧ｹ繧ｳ繝ｼ繝励Ο繝・け遒ｺ螳夲ｼ・026-02-11・・*: 隧ｳ邏ｰ縺ｯ `docs/PROJECT_ROADMAP.md` ﾂｧ2 繧貞盾辣ｧ縲・  - In-Scope: S-01縲彜-18・医ち繧､繝医Ν竊偵メ繝｣繝・ヨ竊貞・蟯絶・蠕・ｩ溪・繧ｻ繝ｼ繝・繝ｭ繝ｼ繝牙ｰ守ｷ・+ 繧ｹ繝｢繝ｼ繧ｯ讀懆ｨｼ + 繝・・繝槫・髮｢荳区ｺ門ｙ・・  - Out-of-Scope: X-01縲弭-18・域爾邏｢繝ｪ繧ｽ繝ｼ繧ｹ縲√Α繝九ご繝ｼ繝�縲∝粋謌舌・㍾貍泌・縲・｣邨｡蜈医Μ繧ｹ繝育ｭ会ｼ・  - 蛻､譁ｭ繝輔Ο繝ｼ: 蟆守ｷ壻ｸ翫↓縺ゅｋ縺・竊・蝗槫ｸｰ讀懃衍縺ｫ蠢・ｦ√° 竊・繝・・繝槫・髮｢荳区ｺ門ｙ縺・竊・縺・★繧後ｂNo縺ｪ繧臼hase 4+
+## Backlog（将来提案）
 
-## 繝ｪ繧ｹ繧ｯ/諛ｸ蠢ｵ
+- [x] プロジェクト構造の整理（docs と docs の統合検討）→ TASK_026完了（参照パス196ファイル更新）
+- [x] CharacterProfile ScriptableObject 導入 → Sprint S1/S2で実装済み、CharacterProfileCreator Editor ツール追加済み
+- [ ] ChatDialogueView (DialogueViewBase継承) の正式実装
+- [ ] 連絡先リスト（Contact List）機能
+- [ ] Addressables 移行（Resources.Load 脱却）
 
-- 譌｢蟄倥さ繝ｼ繝・繧ｿ繧ｹ繧ｯ蜷阪↓譌ｧ譁ｹ驥晢ｼ域耳隲也ｳｻ繝ｻ邯ｲ鄒・ユ繧ｹ繝亥━蜈茨ｼ峨・逞戊ｷ｡縺梧ｮ九▲縺ｦ縺・ｋ縲・- 螳溯｣・ｸ医∩讖溯・縺ｮ荳驛ｨ縺後∫樟陦後・Vertical Slice蜆ｪ蜈亥ｺｦ縺ｨ荳閾ｴ縺励↑縺・庄閭ｽ諤ｧ縺後≠繧九・- 繝・せ繝郁ｳ・肇縺ｮ荳驛ｨ縺ｯ萓｡蛟､繧堤ｶｭ謖√☆繧九′縲∝━蜈磯�・ｽ阪・蜀崎ｩ穂ｾ｡縺悟ｿ・ｦ√・
+## タスク管理（短期/中期/長期）
 
-## Backlog・亥ｰ・擂謠先｡茨ｼ・
+### 短期（Next）
 
-- [ ] 繝・・繝槫・髮｢繧貞燕謠舌→縺励◆貍泌・繝励Ο繝輔ぃ繧､繝ｫ險ｭ險茨ｼ・oundPhone / Meta Horror・・- [ ] ChatDialogueView (DialogueViewBase邯呎価) 縺ｮ豁｣蠑丞ｮ溯｣・- [ ] 騾｣邨｡蜈医Μ繧ｹ繝茨ｼ・ontact List・画ｩ溯・
-- [ ] Addressables 遘ｻ陦鯉ｼ・esources.Load 閼ｱ蜊ｴ・・
+- [pending] Save System UI Implementation (ref: docs/tasks/TASK_041_SaveSystemUI.md, Status: COMPLETED)
 
-## 繧ｿ繧ｹ繧ｯ邂｡逅・ｼ育洒譛・荳ｭ譛・髟ｷ譛滂ｼ・
->
-> **隧ｳ邏ｰ繝ｭ繝ｼ繝峨・繝・・**: `docs/PROJECT_ROADMAP.md` 繧貞盾辣ｧ・・026-02-10譁ｹ驥晏酔譛滓ｸ医∩・・
->
-### Worker螳御ｺ・せ繝・・繧ｿ繧ｹ・亥ｱ･豁ｴ・・
+
+> **詳細ロードマップ**: `docs/PROJECT_ROADMAP.md` を参照（2026-02-07作成）
+
+### Worker完了ステータス
 
 - TASK_022: DONE (Performance Baseline - Report Generated)
 - TASK_023: COMPLETED (Verification Gap - Evidence Confirmed)
 - TASK_024: COMPLETED (Fix Performance Compilation - Hotfix Done)
-- TASK_025: IN_PROGRESS (GC Alloc Reduction - After險域ｸｬ蠕・■)
+- TASK_025: IN_PROGRESS (GC Alloc Reduction - Code Done, After計測待ち)
 - TASK_026: COMPLETED (Project Structure Cleanup)
-- TASK_027: IN_PROGRESS (Full Playthrough Test - 謇句虚繝・せ繝亥ｾ・■)
+- TASK_027: IN_PROGRESS (Full Playthrough Test - 手動テスト待ち)
 - TASK_028: COMPLETED (Save System)
 - TASK_031: DONE (Compile Error Fix)
-- TASK_040: DONE (Synthesis Recipes菴懈・)
+- TASK_040: DONE (Synthesis Recipes作成)
 - TASK_041: DONE (Save System UI)
-- TASK_043: DONE (Title Screen螳溯｣・
+- TASK_043: DONE (Title Screen実装)
 
-### 遏ｭ譛滂ｼ・ext: 1-2騾ｱ髢難ｼ俄・Vertical Slice遒ｺ遶・
+### 短期（Next: 1-2週間）— 品質基盤の確立
 
-- [done] Vertical Slice遽・峇縺ｮ遒ｺ螳夲ｼ・ASK_045螳御ｺ・窶・繧ｹ繧ｳ繝ｼ繝励Ο繝・け遒ｺ螳夲ｼ・- [pending] ChatDialogueView 螳溯｣・ｼ・arn豁｣蠑城｣謳ｺ・・- [pending] 繝√Ε繝・ヨ繧ｳ繧｢UX縺ｮ遒ｺ螳夲ｼ郁・蜍輔せ繧ｯ繝ｭ繝ｼ繝ｫ/蜈･蜉帙Ο繝・け/繧ｷ繧ｹ繝・Β繝｡繝・そ繝ｼ繧ｸ・・- [pending] 繧ｵ繝ｳ繝励Ν繧ｹ繝医・繝ｪ繝ｼ譛蟆乗ｧ区・縺ｮ謨ｴ蛯呻ｼ域ｩ溯・讀懆ｨｼ逕ｨ・・- [in_progress] 繧ｹ繝｢繝ｼ繧ｯ繝・せ繝域紛蛯呻ｼ・ASK_047: PlayMode繧ｹ繝｢繝ｼ繧ｯ+謇句虚繝√ぉ繝・け謨ｴ蛯吶∝ｮ溯｡悟ｾ・■・・- [done] 莉墓ｧ俶嶌邨ｱ蜷茨ｼ・SOT遒ｺ遶九√い繝ｼ繧ｫ繧､繝匁紛逅・ｼ・
+- [in_progress] GC Alloc Reduction After計測 (TASK_025)
+- [in_progress] Full Playthrough Test 手動実行 (TASK_027)
+- [done] **SaveData シリアライズ修正** — Newtonsoft.Json に切替済み
+- [done] **CharacterProfile SO 基盤** — CharacterProfileCreator.cs で Editor メニューから生成可能
+- [pending] テストカバレッジ拡充 — ChatController / ScenarioManager / DeductionBoard (各3ケース+)
+- [pending] ImageCommand 実装完了 — 画像バブルPrefab + 実Sprite表示
+- [pending] ChatDialogueView 実装 — DialogueViewBase 継承、Yarn Spinner正式連携
+- [pending] system_message コマンド / StartWait進行制御修正
 
-### 荳ｭ譛滂ｼ・ater: 2-6騾ｱ髢難ｼ俄・讖溯・諡｡蠑ｵ縺ｨ蜿ｯ螟牙喧
+### 中期（Later: 2-6週間）— 機能拡充 & コンテンツ制作準備
 
-- [ ] 繝・・繝槫・髮｢蜿ｯ閭ｽ縺ｪ貍泌・繝ｬ繧､繝､繝ｼ讒区・
-- [ ] 謗｢邏｢繧ｹ繝ｬ繝・ラ縺ｮ繝ｪ繧ｽ繝ｼ繧ｹ險ｭ險茨ｼ・BD鬆・岼縺ｮ繝悶Ξ繧ｹ繝遺・遒ｺ螳夲ｼ・- [ ] SaveLoadUI 繝薙ず繝･繧｢繝ｫ繝・じ繧､繝ｳ
-- [ ] Options 繝代ロ繝ｫ螳溯｣・ｼ磯浹驥上√ユ繧ｭ繧ｹ繝磯溷ｺｦ・・- [ ] Safe Area / 繧ｭ繝ｼ繝懊・繝牙ｯｾ蠢懊・莉穂ｸ翫￡
-- [ ] 騾｣邨｡蜈医Μ繧ｹ繝・+ add_contact / ChangeStatus 繧ｳ繝槭Φ繝・- [ ] 繧ｪ繝ｼ繝医そ繝ｼ繝匁ｩ溯・・・nApplicationPause + 驥崎ｦ√・繧､繝ｳ繝茨ｼ・- [ ] Yarn 繧ｹ繧ｯ繝ｪ繝励ヨ繝・Φ繝励Ξ繝ｼ繝・/ 繧ｳ繝ｳ繝・Φ繝・宛菴懊ヱ繧､繝励Λ繧､繝ｳ
+- [ ] MessageBubble オブジェクトプーリング
+- [ ] CharacterProfile ベースのバブルカラーリング
+- [ ] メッセージアニメーション強化（Scale + Slide + Fade）
+- [ ] SaveLoadUI ビジュアルデザイン
+- [ ] Options パネル実装（音量、テキスト速度）
+- [ ] Safe Area / キーボード対応
+- [ ] 連絡先リスト（Contact List）+ add_contact / ChangeStatus コマンド
+- [ ] オートセーブ機能（OnApplicationPause + 重要ポイント）
+- [ ] Yarn スクリプトテンプレート / コンテンツ制作パイプライン
+- [ ] CharacterProfile / Topic / Recipe の本番マスターデータ設計
 
-### 髟ｷ譛滂ｼ・omeday: 2-6繝ｶ譛茨ｼ俄・繝励Ο繝繧ｯ繧ｷ繝ｧ繝ｳ
+### 長期（Someday: 2-6ヶ月）— プロダクション & リリース
 
-- [ ] 繝｡繧､繝ｳ繧ｹ繝医・繝ｪ繝ｼ蛻ｶ菴懶ｼ・-5繝√Ε繝励ち繝ｼ・・- [ ] 繧ｭ繝｣繝ｩ繧ｯ繧ｿ繝ｼ繧｢繝ｼ繝・/ SE / BGM
-- [ ] Addressables 遘ｻ陦・- [ ] 繧ｻ繝ｼ繝悶ョ繝ｼ繧ｿ證怜捷蛹・/ 繧ｯ繝ｩ繧ｦ繝峨そ繝ｼ繝・- [ ] CI/CD 繝代う繝励Λ繧､繝ｳ
-- [ ] 繝ｭ繝ｼ繧ｫ繝ｩ繧､繧ｺ蝓ｺ逶､・域律譛ｬ隱・闍ｱ隱橸ｼ・- [ ] QA / 繧ｹ繝医い逕ｳ隲区ｺ門ｙ
+- [ ] メインストーリー制作（3-5チャプター）
+- [ ] キャラクターアート / SE / BGM
+- [ ] Addressables 移行
+- [ ] セーブデータ暗号化 / クラウドセーブ
+- [ ] CI/CD パイプライン
+- [ ] ローカライズ基盤（日本語/英語）
+- [ ] QA / ストア申請準備
 
-## 繝峨く繝･繝｡繝ｳ繝域ｧ区・
+## 備考（自由記述）
 
-- **`docs/GAME_DESIGN_DOCUMENT.md`** 窶・豁｣隕丈ｻ墓ｧ俶嶌・・SOT・・- **`docs/CONCEPT.md`** 窶・陬懷勧繝｡繝｢・・DD隕∫ｴ・ｼ・- **`docs/specs/`** 窶・譌ｧ莉墓ｧ倥Γ繝｢・医い繝ｼ繧ｫ繧､繝厄ｼ・- **`docs/PROJECT_ROADMAP.md`** 窶・螳溯｣・Ο繝ｼ繝峨・繝・・
-- **`docs/HANDOVER.md`** 窶・蠑輔″邯吶℃逕ｨ繧ｹ繝・・繧ｿ繧ｹ
-- **`docs/tasks/`** 窶・蛟句挨繧ｿ繧ｹ繧ｯ螳夂ｾｩ
-- **`docs/reports/`** 窶・繧ｿ繧ｹ繧ｯ螳御ｺ・Ξ繝昴・繝・
+- Unity プロジェクト（ChatNovelGame）のコアシステム実装完了
+- 主要クラス: TopicData, SynthesisRecipe, ChatController, ScenarioManager, SaveManager, DeductionBoard, MetaEffectController, TitleScreenManager, **CharacterProfile**, **CharacterDatabase**
+- SOLID原則に基づいた設計で拡張性を確保
+- Save System（3スロット対応）実装完了
+- Synthesis Recipes・Title Screen実装完了
+- 2026-02-06: プロジェクトクリーンアップ実施（asmdef修正、GlitchEffect重複解消、ドキュメント同期）
+- 2026-02-07: Sprint S1/S2 実施—下記完了:
+  - SaveDataシリアライズをNewtonsoft.Jsonに切替（Dictionary<string,object>対応）
+  - CoreLogicTests.cs 作成（18テストケース: TopicData/SynthesisRecipe/DeductionBoard/SaveData）
+  - CharacterProfile SO + CharacterDatabase 作成、ChatController統合（テーマカラー適用）
+  - ImageCommand実装完了（AddImageMessage + Sprite実表示）
+  - SystemMessageコマンド実装（中央揃えグレーテキスト）
+  - StartWaitをCoroutineベースブロッキングに修正
+  - TopicData/SynthesisRecipeのOnValidate実装
 
-## 蛯呵・ｼ郁・逕ｱ險倩ｿｰ・・
+## 運用ルール (Non-Negotiable)
 
-- Unity繝励Ο繧ｸ繧ｧ繧ｯ繝医・繧ｳ繧｢螳溯｣・・騾ｲ陦梧ｸ医∩縺�縺後∝━蜈磯�・ｽ阪ｒ蜀咲ｷｨ荳ｭ縲・- 荳ｻ隕√け繝ｩ繧ｹ・育樟迥ｶ・・ TopicData, SynthesisRecipe, ChatController, ScenarioManager, SaveManager, MetaEffectController, TitleScreenManager, CharacterProfile, CharacterDatabase
-- 縺薙ｌ縺ｾ縺ｧ縺ｮ繝・せ繝域紛蛯吶・雉・肇縺ｨ縺励※邯ｭ謖√＠縺､縺､縲∝ｽ馴擇縺ｯ邵ｦ蛻・ｊ騾ｲ陦後・讀懆ｨｼ繧貞・陦後☆繧九・
-
-## 驕狗畑繝ｫ繝ｼ繝ｫ (Non-Negotiable)
-
-- **繧ｹ繧ｯ繝ｪ繝ｼ繝ｳ繧ｷ繝ｧ繝・ヨ蝣ｱ蜻顔ｾｩ蜍・*: UI/Visual螟画峩繧貞性繧繧ｿ繧ｹ繧ｯ螳御ｺ・凾縺ｯ `docs/evidence/` 縺ｫ險ｼ霍｡繧剃ｿ晏ｭ倥☆繧九・  - Evidence縺ｪ縺怜ｮ御ｺ・�ｱ蜻翫・蜴溷援縲梧悴螳御ｺ・肴桶縺・ゅ◆縺�縺励ヶ繝ｭ繝・き繝ｼ譎ゅ・騾溷ｺｦ蜆ｪ蜈医〒騾ｲ繧√！ssue/Task縺ｫ `Evidence Missing` 繧呈・險倥・
+- **スクリーンショット報告義務**: UI/Visual な変更を含むタスク完了時は、必ず `docs/evidence/` にスクリーンショット（または動画）を保存し、レポートに添付すること。
+  - Evidence なき完了報告は原則「未完了」とみなすが、ブロッカーになる場合は「速度優先」で進行してよい（その場合は Issue/Task に Evidence Missing と明記すること）。
 
 ## Worker Status
 
 - Active Workers: None
 
-## 螻･豁ｴ
+## 履歴
 
-- 2026-01-06 06:45: AI_CONTEXT.md 繧貞・譛溷喧
-- 2026-01-06 08:10: TASK_001螳御ｺ・ｼ・nity Core System Skeleton螳溯｣・ｼ・- 2026-01-06 08:20: TASK_002襍ｷ逾ｨ螳御ｺ・ｼ医Ο繧ｸ繝・け螳溯｣・ち繧ｹ繧ｯ・・- 2026-01-06 09:00: TASK_002螳御ｺ・ｼ医Ο繧ｸ繝・け螳溯｣・ｮ御ｺ・ｼ・- 2026-02-02 13:00: TASK_031螳御ｺ・ｼ医さ繝ｳ繝代う繝ｫ繧ｨ繝ｩ繝ｼ菫ｮ豁｣・・- 2026-02-02 18:41: TASK_026/027/028/040/041/043 繧ｹ繝・・繧ｿ繧ｹ譖ｴ譁ｰ
-- 2026-02-06 13:50: 繝励Ο繧ｸ繧ｧ繧ｯ繝医け繝ｪ繝ｼ繝ｳ繧｢繝・・・・smdef菫ｮ豁｣縲；litchEffect驥崎､・ｧ｣豸医、I_CONTEXT蜷梧悄・・- 2026-02-07 14:56: PROJECT_ROADMAP.md 菴懈・・育洒譛・荳ｭ譛・髟ｷ譛溘・繝ｩ繝ｳ遲門ｮ壹∬ｪｲ鬘梧ｴ励＞蜃ｺ縺暦ｼ・- 2026-02-07 20:35: Sprint S1/S2 螳溯｣・ｮ御ｺ・ｼ・aveData, CoreLogicTests, CharacterProfile, SystemMessage, StartWait遲会ｼ・- 2026-02-08: 繝励Ο繧ｸ繧ｧ繧ｯ繝育ｷ冗せ讀懷ｮ滓命・・5隱ｲ鬘瑚ｭ伜挨・・- 2026-02-09: Phase A 繝悶Ο繝・き繝ｼ隗｣豸茨ｼ・Q-04/05/06/10, AS-01・・- 2026-02-10: Phase B 蜩∬ｳｪ繝ｻ繝・せ繝亥渕逶､・・Q-01/02/07/09, QA-07・・- 2026-02-10: 莉墓ｧ倡ｵｱ蜷茨ｼ・SOT遒ｺ遶九√い繝ｼ繧ｫ繧､繝門喧縲∵婿蜷第ｧ繧偵メ繝｣繝・ヨ繝弱・繝ｫ繧ｨ繝ｳ繧ｸ繝ｳ蜆ｪ蜈医∈譖ｴ譁ｰ・・- 2026-02-11: TASK_045螳御ｺ・ｼ・ertical Slice繧ｹ繧ｳ繝ｼ繝励Ο繝・け遒ｺ螳夲ｼ・- 2026-02-11: TASK_046逹謇具ｼ・ARN_SPINNER譛牙柑蛹悶ヾtartWait菫ｮ豁｣縲〃erticalSlice.yarn菴懈・縲√す繝ｼ繝ｳ繧ｻ繝・ヨ繧｢繝・・繧ｹ繧ｯ繝ｪ繝励ヨ菴懈・・・- 2026-02-11: TASK_047逹謇具ｼ医せ繝｢繝ｼ繧ｯ繧ｲ繝ｼ繝域紛蛯呻ｼ啀layMode繧ｹ繝｢繝ｼ繧ｯ霑ｽ蜉�縲∵焔蜍輔メ繧ｧ繝・け謨ｴ蛯呻ｼ・
+- 2026-01-06 06:45: AI_CONTEXT.md を初期化
+- 2026-01-06 08:10: TASK_001完了（Unity Core System Skeleton実装）
+- 2026-01-06 08:20: TASK_002起票完了（ロジック実装タスク）
+- 2026-01-06 09:00: TASK_002完了（ロジック実装完了）
+- 2026-02-02 13:00: TASK_031完了（コンパイルエラー修正）
+- 2026-02-02 18:41: TASK_026/027/028/040/041/043 ステータス更新
+- 2026-02-06 13:50: プロジェクトクリーンアップ（asmdef修正、GlitchEffect重複解消、AI_CONTEXT同期）
+- 2026-02-07 14:56: PROJECT_ROADMAP.md 作成（短期/中期/長期プラン策定、課題・技術的負債の洗い出し、AI_CONTEXT同期）
+- 2026-02-07 20:35: Sprint S1/S2 実装完了（S1-3,S1-4,S1-5/6,S2-1,S2-3,S2-4,S2-5）— 新規: CharacterProfile.cs, CharacterDatabase.cs, CoreLogicTests.cs 修正: SaveData.cs, SaveManager.cs, ChatController.cs, ScenarioManager.cs, TopicData.cs, SynthesisRecipe.cs, Tests.asmdef
+- 2026-02-08: プロジェクト総点検実施 — 45課題を5カテゴリで識別、docs/tasks/AUDIT_*.md に記録
+- 2026-02-09: Phase A ブロッカー解消 — CQ-04/05(TODO解消), CQ-06(Show/Hide実装), CQ-10(YarnSpinnerバージョン固定), AS-01(Characters/フォルダ+CharacterProfileCreator作成)
+- 2026-02-10: Phase B コード品質・テスト基盤 — CQ-09(空ファイル削除), CQ-07(IsInputLocked実機能化+SetInputEnabled), CQ-02(ConfigureBubble抽出), CQ-01(Update→onValueChanged), QA-07(CharacterProfile/Database テスト8件追加), テスト失敗修正(TopicCardPrefab設定, SafeDestroy)
