@@ -226,6 +226,7 @@ GameObject:
   m_Component:
   - component: {fileID: 434205177}
   - component: {fileID: 434205176}
+  - component: {fileID: 434205178}
   m_Layer: 0
   m_Name: MVPGameController
   m_TagString: Untagged
@@ -260,6 +261,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &434205178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 434205175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b51206b584070274a8ccf6a83d53e643, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ProjectFoundPhone.Utils::Assets.Scripts.Utils.VerificationCapture
+  CaptureOnStart: 1
+  DelaySeconds: 0.5
+  CaptureLogs: 1
 --- !u!1 &837139248
 GameObject:
   m_ObjectHideFlags: 0

@@ -35,6 +35,7 @@
 ### 短期（Next）
 
 - [pending] Save System UI Implementation (ref: docs/tasks/TASK_041_SaveSystemUI.md, Status: COMPLETED)
+- [done] Screenshot Evidence Recovery (ref: docs/tasks/TASK_048_ScreenshotEvidenceRecovery.md, Status: COMPLETED)
 
 
 > **詳細ロードマップ**: `docs/PROJECT_ROADMAP.md` を参照（2026-02-07作成）

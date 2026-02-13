@@ -275,6 +275,26 @@ namespace ProjectFoundPhone.MVP
             TransitionTo(GameState.Title);
             m_IsTransitioning = false;
         }
+
+public void ForceTransitionToChat()
+        {
+            if (m_IsTransitioning) return;
+            OnStartClicked();
+        }
+
+        public void ForceTransitionToChoice()
+        {
+            if (m_IsTransitioning) return;
+            TransitionTo(GameState.Choice);
+        }
+
+        public void ForceTransitionToEnd()
+        {
+            if (m_IsTransitioning) return;
+            m_EndText.text = "テストエンディング";
+            TransitionTo(GameState.End);
+        }
+
         #endregion
 
         #region Chat Flow
