@@ -37,6 +37,87 @@
 - [pending] Save System UI Implementation (ref: docs/tasks/TASK_041_SaveSystemUI.md, Status: COMPLETED)
 - [done] Screenshot Evidence Recovery (ref: docs/tasks/TASK_048_ScreenshotEvidenceRecovery.md, Status: COMPLETED)
 
+> **詳細ロードマップ**: `docs/PROJECT_ROADMAP.md` を参照（2026-02-07作成）
+
+### Worker完了ステータス
+
+- TASK_022: DONE (Performance Baseline - Report Generated)
+- TASK_023: COMPLETED (Verification Gap - Evidence Confirmed)
+- TASK_024: COMPLETED (Fix Performance Compilation - Hotfix Done)
+- TASK_025: IN_PROGRESS (GC Alloc Reduction - Code Done, After計測待ち)
+- TASK_026: COMPLETED (Project Structure Cleanup)
+- TASK_027: IN_PROGRESS (Full Playthrough Test - 手動テスト待ち)
+- TASK_028: COMPLETED (Save System)
+- TASK_031: DONE (Compile Error Fix)
+- TASK_040: DONE (Synthesis Recipes作成)
+- TASK_041: DONE (Save System UI)
+- TASK_043: DONE (Title Screen実装)
+
+### 短期（Next: 1-2週間）— 品質基盤の確立
+
+- [in_progress] GC Alloc Reduction After計測 (TASK_025)
+- [in_progress] Full Playthrough Test 手動実行 (TASK_027)
+- [done] **SaveData シリアライズ修正** — Newtonsoft.Json に切替済み
+- [done] **CharacterProfile SO 基盤** — CharacterProfileCreator.cs で Editor メニューから生成可能
+- [pending] テストカバレッジ拡充 — ChatController / ScenarioManager / DeductionBoard (各3ケース+)
+- [pending] ImageCommand 実装完了 — 画像バブルPrefab + 実Sprite表示
+- [pending] ChatDialogueView 実装 — DialogueViewBase 継承、Yarn Spinner正式連携
+- [pending] system_message コマンド / StartWait進行制御修正
+
+### 中期（Later: 2-6週間）— 機能拡充 & コンテンツ制作準備
+
+- [ ] MessageBubble オブジェクトプーリング
+- [ ] CharacterProfile ベースのバブルカラーリング
+- [ ] メッセージアニメーション強化（Scale + Slide + Fade）
+- [ ] SaveLoadUI ビジュアルデザイン
+- [ ] Options パネル実装（音量、テキスト速度）
+- [ ] Safe Area / キーボード対応
+- [ ] 連絡先リスト（Contact List）+ add_contact / ChangeStatus コマンド
+- [ ] オートセーブ機能（OnApplicationPause + 重要ポイント）
+- [ ] Yarn スクリプトテンプレート / コンテンツ制作パイプライン
+- [ ] CharacterProfile / Topic / Recipe の本番マスターデータ設計
+
+### 長期（Someday: 2-6ヶ月）— プロダクション & リリース
+
+- [ ] メインストーリー制作（3-5チャプター）
+- [ ] キャラクターアート / SE / BGM
+- [ ] Addressables 移行
+- [ ] セーブデータ暗号化 / クラウドセーブ
+- [ ] CI/CD パイプライン
+- [ ] ローカライズ基盤（日本語/英語）
+- [ ] QA / ストア申請準備
+
+## 備考（自由記述）
+
+- Unity プロジェクト（ChatNovelGame）のコアシステム実装完了
+- 主要クラス: TopicData, SynthesisRecipe, ChatController, ScenarioManager, SaveManager, DeductionBoard, MetaEffectController, TitleScreenManager, **CharacterProfile**, **CharacterDatabase**
+- SOLID原則に基づいた設計で拡張性を確保
+- Save System（3スロット対応）実装完了
+- Synthesis Recipes・Title Screen実装完了
+- 2026-02-06: プロジェクトクリーンアップ実施（asmdef修正、GlitchEffect重複解消、ドキュメント同期）
+- 2026-02-07: Sprint S1/S2 実施—下記完了:
+  - SaveDataシリアライズをNewtonsoft.Jsonに切替（Dictionary<string,object>対応）
+  - CoreLogicTests.cs 作成（18テストケース: TopicData/SynthesisRecipe/DeductionBoard/SaveData）
+  - CharacterProfile SO + CharacterDatabase 作成、ChatController統合（テーマカラー適用）
+  - ImageCommand実装完了（AddImageMessage + Sprite実表示）
+  - SystemMessageコマンド実装（中央揃えグレーテキスト）
+  - StartWaitをCoroutineベースブロッキングに修正
+  - TopicData/SynthesisRecipeのOnValidate実装
+
+## 運用ルール (Non-Negotiable)
+
+- **スクリーンショット報告義務**: UI/Visual な変更を含むタスク完了時は、必ず `docs/evidence/` にスクリーンショット（または動画）を保存し、レポートに添付すること。
+  - Evidence なき完了報告は原則「未完了」とみなすが、ブロッカーになる場合は「速度優先」で進行してよい（その場合は Issue/Task に Evidence Missing と明記すること）。
+
+## Worker Status
+
+- Active Workers: None
+
+## 履歴
+
+- 2026-01-06 06:45: AI_CONTEXT.md を初期化
+- 2026-01-06 08:10: TASK_001完了（Unity Core System Skeleton実装）
+- 2026-01-06 08:20: TASK_002起票完了（ロジック実装タスク）
 
 > **詳細ロードマップ**: `docs/PROJECT_ROADMAP.md` を参照（2026-02-07作成）
 
