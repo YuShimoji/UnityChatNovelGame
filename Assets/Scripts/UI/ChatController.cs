@@ -440,6 +440,7 @@ namespace ProjectFoundPhone.UI
             for (int i = 0; i < options.Count; i++)
             {
                 GameObject buttonObj = Instantiate(m_ChoiceButtonPrefab, m_ChoiceContainer);
+                buttonObj.name = "Choice" + (char)('A' + i); // For Test Automation (MVPTestHelper)
                 
                 // ボタンのテキスト設定
                 TextMeshProUGUI btnText = buttonObj.GetComponentInChildren<TextMeshProUGUI>();

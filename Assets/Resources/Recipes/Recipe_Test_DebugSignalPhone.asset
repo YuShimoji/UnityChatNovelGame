@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9710dedc27d4cf45ab9032d1f87311b, type: 3}
   m_Name: Recipe_Test_DebugSignalPhone
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFoundPhone.Data.SynthesisRecipe
-  m_IngredientA: {fileID: 11400000, guid: 88cc88b8365a0794b9698889aff97e99, type: 2}
+  m_IngredientA: {fileID: 11400000, guid: e1025900953433e458f33df878c4c665, type: 2}
   m_IngredientB: {fileID: 11400000, guid: 425c4c615b4d0b544b68535bc9bc9432, type: 2}
   m_Result: {fileID: 11400000, guid: ae12610ab7d4aa54cad73af1df3b75ad, type: 2}
