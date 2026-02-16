@@ -7,12 +7,43 @@ KICKSTART_2026-01-15T13:26:07+09:00
 2026-01-15T13:26:07+09:00
 
 ## 現在のフェーズ
-Phase 4: Ticket Creation
+Phase 6: Worker Execution
 
 ## ステータス
-MVP_TICKETING_DONE
+TASK_050_051_BLOCKED_BY_ACTIVE_UNITY_2026-02-16
 
 ## 進捗記録
+
+### Phase 6: Worker Execution (2026-02-16)
+- [x] TASK_050 修正差分を反映（開始ノード名統一 / 変数再宣言解消）
+- [x] TASK_051 修正差分を反映（ImageBubbleのactive化 / Choice+Image fallback用PlayModeテスト追加）
+- [x] 静的確認
+  - `VerticalSlice.yarn` のみ `title: VerticalSlice_Start`
+  - `DebugScript.yarn` のみ `title: Start`
+  - `$has_topic_debug_topic_01` の重複宣言なし
+- [ ] Runtime検証
+  - Unity batchmode: `It looks like another Unity instance is running with this project open.`
+  - ブロッカー: `UnityChatNovelGame` が別Unityインスタンスで開かれている
+- [ ] Next Action: UnityChatNovelGame を閉じた状態で batchmode再実行
+- [ ] Next Action: PlayModeテスト結果を `docs/evidence/TASK_050` / `docs/evidence/TASK_051` に保存
+
+### Phase 5: Worker Prompt Generation (2026-02-16)
+- [x] TASK_049〜053 の Worker Prompt を生成
+- [x] docs/reports/WORKER_PROMPT_TASK_049.md
+- [x] docs/reports/WORKER_PROMPT_TASK_050.md
+- [x] docs/reports/WORKER_PROMPT_TASK_051.md
+- [x] docs/reports/WORKER_PROMPT_TASK_052.md
+- [x] docs/reports/WORKER_PROMPT_TASK_053.md
+- [ ] Next Action: Worker割り当て（A:049, B:050, C:051）
+- [ ] Next Action: 依存解消後に Worker D/E へ 052/053 を割当
+
+### Phase 4: Ticket Creation (2026-02-16)
+- [x] TASK_049_BuildGateFix_VerticalSlice を作成
+- [x] TASK_050_YarnConflictCleanup を作成
+- [x] TASK_051_DebugChatUIWiring を作成
+- [x] TASK_052_VerticalSliceSmokeResultClosure を作成
+- [x] TASK_053_MVPFinalVerificationPack を作成
+- [x] 各タスクに Test Plan / Milestone / DoD / Stop Conditions を記載
 
 ### Phase 1.5: Audit (2026-02-12)
 - [x] docs/tasks / docs/inbox / docs/HANDOVER.md を確認
@@ -957,4 +988,5 @@ MVP_TICKETING_DONE
 - [x] Removed ghost .meta files (Core, UI, Data, Effects)
 - [x] Verification: File System Clean
 - [x] Phase 6 ����
+
 

@@ -39,6 +39,11 @@ namespace ProjectFoundPhone.UI
 
         private bool m_AutoScrollScheduled = false;
         private Tween m_ScrollTween;
+
+        private GameObject m_RuntimeChoiceButtonTemplate;
+        private GameObject m_RuntimeImageBubbleTemplate;
+        private TMP_InputField m_RuntimeInputField;
+        private Button m_RuntimeSendButton;
         #endregion
 
         #region Unity Lifecycle
@@ -93,6 +98,10 @@ namespace ProjectFoundPhone.UI
             {
                 Debug.LogWarning("ChatController: m_TypingIndicator is not assigned. Typing indicator will not be displayed.");
             }
+
+            EnsureChoiceUIElements();
+            EnsureImageBubbleTemplate();
+            EnsureInputControls();
         }
 
         /// <summary>
@@ -256,6 +265,7 @@ namespace ProjectFoundPhone.UI
             }
 
             GameObject imageBubble = Instantiate(prefab, m_ScrollRect.content);
+            imageBubble.SetActive(true);
 
             // プレイヤー判定・テーマカラー・配置を共通処理で設定
             ConfigureBubble(imageBubble, charID);
@@ -440,6 +450,7 @@ namespace ProjectFoundPhone.UI
             for (int i = 0; i < options.Count; i++)
             {
                 GameObject buttonObj = Instantiate(m_ChoiceButtonPrefab, m_ChoiceContainer);
+                buttonObj.SetActive(true);
                 buttonObj.name = "Choice" + (char)('A' + i); // For Test Automation (MVPTestHelper)
                 
                 // ボタンのテキスト設定
@@ -542,6 +553,314 @@ namespace ProjectFoundPhone.UI
             if (m_ScrollTween != null && m_ScrollTween.IsActive())
             {
                 m_ScrollTween.Kill(false);
+            }
+        }
+
+        private void EnsureChoiceUIElements()
+        {
+            if (m_ChoiceContainer == null)
+            {
+                m_ChoiceContainer = CreateRuntimeChoiceContainer();
+            }
+
+            if (m_ChoiceButtonPrefab == null)
+            {
+                m_RuntimeChoiceButtonTemplate = CreateChoiceButtonTemplate();
+                m_ChoiceButtonPrefab = m_RuntimeChoiceButtonTemplate;
+            }
+        }
+
+        private void EnsureImageBubbleTemplate()
+        {
+            if (m_ImageBubblePrefab == null && m_RuntimeImageBubbleTemplate == null)
+            {
+                m_RuntimeImageBubbleTemplate = CreateImageBubbleTemplate();
+                m_ImageBubblePrefab = m_RuntimeImageBubbleTemplate;
+            }
+        }
+
+        private void EnsureInputControls()
+        {
+            if (m_InputField != null && m_SendButton != null)
+            {
+                return;
+            }
+
+            const float footerHeight = 160f;
+            Transform parentForFooter = transform.parent != null ? transform.parent : transform;
+            GameObject footer = new GameObject("AutoFooter", typeof(RectTransform), typeof(Image));
+            AssignUILayer(footer);
+            footer.transform.SetParent(parentForFooter, false);
+            footer.transform.SetAsLastSibling();
+
+            RectTransform footerRect = footer.GetComponent<RectTransform>();
+            footerRect.anchorMin = new Vector2(0f, 0f);
+            footerRect.anchorMax = new Vector2(1f, 0f);
+            footerRect.pivot = new Vector2(0.5f, 0f);
+            footerRect.offsetMin = new Vector2(0f, 0f);
+            footerRect.offsetMax = new Vector2(0f, footerHeight);
+
+            Image footerBg = footer.GetComponent<Image>();
+            footerBg.color = new Color(0.09f, 0.09f, 0.11f, 0.95f);
+
+            m_RuntimeInputField = CreateRuntimeInputField(footer.transform);
+            m_RuntimeSendButton = CreateRuntimeSendButton(footer.transform);
+
+            if (m_InputField == null)
+            {
+                m_InputField = m_RuntimeInputField;
+            }
+
+            if (m_SendButton == null)
+            {
+                m_SendButton = m_RuntimeSendButton;
+            }
+
+            if (m_ScrollRect != null && m_ScrollRect.viewport != null)
+            {
+                RectTransform viewport = m_ScrollRect.viewport;
+                Vector2 offsetMin = viewport.offsetMin;
+                offsetMin.y = Mathf.Max(offsetMin.y, footerHeight);
+                viewport.offsetMin = offsetMin;
+            }
+        }
+
+        private Transform CreateRuntimeChoiceContainer()
+        {
+            GameObject container = new GameObject("AutoChoiceContainer", typeof(RectTransform), typeof(Image), typeof(VerticalLayoutGroup), typeof(ContentSizeFitter));
+            container.transform.SetParent(transform, false);
+            RectTransform rect = container.GetComponent<RectTransform>();
+            rect.anchorMin = new Vector2(0.05f, 0f);
+            rect.anchorMax = new Vector2(0.95f, 0f);
+            rect.pivot = new Vector2(0.5f, 0f);
+            rect.offsetMin = new Vector2(0f, 24f);
+            rect.offsetMax = new Vector2(0f, 260f);
+            container.transform.SetAsLastSibling();
+
+            Image background = container.GetComponent<Image>();
+            background.color = new Color(0.07f, 0.07f, 0.09f, 0.92f);
+
+            VerticalLayoutGroup layoutGroup = container.GetComponent<VerticalLayoutGroup>();
+            layoutGroup.spacing = 12f;
+            layoutGroup.padding = new RectOffset(20, 20, 20, 20);
+            layoutGroup.childForceExpandWidth = true;
+            layoutGroup.childForceExpandHeight = false;
+            layoutGroup.childControlWidth = true;
+            layoutGroup.childControlHeight = true;
+
+            ContentSizeFitter fitter = container.GetComponent<ContentSizeFitter>();
+            fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+
+            container.SetActive(false);
+            return container.transform;
+        }
+
+        private GameObject CreateChoiceButtonTemplate()
+        {
+            GameObject template = new GameObject("AutoChoiceButtonTemplate", typeof(RectTransform), typeof(Image), typeof(Button), typeof(LayoutElement));
+            template.transform.SetParent(transform, false);
+            template.SetActive(false);
+
+            Image buttonBackground = template.GetComponent<Image>();
+            buttonBackground.color = new Color(0.18f, 0.18f, 0.22f, 0.95f);
+
+            Button button = template.GetComponent<Button>();
+            button.transition = Selectable.Transition.ColorTint;
+            button.targetGraphic = buttonBackground;
+
+            LayoutElement layout = template.GetComponent<LayoutElement>();
+            layout.minHeight = 60f;
+            layout.preferredHeight = 70f;
+            layout.flexibleWidth = 1f;
+
+            RectTransform rect = template.GetComponent<RectTransform>();
+            rect.anchorMin = new Vector2(0f, 0f);
+            rect.anchorMax = new Vector2(1f, 1f);
+            rect.offsetMin = new Vector2(0f, 0f);
+            rect.offsetMax = new Vector2(0f, 0f);
+
+            GameObject textObj = new GameObject("Text", typeof(RectTransform));
+            textObj.transform.SetParent(template.transform, false);
+            RectTransform textRect = textObj.GetComponent<RectTransform>();
+            textRect.anchorMin = Vector2.zero;
+            textRect.anchorMax = Vector2.one;
+            textRect.offsetMin = new Vector2(20f, 10f);
+            textRect.offsetMax = new Vector2(-20f, -10f);
+
+            TextMeshProUGUI label = textObj.AddComponent<TextMeshProUGUI>();
+            label.text = "Choice";
+            label.enableAutoSizing = true;
+            label.fontSizeMin = 20f;
+            label.fontSizeMax = 36f;
+            label.alignment = TextAlignmentOptions.Midline;
+            label.color = Color.white;
+            label.raycastTarget = false;
+            if (TMP_Settings.defaultFontAsset != null)
+            {
+                label.font = TMP_Settings.defaultFontAsset;
+            }
+
+            return template;
+        }
+
+        private GameObject CreateImageBubbleTemplate()
+        {
+            GameObject template = new GameObject("AutoImageBubblePrefab", typeof(RectTransform), typeof(Image), typeof(ContentSizeFitter));
+            template.transform.SetParent(transform, false);
+            template.SetActive(false);
+
+            Image bubbleBackground = template.GetComponent<Image>();
+            bubbleBackground.color = Color.white;
+            bubbleBackground.raycastTarget = true;
+
+            ContentSizeFitter sizeFitter = template.GetComponent<ContentSizeFitter>();
+            sizeFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+            sizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+            GameObject imageContainer = new GameObject("ImageContent", typeof(RectTransform), typeof(Image));
+            imageContainer.transform.SetParent(template.transform, false);
+            RectTransform imageRect = imageContainer.GetComponent<RectTransform>();
+            imageRect.anchorMin = Vector2.zero;
+            imageRect.anchorMax = Vector2.one;
+            imageRect.offsetMin = new Vector2(12f, 12f);
+            imageRect.offsetMax = new Vector2(-12f, -12f);
+
+            Image contentImage = imageContainer.GetComponent<Image>();
+            contentImage.preserveAspect = true;
+
+            return template;
+        }
+
+        private TMP_InputField CreateRuntimeInputField(Transform parent)
+        {
+            GameObject inputObj = new GameObject("InputField", typeof(RectTransform), typeof(Image), typeof(TMP_InputField));
+            AssignUILayer(inputObj);
+            inputObj.transform.SetParent(parent, false);
+
+            RectTransform inputRect = inputObj.GetComponent<RectTransform>();
+            inputRect.anchorMin = new Vector2(0f, 0f);
+            inputRect.anchorMax = new Vector2(1f, 1f);
+            inputRect.offsetMin = new Vector2(20f, 20f);
+            inputRect.offsetMax = new Vector2(-150f, -20f);
+
+            Image inputBg = inputObj.GetComponent<Image>();
+            inputBg.color = new Color(0.16f, 0.16f, 0.2f, 0.95f);
+            inputBg.raycastTarget = true;
+
+            TMP_InputField inputField = inputObj.GetComponent<TMP_InputField>();
+            inputField.textViewport = CreateInputTextViewport(inputObj.transform, out TextMeshProUGUI textComponent, out TextMeshProUGUI placeholderComponent);
+            inputField.textComponent = textComponent;
+            inputField.placeholder = placeholderComponent;
+            inputField.lineType = TMP_InputField.LineType.MultiLineNewline;
+            inputField.characterLimit = 0;
+
+            return inputField;
+        }
+
+        private RectTransform CreateInputTextViewport(Transform parent, out TextMeshProUGUI textComponent, out TextMeshProUGUI placeholderComponent)
+        {
+            GameObject textArea = new GameObject("TextArea", typeof(RectTransform));
+            AssignUILayer(textArea);
+            textArea.transform.SetParent(parent, false);
+            RectTransform textAreaRect = textArea.GetComponent<RectTransform>();
+            textAreaRect.anchorMin = Vector2.zero;
+            textAreaRect.anchorMax = Vector2.one;
+            textAreaRect.offsetMin = new Vector2(10f, 8f);
+            textAreaRect.offsetMax = new Vector2(-10f, -8f);
+
+            GameObject viewportObj = new GameObject("TextViewport", typeof(RectTransform), typeof(RectMask2D));
+            AssignUILayer(viewportObj);
+            viewportObj.transform.SetParent(textArea.transform, false);
+            RectTransform viewportRect = viewportObj.GetComponent<RectTransform>();
+            viewportRect.anchorMin = Vector2.zero;
+            viewportRect.anchorMax = Vector2.one;
+            viewportRect.offsetMin = Vector2.zero;
+            viewportRect.offsetMax = Vector2.zero;
+
+            placeholderComponent = CreateTMPText(viewportObj.transform, "Placeholder", new Color(0.65f, 0.65f, 0.7f, 0.85f), FontStyles.Italic);
+            placeholderComponent.text = "Type a message...";
+
+            textComponent = CreateTMPText(viewportObj.transform, "Text", Color.white, FontStyles.Normal);
+            textComponent.enableWordWrapping = true;
+            textComponent.text = string.Empty;
+
+            return viewportRect;
+        }
+
+        private Button CreateRuntimeSendButton(Transform parent)
+        {
+            GameObject buttonObj = new GameObject("SendButton", typeof(RectTransform), typeof(Image), typeof(Button));
+            AssignUILayer(buttonObj);
+            buttonObj.transform.SetParent(parent, false);
+
+            RectTransform btnRect = buttonObj.GetComponent<RectTransform>();
+            btnRect.anchorMin = new Vector2(1f, 0f);
+            btnRect.anchorMax = new Vector2(1f, 1f);
+            btnRect.pivot = new Vector2(1f, 0.5f);
+            btnRect.offsetMin = new Vector2(-130f, 20f);
+            btnRect.offsetMax = new Vector2(-20f, -20f);
+
+            Image btnImage = buttonObj.GetComponent<Image>();
+            btnImage.color = new Color(0.25f, 0.55f, 1.0f, 1.0f);
+            btnImage.raycastTarget = true;
+
+            Button button = buttonObj.GetComponent<Button>();
+            button.targetGraphic = btnImage;
+            button.transition = Selectable.Transition.ColorTint;
+
+            TextMeshProUGUI label = CreateTMPText(buttonObj.transform, "Text", Color.white, FontStyles.Bold);
+            RectTransform labelRect = label.GetComponent<RectTransform>();
+            labelRect.anchorMin = Vector2.zero;
+            labelRect.anchorMax = Vector2.one;
+            labelRect.offsetMin = Vector2.zero;
+            labelRect.offsetMax = Vector2.zero;
+            label.alignment = TextAlignmentOptions.Center;
+            label.enableAutoSizing = true;
+            label.fontSizeMin = 20f;
+            label.fontSizeMax = 40f;
+            label.text = "Send";
+
+            return button;
+        }
+
+        private TextMeshProUGUI CreateTMPText(Transform parent, string name, Color color, FontStyles fontStyle)
+        {
+            GameObject textObj = new GameObject(name, typeof(RectTransform));
+            AssignUILayer(textObj);
+            textObj.transform.SetParent(parent, false);
+
+            RectTransform rect = textObj.GetComponent<RectTransform>();
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = Vector2.zero;
+            rect.offsetMax = Vector2.zero;
+
+            TextMeshProUGUI tmp = textObj.AddComponent<TextMeshProUGUI>();
+            tmp.color = color;
+            tmp.fontSize = 30f;
+            tmp.fontStyle = fontStyle;
+            tmp.text = string.Empty;
+            tmp.enableAutoSizing = true;
+            tmp.fontSizeMin = 16f;
+            tmp.fontSizeMax = 48f;
+            tmp.alignment = TextAlignmentOptions.MidlineLeft;
+            tmp.raycastTarget = false;
+
+            if (TMP_Settings.defaultFontAsset != null)
+            {
+                tmp.font = TMP_Settings.defaultFontAsset;
+            }
+
+            return tmp;
+        }
+
+        private void AssignUILayer(GameObject go)
+        {
+            int uiLayer = LayerMask.NameToLayer("UI");
+            if (uiLayer >= 0)
+            {
+                go.layer = uiLayer;
             }
         }
 

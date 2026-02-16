@@ -1,6 +1,5 @@
-title: Start
+title: VerticalSlice_Start
 ---
-<<declare $has_topic_debug_topic_01 = false>>
 <<declare $speaker = "">>
 
 <<SystemMessage "接続を確認しています...">>

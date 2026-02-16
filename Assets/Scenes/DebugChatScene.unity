@@ -370,7 +370,7 @@ MonoBehaviour:
   dialoguePresenters: []
   verboseLogging: 0
   autoStart: 0
-  startNode: Start
+  startNode: VerticalSlice_Start
   runSelectedOptionAsLine: 0
   allowOptionFallthrough: 1
   onNodeStart:
@@ -402,7 +402,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFoundPhone.Core.ScenarioManager
   m_DialogueRunner: {fileID: 799380007}
   m_ChatController: {fileID: 1245452348}
-  m_StartNode: Start
+  m_StartNode: VerticalSlice_Start
 --- !u!4 &799380009
 Transform:
   m_ObjectHideFlags: 0

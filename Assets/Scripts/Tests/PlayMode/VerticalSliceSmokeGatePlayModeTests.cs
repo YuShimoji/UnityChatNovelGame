@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using ProjectFoundPhone.Core;
 using ProjectFoundPhone.UI;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
@@ -36,7 +38,7 @@ namespace ProjectFoundPhone.Tests
             Assert.IsNotNull(scenarioManager, "DebugChatScene: ScenarioManager not found.");
             Assert.IsNotNull(chatController, "DebugChatScene: ChatController not found.");
 
-            scenarioManager.StartScenario("Start");
+            scenarioManager.StartScenario("VerticalSlice_Start");
 
             bool messagesAppeared = false;
             float startTime = Time.realtimeSinceStartup;
@@ -63,6 +65,59 @@ namespace ProjectFoundPhone.Tests
             Assert.IsTrue(loaded, "LoadGame failed.");
 
             CleanupSaveSlot(SaveSlot);
+        }
+
+        [UnityTest]
+        public IEnumerator DebugChatScene_ChoiceAndImageFallback_AreUsable()
+        {
+            yield return LoadSceneWithTimeout("DebugChatScene", SceneLoadTimeoutSeconds);
+
+            ChatController chatController = UnityEngine.Object.FindFirstObjectByType<ChatController>();
+            Assert.IsNotNull(chatController, "DebugChatScene: ChatController not found.");
+
+            chatController.ShowChoices(new List<string> { "A", "B" }, _ => { });
+            yield return null;
+
+            GameObject choiceA = GameObject.Find("ChoiceA");
+            GameObject choiceB = GameObject.Find("ChoiceB");
+            Assert.IsNotNull(choiceA, "ChoiceA was not created.");
+            Assert.IsNotNull(choiceB, "ChoiceB was not created.");
+            Assert.IsTrue(choiceA.activeInHierarchy, "ChoiceA is inactive.");
+            Assert.IsTrue(choiceB.activeInHierarchy, "ChoiceB is inactive.");
+
+            Texture2D tempTexture = new Texture2D(4, 4, TextureFormat.RGBA32, false);
+            Color[] colors = new Color[16];
+            for (int i = 0; i < colors.Length; i++)
+            {
+                colors[i] = Color.white;
+            }
+            tempTexture.SetPixels(colors);
+            tempTexture.Apply();
+
+            Sprite testSprite = Sprite.Create(tempTexture, new Rect(0, 0, 4, 4), new Vector2(0.5f, 0.5f));
+            chatController.AddImageMessage("player", testSprite);
+            yield return null;
+
+            ScrollRect scrollRect = chatController.GetComponent<ScrollRect>();
+            Assert.IsNotNull(scrollRect, "ScrollRect was not found on ChatController.");
+            Assert.IsNotNull(scrollRect.content, "ScrollRect content is null.");
+            Assert.Greater(scrollRect.content.childCount, 0, "No chat bubbles were created.");
+
+            GameObject lastBubble = scrollRect.content.GetChild(scrollRect.content.childCount - 1).gameObject;
+            Assert.IsTrue(lastBubble.activeInHierarchy, "Image bubble is inactive.");
+
+            Transform imageContentTransform = lastBubble.transform.Find("ImageContent");
+            Image imageContent = imageContentTransform != null ? imageContentTransform.GetComponent<Image>() : null;
+            bool hasImage = imageContent != null && imageContent.sprite != null;
+
+            TextMeshProUGUI textComponent = lastBubble.GetComponentInChildren<TextMeshProUGUI>();
+            bool hasFallbackText = textComponent != null && textComponent.text.Contains("[Image:");
+
+            Assert.IsTrue(hasImage || hasFallbackText, "Image message did not render as image or fallback text.");
+
+            chatController.HideChoices();
+            UnityEngine.Object.Destroy(testSprite);
+            UnityEngine.Object.Destroy(tempTexture);
         }
 
         [TearDown]

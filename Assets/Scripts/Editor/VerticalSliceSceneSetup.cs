@@ -215,7 +215,7 @@ namespace ProjectFoundPhone.Editor
             smSO.Update();
             smSO.FindProperty("m_DialogueRunner").objectReferenceValue = dialogueRunner;
             smSO.FindProperty("m_ChatController").objectReferenceValue = chatController;
-            smSO.FindProperty("m_StartNode").stringValue = "Start";
+            smSO.FindProperty("m_StartNode").stringValue = "VerticalSlice_Start";
             smSO.FindProperty("m_AutoStartYarn").boolValue = true;
             smSO.ApplyModifiedProperties();
 
