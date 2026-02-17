@@ -10,9 +10,19 @@ KICKSTART_2026-01-15T13:26:07+09:00
 Phase 6: Worker Execution
 
 ## ステータス
-TASK_050_051_RUNTIME_VALIDATION_PENDING_2026-02-17
+TASK_050_051_RESETUP_READY_2026-02-17
 
 ## 進捗記録
+
+### Phase 6: Worker Execution (2026-02-17 追加)
+- [x] `TitleScene` の `TitleScreenManager` 参照GUID不整合を修正
+- [x] 再セットアップ用メニューを追加
+  - `Tools/FoundPhone/Re-Setup/TitleScene Manager`
+  - `Tools/FoundPhone/Re-Setup/Vertical Slice Essentials`
+- [x] 改善提案を実装
+  - 参照健全性チェック: `Tools/FoundPhone/Validate/TitleScene Manager Wiring`
+- [ ] Next Action: Unity Editor上で Re-Setup メニュー実行
+- [ ] Next Action: PlayMode `VerticalSliceSmokeGatePlayModeTests` 再実行で TitleScene 起点の通過確認
 
 ### Phase 6: Worker Execution (2026-02-17)
 - [x] ReImport 後のコンパイル実行を確認（致命的エラーなし、warning中心）

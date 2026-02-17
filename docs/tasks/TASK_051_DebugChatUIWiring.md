@@ -5,7 +5,7 @@ Tier: 2 (Integration)
 Branch: feature/task-051-debugchat-ui-wiring
 Owner: Worker
 Created: 2026-02-16
-Updated: 2026-02-16
+Updated: 2026-02-17
 Report: docs/reports/REPORT_TASK_051_DebugChatUIWiring.md
 
 ## Objective
@@ -38,9 +38,9 @@ DebugChatScene の ChatController 参照不足（Choice/Image周り）を解消�
 
 ## DoD
 
-- [ ] Choice表示時に `ChoiceButtonPrefab or ChoiceContainer is not assigned` が発生しない
-- [ ] ImageMessage導線が正常に表示される（フォールバック含む）
-- [ ] DebugChatScene の ChatController 参照が必要項目まで設定される
+- [x] Choice表示時に `ChoiceButtonPrefab or ChoiceContainer is not assigned` が発生しない
+- [x] ImageMessage導線が正常に表示される（フォールバック含む）
+- [x] DebugChatScene の ChatController 参照が必要項目まで設定される
 - [x] 検証証跡を `docs/reports/REPORT_TASK_051_DebugChatUIWiring.md` に残す
 
 ## Test Plan

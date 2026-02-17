@@ -48,4 +48,5 @@
 - [x] PlayMode実行証跡取得（失敗理由記録：Yarnスコープ外）
 
 ## Follow-up Tasks
-- TASK_051: TitleSceneへのTitleScreenManager配置（PlayModeテスト成功に必要）
+- TitleScene の `TitleScreenManager` 参照切れ修正後に PlayMode テストを再実行し、`VerticalSlice_SmokeFlow_TitleToChat_SaveLoad` の通過を確認する。
+- 必要に応じて `Tools/FoundPhone/Re-Setup/Vertical Slice Essentials` を実行して BuildSettings/TitleScene 配線を再セットアップする。
