@@ -6,7 +6,6 @@ using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using ProjectFoundPhone.Core;
 using ProjectFoundPhone.UI;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
@@ -110,8 +109,8 @@ namespace ProjectFoundPhone.Tests
             Image imageContent = imageContentTransform != null ? imageContentTransform.GetComponent<Image>() : null;
             bool hasImage = imageContent != null && imageContent.sprite != null;
 
-            TextMeshProUGUI textComponent = lastBubble.GetComponentInChildren<TextMeshProUGUI>();
-            bool hasFallbackText = textComponent != null && textComponent.text.Contains("[Image:");
+            bool hasFallbackText = TryFindFallbackImageText(lastBubble, out string bubbleText)
+                && bubbleText.Contains("[Image:");
 
             Assert.IsTrue(hasImage || hasFallbackText, "Image message did not render as image or fallback text.");
 
@@ -191,6 +190,40 @@ namespace ProjectFoundPhone.Tests
             {
                 File.Delete(filePath);
             }
+        }
+
+        private static bool TryFindFallbackImageText(GameObject bubble, out string textValue)
+        {
+            textValue = string.Empty;
+            if (bubble == null)
+            {
+                return false;
+            }
+
+            Component[] components = bubble.GetComponentsInChildren<Component>(true);
+            for (int i = 0; i < components.Length; i++)
+            {
+                Component component = components[i];
+                if (component == null)
+                {
+                    continue;
+                }
+
+                var textProperty = component.GetType().GetProperty("text");
+                if (textProperty == null || textProperty.PropertyType != typeof(string))
+                {
+                    continue;
+                }
+
+                string value = textProperty.GetValue(component) as string;
+                if (!string.IsNullOrEmpty(value))
+                {
+                    textValue = value;
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
