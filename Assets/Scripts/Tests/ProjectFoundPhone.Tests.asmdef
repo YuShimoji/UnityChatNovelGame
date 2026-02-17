@@ -4,6 +4,7 @@
     "references": [
         "ProjectFoundPhone",
         "ProjectFoundPhone.Utils",
+        "Unity.TextMeshPro",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"
     ],
