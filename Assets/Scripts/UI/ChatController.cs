@@ -250,6 +250,9 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
+            // 遅延初期化: ImageBubblePrefabが未設定の場合はランタイム生成
+            EnsureImageBubbleTemplate();
+
             if (m_ScrollRect == null || m_ScrollRect.content == null)
             {
                 Debug.LogError("ChatController: Cannot create image bubble. ScrollRect or content is not assigned.");
@@ -432,9 +435,12 @@ namespace ProjectFoundPhone.UI
         /// <param name="onSelected">選択時のコールバック (index)</param>
         public void ShowChoices(List<string> options, System.Action<int> onSelected)
         {
+            // 遅延初期化: ChoiceButtonPrefab/Containerが未設定の場合はランタイム生成
+            EnsureChoiceUIElements();
+
             if (m_ChoiceButtonPrefab == null || m_ChoiceContainer == null)
             {
-                Debug.LogError("ChatController: ChoiceButtonPrefab or ChoiceContainer is not assigned.");
+                Debug.LogError("ChatController: ChoiceButtonPrefab or ChoiceContainer is not assigned after initialization.");
                 return;
             }
 
