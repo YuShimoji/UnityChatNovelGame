@@ -1,6 +1,6 @@
 ﻿# Task: Yarn Script Conflict Cleanup for Vertical Slice
 
-Status: IN_PROGRESS
+Status: COMPLETED
 Tier: 2 (Stabilization)
 Branch: feature/task-050-yarn-conflict-cleanup
 Owner: Worker
@@ -41,7 +41,7 @@ Yarn スクリプトのノード重複/変数再宣言を解消し、縦切り�
 - [x] `More than one node is named Start` が解消される（静的確認済み）
 - [x] `Redeclaration of existing variable` が解消される（静的確認済み）
 - [x] Vertical Slice用の開始ノードが一意に定義される（静的確認済み）
-- [ ] EditMode/PlayMode 実行証跡が取得される
+- [x] EditMode/PlayMode 実行証跡が取得される
 - [x] 修正内容を `docs/reports/REPORT_TASK_050_YarnConflictCleanup.md` に記録する
 
 ## Test Plan

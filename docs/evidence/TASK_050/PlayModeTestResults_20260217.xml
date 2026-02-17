@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Failed(Child)" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-02-17 07:43:38Z" end-time="2026-02-17 07:43:38Z" duration="0.3664422">
+  <test-suite type="TestSuite" id="1011" name="UnityChatNovelGame" fullname="UnityChatNovelGame" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-02-17 07:43:38Z" end-time="2026-02-17 07:43:38Z" duration="0.366442" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1006" name="ProjectFoundPhone.PlayModeTests.dll" fullname="C:/Users/PLANNER007/UnityChatNovelGame/Library/ScriptAssemblies/ProjectFoundPhone.PlayModeTests.dll" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-02-17 07:43:38Z" end-time="2026-02-17 07:43:38Z" duration="0.359793" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="35984" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1007" name="ProjectFoundPhone" fullname="ProjectFoundPhone" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-02-17 07:43:38Z" end-time="2026-02-17 07:43:38Z" duration="0.359339" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1008" name="Tests" fullname="ProjectFoundPhone.Tests" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-02-17 07:43:38Z" end-time="2026-02-17 07:43:38Z" duration="0.358970" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestFixture" id="1003" name="VerticalSliceSmokeGatePlayModeTests" fullname="ProjectFoundPhone.Tests.VerticalSliceSmokeGatePlayModeTests" classname="ProjectFoundPhone.Tests.VerticalSliceSmokeGatePlayModeTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-02-17 07:43:38Z" end-time="2026-02-17 07:43:38Z" duration="0.358005" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="1005" name="DebugChatScene_ChoiceAndImageFallback_AreUsable" fullname="ProjectFoundPhone.Tests.VerticalSliceSmokeGatePlayModeTests.DebugChatScene_ChoiceAndImageFallback_AreUsable" methodname="DebugChatScene_ChoiceAndImageFallback_AreUsable" classname="ProjectFoundPhone.Tests.VerticalSliceSmokeGatePlayModeTests" runstate="Runnable" seed="730649375" result="Passed" start-time="2026-02-17 07:43:38Z" end-time="2026-02-17 07:43:38Z" duration="0.320744" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1004" name="VerticalSlice_SmokeFlow_TitleToChat_SaveLoad" fullname="ProjectFoundPhone.Tests.VerticalSliceSmokeGatePlayModeTests.VerticalSlice_SmokeFlow_TitleToChat_SaveLoad" methodname="VerticalSlice_SmokeFlow_TitleToChat_SaveLoad" classname="ProjectFoundPhone.Tests.VerticalSliceSmokeGatePlayModeTests" runstate="Runnable" seed="1498115674" result="Failed" start-time="2026-02-17 07:43:38Z" end-time="2026-02-17 07:43:38Z" duration="0.028174" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[Unhandled log message: '[Error] Scene 'TitleScene' couldn't be loaded because it has not been added to the active build profile or shared scene list or the AssetBundle has not been loaded.
+To add a scene to the active build profile or shared scene list use the menu File->Build Profiles'. Use UnityEngine.TestTools.LogAssert.Expect]]></message>
+                <stack-trace><![CDATA[UnityEngine.SceneManagement.SceneManager:LoadSceneAsync (string)
+ProjectFoundPhone.Tests.VerticalSliceSmokeGatePlayModeTests/<LoadSceneWithTimeout>d__7:MoveNext () (at Assets/Scripts/Tests/PlayMode/VerticalSliceSmokeGatePlayModeTests.cs:136)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[Scene 'TitleScene' couldn't be loaded because it has not been added to the active build profile or shared scene list or the AssetBundle has not been loaded.
+To add a scene to the active build profile or shared scene list use the menu File->Build Profiles
+VerticalSliceSmokeGate: Evidence saved to C:\Users\PLANNER007\UnityChatNovelGame\docs/evidence/TASK_047
+<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: [TestRunnerNoThrottle] Restored Interaction Mode after test run.
+Saving results to: C:/Users/PLANNER007/AppData/LocalLow/DefaultCompany/UnityChatNovelGame\TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

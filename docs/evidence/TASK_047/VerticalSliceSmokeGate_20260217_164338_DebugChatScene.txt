@@ -1,0 +1,5 @@
+Test Failed: VerticalSlice_SmokeFlow_TitleToChat_SaveLoad
+Message: Unhandled log message: '[Error] Scene 'TitleScene' couldn't be loaded because it has not been added to the active build profile or shared scene list or the AssetBundle has not been loaded.
+To add a scene to the active build profile or shared scene list use the menu File->Build Profiles'. Use UnityEngine.TestTools.LogAssert.Expect
+Scene: DebugChatScene
+Time: 2026-02-17T16:43:38.4546603+09:00

@@ -1,0 +1,7 @@
+Test Failed: VerticalSlice_SmokeFlow_TitleToChat_SaveLoad
+Message:   TitleScene: TitleScreenManager not found.
+  Expected: not null
+  But was:  null
+
+Scene: TitleScene
+Time: 2026-02-17T17:36:55.1966483+09:00

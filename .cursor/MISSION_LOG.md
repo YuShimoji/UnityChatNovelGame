@@ -10,9 +10,22 @@ KICKSTART_2026-01-15T13:26:07+09:00
 Phase 6: Worker Execution
 
 ## ステータス
-TASK_050_051_BLOCKED_BY_ACTIVE_UNITY_2026-02-16
+TASK_050_051_RUNTIME_VALIDATION_PENDING_2026-02-17
 
 ## 進捗記録
+
+### Phase 6: Worker Execution (2026-02-17)
+- [x] ReImport 後のコンパイル実行を確認（致命的エラーなし、warning中心）
+- [x] `CS0246: TMPro` の再発防止修正が main に反映済み（tests 側の TMP 直接依存除去）
+- [x] 現在の主要ブロッカーを更新
+  - BLOCKER解除: `TMPro` 参照エラー
+  - 残課題: TASK_050/051 の Runtime証跡（PlayMode/手動）未回収
+- [x] 「ReImportしないとコンパイルが走らない」件の一次調査
+  - プロジェクト設定の異常値は未検出（`ProjectSettings/EditorSettings.asset`）
+  - `LockReloadAssemblies/DisallowAutoRefresh` を使う独自コードは検出なし
+  - 可能性高: Unity Editor 個人設定（Auto Refresh）起因
+- [ ] Next Action: Editorの Auto Refresh 設定確認とログ採取
+- [ ] Next Action: DebugChatScene 実行証跡を回収して TASK_050/051 DoD を更新
 
 ### Phase 6: Worker Execution (2026-02-16)
 - [x] TASK_050 修正差分を反映（開始ノード名統一 / 変数再宣言解消）
