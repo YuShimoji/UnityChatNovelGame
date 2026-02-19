@@ -44,7 +44,7 @@ namespace ProjectFoundPhone.Editor
             Debug.Log($"TitleScene validation passed: {scene.name} contains TitleScreenManager.");
         }
 
-        private static SceneSetupResult EnsureTitleSceneManager()
+        internal static SceneSetupResult EnsureTitleSceneManager()
         {
             var scene = EditorSceneManager.OpenScene(TitleScenePath, OpenSceneMode.Single);
             GameObject managerObject = GameObject.Find("TitleScreenManager");
@@ -58,35 +58,48 @@ namespace ProjectFoundPhone.Editor
 
             int removedMissingScripts = GameObjectUtility.RemoveMonoBehavioursWithMissingScript(managerObject);
             TitleScreenManager manager = managerObject.GetComponent<TitleScreenManager>();
+            bool componentAdded = false;
             if (manager == null)
             {
                 manager = managerObject.AddComponent<TitleScreenManager>();
+                componentAdded = true;
             }
 
             SerializedObject serializedManager = new SerializedObject(manager);
             SerializedProperty newGameSceneProperty = serializedManager.FindProperty("m_NewGameSceneName");
+            bool assignedDefaultScene = false;
             if (newGameSceneProperty != null && string.IsNullOrWhiteSpace(newGameSceneProperty.stringValue))
             {
                 newGameSceneProperty.stringValue = DefaultNewGameScene;
                 serializedManager.ApplyModifiedPropertiesWithoutUndo();
+                assignedDefaultScene = true;
             }
 
-            EditorSceneManager.MarkSceneDirty(scene);
-            EditorSceneManager.SaveScene(scene);
+            bool sceneModified = created || removedMissingScripts > 0 || componentAdded || assignedDefaultScene;
+            if (sceneModified)
+            {
+                EditorSceneManager.MarkSceneDirty(scene);
+                EditorSceneManager.SaveScene(scene);
+            }
 
-            return new SceneSetupResult(created, removedMissingScripts);
+            return new SceneSetupResult(created, removedMissingScripts, componentAdded, assignedDefaultScene);
         }
 
-        private readonly struct SceneSetupResult
+        internal readonly struct SceneSetupResult
         {
-            public SceneSetupResult(bool created, int removedMissingScripts)
+            public SceneSetupResult(bool created, int removedMissingScripts, bool componentAdded, bool assignedDefaultScene)
             {
                 Created = created;
                 RemovedMissingScripts = removedMissingScripts;
+                ComponentAdded = componentAdded;
+                AssignedDefaultScene = assignedDefaultScene;
             }
 
             public bool Created { get; }
             public int RemovedMissingScripts { get; }
+            public bool ComponentAdded { get; }
+            public bool AssignedDefaultScene { get; }
+            public bool SceneModified => Created || RemovedMissingScripts > 0 || ComponentAdded || AssignedDefaultScene;
         }
     }
 }

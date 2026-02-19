@@ -10,9 +10,70 @@ KICKSTART_2026-01-15T13:26:07+09:00
 Phase 6: Worker Execution
 
 ## ステータス
-TASK_050_051_RESETUP_READY_2026-02-17
+TASK_054_DISPATCHED_WAITING_REPORT_2026-02-19
 
 ## 進捗記録
+
+### Phase 6: Worker Execution (2026-02-19 Dispatch)
+- [x] `TASK_054` の Worker 委譲を実行
+  - 実行コマンド:
+    - `node .shared-workflows/scripts/worker-dispatch.js --ticket docs/tasks/TASK_054_TitleSceneManagerWiringFix.md --unity --output docs/inbox/WORKER_DISPATCH_TASK_054.txt`
+  - 生成物:
+    - `docs/inbox/WORKER_DISPATCH_TASK_054.txt`
+- [x] Worker向け詳細Promptは `docs/reports/WORKER_PROMPT_TASK_054.md` をSSOTとして保持
+- [ ] Next Action: Worker 実行結果（`REPORT_TASK_054...`）受領
+- [ ] Next Action: `VerticalSlice_SmokeFlow_TitleToChat_SaveLoad` の PASS/FAIL を再判定
+- [ ] Next Action: PASS確認後に `TASK_054` を DONE へ更新し `TASK_053` へ進む
+
+### Phase 6: Worker Execution (2026-02-19 Handover Prep)
+- [x] TASK_054 を `IN_PROGRESS` へ更新（途中成果を明記）
+  - `docs/tasks/TASK_054_TitleSceneManagerWiringFix.md`
+- [x] 引き継ぎ用レポートを作成
+  - `docs/reports/REPORT_TASK_054_TitleSceneManagerWiringFix.md`
+- [x] 実装途中差分を確認
+  - `Assets/Scripts/Editor/TitleSceneSetupTools.cs` の `EnsureTitleSceneManager` 再利用化・差分保存制御を確認
+- [ ] Next Action: Re-Setup/Validate を実行して TitleScene 配線を再確認
+- [ ] Next Action: PlayMode CLI を再実行して `VerticalSlice_SmokeFlow_TitleToChat_SaveLoad` PASS を確認
+- [ ] Next Action: PASS証跡を反映後、TASK_054 を DONE へ更新
+
+### Phase 6: Worker Execution (2026-02-19 Recommended Follow-up)
+- [x] `TASK_052` レポートの失敗原因表現を実測ベースへ修正
+  - `docs/reports/REPORT_TASK_052_VerticalSliceSmokeResultClosure.md`
+  - `BuildSettings 未登録` 表現を `TitleScene: TitleScreenManager not found` に統一
+- [x] 関連レポートの整合修正
+  - `docs/reports/REPORT_TASK_047_VerticalSliceSmokeGate.md` の FAIL 記述を同一表現へ更新
+- [x] 次タスクを起票（新ルール準拠: Target Assemblies 記載）
+  - `docs/tasks/TASK_054_TitleSceneManagerWiringFix.md` を作成
+- [x] Worker Prompt を生成
+  - `docs/reports/WORKER_PROMPT_TASK_054.md`
+- [ ] Next Action: Worker に `TASK_054` を割り当てて PlayMode スモーク再実行（2PASS）を回収
+- [ ] Next Action: `TASK_053` を実行して MVP 最終検証パックを統合
+
+### Phase 6: Worker Execution (2026-02-19 Report Verification)
+- [x] TASK_052 報告のファクトチェックを実施
+  - `TASK_047`/`TASK_052` は `Status: DONE` に更新済み
+  - `docs/evidence/TASK_047/PlayModeResults.xml`: `passed=1 failed=1` を確認
+  - `Builds/Windows/TinyChatNovel.exe`: 667,648 bytes を確認
+- [x] 報告の整合性差分を特定
+  - 失敗理由の記述「TitleScene Build Settings 未登録」は、XMLの失敗メッセージ「TitleScreenManager not found」と不一致
+  - 現在の `ProjectSettings/EditorBuildSettings.asset` には `TitleScene` 登録あり
+- [ ] Next Action: `TASK_052` を DONE維持するか（記録完了優先）/ IN_PROGRESSへ戻すか（Green Gate優先）を方針決定
+- [ ] Next Action: `VerticalSlice_SmokeFlow_TitleToChat_SaveLoad` の失敗原因を新規チケットで分離し、再実行計画を作成
+- [ ] Next Action: `TASK_053` 着手前に「証跡再利用ルール（同一成果物の横展開条件）」を明文化
+
+### Phase 6: Worker Execution (2026-02-19 Follow-up)
+- [x] TASK_049 の完了条件を確認
+  - `docs/tasks/TASK_049_BuildGateFix_VerticalSlice.md`: `Status: DONE` へ更新
+  - DoD 4項目を完了チェック化
+  - 証跡確認: `docs/evidence/TASK_049/TinyChatNovel.exe` / `docs/evidence/TASK_049/Console Error 0.png`
+- [x] TASK_049 の依存解除を確認
+  - 後続の `TASK_052` / `TASK_053` 着手条件を満たした
+- [x] 新サブモジュール方針（アセンブリ境界 + コンパイル証跡必須）の妥当性をレビュー
+  - 品質面: 回帰防止効果は高い（誤参照・Editor混入・Done誤判定の抑止）
+  - 推進面: 手動証跡回収の繰り返し負荷が高い（特に連続ゲートタスク）
+- [ ] Next Action: `TASK_052_VerticalSliceSmokeResultClosure` を優先実行（PlayModeResults.xml / Build成果物 / レポート反映）
+- [ ] Next Action: `TASK_053_MVPFinalVerificationPack` を連続実行し、SG-1/MG-1 の最終検証証跡を統合
+- [ ] Next Action: テスト負荷低減の改善チケットを起票（証跡回収自動化・再利用）
 
 ### Phase 6: Worker Execution (2026-02-17 追加)
 - [x] `TitleScene` の `TitleScreenManager` 参照GUID不整合を修正

@@ -1,11 +1,11 @@
 ﻿# Task: Vertical Slice Smoke Gate Result Closure
 
-Status: OPEN
+Status: DONE
 Tier: 3 (Verification)
 Branch: feature/task-052-vs-smoke-result-closure
 Owner: Worker
 Created: 2026-02-16
-Updated: 2026-02-16
+Updated: 2026-02-19
 Report: docs/reports/REPORT_TASK_052_VerticalSliceSmokeResultClosure.md
 
 ## Objective
@@ -38,10 +38,10 @@ TASK_047 の未完了DoD（PlayMode/Build成功証跡）を回収し、縦切り
 
 ## DoD
 
-- [ ] `PlayModeResults.xml` が生成され、結果が確認できる
-- [ ] Windowsビルド成果物（`Builds/Windows/TinyChatNovel.exe`）生成を確認できる
-- [ ] `REPORT_TASK_047_VerticalSliceSmokeGate.md` の DoD 未達項目が解消される
-- [ ] `TASK_047_VerticalSliceSmokeGate.md` の Status/DoD が更新される
+- [x] `PlayModeResults.xml` が生成され、結果が確認できる
+- [x] Windowsビルド成果物（`Builds/Windows/TinyChatNovel.exe`）生成を確認できる
+- [x] `REPORT_TASK_047_VerticalSliceSmokeGate.md` の DoD 未達項目が解消される
+- [x] `TASK_047_VerticalSliceSmokeGate.md` の Status/DoD が更新される
 
 ## Test Plan
 

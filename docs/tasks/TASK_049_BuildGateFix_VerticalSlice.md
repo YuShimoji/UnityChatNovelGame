@@ -1,6 +1,6 @@
 ﻿# Task: Build Gate Fix for Vertical Slice
 
-Status: OPEN
+Status: DONE
 Tier: 2 (Stabilization)
 Branch: feature/task-049-build-gate-fix
 Owner: Worker
@@ -39,10 +39,10 @@ Report: docs/reports/REPORT_TASK_049_BuildGateFix_VerticalSlice.md
 
 ## DoD
 
-- [ ] `Build.log` で出ている Editor 名前空間系のコンパイルエラーが解消される
-- [ ] Unity Editor でコンパイルエラー 0 を確認する
-- [ ] Windows ビルドが成功する（`Builds/Windows/TinyChatNovel.exe` 生成）
-- [ ] 変更理由を `docs/reports/REPORT_TASK_049_BuildGateFix_VerticalSlice.md` に記録する
+- [x] `Build.log` で出ている Editor 名前空間系のコンパイルエラーが解消される
+- [x] Unity Editor でコンパイルエラー 0 を確認する
+- [x] Windows ビルドが成功する（`Builds/Windows/TinyChatNovel.exe` 生成）
+- [x] 変更理由を `docs/reports/REPORT_TASK_049_BuildGateFix_VerticalSlice.md` に記録する
 
 ## Test Plan
 
