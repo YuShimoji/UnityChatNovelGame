@@ -35,6 +35,7 @@ MVP最終検証タスク群（TASK_MVP_04, TASK_027, TASK_025）を実測で埋�
 ## Constraints
 
 - 依存タスク（TASK_049/050/051）完了後に着手する
+- `TASK_055_EvidenceReuseAutomation` の判定基準で再利用可能な証跡を先に仕分ける
 - 実測値・証跡なしで完了扱いにしない
 - 60秒完走・Console Error 0 を短期ゲート基準にする
 
