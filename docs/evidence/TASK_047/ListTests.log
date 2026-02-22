@@ -2,18 +2,23 @@
 Built from '6000.3/staging' branch; Version is '6000.3.3f1 (ef04196de0d6) revision 15664153'; Using compiler version '194234433'; Build Type 'Release'
 OS: 'Windows 11  (10.0.26200) 64bit Core' Language: 'ja' Physical Memory: 16218 MB
 BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1
-[Licensing::IpcConnector] Successfully connected to: "LicenseClient-thank" at "2026-02-11T18:23:57.8338842Z"
-Date: 2026-02-11T18:23:57Z
+Date: 2026-02-22T13:25:17Z
+[Licensing::IpcConnector] Channel LicenseClient-thank doesn't exist
+[Licensing::Module] Successfully launched the LicensingClient (PId: 23756)
 
 COMMAND LINE ARGUMENTS:
 C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Unity.exe
 -batchmode
 -projectPath
-c:\Users\thank\Storage\Game Projects\UnityChatNovelGame
+.
+-runTests
+-testPlatform
+PlayMode
+-listTests
+-logfile
+docs/evidence/TASK_047/ListTests.log
 -quit
--logFile
-docs/evidence/TASK_047/EditorBatchCheck.log
-Successfully changed project path to: c:\Users\thank\Storage\Game Projects\UnityChatNovelGame
+Successfully changed project path to: C:/Users/thank/Storage/Game Projects/UnityChatNovelGame
 C:/Users/thank/Storage/Game Projects/UnityChatNovelGame
 [UnityMemory] Configuration Parameters - Can be set up in boot.config
     "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
@@ -50,25 +55,27 @@ C:/Users/thank/Storage/Game Projects/UnityChatNovelGame
     "memorysetup-job-temp-allocator-block-size-background=1048576"
     "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
     "memorysetup-temp-allocator-size-cloud-worker=32768"
-Player connection [121180]  Target information:
+Player connection [10920]  Target information:
 
-Player connection [121180]  * "[IP] 10.198.120.76 [Port] 55504 [Flags] 2 [Guid] 1862802323 [EditorId] 1862802323 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-H53P1T4) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+Player connection [10920]  * "[IP] 10.67.32.76 [Port] 55504 [Flags] 2 [Guid] 996743667 [EditorId] 996743667 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-H53P1T4) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
 
-Player connection [121180] Host joined multi-casting on [225.0.0.222:54997]...
-Player connection [121180] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Player connection [10920] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [10920] Host joined alternative multi-casting on [225.0.0.222:34997]...
 Input System module state changed to: Initialized.
 [Physics::Module] Initialized fallback backend.
 [Physics::Module] Id: 0xdecafbad
-[Package Manager] Connected to IPC stream "Upm-121176" after 0.5 seconds.
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-thank" at "2026-02-22T13:25:18.1235856Z"
+[Package Manager] Connected to IPC stream "Upm-57828" after 0.6 seconds.
 [Licensing::Module] Licensing is not yet initialized.
 [Licensing::Client] Handshaking with LicensingClient:
   Version:                 1.17.4+4293ba1
-  Session Id:              7a5e0610eb104ee4a4ba8906303f1a3b
-  Correlation Id:          f0e4a34d9903f0199c81ac4ae21a256c
-  External correlation Id: 5542471479561064702
+  Session Id:              46642b261b304e07b6801e6c47ed4928
+  Correlation Id:          86b6bcfcfb982c9ae3c87a4ca491ae42
+  External correlation Id: 2302908814187463983
   Machine Id:              nLx//OVipz/9JKx+L1gSxSSFrqs=
-[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-thank" (connect: 0.00s, validation: 0.00s, handshake: 1.52s)
-[Licensing::IpcConnector] Successfully connected to: "LicenseClient-thank-notifications" at "2026-02-11T18:23:59.3564505Z"
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-thank" (connect: 0.86s, validation: 0.06s, handshake: 1.39s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-thank-notifications" at "2026-02-22T13:25:19.5682134Z"
+[Licensing::Module] Connected to LicensingClient (PId: 23756, launch time: 0.00, total connection time: 2.30s)
 [Licensing::Module] Error: Access token is unavailable; failed to update
 [Licensing::Client] Successfully resolved entitlement details
 [Licensing::Module] License group:
@@ -76,10 +83,9 @@ Input System module state changed to: Initialized.
   Product: Unity Personal
   Type: Assigned
   Expiration: Unlimited
-[Licensing::Client] Successfully updated license, isAsync: True, time: 0.00
-[Licensing::Client] Successfully resolved entitlement details
-[Licensing::Module] Licensing Background thread has ended after 1.53s
-[Licensing::Module] Licensing is initialized (took 0.83s).
+[Licensing::Client] Successfully updated license, isAsync: True, time: 0.01
+[Licensing::Module] Licensing Background thread has ended after 2.34s
+[Licensing::Module] Licensing is initialized (took 1.43s).
 [Licensing::Client] Successfully resolved entitlement details
 Library Redirect Path: Library/
 [Physics::Module] Selected backend.
@@ -88,7 +94,7 @@ Library Redirect Path: Library/
 [Physics::Module] SDK Version: 4.1.2
 [Physics::Module] Integration Version: 1.0.0
 [Physics::Module] Threading Mode: Multi-Threaded
-Refreshing native plugins compatible for Editor in 0.39 ms, found 0 plugins.
+Refreshing native plugins compatible for Editor in 0.62 ms, found 0 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 6000.3.3f1 (ef04196de0d6)
 [Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/6000.3.3f1/Editor/Data/Resources/UnitySubsystems
@@ -104,7 +110,7 @@ Initialize mono
 Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/6000.3.3f1/Editor/Data/Managed'
 Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/6000.3.3f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
 Mono config path = 'C:/Program Files/Unity/Hub/Editor/6000.3.3f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56176
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56828
 Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
 Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
 ImportWorker Server TCP listen port: 0
@@ -112,39 +118,39 @@ AcceleratorClientConnectionCallback - disconnected - :0
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.3.3f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.002324 seconds.
-- Loaded All Assemblies, in  0.603 seconds
+Registered in 0.002698 seconds.
+- Loaded All Assemblies, in  0.589 seconds
 Native extension for WindowsStandalone target not found
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.592 seconds
-Domain Reload Profiling: 1192ms
-	BeginReloadAssembly (181ms)
+- Finished resetting the current domain, in  0.619 seconds
+Domain Reload Profiling: 1203ms
+	BeginReloadAssembly (194ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (0ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (3ms)
+		CreateAndSetChildDomain (19ms)
 	RebuildCommonClasses (51ms)
 	RebuildNativeTypeToScriptingClass (20ms)
-	initialDomainReloadingComplete (67ms)
-	LoadAllAssembliesAndSetupDomain (280ms)
-		LoadAssemblies (175ms)
+	initialDomainReloadingComplete (68ms)
+	LoadAllAssembliesAndSetupDomain (252ms)
+		LoadAssemblies (171ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (277ms)
-			TypeCache.Refresh (275ms)
-				TypeCache.ScanAssembly (255ms)
+		AnalyzeDomain (248ms)
+			TypeCache.Refresh (246ms)
+				TypeCache.ScanAssembly (226ms)
 			BuildScriptInfoCaches (0ms)
-			ResolveRequiredComponents (1ms)
-	FinalizeReload (593ms)
+			ResolveRequiredComponents (0ms)
+	FinalizeReload (619ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (545ms)
+		SetupLoadedEditorAssemblies (568ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (56ms)
+			InitializePlatformSupportModulesInManaged (59ms)
 			SetLoadedEditorAssemblies (5ms)
-			BeforeProcessingInitializeOnLoad (154ms)
-			ProcessInitializeOnLoadAttributes (236ms)
-			ProcessInitializeOnLoadMethodAttributes (94ms)
+			BeforeProcessingInitializeOnLoad (148ms)
+			ProcessInitializeOnLoadAttributes (244ms)
+			ProcessInitializeOnLoadMethodAttributes (111ms)
 			AfterProcessingInitializeOnLoad (0ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
@@ -218,8 +224,7 @@ Package Manager log level set to [2]
     com.unity.ext.nunit@2.0.5 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.ext.nunit@d8c07649098d)
     com.unity.2d.sprite@1.0.0 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.2d.sprite@82f01c8c75ca)
 [Subsystems] No new subsystems found in resolved package list.
-[Package Manager] Done registering packages in 0.02 seconds
-[ScriptCompilation] Requested script compilation because: Assetdatabase observed changes in script compilation related files
+[Package Manager] Done registering packages in 0.03 seconds
 Duplicate assembly 'Microsoft.CodeAnalysis.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/CodeAnalysis/Microsoft.CodeAnalysis.dll, AssemblyName=Microsoft.CodeAnalysis, Version=3.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/Microsoft.CodeAnalysis.dll, AssemblyName=Microsoft.CodeAnalysis, Version=3.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'.Duplicate assembly 'System.Reflection.Metadata.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Reflection.Metadata.dll, AssemblyName=System.Reflection.Metadata, Version=10.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Reflection.Metadata.dll, AssemblyName=System.Reflection.Metadata, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Collections.Immutable.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Collections.Immutable.dll, AssemblyName=System.Collections.Immutable, Version=10.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Collections.Immutable.dll, AssemblyName=System.Collections.Immutable, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Runtime.CompilerServices.Unsafe.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Runtime.CompilerServices.Unsafe.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/com.unity.collections/Unity.Collections.Tests/System.Runtime.CompilerServices.Unsafe/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'Microsoft.CodeAnalysis.CSharp.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/CodeAnalysis/Microsoft.CodeAnalysis.CSharp.dll, AssemblyName=Microsoft.CodeAnalysis.CSharp, Version=3.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/Microsoft.CodeAnalysis.CSharp.dll, AssemblyName=Microsoft.CodeAnalysis.CSharp, Version=3.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'.Assembly for Assembly Definition File 'Assets/Plugins/Demigiant/DOTween/Editor/Demigiant.DOTween.Editor.asmdef' will not be compiled, because it has no scripts associated with it.
 UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
 UnityEngine.StackTraceUtility:ExtractStackTrace ()
@@ -234,30 +239,17 @@ UnityEditor.Scripting.ScriptCompilation.EditorCompilationInterface/<>c__DisplayC
 UnityEditor.Scripting.ScriptCompilation.EditorCompilationInterface:EmitExceptionAsError<UnityEditor.Scripting.ScriptCompilation.EditorCompilation/CompileStatus> (System.Func`1<UnityEditor.Scripting.ScriptCompilation.EditorCompilation/CompileStatus>,UnityEditor.Scripting.ScriptCompilation.EditorCompilation/CompileStatus)
 UnityEditor.Scripting.ScriptCompilation.EditorCompilationInterface:CompileScripts (UnityEditor.Scripting.ScriptCompilation.EditorScriptCompilationOptions,UnityEditor.BuildTarget,int,string[])
 
-Refreshing native plugins compatible for Editor in 1.47 ms, found 1 plugins.
+Refreshing native plugins compatible for Editor in 2.86 ms, found 1 plugins.
 Starting: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Tools\BuildPipeline\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
 WorkingDir: C:/Users/thank/Storage/Game Projects/UnityChatNovelGame
 DisplayProgressbar: Compiling Scripts
-ExitCode: 0 Duration: 0s958ms
-[ 989/1303  0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
-[1299/1303  0s] Csc Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.dll (+2 others)
-[1300/1303  0s] ILPostProcess Library/Bee/artifacts/1900b0aE.dag/post-processed/Assembly-CSharp-Editor.dll (+pdb)
-Processing assembly Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.dll, with 137 defines and 351 references
-
-processors: Unity.Jobs.CodeGen.JobsILPostProcessor, zzzUnity.Burst.CodeGen.BurstILPostProcessor
-
-running Unity.Jobs.CodeGen.JobsILPostProcessor
-
-running zzzUnity.Burst.CodeGen.BurstILPostProcessor
-[1301/1303  0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.pdb
-[1302/1303  0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.dll
-*** Tundra build success (0.92 seconds), 5 items updated, 1303 evaluated
-AssetDatabase: script compilation time: 1.515669s
+ExitCode: 0 Duration: 0s552ms
+[1004/1323  0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
+*** Tundra build success (0.51 seconds), 1 items updated, 1323 evaluated
+AssetDatabase: script compilation time: 1.196485s
 Begin MonoManager ReloadAssembly
-Duplicate assembly 'Microsoft.CodeAnalysis.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/CodeAnalysis/Microsoft.CodeAnalysis.dll, AssemblyName=Microsoft.CodeAnalysis, Version=3.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/Microsoft.CodeAnalysis.dll, AssemblyName=Microsoft.CodeAnalysis, Version=3.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'.Duplicate assembly 'System.Reflection.Metadata.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Reflection.Metadata.dll, AssemblyName=System.Reflection.Metadata, Version=10.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Reflection.Metadata.dll, AssemblyName=System.Reflection.Metadata, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Collections.Immutable.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Collections.Immutable.dll, AssemblyName=System.Collections.Immutable, Version=10.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Collections.Immutable.dll, AssemblyName=System.Collections.Immutable, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Runtime.CompilerServices.Unsafe.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Runtime.CompilerServices.Unsafe.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/com.unity.collections/Unity.Collections.Tests/System.Runtime.CompilerServices.Unsafe/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'Microsoft.CodeAnalysis.CSharp.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/CodeAnalysis/Microsoft.CodeAnalysis.CSharp.dll, AssemblyName=Microsoft.CodeAnalysis.CSharp, Version=3.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/Microsoft.CodeAnalysis.CSharp.dll, AssemblyName=Microsoft.CodeAnalysis.CSharp, Version=3.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'.- Loaded All Assemblies, in  1.508 seconds
-Start importing Assets/Scripts/Tests/PlayMode using Guid(390da50422e6494786d0da0d277082ad) (DefaultImporter) -> (artifact id: '4268816e71721fdf20d13d2b50cfa46c') in 0.0215972 seconds
-Start importing Assets/Scripts/Tests/PlayMode/ProjectFoundPhone.PlayModeTests.asmdef using Guid(e130893ff79b4f6b9662fb354ae1d10c) (AssemblyDefinitionImporter) -> (artifact id: 'a6f39e2949f45c7ab86715124add48d4') in 0.0023867 seconds
-Refreshing native plugins compatible for Editor in 2.46 ms, found 1 plugins.
+Duplicate assembly 'Microsoft.CodeAnalysis.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/CodeAnalysis/Microsoft.CodeAnalysis.dll, AssemblyName=Microsoft.CodeAnalysis, Version=3.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/Microsoft.CodeAnalysis.dll, AssemblyName=Microsoft.CodeAnalysis, Version=3.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'.Duplicate assembly 'System.Reflection.Metadata.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Reflection.Metadata.dll, AssemblyName=System.Reflection.Metadata, Version=10.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Reflection.Metadata.dll, AssemblyName=System.Reflection.Metadata, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Collections.Immutable.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Collections.Immutable.dll, AssemblyName=System.Collections.Immutable, Version=10.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Collections.Immutable.dll, AssemblyName=System.Collections.Immutable, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Runtime.CompilerServices.Unsafe.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Runtime.CompilerServices.Unsafe.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/com.unity.collections/Unity.Collections.Tests/System.Runtime.CompilerServices.Unsafe/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'Microsoft.CodeAnalysis.CSharp.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/CodeAnalysis/Microsoft.CodeAnalysis.CSharp.dll, AssemblyName=Microsoft.CodeAnalysis.CSharp, Version=3.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/Microsoft.CodeAnalysis.CSharp.dll, AssemblyName=Microsoft.CodeAnalysis.CSharp, Version=3.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'.- Loaded All Assemblies, in  1.459 seconds
+Refreshing native plugins compatible for Editor in 1.93 ms, found 1 plugins.
 Native extension for WindowsStandalone target not found
 Duplicate assembly 'Microsoft.CodeAnalysis.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/CodeAnalysis/Microsoft.CodeAnalysis.dll, AssemblyName=Microsoft.CodeAnalysis, Version=3.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/Microsoft.CodeAnalysis.dll, AssemblyName=Microsoft.CodeAnalysis, Version=3.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'.Duplicate assembly 'System.Reflection.Metadata.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Reflection.Metadata.dll, AssemblyName=System.Reflection.Metadata, Version=10.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Reflection.Metadata.dll, AssemblyName=System.Reflection.Metadata, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Collections.Immutable.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Collections.Immutable.dll, AssemblyName=System.Collections.Immutable, Version=10.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Collections.Immutable.dll, AssemblyName=System.Collections.Immutable, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Runtime.CompilerServices.Unsafe.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Runtime.CompilerServices.Unsafe.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/com.unity.collections/Unity.Collections.Tests/System.Runtime.CompilerServices.Unsafe/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'Microsoft.CodeAnalysis.CSharp.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/CodeAnalysis/Microsoft.CodeAnalysis.CSharp.dll, AssemblyName=Microsoft.CodeAnalysis.CSharp, Version=3.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/Microsoft.CodeAnalysis.CSharp.dll, AssemblyName=Microsoft.CodeAnalysis.CSharp, Version=3.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'.<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Auto-discovered 18 tools and 14 resources (32 total handlers)
 UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
@@ -276,103 +268,87 @@ UnityEditor.EditorAssemblies:ProcessInitializeOnLoadAttributes (System.Type[])
 
 (Filename: Assets/MCPForUnity/Editor/Helpers/McpLog.cs Line: 40)
 
-Refreshing native plugins compatible for Editor in 2.14 ms, found 1 plugins.
+Refreshing native plugins compatible for Editor in 2.17 ms, found 1 plugins.
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  8.266 seconds
-Domain Reload Profiling: 9768ms
-	BeginReloadAssembly (344ms)
+- Finished resetting the current domain, in  7.983 seconds
+Domain Reload Profiling: 9430ms
+	BeginReloadAssembly (365ms)
 		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (13ms)
+		DisableScriptedObjects (15ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (161ms)
-	RebuildCommonClasses (47ms)
-	RebuildNativeTypeToScriptingClass (19ms)
-	initialDomainReloadingComplete (66ms)
-	LoadAllAssembliesAndSetupDomain (1024ms)
-		LoadAssemblies (693ms)
+		CreateAndSetChildDomain (169ms)
+	RebuildCommonClasses (53ms)
+	RebuildNativeTypeToScriptingClass (22ms)
+	initialDomainReloadingComplete (81ms)
+	LoadAllAssembliesAndSetupDomain (926ms)
+		LoadAssemblies (595ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (440ms)
-			TypeCache.Refresh (375ms)
-				TypeCache.ScanAssembly (355ms)
-			BuildScriptInfoCaches (57ms)
-			ResolveRequiredComponents (4ms)
-	FinalizeReload (8267ms)
+		AnalyzeDomain (463ms)
+			TypeCache.Refresh (393ms)
+				TypeCache.ScanAssembly (370ms)
+			BuildScriptInfoCaches (59ms)
+			ResolveRequiredComponents (5ms)
+	FinalizeReload (7983ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (8101ms)
+		SetupLoadedEditorAssemblies (7814ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (41ms)
-			SetLoadedEditorAssemblies (9ms)
-			BeforeProcessingInitializeOnLoad (449ms)
-			ProcessInitializeOnLoadAttributes (7180ms)
-			ProcessInitializeOnLoadMethodAttributes (409ms)
-			AfterProcessingInitializeOnLoad (12ms)
-			EditorAssembliesLoaded (1ms)
+			InitializePlatformSupportModulesInManaged (28ms)
+			SetLoadedEditorAssemblies (5ms)
+			BeforeProcessingInitializeOnLoad (368ms)
+			ProcessInitializeOnLoadAttributes (6980ms)
+			ProcessInitializeOnLoadMethodAttributes (425ms)
+			AfterProcessingInitializeOnLoad (8ms)
+			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
-		AwakeInstancesAfterBackupRestoration (13ms)
-Start importing Assets/Resources/Yarn/DebugScript.yarn using Guid(f413bcdc9b2cbe34494e985ba27779a2) (ScriptedImporter) -> (artifact id: '943f40a9b7145034848d2543dc430b79') in 0.249074 seconds
-Start importing Assets/Resources/Yarn/VerticalSlice.yarn using Guid(1954630695cf6ff488feabd13efd355d) (ScriptedImporter) -> (artifact id: '21c17312c6f2120b964e251b78dd61f7') in 0.1758642 seconds
-Start importing Packages/dev.yarnspinner.unity/Prefabs/Dialogue System.prefab using Guid(52571f68872914e24837210513edea1d) (PrefabImporter) -> (artifact id: '9ec11e57240837630f058c1aba38b226') in 0.2137781 seconds
-Start importing Packages/dev.yarnspinner.unity/Prefabs/Option Item.prefab using Guid(e605972137b0b4c1399ffb07beae9a9b) (PrefabImporter) -> (artifact id: '3fedc20ce2abedbd31fecbf4433c007f') in 0.0317622 seconds
-Start importing Assets/Resources/Yarn/Project.yarnproject using Guid(a47e6935cb6cadf4d9247e39c563dd95) (ScriptedImporter)Error compiling <a href="Assets\Resources\Yarn\DebugScript.yarn">Assets\Resources\Yarn\DebugScript.yarn</a> line 1: More than one node is named Start
-Error compiling <a href="Assets\Resources\Yarn\VerticalSlice.yarn">Assets\Resources\Yarn\VerticalSlice.yarn</a> line 1: More than one node is named Start
-Error compiling <a href="Assets\Resources\Yarn\VerticalSlice.yarn">Assets\Resources\Yarn\VerticalSlice.yarn</a> line 3: Redeclaration of existing variable $has_topic_debug_topic_01
- -> (artifact id: 'e6571f96974febfcd6a2837bcee2eb94') in 0.4851064 seconds
-Refreshing native plugins compatible for Editor in 2.23 ms, found 1 plugins.
-Preloading 1 native plugins for Editor in 0.11 ms.
-Asset Pipeline Refresh (id=a2c87b375892d43419e34582b3ffed7d): Total: 14.042 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+		AwakeInstancesAfterBackupRestoration (9ms)
+Asset Pipeline Refresh (id=70aee0d1590f4744ea16f8201307edc0): Total: 11.675 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
 	Summary:
-		Imports: total=7 (actual=7, local cache=0, cache server=0)
-		Asset DB Process Time: managed=23 ms, native=10063 ms
-		Asset DB Callback time: managed=822 ms, native=37 ms
-		Scripting: domain reloads=1, domain reload time=1508 ms, compile time=1519 ms, other=66 ms
-		Project Asset Count: scripts=1407, non-scripts=3823
-		Asset File Changes: new=0, changed=1, moved=0, deleted=0
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=8612 ms
+		Asset DB Callback time: managed=276 ms, native=38 ms
+		Scripting: domain reloads=1, domain reload time=1459 ms, compile time=1201 ms, other=85 ms
+		Project Asset Count: scripts=1410, non-scripts=3839
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
 		Scan Filter Count: 0
 	InvokeCustomDependenciesCallbacks: 0.001ms
-	InvokePackagesCallback: 27.537ms
-	ApplyChangesToAssetFolders: 0.882ms
-	Scan: 124.196ms
-	OnSourceAssetsModified: 0.890ms
-	CategorizeAssetsWithTransientArtifact: 49.541ms
-	ProcessAssetsWithTransientArtifactChanges: 92.610ms
-	CategorizeAssets: 159.437ms
-	ImportOutOfDateAssets: 9481.091ms (6762.851ms without children)
-		ImportManagerImport: 1196.211ms (10.187ms without children)
-			ImportInProcess: 1185.911ms
-			UpdateCategorizedAssets: 0.113ms
-		CompileScripts: 1519.089ms
-		ReloadNativeAssets: 0.007ms
-		UnloadImportedAssets: 0.589ms
-		ReloadImportedAssets: 0.003ms
-		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 1.252ms
-		InitializingProgressBar: 0.009ms
-		PostProcessAllAssetNotificationsAddChangedAssets: 0.001ms
-		OnDemandSchedulerStart: 1.078ms
-	PostProcessAllAssets: 824.759ms
-	Hotreload: 8.839ms
+	InvokePackagesCallback: 40.320ms
+	ApplyChangesToAssetFolders: 0.858ms
+	Scan: 150.005ms
+	OnSourceAssetsModified: 0.003ms
+	CategorizeAssetsWithTransientArtifact: 75.743ms
+	ProcessAssetsWithTransientArtifactChanges: 93.152ms
+	CategorizeAssets: 82.045ms
+	ImportOutOfDateAssets: 7994.390ms (6791.088ms without children)
+		CompileScripts: 1201.454ms
+		ReloadNativeAssets: 0.008ms
+		UnloadImportedAssets: 0.144ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 1.051ms
+		InitializingProgressBar: 0.000ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.000ms
+		OnDemandSchedulerStart: 0.644ms
+	PostProcessAllAssets: 277.052ms
 	GatherAllCurrentPrimaryArtifactRevisions: 0.003ms
-	UnloadStreamsBegin: 3.746ms
-	PersistCurrentRevisions: 0.282ms
+	UnloadStreamsBegin: 1.635ms
+	PersistCurrentRevisions: 0.215ms
 	UnloadStreamsEnd: 0.001ms
-	GenerateScriptTypeHashes: 6.070ms
-	Untracked: 3268.668ms
+	GenerateScriptTypeHashes: 6.485ms
+	Untracked: 2959.507ms
 
 Application.AssetDatabase Initial Refresh End
-Launched and connected shader compiler UnityShaderCompiler.exe after 0.03 seconds
-Scanning for USB devices : 5.405ms
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.02 seconds
+Scanning for USB devices : 1.537ms
 Initializing Unity extensions:
 [MODES] ModeService[none].Initialize
 [MODES] ModeService[none].LoadModes
 [MODES] Loading mode Default (0) for mode-current-id-UnityChatNovelGame
-Unloading 50 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 5617 unused Assets / (17.0 MB). Loaded Objects now: 6259.
-Memory consumption went from 195.2 MB to 178.3 MB.
-Total: 28.206200 ms (FindLiveObjects: 0.843200 ms CreateObjectMapping: 1.693000 ms MarkObjects: 19.698100 ms  DeleteObjects: 5.970400 ms)
+Unloading 168 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 5743 unused Assets / (26.5 MB). Loaded Objects now: 6123.
+Memory consumption went from 216.3 MB to 189.8 MB.
+Total: 24.224500 ms (FindLiveObjects: 0.761700 ms CreateObjectMapping: 1.089700 ms MarkObjects: 11.407800 ms  DeleteObjects: 10.964200 ms)
 
 Batchmode quit successfully invoked - shutting down!
-Curl error 42: Callback aborted
 <b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: No process found listening on port 8080
 UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
 UnityEngine.StackTraceUtility:ExtractStackTrace ()
@@ -388,10 +364,45 @@ UnityEditor.EditorApplication:Internal_EditorApplicationQuit ()
 
 (Filename: Assets/MCPForUnity/Editor/Helpers/McpLog.cs Line: 40)
 
-Start importing ProjectSettings/EditorBuildSettings.asset using Guid(0000000000000000b000000000000000) (LibraryAssetImporter) -> (artifact id: 'aaaabafb4c2d2909ffa13f9201ae9740') in 0.0056401 seconds
-Refreshing native plugins compatible for Editor in 1.94 ms, found 1 plugins.
-Preloading 1 native plugins for Editor in 0.15 ms.
-Asset Pipeline Refresh (id=b31c4abbc0370694fa806d2d94bc3880): Total: 0.071 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+Start importing ProjectSettings/EditorBuildSettings.asset using Guid(0000000000000000b000000000000000) (LibraryAssetImporter) -> (artifact id: '8e7c9dea582a8b094afeb2a282c2758f') in 0.0100417 seconds
+Refreshing native plugins compatible for Editor in 1.90 ms, found 1 plugins.
+Preloading 1 native plugins for Editor in 0.11 ms.
+Asset Pipeline Refresh (id=09b0038c08e2ac642a331f4119bcaa91): Total: 0.550 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=2 ms, native=53 ms
+		Asset DB Callback time: managed=483 ms, native=9 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=1410, non-scripts=3839
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 1
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 0.001ms
+	ApplyChangesToAssetFolders: 0.139ms
+	Scan: 26.357ms
+	OnSourceAssetsModified: 0.001ms
+	CategorizeAssetsWithTransientArtifact: 0.028ms
+	ProcessAssetsWithTransientArtifactChanges: 0.125ms
+	CategorizeAssets: 2.201ms
+	ImportOutOfDateAssets: 15.688ms (0.613ms without children)
+		ImportManagerImport: 12.407ms (1.911ms without children)
+			ImportInProcess: 10.457ms
+			UpdateCategorizedAssets: 0.040ms
+		ReloadNativeAssets: 0.031ms
+		UnloadImportedAssets: 0.530ms
+		ReloadImportedAssets: 0.000ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 1.202ms
+		InitializingProgressBar: 0.000ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.001ms
+		OnDemandSchedulerStart: 0.903ms
+	PostProcessAllAssets: 490.782ms
+	Hotreload: 3.028ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.215ms
+	UnloadStreamsBegin: 2.027ms
+	PersistCurrentRevisions: 0.495ms
+	UnloadStreamsEnd: 0.002ms
+	Untracked: 8.944ms
+
 [Physics::Module] Cleanup current backend.
 [Physics::Module] Id: 0xf2b8ea05
 Input System module state changed to: ShutdownInProgress.

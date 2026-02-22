@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="3" result="Failed(Child)" total="3" passed="2" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-02-22 13:49:51Z" end-time="2026-02-22 13:49:53Z" duration="2.1895373">
+  <test-suite type="TestSuite" id="1011" name="UnityChatNovelGame" fullname="UnityChatNovelGame" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-02-22 13:49:51Z" end-time="2026-02-22 13:49:53Z" duration="2.189537" total="3" passed="2" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1006" name="ProjectFoundPhone.PlayModeTests.dll" fullname="C:/Users/thank/Storage/Game Projects/UnityChatNovelGame/Library/ScriptAssemblies/ProjectFoundPhone.PlayModeTests.dll" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-02-22 13:49:51Z" end-time="2026-02-22 13:49:53Z" duration="2.149045" total="3" passed="2" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="34540" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1007" name="ProjectFoundPhone" fullname="ProjectFoundPhone" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-02-22 13:49:51Z" end-time="2026-02-22 13:49:53Z" duration="2.147781" total="3" passed="2" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1008" name="Tests" fullname="ProjectFoundPhone.Tests" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-02-22 13:49:51Z" end-time="2026-02-22 13:49:53Z" duration="2.147099" total="3" passed="2" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestFixture" id="1001" name="MVPScreenshotEvidencePlayModeTests" fullname="ProjectFoundPhone.Tests.MVPScreenshotEvidencePlayModeTests" classname="ProjectFoundPhone.Tests.MVPScreenshotEvidencePlayModeTests" runstate="Runnable" testcasecount="1" result="Failed" site="Child" start-time="2026-02-22 13:49:51Z" end-time="2026-02-22 13:49:51Z" duration="0.040453" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="1002" name="MVPFlow_CapturesDistinctGameViewEvidence" fullname="ProjectFoundPhone.Tests.MVPScreenshotEvidencePlayModeTests.MVPFlow_CapturesDistinctGameViewEvidence" methodname="MVPFlow_CapturesDistinctGameViewEvidence" classname="ProjectFoundPhone.Tests.MVPScreenshotEvidencePlayModeTests" runstate="Runnable" seed="1933735788" result="Failed" start-time="2026-02-22 13:49:51Z" end-time="2026-02-22 13:49:51Z" duration="0.020772" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <failure>
+                <message><![CDATA[Scene path was not found: Assets/Scenes/MVPScene.unity]]></message>
+                <stack-trace><![CDATA[at ProjectFoundPhone.Tests.MVPScreenshotEvidencePlayModeTests+<LoadMvpScene>d__7.MoveNext () [0x00023] in C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Assets\Scripts\Tests\PlayMode\MVPScreenshotEvidencePlayModeTests.cs:91
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+              </failure>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1003" name="VerticalSliceSmokeGatePlayModeTests" fullname="ProjectFoundPhone.Tests.VerticalSliceSmokeGatePlayModeTests" classname="ProjectFoundPhone.Tests.VerticalSliceSmokeGatePlayModeTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-02-22 13:49:51Z" end-time="2026-02-22 13:49:53Z" duration="2.104944" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1005" name="DebugChatScene_ChoiceAndImageFallback_AreUsable" fullname="ProjectFoundPhone.Tests.VerticalSliceSmokeGatePlayModeTests.DebugChatScene_ChoiceAndImageFallback_AreUsable" methodname="DebugChatScene_ChoiceAndImageFallback_AreUsable" classname="ProjectFoundPhone.Tests.VerticalSliceSmokeGatePlayModeTests" runstate="Runnable" seed="325936125" result="Passed" start-time="2026-02-22 13:49:51Z" end-time="2026-02-22 13:49:52Z" duration="0.918686" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1004" name="VerticalSlice_SmokeFlow_TitleToChat_SaveLoad" fullname="ProjectFoundPhone.Tests.VerticalSliceSmokeGatePlayModeTests.VerticalSlice_SmokeFlow_TitleToChat_SaveLoad" methodname="VerticalSlice_SmokeFlow_TitleToChat_SaveLoad" classname="ProjectFoundPhone.Tests.VerticalSliceSmokeGatePlayModeTests" runstate="Runnable" seed="1648535646" result="Passed" start-time="2026-02-22 13:49:52Z" end-time="2026-02-22 13:49:53Z" duration="1.182390" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[TitleScreenManager: Starting New Game...
+The referenced script on this Behaviour (Game Object '<null>') is missing!
+The referenced script on this Behaviour (Game Object 'MessageBubble') is missing!
+The referenced script on this Behaviour (Game Object 'MessageBubble') is missing!
+ScenarioManager: Variable $current_node not found in VariableStorage.
+DeductionBoard: Instance not found in scene.
+DeductionBoard: Instance not found in scene.
+SaveManager: DeductionBoard not found. Topic progress will not be saved.
+SaveManager: Game saved to slot 0 at C:/Users/thank/AppData/LocalLow/DefaultCompany/UnityChatNovelGame\SaveData_0.json
+DeductionBoard: Instance not found in scene.
+SaveManager: DeductionBoard not found. Topics will not be restored.
+The referenced script on this Behaviour (Game Object '<null>') is missing!
+The referenced script on this Behaviour (Game Object 'MessageBubble') is missing!
+The referenced script on this Behaviour (Game Object 'MessageBubble') is missing!
+SaveManager: Game loaded from slot 0
+<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: [TestRunnerNoThrottle] Restored Interaction Mode after test run.
+Saving results to: C:/Users/thank/AppData/LocalLow/DefaultCompany/UnityChatNovelGame\TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

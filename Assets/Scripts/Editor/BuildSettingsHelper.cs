@@ -15,7 +15,8 @@ public static class BuildSettingsHelper
         string[] requiredScenes = new[]
         {
             "Assets/Scenes/TitleScene.unity",
-            "Assets/Scenes/DebugChatScene.unity"
+            "Assets/Scenes/DebugChatScene.unity",
+            "Assets/Scenes/MVPScene.unity"
         };
         
         var scenes = EditorBuildSettings.scenes.ToList();

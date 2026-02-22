@@ -1,11 +1,11 @@
 ﻿# Task: Vertical Slice Smoke Gate
 
-Status: IN_PROGRESS
+Status: DONE
 Tier: 2 (Verification)
 Branch: feature/task-047-vs-smoke-gate
 Owner: Worker
 Created: 2026-02-11
-Updated: 2026-02-11
+Updated: 2026-02-22
 Report: docs/reports/REPORT_TASK_047_VerticalSliceSmokeGate.md
 
 ## Objective
@@ -40,7 +40,7 @@ Report: docs/reports/REPORT_TASK_047_VerticalSliceSmokeGate.md
 - [x] 最低1本のPlayModeスモークが実行可能
 - [x] 手動チェックリストがレポートに整備されている
 - [x] 失敗時の記録方法（ログ/スクリーンショット）が明記されている
-- [ ] テスト実行結果（PlayMode/Build）が記録される
+- [x] テスト実行結果（PlayMode/Build）が記録される
 
 ## Test Plan
 

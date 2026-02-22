@@ -32,7 +32,7 @@
   - [ ] MVPの通し完走（60秒以内）の記録
   - [ ] Console Error/Exception 0
   - [ ] TASK_047 の PlayMode/Build 証跡回収完了
-  - [ ] TASK_049 の Build Gate 修正完了
+  - [x] TASK_049 の Build Gate 修正完了
   - [ ] TASK_025 After計測の完了
   - [ ] TASK_027 手動フルプレイの完了
   - [ ] テスト全通過・ビルド成功
@@ -93,4 +93,5 @@ gantt
 ## 履歴
 
 - 2026-02-22 06:10: Phase 6 再計画に合わせて MG-1 の対象タスクと進捗を更新
+- 2026-02-22 16:10: TASK_049 完了証跡（Build2.log / TinyChatNovel.exe）を反映
 - 2026-02-12 14:00: MILESTONE_PLAN.md を初期化
