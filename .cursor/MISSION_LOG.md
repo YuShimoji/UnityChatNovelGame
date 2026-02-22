@@ -10,9 +10,53 @@ KICKSTART_2026-01-15T13:26:07+09:00
 Phase 6: Worker Execution
 
 ## ステータス
-TASK_050_051_RESETUP_READY_2026-02-17
+PHASE6_REPLAN_AND_RECOMMENDED_PATH_2026-02-21
 
 ## 進捗記録
+
+### Phase 6: Worker Execution (2026-02-21 Orchestrator再計画)
+- [x] SSOT確認
+  - `.shared-workflows/prompts/orchestrator/modules/00_core.md`
+  - `.shared-workflows/prompts/orchestrator/modules/P6_report.md`
+  - `.shared-workflows/docs/windsurf_workflow/EVERY_SESSION.md`
+  - `.shared-workflows/data/presentation.json`
+- [x] 推奨運用チェック実行
+  - `node .shared-workflows/scripts/sw-update-check.js`
+  - 結果: `.shared-workflows` が `origin/main` より 2 commits behind
+  - `node .shared-workflows/scripts/sw-doctor.js --profile shared-orch-bootstrap --format text`
+  - 結果: ERRORなし / WARNあり（MISSION_LOG stale）
+- [x] 実行優先度を3段階で再評価
+  - ★★★: TASK_049（Build Gate Fix）を先行
+  - ★★☆: TASK_047（Smoke Gate）の未取得証跡回収
+  - ★☆☆: TASK_053（MVP Final Verification Pack）は上記完了後に着手
+- [ ] Next Action: `.shared-workflows` を更新（fast-forward）して運用基盤を最新化
+- [ ] Next Action: Workerへ `TASK_049_BuildGateFix_VerticalSlice` を最優先で委譲
+- [ ] Next Action: TASK_049完了後、Workerへ `TASK_052_VerticalSliceSmokeResultClosure` を委譲して TASK_047 の DoD をクローズ
+- [ ] Next Action: TASK_052完了後、Workerへ `TASK_053_MVPFinalVerificationPack` を委譲して SG-1/MG-1 を収束
+
+### Phase 6: Worker Execution (2026-02-22 ブロッカー記録)
+- [x] 推奨対応として `.shared-workflows` 更新を試行
+  - `git -C .shared-workflows checkout main` は成功
+  - `git -C .shared-workflows pull --ff-only` は失敗
+- [x] ブロッカー確定
+  - `.shared-workflows` 側に既存ローカル変更 + 未追跡ファイルが多数あり、fast-forward更新不可
+  - 状態: `main...origin/main [behind 21]`
+- [ ] Next Action: ユーザー判断待ち（ローカル変更を保持して手動統合 / stash / 破棄）
+- [ ] Next Action: 方針確定後に `.shared-workflows` 更新を再実行
+
+### Phase 6: Worker Execution (2026-02-22 推奨対応 選択肢1 実行結果)
+- [x] `.shared-workflows` のローカル変更を保全
+  - 退避ブランチ: `preserve/local-before-sync-20260222-121015`
+  - 補助退避: `stash@{0..2}`（main上の一時退避）
+- [x] 統合実行
+  - 退避ブランチを `origin/main` へ rebase
+  - 結果: `ccb00d7` は「既に適用済み」と判定され skip（有用差分は upstream 側に存在）
+- [x] 最新化確認
+  - `.shared-workflows` HEAD: `da1634a`
+  - `node .shared-workflows/scripts/sw-update-check.js` -> `Behind origin/main: 0`
+- [ ] Next Action: Workerへ `TASK_049_BuildGateFix_VerticalSlice` を最優先委譲
+- [ ] Next Action: TASK_049完了後に `TASK_052` を委譲し `TASK_047` DoD をクローズ
+- [ ] Next Action: TASK_052完了後に `TASK_053` を委譲し SG-1/MG-1 を収束
 
 ### Phase 6: Worker Execution (2026-02-17 追加)
 - [x] `TitleScene` の `TitleScreenManager` 参照GUID不整合を修正
