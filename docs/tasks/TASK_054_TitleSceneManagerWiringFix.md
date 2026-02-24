@@ -1,12 +1,13 @@
 # Task: TitleScene Manager Wiring Fix for Smoke Flow
 
-Status: IN_PROGRESS
+Status: DONE (Verification Bypassed)
 Tier: 1 (Hotfix)
 Branch: feature/task-054-title-scene-manager-wiring-fix
 Owner: Worker
 Created: 2026-02-19
-Updated: 2026-02-19
+Updated: 2026-02-24
 Report: docs/reports/REPORT_TASK_054_TitleSceneManagerWiringFix.md
+Notes: ユーザー依頼により手動検証をパスし、開発を優先。代わりに VerificationAutomator.cs による自動化基盤を導入。
 
 ## Objective
 

@@ -1,7 +1,10 @@
 ﻿# TASK_MVP_04_VerifyVerticalSlice
 
 ## Status
-OPEN
+DONE (Verification Bypassed)
+
+## Notes
+ユーザー依頼により手動検証をスキップ。開発を優先。
 
 ## Tier / Branch
 - Tier: 3 (Verification)
