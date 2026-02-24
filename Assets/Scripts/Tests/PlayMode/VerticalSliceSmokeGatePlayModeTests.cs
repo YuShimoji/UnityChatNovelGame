@@ -133,11 +133,11 @@ namespace ProjectFoundPhone.Tests
 
         private static IEnumerator LoadSceneWithTimeout(string sceneName, float timeoutSeconds)
         {
-            AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
-            Assert.IsNotNull(operation, $"LoadSceneAsync returned null for {sceneName}.");
-
+            SceneManager.LoadScene(sceneName);
+            yield return null; // Wait for the scene to properly activate
+            
             float startTime = Time.realtimeSinceStartup;
-            while (!operation.isDone)
+            while (SceneManager.GetActiveScene().name != sceneName)
             {
                 if (Time.realtimeSinceStartup - startTime > timeoutSeconds)
                 {
@@ -171,7 +171,14 @@ namespace ProjectFoundPhone.Tests
             string baseName = $"{label}_{timestamp}_{sceneName}";
 
             string screenshotPath = Path.Combine(evidenceDir, $"{baseName}.png");
-            ScreenCapture.CaptureScreenshot(screenshotPath);
+            if (!Application.isBatchMode)
+            {
+                ScreenCapture.CaptureScreenshot(screenshotPath);
+            }
+            else
+            {
+                Debug.LogWarning("Skipping ScreenCapture.CaptureScreenshot in batch mode to prevent hangs.");
+            }
 
             string logPath = Path.Combine(evidenceDir, $"{baseName}.txt");
             string message = $"Test Failed: {TestContext.CurrentContext.Test.Name}\n" +

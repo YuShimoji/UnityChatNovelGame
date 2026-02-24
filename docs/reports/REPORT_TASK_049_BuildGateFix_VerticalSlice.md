@@ -1,89 +1,43 @@
-# REPORT_TASK_049: Build Gate Fix for Vertical Slice
+# Report: TASK_049 Build Gate Fix for Vertical Slice
 
-- **Task:** TASK_049
-- **Date:** 2026-02-19
-- **Author:** Antigravity (AI Worker)
-- **Branch:** feature/task-049-build-gate-fix
-- **Status:** ✅ DONE
+**Date**: 2026-02-22
+**Status**: COMPLETED
 
----
+## Summary
+- EditorOnly スクリプト境界の見直しにより、`UnityEditor` 名前空間未解決で失敗していたビルドゲートを解消した。
+- 旧失敗ログ（`Build.log`）を残したまま、再実行ログ（`Build2.log`）で成功証跡を取得した。
+- `Builds/Windows/TinyChatNovel.exe` の生成を確認した。
 
-## 概要
+## Changed Files
+- `Assets/Scripts/Debug/Editor/DebugSceneBuilder.cs`
+- `Assets/Scripts/Debug/Editor/ProjectFoundPhone.Debug.Editor.asmdef`
+- `Assets/Scripts/Debug/Editor/TopicAssetScreenshotTool.cs`
+- `Assets/Scripts/Debug/Editor/TopicDataAssetCreator.cs`
+- `Assets/Scripts/Dev/ProjectFoundPhone.Dev.asmdef`
+- `Assets/Scripts/MVP/Editor/MVPSceneSetup.cs`
+- `Assets/Scripts/MVP/Editor/MVPTestHelper.cs`
 
-縦切り導線の Windows Player ビルドを阻害していた Editor 名前空間系のコンパイルエラーを解消した。
+## Verification
 
----
+### Build Failure (Before): RECORDED
+- 証跡: `docs/evidence/TASK_049/Build.log`
+- 代表エラー:
+  - `error CS0234: UnityEditor.SceneManagement`
+  - `error CS0246: EditorWindow / MenuItem`
 
-## 発生していたエラー（Build.log より）
+### Build Success (After): PASS
+- 証跡: `docs/evidence/TASK_049/Build2.log`
+- 成功ログ:
+  - `DisplayProgressNotification: Build Successful`
+  - `Build Finished, Result: Success.`
+- 成果物:
+  - `Builds/Windows/TinyChatNovel.exe`
 
-```
-Assets\Scripts\MVP\Editor\MVPSceneSetup.cs(3,19): error CS0234: The type or namespace name 'SceneManagement' does not exist in the namespace 'UnityEditor'
-Assets\Scripts\Debug\Editor\DebugSceneBuilder.cs(14,38): error CS0246: The type or namespace name 'EditorWindow' could not be found
-Assets\Scripts\MVP\Editor\MVPSceneSetup.cs(12,34): error CS0246: The type or namespace name 'EditorWindow' could not be found
-Assets\Scripts\MVP\Editor\MVPSceneSetup.cs(14,10): error CS0246: The type or namespace name 'MenuItem' could not be found
-Assets\Scripts\Debug\Editor\TopicAssetScreenshotTool.cs(20,10): error CS0246: The type or namespace name 'MenuItem' could not be found
-Assets\Scripts\Debug\Editor\TopicAssetScreenshotTool.cs(96,10): error CS0246: The type or namespace name 'MenuItem' could not be found
-Assets\Scripts\Debug\Editor\TopicDataAssetCreator.cs(19,10): error CS0246: The type or namespace name 'MenuItem' could not be found
-Assets\Scripts\Debug\Editor\TopicDataAssetCreator.cs(113,10): error CS0246: The type or namespace name 'MenuItem' could not be found
-```
+## DoD Status
+- [x] Build阻害コンパイルエラー解消
+- [x] Unity Editor コンパイルエラー0を確認
+- [x] Windowsビルド成功と成果物生成を確認
+- [x] 変更理由と証跡をレポート化
 
----
-
-## 根本原因分析
-
-Unity の Player ビルドでは、`includePlatforms: ["Editor"]` が設定された asmdef に**属していないスクリプト**は、プレイヤー向けにもコンパイルされる。
-
-`Assets/Scripts/Debug/Editor/` 配下の以下の3スクリプトは、専用 asmdef が存在しなかったため、上位の `ProjectFoundPhone.asmdef`（ランタイム、全プラットフォーム対象）に属していた。
-
-- `DebugSceneBuilder.cs`
-- `TopicAssetScreenshotTool.cs`
-- `TopicDataAssetCreator.cs`
-
-これらは `UnityEditor` 型（`EditorWindow`, `MenuItem`, `AssetDatabase` 等）を使用しているため、プレイヤービルド時に `UnityEditor.dll` が参照できずエラーとなった。
-
----
-
-## 実施した変更
-
-### 変更 1: `Assets/Scripts/Debug/Editor/ProjectFoundPhone.Debug.Editor.asmdef` [新規作成]
-
-`Assets/Scripts/Debug/Editor/` を Editor-only アセンブリとして独立させた。
-
-**要点:**
-- `"includePlatforms": ["Editor"]` → Player ビルド時にコンパイル対象外となる
-- `"autoReferenced": false` → ランタイムアセンブリへの自動参照を防止
-- YarnSpinner の `YARN_SPINNER` define constraint も引き継ぎ（`DebugSceneBuilder.cs` の `#if YARN_SPINNER` 用）
-
-### 変更 2: `Assets/Scripts/MVP/Editor/ProjectFoundPhone.MVP.Editor.asmdef` [修正]
-
-`"autoReferenced": true` → `"autoReferenced": false` に変更。
-
-Editor-only アセンブリが autoReferenced になっていると、Unity が意図せずランタイムビルドに含めようとするケースを防止する。
-
----
-
-## 変更ファイル一覧
-
-| ファイル | 変更種別 | 変更内容 |
-|---|---|---|
-| `Assets/Scripts/Debug/Editor/ProjectFoundPhone.Debug.Editor.asmdef` | 新規作成 | Editor-only asmdef の追加 |
-| `Assets/Scripts/MVP/Editor/ProjectFoundPhone.MVP.Editor.asmdef` | 修正 | `autoReferenced: false` |
-
----
-
-## 影響範囲
-
-- **ランタイム挙動の変更:** なし
-- **ゲームフローの変更:** なし
-- **Editor ツールの動作:** Editor 内での動作は変わらず、Editor メニューから引き続き使用可能
-
----
-
-## DoD 確認
-
-| 項目 | 状態 | 備考 |
-|---|---|---|
-| Build.log の Editor 名前空間系コンパイルエラー解消 | ✅ | asmdef 分離により解消 |
-| Unity Editor でコンパイルエラー 0 の確認 | ⏳ | Unity 側で要確認 |
-| Windows ビルド成功 | ⏳ | ビルド実行後に確認 |
-| 変更理由を本レポートに記録 | ✅ | 本ファイル |
+## Notes
+- `ProjectSettings/EditorBuildSettings.asset` と `docs/evidence/TASK_049/Build2.log` に未コミット更新が残っているため、統合時に差分確認して取り込むこと。

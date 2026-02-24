@@ -1,11 +1,10 @@
 {
     "name": "ProjectFoundPhone.Debug.Editor",
-    "rootNamespace": "ProjectFoundPhone.Logging.Editor",
+    "rootNamespace": "ProjectFoundPhone.Debug.Editor",
     "references": [
         "ProjectFoundPhone",
-        "ProjectFoundPhone.Utils",
-        "Unity.TextMeshPro",
-        "YarnSpinner.Unity"
+        "ProjectFoundPhone.Editor",
+        "ProjectFoundPhone.Utils"
     ],
     "includePlatforms": [
         "Editor"
@@ -14,14 +13,8 @@
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
-    "autoReferenced": false,
+    "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [
-        {
-            "name": "dev.yarnspinner.unity",
-            "expression": "",
-            "define": "YARN_SPINNER"
-        }
-    ],
+    "versionDefines": [],
     "noEngineReferences": false
 }
