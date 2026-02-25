@@ -69,3 +69,34 @@ PHASE7_DEV_START_2026-02-24
 - [ ] Next Action: Worker 実行結果（`REPORT_TASK_055...`）受領
 - [ ] Next Action: `TASK_055` 成果を `TASK_053` に反映（再利用証跡/追加取得証跡の分離）
 - [ ] Next Action: `TASK_054` の PASS/FAIL 再判定と `TASK_053` 最終検証パック着手順を確定
+### Phase 7: Development Acceleration (2026-02-24 P2.5 Diverge Refresh)
+- [x] 状態SSOT `docs/WORKFLOW_STATE_SSOT.md` を新規作成
+- [x] 開発優先方針を反映（TASK_055 検証スキップ継続）
+- [x] 3段階尺度で次タスクを評価
+  - TASK_056: 3/3 (High)
+  - TASK_057: 2/3 (Medium)
+  - TASK_058: 2/3 (Medium)
+- [x] TASK_056/TASK_057/TASK_058 を起票
+- [ ] Next Action: TASK_056 Layer A 実装に着手
+- [ ] Next Action: TASK_056 Layer B 手動検証（DebugChatScene）
+- [ ] Next Action: TASK_057/058 へ順次移行
+### Phase 7: Development Acceleration (2026-02-25 Remote Sync & Resume)
+- [x] リモート同期確認を実施
+  - `git fetch origin` 実行
+  - 現在ブランチ: `feature/task-049-build-gate-fix`
+  - `origin/feature/task-049-build-gate-fix` との差分: ahead 5 / behind 0
+  - `origin/main` との差分: ahead 6 / behind 0
+  - `.shared-workflows` submodule: `caa90c5` (同期済み)
+- [x] pull試行の結果を記録
+  - `git pull --rebase origin feature/task-049-build-gate-fix` は未ステージ変更のため停止
+  - ただし behind 0 のため、取り込み不足はなし
+- [x] 現在地と次タスクの3段階評価を再確認
+  - TASK_056: 3/3 (High)
+  - TASK_057: 2/3 (Medium)
+  - TASK_058: 2/3 (Medium)
+- [ ] Next Action: Workerへ TASK_056 を委譲（Layer A実装）
+- [ ] Next Action: TASK_056 Layer B 手動検証
+- [ ] Next Action: TASK_057 -> TASK_058 へ順次移行
+- [x] Worker 委譲プロンプトを生成
+  - `docs/inbox/WORKER_DISPATCH_TASK_056.txt`
+  - Report Target: `docs/inbox/REPORT_TASK_056_ChatDialogueView_Production_20260225.md`

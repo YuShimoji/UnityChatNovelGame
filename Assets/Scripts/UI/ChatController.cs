@@ -23,6 +23,7 @@ namespace ProjectFoundPhone.UI
         [SerializeField] private TMP_InputField m_InputField;
         [SerializeField] private Button m_SendButton;
         [SerializeField] private float m_AutoScrollThreshold = 0.1f; // 自動スクロールを実行する閾値（0.0-1.0）
+        [SerializeField] private MessageBubblePool m_MessageBubblePool;
 
         [Header("Image Bubble Settings")]
         [SerializeField] private GameObject m_ImageBubblePrefab;
@@ -99,9 +100,33 @@ namespace ProjectFoundPhone.UI
                 Debug.LogWarning("ChatController: m_TypingIndicator is not assigned. Typing indicator will not be displayed.");
             }
 
+            // プールの初期化（未設定時は自動生成）
+            EnsureMessageBubblePool();
+
             EnsureChoiceUIElements();
             EnsureImageBubbleTemplate();
             EnsureInputControls();
+        }
+
+        /// <summary>
+        /// MessageBubblePool の初期化（未設定時は自動生成）
+        /// </summary>
+        private void EnsureMessageBubblePool()
+        {
+            if (m_MessageBubblePool == null)
+            {
+                m_MessageBubblePool = GetComponent<MessageBubblePool>();
+                if (m_MessageBubblePool == null)
+                {
+                    m_MessageBubblePool = gameObject.AddComponent<MessageBubblePool>();
+                }
+            }
+
+            // プールにPrefabが未設定の場合は同期
+            if (m_MessageBubblePool != null && m_MessageBubblePrefab != null)
+            {
+                m_MessageBubblePool.SetPrefab(m_MessageBubblePrefab);
+            }
         }
 
         /// <summary>
@@ -160,36 +185,66 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// メッセージバブルのPrefabをインスタンス化
+        /// メッセージバブルのPrefabをインスタンス化（プール経由）
         /// </summary>
         /// <param name="charID">キャラクターID（自分/相手の判定に使用）</param>
         /// <param name="text">メッセージテキスト</param>
         /// <returns>生成されたGameObject</returns>
         private GameObject CreateMessageBubble(string charID, string text)
         {
-            if (m_MessageBubblePrefab == null)
-            {
-                Debug.LogError("ChatController: Cannot create message bubble. Prefab is not assigned.");
-                return null;
-            }
-
             if (m_ScrollRect == null || m_ScrollRect.content == null)
             {
                 Debug.LogError("ChatController: Cannot create message bubble. ScrollRect or content is not assigned.");
                 return null;
             }
 
-            // Prefabからインスタンスを生成
-            GameObject messageBubble = Instantiate(m_MessageBubblePrefab, m_ScrollRect.content);
+            // プール未設定時はフォールバック
+            if (m_MessageBubblePool == null)
+            {
+                EnsureMessageBubblePool();
+            }
+
+            GameObject messageBubble;
+
+            // プールから取得（設定されていれば）
+            if (m_MessageBubblePool != null)
+            {
+                messageBubble = m_MessageBubblePool.Get(m_ScrollRect.content);
+            }
+            else
+            {
+                // フォールバック: 直接Instantiate（Prefabがない場合は失敗）
+                if (m_MessageBubblePrefab == null)
+                {
+                    Debug.LogError("ChatController: Cannot create message bubble. Prefab is not assigned and pool is unavailable.");
+                    return null;
+                }
+                messageBubble = Instantiate(m_MessageBubblePrefab, m_ScrollRect.content);
+            }
+
+            if (messageBubble == null)
+            {
+                Debug.LogError("ChatController: Failed to create message bubble from pool.");
+                return null;
+            }
 
             // プレイヤー判定・テーマカラー・配置を共通処理で設定
             ConfigureBubble(messageBubble, charID);
+
+            // 表示名をCharacterDatabaseから取得（fallback: IDそのまま）
+            string displayName = CharacterDatabase.Instance != null
+                ? CharacterDatabase.Instance.GetDisplayName(charID)
+                : charID;
+
+            // システムメッセージ（charIDが空または"system"）の場合は名前を付加しない
+            bool isSystemMessage = string.IsNullOrEmpty(charID) || charID.ToLower() == "system";
+            string finalText = isSystemMessage ? text : $"{displayName}: {text}";
 
             // TextMeshProコンポーネントにtextを設定
             TextMeshProUGUI textComponent = messageBubble.GetComponentInChildren<TextMeshProUGUI>();
             if (textComponent != null)
             {
-                textComponent.text = text;
+                textComponent.text = finalText;
             }
             else
             {
@@ -267,7 +322,24 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            GameObject imageBubble = Instantiate(prefab, m_ScrollRect.content);
+            // プール未設定時はフォールバック
+            if (m_MessageBubblePool == null)
+            {
+                EnsureMessageBubblePool();
+            }
+
+            GameObject imageBubble;
+
+            // プールから取得（プールが有効で、MessageBubblePrefabを使用する場合）
+            if (m_MessageBubblePool != null && prefab == m_MessageBubblePrefab)
+            {
+                imageBubble = m_MessageBubblePool.Get(m_ScrollRect.content);
+            }
+            else
+            {
+                // フォールバック: 直接Instantiate
+                imageBubble = Instantiate(prefab, m_ScrollRect.content);
+            }
             imageBubble.SetActive(true);
 
             // プレイヤー判定・テーマカラー・配置を共通処理で設定
@@ -320,7 +392,11 @@ namespace ProjectFoundPhone.UI
                 TextMeshProUGUI textComponent = imageBubble.GetComponentInChildren<TextMeshProUGUI>();
                 if (textComponent != null)
                 {
-                    textComponent.text = $"[Image: {imageSprite.name}]";
+                    // 表示名をCharacterDatabaseから取得（fallback: IDそのまま）
+                    string displayName = CharacterDatabase.Instance != null
+                        ? CharacterDatabase.Instance.GetDisplayName(charID)
+                        : charID;
+                    textComponent.text = $"{displayName}: [Image: {imageSprite.name}]";
                 }
             }
 
@@ -355,7 +431,23 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            GameObject systemBubble = Instantiate(m_MessageBubblePrefab, m_ScrollRect.content);
+            if (m_MessageBubblePool == null)
+            {
+                EnsureMessageBubblePool();
+            }
+
+            GameObject systemBubble;
+
+            // プールから取得（設定されていれば）
+            if (m_MessageBubblePool != null)
+            {
+                systemBubble = m_MessageBubblePool.Get(m_ScrollRect.content);
+            }
+            else
+            {
+                // フォールバック: 直接Instantiate
+                systemBubble = Instantiate(m_MessageBubblePrefab, m_ScrollRect.content);
+            }
 
             // 中央揃え
             RectTransform rectTransform = systemBubble.GetComponent<RectTransform>();
@@ -909,7 +1001,7 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// チャット履歴をクリア
+        /// チャット履歴をクリア（プール返却方式）
         /// </summary>
         public void ClearMessages()
         {
@@ -918,14 +1010,30 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            // m_ScrollRect.contentの子オブジェクト（メッセージバブル）を全て削除
-            int childCount = m_ScrollRect.content.childCount;
-            for (int i = childCount - 1; i >= 0; i--)
+            // プールにオブジェクトが返却可能か確認
+            if (m_MessageBubblePool == null)
+            {
+                // プール未設定時は従来通りDestroy
+                int childCount = m_ScrollRect.content.childCount;
+                for (int i = childCount - 1; i >= 0; i--)
+                {
+                    Transform child = m_ScrollRect.content.GetChild(i);
+                    if (child != null)
+                    {
+                        Destroy(child.gameObject);
+                    }
+                }
+                return;
+            }
+
+            // m_ScrollRect.contentの子オブジェクト（メッセージバブル）をプールに返却
+            int childCount2 = m_ScrollRect.content.childCount;
+            for (int i = childCount2 - 1; i >= 0; i--)
             {
                 Transform child = m_ScrollRect.content.GetChild(i);
                 if (child != null)
                 {
-                    Destroy(child.gameObject);
+                    m_MessageBubblePool.Return(child.gameObject);
                 }
             }
         }
