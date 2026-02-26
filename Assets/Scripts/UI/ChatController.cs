@@ -42,6 +42,7 @@ namespace ProjectFoundPhone.UI
 
         private GameObject m_RuntimeChoiceButtonTemplate;
         private GameObject m_RuntimeImageBubbleTemplate;
+        private GameObject m_RuntimeMessageBubbleTemplate;
         private TMP_InputField m_RuntimeInputField;
         private Button m_RuntimeSendButton;
         #endregion
@@ -91,7 +92,7 @@ namespace ProjectFoundPhone.UI
             // m_MessageBubblePrefab、m_TypingIndicatorのnullチェックと警告
             if (m_MessageBubblePrefab == null)
             {
-                Debug.LogWarning("ChatController: m_MessageBubblePrefab is not assigned. Message bubbles cannot be created.");
+                Debug.LogWarning("ChatController: m_MessageBubblePrefab is not assigned. Runtime message template will be used.");
             }
 
             if (m_TypingIndicator == null)
@@ -142,14 +143,7 @@ namespace ProjectFoundPhone.UI
                 : (isPlayer ? new Color(0.2f, 0.6f, 1.0f) : new Color(0.85f, 0.85f, 0.85f));
 
             // 右寄せ（プレイヤー）/ 左寄せ（NPC）を設定
-            RectTransform rectTransform = bubble.GetComponent<RectTransform>();
-            if (rectTransform != null)
-            {
-                float anchorX = isPlayer ? 1.0f : 0.0f;
-                rectTransform.anchorMin = new Vector2(anchorX, 1.0f);
-                rectTransform.anchorMax = new Vector2(anchorX, 1.0f);
-                rectTransform.pivot = new Vector2(anchorX, 1.0f);
-            }
+            // LayoutGroup 配下のため、位置系はここで直接操作しない。
 
             // バブル背景にテーマカラーを適用
             Image bubbleBackground = bubble.GetComponent<Image>();
@@ -167,12 +161,6 @@ namespace ProjectFoundPhone.UI
         /// <returns>生成されたGameObject</returns>
         private GameObject CreateMessageBubble(string charID, string text)
         {
-            if (m_MessageBubblePrefab == null)
-            {
-                Debug.LogError("ChatController: Cannot create message bubble. Prefab is not assigned.");
-                return null;
-            }
-
             if (m_ScrollRect == null || m_ScrollRect.content == null)
             {
                 Debug.LogError("ChatController: Cannot create message bubble. ScrollRect or content is not assigned.");
@@ -180,7 +168,8 @@ namespace ProjectFoundPhone.UI
             }
 
             // Prefabからインスタンスを生成
-            GameObject messageBubble = Instantiate(m_MessageBubblePrefab, m_ScrollRect.content);
+            GameObject messageBubble = Instantiate(GetSafeMessageBubbleTemplate(), m_ScrollRect.content);
+            messageBubble.SetActive(true);
 
             // プレイヤー判定・テーマカラー・配置を共通処理で設定
             ConfigureBubble(messageBubble, charID);
@@ -190,6 +179,7 @@ namespace ProjectFoundPhone.UI
             if (textComponent != null)
             {
                 textComponent.text = text;
+                textComponent.ForceMeshUpdate();
             }
             else
             {
@@ -197,10 +187,12 @@ namespace ProjectFoundPhone.UI
             }
 
             // ContentSizeFitterで高さを自動調整
-            ContentSizeFitter sizeFitter = messageBubble.GetComponent<ContentSizeFitter>();
-            if (sizeFitter != null)
+            LayoutElement layout = messageBubble.GetComponent<LayoutElement>();
+            if (layout != null && textComponent != null && m_ScrollRect != null && m_ScrollRect.viewport != null)
             {
-                sizeFitter.SetLayoutVertical();
+                float maxWidth = Mathf.Max(240f, m_ScrollRect.viewport.rect.width - 80f);
+                Vector2 preferred = textComponent.GetPreferredValues(text, maxWidth, 0f);
+                layout.preferredHeight = Mathf.Max(56f, preferred.y + 24f);
             }
 
             return messageBubble;
@@ -349,13 +341,8 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            if (m_MessageBubblePrefab == null)
-            {
-                Debug.LogError("ChatController: Cannot create system message. MessageBubblePrefab is not assigned.");
-                return;
-            }
-
-            GameObject systemBubble = Instantiate(m_MessageBubblePrefab, m_ScrollRect.content);
+            GameObject systemBubble = Instantiate(GetSafeMessageBubbleTemplate(), m_ScrollRect.content);
+            systemBubble.SetActive(true);
 
             // 中央揃え
             RectTransform rectTransform = systemBubble.GetComponent<RectTransform>();
@@ -738,6 +725,61 @@ namespace ProjectFoundPhone.UI
             return template;
         }
 
+        private GameObject CreateMessageBubbleTemplate()
+        {
+            GameObject template = new GameObject("AutoMessageBubblePrefab", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
+            template.transform.SetParent(transform, false);
+            template.SetActive(false);
+
+            RectTransform bubbleRect = template.GetComponent<RectTransform>();
+            bubbleRect.anchorMin = new Vector2(0f, 1f);
+            bubbleRect.anchorMax = new Vector2(1f, 1f);
+            bubbleRect.pivot = new Vector2(0.5f, 1f);
+            bubbleRect.sizeDelta = new Vector2(0f, 72f);
+
+            Image bubbleBackground = template.GetComponent<Image>();
+            bubbleBackground.color = Color.white;
+            bubbleBackground.raycastTarget = false;
+
+            LayoutElement layout = template.GetComponent<LayoutElement>();
+            layout.minHeight = 56f;
+            layout.preferredHeight = 72f;
+            layout.flexibleWidth = 1f;
+
+            GameObject textObj = new GameObject("Text", typeof(RectTransform));
+            textObj.transform.SetParent(template.transform, false);
+            RectTransform textRect = textObj.GetComponent<RectTransform>();
+            textRect.anchorMin = Vector2.zero;
+            textRect.anchorMax = Vector2.one;
+            textRect.offsetMin = new Vector2(10f, 8f);
+            textRect.offsetMax = new Vector2(-10f, -8f);
+
+            TextMeshProUGUI label = textObj.AddComponent<TextMeshProUGUI>();
+            label.text = "Message";
+            label.textWrappingMode = TextWrappingModes.Normal;
+            label.color = new Color(0.19607843f, 0.19607843f, 0.19607843f, 1f);
+            label.enableAutoSizing = false;
+            label.fontSize = 28f;
+            label.alignment = TextAlignmentOptions.TopLeft;
+            label.raycastTarget = false;
+            if (TMP_Settings.defaultFontAsset != null)
+            {
+                label.font = TMP_Settings.defaultFontAsset;
+            }
+
+            return template;
+        }
+
+        private GameObject GetSafeMessageBubbleTemplate()
+        {
+            if (m_RuntimeMessageBubbleTemplate == null)
+            {
+                m_RuntimeMessageBubbleTemplate = CreateMessageBubbleTemplate();
+            }
+
+            return m_RuntimeMessageBubbleTemplate;
+        }
+
         private TMP_InputField CreateRuntimeInputField(Transform parent)
         {
             GameObject inputObj = new GameObject("InputField", typeof(RectTransform), typeof(Image), typeof(TMP_InputField));
@@ -788,7 +830,7 @@ namespace ProjectFoundPhone.UI
             placeholderComponent.text = "Type a message...";
 
             textComponent = CreateTMPText(viewportObj.transform, "Text", Color.white, FontStyles.Normal);
-            textComponent.enableWordWrapping = true;
+            textComponent.textWrappingMode = TextWrappingModes.Normal;
             textComponent.text = string.Empty;
 
             return viewportRect;

@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using System.IO;
+using System;
+using System.Linq;
 using Assets.Scripts.Utils;
 using UnityEngine.SceneManagement;
 
@@ -20,6 +22,7 @@ namespace ProjectFoundPhone.Tests
 
         private IEnumerator Start()
         {
+            DateTime verificationStart = DateTime.UtcNow;
             yield return new WaitForSeconds(1.0f); // Wait for Monitor to spawn
             var monitor = FindFirstObjectByType<PerformanceMonitor>();
             if (monitor == null)
@@ -35,12 +38,27 @@ namespace ProjectFoundPhone.Tests
 
             string projectRoot = Directory.GetParent(Application.dataPath).FullName;
             string reportPath = Path.Combine(projectRoot, monitor.ReportPath);
+            string reportDirectory = Path.GetDirectoryName(reportPath);
+            string reportFileNameNoExt = Path.GetFileNameWithoutExtension(reportPath);
+            string reportExt = Path.GetExtension(reportPath);
+            string reportPattern = $"{reportFileNameNoExt}*{reportExt}";
 
-            if (File.Exists(reportPath))
+            string latestReport = null;
+            if (Directory.Exists(reportDirectory))
             {
-                Debug.Log($"[Verification] SUCCESS: Report found at {reportPath}");
+                latestReport = Directory.GetFiles(reportDirectory, reportPattern)
+                    .Select(path => new FileInfo(path))
+                    .Where(info => info.LastWriteTimeUtc >= verificationStart.AddSeconds(-2))
+                    .OrderByDescending(info => info.LastWriteTimeUtc)
+                    .Select(info => info.FullName)
+                    .FirstOrDefault();
+            }
+
+            if (!string.IsNullOrEmpty(latestReport) && File.Exists(latestReport))
+            {
+                Debug.Log($"[Verification] SUCCESS: Report found at {latestReport}");
                 // Read content to ensure it's not empty
-                string content = File.ReadAllText(reportPath);
+                string content = File.ReadAllText(latestReport);
                 if (content.Length > 0 && content.Contains("FPS"))
                 {
                      Debug.Log("[Verification] Content validated (Contains FPS).");
@@ -52,7 +70,7 @@ namespace ProjectFoundPhone.Tests
             }
             else
             {
-                Debug.LogError($"[Verification] FAILURE: Report NOT found at {reportPath}");
+                Debug.LogError($"[Verification] FAILURE: New report NOT found (pattern: {reportPattern}) in {reportDirectory}");
             }
         }
     }

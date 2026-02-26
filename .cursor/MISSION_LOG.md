@@ -1073,3 +1073,54 @@ PHASE6_TASK049_VERIFIED_2026-02-22
 - [x] Phase 6 ����
 
 
+
+### Phase 6: Worker Execution (2026-02-26 証跡反映)
+- [x] TASK_027 証跡反映を更新
+  - `docs/reports/REPORT_TASK_027_FullPlaythroughTest.md` を 2026-02-26 実行ログで更新
+  - DebugChatScene 入力欄のみ表示の事象を Layer B blocker として記録
+- [x] TASK_053 統合レポートを作成
+  - `docs/reports/REPORT_TASK_053_MVPFinalVerificationPack.md` を新規作成
+  - Status を `PARTIALLY_COMPLETED` として未充足条件を明文化
+- [x] 状態SSOTを更新
+  - `docs/WORKFLOW_STATE_SSOT.md` を作成し、Next Action を単一化
+- [x] 再実行阻害ノイズを軽減
+  - `PerformanceBaselineVerification.cs` を `Assets/Scripts/Tests/PlayMode/` へ移動
+- [ ] Next Action: DebugChatScene の入力欄のみ表示問題を解消し、TASK_027 Layer B を再実行
+- [ ] Next Action: フルプレイ証跡反映後に TASK_053 を DONE 判定へ更新
+
+### Phase 6: Worker Execution (2026-02-26 MessageBubble blocker mitigation)
+- [x] Root cause narrowed from input-only symptom to prefab integrity issue
+  - Unity log confirms repeated `The referenced script ... is missing!` at `ChatController.CreateMessageBubble()`
+- [x] `MessageBubble.prefab` script GUIDs corrected
+  - Image GUID fixed to `fe87c0e1cc204ed48ad3b37840f39efc`
+  - ContentSizeFitter GUID fixed to `3245ec927659c4140ac4f8d17403cc18`
+- [x] Runtime hardening added in `ChatController`
+  - Detect missing-script components after instantiate
+  - Fallback to runtime-generated message bubble template
+- [x] `PerformanceBaselineVerification` false-positive risk reduced
+  - Verification now checks newly generated latest report file by timestamp pattern
+- [x] Evidence/docs synchronized
+  - `REPORT_TASK_027`, `REPORT_TASK_025`, `WORKFLOW_STATE_SSOT` updated with latest 2026-02-26 evidence
+- [ ] Next Action: Reopen Unity and rerun DebugChatScene to confirm missing-script error disappearance
+- [ ] Next Action: Execute TASK_027 Layer B full playthrough and finalize TASK_053 status
+
+### Phase 6: Worker Execution (2026-02-26 ReImportAll後の緊急復旧)
+- [x] ReImportAll後ログを解析し、主因を再特定
+  - `MessageBubble.prefab` の破損警告 + `The referenced script ... is missing!` を確認
+- [x] 破損誘発の可能性がある `MessageBubble.prefab` 手編集差分を撤回
+  - プレハブ本体を HEAD 状態へ復元
+- [x] `ChatController` を安全側へ変更
+  - メッセージ/システムメッセージは runtime template を必ず使用
+  - 破損プレハブ参照の instantiate 経路を遮断
+- [ ] Next Action: Unity再起動後に DebugChatScene で送信を実行し、Missing Script エラー消失を確認
+- [ ] Next Action: 導線復旧確認後に TASK_027 Layer B フルプレイ証跡を回収
+
+### Phase 6: Worker Execution (2026-02-27 Bubble layout patch)
+- [x] Missing Script 解消後の残課題を特定
+  - Clone生成は成功、ただしバブルが極小/左上表示で視認性不良
+- [x] `ChatController` のランタイムバブルレイアウトを修正
+  - ConfigureBubble で anchor/pivot を直接変更しない
+  - AutoMessageBubble を LayoutElement ベースに変更
+  - テキストサイズ/折返し/高さ計算を調整
+- [ ] Next Action: Unity再実行でバブル視認性（サイズ/位置）を確認
+- [ ] Next Action: 視認性OK後に TASK_027 Layer B フルプレイ証跡を回収
