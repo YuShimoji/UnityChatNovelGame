@@ -10,9 +10,23 @@ KICKSTART_2026-01-15T13:26:07+09:00
 Phase 6: Worker Execution
 
 ## ステータス
-PHASE6_TASK049_VERIFIED_2026-02-22
+PHASE6_TASK053_AUTO_VERIFIED_2026-03-01
 
 ## 進捗記録
+
+### Phase 6: Worker Execution (2026-03-01 自動検証パック統合)
+- [x] `TASK_MVP_04` 自動検証を完了
+  - `ProjectFoundPhone.EditorTools.VerificationMenu.RunMvpFinalVerificationPackBatch`
+  - `docs/evidence/MVP_FINAL_VERIFICATION_20260301_015705.md`
+- [x] `TASK_027` 自動フルプレイを完了
+  - `ProjectFoundPhone.EditorTools.VerificationMenu.RunVerticalSliceFullPlaythroughBatch`
+  - `docs/evidence/TASK_027/FULL_PLAYTHROUGH_RESULTS_20260301_015520.md`
+- [x] `TASK_053` の統合更新を完了
+  - `docs/AI_CONTEXT_MVP.md` / `docs/reports/REPORT_TASK_027_FullPlaythroughTest.md` / `docs/reports/REPORT_TASK_053_MVPFinalVerificationPack.md` を更新
+- [x] `TASK_025` verdict を固定
+  - `docs/reports/REPORT_TASK_025_GCAllocReduction_DELTA_20260301.md`
+  - Verdict: `NO_MEASURABLE_REDUCTION` (`+0.22 KB/frame`)
+- [ ] Next Action: `TASK_025` の Layer A を開始し、GC Alloc 上位発生源の特定と次の改善タスク切り出しを行う
 
 ### Phase 6: Worker Execution (2026-02-28 リモート同期確認・状態整流化)
 - [x] root repo と `.shared-workflows` の更新確認を実施
@@ -468,8 +482,7 @@ PHASE6_TASK049_VERIFIED_2026-02-22
 | TASK_010 | CODE_DONE | MetaEffectController | Prefab Needed |
 
 ## 次のアクション
-- Worker (TASK_007, TASK_013) に「PlayModeテストによる自動検証」を指示する。
-  - 要件: `ScreenshotUtility` の使用 + `run_tests` による実行 + ファイル移動 (`docs/evidence` へ)。
+- Single Entry: `TASK_025` の Layer A を開始し、GC Alloc 上位発生源の特定と次の改善タスク切り出しを行う。
 
 ### Phase 1: Sync & Merge (2026-01-19)
 - [x] Remote Changes Merged (Resolved Conflicts in ScenarioManager, Log, Handover)

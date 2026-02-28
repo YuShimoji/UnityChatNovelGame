@@ -10,21 +10,49 @@ namespace ProjectFoundPhone.EditorTools
         [MenuItem("Tools/Verification/Run Chat UI Verification")]
         public static void RunChatUIVerification()
         {
-            SetupAndRun("DebugChatScene");
+            SetupAndRun("DebugChatScene", "single_capture", true);
         }
 
         [MenuItem("Tools/Verification/Run Synthesis Verification")]
         public static void RunSynthesisVerification()
         {
-            SetupAndRun("VerificationScene");
+            SetupAndRun("VerificationScene", "single_capture", true);
         }
 
-        private static void SetupAndRun(string targetSceneName)
+        [MenuItem("Tools/Verification/Run MVP Final Verification Pack")]
+        public static void RunMvpFinalVerificationPack()
         {
-            // Ask to save changes if needed
-            if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+            SetupAndRun("MVPScene", "mvp_pack", true);
+        }
+
+        [MenuItem("Tools/Verification/Run Vertical Slice Full Playthrough")]
+        public static void RunVerticalSliceFullPlaythrough()
+        {
+            SetupAndRun("DebugChatScene", "vertical_slice_full", true);
+        }
+
+        public static void RunMvpFinalVerificationPackBatch()
+        {
+            SetupAndRun("MVPScene", "mvp_pack", false);
+        }
+
+        public static void RunVerticalSliceFullPlaythroughBatch()
+        {
+            SetupAndRun("DebugChatScene", "vertical_slice_full", false);
+        }
+
+        private static void SetupAndRun(string targetSceneName, string verificationFlow, bool promptToSave)
+        {
+            if (promptToSave)
             {
-                return;
+                if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+                {
+                    return;
+                }
+            }
+            else
+            {
+                AssetDatabase.SaveAssets();
             }
 
             // Create a temporary scene for the runner
@@ -34,13 +62,14 @@ namespace ProjectFoundPhone.EditorTools
             GameObject go = new GameObject("VerificationRunner");
             var automator = go.AddComponent<VerificationAutomator>();
             automator.TargetScene = targetSceneName;
+            automator.VerificationFlow = verificationFlow;
             
             // Ensure it survives load
             // Note: DontDestroyOnLoad only works at runtime. 
             // VerificationAutomator.Start() handles DontDestroyOnLoad when playing starts.
             
             // Start Play Mode
-            Debug.Log($"Starting Verification for {targetSceneName}...");
+            Debug.Log($"Starting Verification for {targetSceneName} ({verificationFlow})...");
             EditorApplication.isPlaying = true;
         }
     }

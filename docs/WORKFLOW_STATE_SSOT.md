@@ -1,6 +1,6 @@
-﻿# Workflow State SSOT
+# Workflow State SSOT
 
-Last Updated: 2026-02-28
+Last Updated: 2026-03-01
 Owner: Orchestrator
 Scope: UnityChatNovelGame + shared-workflows integration
 
@@ -16,29 +16,30 @@ Scope: UnityChatNovelGame + shared-workflows integration
 ## Current Phase
 
 - Phase: Worker Execution
-- Gate: Verification Gate split active (A/B)
+- Gate: SG-1 closed / MG-1 performance follow-up
 
 ## Active Task Set
 
 - TASK_047: DONE
   - PlayMode / Build 証跡は `docs/evidence/TASK_047/` で検証済み
 - TASK_052: COMPLETED
-  - `TASK_047` の未達DoDクローズを 2026-02-28 に再確認
-- TASK_027: IN_PROGRESS
-  - Layer A: COMPLETED
-  - Layer B: IN_PROGRESS (full route evidence pending only)
-- TASK_053: IN_PROGRESS
-  - Remaining: `TASK_027` Layer B + `docs/AI_CONTEXT_MVP.md` 最終反映
+  - `TASK_047` の未達DoDクローズを 2026-02-28 に再確認済み
+- TASK_MVP_04: COMPLETED
+  - `docs/evidence/MVP_FINAL_VERIFICATION_20260301_015705.md` で 60秒以内 / 分岐A-B / rapid input を確認済み
+- TASK_027: COMPLETED
+  - `docs/evidence/TASK_027/FULL_PLAYTHROUGH_RESULTS_20260301_015520.md` で通し導線を自動検証済み
+- TASK_053: COMPLETED
+  - SG-1 クローズに必要な統合更新を 2026-03-01 に反映済み
 - TASK_025: IN_PROGRESS
   - After measurement: RECORDED
-  - Verdict: no measurable GC reduction yet
+  - Verdict: `NO_MEASURABLE_REDUCTION` (`+0.22 KB/frame` vs baseline)
 
 ## Blocker Registry
 
-- Previous blocker: `MessageBubble` missing-script runtime failure
-- Current blocker: none (technical)
-- Remaining gap: consolidated manual verification block not yet executed
+- Current blocker: none (delivery-stopping)
+- Residual observation: batch evidence capture still emits raw `ReadPixels...` noise in Unity logs
+- Residual observation: `DebugChatScene` load log includes one `The referenced script (Unknown) on this Behaviour is missing!` line
 
 ## Next Action
 
-- Single Entry: Execute the minimum manual verification block for `TASK_027/TASK_053` and save dated evidence (`FULL_PLAYTHROUGH_RESULTS_*`, `Log_*`, `Capture_*`) in `docs/evidence/TASK_027/`, then update `docs/AI_CONTEXT_MVP.md`.
+- Single Entry: `TASK_025` の Layer A を開始し、GC Alloc 上位発生源の特定と次の改善タスク切り出しを行う。

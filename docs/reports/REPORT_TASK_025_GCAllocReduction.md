@@ -1,6 +1,6 @@
-﻿# GC Alloc Reduction Report (TASK_025)
+# GC Alloc Reduction Report (TASK_025)
 
-- Date: 2026-02-26
+- Date: 2026-03-01
 - Scene: DebugChatScene
 - Platform: WindowsEditor
 - Measurement Tool: `Assets/Scripts/Utils/PerformanceMonitor.cs`
@@ -8,7 +8,8 @@
 
 ## Status
 
-- Result: IN_PROGRESS (after measurement updated)
+- Result: IN_PROGRESS
+- Verdict: NO_MEASURABLE_REDUCTION
 
 ## Baseline (Before)
 
@@ -19,9 +20,11 @@
 
 ## Evidence
 
+- `docs/reports/REPORT_TASK_022_PerformanceBaseline.md`
 - `docs/reports/REPORT_TASK_022_PerformanceBaseline_RAW_20260226_224612.md`
 - `docs/reports/REPORT_TASK_022_PerformanceBaseline_RAW_20260226_222221.md`
 - `docs/reports/REPORT_TASK_022_PerformanceBaseline_RAW_20260226_222235.md`
+- `docs/reports/REPORT_TASK_025_GCAllocReduction_DELTA_20260301.md`
 
 ## Measurement (After)
 
@@ -37,7 +40,16 @@
 | 8.0 | 218.6 | 1807 | 1252 | 22 |
 | 9.0 | 222.1 | 1807 | 1257 | 22 |
 
+## Delta Summary
+
+- Baseline Avg GC Alloc: 22 KB/frame
+- After Avg GC Alloc: 22.22 KB/frame
+- After Range: 22-23 KB/frame
+- Delta: +0.22 KB/frame
+- Verdict: `NO_MEASURABLE_REDUCTION`
+
 ## Conclusion
 
-- Current after data is recorded successfully and comparable in range to baseline.
-- Final close still requires TASK_027 full-playthrough closure and consolidated verdict in TASK_053.
+- After data is recorded successfully and remains directly comparable to baseline
+- GC Alloc は同一帯域に留まり、現時点では低減を主張できない
+- TASK_025 は `IN_PROGRESS` を維持し、次のステップは alloc source attribution と追加改善施策の切り出しとする
