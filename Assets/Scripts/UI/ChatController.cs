@@ -5,6 +5,7 @@ using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using ProjectFoundPhone.Data;
+using Unity.Profiling;
 
 namespace ProjectFoundPhone.UI
 {
@@ -45,6 +46,12 @@ namespace ProjectFoundPhone.UI
         private GameObject m_RuntimeMessageBubbleTemplate;
         private TMP_InputField m_RuntimeInputField;
         private Button m_RuntimeSendButton;
+        private static readonly ProfilerMarker s_CreateMessageBubbleMarker = new ProfilerMarker("ChatController.CreateMessageBubble");
+        private static readonly ProfilerMarker s_AddMessageMarker = new ProfilerMarker("ChatController.AddMessage");
+        private static readonly ProfilerMarker s_AddImageMessageMarker = new ProfilerMarker("ChatController.AddImageMessage");
+        private static readonly ProfilerMarker s_AddSystemMessageMarker = new ProfilerMarker("ChatController.AddSystemMessage");
+        private static readonly ProfilerMarker s_ShowChoicesMarker = new ProfilerMarker("ChatController.ShowChoices");
+        private static readonly ProfilerMarker s_AutoScrollMarker = new ProfilerMarker("ChatController.AutoScroll");
         #endregion
 
         #region Unity Lifecycle
@@ -161,6 +168,8 @@ namespace ProjectFoundPhone.UI
         /// <returns>生成されたGameObject</returns>
         private GameObject CreateMessageBubble(string charID, string text)
         {
+            using var _ = s_CreateMessageBubbleMarker.Auto();
+
             if (m_ScrollRect == null || m_ScrollRect.content == null)
             {
                 Debug.LogError("ChatController: Cannot create message bubble. ScrollRect or content is not assigned.");
@@ -179,7 +188,6 @@ namespace ProjectFoundPhone.UI
             if (textComponent != null)
             {
                 textComponent.text = text;
-                textComponent.ForceMeshUpdate();
             }
             else
             {
@@ -207,6 +215,8 @@ namespace ProjectFoundPhone.UI
         /// <param name="text">メッセージテキスト</param>
         public void AddMessage(string charID, string text)
         {
+            using var _ = s_AddMessageMarker.Auto();
+
             if (string.IsNullOrEmpty(text))
             {
                 Debug.LogWarning("ChatController: Attempted to add empty message.");
@@ -236,6 +246,8 @@ namespace ProjectFoundPhone.UI
         /// <param name="imageSprite">表示する画像Sprite</param>
         public void AddImageMessage(string charID, Sprite imageSprite)
         {
+            using var _ = s_AddImageMessageMarker.Auto();
+
             if (imageSprite == null)
             {
                 Debug.LogWarning("ChatController: Attempted to add image message with null sprite.");
@@ -330,6 +342,8 @@ namespace ProjectFoundPhone.UI
         /// <param name="text">システムメッセージのテキスト</param>
         public void AddSystemMessage(string text)
         {
+            using var _ = s_AddSystemMessageMarker.Auto();
+
             if (string.IsNullOrEmpty(text))
             {
                 return;
@@ -422,6 +436,8 @@ namespace ProjectFoundPhone.UI
         /// <param name="onSelected">選択時のコールバック (index)</param>
         public void ShowChoices(List<string> options, System.Action<int> onSelected)
         {
+            using var _ = s_ShowChoicesMarker.Auto();
+
             // 遅延初期化: ChoiceButtonPrefab/Containerが未設定の場合はランタイム生成
             EnsureChoiceUIElements();
 
@@ -493,6 +509,8 @@ namespace ProjectFoundPhone.UI
 
         public void AutoScroll()
         {
+            using var _ = s_AutoScrollMarker.Auto();
+
             if (m_ScrollRect == null || m_IsUserScrolling)
             {
                 return;

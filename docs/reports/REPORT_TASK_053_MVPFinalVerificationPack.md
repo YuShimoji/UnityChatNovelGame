@@ -1,41 +1,40 @@
 # TASK_053 MVP Final Verification Pack Report
 
-Generated: 2026-03-01 02:05:15
+Generated: 2026-03-01 05:20:00
 Status: COMPLETED
 Branch: main
 Verification Mode: AUTO_VERIFIED
 
 ## Summary
 
-- MVPScene の自動検証パックが成功し、分岐A/B・rapid input・60秒以内完走・Unexpected Error Count 0 を記録した
-- DebugChatScene の自動フルプレイが成功し、Topic unlock / synthesis / end marker までの通し証跡を回収した
-- TASK_025 は delta summary を生成し、`NO_MEASURABLE_REDUCTION` を現時点 verdict として固定した
-- SG-1 はクローズし、MG-1 の残件は performance follow-up のみとなった
+- MVPScene の自動検証パックを再実行し、Branch A / Branch B / rapid input / 60秒以内 / Unexpected Error Count 0 を確認しました。
+- DebugChatScene の full playthrough も再実行し、topic unlock / synthesis / end marker を再確認しました。
+- `TASK_025` は最新 batch after measurement で `GC Alloc 22 -> 8 KB/frame` となり、verdict は `IMPROVED` です。
+- `ReadPixels...` ノイズと `missing script` follow-up は今回の hardening で解消済みです。
 
 ## Evidence
 
-- `docs/evidence/MVP_FINAL_VERIFICATION_20260301_015705.md`
-- `docs/evidence/AUTOMATION_SUMMARY_mvp_pack_20260301_015705.md`
-- `docs/evidence/MVP_FINAL_VERIFICATION_LOG_20260301_015705.txt`
-- `docs/evidence/TASK_027/FULL_PLAYTHROUGH_RESULTS_20260301_015520.md`
-- `docs/evidence/AUTOMATION_SUMMARY_vertical_slice_full_20260301_015534.md`
+- `docs/evidence/MVP_FINAL_VERIFICATION_20260301_033904.md`
+- `docs/evidence/AUTOMATION_SUMMARY_mvp_pack_20260301_033904.md`
+- `docs/evidence/TASK_027/FULL_PLAYTHROUGH_RESULTS_20260301_034145.md`
+- `docs/evidence/AUTOMATION_SUMMARY_vertical_slice_full_20260301_034159.md`
+- `docs/evidence/PERFORMANCE_MEASUREMENT_20260301_051439.md`
 - `docs/reports/REPORT_TASK_025_GCAllocReduction.md`
-- `docs/reports/REPORT_TASK_025_GCAllocReduction_DELTA_20260301.md`
+- `docs/reports/REPORT_TASK_025_GCAllocReduction_DELTA_20260301_round2.md`
 - `docs/AI_CONTEXT_MVP.md`
 
 ## Key Findings
 
-1. Branch A / Branch B はいずれも約 10.5 秒で完走し、60 秒ゲートを大きく下回った
-2. rapid input シーケンスでも end state に到達し、二重遷移や停止不全は観測されなかった
-3. DebugChatScene の通し導線は automation fallback を含めて end marker まで到達した
-4. GC Alloc は baseline 22 KB/frame に対して after average 22.22 KB/frame で、有意な低減は確認できなかった
+1. MVP branch verification remains green on the refreshed batch evidence.
+2. Vertical slice full playthrough remains green on the refreshed batch evidence.
+3. `TASK_025` is now measured as improved, not neutral.
+4. `MessageBubble.prefab` contained the residual missing MonoBehaviour; cleanup removed the raw `missing script` warning from subsequent batch runs.
 
 ## Remaining Gaps
 
-1. SG-1 に対する blocking gap はなし
-2. MG-1 では `TASK_025` の source attribution と次の最適化施策が未着手
-3. raw batch log の `ReadPixels...` ノイズと `missing script` 行は証跡品質の follow-up 候補
+1. Delivery-stopping gaps are none.
+2. Residual work is limited to generated log cleanup and worktree normalization.
 
 ## Conclusion
 
-TASK_053 は `COMPLETED`。短期ゲートは閉じたため、次の主対象は `TASK_025` の Layer A と verification hardening に移行する。
+TASK_053 は `COMPLETED` のまま維持されます。短期・中期ゲートは閉じており、次の主対象は worktree 整理と次サイクル準備です。

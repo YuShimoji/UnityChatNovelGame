@@ -8,8 +8,8 @@
 
 ## Status
 
-- Result: IN_PROGRESS
-- Verdict: NO_MEASURABLE_REDUCTION
+- Result: COMPLETED
+- Verdict: IMPROVED
 
 ## Baseline (Before)
 
@@ -21,35 +21,34 @@
 ## Evidence
 
 - `docs/reports/REPORT_TASK_022_PerformanceBaseline.md`
-- `docs/reports/REPORT_TASK_022_PerformanceBaseline_RAW_20260226_224612.md`
-- `docs/reports/REPORT_TASK_022_PerformanceBaseline_RAW_20260226_222221.md`
-- `docs/reports/REPORT_TASK_022_PerformanceBaseline_RAW_20260226_222235.md`
-- `docs/reports/REPORT_TASK_025_GCAllocReduction_DELTA_20260301.md`
+- `docs/reports/REPORT_TASK_022_PerformanceBaseline_RAW_20260301_051433.md`
+- `docs/reports/REPORT_TASK_025_GCAllocReduction_DELTA_20260301_round2.md`
+- `docs/evidence/PERFORMANCE_MEASUREMENT_20260301_051439.md`
 
 ## Measurement (After)
 
 | Time (s) | FPS | Reserved (MB) | Used (MB) | GC Alloc (KB/frame) |
 |----------|-----|---------------|-----------|----------------------|
-| 1.0 | 170.6 | 1807 | 1225 | 22 |
-| 2.0 | 161.7 | 1807 | 1227 | 22 |
-| 3.0 | 172.6 | 1807 | 1230 | 23 |
-| 4.0 | 199.9 | 1807 | 1233 | 22 |
-| 5.0 | 196.0 | 1807 | 1237 | 22 |
-| 6.0 | 221.7 | 1807 | 1242 | 22 |
-| 7.0 | 231.3 | 1807 | 1247 | 23 |
-| 8.0 | 218.6 | 1807 | 1252 | 22 |
-| 9.0 | 222.1 | 1807 | 1257 | 22 |
+| 1.0 | 1908.3 | 1503 | 1046 | 8 |
+| 2.0 | 2206.8 | 1503 | 1065 | 8 |
+| 3.0 | 2167.9 | 1503 | 1084 | 8 |
+| 4.0 | 2054.3 | 1503 | 1102 | 8 |
+| 5.0 | 2221.6 | 1503 | 1121 | 8 |
+| 6.0 | 2234.9 | 1503 | 1141 | 8 |
+| 7.0 | 2103.4 | 1503 | 1002 | 8 |
+| 8.0 | 2209.4 | 1503 | 1019 | 8 |
+| 9.0 | 2227.1 | 1503 | 1039 | 8 |
 
 ## Delta Summary
 
 - Baseline Avg GC Alloc: 22 KB/frame
-- After Avg GC Alloc: 22.22 KB/frame
-- After Range: 22-23 KB/frame
-- Delta: +0.22 KB/frame
-- Verdict: `NO_MEASURABLE_REDUCTION`
+- After Avg GC Alloc: 8 KB/frame
+- After Range: 8-8 KB/frame
+- Delta: -14 KB/frame
+- Verdict: `IMPROVED`
 
 ## Conclusion
 
-- After data is recorded successfully and remains directly comparable to baseline
-- GC Alloc は同一帯域に留まり、現時点では低減を主張できない
-- TASK_025 は `IN_PROGRESS` を維持し、次のステップは alloc source attribution と追加改善施策の切り出しとする
+- After data is recorded successfully and shows a measurable reduction versus baseline.
+- `VerificationAutomator` から `PerformanceMonitor` を明示起動することで batch raw report の自動取得を安定化しました。
+- `DebugChatScene` の `missing script` は `MessageBubble.prefab` の欠損 MonoBehaviour 削除で解消済みです。

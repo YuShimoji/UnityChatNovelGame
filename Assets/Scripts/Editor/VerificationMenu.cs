@@ -31,6 +31,18 @@ namespace ProjectFoundPhone.EditorTools
             SetupAndRun("DebugChatScene", "vertical_slice_full", true);
         }
 
+        [MenuItem("Tools/Verification/Run Performance Measurement")]
+        public static void RunPerformanceMeasurement()
+        {
+            SetupAndRun("DebugChatScene", "performance_measurement", true);
+        }
+
+        [MenuItem("Tools/Verification/Utilities/Scan DebugChatScene Missing Scripts")]
+        public static void RunMissingScriptScan()
+        {
+            MissingScriptScanner.ScanDebugChatSceneMissingScripts();
+        }
+
         public static void RunMvpFinalVerificationPackBatch()
         {
             SetupAndRun("MVPScene", "mvp_pack", false);
@@ -39,6 +51,11 @@ namespace ProjectFoundPhone.EditorTools
         public static void RunVerticalSliceFullPlaythroughBatch()
         {
             SetupAndRun("DebugChatScene", "vertical_slice_full", false);
+        }
+
+        public static void RunPerformanceMeasurementBatch()
+        {
+            SetupAndRun("DebugChatScene", "performance_measurement", false);
         }
 
         private static void SetupAndRun(string targetSceneName, string verificationFlow, bool promptToSave)

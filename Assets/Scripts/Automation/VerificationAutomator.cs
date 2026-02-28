@@ -24,6 +24,7 @@ namespace Assets.Scripts.Dev
         private const float SceneLoadTimeoutSeconds = 15f;
         private const float StateTimeoutSeconds = 20f;
         private const float MaxMvpFlowSeconds = 60f;
+        private const float PerformanceMeasurementTimeoutSeconds = 18f;
 
         private readonly List<string> m_LogEntries = new List<string>();
         private bool m_HasFailed;
@@ -64,6 +65,9 @@ namespace Assets.Scripts.Dev
                     break;
                 case "vertical_slice_full":
                     yield return RunVerticalSliceFullPlaythrough();
+                    break;
+                case "performance_measurement":
+                    yield return RunPerformanceMeasurement();
                     break;
                 default:
                     yield return RunSingleCapture();
@@ -421,6 +425,64 @@ namespace Assets.Scripts.Dev
             File.WriteAllLines(logPath, m_LogEntries);
         }
 
+        private IEnumerator RunPerformanceMeasurement()
+        {
+            string reportsDir = Path.Combine(m_ProjectRoot, "docs", "reports");
+            Directory.CreateDirectory(reportsDir);
+
+            string latestBefore = FindLatestFile(reportsDir, "REPORT_TASK_022_PerformanceBaseline_RAW*.md");
+            EnsurePerformanceMonitor();
+            yield return new WaitForSeconds(PerformanceMeasurementTimeoutSeconds);
+
+            string latestAfter = FindLatestFile(reportsDir, "REPORT_TASK_022_PerformanceBaseline_RAW*.md");
+            if (string.IsNullOrWhiteSpace(latestAfter))
+            {
+                Fail("Performance measurement report was not generated.");
+                yield break;
+            }
+
+            if (string.Equals(latestBefore, latestAfter, StringComparison.OrdinalIgnoreCase))
+            {
+                Fail("Performance measurement did not produce a new report file.");
+                yield break;
+            }
+
+            string evidenceDir = Path.Combine(m_ProjectRoot, "docs", "evidence");
+            string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            string summaryPath = Path.Combine(evidenceDir, $"PERFORMANCE_MEASUREMENT_{timestamp}.md");
+            string[] lines =
+            {
+                "# TASK_025 Automated Performance Measurement",
+                string.Empty,
+                $"- Started: {m_StartedAt:O}",
+                $"- Finished: {DateTimeOffset.Now:O}",
+                $"- Result: {(m_HasFailed ? "FAILED" : "SUCCESS")}",
+                $"- Latest Report: {latestAfter}",
+                $"- Unexpected Error Count: {GetUnexpectedErrorEntries().Count}",
+            };
+
+            File.WriteAllLines(summaryPath, lines);
+        }
+
+        private static void EnsurePerformanceMonitor()
+        {
+            Type monitorType = Type.GetType("Assets.Scripts.Utils.PerformanceMonitor, ProjectFoundPhone.Utils");
+            if (monitorType == null)
+            {
+                Debug.LogWarning("VerificationAutomator: PerformanceMonitor type could not be resolved.");
+                return;
+            }
+
+            if (FindFirstObjectByType(monitorType) != null)
+            {
+                return;
+            }
+
+            GameObject monitorObject = new GameObject("PerformanceMonitor (Automation)");
+            monitorObject.AddComponent(monitorType);
+            DontDestroyOnLoad(monitorObject);
+        }
+
         private IEnumerator EnsureDeductionBoardExists()
         {
 #if UNITY_EDITOR
@@ -522,29 +584,20 @@ namespace Assets.Scripts.Dev
                 File.Delete(fullPath);
             }
 
+            Debug.Log($"VerificationAutomator: Capturing screenshot to {fullPath}");
+
             if (Application.isBatchMode)
             {
-                yield return null;
-                yield return null;
+                yield return WaitForCaptureFrame();
 
-                Texture2D screenshot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
-                screenshot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
-                screenshot.Apply();
-
-                byte[] bytes = screenshot.EncodeToPNG();
-                Destroy(screenshot);
-
-                if (bytes == null || bytes.Length == 0)
+                if (!TryCaptureBatchScreenshot(fullPath))
                 {
-                    Fail($"Screenshot encode failed: {fullPath}");
                     yield break;
                 }
-
-                File.WriteAllBytes(fullPath, bytes);
             }
             else
             {
-                yield return new WaitForEndOfFrame();
+                yield return WaitForCaptureFrame();
                 ScreenCapture.CaptureScreenshot(fullPath, 1);
 
                 float start = Time.realtimeSinceStartup;
@@ -561,6 +614,85 @@ namespace Assets.Scripts.Dev
             }
 
             Debug.Log($"VerificationAutomator: Screenshot written to {fullPath}");
+        }
+
+        private static IEnumerator WaitForCaptureFrame()
+        {
+            if (Application.isBatchMode)
+            {
+                // WaitForEndOfFrame can stall in editor batch mode, so advance a couple of frames instead.
+                yield return null;
+                yield return null;
+                Canvas.ForceUpdateCanvases();
+                yield break;
+            }
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        private bool TryCaptureBatchScreenshot(string fullPath)
+        {
+            Camera captureCamera = Camera.main;
+            bool createdTempCamera = false;
+            if (captureCamera == null)
+            {
+                captureCamera = FindObjectsByType<Camera>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+                    .FirstOrDefault(camera => camera != null && camera.enabled);
+            }
+
+            if (captureCamera == null)
+            {
+                GameObject cameraObject = new GameObject("VerificationCaptureCamera");
+                captureCamera = cameraObject.AddComponent<Camera>();
+                captureCamera.clearFlags = CameraClearFlags.SolidColor;
+                captureCamera.backgroundColor = Color.black;
+                captureCamera.orthographic = true;
+                captureCamera.cullingMask = ~0;
+                createdTempCamera = true;
+            }
+
+            int width = Mathf.Max(Screen.width, captureCamera.pixelWidth > 0 ? captureCamera.pixelWidth : 1280);
+            int height = Mathf.Max(Screen.height, captureCamera.pixelHeight > 0 ? captureCamera.pixelHeight : 720);
+            RenderTexture renderTexture = RenderTexture.GetTemporary(width, height, 24, RenderTextureFormat.ARGB32);
+            RenderTexture previousActive = RenderTexture.active;
+            RenderTexture previousTarget = captureCamera.targetTexture;
+            List<CanvasCaptureState> canvasStates = PrepareCanvasesForCapture(captureCamera);
+
+            try
+            {
+                Canvas.ForceUpdateCanvases();
+                captureCamera.targetTexture = renderTexture;
+                captureCamera.Render();
+                RenderTexture.active = renderTexture;
+
+                Texture2D screenshot = new Texture2D(width, height, TextureFormat.RGB24, false);
+                screenshot.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+                screenshot.Apply(false, false);
+
+                byte[] bytes = screenshot.EncodeToPNG();
+                Destroy(screenshot);
+
+                if (bytes == null || bytes.Length == 0)
+                {
+                    Fail($"Screenshot encode failed: {fullPath}");
+                    return false;
+                }
+
+                File.WriteAllBytes(fullPath, bytes);
+                return true;
+            }
+            finally
+            {
+                RestoreCanvasCaptureStates(canvasStates);
+                captureCamera.targetTexture = previousTarget;
+                RenderTexture.active = previousActive;
+                RenderTexture.ReleaseTemporary(renderTexture);
+
+                if (createdTempCamera && captureCamera != null)
+                {
+                    Destroy(captureCamera.gameObject);
+                }
+            }
         }
 
         private static Button FindButton(string objectName)
@@ -619,8 +751,7 @@ namespace Assets.Scripts.Dev
                     log.Contains("[Error]", StringComparison.Ordinal) ||
                     log.Contains("[Exception]", StringComparison.Ordinal) ||
                     log.Contains("[Assert]", StringComparison.Ordinal)
-                ) &&
-                !log.Contains("ReadPixels was called to read pixels from system frame buffer", StringComparison.Ordinal)
+                )
             ).ToList();
         }
 
@@ -679,6 +810,78 @@ namespace Assets.Scripts.Dev
 #else
             Application.Quit();
 #endif
+        }
+
+        private static string FindLatestFile(string directoryPath, string searchPattern)
+        {
+            if (!Directory.Exists(directoryPath))
+            {
+                return null;
+            }
+
+            return Directory.GetFiles(directoryPath, searchPattern)
+                .OrderByDescending(File.GetLastWriteTimeUtc)
+                .FirstOrDefault();
+        }
+
+        private static List<CanvasCaptureState> PrepareCanvasesForCapture(Camera captureCamera)
+        {
+            Canvas[] canvases = FindObjectsByType<Canvas>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var states = new List<CanvasCaptureState>(canvases.Length);
+
+            for (int i = 0; i < canvases.Length; i++)
+            {
+                Canvas canvas = canvases[i];
+                if (canvas == null)
+                {
+                    continue;
+                }
+
+                states.Add(new CanvasCaptureState
+                {
+                    Canvas = canvas,
+                    RenderMode = canvas.renderMode,
+                    WorldCamera = canvas.worldCamera,
+                    PlaneDistance = canvas.planeDistance,
+                });
+
+                if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
+                {
+                    canvas.renderMode = RenderMode.ScreenSpaceCamera;
+                    canvas.worldCamera = captureCamera;
+                    canvas.planeDistance = 1f;
+                }
+                else if (canvas.renderMode == RenderMode.ScreenSpaceCamera && canvas.worldCamera == null)
+                {
+                    canvas.worldCamera = captureCamera;
+                }
+            }
+
+            return states;
+        }
+
+        private static void RestoreCanvasCaptureStates(List<CanvasCaptureState> states)
+        {
+            for (int i = 0; i < states.Count; i++)
+            {
+                CanvasCaptureState state = states[i];
+                if (state.Canvas == null)
+                {
+                    continue;
+                }
+
+                state.Canvas.renderMode = state.RenderMode;
+                state.Canvas.worldCamera = state.WorldCamera;
+                state.Canvas.planeDistance = state.PlaneDistance;
+            }
+        }
+
+        private struct CanvasCaptureState
+        {
+            public Canvas Canvas;
+            public RenderMode RenderMode;
+            public Camera WorldCamera;
+            public float PlaneDistance;
         }
     }
 }

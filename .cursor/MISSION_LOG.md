@@ -10,9 +10,27 @@ KICKSTART_2026-01-15T13:26:07+09:00
 Phase 6: Worker Execution
 
 ## ステータス
-PHASE6_TASK053_AUTO_VERIFIED_2026-03-01
+PHASE6_TASK054_055_NORMALIZATION_2026-03-01
 
 ## 進捗記録
+
+### Phase 6: Worker Execution (2026-03-01 verification hardening / hygiene normalization)
+- [x] `TASK_054_VerificationAutomationHardening` を retrospective task として起票
+  - `docs/tasks/TASK_054_VerificationAutomationHardening.md`
+  - `docs/reports/REPORT_TASK_054_VerificationAutomationHardening.md`
+- [x] 未同期だった task docs を是正
+  - `docs/tasks/TASK_025_GCAllocReduction.md`
+  - `docs/tasks/TASK_053_MVPFinalVerificationPack.md`
+- [x] generated artifacts の整流化を開始
+  - superseded performance logs / reports を削除
+  - 参照が必要な latest evidence / source attribution logs のみ保持
+- [x] `TASK_055_WorktreeNormalization` を起票し、hygiene pass を完了
+  - `docs/tasks/TASK_055_WorktreeNormalization.md`
+  - `docs/reports/REPORT_TASK_055_WorktreeNormalization.md`
+- [ ] Residual hygiene
+  - `docs/logs/unity_automation_task027_20260301.log` は別プロセス使用中で削除未了
+  - unrelated local modifications は user-side change として除外管理
+- [ ] Next Action: orchestrator-owned verification / evidence / report updates を commit boundary として確定し、`TASK_044` / `TASK_046` の再優先付けへ移る
 
 ### Phase 6: Worker Execution (2026-03-01 自動検証パック統合)
 - [x] `TASK_MVP_04` 自動検証を完了
@@ -23,10 +41,18 @@ PHASE6_TASK053_AUTO_VERIFIED_2026-03-01
   - `docs/evidence/TASK_027/FULL_PLAYTHROUGH_RESULTS_20260301_015520.md`
 - [x] `TASK_053` の統合更新を完了
   - `docs/AI_CONTEXT_MVP.md` / `docs/reports/REPORT_TASK_027_FullPlaythroughTest.md` / `docs/reports/REPORT_TASK_053_MVPFinalVerificationPack.md` を更新
-- [x] `TASK_025` verdict を固定
-  - `docs/reports/REPORT_TASK_025_GCAllocReduction_DELTA_20260301.md`
-  - Verdict: `NO_MEASURABLE_REDUCTION` (`+0.22 KB/frame`)
-- [ ] Next Action: `TASK_025` の Layer A を開始し、GC Alloc 上位発生源の特定と次の改善タスク切り出しを行う
+- [x] `TASK_025` batch after measurement を再実行
+  - `docs/reports/REPORT_TASK_022_PerformanceBaseline_RAW_20260301_035327.md`
+  - `docs/evidence/PERFORMANCE_MEASUREMENT_20260301_035333.md`
+- [x] `TASK_025` verdict を更新
+  - `docs/reports/REPORT_TASK_025_GCAllocReduction_DELTA_20260301_round2.md`
+  - Verdict: `IMPROVED` (`-14 KB/frame`, `22 -> 8 KB/frame`)
+- [x] batch capture の `ReadPixels...` ノイズを解消
+  - `VerificationAutomator` を RenderTexture capture へ更新
+- [x] `DebugChatScene` load 時の `missing script` source attribution を完了
+  - 原因: `Assets/Prefabs/UI/MessageBubble.prefab`
+  - 対応: missing MonoBehaviour 1 件を cleanup
+- [ ] Next Action: generated logs を整理し、user-side local modifications を除いた clean commit boundary を作る
 
 ### Phase 6: Worker Execution (2026-02-28 リモート同期確認・状態整流化)
 - [x] root repo と `.shared-workflows` の更新確認を実施

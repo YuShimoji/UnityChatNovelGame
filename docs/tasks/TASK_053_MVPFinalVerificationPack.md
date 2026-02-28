@@ -5,73 +5,72 @@ Tier: 3 (Verification)
 Branch: main
 Owner: Worker
 Created: 2026-02-16
-Updated: 2026-03-01
+Updated: 2026-03-01T05:20:00+09:00
 Report: docs/reports/REPORT_TASK_053_MVPFinalVerificationPack.md
 
 ## Objective
 
-MVP最終検証タスク群（TASK_MVP_04, TASK_027, TASK_025）の証跡と verdict を統合し、短期ゲートをクローズする。
+MVP の主要 verification task (`TASK_MVP_04`, `TASK_027`, `TASK_025`) を統合し、SG-1 / MG-1 の最終判定を閉じる。
 
 ## Milestone
 
-- SG-1: MVP縦切りの最終確認
-- MG-1: MVP安定化と最低限の品質基盤
+- SG-1: MVP 縦切りの最終確認
+- MG-1: MVP 安定化と最低限の品質基盤
 
 ## Focus Area
 
 - `docs/tasks/TASK_MVP_04_VerifyVerticalSlice.md`
 - `docs/tasks/TASK_027_FullPlaythroughTest.md`
-- `docs/reports/REPORT_TASK_027_FullPlaythroughTest.md`
 - `docs/tasks/TASK_025_GCAllocReduction.md`
+- `docs/reports/REPORT_TASK_027_FullPlaythroughTest.md`
 - `docs/reports/REPORT_TASK_025_GCAllocReduction.md`
-- `docs/reports/REPORT_TASK_025_GCAllocReduction_DELTA_20260301.md`
 - `docs/AI_CONTEXT_MVP.md`
 
 ## Forbidden Area
 
-- MVP導線に無関係な機能追加
-- 大規模リファクタ
-- Addressables/CloudSave等の長期機能着手
+- MVP 範囲外の機能追加
+- 大規模リファクタリング
+- 手動テスト前提への後退
 
 ## Constraints
 
-- 依存タスク（TASK_047/049/050/051/052）は完了済みであること
-- 実測値・証跡なしで完了扱いにしない
-- 60秒完走・Console Error 0 を短期ゲート基準にする
+- 主要 evidence は batch 再実行で更新する
+- SG-1 / MG-1 の判定理由を明文化する
+- residual warning は follow-up または hardening task に明確化する
 
 ## Current Status
 
-- `TASK_MVP_04` は `RunMvpFinalVerificationPackBatch` で成功し、分岐A/Bと rapid input を検証済み
-- `TASK_027` は `RunVerticalSliceFullPlaythroughBatch` で成功し、通し証跡を保存済み
-- `TASK_025` は After 計測の delta summary を生成し、verdict を `NO_MEASURABLE_REDUCTION` に固定した
-- SG-1 はクローズ、MG-1 は performance follow-up のみ残る
+- `TASK_MVP_04`: COMPLETED
+- `TASK_027`: COMPLETED
+- `TASK_025`: COMPLETED (`IMPROVED`, `GC Alloc 22 -> 8 KB/frame`)
+- residual `ReadPixels...` noise and `missing script` follow-up are closed by `TASK_054`
+- SG-1: CLOSED
+- MG-1: CLOSED
 
 ## DoD
 
-- [x] TASK_MVP_04 のチェックリストが実測で更新されている
-- [x] TASK_027 の Pending項目が実測で更新されている
-- [x] TASK_025 の After計測が埋まり、Before/After比較と verdict が成立している
-- [x] `docs/AI_CONTEXT_MVP.md` のチェックリストが更新されている
-- [x] 結果を `docs/reports/REPORT_TASK_053_MVPFinalVerificationPack.md` に統合記録している
+- [x] `TASK_MVP_04` の checklist / evidence / report が最新化されている
+- [x] `TASK_027` の full playthrough evidence が成功状態で揃っている
+- [x] `TASK_025` の after measurement / delta / verdict が反映されている
+- [x] `docs/AI_CONTEXT_MVP.md` の checklist が反映されている
+- [x] `docs/reports/REPORT_TASK_053_MVPFinalVerificationPack.md` に統合判断が記録されている
 
 ## Test Plan
 
 - テスト対象:
-  - MVPScene 通し導線
-  - Full playthrough 手順
-  - PerformanceMonitor After計測
+  - MVP final verification pack
+  - full playthrough batch
+  - performance measurement batch
 - テスト種別:
-  - PlayMode（自動）
-  - 計測検証（PerformanceMonitor）
+  - Unity batch verification
+  - report integration review
 - 期待結果:
-  - 60秒以内完走
-  - Console Error/Exception 0
-  - GC Alloc After が記録され比較可能
-- テスト不要項目:
-  - 新規ユニットテスト追加（検証タスクのため）
+  - 60秒導線が成功する
+  - Console Error/Exception 0 を維持する
+  - performance verdict が明文化される
 
 ## Stop Conditions
 
-- 前提タスク未完了で導線が成立しない
-- 計測環境が不安定で再現不能
-- 仕様解釈の不一致が3件以上発生する
+- 主要 verification task のいずれかが再現不能
+- evidence 間で verdict が矛盾する
+- release blocking gap が新たに発生する
