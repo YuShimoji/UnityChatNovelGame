@@ -5,7 +5,7 @@ Tier: 3 (Verification)
 Branch: feature/task-053-mvp-final-verification-pack
 Owner: Worker
 Created: 2026-02-16
-Updated: 2026-02-26
+Updated: 2026-02-28
 Report: docs/reports/REPORT_TASK_053_MVPFinalVerificationPack.md
 
 ## Objective
@@ -34,15 +34,21 @@ MVP最終検証タスク群（TASK_MVP_04, TASK_027, TASK_025）を実測で埋�
 
 ## Constraints
 
-- 依存タスク（TASK_049/050/051）完了後に着手する
+- 依存タスク（TASK_047/049/050/051/052）は完了済みであること
 - 実測値・証跡なしで完了扱いにしない
 - 60秒完走・Console Error 0 を短期ゲート基準にする
+
+## Current Status
+
+- `TASK_047` / `TASK_049` / `TASK_052` は完了済み。
+- `TASK_025` は After 計測ログを回収済みだが、低減効果の最終判定は未了。
+- 2026-02-28 時点の短期残件は `TASK_027` Layer B と `docs/AI_CONTEXT_MVP.md` の最終チェック反映。
 
 ## DoD
 
 - [ ] TASK_MVP_04 のチェックリストが実測で更新される
 - [ ] TASK_027 の Pending項目が実測で更新される
-- [ ] TASK_025 の After計測が埋まり、Before/After比較が成立する
+- [x] TASK_025 の After計測が埋まり、Before/After比較が成立する
 - [ ] `docs/AI_CONTEXT_MVP.md` のチェックリストが更新される
 - [x] 結果を `docs/reports/REPORT_TASK_053_MVPFinalVerificationPack.md` に統合記録する
 

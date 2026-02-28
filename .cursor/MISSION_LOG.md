@@ -14,6 +14,21 @@ PHASE6_TASK049_VERIFIED_2026-02-22
 
 ## 進捗記録
 
+### Phase 6: Worker Execution (2026-02-28 リモート同期確認・状態整流化)
+- [x] root repo と `.shared-workflows` の更新確認を実施
+  - `git pull --ff-only` -> `Already up to date.`
+  - `git -C .shared-workflows pull --ff-only origin main` -> `Already up to date.`
+  - `node .shared-workflows/scripts/sw-update-check.js` -> `Behind origin/main: 0`
+- [x] 状態不整合を是正
+  - `TASK_052` を `COMPLETED` に更新
+  - `TASK_025` を `IN_PROGRESS` として現在地を明文化
+  - `TASK_027` / `TASK_053` の残件を最小手動ブロックへ圧縮
+  - `docs/WORKFLOW_STATE_SSOT.md` / `docs/MILESTONE_PLAN.md` / `docs/HANDOVER.md` を更新
+- [x] 手動ブロックの引き渡し準備
+  - `docs/evidence/TASK_027/README.md` を現行 runbook に更新
+- [ ] Next Action: `TASK_027/TASK_053` の最小手動検証ブロックを実行し、`docs/evidence/TASK_027/` に日付付き証跡を保存
+- [ ] Next Action: 手動証跡反映後に `docs/AI_CONTEXT_MVP.md` / `REPORT_TASK_027` / `REPORT_TASK_053` を更新して SG-1 を判定
+
 ### Phase 6: Worker Execution (2026-02-22 TASK_049 検証・統合)
 - [x] TASK_049 完了根拠を検証
   - `git log` で `fix: isolate Editor-only code to resolve build gate errors (TASK_049)` を確認

@@ -1,49 +1,36 @@
 ﻿# Project Handover & Status
 
-**Timestamp**: 2026-02-06T18:21:00+09:00
+**Timestamp**: 2026-02-28T21:36:21+09:00
 **Actor**: Cascade AI Worker
 **Type**: Handover
 **Mode**: implementation
 
 ## 基本情報
 
-- **最終更新**: 2026-02-06T18:21:00+09:00
-- **更新者**: Cascade AI Worker
+- **最終更新**: 2026-02-28T21:36:21+09:00
+- **更新者**: Codex Orchestrator
 
 ## GitHubAutoApprove
 
 GitHubAutoApprove: false
 
+## Current Snapshot (2026-02-28)
+
+- root repo / `.shared-workflows` はともに `origin/main` に同期済み（behind 0）
+- `TASK_047` / `TASK_049` / `TASK_052` は証跡付きで完了確認済み
+- `TASK_027` は Layer A 完了、Layer B の最終手動通し証跡のみ未回収
+- `TASK_053` は `PARTIALLY_COMPLETED`。残件は `TASK_027` 証跡反映と `docs/AI_CONTEXT_MVP.md` 更新
+- `TASK_025` は After 計測ログ回収済みだが、GC Alloc 改善 verdict は未確定
+
 ## 現在の目標
 
-- ✅ プロジェクト初期セットアップ完了
-- ✅ Unity Core System Skeleton実装完了（TASK_001）
-- ✅ ChatController & ScenarioManager ロジック実装完了（TASK_002）
-- ✅ Prefab作成完了（TASK_003: MessageBubble, TypingIndicator）
-- ✅ パッケージ導入完了（TASK_004/005: Yarn, DOTween, TMP）
-- ✅ コンパイルエラー修正完了（TASK_006）
-- ✅ MCPコンパイルエラー修正完了（TASK_009）
-- ✅ MetaEffectController実装完了（TASK_010）
-- ✅ TopicScriptableObjects準備完了（TASK_011）- (Verified without Evidence)
-- ✅ CompileErrorFix完了（TASK_012）
-- ✅ TopicDataVerification完了（TASK_013）- (DONE - Evidence Secured)
-- ✅ FixChatControllerError完了（TASK_014）
-- ✅ FixDebugSceneBuilderReflection完了（TASK_015）
-- ✅ Core System Verification完了（TASK_007）- (Verified without Evidence)
-- ✅ Verification Tools Implemented (TASK_016)
-- ✅ ChatUI Integration完了（TASK_008） - (Verified with Evidence)
-
-- ✅ Deduction Board実装完了（TASK_018）
-- ✅ Performance Baseline完了（TASK_022）- (Report Generated)
-- 🚧 GC Alloc削減（TASK_025 実装完了・計測待ち）
-- ✅ プロジェクト構造整理（TASK_026 完了）
-
-- Full Playthrough Test（TASK_027 進行中・手動テスト待ち）
-- ✅ Save System（TASK_028 完了）
-- ✅ Synthesis Recipes作成（TASK_040 DONE）
-- ✅ Save System UI（TASK_041 DONE）
-- ✅ Title Screen実装（TASK_043 DONE）
-- ✅ Verification Gap Closure（TASK_023 DONE - Evidence Secured）
+- ✅ MVP縦切りを支える主要実装は統合済み
+- ✅ `TASK_047` Vertical Slice Smoke Gate 完了
+- ✅ `TASK_049` Build Gate Fix 完了
+- ✅ `TASK_052` Smoke Result Closure 完了
+- 🚧 `TASK_027` Full Playthrough Test は手動最終証跡待ち
+- 🚧 `TASK_053` MVP Final Verification Pack は最終統合待ち
+- 🚧 `TASK_025` GC Alloc Reduction は比較ログ回収済み、改善確定待ち
 
 ## 進捗
 
@@ -88,21 +75,37 @@ GitHubAutoApprove: false
 
 ## ブロッカー
 
-- なし
+- 技術的 blocker はなし
+- 外部依存として、最終手動証跡の実行時間確保のみ残る
 
 ## バックログ
 
-- なし（主要タスク完了済み）
+- `TASK_044_NarrativeVerticalSlicePlan`
+- `TASK_046_ChatDialogueView_VerticalSlice`
+- `LG-1` 配下の production readiness（Addressables / CI / QA）
 
 ## リスク
 
 - **Evidence Missing**: 手動検証の負担増により、スクリーンショット取得がスキップされがちである。自動化ツールの徹底が必要。
 - **Git Context Divergence**: 複数セッション間でのコンテキスト同期にズレが生じやすい（Sync必須）。
-- **Synthesis Recipe不足**: TASK_027の完全なテストにはレシピデータが必要（現在0件）。
+- **Verification Drift**: `TASK_025` のように計測ログはあるが verdict が閉じていないタスクが残りやすい。
 
 ## 最新の作業内容（2026-02-02）
 
 ## 最新の作業内容（2026-02-06）
+
+## 最新の作業内容（2026-02-28）
+
+- **Status**: IN_PROGRESS
+- **内容**:
+  - root repo / `.shared-workflows` のリモート同期を再確認（ともに `Already up to date.`）
+  - `TASK_047` / `TASK_052` の完了状態を証跡付きで再検証
+  - `TASK_025` / `TASK_027` / `TASK_053` の残件を運用 SSOT に合わせて整理
+  - `docs/evidence/TASK_027/README.md` を最小手動ブロック用 runbook に更新
+- **次の最短手順**:
+  - `TASK_027/TASK_053` の統合手動ブロックを 1 回実行
+  - `docs/AI_CONTEXT_MVP.md` を結果で更新
+  - 結果に応じて `TASK_053` を DONE へ更新、`TASK_025` を別途判定
 
 - **Status**: DONE
 - **内容**:
@@ -125,10 +128,9 @@ GitHubAutoApprove: false
 - **Status**: IN PROGRESS
 - **内容**: 全機能の統合動作検証
 - **現状**:
-  - テスト準備完了（Unity Editor起動確認済み）
-  - DebugScript.yarn による包括的テストシナリオ作成済み
-  - **ブロッカー**: Synthesis Recipeが0件のため、合成システムの完全テストは保留
-  - 手動テスト実行待ち
+  - 技術 blocker は解消済み
+  - Chat bubble / runtime stability は 2026-02-27 時点で再確認済み
+  - 残件は `docs/evidence/TASK_027/` への最終手動証跡保存のみ
 - **Report**: `docs/reports/REPORT_TASK_027_FullPlaythroughTest.md`
 
 ### TASK_028: Save System
@@ -177,19 +179,19 @@ GitHubAutoApprove: false
 ## Outlook
 
 - **Short-term**:
-  - TASK_030 (Synthesis Recipe) の作成（TASK_027完全テストのため）
-  - TASK_031 (Save System UI) の実装
-  - TASK_033 (Title Screen) の実装
+  - `TASK_027/TASK_053` の統合手動ブロック実行
+  - `docs/AI_CONTEXT_MVP.md` と最終レポート更新
+  - SG-1 判定
 - **Mid-term**:
-  - SaveLoadUIのビジュアルデザイン実装
-  - オートセーブ機能追加
-  - コンテンツ制作準備
+  - `TASK_025` の GC Alloc verdict 確定
+  - `TASK_046` / `TASK_044` の優先順位再設計
+  - MG-1 クローズ後の次マイルストーン策定
 - **Long-term**:
   - Content Production
-  - Phase 2機能（暗号化、クラウドセーブ等）
+  - Release readiness（Addressables / CI / QA）
 
 ## Proposals
 
 - TASK_027の手動テスト実行を推奨（Unity Editorで実行可能）
-- Synthesis Recipe作成タスクの起票を推奨（最低1件のテストレシピ）
-- SaveLoadUIのプレハブとビジュアルデザイン作成を次フェーズで検討
+- TASK_027証跡の半自動保存導線を次フェーズで検討
+- TASK_025 verdict を数値差分付きで自動追記する仕組みを検討

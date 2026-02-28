@@ -5,7 +5,7 @@ Tier: 2 (Verification)
 Branch: main
 Owner: Worker
 Created: 2026-02-02T04:00:00+09:00
-Updated: 2026-02-27T03:15:00+09:00
+Updated: 2026-02-28T21:36:21+09:00
 Report: docs/reports/REPORT_TASK_027_FullPlaythroughTest.md
 
 ## Objective
@@ -33,20 +33,27 @@ DebugChatScene の通し導線（Chat UI -> Topic -> Deduction -> Synthesis -> E
 - Unity で `Assets/Scenes/DebugChatScene.unity` を通し実行
 - フルプレイ結果の記録と保存
 
-## Current Status (2026-02-27)
+## Current Status (2026-02-28)
 
-- 以前の blocker（Missing Script / bubble不可視）は解消。
-- 現在は Layer B のフル導線実測を残す段階。
+- 以前の blocker（Missing Script / bubble不可視）は解消済み。
+- 2026-02-27 時点でチャットバブル視認性とランタイム安定性は再確認済み。
+- 残件は Layer B のフル導線実測と、日付付き証跡の保存のみ。
 
 ## Steps
 
-1. DebugChatScene を PlayMode で実行。
-2. Chat UI -> Topic -> Deduction -> Synthesis -> End まで通し確認。
-3. 各機能の動作を記録（スクリーンショット/ログ）。
-4. 問題点・改善点をレポートに反映。
+1. `Assets/Scenes/DebugChatScene.unity` を開き、Console をクリアしてから PlayMode を開始。
+2. `Chat UI -> Topic unlock -> Deduction -> Synthesis -> Effect/End` を 1 回通しで実行する。
+3. `docs/evidence/TASK_027/` に以下を保存する。
+   - `FULL_PLAYTHROUGH_RESULTS_YYYYMMDD.md`
+   - `Log_YYYYMMDD.txt`
+   - `Capture_01_start.png`
+   - `Capture_02_topic.png`
+   - `Capture_03_synthesis_or_end.png`
+4. 成功/失敗にかかわらず、最後に到達したステップと Console 状態を `REPORT_TASK_027_FullPlaythroughTest.md` に反映する。
 
 ## DoD (Definition of Done)
 
 - [ ] Full Playthrough が完了している。
+- [ ] `docs/evidence/TASK_027/` に日付付き結果ファイルと 3 枚のキャプチャが保存されている。
 - [ ] 発見された問題が Issue/Task として起票されている（または問題なしと記録）。
 - [x] レポートが `docs/reports/REPORT_TASK_027_FullPlaythroughTest.md` に作成されている。

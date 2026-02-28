@@ -1,6 +1,6 @@
 ﻿# Workflow State SSOT
 
-Last Updated: 2026-02-27
+Last Updated: 2026-02-28
 Owner: Orchestrator
 Scope: UnityChatNovelGame + shared-workflows integration
 
@@ -20,20 +20,25 @@ Scope: UnityChatNovelGame + shared-workflows integration
 
 ## Active Task Set
 
+- TASK_047: DONE
+  - PlayMode / Build 証跡は `docs/evidence/TASK_047/` で検証済み
+- TASK_052: COMPLETED
+  - `TASK_047` の未達DoDクローズを 2026-02-28 に再確認
 - TASK_027: IN_PROGRESS
   - Layer A: COMPLETED
-  - Layer B: IN_PROGRESS (UI/bubble gate passed, full route evidence pending)
+  - Layer B: IN_PROGRESS (full route evidence pending only)
 - TASK_053: IN_PROGRESS
-  - Dependency: TASK_027 Layer B completion
+  - Remaining: `TASK_027` Layer B + `docs/AI_CONTEXT_MVP.md` 最終反映
 - TASK_025: IN_PROGRESS
-  - After measurement: UPDATED (`REPORT_TASK_022_PerformanceBaseline_RAW_20260227_020005.md` / `...030649.md`)
+  - After measurement: RECORDED
+  - Verdict: no measurable GC reduction yet
 
 ## Blocker Registry
 
 - Previous blocker: `MessageBubble` missing-script runtime failure
 - Current blocker: none (technical)
-- Remaining gap: manual full-route evidence not yet captured
+- Remaining gap: consolidated manual verification block not yet executed
 
 ## Next Action
 
-- Single Entry: Run TASK_027 Layer B full route and record dated evidence (`FULL_PLAYTHROUGH_RESULTS_*`, `Log_*`, `Capture_*`), then close TASK_053.
+- Single Entry: Execute the minimum manual verification block for `TASK_027/TASK_053` and save dated evidence (`FULL_PLAYTHROUGH_RESULTS_*`, `Log_*`, `Capture_*`) in `docs/evidence/TASK_027/`, then update `docs/AI_CONTEXT_MVP.md`.

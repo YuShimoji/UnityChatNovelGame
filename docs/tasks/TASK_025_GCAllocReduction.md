@@ -1,10 +1,11 @@
 ﻿# Task: GC Alloc Reduction (Baseline Follow-up)
 
-Status: OPEN
+Status: IN_PROGRESS
 Tier: 2 (Performance)
 Branch: feature/gc-alloc-reduction
 Owner: Worker
 Created: 2026-01-31T01:00:00+09:00
+Updated: 2026-02-28T21:36:21+09:00
 Report: docs/reports/REPORT_TASK_025_GCAllocReduction.md
 
 ## Objective
@@ -39,7 +40,13 @@ TASK_022のベースライン計測で観測されたGC Alloc（平均22KB/frame
 2. 上位1〜3箇所を対象に、alloc削減の小さな変更を実施。
 3. DebugChatSceneで再計測し、Before/Afterをレポートに記載。
 
+## Current Status
+
+- 2026-02-27 までの After 計測ログは取得済み。
+- `GC Alloc` は `22-23 KB/frame` 帯で、現時点ではベースラインからの有意な低減を確認できていない。
+- 短期ゲートの主ブロックではないが、MG-1 を閉じるには追加の根拠整理または次の改善施策が必要。
+
 ## DoD (Definition of Done)
 - [ ] 主なGC Alloc発生箇所（上位1〜3）が特定され、レポートに根拠として添付されている。
 - [ ] 変更後の計測で、GC Allocがベースライン（平均22KB/frame）から低減している。
-- [ ] `docs/reports/REPORT_TASK_025_GCAllocReduction.md` が作成され、Before/Afterが明記されている。
+- [x] `docs/reports/REPORT_TASK_025_GCAllocReduction.md` が作成され、Before/Afterが明記されている。
