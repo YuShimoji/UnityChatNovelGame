@@ -35,6 +35,8 @@
 ### 短期（Next）
 
 - [in_progress] TASK_056_CIReadinessBaseline (ref: docs/tasks/TASK_056_CIReadinessBaseline.md, Status: IN_PROGRESS)
+- [in_progress] TASK_057_QACharacterDatabaseEditModeCoverage (ref: docs/tasks/TASK_057_QACharacterDatabaseEditModeCoverage.md, Status: IN_PROGRESS)
+- [in_progress] TASK_058_RemoteUnityEditModeCIPath (ref: docs/tasks/TASK_058_RemoteUnityEditModeCIPath.md, Status: IN_PROGRESS)
 
 ### Worker完了ステータス
 

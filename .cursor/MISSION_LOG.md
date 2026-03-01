@@ -10,9 +10,27 @@ KICKSTART_2026-01-15T13:26:07+09:00
 Phase 6: Worker Execution
 
 ## ステータス
-PHASE6_TASK056_CI_BASELINE_2026-03-01
+PHASE6_TASK058_REMOTE_UNITY_EDITMODE_CI_2026-03-01
 
 ## 進捗記録
+
+### Phase 6: Worker Execution (2026-03-01 remote Unity EditMode CI path)
+- [x] `TASK_057` Layer A の未コミット差分を整理
+  - `Assets/Scripts/Tests/CoreLogicTests.cs`
+  - `docs/tasks/TASK_057_QACharacterDatabaseEditModeCoverage.md`
+  - `docs/reports/REPORT_TASK_057_QACharacterDatabaseEditModeCoverage.md`
+- [x] `TASK_058_RemoteUnityEditModeCIPath` を起票
+  - `docs/tasks/TASK_058_RemoteUnityEditModeCIPath.md`
+  - `docs/reports/REPORT_TASK_058_RemoteUnityEditModeCIPath.md`
+- [x] remote Unity EditMode workflow を追加
+  - `.github/workflows/unity-editmode-tests.yml`
+  - Unity secrets 未設定時は skip reason を明示して fail しない構成
+- [x] SSOT / handover / milestone / report を更新
+  - `docs/WORKFLOW_STATE_SSOT.md`
+  - `docs/HANDOVER.md`
+  - `docs/MILESTONE_PLAN.md`
+  - `docs/inbox/REPORT_ORCH_2026-03-01T162951+09-00.md`
+- [ ] Next Action: `TASK_056` / `TASK_057` / `TASK_058` の Layer B を閉じるため、remote push 後の `repo-guards` と `unity-editmode-tests` 初回 green run を観測する
 
 ### Phase 6: Worker Execution (2026-03-01 LG-1 entry slice / CI baseline)
 - [x] Phase 1 sync を実施

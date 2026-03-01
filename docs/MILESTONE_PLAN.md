@@ -1,56 +1,54 @@
 # Milestone Plan
 
-## 基本情報
+## Metadata
 
-- 最終更新: 2026-03-01T16:21:46+09:00
-- 更新者: Codex Orchestrator
+- Last Updated: 2026-03-01T16:29:51+09:00
+- Updated By: Codex Orchestrator
 
 ---
 
-## 長期マイルストーン
+## Long Milestone
 
 ### LG-1: Production readiness
 
-- 目的: Addressables / CI / QA を含むリリース準備へ移行する
-- 期限目安: 2026-06
-- 現状: 着手済み
-- 進捗: 20%
-- 関連:
-  - `TASK_056_CIReadinessBaseline` (current)
-  - next candidate: QA slice
+- Objective: move Addressables / CI / QA toward a reusable production baseline
+- Target Window: 2026-06
+- Status: started
+- Progress: 45%
+- Related:
+  - `TASK_056_CIReadinessBaseline`
+  - `TASK_057_QACharacterDatabaseEditModeCoverage`
+  - `TASK_058_RemoteUnityEditModeCIPath`
   - later candidate: Addressables migration planning
 
 ---
 
-## 中期マイルストーン
+## Mid Milestone
 
-### MG-1: MVP 検証と最小品質の収束
+### MG-1: MVP verification and minimum release confidence
 
-- 目的: MVP の主要検証を完了し、次段階へ進める状態を作る
-- 期限目安: 2026-03-05
-- 現状: 完了
-- 進捗: 100%
-- 関連タスク: TASK_047, TASK_049, TASK_052, TASK_MVP_04, TASK_027, TASK_053, TASK_025, TASK_054, TASK_055
-
----
-
-## 短期マイルストーン
-
-### SG-1: MVP 検証パック完了
-
-- 目的: MVP チェックリストの最小完了条件を満たす
-- 期限目安: 2026-03-02
-- 現状: 完了
-- 進捗: 100%
-- 対応タスク: TASK_MVP_04, TASK_027, TASK_053
+- Objective: close the main MVP verification loop and leave a stable state behind
+- Target Window: 2026-03-05
+- Status: completed
+- Progress: 100%
 
 ---
 
-## 現在地マップ
+## Short Milestone
 
+### SG-1: MVP verification pack closure
+
+- Objective: close the MVP checklist at the minimum acceptable level
+- Target Window: 2026-03-02
+- Status: completed
+- Progress: 100%
+
+---
+
+## Current Map
 ```mermaid
 gantt
-    title プロジェクト進行
+    title Project Milestones
     dateFormat  YYYY-MM-DD
     section Long
     LG-1 :active, lg1, 2026-03-01, 2026-06-30
@@ -68,25 +66,24 @@ gantt
 
 **Keep**
 
-- MVP / Vertical Slice / Performance の batch automation が安定している
-- stale legacy task docs を現行実装と証跡へ接続できた
-- CI baseline を先に切ることで、以後の LG-1 作業に remote guard を入れられる
+- The CI baseline created a reusable remote guard without requiring manual local testing.
+- The QA slice stayed narrow and high-signal by focusing on `CharacterDatabase` EditMode behavior.
+- The Unity EditMode CI path now exists as a concrete Layer B closing route.
 
 **Problem**
 
-- user-side local modifications と generated artifact が worktree に残る
-- `TASK_056` は remote run を見ない限り Layer B が閉じない
-- Addressables は依然として面積が大きい
+- `TASK_056`, `TASK_057`, and `TASK_058` remain open on Layer B until the first remote runs are observed.
+- User-side local modifications and one generated artifact still keep the worktree dirty.
 
 **Try**
 
-- `TASK_056` Layer B は pending のまま固定し、次の LG-1 slice 候補を QA に寄せて監査する
-- CI baseline を起点に次タスクの remote guard 前提を整える
+- Observe the first remote `repo-guards` and `unity-editmode-tests` runs.
+- After remote execution is confirmed, choose the next LG-1 slice between Addressables planning and CI hardening.
 
 ---
 
-## 履歴
+## History
 
-- 2026-03-01 16:21: LG-1 entry slice として `TASK_056_CIReadinessBaseline` を起票し、GitHub Actions baseline を追加
-- 2026-03-01 16:06: orchestrator-owned boundary を `63619cf` / `fcda472` で固定し、next-cycle sync ready へ遷移
-- 2026-03-01 05:37: `TASK_054` / `TASK_055` を追加し、verification hardening と hygiene normalization を文脈へ固定
+- 2026-03-01 16:29: `TASK_058_RemoteUnityEditModeCIPath` added to define the Unity EditMode CI path
+- 2026-03-01 16:26: `TASK_057_QACharacterDatabaseEditModeCoverage` added to expand EditMode coverage
+- 2026-03-01 16:21: `TASK_056_CIReadinessBaseline` added as the first LG-1 slice

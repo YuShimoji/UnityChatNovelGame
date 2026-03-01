@@ -1,6 +1,6 @@
 # Workflow State SSOT
 
-Last Updated: 2026-03-01T16:21:46+09:00
+Last Updated: 2026-03-01T16:29:51+09:00
 Owner: Orchestrator
 Scope: UnityChatNovelGame + shared-workflows integration
 
@@ -16,34 +16,31 @@ Scope: UnityChatNovelGame + shared-workflows integration
 ## Current Phase
 
 - Phase: Worker Execution
-- Gate: SG-1 closed / MG-1 closed / LG-1 entry slice in progress
+- Gate: SG-1 closed / MG-1 closed / LG-1 entry slices in progress
 
 ## Active Task Set
 
 - TASK_047: DONE
-  - PlayMode / Build evidence is recorded under `docs/evidence/TASK_047/`
 - TASK_052: COMPLETED
-  - TASK_047 closure completed on 2026-02-28
 - TASK_MVP_04: COMPLETED
-  - `docs/evidence/MVP_FINAL_VERIFICATION_20260301_033904.md`
 - TASK_027: COMPLETED
-  - `docs/evidence/TASK_027/FULL_PLAYTHROUGH_RESULTS_20260301_034145.md`
 - TASK_053: COMPLETED
-  - SG-1 report integration closed on 2026-03-01
 - TASK_025: COMPLETED
-  - After measurement: `docs/reports/REPORT_TASK_022_PerformanceBaseline_RAW_20260301_051433.md`
-  - Verdict: `IMPROVED` (`-14 KB/frame`, `22 -> 8 KB/frame`)
 - TASK_054: COMPLETED
-  - Verification automation hardening / missing script source attribution and cleanup are recorded
 - TASK_055: COMPLETED
-  - Generated artifacts were normalized into an orchestrator-owned commit-ready boundary
 - Legacy task normalization: COMPLETED
-  - `TASK_001`, `TASK_010`, `TASK_011`, `TASK_013`, `TASK_029`, `TASK_044`, `TASK_046`
-  - `TASK_MVP_02`, `TASK_MVP_03`, `TASK_MVP_04`
 - TASK_056: IN_PROGRESS
-  - LG-1 entry slice
+  - CI baseline
   - Layer A: completed
-  - Layer B: waiting for first remote GitHub Actions green run
+  - Layer B: waiting for first remote `repo-guards` green run
+- TASK_057: IN_PROGRESS
+  - QA CharacterDatabase EditMode coverage
+  - Layer A: completed
+  - Layer B: waiting for first `unity-editmode-tests` pass
+- TASK_058: IN_PROGRESS
+  - Remote Unity EditMode CI path
+  - Layer A: completed
+  - Layer B: waiting for first remote run with Unity credentials configured
 
 ## Blocker Registry
 
@@ -54,8 +51,11 @@ Scope: UnityChatNovelGame + shared-workflows integration
     - `Assets/Scripts/Tests/PlayMode/MVPScreenshotEvidencePlayModeTests.cs`
   - one transient log remains locked by another process:
     - `docs/logs/unity_automation_task027_20260301.log`
-  - `TASK_056` Layer B depends on remote workflow execution after a future push
+  - `TASK_056`, `TASK_057`, and `TASK_058` Layer B depend on remote execution
+  - `TASK_058` requires one of the following secret sets:
+    - `UNITY_LICENSE` + `UNITY_EMAIL` + `UNITY_PASSWORD`
+    - or `UNITY_SERIAL` + `UNITY_EMAIL` + `UNITY_PASSWORD`
 
 ## Next Action
 
-- Single Entry: `TASK_056` の Layer B を除く準備を固定した状態で、LG-1 の次候補を QA slice として切るべきかを audit ベースで確定する
+- Single Entry: keep the local boundary clean and observe the first remote `repo-guards` plus `unity-editmode-tests` runs needed to close Layer B for `TASK_056` / `TASK_057` / `TASK_058`

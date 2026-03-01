@@ -1,15 +1,16 @@
 # Project Handover & Status
 
-**Timestamp**: 2026-03-01T16:21:46+09:00
+**Timestamp**: 2026-03-01T16:29:51+09:00
 **Actor**: Codex Orchestrator
 **Type**: Handover
 **Mode**: implementation
 
 ## Current Snapshot
 
-- root repo 側では SG-1 / MG-1 のクローズ状態を維持し、orchestrator-owned boundary を `63619cf` / `fcda472` で固定済み。
-- `.shared-workflows` 側では `9f269f0` (`fix: stabilize reporting diagnostics`) まで取り込み済み。
-- LG-1 の最初の slice として `TASK_056_CIReadinessBaseline` を起票し、GitHub Actions baseline をローカル実装まで進めた。
+- SG-1 and MG-1 are closed in the root repository.
+- LG-1 now has three recorded slices: `TASK_056`, `TASK_057`, and `TASK_058`.
+- Layer A is complete for all three LG-1 slices.
+- `.shared-workflows` diagnostics remain aligned with commit `9f269f0`.
 
 ## Current Position
 
@@ -19,17 +20,20 @@
 
 ## Completed This Session
 
-- Addressables / CI / QA を比較し、最初の LG-1 slice を `CI baseline` に決定した。
-- `.github/workflows/repo-guards.yml` を追加した。
-- `TASK_056_CIReadinessBaseline` と `REPORT_TASK_056_CIReadinessBaseline` を追加した。
-- CI で実行する shared workflow script の syntax check と validator 実行をローカルで確認した。
+- Added `.github/workflows/repo-guards.yml` as the CI baseline slice (`TASK_056`).
+- Expanded `Assets/Scripts/Tests/CoreLogicTests.cs` with injected-profile EditMode coverage for `CharacterDatabase` (`TASK_057`).
+- Added `.github/workflows/unity-editmode-tests.yml` as the remote Unity execution path (`TASK_058`).
+- Updated task/report/SSOT artifacts for the active LG-1 slices.
 
 ## Key Evidence
 
-- `docs/inbox/REPORT_ORCH_2026-03-01T162146+09-00.md`
+- `docs/inbox/REPORT_ORCH_2026-03-01T162951+09-00.md`
 - `docs/tasks/TASK_056_CIReadinessBaseline.md`
 - `docs/reports/REPORT_TASK_056_CIReadinessBaseline.md`
-- `.github/workflows/repo-guards.yml`
+- `docs/tasks/TASK_057_QACharacterDatabaseEditModeCoverage.md`
+- `docs/reports/REPORT_TASK_057_QACharacterDatabaseEditModeCoverage.md`
+- `docs/tasks/TASK_058_RemoteUnityEditModeCIPath.md`
+- `docs/reports/REPORT_TASK_058_RemoteUnityEditModeCIPath.md`
 
 ## Task Status
 
@@ -38,26 +42,29 @@
 - Status: IN_PROGRESS
 - Layer A: completed
 - Layer B: pending
-- Pending reason: remote GitHub Actions run has not been observed yet
+- Pending reason: the first remote `repo-guards` run has not been observed yet
 
-### TASK_025
+### TASK_057
 
-- Status: COMPLETED
-- Verdict: `IMPROVED`
+- Status: IN_PROGRESS
+- Layer A: completed
+- Layer B: pending
+- Pending reason: the first remote `unity-editmode-tests` pass has not been observed yet
 
-### TASK_027
+### TASK_058
 
-- Status: COMPLETED
-- Evidence: `docs/evidence/TASK_027/FULL_PLAYTHROUGH_RESULTS_20260301_034145.md`
+- Status: IN_PROGRESS
+- Layer A: completed
+- Layer B: pending
+- Pending reason: Unity credentials are not verifiable locally and the first remote run has not been observed yet
 
 ## Next Action
 
-- Keep `TASK_056` at Layer B pending until a future push triggers the first workflow run.
-- Use the now-added CI baseline as the guardrail for selecting the next LG-1 slice.
-- Evaluate QA as the next likely candidate before Addressables.
+- Observe the first remote `repo-guards` and `unity-editmode-tests` runs after push.
+- If Unity credentials are absent, configure one supported secret set for `TASK_058`.
 
 ## Risks
 
 - The worktree still contains unrelated user-side modifications in `Assets/Font/NotoSansJP-Regular SDF.asset` and `Assets/Scripts/Tests/PlayMode/MVPScreenshotEvidencePlayModeTests.cs`.
 - `docs/logs/unity_automation_task027_20260301.log` is still locked by another process.
-- `TASK_056` cannot be fully closed until the workflow runs on remote infrastructure.
+- `TASK_056`, `TASK_057`, and `TASK_058` all depend on remote execution to fully close.
