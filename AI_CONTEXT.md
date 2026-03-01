@@ -34,14 +34,7 @@
 
 ### 短期（Next）
 
-- [pending] GC Alloc Reduction (Baseline Follow-up) (ref: docs/tasks/TASK_025_GCAllocReduction.md, Status: COMPLETED)
-- [pending] Full Playthrough Test (ref: docs/tasks/TASK_027_FullPlaythroughTest.md, Status: COMPLETED)
-- [pending] Save System UI Implementation (ref: docs/tasks/TASK_041_SaveSystemUI.md, Status: COMPLETED)
-- [in_progress] ChatDialogueView Vertical Slice Integration (ref: docs/tasks/TASK_046_ChatDialogueView_VerticalSlice.md, Status: IN_PROGRESS)
-- [pending] Screenshot Evidence Recovery (ref: docs/tasks/TASK_048_ScreenshotEvidenceRecovery.md, Status: COMPLETED)
-- [pending] MVP Final Verification Pack (TASK_MVP_04 / TASK_027 / TASK_025) (ref: docs/tasks/TASK_053_MVPFinalVerificationPack.md, Status: COMPLETED)
-- [pending] Verification Automation Hardening (ref: docs/tasks/TASK_054_VerificationAutomationHardening.md, Status: COMPLETED)
-- [pending] Worktree Normalization (ref: docs/tasks/TASK_055_WorktreeNormalization.md, Status: COMPLETED)
+- [done] 未完了タスクなし（docs/tasks/ に OPEN / IN_PROGRESS なし）
 
 ### Worker完了ステータス
 

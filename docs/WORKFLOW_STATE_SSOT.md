@@ -1,6 +1,6 @@
 # Workflow State SSOT
 
-Last Updated: 2026-03-01T05:37:17+09:00
+Last Updated: 2026-03-01T16:01:02+09:00
 Owner: Orchestrator
 Scope: UnityChatNovelGame + shared-workflows integration
 
@@ -16,7 +16,7 @@ Scope: UnityChatNovelGame + shared-workflows integration
 ## Current Phase
 
 - Phase: Worker Execution
-- Gate: SG-1 closed / MG-1 closed / residual hygiene normalization in progress
+- Gate: SG-1 closed / MG-1 closed / next-cycle sync preparation in progress
 
 ## Active Task Set
 
@@ -32,11 +32,15 @@ Scope: UnityChatNovelGame + shared-workflows integration
   - SG-1 report integration closed on 2026-03-01
 - TASK_025: COMPLETED
   - After measurement: `docs/reports/REPORT_TASK_022_PerformanceBaseline_RAW_20260301_051433.md`
-  - Verdict: `IMPROVED` (`-14 KB/frame` vs baseline, `22 -> 8 KB/frame`)
+  - Verdict: `IMPROVED` (`-14 KB/frame`, `22 -> 8 KB/frame`)
 - TASK_054: COMPLETED
   - Verification automation hardening / missing script source attribution and cleanup are recorded
 - TASK_055: COMPLETED
-  - generated artifacts were normalized into an orchestrator-owned commit-ready boundary
+  - Generated artifacts were normalized into an orchestrator-owned commit-ready boundary
+- Legacy task normalization: COMPLETED
+  - `TASK_001`, `TASK_010`, `TASK_011`, `TASK_013`, `TASK_029`, `TASK_044`, `TASK_046`
+  - `TASK_MVP_02`, `TASK_MVP_03`, `TASK_MVP_04`
+  - stale task / report docs were aligned to current evidence
 
 ## Blocker Registry
 
@@ -50,4 +54,4 @@ Scope: UnityChatNovelGame + shared-workflows integration
 
 ## Next Action
 
-- Single Entry: orchestrator-owned verification / report / evidence updates を commit boundary として確定し、その後に `TASK_044` / `TASK_046` の再優先付けへ移る
+- Single Entry: orchestrator-owned docs / workflow updates を commit boundary として確定し、続けて Phase 1 sync で LG-1 候補（Addressables / CI / QA）の最初の着手点を定義する

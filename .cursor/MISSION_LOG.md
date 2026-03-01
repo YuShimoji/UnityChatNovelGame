@@ -14,6 +14,21 @@ PHASE6_TASK054_055_NORMALIZATION_2026-03-01
 
 ## 進捗記録
 
+### Phase 6: Worker Execution (2026-03-01 legacy task normalization / workflow diagnostics hardening)
+- [x] stale legacy task docs を現行実装に同期
+  - `TASK_001`, `TASK_010`, `TASK_011`, `TASK_013`, `TASK_029`
+  - `TASK_044`, `TASK_046`
+  - `TASK_MVP_02`, `TASK_MVP_03`, `TASK_MVP_04`
+- [x] legacy report docs を補完
+  - `docs/reports/REPORT_TASK_001_UnityProjectStructure.md`
+  - `docs/reports/REPORT_TASK_029_FixAssemblyDefinitions.md`
+- [x] `.shared-workflows` の診断系スクリプトを改善
+  - `scripts/session-end-check.js`: dirty worktree の `source changes` / `generated artifacts` 分類表示
+  - `scripts/report-validator.js`: syntax recovery + Git warning の分離基盤
+  - `scripts/todo-sync.js`: `COMPLETED` / `CLOSED` を `done` として解釈
+- [ ] Next Action: orchestrator-owned project docs と `.shared-workflows` 更新を commit boundary として確定し、続けて Phase 1 sync で LG-1 候補の最初の着手点を定義
+- [ ] Next Action: user-side local modifications と locked transient log を除いた状態で checker を再実行し、残差を更新
+
 ### Phase 6: Worker Execution (2026-03-01 verification hardening / hygiene normalization)
 - [x] `TASK_054_VerificationAutomationHardening` を retrospective task として起票
   - `docs/tasks/TASK_054_VerificationAutomationHardening.md`
