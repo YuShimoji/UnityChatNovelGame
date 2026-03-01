@@ -6,35 +6,54 @@ public static class BuildSettingsHelper
 {
     static BuildSettingsHelper()
     {
-        EnsureDebugChatSceneInBuildSettings();
+        EnsureCoreScenesInBuildSettings();
     }
 
     [MenuItem("Tools/FoundPhone/Fix Build Settings")]
-    public static void EnsureDebugChatSceneInBuildSettings()
+    public static void EnsureCoreScenesInBuildSettings()
     {
-        string[] requiredScenes = new[]
+        var requiredScenes = new System.Collections.Generic.List<string>
         {
             "Assets/Scenes/TitleScene.unity",
             "Assets/Scenes/DebugChatScene.unity",
             "Assets/Scenes/MVPScene.unity"
         };
+
+        const string contentAuthoringScenePath = "Assets/Scenes/ContentAuthoring.unity";
+        if (AssetDatabase.LoadAssetAtPath<SceneAsset>(contentAuthoringScenePath) != null)
+        {
+            requiredScenes.Insert(1, contentAuthoringScenePath);
+        }
         
         var scenes = EditorBuildSettings.scenes.ToList();
-        bool changed = false;
+        var reorderedScenes = new System.Collections.Generic.List<EditorBuildSettingsScene>();
 
         foreach (string scenePath in requiredScenes)
         {
-            if (!scenes.Any(s => s.path == scenePath))
+            EditorBuildSettingsScene existingScene = scenes.FirstOrDefault(s => s.path == scenePath);
+            reorderedScenes.Add(existingScene ?? new EditorBuildSettingsScene(scenePath, true));
+        }
+
+        foreach (EditorBuildSettingsScene scene in scenes)
+        {
+            if (!requiredScenes.Contains(scene.path))
             {
-                scenes.Add(new EditorBuildSettingsScene(scenePath, true));
-                UnityEngine.Debug.Log($"Added {scenePath} to Build Settings.");
-                changed = true;
+                reorderedScenes.Add(scene);
             }
         }
 
+        bool changed =
+            scenes.Count != reorderedScenes.Count ||
+            scenes.Where((scene, index) => scene.path != reorderedScenes[index].path || scene.enabled != reorderedScenes[index].enabled).Any();
+
         if (changed)
         {
-            EditorBuildSettings.scenes = scenes.ToArray();
+            EditorBuildSettings.scenes = reorderedScenes.ToArray();
         }
+    }
+
+    public static void EnsureDebugChatSceneInBuildSettings()
+    {
+        EnsureCoreScenesInBuildSettings();
     }
 }

@@ -1,43 +1,56 @@
 #if YARN_SPINNER
-using UnityEngine;
-using UnityEditor;
-using UnityEngine.UI;
-using TMPro;
-using UnityEditor.SceneManagement;
-using UnityEngine.SceneManagement;
-using ProjectFoundPhone.UI;
+using System.Collections.Generic;
 using ProjectFoundPhone.Core;
+using ProjectFoundPhone.UI;
+using TMPro;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Yarn.Unity;
 
 namespace ProjectFoundPhone.Editor
 {
-    /// <summary>
-    /// Vertical Slice 用 DebugChatScene のセットアップスクリプト。
-    /// Menu: Tools/Setup Vertical Slice Scene
-    /// YARN_SPINNER シンボルが有効な場合のみコンパイルされる。
-    /// </summary>
     public static class VerticalSliceSceneSetup
     {
+        private const string DebugChatScenePath = "Assets/Scenes/DebugChatScene.unity";
+        private const string ContentAuthoringScenePath = "Assets/Scenes/ContentAuthoring.unity";
+        private const string DefaultStartNode = "VerticalSlice_Start";
+        private const string YarnProjectPath = "Assets/Resources/Yarn/Project.yarnproject";
+
         [MenuItem("Tools/Setup Vertical Slice Scene")]
         public static void SetupScene()
         {
-            // 新しいシーンを作成
+            SetupSceneInternal(DebugChatScenePath, DefaultStartNode, "VerticalSliceSetup");
+        }
+
+        [MenuItem("Tools/Setup Content Authoring Scene")]
+        public static void SetupContentAuthoringScene()
+        {
+            SetupSceneInternal(ContentAuthoringScenePath, DefaultStartNode, "ContentAuthoringSetup");
+        }
+
+        public static void SetupContentAuthoringSceneBatch()
+        {
+            SetupContentAuthoringScene();
+        }
+
+        private static void SetupSceneInternal(string scenePath, string startNode, string logPrefix)
+        {
             Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
-            // Camera
             GameObject cameraObj = new GameObject("Main Camera");
-            Camera cam = cameraObj.AddComponent<Camera>();
-            cam.clearFlags = CameraClearFlags.SolidColor;
-            cam.backgroundColor = new Color(0.12f, 0.12f, 0.15f);
+            Camera camera = cameraObj.AddComponent<Camera>();
+            camera.clearFlags = CameraClearFlags.SolidColor;
+            camera.backgroundColor = new Color(0.12f, 0.12f, 0.15f);
             cameraObj.tag = "MainCamera";
             cameraObj.AddComponent<AudioListener>();
 
-            // EventSystem
             GameObject eventSystemObj = new GameObject("EventSystem");
             eventSystemObj.AddComponent<UnityEngine.EventSystems.EventSystem>();
             eventSystemObj.AddComponent<UnityEngine.EventSystems.StandaloneInputModule>();
 
-            // Canvas
             GameObject canvasObj = new GameObject("Canvas");
             Canvas canvas = canvasObj.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
@@ -47,55 +60,49 @@ namespace ProjectFoundPhone.Editor
             scaler.matchWidthOrHeight = 0.5f;
             canvasObj.AddComponent<GraphicRaycaster>();
 
-            // Background
-            GameObject bgObj = CreateUIElement("Background", canvasObj.transform);
-            Image bgImage = bgObj.AddComponent<Image>();
-            bgImage.color = new Color(0.1f, 0.1f, 0.13f);
-            StretchToFill(bgObj);
+            GameObject backgroundObj = CreateUIElement("Background", canvasObj.transform);
+            Image backgroundImage = backgroundObj.AddComponent<Image>();
+            backgroundImage.color = new Color(0.1f, 0.1f, 0.13f);
+            StretchToFill(backgroundObj);
 
-            // === Chat UI ===
-            // ScrollView
             GameObject scrollViewObj = CreateUIElement("ChatScrollView", canvasObj.transform);
             ScrollRect scrollRect = scrollViewObj.AddComponent<ScrollRect>();
-            RectTransform scrollRT = scrollViewObj.GetComponent<RectTransform>();
-            scrollRT.anchorMin = Vector2.zero;
-            scrollRT.anchorMax = Vector2.one;
-            scrollRT.offsetMin = new Vector2(0, 150);
-            scrollRT.offsetMax = Vector2.zero;
+            RectTransform scrollRectTransform = scrollViewObj.GetComponent<RectTransform>();
+            scrollRectTransform.anchorMin = Vector2.zero;
+            scrollRectTransform.anchorMax = Vector2.one;
+            scrollRectTransform.offsetMin = new Vector2(0f, 150f);
+            scrollRectTransform.offsetMax = Vector2.zero;
 
-            // Viewport
             GameObject viewportObj = CreateUIElement("Viewport", scrollViewObj.transform);
             StretchToFill(viewportObj);
             viewportObj.AddComponent<Mask>().showMaskGraphic = false;
-            Image vpImg = viewportObj.AddComponent<Image>();
-            vpImg.color = new Color(1, 1, 1, 0.01f);
+            Image viewportImage = viewportObj.AddComponent<Image>();
+            viewportImage.color = new Color(1f, 1f, 1f, 0.01f);
 
-            // Content
             GameObject contentObj = CreateUIElement("Content", viewportObj.transform);
-            RectTransform contentRT = contentObj.GetComponent<RectTransform>();
-            contentRT.anchorMin = new Vector2(0, 1);
-            contentRT.anchorMax = new Vector2(1, 1);
-            contentRT.pivot = new Vector2(0.5f, 1);
-            contentRT.sizeDelta = new Vector2(0, 0);
+            RectTransform contentTransform = contentObj.GetComponent<RectTransform>();
+            contentTransform.anchorMin = new Vector2(0f, 1f);
+            contentTransform.anchorMax = new Vector2(1f, 1f);
+            contentTransform.pivot = new Vector2(0.5f, 1f);
+            contentTransform.sizeDelta = Vector2.zero;
 
-            VerticalLayoutGroup vlg = contentObj.AddComponent<VerticalLayoutGroup>();
-            vlg.padding = new RectOffset(20, 20, 20, 20);
-            vlg.spacing = 16;
-            vlg.childControlHeight = true;
-            vlg.childControlWidth = true;
-            vlg.childForceExpandHeight = false;
-            vlg.childForceExpandWidth = true;
+            VerticalLayoutGroup layoutGroup = contentObj.AddComponent<VerticalLayoutGroup>();
+            layoutGroup.padding = new RectOffset(20, 20, 20, 20);
+            layoutGroup.spacing = 16;
+            layoutGroup.childControlHeight = true;
+            layoutGroup.childControlWidth = true;
+            layoutGroup.childForceExpandHeight = false;
+            layoutGroup.childForceExpandWidth = true;
 
-            ContentSizeFitter csf = contentObj.AddComponent<ContentSizeFitter>();
-            csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            ContentSizeFitter contentSizeFitter = contentObj.AddComponent<ContentSizeFitter>();
+            contentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            scrollRect.content = contentRT;
+            scrollRect.content = contentTransform;
             scrollRect.viewport = viewportObj.GetComponent<RectTransform>();
             scrollRect.horizontal = false;
             scrollRect.vertical = true;
             scrollRect.movementType = ScrollRect.MovementType.Elastic;
 
-            // TypingIndicator
             GameObject typingInstance = null;
             GameObject typingPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/UI/TypingIndicator.prefab");
             if (typingPrefab != null)
@@ -104,77 +111,71 @@ namespace ProjectFoundPhone.Editor
                 typingInstance.SetActive(false);
             }
 
-            // Choice Container
             GameObject choiceContainerObj = CreateUIElement("ChoiceContainer", canvasObj.transform);
-            RectTransform choiceRT = choiceContainerObj.GetComponent<RectTransform>();
-            choiceRT.anchorMin = new Vector2(0.05f, 0.3f);
-            choiceRT.anchorMax = new Vector2(0.95f, 0.7f);
-            choiceRT.offsetMin = Vector2.zero;
-            choiceRT.offsetMax = Vector2.zero;
+            RectTransform choiceTransform = choiceContainerObj.GetComponent<RectTransform>();
+            choiceTransform.anchorMin = new Vector2(0.05f, 0.3f);
+            choiceTransform.anchorMax = new Vector2(0.95f, 0.7f);
+            choiceTransform.offsetMin = Vector2.zero;
+            choiceTransform.offsetMax = Vector2.zero;
 
-            VerticalLayoutGroup choiceVLG = choiceContainerObj.AddComponent<VerticalLayoutGroup>();
-            choiceVLG.spacing = 12;
-            choiceVLG.childControlHeight = true;
-            choiceVLG.childControlWidth = true;
-            choiceVLG.childForceExpandHeight = false;
-            choiceVLG.childForceExpandWidth = true;
-            choiceVLG.padding = new RectOffset(20, 20, 20, 20);
+            VerticalLayoutGroup choiceLayoutGroup = choiceContainerObj.AddComponent<VerticalLayoutGroup>();
+            choiceLayoutGroup.spacing = 12;
+            choiceLayoutGroup.childControlHeight = true;
+            choiceLayoutGroup.childControlWidth = true;
+            choiceLayoutGroup.childForceExpandHeight = false;
+            choiceLayoutGroup.childForceExpandWidth = true;
+            choiceLayoutGroup.padding = new RectOffset(20, 20, 20, 20);
             choiceContainerObj.SetActive(false);
 
-            // ChoiceButton Prefab
-            GameObject choiceButtonTemplate = CreateChoiceButtonPrefab();
+            GameObject choiceButtonTemplate = CreateChoiceButtonPrefab(logPrefix);
 
-            // Footer (Input + Send)
             GameObject footerObj = CreateUIElement("Footer", canvasObj.transform);
-            RectTransform footerRT = footerObj.GetComponent<RectTransform>();
-            footerRT.anchorMin = Vector2.zero;
-            footerRT.anchorMax = new Vector2(1, 0);
-            footerRT.offsetMin = Vector2.zero;
-            footerRT.offsetMax = new Vector2(0, 150);
-            Image footerBg = footerObj.AddComponent<Image>();
-            footerBg.color = new Color(0.15f, 0.15f, 0.18f);
+            RectTransform footerTransform = footerObj.GetComponent<RectTransform>();
+            footerTransform.anchorMin = Vector2.zero;
+            footerTransform.anchorMax = new Vector2(1f, 0f);
+            footerTransform.offsetMin = Vector2.zero;
+            footerTransform.offsetMax = new Vector2(0f, 150f);
+            Image footerBackground = footerObj.AddComponent<Image>();
+            footerBackground.color = new Color(0.15f, 0.15f, 0.18f);
 
-            // Input Field
             TMP_InputField inputField = CreateInputField(footerObj.transform);
-
-            // Send Button
             Button sendButton = CreateSendButton(footerObj.transform);
 
-            // === ChatController ===
             ChatController chatController = scrollViewObj.AddComponent<ChatController>();
-            SerializedObject chatSO = new SerializedObject(chatController);
-            chatSO.Update();
-            chatSO.FindProperty("m_ScrollRect").objectReferenceValue = scrollRect;
-            chatSO.FindProperty("m_LayoutGroup").objectReferenceValue = vlg;
-            chatSO.FindProperty("m_InputField").objectReferenceValue = inputField;
-            chatSO.FindProperty("m_SendButton").objectReferenceValue = sendButton;
-            chatSO.FindProperty("m_ChoiceContainer").objectReferenceValue = choiceContainerObj.transform;
-            chatSO.FindProperty("m_ChoiceButtonPrefab").objectReferenceValue = choiceButtonTemplate;
+            SerializedObject chatControllerObject = new SerializedObject(chatController);
+            chatControllerObject.Update();
+            chatControllerObject.FindProperty("m_ScrollRect").objectReferenceValue = scrollRect;
+            chatControllerObject.FindProperty("m_LayoutGroup").objectReferenceValue = layoutGroup;
+            chatControllerObject.FindProperty("m_InputField").objectReferenceValue = inputField;
+            chatControllerObject.FindProperty("m_SendButton").objectReferenceValue = sendButton;
+            chatControllerObject.FindProperty("m_ChoiceContainer").objectReferenceValue = choiceContainerObj.transform;
+            chatControllerObject.FindProperty("m_ChoiceButtonPrefab").objectReferenceValue = choiceButtonTemplate;
 
             GameObject bubblePrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/UI/MessageBubble.prefab");
             if (bubblePrefab != null)
-                chatSO.FindProperty("m_MessageBubblePrefab").objectReferenceValue = bubblePrefab;
+            {
+                chatControllerObject.FindProperty("m_MessageBubblePrefab").objectReferenceValue = bubblePrefab;
+            }
             else
-                Debug.LogError("VerticalSliceSetup: MessageBubble.prefab not found!");
+            {
+                Debug.LogError($"{logPrefix}: MessageBubble.prefab not found.");
+            }
 
             if (typingInstance != null)
-                chatSO.FindProperty("m_TypingIndicator").objectReferenceValue = typingInstance;
+            {
+                chatControllerObject.FindProperty("m_TypingIndicator").objectReferenceValue = typingInstance;
+            }
 
-            chatSO.ApplyModifiedProperties();
+            chatControllerObject.ApplyModifiedProperties();
 
-            // === Dialogue System ===
             GameObject dialogueSystemObj = new GameObject("DialogueSystem");
+            dialogueSystemObj.AddComponent<InMemoryVariableStorage>();
 
-            // InMemoryVariableStorage
-            InMemoryVariableStorage variableStorage = dialogueSystemObj.AddComponent<InMemoryVariableStorage>();
-
-            // DialogueRunner
             DialogueRunner dialogueRunner = dialogueSystemObj.AddComponent<DialogueRunner>();
-            SerializedObject drSO = new SerializedObject(dialogueRunner);
-            drSO.Update();
+            SerializedObject dialogueRunnerObject = new SerializedObject(dialogueRunner);
+            dialogueRunnerObject.Update();
 
-            // YarnProject 参照
-            YarnProject yarnProjectAsset = AssetDatabase.LoadAssetAtPath<YarnProject>("Assets/Resources/Yarn/Project.asset");
+            YarnProject yarnProjectAsset = AssetDatabase.LoadAssetAtPath<YarnProject>(YarnProjectPath);
             if (yarnProjectAsset == null)
             {
                 string[] guids = AssetDatabase.FindAssets("t:YarnProject", new[] { "Assets/Resources/Yarn" });
@@ -183,56 +184,59 @@ namespace ProjectFoundPhone.Editor
                     yarnProjectAsset = AssetDatabase.LoadAssetAtPath<YarnProject>(AssetDatabase.GUIDToAssetPath(guids[0]));
                 }
             }
+
             if (yarnProjectAsset != null)
             {
-                drSO.FindProperty("yarnProject").objectReferenceValue = yarnProjectAsset;
+                dialogueRunnerObject.FindProperty("yarnProject").objectReferenceValue = yarnProjectAsset;
             }
             else
             {
-                Debug.LogWarning("VerticalSliceSetup: YarnProject not found. Assign manually in Inspector.");
+                Debug.LogWarning($"{logPrefix}: YarnProject not found. Assign it manually in the Inspector.");
             }
 
-            drSO.FindProperty("startAutomatically").boolValue = false;
-            drSO.ApplyModifiedProperties();
+            SerializedProperty startAutomaticallyProperty = dialogueRunnerObject.FindProperty("startAutomatically");
+            if (startAutomaticallyProperty != null)
+            {
+                startAutomaticallyProperty.boolValue = false;
+            }
 
-            // ChatDialogueView
+            SerializedProperty startNodeProperty = dialogueRunnerObject.FindProperty("startNode");
+            if (startNodeProperty != null)
+            {
+                startNodeProperty.stringValue = startNode;
+            }
+
+            dialogueRunnerObject.ApplyModifiedProperties();
+
             ChatDialogueView chatDialogueView = dialogueSystemObj.AddComponent<ChatDialogueView>();
 
-            // DialoguePresenters に ChatDialogueView を登録
-            drSO = new SerializedObject(dialogueRunner);
-            drSO.Update();
-            SerializedProperty dialoguePresenters = drSO.FindProperty("dialoguePresenters");
+            dialogueRunnerObject = new SerializedObject(dialogueRunner);
+            dialogueRunnerObject.Update();
+            SerializedProperty dialoguePresenters = dialogueRunnerObject.FindProperty("dialoguePresenters");
             if (dialoguePresenters != null)
             {
                 dialoguePresenters.arraySize = 1;
                 dialoguePresenters.GetArrayElementAtIndex(0).objectReferenceValue = chatDialogueView;
             }
-            drSO.ApplyModifiedProperties();
+            dialogueRunnerObject.ApplyModifiedProperties();
 
-            // ScenarioManager
             ScenarioManager scenarioManager = dialogueSystemObj.AddComponent<ScenarioManager>();
-            SerializedObject smSO = new SerializedObject(scenarioManager);
-            smSO.Update();
-            smSO.FindProperty("m_DialogueRunner").objectReferenceValue = dialogueRunner;
-            smSO.FindProperty("m_ChatController").objectReferenceValue = chatController;
-            smSO.FindProperty("m_StartNode").stringValue = "VerticalSlice_Start";
-            smSO.FindProperty("m_AutoStartYarn").boolValue = true;
-            smSO.ApplyModifiedProperties();
+            SerializedObject scenarioManagerObject = new SerializedObject(scenarioManager);
+            scenarioManagerObject.Update();
+            scenarioManagerObject.FindProperty("m_DialogueRunner").objectReferenceValue = dialogueRunner;
+            scenarioManagerObject.FindProperty("m_ChatController").objectReferenceValue = chatController;
+            scenarioManagerObject.FindProperty("m_StartNode").stringValue = startNode;
+            scenarioManagerObject.FindProperty("m_AutoStartYarn").boolValue = true;
+            scenarioManagerObject.ApplyModifiedProperties();
 
-            // === SaveManager ===
             GameObject saveManagerObj = new GameObject("SaveManager");
             saveManagerObj.AddComponent<SaveManager>();
 
-            // シーンを保存
-            string scenePath = "Assets/Scenes/DebugChatScene.unity";
             EditorSceneManager.SaveScene(scene, scenePath);
-            Debug.Log($"VerticalSliceSetup: Scene saved to {scenePath}");
-            Debug.Log("VerticalSliceSetup: Complete! Please verify:");
-            Debug.Log("  1. DialogueRunner の YarnProject 参照が正しいこと");
-            Debug.Log("  2. Play ボタンで Start ノードから進行すること");
-
-            // Build Settings にシーンを追加
             AddSceneToBuildSettings(scenePath);
+
+            Debug.Log($"{logPrefix}: Scene saved to {scenePath}");
+            Debug.Log($"{logPrefix}: Ready. Open the scene and press Play to preview {startNode}.");
         }
 
         private static GameObject CreateUIElement(string name, Transform parent)
@@ -244,24 +248,24 @@ namespace ProjectFoundPhone.Editor
 
         private static void StretchToFill(GameObject obj)
         {
-            RectTransform rt = obj.GetComponent<RectTransform>();
-            rt.anchorMin = Vector2.zero;
-            rt.anchorMax = Vector2.one;
-            rt.offsetMin = Vector2.zero;
-            rt.offsetMax = Vector2.zero;
+            RectTransform rectTransform = obj.GetComponent<RectTransform>();
+            rectTransform.anchorMin = Vector2.zero;
+            rectTransform.anchorMax = Vector2.one;
+            rectTransform.offsetMin = Vector2.zero;
+            rectTransform.offsetMax = Vector2.zero;
         }
 
         private static TMP_InputField CreateInputField(Transform parent)
         {
             GameObject inputObj = CreateUIElement("InputField", parent);
-            RectTransform inputRT = inputObj.GetComponent<RectTransform>();
-            inputRT.anchorMin = Vector2.zero;
-            inputRT.anchorMax = Vector2.one;
-            inputRT.offsetMin = new Vector2(20, 20);
-            inputRT.offsetMax = new Vector2(-140, -20);
+            RectTransform inputTransform = inputObj.GetComponent<RectTransform>();
+            inputTransform.anchorMin = Vector2.zero;
+            inputTransform.anchorMax = Vector2.one;
+            inputTransform.offsetMin = new Vector2(20f, 20f);
+            inputTransform.offsetMax = new Vector2(-140f, -20f);
 
-            Image inputBg = inputObj.AddComponent<Image>();
-            inputBg.color = new Color(0.2f, 0.2f, 0.24f);
+            Image inputBackground = inputObj.AddComponent<Image>();
+            inputBackground.color = new Color(0.2f, 0.2f, 0.24f);
 
             TMP_InputField inputField = inputObj.AddComponent<TMP_InputField>();
 
@@ -271,111 +275,114 @@ namespace ProjectFoundPhone.Editor
 
             GameObject textObj = CreateUIElement("Text", textArea.transform);
             StretchToFill(textObj);
-            TextMeshProUGUI textTmp = textObj.AddComponent<TextMeshProUGUI>();
-            textTmp.color = Color.white;
-            textTmp.fontSize = 28;
+            TextMeshProUGUI text = textObj.AddComponent<TextMeshProUGUI>();
+            text.color = Color.white;
+            text.fontSize = 28f;
 
             GameObject placeholderObj = CreateUIElement("Placeholder", textArea.transform);
             StretchToFill(placeholderObj);
-            TextMeshProUGUI placeholderTmp = placeholderObj.AddComponent<TextMeshProUGUI>();
-            placeholderTmp.text = "メッセージを入力...";
-            placeholderTmp.color = new Color(0.5f, 0.5f, 0.5f);
-            placeholderTmp.fontSize = 28;
-            placeholderTmp.fontStyle = FontStyles.Italic;
+            TextMeshProUGUI placeholder = placeholderObj.AddComponent<TextMeshProUGUI>();
+            placeholder.text = "Preview only...";
+            placeholder.color = new Color(0.5f, 0.5f, 0.5f);
+            placeholder.fontSize = 28f;
+            placeholder.fontStyle = FontStyles.Italic;
 
             inputField.textViewport = textArea.GetComponent<RectTransform>();
-            inputField.textComponent = textTmp;
-            inputField.placeholder = placeholderTmp;
+            inputField.textComponent = text;
+            inputField.placeholder = placeholder;
 
             return inputField;
         }
 
         private static Button CreateSendButton(Transform parent)
         {
-            GameObject btnObj = CreateUIElement("SendButton", parent);
-            RectTransform btnRT = btnObj.GetComponent<RectTransform>();
-            btnRT.anchorMin = new Vector2(1, 0);
-            btnRT.anchorMax = new Vector2(1, 1);
-            btnRT.offsetMin = new Vector2(-120, 20);
-            btnRT.offsetMax = new Vector2(-20, -20);
+            GameObject buttonObj = CreateUIElement("SendButton", parent);
+            RectTransform buttonTransform = buttonObj.GetComponent<RectTransform>();
+            buttonTransform.anchorMin = new Vector2(1f, 0f);
+            buttonTransform.anchorMax = new Vector2(1f, 1f);
+            buttonTransform.offsetMin = new Vector2(-120f, 20f);
+            buttonTransform.offsetMax = new Vector2(-20f, -20f);
 
-            Image btnBg = btnObj.AddComponent<Image>();
-            btnBg.color = new Color(0.2f, 0.5f, 1.0f);
+            Image buttonBackground = buttonObj.AddComponent<Image>();
+            buttonBackground.color = new Color(0.2f, 0.5f, 1f);
 
-            Button btn = btnObj.AddComponent<Button>();
-            btn.targetGraphic = btnBg;
+            Button button = buttonObj.AddComponent<Button>();
+            button.targetGraphic = buttonBackground;
 
-            GameObject labelObj = CreateUIElement("Label", btnObj.transform);
+            GameObject labelObj = CreateUIElement("Label", buttonObj.transform);
             StretchToFill(labelObj);
-            TextMeshProUGUI labelTmp = labelObj.AddComponent<TextMeshProUGUI>();
-            labelTmp.text = "送信";
-            labelTmp.color = Color.white;
-            labelTmp.fontSize = 26;
-            labelTmp.alignment = TextAlignmentOptions.Center;
+            TextMeshProUGUI label = labelObj.AddComponent<TextMeshProUGUI>();
+            label.text = "Send";
+            label.color = Color.white;
+            label.fontSize = 26f;
+            label.alignment = TextAlignmentOptions.Center;
 
-            return btn;
+            return button;
         }
 
-        private static GameObject CreateChoiceButtonPrefab()
+        private static GameObject CreateChoiceButtonPrefab(string logPrefix)
         {
-            GameObject btnObj = new GameObject("ChoiceButton", typeof(RectTransform));
+            const string prefabPath = "Assets/Prefabs/UI/ChoiceButton.prefab";
+            GameObject existingPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+            if (existingPrefab != null)
+            {
+                return existingPrefab;
+            }
 
-            Image btnBg = btnObj.AddComponent<Image>();
-            btnBg.color = new Color(0.25f, 0.45f, 0.8f);
+            GameObject buttonObj = new GameObject("ChoiceButton", typeof(RectTransform));
 
-            Button btn = btnObj.AddComponent<Button>();
-            btn.targetGraphic = btnBg;
+            Image buttonBackground = buttonObj.AddComponent<Image>();
+            buttonBackground.color = new Color(0.25f, 0.45f, 0.8f);
 
-            LayoutElement le = btnObj.AddComponent<LayoutElement>();
-            le.minHeight = 60;
-            le.preferredHeight = 70;
+            Button button = buttonObj.AddComponent<Button>();
+            button.targetGraphic = buttonBackground;
+
+            LayoutElement layoutElement = buttonObj.AddComponent<LayoutElement>();
+            layoutElement.minHeight = 60f;
+            layoutElement.preferredHeight = 70f;
 
             GameObject labelObj = new GameObject("Label", typeof(RectTransform));
-            labelObj.transform.SetParent(btnObj.transform, false);
-            RectTransform labelRT = labelObj.GetComponent<RectTransform>();
-            labelRT.anchorMin = Vector2.zero;
-            labelRT.anchorMax = Vector2.one;
-            labelRT.offsetMin = new Vector2(20, 0);
-            labelRT.offsetMax = new Vector2(-20, 0);
+            labelObj.transform.SetParent(buttonObj.transform, false);
+            RectTransform labelTransform = labelObj.GetComponent<RectTransform>();
+            labelTransform.anchorMin = Vector2.zero;
+            labelTransform.anchorMax = Vector2.one;
+            labelTransform.offsetMin = new Vector2(20f, 0f);
+            labelTransform.offsetMax = new Vector2(-20f, 0f);
 
-            TextMeshProUGUI labelTmp = labelObj.AddComponent<TextMeshProUGUI>();
-            labelTmp.text = "Choice";
-            labelTmp.color = Color.white;
-            labelTmp.fontSize = 24;
-            labelTmp.alignment = TextAlignmentOptions.Center;
+            TextMeshProUGUI label = labelObj.AddComponent<TextMeshProUGUI>();
+            label.text = "Choice";
+            label.color = Color.white;
+            label.fontSize = 24f;
+            label.alignment = TextAlignmentOptions.Center;
 
-            string prefabPath = "Assets/Prefabs/UI/ChoiceButton.prefab";
-            GameObject prefab = PrefabUtility.SaveAsPrefabAsset(btnObj, prefabPath);
-            Object.DestroyImmediate(btnObj);
-            Debug.Log($"VerticalSliceSetup: ChoiceButton prefab saved to {prefabPath}");
+            GameObject prefab = PrefabUtility.SaveAsPrefabAsset(buttonObj, prefabPath);
+            Object.DestroyImmediate(buttonObj);
+
+            Debug.Log($"{logPrefix}: ChoiceButton prefab saved to {prefabPath}");
             return prefab;
         }
 
         private static void AddSceneToBuildSettings(string scenePath)
         {
-            var scenes = new System.Collections.Generic.List<EditorBuildSettingsScene>(EditorBuildSettings.scenes);
+            var scenes = new List<EditorBuildSettingsScene>(EditorBuildSettings.scenes);
+            bool hasScene = false;
 
-            bool hasTitleScene = false;
-            bool hasDebugScene = false;
-            foreach (var s in scenes)
+            foreach (EditorBuildSettingsScene scene in scenes)
             {
-                if (s.path.Contains("TitleScene")) hasTitleScene = true;
-                if (s.path == scenePath) hasDebugScene = true;
+                if (scene.path == scenePath)
+                {
+                    hasScene = true;
+                    break;
+                }
             }
 
-            if (!hasTitleScene)
-            {
-                string titlePath = "Assets/Scenes/TitleScene.unity";
-                scenes.Insert(0, new EditorBuildSettingsScene(titlePath, true));
-            }
-
-            if (!hasDebugScene)
+            if (!hasScene)
             {
                 scenes.Add(new EditorBuildSettingsScene(scenePath, true));
+                EditorBuildSettings.scenes = scenes.ToArray();
             }
 
-            EditorBuildSettings.scenes = scenes.ToArray();
-            Debug.Log("VerticalSliceSetup: Build Settings updated with TitleScene and DebugChatScene.");
+            BuildSettingsHelper.EnsureCoreScenesInBuildSettings();
         }
     }
 }

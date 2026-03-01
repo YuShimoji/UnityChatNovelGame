@@ -194,16 +194,20 @@ namespace ProjectFoundPhone.UI
                 Debug.LogWarning("ChatController: TextMeshProUGUI component not found in message bubble prefab.");
             }
 
-            // ContentSizeFitterで高さを自動調整
-            LayoutElement layout = messageBubble.GetComponent<LayoutElement>();
-            if (layout != null && textComponent != null && m_ScrollRect != null && m_ScrollRect.viewport != null)
-            {
-                float maxWidth = Mathf.Max(240f, m_ScrollRect.viewport.rect.width - 80f);
-                Vector2 preferred = textComponent.GetPreferredValues(text, maxWidth, 0f);
-                layout.preferredHeight = Mathf.Max(56f, preferred.y + 24f);
-            }
+            // アニメーション演出
+            AnimateBubbleIn(messageBubble);
 
             return messageBubble;
+        }
+
+        /// <summary>
+        /// バブルが出現する際のアニメーション演出
+        /// </summary>
+        private void AnimateBubbleIn(GameObject bubble)
+        {
+            if (bubble == null) return;
+            bubble.transform.localScale = Vector3.zero;
+            bubble.transform.DOScale(1f, 0.4f).SetEase(Ease.OutBack).SetUpdate(true);
         }
         #endregion
 
@@ -317,6 +321,10 @@ namespace ProjectFoundPhone.UI
                     }
                     imgRect.sizeDelta = new Vector2(width, height);
                 }
+
+                // 画像のフェードイン演出
+                imageContent.color = new Color(1, 1, 1, 0);
+                imageContent.DOFade(1f, 0.6f).SetUpdate(true);
             }
             else
             {
@@ -327,6 +335,8 @@ namespace ProjectFoundPhone.UI
                     textComponent.text = $"[Image: {imageSprite.name}]";
                 }
             }
+
+            AnimateBubbleIn(imageBubble);
 
             if (!m_IsUserScrolling)
             {
@@ -384,6 +394,8 @@ namespace ProjectFoundPhone.UI
                 textComponent.fontSize = textComponent.fontSize * 0.85f;
                 textComponent.color = new Color(0.4f, 0.4f, 0.4f, 1.0f);
             }
+
+            AnimateBubbleIn(systemBubble);
 
             if (!m_IsUserScrolling)
             {
@@ -451,8 +463,9 @@ namespace ProjectFoundPhone.UI
             HideChoices();
 
             m_ChoiceContainer.gameObject.SetActive(true);
+            m_ChoiceContainer.SetAsLastSibling();
 
-            // 入力欄を非表示にする（オプション）
+            // 入力欄を非表示にする（既にSetInputEnabled(false)されていれば、ここでは単に見た目の制御）
             if (m_InputField != null) m_InputField.gameObject.SetActive(false);
             if (m_SendButton != null) m_SendButton.gameObject.SetActive(false);
 
@@ -610,50 +623,31 @@ namespace ProjectFoundPhone.UI
             footerRect.pivot = new Vector2(0.5f, 0f);
             footerRect.offsetMin = new Vector2(0f, 0f);
             footerRect.offsetMax = new Vector2(0f, footerHeight);
-
-            Image footerBg = footer.GetComponent<Image>();
-            footerBg.color = new Color(0.09f, 0.09f, 0.11f, 0.95f);
-
-            m_RuntimeInputField = CreateRuntimeInputField(footer.transform);
-            m_RuntimeSendButton = CreateRuntimeSendButton(footer.transform);
-
-            if (m_InputField == null)
-            {
-                m_InputField = m_RuntimeInputField;
-            }
-
-            if (m_SendButton == null)
-            {
-                m_SendButton = m_RuntimeSendButton;
-            }
-
-            if (m_ScrollRect != null && m_ScrollRect.viewport != null)
-            {
-                RectTransform viewport = m_ScrollRect.viewport;
-                Vector2 offsetMin = viewport.offsetMin;
-                offsetMin.y = Mathf.Max(offsetMin.y, footerHeight);
-                viewport.offsetMin = offsetMin;
-            }
         }
 
         private Transform CreateRuntimeChoiceContainer()
         {
-            GameObject container = new GameObject("AutoChoiceContainer", typeof(RectTransform), typeof(Image), typeof(VerticalLayoutGroup), typeof(ContentSizeFitter));
-            container.transform.SetParent(transform, false);
-            RectTransform rect = container.GetComponent<RectTransform>();
-            rect.anchorMin = new Vector2(0.05f, 0f);
-            rect.anchorMax = new Vector2(0.95f, 0f);
-            rect.pivot = new Vector2(0.5f, 0f);
-            rect.offsetMin = new Vector2(0f, 24f);
-            rect.offsetMax = new Vector2(0f, 260f);
-            container.transform.SetAsLastSibling();
+            if (m_ScrollRect == null || m_ScrollRect.content == null)
+            {
+                Debug.LogError("ChatController: Cannot create choice container. ScrollRect or content is missing.");
+                return null;
+            }
 
+            GameObject container = new GameObject("AutoChoiceContainer", typeof(RectTransform), typeof(Image), typeof(VerticalLayoutGroup), typeof(ContentSizeFitter), typeof(LayoutElement));
+            container.transform.SetParent(m_ScrollRect.content, false);
+            RectTransform rect = container.GetComponent<RectTransform>();
+            
+            // レイアウトグループ内での配置設定
+            rect.anchorMin = new Vector2(0f, 0f);
+            rect.anchorMax = new Vector2(1f, 0f);
+            rect.pivot = new Vector2(0.5f, 0f);
+            
             Image background = container.GetComponent<Image>();
-            background.color = new Color(0.07f, 0.07f, 0.09f, 0.92f);
+            background.color = new Color(0.07f, 0.07f, 0.09f, 0f); // 背景は透明に（メッセージの流れと同化）
 
             VerticalLayoutGroup layoutGroup = container.GetComponent<VerticalLayoutGroup>();
-            layoutGroup.spacing = 12f;
-            layoutGroup.padding = new RectOffset(20, 20, 20, 20);
+            layoutGroup.spacing = 8f;
+            layoutGroup.padding = new RectOffset(40, 40, 10, 20); // 左右の余白を多めに
             layoutGroup.childForceExpandWidth = true;
             layoutGroup.childForceExpandHeight = false;
             layoutGroup.childControlWidth = true;
@@ -662,6 +656,9 @@ namespace ProjectFoundPhone.UI
             ContentSizeFitter fitter = container.GetComponent<ContentSizeFitter>();
             fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
             fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+
+            LayoutElement le = container.GetComponent<LayoutElement>();
+            le.flexibleWidth = 1f;
 
             container.SetActive(false);
             return container.transform;
@@ -674,15 +671,20 @@ namespace ProjectFoundPhone.UI
             template.SetActive(false);
 
             Image buttonBackground = template.GetComponent<Image>();
-            buttonBackground.color = new Color(0.18f, 0.18f, 0.22f, 0.95f);
+            buttonBackground.color = new Color(0.25f, 0.55f, 1.0f, 0.8f); // プレイヤーカラーに近い青色
 
             Button button = template.GetComponent<Button>();
             button.transition = Selectable.Transition.ColorTint;
             button.targetGraphic = buttonBackground;
+            
+            ColorBlock cb = button.colors;
+            cb.highlightedColor = new Color(0.35f, 0.65f, 1.0f, 1.0f);
+            cb.pressedColor = new Color(0.15f, 0.45f, 0.9f, 1.0f);
+            button.colors = cb;
 
             LayoutElement layout = template.GetComponent<LayoutElement>();
-            layout.minHeight = 60f;
-            layout.preferredHeight = 70f;
+            layout.minHeight = 50f;
+            layout.preferredHeight = 60f;
             layout.flexibleWidth = 1f;
 
             RectTransform rect = template.GetComponent<RectTransform>();
