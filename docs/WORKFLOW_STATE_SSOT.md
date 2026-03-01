@@ -1,6 +1,6 @@
 # Workflow State SSOT
 
-Last Updated: 2026-03-01T16:06:00+09:00
+Last Updated: 2026-03-01T16:21:46+09:00
 Owner: Orchestrator
 Scope: UnityChatNovelGame + shared-workflows integration
 
@@ -11,12 +11,12 @@ Scope: UnityChatNovelGame + shared-workflows integration
 - Do not create additional tasks while `Next Action` is unresolved.
 - Measurement tasks must be tracked as two layers:
   - Layer A (AI-completable: instrumentation/setup/docs)
-  - Layer B (human-run: Unity manual measurement and evidence capture)
+  - Layer B (human-run or remote-run verification)
 
 ## Current Phase
 
 - Phase: Worker Execution
-- Gate: SG-1 closed / MG-1 closed / next-cycle sync ready
+- Gate: SG-1 closed / MG-1 closed / LG-1 entry slice in progress
 
 ## Active Task Set
 
@@ -40,7 +40,10 @@ Scope: UnityChatNovelGame + shared-workflows integration
 - Legacy task normalization: COMPLETED
   - `TASK_001`, `TASK_010`, `TASK_011`, `TASK_013`, `TASK_029`, `TASK_044`, `TASK_046`
   - `TASK_MVP_02`, `TASK_MVP_03`, `TASK_MVP_04`
-  - stale task / report docs were aligned to current evidence
+- TASK_056: IN_PROGRESS
+  - LG-1 entry slice
+  - Layer A: completed
+  - Layer B: waiting for first remote GitHub Actions green run
 
 ## Blocker Registry
 
@@ -51,7 +54,8 @@ Scope: UnityChatNovelGame + shared-workflows integration
     - `Assets/Scripts/Tests/PlayMode/MVPScreenshotEvidencePlayModeTests.cs`
   - one transient log remains locked by another process:
     - `docs/logs/unity_automation_task027_20260301.log`
+  - `TASK_056` Layer B depends on remote workflow execution after a future push
 
 ## Next Action
 
-- Single Entry: Phase 1 sync を開始し、LG-1 候補（Addressables / CI / QA）のうち最初に切る 1 本を定義する
+- Single Entry: `TASK_056` の Layer B を除く準備を固定した状態で、LG-1 の次候補を QA slice として切るべきかを audit ベースで確定する

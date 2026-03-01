@@ -10,9 +10,32 @@ KICKSTART_2026-01-15T13:26:07+09:00
 Phase 6: Worker Execution
 
 ## ステータス
-PHASE6_TASK054_055_NORMALIZATION_2026-03-01
+PHASE6_TASK056_CI_BASELINE_2026-03-01
 
 ## 進捗記録
+
+### Phase 6: Worker Execution (2026-03-01 LG-1 entry slice / CI baseline)
+- [x] Phase 1 sync を実施
+  - `git fetch origin`
+  - `git status -sb`
+  - `docs/inbox/` / `docs/HANDOVER.md` / `docs/MILESTONE_PLAN.md` を確認
+- [x] LG-1 候補を比較
+  - Addressables: 面積が広く初手には重い
+  - QA: Unity 実行依存が強く remote guard としては一段遅い
+  - CI: 低摩擦で以後の slice に再利用可能
+- [x] `TASK_056_CIReadinessBaseline` を起票
+  - `docs/tasks/TASK_056_CIReadinessBaseline.md`
+  - `docs/reports/REPORT_TASK_056_CIReadinessBaseline.md`
+- [x] LG-1 entry slice を自前実装
+  - `.github/workflows/repo-guards.yml`
+  - shared workflow scripts の syntax check / report-validator / session-end-check を remote guard に組み込み
+- [x] local validation
+  - `node --check .shared-workflows/scripts/report-validator.js`
+  - `node --check .shared-workflows/scripts/session-end-check.js`
+  - `node --check .shared-workflows/scripts/todo-sync.js`
+  - `node .shared-workflows/scripts/report-validator.js docs/HANDOVER.md --profile handover`
+  - `node .shared-workflows/scripts/report-validator.js docs/inbox/REPORT_ORCH_2026-03-01T160102+09-00.md`
+- [ ] Next Action: `TASK_056` は Layer B を remote run 待ちで保持しつつ、次の LG-1 slice 候補を QA として audit / 起票する
 
 ### Phase 6: Worker Execution (2026-03-01 legacy task normalization / workflow diagnostics hardening)
 - [x] stale legacy task docs を現行実装に同期

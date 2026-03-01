@@ -34,7 +34,7 @@
 
 ### 短期（Next）
 
-- [done] 未完了タスクなし（docs/tasks/ に OPEN / IN_PROGRESS なし）
+- [in_progress] TASK_056_CIReadinessBaseline (ref: docs/tasks/TASK_056_CIReadinessBaseline.md, Status: IN_PROGRESS)
 
 ### Worker完了ステータス
 

@@ -2,7 +2,7 @@
 
 ## 基本情報
 
-- 最終更新: 2026-03-01T16:06:00+09:00
+- 最終更新: 2026-03-01T16:21:46+09:00
 - 更新者: Codex Orchestrator
 
 ---
@@ -13,9 +13,12 @@
 
 - 目的: Addressables / CI / QA を含むリリース準備へ移行する
 - 期限目安: 2026-06
-- 現状: 未着手
-- 進捗: 10%
-- 関連: MG-1 完了後の次サイクル設計
+- 現状: 着手済み
+- 進捗: 20%
+- 関連:
+  - `TASK_056_CIReadinessBaseline` (current)
+  - next candidate: QA slice
+  - later candidate: Addressables migration planning
 
 ---
 
@@ -28,17 +31,6 @@
 - 現状: 完了
 - 進捗: 100%
 - 関連タスク: TASK_047, TASK_049, TASK_052, TASK_MVP_04, TASK_027, TASK_053, TASK_025, TASK_054, TASK_055
-- 完了条件:
-  - [x] MVP 主要導線の検証
-  - [x] Console Error / Exception 0
-  - [x] TASK_047 完了
-  - [x] TASK_049 完了
-  - [x] TASK_052 完了
-  - [x] TASK_027 完了
-  - [x] TASK_053 完了
-  - [x] TASK_025 after measurement と verdict 更新
-  - [x] `DebugChatScene` の `missing script` source attribution and prefab cleanup
-  - [x] verification automation hardening の task/report 化
 
 ---
 
@@ -76,29 +68,25 @@ gantt
 
 **Keep**
 
-- MVP / Vertical Slice / Performance の batch automation を最新 evidence で維持できた
-- stale legacy task docs を現行実装と証跡へ接続し、次回の探索コストを下げた
-- workflow script 側の validator / checker / todo sync の可読性を改善した
+- MVP / Vertical Slice / Performance の batch automation が安定している
+- stale legacy task docs を現行実装と証跡へ接続できた
+- CI baseline を先に切ることで、以後の LG-1 作業に remote guard を入れられる
 
 **Problem**
 
-- unrelated local modifications と transient artifacts が worktree に残る
-- `docs/logs/unity_automation_task027_20260301.log` が別プロセスに掴まれている
-- `.shared-workflows` の改善は submodule commit と root pointer 更新を揃えて完了させる必要がある
+- user-side local modifications と generated artifact が worktree に残る
+- `TASK_056` は remote run を見ない限り Layer B が閉じない
+- Addressables は依然として面積が大きい
 
 **Try**
 
-- Phase 1 sync へ入り、LG-1 の最初の slice を Addressables / CI / QA から 1 本に絞る
-- user-side local modifications と generated artifact の扱いを分離したまま次サイクルへ移行する
+- `TASK_056` Layer B は pending のまま固定し、次の LG-1 slice 候補を QA に寄せて監査する
+- CI baseline を起点に次タスクの remote guard 前提を整える
 
 ---
 
 ## 履歴
 
-- 2026-03-01 16:06: orchestrator-owned boundary を `63619cf` で固定し、next-cycle Phase 1 sync ready へ遷移
-- 2026-03-01 16:01: stale legacy task/report docs を整流化し、workflow diagnostics (`session-end-check` / `report-validator` / `todo-sync`) を改善
+- 2026-03-01 16:21: LG-1 entry slice として `TASK_056_CIReadinessBaseline` を起票し、GitHub Actions baseline を追加
+- 2026-03-01 16:06: orchestrator-owned boundary を `63619cf` / `fcda472` で固定し、next-cycle sync ready へ遷移
 - 2026-03-01 05:37: `TASK_054` / `TASK_055` を追加し、verification hardening と hygiene normalization を文脈へ固定
-- 2026-03-01 05:20: `MessageBubble.prefab` の missing MonoBehaviour を cleanup、subsequent batch run で warning 消失を確認
-- 2026-03-01 04:00: `TASK_025` batch after measurement を再実行、`GC Alloc 22 -> 8 KB/frame` / verdict `IMPROVED` を更新
-- 2026-03-01 02:05: `TASK_MVP_04` / `TASK_027` / `TASK_053` を batch evidence でクローズ
-- 2026-02-28 21:36: root repo / `.shared-workflows` の remote 状態と現状整流を確認
