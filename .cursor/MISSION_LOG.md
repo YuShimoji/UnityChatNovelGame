@@ -26,8 +26,13 @@ PHASE6_TASK054_055_NORMALIZATION_2026-03-01
   - `scripts/session-end-check.js`: dirty worktree の `source changes` / `generated artifacts` 分類表示
   - `scripts/report-validator.js`: syntax recovery + Git warning の分離基盤
   - `scripts/todo-sync.js`: `COMPLETED` / `CLOSED` を `done` として解釈
-- [ ] Next Action: orchestrator-owned project docs と `.shared-workflows` 更新を commit boundary として確定し、続けて Phase 1 sync で LG-1 候補の最初の着手点を定義
-- [ ] Next Action: user-side local modifications と locked transient log を除いた状態で checker を再実行し、残差を更新
+- [x] orchestrator-owned boundary を commit
+  - root: `63619cf` `docs: normalize legacy task context and workflow state`
+  - `.shared-workflows`: `9f269f0` `fix: stabilize reporting diagnostics`
+- [x] checker を再実行し、残差を再確認
+  - source changes: 2 (`Assets/Font/NotoSansJP-Regular SDF.asset`, `Assets/Scripts/Tests/PlayMode/MVPScreenshotEvidencePlayModeTests.cs`)
+  - generated artifacts: 1 (`docs/logs/unity_automation_task027_20260301.log`)
+- [ ] Next Action: Phase 1 sync を開始し、LG-1 候補（Addressables / CI / QA）のうち最初の 1 本を定義
 
 ### Phase 6: Worker Execution (2026-03-01 verification hardening / hygiene normalization)
 - [x] `TASK_054_VerificationAutomationHardening` を retrospective task として起票

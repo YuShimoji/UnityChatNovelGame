@@ -1,15 +1,16 @@
 # Project Handover & Status
 
-**Timestamp**: 2026-03-01T16:01:02+09:00
+**Timestamp**: 2026-03-01T16:06:00+09:00
 **Actor**: Codex Orchestrator
 **Type**: Handover
 **Mode**: implementation
 
 ## Current Snapshot
 
-- root repo 側では SG-1 / MG-1 のクローズ状態を維持している。
+- root repo 側では SG-1 / MG-1 のクローズ状態を維持し、orchestrator-owned boundary を `63619cf` で固定した。
 - stale legacy task docs (`TASK_001`, `TASK_010`, `TASK_011`, `TASK_013`, `TASK_029`, `TASK_044`, `TASK_046`, `TASK_MVP_02`, `TASK_MVP_03`, `TASK_MVP_04`) を現行実装と証跡に合わせて正規化した。
 - `.shared-workflows` 側では `session-end-check` に dirty worktree 分類表示を追加し、`report-validator` の壊れていた構文を復旧しつつ Git warning を分離、`todo-sync` の `COMPLETED/CLOSED` 解釈を補正した。
+- `.shared-workflows` の保存点は `9f269f0` (`fix: stabilize reporting diagnostics`)。
 
 ## Current Position
 
@@ -67,9 +68,9 @@
 
 ## Next Action
 
-- Commit the orchestrator-owned project docs and `.shared-workflows` updates as a clean boundary.
-- Re-run validators on the refreshed report / handover set.
-- Start next-cycle Phase 1 sync to define the first LG-1 task candidate.
+- Start next-cycle Phase 1 sync.
+- Narrow LG-1 candidate space to the first actionable slice from Addressables / CI / QA.
+- Keep user-side local modifications and the locked transient log excluded from orchestrator ownership.
 
 ## Risks
 

@@ -2,7 +2,7 @@
 
 ## 基本情報
 
-- 最終更新: 2026-03-01T16:01:02+09:00
+- 最終更新: 2026-03-01T16:06:00+09:00
 - 更新者: Codex Orchestrator
 
 ---
@@ -88,13 +88,14 @@ gantt
 
 **Try**
 
-- orchestrator-owned boundary を commit で固定する
-- その後に Phase 1 sync へ入り、LG-1 の最初の slice を Addressables / CI / QA から 1 本に絞る
+- Phase 1 sync へ入り、LG-1 の最初の slice を Addressables / CI / QA から 1 本に絞る
+- user-side local modifications と generated artifact の扱いを分離したまま次サイクルへ移行する
 
 ---
 
 ## 履歴
 
+- 2026-03-01 16:06: orchestrator-owned boundary を `63619cf` で固定し、next-cycle Phase 1 sync ready へ遷移
 - 2026-03-01 16:01: stale legacy task/report docs を整流化し、workflow diagnostics (`session-end-check` / `report-validator` / `todo-sync`) を改善
 - 2026-03-01 05:37: `TASK_054` / `TASK_055` を追加し、verification hardening と hygiene normalization を文脈へ固定
 - 2026-03-01 05:20: `MessageBubble.prefab` の missing MonoBehaviour を cleanup、subsequent batch run で warning 消失を確認

@@ -1,6 +1,6 @@
 # Workflow State SSOT
 
-Last Updated: 2026-03-01T16:01:02+09:00
+Last Updated: 2026-03-01T16:06:00+09:00
 Owner: Orchestrator
 Scope: UnityChatNovelGame + shared-workflows integration
 
@@ -16,7 +16,7 @@ Scope: UnityChatNovelGame + shared-workflows integration
 ## Current Phase
 
 - Phase: Worker Execution
-- Gate: SG-1 closed / MG-1 closed / next-cycle sync preparation in progress
+- Gate: SG-1 closed / MG-1 closed / next-cycle sync ready
 
 ## Active Task Set
 
@@ -54,4 +54,4 @@ Scope: UnityChatNovelGame + shared-workflows integration
 
 ## Next Action
 
-- Single Entry: orchestrator-owned docs / workflow updates を commit boundary として確定し、続けて Phase 1 sync で LG-1 候補（Addressables / CI / QA）の最初の着手点を定義する
+- Single Entry: Phase 1 sync を開始し、LG-1 候補（Addressables / CI / QA）のうち最初に切る 1 本を定義する
