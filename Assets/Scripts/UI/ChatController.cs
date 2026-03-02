@@ -239,6 +239,28 @@ namespace ProjectFoundPhone.UI
                 return null;
             }
 
+            // バブルを確実に表示
+            messageBubble.SetActive(true);
+
+            // LayoutElementを追加・設定（高さを自動調整）
+            LayoutElement layoutElement = messageBubble.GetComponent<LayoutElement>();
+            if (layoutElement == null)
+            {
+                layoutElement = messageBubble.AddComponent<LayoutElement>();
+            }
+            layoutElement.minHeight = 60f;
+            layoutElement.preferredHeight = -1f; // ContentSizeFitterに任せる
+            layoutElement.flexibleHeight = -1f;
+
+            // ContentSizeFitterを追加・設定
+            ContentSizeFitter sizeFitter = messageBubble.GetComponent<ContentSizeFitter>();
+            if (sizeFitter == null)
+            {
+                sizeFitter = messageBubble.AddComponent<ContentSizeFitter>();
+            }
+            sizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            sizeFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+
             // プレイヤー判定・テーマカラー・配置を共通処理で設定
             ConfigureBubble(messageBubble, charID);
 
@@ -256,11 +278,24 @@ namespace ProjectFoundPhone.UI
             if (textComponent != null)
             {
                 textComponent.text = finalText;
+                
+                // TextMeshProのサイズを適切に設定
+                RectTransform textRect = textComponent.GetComponent<RectTransform>();
+                if (textRect != null)
+                {
+                    textRect.anchorMin = new Vector2(0, 0);
+                    textRect.anchorMax = new Vector2(1, 1);
+                    textRect.offsetMin = new Vector2(10, 10);
+                    textRect.offsetMax = new Vector2(-10, -10);
+                }
             }
             else
             {
                 Debug.LogWarning("ChatController: TextMeshProUGUI component not found in message bubble prefab.");
             }
+
+            // レイアウトを即座に更新
+            Canvas.ForceUpdateCanvases();
 
             // アニメーション演出
             AnimateBubbleIn(messageBubble);
