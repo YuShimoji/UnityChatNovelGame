@@ -1,11 +1,12 @@
 # Task: Evidence Reuse Rule and Capture Automation for MVP Gates
 
-Status: IN_PROGRESS
+Status: COMPLETED
 Tier: 2 (Tooling)
 Branch: feature/task-055-evidence-reuse-automation
 Owner: Worker
 Created: 2026-02-20
-Updated: 2026-02-20
+Updated: 2026-03-02
+Completed: 2026-03-02
 Report: docs/reports/REPORT_TASK_055_EvidenceReuseAutomation.md
 
 ## Objective
@@ -43,11 +44,11 @@ Report: docs/reports/REPORT_TASK_055_EvidenceReuseAutomation.md
 
 ## DoD
 
-- [ ] 証跡再利用ルールを `docs/03_guides/` 配下に文書化し、再利用可否判定基準を明記する
-- [ ] 既存証跡（`docs/evidence/TASK_047/`）を入力に、再利用判定のための manifest（例: hash/updated/test result）を出力できる
-- [ ] `TASK_053_MVPFinalVerificationPack.md` に再利用条件と追加取得が必要な証跡の線引きを反映する
-- [ ] 適用結果を `docs/reports/REPORT_TASK_055_EvidenceReuseAutomation.md` に記録する
-- [ ] 変更がコードを含む場合は Unity Editor でコンパイルエラー 0 を確認する
+- [x] 証跡再利用ルールを `docs/03_guides/` 配下に文書化し、再利用可否判定基準を明記する
+- [x] 既存証跡（`docs/evidence/TASK_047/`）を入力に、再利用判定のための manifest（例: hash/updated/test result）を出力できる
+- [x] `TASK_053_MVPFinalVerificationPack.md` に再利用条件と追加取得が必要な証跡の線引きを反映する
+- [x] 適用結果を `docs/reports/REPORT_TASK_055_EvidenceReuseAutomation.md` に記録する
+- [x] 変更がコードを含む場合は Unity Editor でコンパイルエラー 0 を確認する（コード変更なし）
 
 ## Test Plan
 
