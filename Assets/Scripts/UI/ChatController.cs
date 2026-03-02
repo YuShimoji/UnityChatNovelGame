@@ -446,13 +446,6 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-<<<<<<< HEAD
-            if (m_MessageBubblePrefab == null)
-            {
-                Debug.LogError("ChatController: Cannot create system message. MessageBubblePrefab is not assigned.");
-                return;
-            }
-
             if (m_MessageBubblePool == null)
             {
                 EnsureMessageBubblePool();
@@ -468,12 +461,14 @@ namespace ProjectFoundPhone.UI
             else
             {
                 // フォールバック: 直接Instantiate
+                if (m_MessageBubblePrefab == null)
+                {
+                    Debug.LogError("ChatController: Cannot create system message. MessageBubblePrefab is not assigned.");
+                    return;
+                }
                 systemBubble = Instantiate(m_MessageBubblePrefab, m_ScrollRect.content);
             }
-=======
-            GameObject systemBubble = Instantiate(GetSafeMessageBubbleTemplate(), m_ScrollRect.content);
             systemBubble.SetActive(true);
->>>>>>> origin/main
 
             // 中央揃え
             RectTransform rectTransform = systemBubble.GetComponent<RectTransform>();
