@@ -95,6 +95,14 @@ namespace ProjectFoundPhone.UI
             if (m_LayoutGroup == null && m_ScrollRect != null && m_ScrollRect.content != null)
             {
                 m_LayoutGroup = m_ScrollRect.content.GetComponent<VerticalLayoutGroup>();
+                
+                // VerticalLayoutGroupのスペーシング設定を確保
+                if (m_LayoutGroup != null)
+                {
+                    m_LayoutGroup.spacing = Mathf.Max(m_LayoutGroup.spacing, 10f);
+                    m_LayoutGroup.childControlHeight = false;
+                    m_LayoutGroup.childForceExpandHeight = false;
+                }
             }
 
             // m_MessageBubblePrefab、m_TypingIndicatorのnullチェックと警告
