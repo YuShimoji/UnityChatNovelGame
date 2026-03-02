@@ -15,6 +15,8 @@ namespace ProjectFoundPhone.UI
 
         private DialogueRunner? m_DialogueRunner;
         private TextMeshProUGUI? m_DebugOverlayText;
+        private GameObject? m_DebugOverlayObj;
+        private bool m_DebugOverlayExpanded = false;
         private string m_CurrentNodeName = "-";
         private string m_CurrentLineId = "-";
         private string m_CurrentTags = "-";
@@ -161,23 +163,30 @@ namespace ProjectFoundPhone.UI
             Transform existing = canvas.transform.Find("ContentAuthoringDebugOverlay");
             if (existing != null)
             {
+                m_DebugOverlayObj = existing.gameObject;
                 m_DebugOverlayText = existing.GetComponentInChildren<TextMeshProUGUI>();
                 return;
             }
 
-            GameObject overlayObj = new GameObject("ContentAuthoringDebugOverlay", typeof(RectTransform), typeof(Image));
+            // 右上に小さなバッジとして配置（クリックで展開/折りたたみ）
+            GameObject overlayObj = new GameObject("ContentAuthoringDebugOverlay", typeof(RectTransform), typeof(Image), typeof(Button));
             overlayObj.transform.SetParent(canvas.transform, false);
+            m_DebugOverlayObj = overlayObj;
 
             RectTransform overlayRect = overlayObj.GetComponent<RectTransform>();
-            overlayRect.anchorMin = new Vector2(0f, 1f);
-            overlayRect.anchorMax = new Vector2(0f, 1f);
-            overlayRect.pivot = new Vector2(0f, 1f);
-            overlayRect.anchoredPosition = new Vector2(24f, -24f);
-            overlayRect.sizeDelta = new Vector2(560f, 104f);
+            overlayRect.anchorMin = new Vector2(1f, 1f);
+            overlayRect.anchorMax = new Vector2(1f, 1f);
+            overlayRect.pivot = new Vector2(1f, 1f);
+            overlayRect.anchoredPosition = new Vector2(-12f, -12f);
+            overlayRect.sizeDelta = new Vector2(120f, 36f);
 
             Image overlayImage = overlayObj.GetComponent<Image>();
-            overlayImage.color = new Color(0f, 0f, 0f, 0.65f);
-            overlayImage.raycastTarget = false;
+            overlayImage.color = new Color(0f, 0f, 0f, 0.45f);
+            overlayImage.raycastTarget = true;
+
+            Button overlayButton = overlayObj.GetComponent<Button>();
+            overlayButton.transition = Selectable.Transition.None;
+            overlayButton.onClick.AddListener(ToggleDebugOverlay);
 
             GameObject textObj = new GameObject("Label", typeof(RectTransform));
             textObj.transform.SetParent(overlayObj.transform, false);
@@ -185,15 +194,40 @@ namespace ProjectFoundPhone.UI
             RectTransform textRect = textObj.GetComponent<RectTransform>();
             textRect.anchorMin = Vector2.zero;
             textRect.anchorMax = Vector2.one;
-            textRect.offsetMin = new Vector2(16f, 10f);
-            textRect.offsetMax = new Vector2(-16f, -10f);
+            textRect.offsetMin = new Vector2(8f, 4f);
+            textRect.offsetMax = new Vector2(-8f, -4f);
 
             m_DebugOverlayText = textObj.AddComponent<TextMeshProUGUI>();
-            m_DebugOverlayText.fontSize = 22f;
-            m_DebugOverlayText.color = Color.white;
+            m_DebugOverlayText.fontSize = 16f;
+            m_DebugOverlayText.color = new Color(1f, 1f, 1f, 0.8f);
             m_DebugOverlayText.alignment = TextAlignmentOptions.TopLeft;
             m_DebugOverlayText.textWrappingMode = TextWrappingModes.NoWrap;
+            m_DebugOverlayText.overflowMode = TextOverflowModes.Ellipsis;
             m_DebugOverlayText.raycastTarget = false;
+
+            m_DebugOverlayExpanded = false;
+        }
+
+        private void ToggleDebugOverlay()
+        {
+            m_DebugOverlayExpanded = !m_DebugOverlayExpanded;
+
+            if (m_DebugOverlayObj == null) return;
+            RectTransform rect = m_DebugOverlayObj.GetComponent<RectTransform>();
+            if (rect == null) return;
+
+            if (m_DebugOverlayExpanded)
+            {
+                rect.sizeDelta = new Vector2(400f, 80f);
+                if (m_DebugOverlayText != null) m_DebugOverlayText.fontSize = 16f;
+            }
+            else
+            {
+                rect.sizeDelta = new Vector2(120f, 36f);
+                if (m_DebugOverlayText != null) m_DebugOverlayText.fontSize = 16f;
+            }
+
+            RefreshDebugOverlay();
         }
 
         private void RefreshDebugOverlay()
@@ -209,10 +243,17 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            m_DebugOverlayText.text =
-                $"node: {m_CurrentNodeName}\n" +
-                $"line: {m_CurrentLineId}\n" +
-                $"tag: {m_CurrentTags}";
+            if (m_DebugOverlayExpanded)
+            {
+                m_DebugOverlayText.text =
+                    $"node: {m_CurrentNodeName}\n" +
+                    $"line: {m_CurrentLineId}\n" +
+                    $"tag: {m_CurrentTags}";
+            }
+            else
+            {
+                m_DebugOverlayText.text = $"[D] {m_CurrentNodeName}";
+            }
         }
     }
 }
