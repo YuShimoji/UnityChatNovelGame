@@ -284,24 +284,28 @@ namespace ProjectFoundPhone.UI
 
             // TextMeshProコンポーネントにtextを設定
             TextMeshProUGUI textComponent = messageBubble.GetComponentInChildren<TextMeshProUGUI>();
-            if (textComponent != null)
+            if (textComponent == null)
             {
-                textComponent.text = finalText;
+                // TextMeshProが存在しない場合は子オブジェクトとして作成
+                GameObject textObj = new GameObject("Text");
+                textObj.transform.SetParent(messageBubble.transform, false);
+                textComponent = textObj.AddComponent<TextMeshProUGUI>();
                 
-                // TextMeshProのサイズを適切に設定
+                // RectTransformの設定
                 RectTransform textRect = textComponent.GetComponent<RectTransform>();
-                if (textRect != null)
-                {
-                    textRect.anchorMin = new Vector2(0, 0);
-                    textRect.anchorMax = new Vector2(1, 1);
-                    textRect.offsetMin = new Vector2(10, 10);
-                    textRect.offsetMax = new Vector2(-10, -10);
-                }
+                textRect.anchorMin = new Vector2(0, 0);
+                textRect.anchorMax = new Vector2(1, 1);
+                textRect.offsetMin = new Vector2(10, 10);
+                textRect.offsetMax = new Vector2(-10, -10);
+                
+                // テキストの基本設定
+                textComponent.fontSize = 18;
+                textComponent.color = Color.black;
+                textComponent.alignment = TextAlignmentOptions.TopLeft;
+                textComponent.enableWordWrapping = true;
             }
-            else
-            {
-                Debug.LogWarning("ChatController: TextMeshProUGUI component not found in message bubble prefab.");
-            }
+            
+            textComponent.text = finalText;
 
             // レイアウトを即座に更新
             Canvas.ForceUpdateCanvases();
@@ -551,14 +555,29 @@ namespace ProjectFoundPhone.UI
 
             // テキストを中央揃え・小さめフォントで設定
             TextMeshProUGUI textComponent = systemBubble.GetComponentInChildren<TextMeshProUGUI>();
-            if (textComponent != null)
+            if (textComponent == null)
             {
-                textComponent.text = text;
+                // TextMeshProが存在しない場合は子オブジェクトとして作成
+                GameObject textObj = new GameObject("Text");
+                textObj.transform.SetParent(systemBubble.transform, false);
+                textComponent = textObj.AddComponent<TextMeshProUGUI>();
+                
+                // RectTransformの設定
+                RectTransform textRect = textComponent.GetComponent<RectTransform>();
+                textRect.anchorMin = new Vector2(0, 0);
+                textRect.anchorMax = new Vector2(1, 1);
+                textRect.offsetMin = new Vector2(10, 10);
+                textRect.offsetMax = new Vector2(-10, -10);
+                
+                // テキストの基本設定
+                textComponent.fontSize = 16;
+                textComponent.color = new Color(0.4f, 0.4f, 0.4f, 1.0f);
                 textComponent.alignment = TextAlignmentOptions.Center;
                 textComponent.fontStyle = FontStyles.Italic;
-                textComponent.fontSize = textComponent.fontSize * 0.85f;
-                textComponent.color = new Color(0.4f, 0.4f, 0.4f, 1.0f);
+                textComponent.enableWordWrapping = true;
             }
+            
+            textComponent.text = text;
 
             AnimateBubbleIn(systemBubble);
 
