@@ -116,6 +116,42 @@ namespace ProjectFoundPhone.Editor
                     ContentAuthoringBatchValidator.ValidateFromMenu();
                 }
             }
+
+            EditorGUILayout.Space(4);
+
+            bool isCorrectScene = IsContentAuthoringSceneActive();
+            bool isPlaying = EditorApplication.isPlaying;
+
+            using (new EditorGUI.DisabledGroupScope(!isCorrectScene || isPlaying))
+            {
+                if (GUILayout.Button("Play from Node", GUILayout.Height(30)))
+                {
+                    PlayFromSelectedNode();
+                }
+            }
+
+            if (!isCorrectScene)
+            {
+                EditorGUILayout.HelpBox("ContentAuthoring シーンを開いてください。", MessageType.Info);
+            }
+            else if (isPlaying)
+            {
+                EditorGUILayout.HelpBox("Play Mode 中は使用できません。", MessageType.Info);
+            }
+        }
+
+        private bool IsContentAuthoringSceneActive()
+        {
+            return EditorSceneManager.GetActiveScene().path == ContentAuthoringScenePath;
+        }
+
+        private void PlayFromSelectedNode()
+        {
+            m_AutoStartYarnProperty.boolValue = true;
+            serializedObject.ApplyModifiedProperties();
+            EditorUtility.SetDirty(target);
+            EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene());
+            EditorApplication.isPlaying = true;
         }
     }
 }
