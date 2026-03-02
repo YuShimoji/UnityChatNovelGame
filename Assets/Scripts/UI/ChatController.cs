@@ -35,6 +35,8 @@ namespace ProjectFoundPhone.UI
         [SerializeField] private GameObject m_ChoiceButtonPrefab;
         [SerializeField] private Transform m_ChoiceContainer;
 
+        [Header("Font Settings")]
+        [SerializeField] private TMP_FontAsset m_JapaneseFontAsset;
 
         private bool m_IsUserScrolling = false;
         private float m_LastScrollPosition = 1.0f;
@@ -303,8 +305,22 @@ namespace ProjectFoundPhone.UI
                 textComponent.color = Color.black;
                 textComponent.alignment = TextAlignmentOptions.TopLeft;
                 textComponent.enableWordWrapping = true;
+
+                // 日本語フォントを設定
+                if (m_JapaneseFontAsset != null)
+                {
+                    textComponent.font = m_JapaneseFontAsset;
+                }
             }
-            
+            else
+            {
+                // 既存のTextMeshProにも日本語フォントを設定
+                if (m_JapaneseFontAsset != null)
+                {
+                    textComponent.font = m_JapaneseFontAsset;
+                }
+            }
+
             textComponent.text = finalText;
 
             // レイアウトを即座に更新
@@ -575,8 +591,22 @@ namespace ProjectFoundPhone.UI
                 textComponent.alignment = TextAlignmentOptions.Center;
                 textComponent.fontStyle = FontStyles.Italic;
                 textComponent.enableWordWrapping = true;
+
+                // 日本語フォントを設定
+                if (m_JapaneseFontAsset != null)
+                {
+                    textComponent.font = m_JapaneseFontAsset;
+                }
             }
-            
+            else
+            {
+                // 既存のTextMeshProにも日本語フォントを設定
+                if (m_JapaneseFontAsset != null)
+                {
+                    textComponent.font = m_JapaneseFontAsset;
+                }
+            }
+
             textComponent.text = text;
 
             AnimateBubbleIn(systemBubble);
@@ -893,7 +923,13 @@ namespace ProjectFoundPhone.UI
             label.alignment = TextAlignmentOptions.Midline;
             label.color = Color.white;
             label.raycastTarget = false;
-            if (TMP_Settings.defaultFontAsset != null)
+
+            // 日本語フォントが設定されていればそれを使用、なければデフォルトフォントを使用
+            if (m_JapaneseFontAsset != null)
+            {
+                label.font = m_JapaneseFontAsset;
+            }
+            else if (TMP_Settings.defaultFontAsset != null)
             {
                 label.font = TMP_Settings.defaultFontAsset;
             }
@@ -966,7 +1002,13 @@ namespace ProjectFoundPhone.UI
             label.fontSize = 28f;
             label.alignment = TextAlignmentOptions.TopLeft;
             label.raycastTarget = false;
-            if (TMP_Settings.defaultFontAsset != null)
+
+            // 日本語フォントが設定されていればそれを使用、なければデフォルトフォントを使用
+            if (m_JapaneseFontAsset != null)
+            {
+                label.font = m_JapaneseFontAsset;
+            }
+            else if (TMP_Settings.defaultFontAsset != null)
             {
                 label.font = TMP_Settings.defaultFontAsset;
             }
@@ -1099,7 +1141,12 @@ namespace ProjectFoundPhone.UI
             tmp.alignment = TextAlignmentOptions.MidlineLeft;
             tmp.raycastTarget = false;
 
-            if (TMP_Settings.defaultFontAsset != null)
+            // 日本語フォントが設定されていればそれを使用、なければデフォルトフォントを使用
+            if (m_JapaneseFontAsset != null)
+            {
+                tmp.font = m_JapaneseFontAsset;
+            }
+            else if (TMP_Settings.defaultFontAsset != null)
             {
                 tmp.font = TMP_Settings.defaultFontAsset;
             }
