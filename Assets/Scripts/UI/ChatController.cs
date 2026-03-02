@@ -242,6 +242,15 @@ namespace ProjectFoundPhone.UI
             // バブルを確実に表示
             messageBubble.SetActive(true);
 
+            // Imageコンポーネントを追加（背景表示用）
+            Image bubbleImage = messageBubble.GetComponent<Image>();
+            if (bubbleImage == null)
+            {
+                bubbleImage = messageBubble.AddComponent<Image>();
+                bubbleImage.color = new Color(0.85f, 0.85f, 0.85f); // デフォルトグレー
+                bubbleImage.raycastTarget = false;
+            }
+
             // LayoutElementを追加・設定（高さを自動調整）
             LayoutElement layoutElement = messageBubble.GetComponent<LayoutElement>();
             if (layoutElement == null)
@@ -513,21 +522,32 @@ namespace ProjectFoundPhone.UI
             }
             systemBubble.SetActive(true);
 
-            // 中央揃え
-            RectTransform rectTransform = systemBubble.GetComponent<RectTransform>();
-            if (rectTransform != null)
-            {
-                rectTransform.anchorMin = new Vector2(0.5f, 1.0f);
-                rectTransform.anchorMax = new Vector2(0.5f, 1.0f);
-                rectTransform.pivot = new Vector2(0.5f, 1.0f);
-            }
-
-            // 背景を半透明グレーに設定
+            // Imageコンポーネントを追加（背景表示用）
             Image bubbleBackground = systemBubble.GetComponent<Image>();
-            if (bubbleBackground != null)
+            if (bubbleBackground == null)
             {
-                bubbleBackground.color = new Color(0.6f, 0.6f, 0.6f, 0.5f);
+                bubbleBackground = systemBubble.AddComponent<Image>();
             }
+            bubbleBackground.color = new Color(0.5f, 0.5f, 0.5f, 0.3f);
+            bubbleBackground.raycastTarget = false;
+
+            // LayoutElementを追加
+            LayoutElement layoutElement = systemBubble.GetComponent<LayoutElement>();
+            if (layoutElement == null)
+            {
+                layoutElement = systemBubble.AddComponent<LayoutElement>();
+            }
+            layoutElement.minHeight = 40f;
+            layoutElement.preferredHeight = -1f;
+
+            // ContentSizeFitterを追加
+            ContentSizeFitter sizeFitter = systemBubble.GetComponent<ContentSizeFitter>();
+            if (sizeFitter == null)
+            {
+                sizeFitter = systemBubble.AddComponent<ContentSizeFitter>();
+            }
+            sizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            sizeFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
 
             // テキストを中央揃え・小さめフォントで設定
             TextMeshProUGUI textComponent = systemBubble.GetComponentInChildren<TextMeshProUGUI>();
