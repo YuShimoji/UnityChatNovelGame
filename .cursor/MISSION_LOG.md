@@ -1,102 +1,62 @@
-﻿﻿# Mission Log
+# Mission Log
 
-## Mission ID
-KICKSTART_2026-01-15T13:26:07+09:00
+## Mission
 
-## 開始時刻
-2026-01-15T13:26:07+09:00
+Editor-Ready: デザイナーが Unity Editor 上で Yarn 会話を編集し、1クリックで再生確認できる制作ループを成立させる。
 
-## 現在のフェーズ
-Phase 7: Development Acceleration
+## Done 条件
 
-## ステータス
-PHASE7_DEV_START_2026-02-24
+1. [ ] ContentAuthoring シーンを開いて Play → 指定の Yarn 会話が開始する
+2. [ ] Yarn の 1 行を変更→停止→再生で差分が確実に反映される
+3. [ ] 画面隅に Debug Overlay（node/line/tag）が表示される
+4. [ ] 失敗時は「壊れたファイル名」をログ 1 行で出す
+
+## Pivot 記録
+
+- 2026-03-01: Editor-Ready pivot 実施
+- 旧ログ: `.cursor/MISSION_LOG_ARCHIVE_PRE_EDITOR_READY.md`
+- 凍結タスク: TASK_056, TASK_057, TASK_058 (CI 関連 — Editor-Ready 後に再開)
+- 理由: 品質過多の重力井戸からの脱出。デザイナーのコンテンツ制作ループ確立を最優先とする。
+
+---
 
 ## 進捗記録
 
-### Phase 7: Development Acceleration (2026-02-24 調整)
-- [x] ユーザー依頼: 動作検証（手動PlayMode）をパスし、開発を優先
-- [x] .shared-workflows サブモジュールを最新 (`caa90c5`) に更新
-- [x] TASK_054, TASK_053 を `DONE (Verification Bypassed)` へ更新
-- [x] ユーザーによる自動化基盤導入を確認 (`VerificationAutomator.cs`, `DeductionBoardSetup.cs` 修正)
-- [ ] Next Action: `TASK_056` (ChatDialogueView 正式実装) 等のバックログ着手
-- [ ] Next Action: 開発優先モードでのマイルストーン再配置
+### Editor-Ready Phase (2026-03-01 pivot)
 
-### Phase 6: Worker Execution (2026-02-22 TASK_049 検証・統合)
-- [x] TASK_049 完了根拠を検証
-  - `git log` で `fix: isolate Editor-only code to resolve build gate errors (TASK_049)` を確認
-  - `docs/evidence/TASK_049/Build2.log` に `Build Successful` / `Result: Success` を確認
-  - `Builds/Windows/TinyChatNovel.exe` 生成を確認
-- [x] 統合漏れを補完
-  - `docs/tasks/TASK_049_BuildGateFix_VerticalSlice.md` を `COMPLETED` + DoD完了へ更新
-  - `docs/reports/REPORT_TASK_049_BuildGateFix_VerticalSlice.md` を作成
-  - `docs/MILESTONE_PLAN.md` の `TASK_049` 完了を反映
-- [x] 他変更の確認
-  - ワーキングツリーに `ProjectSettings/EditorBuildSettings.asset` と `docs/evidence/TASK_049/Build2.log` の未コミット差分あり
-  - 上記はTASK_049証跡として有用のため、破棄せず保持
-- [ ] Next Action: Workerへ `TASK_052_VerticalSliceSmokeResultClosure` を委譲
-- [ ] Next Action: `TASK_047` の未達DoD（PlayMode/Build結果記録）をクローズ
-- [ ] Next Action: `TASK_053_MVPFinalVerificationPack` 実行へ移行
+- [x] Orchestrator Driver を Mission-first 形式に刷新
+- [x] WORKFLOW_STATE_SSOT を Editor-Ready 仕様にリセット
+- [x] MISSION_LOG をリセット（旧ログはアーカイブ済み）
+- [x] ContentAuthoring シーン生成スクリプトを追加し、`Assets/Scenes/ContentAuthoring.unity` を生成
+- [x] `ChatDialogueView` に Debug Overlay（node/line/tag）自動表示を追加
+- [x] `ScenarioManager` に broken yarn file 1 行ログを追加
+- [x] `TitleScreenManager` に ContentAuthoring 優先遷移を追加
+- [ ] Next Action: ContentAuthoring の Play 実行を自動観測する最小 validator を詰める (分類: A/C)
 
-### Phase 6: Worker Execution (2026-02-21 Orchestrator再計画)
-- [x] SSOT確認
-  - `.shared-workflows/prompts/orchestrator/modules/00_core.md`
-  - `.shared-workflows/prompts/orchestrator/modules/P6_report.md`
-  - `.shared-workflows/docs/windsurf_workflow/EVERY_SESSION.md`
-  - `.shared-workflows/data/presentation.json`
-- [x] 推奨運用チェック実行
-  - `node .shared-workflows/scripts/sw-update-check.js`
-  - 結果: `.shared-workflows` が `origin/main` より 2 commits behind
-  - `node .shared-workflows/scripts/sw-doctor.js --profile shared-orch-bootstrap --format text`
-  - 結果: ERRORなし / WARNあり（MISSION_LOG stale）
-- [x] 実行優先度を3段階で再評価
-  - ★★★: TASK_049（Build Gate Fix）を先行
-  - ★★☆: TASK_047（Smoke Gate）の未取得証跡回収
-  - ★☆☆: TASK_053（MVP Final Verification Pack）は上記完了後に着手
-- [ ] Next Action: `.shared-workflows` を更新（fast-forward）して運用基盤を最新化
-- [ ] Next Action: Workerへ `TASK_049_BuildGateFix_VerticalSlice` を最優先で委譲
-- [ ] Next Action: TASK_049完了後、Workerへ `TASK_052_VerticalSliceSmokeResultClosure` を委譲して TASK_047 の DoD をクローズ
-- [ ] Next Action: TASK_052完了後、Workerへ `TASK_053_MVPFinalVerificationPack` を委譲して SG-1/MG-1 を収束
+### 2026-03-01 Validation Pass
 
-### Phase 6: Worker Execution (2026-02-20 Dispatch)
-- [x] `TASK_055` の Worker 委譲を実行
-  - 実行コマンド:
-    - `node .shared-workflows/scripts/worker-dispatch.js --ticket docs/tasks/TASK_055_EvidenceReuseAutomation.md --unity --output docs/inbox/WORKER_DISPATCH_TASK_055.txt`
-  - 生成物:
-    - `docs/inbox/WORKER_DISPATCH_TASK_055.txt`
-  - 納品先（Worker）:
-    - `docs/inbox/REPORT_TASK_055_EvidenceReuseAutomation_20260220.md`
-- [ ] Next Action: Worker 実行結果（`REPORT_TASK_055...`）受領
-- [ ] Next Action: `TASK_055` 成果を `TASK_053` に反映（再利用証跡/追加取得証跡の分離）
-- [ ] Next Action: `TASK_054` の PASS/FAIL 再判定と `TASK_053` 最終検証パック着手順を確定
-### Phase 7: Development Acceleration (2026-02-24 P2.5 Diverge Refresh)
-- [x] 状態SSOT `docs/WORKFLOW_STATE_SSOT.md` を新規作成
-- [x] 開発優先方針を反映（TASK_055 検証スキップ継続）
-- [x] 3段階尺度で次タスクを評価
-  - TASK_056: 3/3 (High)
-  - TASK_057: 2/3 (Medium)
-  - TASK_058: 2/3 (Medium)
-- [x] TASK_056/TASK_057/TASK_058 を起票
-- [ ] Next Action: TASK_056 Layer A 実装に着手
-- [ ] Next Action: TASK_056 Layer B 手動検証（DebugChatScene）
-- [ ] Next Action: TASK_057/058 へ順次移行
-### Phase 7: Development Acceleration (2026-02-25 Remote Sync & Resume)
-- [x] リモート同期確認を実施
-  - `git fetch origin` 実行
-  - 現在ブランチ: `feature/task-049-build-gate-fix`
-  - `origin/feature/task-049-build-gate-fix` との差分: ahead 5 / behind 0
-  - `origin/main` との差分: ahead 6 / behind 0
-  - `.shared-workflows` submodule: `caa90c5` (同期済み)
-- [x] pull試行の結果を記録
-  - `git pull --rebase origin feature/task-049-build-gate-fix` は未ステージ変更のため停止
-  - ただし behind 0 のため、取り込み不足はなし
-- [x] 現在地と次タスクの3段階評価を再確認
-  - TASK_056: 3/3 (High)
-  - TASK_057: 2/3 (Medium)
-  - TASK_058: 2/3 (Medium)
-- [ ] Next Action: Workerへ TASK_056 を委譲（Layer A実装）
-- [ ] Next Action: TASK_056 Layer B 手動検証
-- [ ] Next Action: TASK_057 -> TASK_058 へ順次移行
-- [x] Worker 委譲プロンプトを生成
-  - `docs/inbox/WORKER_DISPATCH_TASK_056.txt`
-  - Report Target: `docs/inbox/REPORT_TASK_056_ChatDialogueView_Production_20260225.md`
+- [x] ContentAuthoringBatchValidator.ValidateBatch passed in Unity batchmode and confirmed autoplay/chat/debug overlay at runtime
+- [x] ScenarioManagerEditor added a Yarn node popup for m_StartNode
+- [x] EditorBuildSettings.asset reordered to TitleScene -> ContentAuthoring -> DebugChatScene -> MVPScene
+- [x] Next Action: begin the first real content slice in ContentAuthoring once the target node/content brief is decided
+
+### 2026-03-01 Roadmap Evaluation & Repo Sync
+
+- [x] Git fetch confirmed local is ahead, repository state is clean.
+- [x] Evaluated Completeness and documented Phase 1/2/3 in `implementation_plan.md`.
+- [x] Extracted actionable roadmap to `task.md`.
+- [x] Next Action: Request user to provide the target scenario direction (Phase 1) or permit drafting a sample scenario in ContentAuthoring. (A/B分類)
+
+### 2026-03-01 Phase 1 (Sample Yarn) Implementation
+
+- [x] Constructed `FirstSlice.yarn` with initial chat flow branching.
+- [x] Updated `ContentAuthoring` scene `ScenarioManager` to start from `FirstSlice_Start`.
+- [x] Fixed YarnProject compilation error (duplicate `$speaker` declaration in `FirstSlice.yarn`).
+- [x] Improved scroll sensitivity and adjusted InputField visibility logic in `ChatController`.
+
+### 2026-03-01 Phase 2 (Enhancement) Implementation
+
+- [x] Refactored `ChatController` to move `ChoiceContainer` into the chat flow (In-chat choices).
+- [x] Implemented bounce animations for messages and fade-in for images using DOTween.
+- [x] Created `CONTENT_AUTHORING_GUIDE.md` for user storyline editing.
+- [ ] Next Action: Final verification of the new UI and animations. User to check if the choices properly appear in the flow. (A分類)

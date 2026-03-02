@@ -1,0 +1,60 @@
+title: FirstSlice_Start
+---
+
+<<SystemMessage "【SYSTEM】認証プロトコルを開始します...">>
+<<StartWait 1.0>>
+<<SystemMessage "【SYSTEM】未知のデバイスからの接続を検出。">>
+<<StartWait 1.0>>
+
+<<set $speaker to "unknown">>
+...そこにいるのは分かっている。
+返事をしろ。
+
+<<set $speaker to "player">>
+あなたは誰だ？ なぜこの端末に接続できる？
+
+<<set $speaker to "unknown">>
+<<StartWait 1.0>>
+質問をしているのはこちらだ。
+その端末をどこで手に入れた？
+
+-> 拾っただけだ
+    <<jump Branch_Honest>>
+-> 答える義理はない
+    <<jump Branch_Defiant>>
+===
+
+title: Branch_Honest
+---
+<<set $speaker to "player">>
+道に落ちていたのを拾っただけだ。警察に届けるつもりだった。
+
+<<set $speaker to "unknown">>
+<<StartWait 1.5>>
+...なるほど。だが、もう遅い。
+その端末に触れた時点で、お前も『観測者』として登録された。
+
+<<jump FirstSlice_End>>
+===
+
+title: Branch_Defiant
+---
+<<set $speaker to "player">>
+見ず知らずの相手に教える理由がない。
+
+<<set $speaker to "unknown">>
+<<StartWait 1.5>>
+強気だな。だが、状況を理解していないようだ。
+その端末は、すでに『彼ら』にマークされている。
+
+<<jump FirstSlice_End>>
+===
+
+title: FirstSlice_End
+---
+<<set $speaker to "unknown">>
+...通信が不安定になってきた。
+いいか、絶対にその端末を手放すな。後でまた連絡する。
+
+<<SystemMessage "【SYSTEM】通信が切断されました。">>
+===

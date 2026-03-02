@@ -1,47 +1,27 @@
-﻿# WORKFLOW STATE SSOT
+# WORKFLOW STATE SSOT
 
-Updated: 2026-02-25
+## Mission
 
-## Current Phase
-- P2.5 Diverge (Phase 7 Development Acceleration context)
+初の本格的なコンテンツ制作スライスの開始（ContentAuthoring シーンでのノードピッカーとオーバーレイを利用した実コンテンツの構築）
 
-## In-Progress
-- TASK_056: ChatDialogueView の正式実装（Yarn連携強化）
-- TASK_057: MessageBubble のオブジェクトプーリング導入
-- TASK_058: CharacterProfile ベースの自動カラーリング
+## Done 条件
 
-## Project Position
-- Branch: feature/task-049-build-gate-fix
-- Remote Sync: origin/feature に behind 0（ahead 5）
-- Main Sync: origin/main に behind 0（ahead 6）
-- Submodule: .shared-workflows @ caa90c5（同期済み）
+- [ ] ユーザーからのディレクション（どのノード/コンテンツを作成するか）の受け取り
+- [ ] ContentAuthoring シーンにて指定された会話の実装と動作確認
+- [ ] デバッグオーバーレイおよびノードピッカーを用いた表示・遷移の検証
 
-## Verification Policy (3-Level)
-- 3: High (実装＋静的確認が揃っている)
-- 2: Medium (実装は可能だが検証/依存確認が残る)
-- 1: Low (前提不足や不確実性が高い)
+## 選別規則
 
-## Task Validation Snapshot
-- TASK_056: 3/3 (High)
-  - 根拠: 既存 `ChatDialogueView` と `ChatController` が存在し、統合拡張の着手条件が整っている。
-- TASK_057: 2/3 (Medium)
-  - 根拠: 実装方針は明確だが、Layer B の実測（Profiler/PlayMode）で確認が必要。
-- TASK_058: 2/3 (Medium)
-  - 根拠: `CharacterProfile`/`CharacterDatabase` は存在するが、UI反映点の統一が必要。
+当面は以下の作業分類に従い、D（将来のための品質や汎化）は凍結とします。
 
-## Blockers
-- なし（開発優先モード）
-- 注記: TASK_055 の検証は開発優先のため一時スキップ（ユーザー指示）
+- A. コア機能・目的の達成
+- B. 制作/開発速度の向上・互換設定
+- C. 失敗からの復旧しやすさ
+- D. テスト拡充、過度なレポート、当面に直結しないリファクタリング → **凍結**
 
-## Next Action
-- TASK_056 を Layer A/B 分割で先行着手し、完了後に TASK_057 → TASK_058 の順で実行する。
+## 禁止事項
 
-## Layer Split
-- Layer A (AI実装):
-  - TASK_056: DialogueView 側の話者解決・選択肢/入力制御の統合
-  - TASK_057: Bubble生成/破棄経路をプール経路へ統一
-  - TASK_058: CharacterProfile の表示名/色を Bubble 描画へ一元適用
-- Layer B (手動検証):
-  - TASK_056: DebugChatScene で Yarn line/options の遷移確認
-  - TASK_057: 長文会話時の GC/フレーム落ち観測（Profiler）
-  - TASK_058: player/NPC/system の配色・可読性確認
+- Editor-Ready 状態（1クリックでの再生確認やデバッグ表示）を損なう変更を行わないこと。
+- MVP の最小導線を破壊しないこと。
+- Console Error / Exception を発生させないこと。
+- 過度なテスト要求、過剰なレポート生成、今の目的に直結しない汎化リファクタリングを行わないこと。

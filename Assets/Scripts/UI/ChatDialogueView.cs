@@ -1,7 +1,10 @@
 #if YARN_SPINNER
-using Yarn.Unity;
-using UnityEngine;
+#nullable enable
 using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+using Yarn.Unity;
 
 namespace ProjectFoundPhone.UI
 {
@@ -12,13 +15,20 @@ namespace ProjectFoundPhone.UI
     public class ChatDialogueView : DialoguePresenterBase
     {
         [SerializeField] private float m_LineDisplayDelay = 0.5f;
+        [SerializeField] private bool m_ShowDebugOverlay = true;
 
-        private DialogueRunner m_DialogueRunner;
-        private ChatController m_ChatController;
+        private DialogueRunner? m_DialogueRunner;
+        private ChatController? m_ChatController;
+        private TextMeshProUGUI? m_DebugOverlayText;
+        private string m_CurrentNodeName = "-";
+        private string m_CurrentLineId = "-";
+        private string m_CurrentTags = "-";
 
         private void Awake()
         {
             m_DialogueRunner = GetComponent<DialogueRunner>();
+            EnsureDebugOverlay();
+            RefreshDebugOverlay();
         }
 
         private void Start()
@@ -36,6 +46,8 @@ namespace ProjectFoundPhone.UI
 
             string lineText = dialogueLine?.TextWithoutCharacterName.Text ?? string.Empty;
 
+            UpdateDebugState(dialogueLine);
+
             if (m_ChatController != null)
             {
                 // 話者解決: CharacterName → $speaker 変数 → "npc" フォールバック
@@ -47,7 +59,6 @@ namespace ProjectFoundPhone.UI
                 Debug.LogWarning($"ChatDialogueView: ChatController not found. Line: {lineText}");
             }
 
-            // ライン表示のための遅延
             await YarnTask.Delay((int)(m_LineDisplayDelay * 1000), token.NextContentToken).SuppressCancellationThrow();
         }
 
@@ -102,7 +113,10 @@ namespace ProjectFoundPhone.UI
                     if (index >= 0 && index < dialogueOptions.Length)
                     {
                         selectedOption = dialogueOptions[index];
+                        // 選択された内容をプレイヤーの発言としてチャットに追加
+                        m_ChatController.AddMessage("player", choiceTexts[index]);
                     }
+
                     choiceMade = true;
                 });
 
@@ -115,16 +129,15 @@ namespace ProjectFoundPhone.UI
                         m_ChatController.HideChoices();
                         return null;
                     }
+
                     await YarnTask.Yield();
                 }
 
                 return selectedOption;
             }
-            else
-            {
-                Debug.LogWarning("ChatDialogueView: ChatController not found. Selecting default option.");
-                return dialogueOptions.Length > 0 ? dialogueOptions[0] : null;
-            }
+
+            Debug.LogWarning("ChatDialogueView: ChatController not found. Selecting default option.");
+            return dialogueOptions.Length > 0 ? dialogueOptions[0] : null;
         }
 
         /// <summary>
@@ -141,6 +154,8 @@ namespace ProjectFoundPhone.UI
             m_ChatController?.SetInputEnabled(false);
             m_ChatController?.HideChoices();
 
+            EnsureDebugOverlay();
+            RefreshDebugOverlay();
             return YarnTask.CompletedTask;
         }
 
@@ -158,19 +173,111 @@ namespace ProjectFoundPhone.UI
             m_ChatController?.HideChoices();
             m_ChatController?.SetInputEnabled(true);
 
+            m_CurrentLineId = "-";
+            m_CurrentTags = "-";
+            RefreshDebugOverlay();
             return YarnTask.CompletedTask;
         }
 
         public override void OnNodeEnter(string nodeName)
         {
+            m_CurrentNodeName = string.IsNullOrEmpty(nodeName) ? "-" : nodeName;
+
             if (m_DialogueRunner != null && m_DialogueRunner.VariableStorage != null)
             {
                 m_DialogueRunner.VariableStorage.SetValue("$current_node", nodeName);
             }
+
+            RefreshDebugOverlay();
+        }
+
+        private void UpdateDebugState(LocalizedLine? dialogueLine)
+        {
+            m_CurrentLineId = dialogueLine == null || string.IsNullOrEmpty(dialogueLine.TextID)
+                ? "-"
+                : dialogueLine.TextID;
+
+            if (dialogueLine == null || dialogueLine.Metadata == null || dialogueLine.Metadata.Length == 0)
+            {
+                m_CurrentTags = "-";
+            }
+            else
+            {
+                m_CurrentTags = string.Join(", ", dialogueLine.Metadata);
+            }
+
+            RefreshDebugOverlay();
+        }
+
+        private void EnsureDebugOverlay()
+        {
+            if (!m_ShowDebugOverlay || m_DebugOverlayText != null)
+            {
+                return;
+            }
+
+            Canvas canvas = FindFirstObjectByType<Canvas>();
+            if (canvas == null)
+            {
+                return;
+            }
+
+            Transform existing = canvas.transform.Find("ContentAuthoringDebugOverlay");
+            if (existing != null)
+            {
+                m_DebugOverlayText = existing.GetComponentInChildren<TextMeshProUGUI>();
+                return;
+            }
+
+            GameObject overlayObj = new GameObject("ContentAuthoringDebugOverlay", typeof(RectTransform), typeof(Image));
+            overlayObj.transform.SetParent(canvas.transform, false);
+
+            RectTransform overlayRect = overlayObj.GetComponent<RectTransform>();
+            overlayRect.anchorMin = new Vector2(0f, 1f);
+            overlayRect.anchorMax = new Vector2(0f, 1f);
+            overlayRect.pivot = new Vector2(0f, 1f);
+            overlayRect.anchoredPosition = new Vector2(24f, -24f);
+            overlayRect.sizeDelta = new Vector2(560f, 104f);
+
+            Image overlayImage = overlayObj.GetComponent<Image>();
+            overlayImage.color = new Color(0f, 0f, 0f, 0.65f);
+            overlayImage.raycastTarget = false;
+
+            GameObject textObj = new GameObject("Label", typeof(RectTransform));
+            textObj.transform.SetParent(overlayObj.transform, false);
+
+            RectTransform textRect = textObj.GetComponent<RectTransform>();
+            textRect.anchorMin = Vector2.zero;
+            textRect.anchorMax = Vector2.one;
+            textRect.offsetMin = new Vector2(16f, 10f);
+            textRect.offsetMax = new Vector2(-16f, -10f);
+
+            m_DebugOverlayText = textObj.AddComponent<TextMeshProUGUI>();
+            m_DebugOverlayText.fontSize = 22f;
+            m_DebugOverlayText.color = Color.white;
+            m_DebugOverlayText.alignment = TextAlignmentOptions.TopLeft;
+            m_DebugOverlayText.textWrappingMode = TextWrappingModes.NoWrap;
+            m_DebugOverlayText.raycastTarget = false;
+        }
+
+        private void RefreshDebugOverlay()
+        {
+            if (!m_ShowDebugOverlay)
+            {
+                return;
+            }
+
+            EnsureDebugOverlay();
+            if (m_DebugOverlayText == null)
+            {
+                return;
+            }
+
+            m_DebugOverlayText.text =
+                $"node: {m_CurrentNodeName}\n" +
+                $"line: {m_CurrentLineId}\n" +
+                $"tag: {m_CurrentTags}";
         }
     }
 }
 #endif
-
-
-

@@ -1,0 +1,135 @@
+name: Unity EditMode Tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - "feature/**"
+      - "feat/**"
+      - "fix/**"
+      - "chore/**"
+    paths:
+      - "Assets/**"
+      - "Packages/**"
+      - "ProjectSettings/**"
+      - ".github/workflows/unity-editmode-tests.yml"
+  pull_request:
+    paths:
+      - "Assets/**"
+      - "Packages/**"
+      - "ProjectSettings/**"
+      - ".github/workflows/unity-editmode-tests.yml"
+
+permissions:
+  contents: read
+  checks: write
+
+concurrency:
+  group: unity-editmode-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  readiness:
+    runs-on: ubuntu-latest
+    outputs:
+      can_run: ${{ steps.detect.outputs.can_run }}
+      license_mode: ${{ steps.detect.outputs.license_mode }}
+
+    steps:
+      - id: detect
+        shell: bash
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+        run: |
+          can_run=false
+          license_mode=missing
+
+          if [ -n "$UNITY_LICENSE" ] && [ -n "$UNITY_EMAIL" ] && [ -n "$UNITY_PASSWORD" ]; then
+            can_run=true
+            license_mode=personal
+          elif [ -n "$UNITY_SERIAL" ] && [ -n "$UNITY_EMAIL" ] && [ -n "$UNITY_PASSWORD" ]; then
+            can_run=true
+            license_mode=professional
+          fi
+
+          echo "can_run=$can_run" >> "$GITHUB_OUTPUT"
+          echo "license_mode=$license_mode" >> "$GITHUB_OUTPUT"
+
+      - name: Summarize readiness
+        shell: bash
+        run: |
+          {
+            echo "## Unity EditMode readiness"
+            echo ""
+            echo "- can_run: ${{ steps.detect.outputs.can_run }}"
+            echo "- license_mode: ${{ steps.detect.outputs.license_mode }}"
+            echo "- supported secrets:"
+            echo "  - UNITY_LICENSE + UNITY_EMAIL + UNITY_PASSWORD"
+            echo "  - UNITY_SERIAL + UNITY_EMAIL + UNITY_PASSWORD"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  editmode-tests:
+    needs: readiness
+    if: needs.readiness.outputs.can_run == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+          submodules: recursive
+
+      - name: Cache Library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-${{ runner.os }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-${{ runner.os }}-
+
+      - name: Run EditMode tests
+        id: run-tests
+        uses: game-ci/unity-test-runner@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+        with:
+          projectPath: .
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          testMode: editmode
+          unityVersion: 6000.3.3f1
+          artifactsPath: artifacts/editmode
+          checkName: Unity EditMode Tests
+
+      - name: Upload EditMode artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unity-editmode-artifacts
+          path: artifacts/editmode
+          if-no-files-found: warn
+
+  editmode-tests-skipped:
+    needs: readiness
+    if: needs.readiness.outputs.can_run != 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Explain skip
+        shell: bash
+        run: |
+          {
+            echo "## Unity EditMode tests skipped"
+            echo ""
+            echo "Unity credentials are not configured for this repository yet."
+            echo "Configure one of the following secret sets to enable TASK_058 Layer B:"
+            echo "- UNITY_LICENSE + UNITY_EMAIL + UNITY_PASSWORD"
+            echo "- UNITY_SERIAL + UNITY_EMAIL + UNITY_PASSWORD"
+          } >> "$GITHUB_STEP_SUMMARY"

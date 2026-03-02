@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/TitleScene.unity
     guid: 25364d48c419eec41b2684c1e3f3ccb1
   - enabled: 1
+    path: Assets/Scenes/ContentAuthoring.unity
+    guid: 91faa0a6e44b80f4cb147595c1a0e460
+  - enabled: 1
     path: Assets/Scenes/DebugChatScene.unity
     guid: 7ce437333c780944c90e7e315a1429bb
   - enabled: 1

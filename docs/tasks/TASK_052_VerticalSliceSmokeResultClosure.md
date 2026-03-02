@@ -1,11 +1,11 @@
 ﻿# Task: Vertical Slice Smoke Gate Result Closure
 
-Status: DONE
+Status: COMPLETED
 Tier: 3 (Verification)
 Branch: feature/task-052-vs-smoke-result-closure
 Owner: Worker
 Created: 2026-02-16
-Updated: 2026-02-19
+Updated: 2026-02-28
 Report: docs/reports/REPORT_TASK_052_VerticalSliceSmokeResultClosure.md
 
 ## Objective
@@ -35,6 +35,11 @@ TASK_047 の未完了DoD（PlayMode/Build成功証跡）を回収し、縦切り
 - 依存タスク（TASK_049/050/051）完了後に着手する
 - 取得する証跡は `docs/evidence/TASK_047/` に集約する
 - 失敗時はログと再現条件を必ず記録する
+
+## Current Status
+
+- `docs/reports/REPORT_TASK_052_VerticalSliceSmokeResultClosure.md` と `docs/evidence/TASK_047/` を再確認し、PlayMode/Build 証跡が揃っていることを 2026-02-28 時点で検証済み。
+- 本タスクの成果は `TASK_047` の完了状態へ反映済み。
 
 ## DoD
 

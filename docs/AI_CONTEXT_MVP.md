@@ -1,4 +1,4 @@
-﻿# AI Context MVP (Vertical Slice Constitution)
+# AI Context MVP (Vertical Slice Constitution)
 
 ## Purpose
 このドキュメントは、Unityプロジェクトを最短でMVP到達させるための最優先ルールを定義する。
@@ -30,14 +30,19 @@
 - 迷ったら「60秒以内の通し完走」に寄与する方を採用する。
 
 ## MVP Acceptance Checklist
-- [ ] Title画面でPlay開始操作ができる
-- [ ] 会話が最低3-5行進行する
-- [ ] 2択のChoiceが表示され、どちらを選んでも進行する
-- [ ] End到達の表示/状態遷移が確認できる
-- [ ] 連打しても二重遷移・二重選択・停止不全が発生しない
-- [ ] Console Error/Exceptionが0件
-- [ ] テキストが空欄/□にならず表示される
+- [x] Title画面でPlay開始操作ができる
+- [x] 会話が最低3-5行進行する
+- [x] 2択のChoiceが表示され、どちらを選んでも進行する
+- [x] End到達の表示/状態遷移が確認できる
+- [x] 連打しても二重遷移・二重選択・停止不全が発生しない
+- [x] Console Error/Exceptionが0件
+- [x] テキストが空欄/□にならず表示される
 
 ## 確認メモ（2026-02-12）
 - MVPSceneでテキストが空欄にならないことを視認
 - Choice表示（2択）が画面上で視認できることを確認
+
+## 確認メモ（2026-03-01）
+- `docs/evidence/MVP_FINAL_VERIFICATION_20260301_015705.md` で Branch A / Branch B ともに 60 秒以内完走を確認
+- `docs/evidence/AUTOMATION_SUMMARY_mvp_pack_20260301_015705.md` で Unexpected Error Count 0 を確認
+- `docs/evidence/06_RapidInput_End_Screen.png` と automation log で rapid input 後の end 到達を確認

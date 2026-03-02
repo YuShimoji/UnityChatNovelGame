@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace ProjectFoundPhone.Effects
 {
@@ -43,6 +44,7 @@ namespace ProjectFoundPhone.Effects
         [SerializeField] private GlitchEffect m_GlitchEffect;
         [SerializeField] private Canvas m_EffectCanvas;
         [SerializeField] private int m_GlitchEffectLayer = 100; // 最前面に表示するためのレイヤー
+        private readonly Dictionary<string, GameObject> m_EffectPrefabCache = new Dictionary<string, GameObject>();
         #endregion
 
         #region Unity Lifecycle
@@ -159,8 +161,18 @@ namespace ProjectFoundPhone.Effects
         /// <param name="duration">自動破壊までの時間（0ならパーティクル等の設定に従う/手動破壊）</param>
         public void PlayEffect(string effectName, Vector3 position, float duration = 2.0f)
         {
-            // 簡易実装: Resourcesからロードしてインスタンス化
-            GameObject prefab = Resources.Load<GameObject>($"Effects/{effectName}");
+            if (string.IsNullOrWhiteSpace(effectName))
+            {
+                Debug.LogWarning("MetaEffectController: Effect name is empty.");
+                return;
+            }
+
+            if (!m_EffectPrefabCache.TryGetValue(effectName, out GameObject prefab))
+            {
+                prefab = Resources.Load<GameObject>($"Effects/{effectName}");
+                m_EffectPrefabCache[effectName] = prefab;
+            }
+
             if (prefab != null)
             {
                 GameObject instance = Instantiate(prefab, position, Quaternion.identity);
