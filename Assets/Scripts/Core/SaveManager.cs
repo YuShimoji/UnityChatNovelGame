@@ -162,6 +162,14 @@ namespace ProjectFoundPhone.Core
                 saveData.ChatHistory = chatController.GetChatHistory();
             }
 
+            // 矛盾発見データを保存
+            ContradictionManager contradictionManager = FindFirstObjectByType<ContradictionManager>();
+            if (contradictionManager != null)
+            {
+                saveData.DiscoveredContradictionIDs = contradictionManager.GetDiscoveredList();
+                saveData.HalluciCoin = contradictionManager.HalluciCoin;
+            }
+
             return saveData;
         }
 
@@ -280,6 +288,15 @@ namespace ProjectFoundPhone.Core
             if (chatController != null && saveData.ChatHistory != null && saveData.ChatHistory.Count > 0)
             {
                 chatController.RestoreChatHistory(saveData.ChatHistory);
+            }
+
+            // 矛盾発見データを復元
+            ContradictionManager contradictionManager = FindFirstObjectByType<ContradictionManager>();
+            if (contradictionManager != null)
+            {
+                contradictionManager.RestoreDiscovered(
+                    saveData.DiscoveredContradictionIDs ?? new List<string>(),
+                    saveData.HalluciCoin);
             }
 
             ScenarioManager scenarioManager = FindFirstObjectByType<ScenarioManager>();

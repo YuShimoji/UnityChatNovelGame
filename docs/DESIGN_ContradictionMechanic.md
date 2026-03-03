@@ -96,28 +96,37 @@ Difficulty: int                  // 1-3 (視覚的ヒントの量に影響)
 
 ---
 
-## 5. 未決定事項（要意思決定）
+## 5. 意思決定結果
 
-### A. 指摘の粒度
+| 項目 | 決定 | 理由 |
+|------|------|------|
+| **A. 指摘の粒度** | バブル単位 | 実装が単純。Ch1-3 で十分 |
+| **B. 視覚的ヒント** | 段階的開示 | Ch2-3 は難易度1のペアにヒント表示、Ch4以降はヒントなし |
+| **C. 誤指摘ペナルティ** | クールダウン (10秒) | 試行錯誤を許容しつつ連打防止 |
 
-| 選択肢 | 説明 |
-|--------|------|
-| **バブル単位** | バブル全体を選択。実装が単純。Ch1-3 で十分 |
-| **テキスト範囲選択** | バブル内のテキストをドラッグ選択。高難度だが没入感が高い |
+---
 
-### B. 矛盾の視覚的ヒント
+## 6. 実装済みコンポーネント
 
-| 選択肢 | 説明 |
-|--------|------|
-| **なし** | 完全にプレイヤーの記憶力に依存。ハードコア |
-| **微妙な色差** | 矛盾を含むバブルの背景色が僅かに異なる |
-| **タイムスタンプ不整合** | 矛盾メッセージのタイムスタンプが不自然 |
-| **段階的開示** | Ch2 はヒントあり → Ch4 以降はヒントなし |
+| ファイル | 役割 |
+|----------|------|
+| `Assets/Scripts/Data/ContradictionPair.cs` | ScriptableObject: 矛盾ペア定義 |
+| `Assets/Scripts/Data/ContradictionDatabase.cs` | ScriptableObject: 全ペア管理 + 検索 |
+| `Assets/Scripts/Core/ContradictionManager.cs` | シングルトン: 指摘モード状態管理、判定、クールダウン、HalluciCoin |
+| `Assets/Scripts/UI/MessageBubble.cs` | バブルコンポーネント: 長押し検出 + タップ選択 + ハイライト |
+| `Assets/Scripts/Data/SaveData.cs` | `DiscoveredContradictionIDs`, `HalluciCoin` フィールド追加 |
+| `Assets/Scripts/Core/SaveManager.cs` | ContradictionManager のセーブ/ロード統合 |
 
-### C. 誤指摘のペナルティ
+### Yarn コマンド
 
-| 選択肢 | 説明 |
-|--------|------|
-| **なし** | 何度でも試行可能。カジュアル向き |
-| **クールダウン** | 失敗後 N 秒間は再指摘不可 |
-| **HalluciCoin 消費** | 指摘にコインを消費（到達権モデルと矛盾する可能性） |
+```
+<<Message "charID" "text">>              // 通常メッセージ（タグなし）
+<<MessageTagged "charID" "text" "tag">>  // 矛盾判定対応メッセージ
+```
+
+### 未実装（Phase 2-3）
+
+- HalluciCoin カウンタ UI
+- 成功/失敗アニメーション（バブル間の線、トースト通知）
+- Pyramid 反応ノードの再生（YarnSpinner 連動）
+- Ch1 の Yarn スクリプトに `<<MessageTagged>>` タグを埋め込み

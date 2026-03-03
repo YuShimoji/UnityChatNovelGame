@@ -28,6 +28,10 @@ namespace ProjectFoundPhone.Data
         /// 画像メッセージの場合のリソースパス（Resources/ 配下の相対パス）
         /// </summary>
         public string ImageResourcePath;
+        /// <summary>
+        /// 矛盾指摘システム用の識別タグ（Yarn #line: タグまたはカスタムID）
+        /// </summary>
+        public string LineTag;
     }
 
     /// <summary>
@@ -71,6 +75,18 @@ namespace ProjectFoundPhone.Data
         /// 獲得済みトピックのIDリスト
         /// </summary>
         public List<string> UnlockedTopicIDs = new List<string>();
+        #endregion
+
+        #region Contradiction System
+        /// <summary>
+        /// 発見済み矛盾ペアのIDリスト
+        /// </summary>
+        public List<string> DiscoveredContradictionIDs = new List<string>();
+
+        /// <summary>
+        /// 蓄積した HalluciCoin
+        /// </summary>
+        public int HalluciCoin;
         #endregion
 
         #region Chat History

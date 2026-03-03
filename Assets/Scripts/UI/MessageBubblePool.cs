@@ -126,6 +126,13 @@ namespace ProjectFoundPhone.UI
                 textComponent.text = string.Empty;
             }
 
+            // MessageBubble の状態をリセット（矛盾指摘用データ）
+            var messageBubble = obj.GetComponent<MessageBubble>();
+            if (messageBubble != null)
+            {
+                messageBubble.ResetState();
+            }
+
             m_Pool.Enqueue(obj);
         }
 

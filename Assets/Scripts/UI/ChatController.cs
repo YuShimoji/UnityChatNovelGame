@@ -409,6 +409,17 @@ namespace ProjectFoundPhone.UI
         /// <param name="text">メッセージテキスト</param>
         public void AddMessage(string charID, string text)
         {
+            AddMessage(charID, text, null);
+        }
+
+        /// <summary>
+        /// LineTag 付きメッセージをチャットに追加（矛盾指摘システム対応）
+        /// </summary>
+        /// <param name="charID">キャラクターID</param>
+        /// <param name="text">メッセージテキスト</param>
+        /// <param name="lineTag">矛盾判定用の識別タグ（null なら通常メッセージ）</param>
+        public void AddMessage(string charID, string text, string lineTag)
+        {
             using var _ = s_AddMessageMarker.Auto();
 
             if (string.IsNullOrEmpty(text))
@@ -424,17 +435,27 @@ namespace ProjectFoundPhone.UI
                 {
                     Type = ChatMessageType.Normal,
                     CharacterID = charID,
-                    Text = text
+                    Text = text,
+                    LineTag = lineTag
                 });
             }
 
             // メッセージバブルの生成と追加
-
-            // CreateMessageBubble()でメッセージバブルを生成（既にcontentの子として追加済み）
             GameObject messageBubble = CreateMessageBubble(charID, text);
             if (messageBubble == null)
             {
                 return;
+            }
+
+            // LineTag が設定されている場合、MessageBubble コンポーネントをアタッチ
+            if (!string.IsNullOrEmpty(lineTag))
+            {
+                MessageBubble bubble = messageBubble.GetComponent<MessageBubble>();
+                if (bubble == null)
+                {
+                    bubble = messageBubble.AddComponent<MessageBubble>();
+                }
+                bubble.Initialize(lineTag, messageBubble.GetComponent<UnityEngine.UI.Image>());
             }
 
             // ユーザーが過去ログを見ていない場合のみAutoScroll()を実行
@@ -1375,7 +1396,7 @@ namespace ProjectFoundPhone.UI
                     switch (msg.Type)
                     {
                         case ChatMessageType.Normal:
-                            AddMessage(msg.CharacterID, msg.Text);
+                            AddMessage(msg.CharacterID, msg.Text, msg.LineTag);
                             break;
                         case ChatMessageType.System:
                             AddSystemMessage(msg.Text);
