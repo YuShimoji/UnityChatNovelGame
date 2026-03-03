@@ -1,0 +1,454 @@
+/// Chapter 1: 端末の貧弱さ — Terminal Poverty
+/// テーマ: 媒介欠陥としての会話不全。「この端末は壊れている」の認識
+/// 登場: Barnaby(player), Pyramid(AI), Marco(段階的に合流)
+/// 指摘メカニクス: なし（Ch2から導入）
+/// 層更新: 矛盾を事件でなくノイズとして認識
+
+title: Ch1_Opening
+---
+<<declare $ch1_completed = false>>
+<<declare $ch1_met_marco = false>>
+<<declare $ch1_fragment_found = false>>
+<<declare $ch1_noticed_contradiction = false>>
+
+<<SystemMessage "端末を起動しています...">>
+<<StartWait 2>>
+
+<<Glitch 1>>
+<<StartWait 0.5>>
+
+<<SystemMessage "ネットワーク検出... 不安定">>
+<<StartWait 1.5>>
+
+<<SystemMessage "チャットルームに接続しました">>
+<<StartWait 1>>
+
+<<set $speaker to "pyramid">>
+おはようございます。Pyramid アシスタントです。
+
+<<StartWait 0.8>>
+
+本日のセッションを開始します。参加者の接続状況を確認しています。
+
+<<StartWait 1>>
+
+現在の接続: あなた（Barnaby）、Pyramid。他の参加者は未接続です。
+
+<<set $speaker to "player">>
+-> ここはどこだ？
+    <<Message "player" "ここはどこだ？ なぜこのチャットに繋がっている？">>
+    <<jump Ch1_AskWhere>>
+-> ...誰かいるのか？
+    <<Message "player" "...誰かいるのか？">>
+    <<jump Ch1_AskWho>>
+===
+
+title: Ch1_AskWhere
+---
+<<set $speaker to "pyramid">>
+<<StartWait 1>>
+あなたの現在地は、端末の位置情報によると
+
+<<StartWait 0.5>>
+
+<<Glitch 1>>
+
+<<SystemMessage "【SYSTEM】位置情報の取得に失敗しました">>
+
+<<StartWait 0.8>>
+
+<<set $speaker to "pyramid">>
+失礼しました。位置情報サービスが一時的に利用できないようです。
+
+<<StartWait 0.5>>
+
+このチャットルームは、地域コミュニケーション支援プログラムの一環として提供されています。
+
+<<set $speaker to "player">>
+-> 地域コミュニケーション支援？
+    <<Message "player" "地域コミュニケーション支援プログラム？ 聞いたことがない。">>
+    <<jump Ch1_PyramidExplain>>
+-> わかった
+    <<Message "player" "...わかった。">>
+    <<jump Ch1_PyramidExplain>>
+===
+
+title: Ch1_AskWho
+---
+<<set $speaker to "pyramid">>
+<<StartWait 1>>
+はい、私はPyramidです。汎用アシスタントモデルとしてこのセッションを支援しています。
+
+<<StartWait 0.5>>
+
+他の参加者も間もなく接続されるはずです。少々お待ちください。
+
+<<jump Ch1_PyramidExplain>>
+===
+
+title: Ch1_PyramidExplain
+---
+<<set $speaker to "pyramid">>
+<<StartWait 1>>
+
+本プログラムでは、参加者同士が情報を共有し、地域の状況を相互に確認することを目的としています。
+
+<<StartWait 0.5>>
+
+なお、通信品質が不安定なため、メッセージの遅延や欠落が発生する場合があります。ご了承ください。
+
+<<StartWait 1>>
+
+<<set $speaker to "player">>
+-> この端末、前からこんなに遅いのか？
+    <<Message "player" "この端末、前からこんなに遅いのか？">>
+<<set $speaker to "pyramid">>
+<<StartWait 0.8>>
+端末の処理速度は正常範囲内です。通信経路の混雑が原因と考えられます。
+
+-> 他に何人いる？
+    <<Message "player" "他に何人参加する予定なんだ？">>
+<<set $speaker to "pyramid">>
+<<StartWait 0.8>>
+本セッションには最大6名の参加が予定されています。現在、1名が接続待機中です。
+
+<<StartWait 1.5>>
+
+<<SystemMessage "新しい参加者が接続しました">>
+
+<<jump Ch1_MarcoArrival>>
+===
+
+title: Ch1_MarcoArrival
+---
+<<set $ch1_met_marco to true>>
+
+<<StartWait 1>>
+
+<<set $speaker to "marco">>
+...繋がった？ これ、繋がってる？
+
+<<StartWait 0.8>>
+
+3回目の接続で、やっとだ。毎回パスワードが変わるのは仕様なのか嫌がらせなのか。
+
+<<set $speaker to "pyramid">>
+<<StartWait 0.5>>
+Marco Grossさん、接続を確認しました。セッションへようこそ。
+
+<<set $speaker to "marco">>
+<<StartWait 0.5>>
+ああ、Pyramid。君はいつも丁寧だな。この端末の調子が最悪でも、挨拶だけは一人前だ。
+
+<<StartWait 1>>
+
+<<set $speaker to "marco">>
+それで、Barnaby？ 君もここに「配属」された口か。
+
+<<set $speaker to "player">>
+-> そうらしい。事情がよくわからないんだが
+    <<Message "player" "そうらしい。正直、事情がよくわからない。">>
+    <<jump Ch1_MarcoReacts_Confused>>
+-> 配属？ 何の話だ？
+    <<Message "player" "配属？ 何の話をしてるんだ？">>
+    <<jump Ch1_MarcoReacts_Confused>>
+===
+
+title: Ch1_MarcoReacts_Confused
+---
+<<set $speaker to "marco">>
+<<StartWait 0.8>>
+
+だよな。誰もちゃんと説明してくれない。
+
+<<StartWait 0.5>>
+
+俺が聞いた話だと、この地域一帯でインフラが不安定になっていて、住民同士の連絡手段としてこのチャットが提供されたらしい。
+
+<<StartWait 0.8>>
+
+<<set $speaker to "marco">>
+...ただ、「この地域」がどこなのかも、正直はっきりしない。
+
+<<set $speaker to "pyramid">>
+<<StartWait 0.5>>
+補足いたします。本プログラムの対象地域は、第4管理区域に分類されています。
+
+<<set $speaker to "marco">>
+<<StartWait 0.3>>
+第4管理区域。聞いたことあるか？
+
+<<set $speaker to "player">>
+-> ない
+    <<Message "player" "いや、聞いたことない。">>
+-> Pyramid、もっと詳しく
+    <<Message "player" "Pyramid、第4管理区域について詳しく教えてくれ。">>
+
+<<jump Ch1_AreaContradiction>>
+===
+
+title: Ch1_AreaContradiction
+---
+<<set $speaker to "pyramid">>
+<<StartWait 1>>
+
+第4管理区域は、2019年の広域行政再編により設定された区分です。
+
+<<StartWait 0.5>>
+
+主要施設として、地域コミュニケーションハブ、共有物資拠点、および教育支援施設が含まれます。
+
+<<set $speaker to "marco">>
+<<StartWait 0.8>>
+
+2019年？ 俺は2021年にここに来たけど、そんな再編の話は聞いてないぞ。
+
+<<StartWait 0.5>>
+
+それに「教育支援施設」って、あの閉鎖された建物のことか？ あれは学校だったはずだが。
+
+<<set $speaker to "pyramid">>
+<<StartWait 0.5>>
+
+申し訳ありません。「教育支援施設」は正式名称に基づいた表記です。地域によっては「学校」と呼称される場合もあります。
+
+<<set $speaker to "marco">>
+<<StartWait 0.3>>
+...地域によっては？ ここの話をしてるんだけど。
+
+<<StartWait 1>>
+
+<<set $speaker to "marco">>
+まあ、いい。Pyramidに正確な情報を期待するのは、この通信環境じゃ無理か。
+
+<<set $ch1_noticed_contradiction to true>>
+
+<<jump Ch1_TerminalTrouble>>
+===
+
+title: Ch1_TerminalTrouble
+---
+<<StartWait 1.5>>
+
+<<set $speaker to "marco">>
+ところで、そっちの端末は調子どうだ？
+
+<<StartWait 0.5>>
+
+俺の方は今日は特にひどい。文字の変換候補が3つしか出ない日もあれば、10個出る日もある。法則がわからない。
+
+<<set $speaker to "player">>
+-> 自分のも遅い気がする
+    <<Message "player" "自分のも反応が遅い。打ったはずの文字が表示されないこともある。">>
+-> 端末のことはよくわからない
+    <<Message "player" "端末のことはあまり詳しくない。普通に使えてはいるが...">>
+
+<<set $speaker to "marco">>
+<<StartWait 0.8>>
+
+「普通」か。この環境で「普通」の基準がわからなくなってきたよ。
+
+<<StartWait 0.5>>
+
+昨日、ベルナルドが面白いことを言ってた。「この端末は壊れているんじゃない、最初からこういう仕様なんだ」って。
+
+<<set $speaker to "player">>
+-> ベルナルド？
+    <<Message "player" "ベルナルド？ まだ会ってない人だ。">>
+<<set $speaker to "marco">>
+<<StartWait 0.5>>
+ベルナルド・フォンセカ。新聞社で働いてた人。文章を読むのが異常にうまい。
+<<StartWait 0.3>>
+彼と、あとメイスンとオリバーっていう二人もこのチャットにいるはずだ。今日はまだ来てないけど。
+
+-> この仕様なら仕方ないか
+    <<Message "player" "仕様なら仕方ないのか...。">>
+<<set $speaker to "marco">>
+<<StartWait 0.5>>
+仕方ない。でもさ、仕様だとしても、なぜこんな不便な仕様にしたのかは聞きたいよな。
+
+<<StartWait 1>>
+
+<<Glitch 1>>
+
+<<SystemMessage "【SYSTEM】通信品質が低下しています">>
+
+<<StartWait 1>>
+
+<<set $speaker to "pyramid">>
+通信の安定化を試みています。しばらくお待ちください。
+
+<<StartWait 2>>
+
+<<SystemMessage "【SYSTEM】通信品質が回復しました">>
+
+<<jump Ch1_FragmentDiscovery>>
+===
+
+title: Ch1_FragmentDiscovery
+---
+<<StartWait 1>>
+
+<<set $speaker to "marco">>
+そうだ、一つ聞きたかったんだ。
+
+<<StartWait 0.5>>
+
+昨日、端末の通知欄に変なテキストが表示されてたんだ。読もうとしたら消えたんだけど、一部だけスクリーンショットが撮れた。
+
+<<StartWait 1>>
+
+<<set $speaker to "marco">>
+「...第3次改定に基づき、本施設は■■■管理局の管轄下にあるものと する。ただし、参照先文書（付録C）は現時点で■■■」
+
+<<StartWait 0.5>>
+
+途中で切れてる。しかも参照先が伏せ字みたいに欠けてる。
+
+<<set $speaker to "player">>
+-> 管理局？ 何の施設の話だ？
+    <<Message "player" "管理局？ 何の施設のことを言ってるんだ？">>
+-> それ、保存してあるか？
+    <<Message "player" "そのスクリーンショット、まだ残ってるか？">>
+
+<<set $speaker to "marco">>
+<<StartWait 0.8>>
+残ってる。こういうのは取っておく癖がついた。
+
+<<StartWait 0.5>>
+
+正直、何の施設かもわからない。Pyramidに聞いても、たぶんまた「正式名称に基づいた」云々で煙に巻かれるだけだろう。
+
+<<set $speaker to "pyramid">>
+<<StartWait 0.5>>
+お送りいただいたテキストについて、関連する情報を検索しましたが、該当する文書は見つかりませんでした。
+
+<<set $speaker to "marco">>
+<<StartWait 0.3>>
+
+ほらな。
+
+<<StartWait 0.5>>
+
+<<UnlockTopic "fragment_ch1_01">>
+<<SystemMessage "断片「施設管理規約（部分）」を記録しました">>
+
+<<set $speaker to "marco">>
+<<StartWait 0.5>>
+こういう「検索しても出てこない」テキストの断片が、ときどき端末に現れるんだ。
+
+<<StartWait 0.3>>
+
+ベルナルドはこれを「不可索引物」って呼んでた。索引に載らない情報。検索しても引っかからない文書の欠片。
+
+<<set $ch1_fragment_found to true>>
+
+<<set $speaker to "player">>
+-> 不可索引物...
+    <<Message "player" "不可索引物... 検索できない情報、か。">>
+-> なぜ検索に出ない？
+    <<Message "player" "なぜ検索に引っかからないんだ？">>
+
+<<set $speaker to "marco">>
+<<StartWait 0.8>>
+
+わからない。消されたのか、最初から登録されなかったのか。
+
+<<StartWait 0.3>>
+
+ただ、この端末にはときどき流れてくる。ノイズみたいに。
+
+<<jump Ch1_DayWinding>>
+===
+
+title: Ch1_DayWinding
+---
+<<StartWait 1.5>>
+
+<<set $speaker to "pyramid">>
+皆さま、本日の推奨セッション時間に近づいています。
+
+<<StartWait 0.3>>
+
+明日のセッションは、通信状況が許す限り午前中に開始予定です。
+
+<<set $speaker to "marco">>
+<<StartWait 0.8>>
+
+「通信状況が許す限り」な。保証はないってことだ。
+
+<<StartWait 0.5>>
+
+まあ、今日はここまでにしよう。Barnaby、明日もここに来られるか？
+
+<<set $speaker to "player">>
+-> たぶん
+    <<Message "player" "たぶん。端末が動けば。">>
+-> 他に選択肢があるのか？
+    <<Message "player" "他に何かやることがあるわけでもない。">>
+
+<<set $speaker to "marco">>
+<<StartWait 0.5>>
+
+だよな。
+
+<<StartWait 0.8>>
+
+ああ、一つだけ。この辺りに小さな無人の売店がある。電源が生きてれば、飲み物くらいは手に入る。
+
+<<StartWait 0.3>>
+
+甘いものが欲しくなったら寄ってみるといい。...甘いものが残ってればの話だけど。
+
+<<jump Ch1_DayEnd>>
+===
+
+title: Ch1_DayEnd
+---
+<<StartWait 1.5>>
+
+<<set $speaker to "pyramid">>
+本日のセッションを終了します。お疲れさまでした。
+
+<<StartWait 0.5>>
+
+<<SystemMessage "接続を維持しています...">>
+
+<<StartWait 1>>
+
+<<Glitch 1>>
+
+<<SystemMessage "【SYSTEM】Marco Gross が切断しました">>
+
+<<StartWait 2>>
+
+<<set $speaker to "pyramid">>
+Barnabyさん、1点補足があります。
+
+<<StartWait 0.5>>
+
+先ほどMarcoさんが共有されたテキスト断片についてですが、改めて検索を実行したところ、「第3次改定」に関連する行政文書が1件確認されました。
+
+<<StartWait 0.3>>
+
+ただし、当該文書の発行年は2017年となっており、Marcoさんの断片とは内容が一致しません。
+
+<<StartWait 1>>
+
+<<set $speaker to "pyramid">>
+...なお、先ほどのセッション中に「2019年の広域行政再編」と申し上げましたが、手元の記録では該当する再編の実施記録が確認できません。
+
+<<StartWait 0.5>>
+
+通信環境による情報の不整合かもしれません。ご不便をおかけします。
+
+<<StartWait 1.5>>
+
+<<SystemMessage "...">>
+
+<<StartWait 2>>
+
+<<SystemMessage "--- 1日目 終了 ---">>
+
+<<set $ch1_completed to true>>
+===

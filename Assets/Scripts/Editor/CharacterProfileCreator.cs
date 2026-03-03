@@ -34,6 +34,22 @@ namespace ProjectFoundPhone.EditorTools
                 isPlayer: false
             );
 
+            created += CreateProfile(
+                fileName: "CharacterProfile_NPC_Pyramid",
+                characterID: "pyramid",
+                displayName: "Pyramid",
+                themeColor: new Color(0.55f, 0.82f, 0.6f),
+                isPlayer: false
+            );
+
+            created += CreateProfile(
+                fileName: "CharacterProfile_NPC_Marco",
+                characterID: "marco",
+                displayName: "Marco Gross",
+                themeColor: new Color(0.9f, 0.55f, 0.3f),
+                isPlayer: false
+            );
+
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 

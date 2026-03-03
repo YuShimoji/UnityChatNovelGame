@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88cc88b8365a0794b9698889aff97e99, type: 3}
+  m_Name: fragment_ch1_01
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFoundPhone.Data.TopicData
+  m_TopicID: fragment_ch1_01
+  m_Icon: {fileID: 0}
+  m_Title: "\u65BD\u8A2D\u7BA1\u7406\u898F\u7D04\uFF08\u90E8\u5206\uFF09"
+  m_Description: "\u300C\u2026\u7B2C3\u6B21\u6539\u5B9A\u306B\u57FA\u3065\u304D\u3001\u672C\u65BD\u8A2D\u306F\u25A0\u25A0\u25A0\u7BA1\u7406\u5C40\u306E\u7BA1\u8F44\u4E0B\u306B\u3042\u308B\u3082\u306E\u3068\u3059\u308B\u3002\u305F\u3060\u3057\u3001\u53C2\u7167\u5148\u6587\u66F8\uFF08\u4ED8\u9332C\uFF09\u306F\u73FE\u6642\u70B9\u3067\u25A0\u25A0\u25A0\u300D Marco\u304C\u7AEF\u672B\u306E\u901A\u77E5\u6B04\u3067\u767A\u898B\u3057\u305F\u6587\u66F8\u306E\u65AD\u7247\u3002\u53C2\u7167\u5148\u304C\u6B20\u640D\u3057\u3066\u304A\u308A\u3001Pyramid\u306E\u691C\u7D22\u3067\u3082\u8A72\u5F53\u6587\u66F8\u304C\u898B\u3064\u304B\u3089\u306A\u3044\u300C\u4E0D\u53EF\u7D22\u5F15\u7269\u300D\u306E\u4E00\u4F8B\u3002"
