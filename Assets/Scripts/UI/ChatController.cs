@@ -24,6 +24,7 @@ namespace ProjectFoundPhone.UI
         [SerializeField] private TMP_InputField m_InputField;
         [SerializeField] private Button m_SendButton;
         [SerializeField] private float m_AutoScrollThreshold = 0.1f; // 自動スクロールを実行する閾値（0.0-1.0）
+        [SerializeField] private MessageBubblePool m_MessageBubblePool;
 
         [Header("Image Bubble Settings")]
         [SerializeField] private GameObject m_ImageBubblePrefab;
@@ -34,6 +35,8 @@ namespace ProjectFoundPhone.UI
         [SerializeField] private GameObject m_ChoiceButtonPrefab;
         [SerializeField] private Transform m_ChoiceContainer;
 
+        [Header("Font Settings")]
+        [SerializeField] private TMP_FontAsset m_JapaneseFontAsset;
 
         private bool m_IsUserScrolling = false;
         private float m_LastScrollPosition = 1.0f;
@@ -95,6 +98,14 @@ namespace ProjectFoundPhone.UI
             if (m_LayoutGroup == null && m_ScrollRect != null && m_ScrollRect.content != null)
             {
                 m_LayoutGroup = m_ScrollRect.content.GetComponent<VerticalLayoutGroup>();
+                
+                // VerticalLayoutGroupのスペーシング設定を確保
+                if (m_LayoutGroup != null)
+                {
+                    m_LayoutGroup.spacing = Mathf.Max(m_LayoutGroup.spacing, 10f);
+                    m_LayoutGroup.childControlHeight = false;
+                    m_LayoutGroup.childForceExpandHeight = false;
+                }
             }
 
             // m_MessageBubblePrefab、m_TypingIndicatorのnullチェックと警告
@@ -108,9 +119,33 @@ namespace ProjectFoundPhone.UI
                 Debug.LogWarning("ChatController: m_TypingIndicator is not assigned. Typing indicator will not be displayed.");
             }
 
+            // プールの初期化（未設定時は自動生成）
+            EnsureMessageBubblePool();
+
             EnsureChoiceUIElements();
             EnsureImageBubbleTemplate();
             EnsureInputControls();
+        }
+
+        /// <summary>
+        /// MessageBubblePool の初期化（未設定時は自動生成）
+        /// </summary>
+        private void EnsureMessageBubblePool()
+        {
+            if (m_MessageBubblePool == null)
+            {
+                m_MessageBubblePool = GetComponent<MessageBubblePool>();
+                if (m_MessageBubblePool == null)
+                {
+                    m_MessageBubblePool = gameObject.AddComponent<MessageBubblePool>();
+                }
+            }
+
+            // プールにPrefabが未設定の場合は同期
+            if (m_MessageBubblePool != null && m_MessageBubblePrefab != null)
+            {
+                m_MessageBubblePool.SetPrefab(m_MessageBubblePrefab);
+            }
         }
 
         /// <summary>
@@ -215,7 +250,7 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// メッセージバブルのPrefabをインスタンス化
+        /// メッセージバブルのPrefabをインスタンス化（プール経由）
         /// </summary>
         /// <param name="charID">キャラクターID（自分/相手の判定に使用）</param>
         /// <param name="text">メッセージテキスト</param>
@@ -230,23 +265,120 @@ namespace ProjectFoundPhone.UI
                 return null;
             }
 
-            // Prefabからインスタンスを生成
-            GameObject messageBubble = Instantiate(GetSafeMessageBubbleTemplate(), m_ScrollRect.content);
+            // プール未設定時はフォールバック
+            if (m_MessageBubblePool == null)
+            {
+                EnsureMessageBubblePool();
+            }
+
+            GameObject messageBubble;
+
+            // プールから取得（設定されていれば）
+            if (m_MessageBubblePool != null)
+            {
+                messageBubble = m_MessageBubblePool.Get(m_ScrollRect.content);
+            }
+            else
+            {
+                // フォールバック: 直接Instantiate（Prefabがない場合は失敗）
+                if (m_MessageBubblePrefab == null)
+                {
+                    Debug.LogError("ChatController: Cannot create message bubble. Prefab is not assigned and pool is unavailable.");
+                    return null;
+                }
+                messageBubble = Instantiate(m_MessageBubblePrefab, m_ScrollRect.content);
+            }
+
+            if (messageBubble == null)
+            {
+                Debug.LogError("ChatController: Failed to create message bubble from pool.");
+                return null;
+            }
+
+            // バブルを確実に表示
             messageBubble.SetActive(true);
+
+            // Imageコンポーネントを追加（背景表示用）
+            Image bubbleImage = messageBubble.GetComponent<Image>();
+            if (bubbleImage == null)
+            {
+                bubbleImage = messageBubble.AddComponent<Image>();
+                bubbleImage.color = new Color(0.85f, 0.85f, 0.85f); // デフォルトグレー
+                bubbleImage.raycastTarget = false;
+            }
+
+            // LayoutElementを追加・設定（高さを自動調整）
+            LayoutElement layoutElement = messageBubble.GetComponent<LayoutElement>();
+            if (layoutElement == null)
+            {
+                layoutElement = messageBubble.AddComponent<LayoutElement>();
+            }
+            layoutElement.minHeight = 60f;
+            layoutElement.preferredHeight = -1f; // ContentSizeFitterに任せる
+            layoutElement.flexibleHeight = -1f;
+
+            // ContentSizeFitterを追加・設定
+            ContentSizeFitter sizeFitter = messageBubble.GetComponent<ContentSizeFitter>();
+            if (sizeFitter == null)
+            {
+                sizeFitter = messageBubble.AddComponent<ContentSizeFitter>();
+            }
+            sizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            sizeFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
 
             // プレイヤー判定・テーマカラー・配置を共通処理で設定
             ConfigureBubble(messageBubble, charID);
 
+            // 表示名をCharacterDatabaseから取得（fallback: IDそのまま）
+            string displayName = CharacterDatabase.Instance != null
+                ? CharacterDatabase.Instance.GetDisplayName(charID)
+                : charID;
+
+            // システムメッセージ（charIDが空または"system"）の場合は名前を付加しない
+            bool isSystemMessage = string.IsNullOrEmpty(charID) || charID.ToLower() == "system";
+            string finalText = isSystemMessage ? text : $"{displayName}: {text}";
+
             // TextMeshProコンポーネントにtextを設定
             TextMeshProUGUI textComponent = messageBubble.GetComponentInChildren<TextMeshProUGUI>();
-            if (textComponent != null)
+            if (textComponent == null)
             {
-                textComponent.text = text;
+                // TextMeshProが存在しない場合は子オブジェクトとして作成
+                GameObject textObj = new GameObject("Text");
+                textObj.transform.SetParent(messageBubble.transform, false);
+                textComponent = textObj.AddComponent<TextMeshProUGUI>();
+                
+                // RectTransformの設定
+                RectTransform textRect = textComponent.GetComponent<RectTransform>();
+                textRect.anchorMin = new Vector2(0, 0);
+                textRect.anchorMax = new Vector2(1, 1);
+                textRect.offsetMin = new Vector2(10, 10);
+                textRect.offsetMax = new Vector2(-10, -10);
+                
+                // テキストの基本設定
+                textComponent.fontSize = 18;
+                textComponent.color = Color.black;
+                textComponent.alignment = TextAlignmentOptions.TopLeft;
+                textComponent.enableWordWrapping = true;
+
+                // 日本語フォントを設定
+                if (m_JapaneseFontAsset != null)
+                {
+                    textComponent.font = m_JapaneseFontAsset;
+                }
             }
             else
             {
-                Debug.LogWarning("ChatController: TextMeshProUGUI component not found in message bubble prefab.");
+                // 既存のTextMeshProにも日本語フォントを設定
+                if (m_JapaneseFontAsset != null)
+                {
+                    textComponent.font = m_JapaneseFontAsset;
+                }
             }
+
+            textComponent.text = finalText;
+
+            // レイアウトを即座に更新
+            Canvas.ForceUpdateCanvases();
 
             // アニメーション演出
             AnimateBubbleIn(messageBubble);
@@ -329,7 +461,24 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            GameObject imageBubble = Instantiate(prefab, m_ScrollRect.content);
+            // プール未設定時はフォールバック
+            if (m_MessageBubblePool == null)
+            {
+                EnsureMessageBubblePool();
+            }
+
+            GameObject imageBubble;
+
+            // プールから取得（プールが有効で、MessageBubblePrefabを使用する場合）
+            if (m_MessageBubblePool != null && prefab == m_MessageBubblePrefab)
+            {
+                imageBubble = m_MessageBubblePool.Get(m_ScrollRect.content);
+            }
+            else
+            {
+                // フォールバック: 直接Instantiate
+                imageBubble = Instantiate(prefab, m_ScrollRect.content);
+            }
             imageBubble.SetActive(true);
 
             // プレイヤー判定・テーマカラー・配置を共通処理で設定
@@ -386,7 +535,11 @@ namespace ProjectFoundPhone.UI
                 TextMeshProUGUI textComponent = imageBubble.GetComponentInChildren<TextMeshProUGUI>();
                 if (textComponent != null)
                 {
-                    textComponent.text = $"[Image: {imageSprite.name}]";
+                    // 表示名をCharacterDatabaseから取得（fallback: IDそのまま）
+                    string displayName = CharacterDatabase.Instance != null
+                        ? CharacterDatabase.Instance.GetDisplayName(charID)
+                        : charID;
+                    textComponent.text = $"{displayName}: [Image: {imageSprite.name}]";
                 }
             }
 
@@ -419,7 +572,28 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            GameObject systemBubble = Instantiate(GetSafeMessageBubbleTemplate(), m_ScrollRect.content);
+            if (m_MessageBubblePool == null)
+            {
+                EnsureMessageBubblePool();
+            }
+
+            GameObject systemBubble;
+
+            // プールから取得（設定されていれば）
+            if (m_MessageBubblePool != null)
+            {
+                systemBubble = m_MessageBubblePool.Get(m_ScrollRect.content);
+            }
+            else
+            {
+                // フォールバック: 直接Instantiate
+                if (m_MessageBubblePrefab == null)
+                {
+                    Debug.LogError("ChatController: Cannot create system message. MessageBubblePrefab is not assigned.");
+                    return;
+                }
+                systemBubble = Instantiate(m_MessageBubblePrefab, m_ScrollRect.content);
+            }
             systemBubble.SetActive(true);
 
             // 中央揃え
@@ -431,23 +605,75 @@ namespace ProjectFoundPhone.UI
                 rectTransform.pivot = new Vector2(0.5f, 1.0f);
             }
 
-            // 背景を半透明ダークに設定
+            // Imageコンポーネントを追加（背景表示用）
             Image bubbleBackground = systemBubble.GetComponent<Image>();
-            if (bubbleBackground != null)
+            if (bubbleBackground == null)
             {
+                bubbleBackground = systemBubble.AddComponent<Image>();
                 bubbleBackground.color = new Color(0.15f, 0.15f, 0.2f, 0.7f);
             }
+            bubbleBackground.color = new Color(0.5f, 0.5f, 0.5f, 0.3f);
+            bubbleBackground.raycastTarget = false;
+
+            // LayoutElementを追加
+            LayoutElement layoutElement = systemBubble.GetComponent<LayoutElement>();
+            if (layoutElement == null)
+            {
+                layoutElement = systemBubble.AddComponent<LayoutElement>();
+            }
+            layoutElement.minHeight = 40f;
+            layoutElement.preferredHeight = -1f;
+
+            // ContentSizeFitterを追加
+            ContentSizeFitter sizeFitter = systemBubble.GetComponent<ContentSizeFitter>();
+            if (sizeFitter == null)
+            {
+                sizeFitter = systemBubble.AddComponent<ContentSizeFitter>();
+            }
+            sizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            sizeFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
 
             // テキストを中央揃え・小さめフォントで設定
             TextMeshProUGUI textComponent = systemBubble.GetComponentInChildren<TextMeshProUGUI>();
-            if (textComponent != null)
+            if (textComponent == null)
             {
-                textComponent.text = text;
+                // TextMeshProが存在しない場合は子オブジェクトとして作成
+                GameObject textObj = new GameObject("Text");
+                textObj.transform.SetParent(systemBubble.transform, false);
+                textComponent = textObj.AddComponent<TextMeshProUGUI>();
+                
+                // RectTransformの設定
+                RectTransform textRect = textComponent.GetComponent<RectTransform>();
+                textRect.anchorMin = new Vector2(0, 0);
+                textRect.anchorMax = new Vector2(1, 1);
+                textRect.offsetMin = new Vector2(10, 10);
+                textRect.offsetMax = new Vector2(-10, -10);
+                
+                // テキストの基本設定
+                textComponent.fontSize = 16;
+                textComponent.color = new Color(0.4f, 0.4f, 0.4f, 1.0f);
                 textComponent.alignment = TextAlignmentOptions.Center;
                 textComponent.fontStyle = FontStyles.Italic;
+                textComponent.enableWordWrapping = true;
                 textComponent.fontSize = textComponent.fontSize * 0.85f;
                 textComponent.color = new Color(0.75f, 0.75f, 0.8f, 1.0f);
+
+                // 日本語フォントを設定
+                if (m_JapaneseFontAsset != null)
+                {
+                    textComponent.font = m_JapaneseFontAsset;
+                }
             }
+            else
+            {
+                // 既存のTextMeshProにも日本語フォントを設定
+                if (m_JapaneseFontAsset != null)
+                {
+                    textComponent.font = m_JapaneseFontAsset;
+                }
+            }
+
+            textComponent.text = text;
 
             AnimateBubbleIn(systemBubble);
 
@@ -766,7 +992,13 @@ namespace ProjectFoundPhone.UI
             label.alignment = TextAlignmentOptions.Midline;
             label.color = Color.white;
             label.raycastTarget = false;
-            if (TMP_Settings.defaultFontAsset != null)
+
+            // 日本語フォントが設定されていればそれを使用、なければデフォルトフォントを使用
+            if (m_JapaneseFontAsset != null)
+            {
+                label.font = m_JapaneseFontAsset;
+            }
+            else if (TMP_Settings.defaultFontAsset != null)
             {
                 label.font = TMP_Settings.defaultFontAsset;
             }
@@ -842,7 +1074,13 @@ namespace ProjectFoundPhone.UI
             label.fontSize = 28f;
             label.alignment = TextAlignmentOptions.TopLeft;
             label.raycastTarget = false;
-            if (TMP_Settings.defaultFontAsset != null)
+
+            // 日本語フォントが設定されていればそれを使用、なければデフォルトフォントを使用
+            if (m_JapaneseFontAsset != null)
+            {
+                label.font = m_JapaneseFontAsset;
+            }
+            else if (TMP_Settings.defaultFontAsset != null)
             {
                 label.font = TMP_Settings.defaultFontAsset;
             }
@@ -975,7 +1213,12 @@ namespace ProjectFoundPhone.UI
             tmp.alignment = TextAlignmentOptions.MidlineLeft;
             tmp.raycastTarget = false;
 
-            if (TMP_Settings.defaultFontAsset != null)
+            // 日本語フォントが設定されていればそれを使用、なければデフォルトフォントを使用
+            if (m_JapaneseFontAsset != null)
+            {
+                tmp.font = m_JapaneseFontAsset;
+            }
+            else if (TMP_Settings.defaultFontAsset != null)
             {
                 tmp.font = TMP_Settings.defaultFontAsset;
             }
@@ -1031,7 +1274,7 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// チャット履歴をクリア
+        /// チャット履歴をクリア（プール返却方式）
         /// </summary>
         public void ClearMessages()
         {
@@ -1040,14 +1283,30 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            // m_ScrollRect.contentの子オブジェクト（メッセージバブル）を全て削除
-            int childCount = m_ScrollRect.content.childCount;
-            for (int i = childCount - 1; i >= 0; i--)
+            // プールにオブジェクトが返却可能か確認
+            if (m_MessageBubblePool == null)
+            {
+                // プール未設定時は従来通りDestroy
+                int childCount = m_ScrollRect.content.childCount;
+                for (int i = childCount - 1; i >= 0; i--)
+                {
+                    Transform child = m_ScrollRect.content.GetChild(i);
+                    if (child != null)
+                    {
+                        Destroy(child.gameObject);
+                    }
+                }
+                return;
+            }
+
+            // m_ScrollRect.contentの子オブジェクト（メッセージバブル）をプールに返却
+            int childCount2 = m_ScrollRect.content.childCount;
+            for (int i = childCount2 - 1; i >= 0; i--)
             {
                 Transform child = m_ScrollRect.content.GetChild(i);
                 if (child != null)
                 {
-                    Destroy(child.gameObject);
+                    m_MessageBubblePool.Return(child.gameObject);
                 }
             }
         }
