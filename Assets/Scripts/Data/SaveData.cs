@@ -19,7 +19,7 @@ namespace ProjectFoundPhone.Data
     /// 1件のチャットメッセージを表すシリアライズ可能なクラス
     /// </summary>
     [Serializable]
-    public class ChatMessage
+    public class SavedChatMessage
     {
         public ChatMessageType Type;
         public string CharacterID;
@@ -93,7 +93,7 @@ namespace ProjectFoundPhone.Data
         /// <summary>
         /// チャット履歴のメッセージリスト
         /// </summary>
-        public List<ChatMessage> ChatHistory = new List<ChatMessage>();
+        public List<SavedChatMessage> ChatHistory = new List<SavedChatMessage>();
         #endregion
 
         #region Synthesis System

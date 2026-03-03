@@ -58,7 +58,7 @@ namespace ProjectFoundPhone.UI
         private static readonly ProfilerMarker s_ShowChoicesMarker = new ProfilerMarker("ChatController.ShowChoices");
         private static readonly ProfilerMarker s_AutoScrollMarker = new ProfilerMarker("ChatController.AutoScroll");
 
-        private readonly List<ChatMessage> m_ChatHistory = new List<ChatMessage>();
+        private readonly List<SavedChatMessage> m_ChatHistory = new List<SavedChatMessage>();
         private bool m_IsRestoringHistory = false;
         #endregion
 
@@ -431,7 +431,7 @@ namespace ProjectFoundPhone.UI
             // 履歴に記録（復元中は二重記録しない）
             if (!m_IsRestoringHistory)
             {
-                m_ChatHistory.Add(new ChatMessage
+                m_ChatHistory.Add(new SavedChatMessage
                 {
                     Type = ChatMessageType.Normal,
                     CharacterID = charID,
@@ -483,7 +483,7 @@ namespace ProjectFoundPhone.UI
             // 履歴に記録（復元中は二重記録しない）
             if (!m_IsRestoringHistory)
             {
-                m_ChatHistory.Add(new ChatMessage
+                m_ChatHistory.Add(new SavedChatMessage
                 {
                     Type = ChatMessageType.Image,
                     CharacterID = charID,
@@ -616,7 +616,7 @@ namespace ProjectFoundPhone.UI
             // 履歴に記録（復元中は二重記録しない）
             if (!m_IsRestoringHistory)
             {
-                m_ChatHistory.Add(new ChatMessage
+                m_ChatHistory.Add(new SavedChatMessage
                 {
                     Type = ChatMessageType.System,
                     Text = text
@@ -1373,7 +1373,7 @@ namespace ProjectFoundPhone.UI
         /// <summary>
         /// 現在のチャット履歴を取得（セーブ用）
         /// </summary>
-        public List<ChatMessage> GetChatHistory()
+        public List<SavedChatMessage> GetChatHistory()
         {
             return m_ChatHistory.ToList();
         }
@@ -1382,7 +1382,7 @@ namespace ProjectFoundPhone.UI
         /// 保存されたチャット履歴からバブルを復元する（ロード用）
         /// アニメーションなしで即座に表示する
         /// </summary>
-        public void RestoreChatHistory(List<ChatMessage> history)
+        public void RestoreChatHistory(List<SavedChatMessage> history)
         {
             if (history == null || history.Count == 0) return;
 
