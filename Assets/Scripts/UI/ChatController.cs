@@ -42,6 +42,7 @@ namespace ProjectFoundPhone.UI
         private float m_LastScrollPosition = 1.0f;
 
         private bool m_AutoScrollScheduled = false;
+        private bool m_IsAutoScrolling = false;
         private Tween m_ScrollTween;
 
         private GameObject m_RuntimeChoiceButtonTemplate;
@@ -153,6 +154,9 @@ namespace ProjectFoundPhone.UI
         /// </summary>
         private void OnScrollValueChanged(Vector2 scrollPosition)
         {
+            // AutoScroll 中の位置変化はユーザー操作とみなさない
+            if (m_IsAutoScrolling) return;
+
             float verticalPos = scrollPosition.y;
 
             // スクロール位置が下から一定以上離れている場合、ユーザーが過去ログを見ていると判定
@@ -182,16 +186,66 @@ namespace ProjectFoundPhone.UI
 
             Color themeColor = CharacterDatabase.Instance != null
                 ? CharacterDatabase.Instance.GetThemeColor(charID)
-                : (isPlayer ? new Color(0.2f, 0.6f, 1.0f) : new Color(0.85f, 0.85f, 0.85f));
-
-            // 右寄せ（プレイヤー）/ 左寄せ（NPC）を設定
-            // LayoutGroup 配下のため、位置系はここで直接操作しない。
+                : (isPlayer ? new Color(0.2f, 0.6f, 1.0f) : new Color(0.3f, 0.3f, 0.35f));
 
             // バブル背景にテーマカラーを適用
             Image bubbleBackground = bubble.GetComponent<Image>();
             if (bubbleBackground != null)
             {
                 bubbleBackground.color = themeColor;
+            }
+
+            // バブルの ContentSizeFitter: 横幅は親任せ、高さのみテキスト量に追従
+            ContentSizeFitter bubbleFitter = bubble.GetComponent<ContentSizeFitter>();
+            if (bubbleFitter != null)
+            {
+                bubbleFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+                bubbleFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            }
+
+            // バブルの LayoutElement: 親に幅制御を委ねる
+            LayoutElement layoutElement = bubble.GetComponent<LayoutElement>();
+            if (layoutElement != null)
+            {
+                layoutElement.flexibleWidth = 1f;
+            }
+
+            if (m_ScrollRect == null || m_ScrollRect.content == null) return;
+
+            // ラッパーで左右配置を実現
+            // パディングで片側にマージンを作ることで、バブルを左 or 右に寄せる
+            GameObject wrapper = new GameObject(isPlayer ? "PlayerRow" : "NpcRow",
+                typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement), typeof(ContentSizeFitter));
+            wrapper.transform.SetParent(m_ScrollRect.content, false);
+            wrapper.transform.SetSiblingIndex(bubble.transform.GetSiblingIndex());
+
+            HorizontalLayoutGroup hlg = wrapper.GetComponent<HorizontalLayoutGroup>();
+            hlg.childForceExpandWidth = true;
+            hlg.childForceExpandHeight = false;
+            hlg.childControlWidth = true;
+            hlg.childControlHeight = true;
+            // パディングで左右マージンを作る → player は左に広いマージン、NPC は右に広いマージン
+            int sideMargin = (int)(Screen.width * 0.25f);
+            hlg.padding = isPlayer
+                ? new RectOffset(sideMargin, 12, 4, 4)
+                : new RectOffset(12, sideMargin, 4, 4);
+
+            LayoutElement wrapperLayout = wrapper.GetComponent<LayoutElement>();
+            wrapperLayout.flexibleWidth = 1f;
+
+            ContentSizeFitter wrapperFitter = wrapper.GetComponent<ContentSizeFitter>();
+            wrapperFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+            wrapperFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+            bubble.transform.SetParent(wrapper.transform, false);
+
+            // テキストの色を調整（プレイヤーは白、NPCは明るいグレー）
+            TextMeshProUGUI textComponent = bubble.GetComponentInChildren<TextMeshProUGUI>();
+            if (textComponent != null)
+            {
+                textComponent.color = isPlayer
+                    ? Color.white
+                    : new Color(0.9f, 0.9f, 0.9f, 1f);
             }
         }
 
@@ -542,11 +596,21 @@ namespace ProjectFoundPhone.UI
             }
             systemBubble.SetActive(true);
 
+            // 中央揃え
+            RectTransform rectTransform = systemBubble.GetComponent<RectTransform>();
+            if (rectTransform != null)
+            {
+                rectTransform.anchorMin = new Vector2(0.5f, 1.0f);
+                rectTransform.anchorMax = new Vector2(0.5f, 1.0f);
+                rectTransform.pivot = new Vector2(0.5f, 1.0f);
+            }
+
             // Imageコンポーネントを追加（背景表示用）
             Image bubbleBackground = systemBubble.GetComponent<Image>();
             if (bubbleBackground == null)
             {
                 bubbleBackground = systemBubble.AddComponent<Image>();
+                bubbleBackground.color = new Color(0.15f, 0.15f, 0.2f, 0.7f);
             }
             bubbleBackground.color = new Color(0.5f, 0.5f, 0.5f, 0.3f);
             bubbleBackground.raycastTarget = false;
@@ -591,6 +655,8 @@ namespace ProjectFoundPhone.UI
                 textComponent.alignment = TextAlignmentOptions.Center;
                 textComponent.fontStyle = FontStyles.Italic;
                 textComponent.enableWordWrapping = true;
+                textComponent.fontSize = textComponent.fontSize * 0.85f;
+                textComponent.color = new Color(0.75f, 0.75f, 0.8f, 1.0f);
 
                 // 日本語フォントを設定
                 if (m_JapaneseFontAsset != null)
@@ -769,6 +835,7 @@ namespace ProjectFoundPhone.UI
                 m_ScrollTween.Kill(false);
             }
 
+            m_IsAutoScrolling = true;
             m_ScrollTween = DOTween.To(
                 () => m_ScrollRect.verticalNormalizedPosition,
                 x => m_ScrollRect.verticalNormalizedPosition = x,
@@ -777,6 +844,8 @@ namespace ProjectFoundPhone.UI
             ).OnComplete(() =>
             {
                 m_LastScrollPosition = 0.0f;
+                m_IsAutoScrolling = false;
+                m_IsUserScrolling = false;
             });
         }
 
@@ -967,7 +1036,7 @@ namespace ProjectFoundPhone.UI
 
         private GameObject CreateMessageBubbleTemplate()
         {
-            GameObject template = new GameObject("AutoMessageBubblePrefab", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
+            GameObject template = new GameObject("AutoMessageBubblePrefab", typeof(RectTransform), typeof(Image), typeof(LayoutElement), typeof(ContentSizeFitter));
             template.transform.SetParent(transform, false);
             template.SetActive(false);
 
@@ -982,22 +1051,25 @@ namespace ProjectFoundPhone.UI
             bubbleBackground.raycastTarget = false;
 
             LayoutElement layout = template.GetComponent<LayoutElement>();
-            layout.minHeight = 56f;
-            layout.preferredHeight = 72f;
+            layout.minHeight = 40f;
             layout.flexibleWidth = 1f;
+
+            ContentSizeFitter fitter = template.GetComponent<ContentSizeFitter>();
+            fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+            fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
             GameObject textObj = new GameObject("Text", typeof(RectTransform));
             textObj.transform.SetParent(template.transform, false);
             RectTransform textRect = textObj.GetComponent<RectTransform>();
             textRect.anchorMin = Vector2.zero;
             textRect.anchorMax = Vector2.one;
-            textRect.offsetMin = new Vector2(10f, 8f);
-            textRect.offsetMax = new Vector2(-10f, -8f);
+            textRect.offsetMin = new Vector2(16f, 10f);
+            textRect.offsetMax = new Vector2(-16f, -10f);
 
             TextMeshProUGUI label = textObj.AddComponent<TextMeshProUGUI>();
             label.text = "Message";
             label.textWrappingMode = TextWrappingModes.Normal;
-            label.color = new Color(0.19607843f, 0.19607843f, 0.19607843f, 1f);
+            label.color = Color.white;
             label.enableAutoSizing = false;
             label.fontSize = 28f;
             label.alignment = TextAlignmentOptions.TopLeft;

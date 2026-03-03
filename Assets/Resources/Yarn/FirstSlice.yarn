@@ -18,17 +18,14 @@ title: FirstSlice_Start
 質問をしているのはこちらだ。
 その端末をどこで手に入れた？
 
--> 拾っただけだ
+-> 道に落ちていたのを拾っただけだ
     <<jump Branch_Honest>>
--> 答える義理はない
+-> 見ず知らずの相手に教える理由がない
     <<jump Branch_Defiant>>
 ===
 
 title: Branch_Honest
 ---
-<<set $speaker to "player">>
-道に落ちていたのを拾っただけだ。警察に届けるつもりだった。
-
 <<set $speaker to "unknown">>
 <<StartWait 1.5>>
 ...なるほど。だが、もう遅い。
@@ -39,9 +36,6 @@ title: Branch_Honest
 
 title: Branch_Defiant
 ---
-<<set $speaker to "player">>
-見ず知らずの相手に教える理由がない。
-
 <<set $speaker to "unknown">>
 <<StartWait 1.5>>
 強気だな。だが、状況を理解していないようだ。
