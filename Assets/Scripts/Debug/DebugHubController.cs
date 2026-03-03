@@ -7,7 +7,7 @@ using Yarn.Unity;
 using ProjectFoundPhone.Core;
 using ProjectFoundPhone.UI;
 
-namespace ProjectFoundPhone.Debug
+namespace ProjectFoundPhone.DebugTools
 {
     /// <summary>
     /// Runtime debug hub — lists all Yarn nodes and allows one-click playback.
