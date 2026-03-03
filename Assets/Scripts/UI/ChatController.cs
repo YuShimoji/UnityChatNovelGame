@@ -145,10 +145,13 @@ namespace ProjectFoundPhone.UI
                 }
             }
 
-            // プールにPrefabが未設定の場合は同期
-            if (m_MessageBubblePool != null && m_MessageBubblePrefab != null)
+            // プールにPrefabを設定（Inspector 未設定時はランタイムテンプレートで代替）
+            if (m_MessageBubblePool != null)
             {
-                m_MessageBubblePool.SetPrefab(m_MessageBubblePrefab);
+                GameObject prefab = m_MessageBubblePrefab != null
+                    ? m_MessageBubblePrefab
+                    : GetSafeMessageBubbleTemplate();
+                m_MessageBubblePool.SetPrefab(prefab);
             }
         }
 
@@ -197,14 +200,6 @@ namespace ProjectFoundPhone.UI
             if (bubbleBackground != null)
             {
                 bubbleBackground.color = themeColor;
-            }
-
-            // バブルの ContentSizeFitter: 横幅は親任せ、高さのみテキスト量に追従
-            ContentSizeFitter bubbleFitter = bubble.GetComponent<ContentSizeFitter>();
-            if (bubbleFitter != null)
-            {
-                bubbleFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
-                bubbleFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
             }
 
             // バブルの LayoutElement: 親に幅制御を委ねる
@@ -321,14 +316,14 @@ namespace ProjectFoundPhone.UI
             layoutElement.preferredHeight = -1f; // ContentSizeFitterに任せる
             layoutElement.flexibleHeight = -1f;
 
-            // ContentSizeFitterを追加・設定
+            // ContentSizeFitter はバブル自体には付けない
+            // （Wrapper の HorizontalLayoutGroup + ContentSizeFitter が高さを制御する。
+            //  バブルにも付けると入れ子 ContentSizeFitter の競合でレイアウトが振動する）
             ContentSizeFitter sizeFitter = messageBubble.GetComponent<ContentSizeFitter>();
-            if (sizeFitter == null)
+            if (sizeFitter != null)
             {
-                sizeFitter = messageBubble.AddComponent<ContentSizeFitter>();
+                UnityEngine.Object.Destroy(sizeFitter);
             }
-            sizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-            sizeFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
 
             // プレイヤー判定・テーマカラー・配置を共通処理で設定
             ConfigureBubble(messageBubble, charID);
@@ -653,13 +648,13 @@ namespace ProjectFoundPhone.UI
             }
             systemBubble.SetActive(true);
 
-            // 中央揃え
+            // ストレッチアンカーで全幅（テキストは中央揃え、アンカーはVLG互換に）
             RectTransform rectTransform = systemBubble.GetComponent<RectTransform>();
             if (rectTransform != null)
             {
-                rectTransform.anchorMin = new Vector2(0.5f, 1.0f);
-                rectTransform.anchorMax = new Vector2(0.5f, 1.0f);
-                rectTransform.pivot = new Vector2(0.5f, 1.0f);
+                rectTransform.anchorMin = new Vector2(0f, 1f);
+                rectTransform.anchorMax = new Vector2(1f, 1f);
+                rectTransform.pivot = new Vector2(0.5f, 1f);
             }
 
             // Imageコンポーネントを追加（背景表示用）
@@ -1093,7 +1088,7 @@ namespace ProjectFoundPhone.UI
 
         private GameObject CreateMessageBubbleTemplate()
         {
-            GameObject template = new GameObject("AutoMessageBubblePrefab", typeof(RectTransform), typeof(Image), typeof(LayoutElement), typeof(ContentSizeFitter));
+            GameObject template = new GameObject("AutoMessageBubblePrefab", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
             template.transform.SetParent(transform, false);
             template.SetActive(false);
 
@@ -1110,10 +1105,6 @@ namespace ProjectFoundPhone.UI
             LayoutElement layout = template.GetComponent<LayoutElement>();
             layout.minHeight = 40f;
             layout.flexibleWidth = 1f;
-
-            ContentSizeFitter fitter = template.GetComponent<ContentSizeFitter>();
-            fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
-            fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
             GameObject textObj = new GameObject("Text", typeof(RectTransform));
             textObj.transform.SetParent(template.transform, false);
