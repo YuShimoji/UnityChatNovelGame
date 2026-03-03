@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using ProjectFoundPhone.Data;
 using Unity.Profiling;
+using System.Linq;
 
 namespace ProjectFoundPhone.UI
 {
@@ -56,6 +57,9 @@ namespace ProjectFoundPhone.UI
         private static readonly ProfilerMarker s_AddSystemMessageMarker = new ProfilerMarker("ChatController.AddSystemMessage");
         private static readonly ProfilerMarker s_ShowChoicesMarker = new ProfilerMarker("ChatController.ShowChoices");
         private static readonly ProfilerMarker s_AutoScrollMarker = new ProfilerMarker("ChatController.AutoScroll");
+
+        private readonly List<ChatMessage> m_ChatHistory = new List<ChatMessage>();
+        private bool m_IsRestoringHistory = false;
         #endregion
 
         #region Unity Lifecycle
@@ -413,6 +417,17 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
+            // 履歴に記録（復元中は二重記録しない）
+            if (!m_IsRestoringHistory)
+            {
+                m_ChatHistory.Add(new ChatMessage
+                {
+                    Type = ChatMessageType.Normal,
+                    CharacterID = charID,
+                    Text = text
+                });
+            }
+
             // メッセージバブルの生成と追加
 
             // CreateMessageBubble()でメッセージバブルを生成（既にcontentの子として追加済み）
@@ -442,6 +457,17 @@ namespace ProjectFoundPhone.UI
             {
                 Debug.LogWarning("ChatController: Attempted to add image message with null sprite.");
                 return;
+            }
+
+            // 履歴に記録（復元中は二重記録しない）
+            if (!m_IsRestoringHistory)
+            {
+                m_ChatHistory.Add(new ChatMessage
+                {
+                    Type = ChatMessageType.Image,
+                    CharacterID = charID,
+                    ImageResourcePath = imageSprite.name
+                });
             }
 
             // 遅延初期化: ImageBubblePrefabが未設定の場合はランタイム生成
@@ -564,6 +590,16 @@ namespace ProjectFoundPhone.UI
             if (string.IsNullOrEmpty(text))
             {
                 return;
+            }
+
+            // 履歴に記録（復元中は二重記録しない）
+            if (!m_IsRestoringHistory)
+            {
+                m_ChatHistory.Add(new ChatMessage
+                {
+                    Type = ChatMessageType.System,
+                    Text = text
+                });
             }
 
             if (m_ScrollRect == null || m_ScrollRect.content == null)
@@ -1296,6 +1332,7 @@ namespace ProjectFoundPhone.UI
                         Destroy(child.gameObject);
                     }
                 }
+                m_ChatHistory.Clear();
                 return;
             }
 
@@ -1309,6 +1346,65 @@ namespace ProjectFoundPhone.UI
                     m_MessageBubblePool.Return(child.gameObject);
                 }
             }
+            m_ChatHistory.Clear();
+        }
+
+        /// <summary>
+        /// 現在のチャット履歴を取得（セーブ用）
+        /// </summary>
+        public List<ChatMessage> GetChatHistory()
+        {
+            return m_ChatHistory.ToList();
+        }
+
+        /// <summary>
+        /// 保存されたチャット履歴からバブルを復元する（ロード用）
+        /// アニメーションなしで即座に表示する
+        /// </summary>
+        public void RestoreChatHistory(List<ChatMessage> history)
+        {
+            if (history == null || history.Count == 0) return;
+
+            ClearMessages();
+
+            m_IsRestoringHistory = true;
+            try
+            {
+                foreach (var msg in history)
+                {
+                    switch (msg.Type)
+                    {
+                        case ChatMessageType.Normal:
+                            AddMessage(msg.CharacterID, msg.Text);
+                            break;
+                        case ChatMessageType.System:
+                            AddSystemMessage(msg.Text);
+                            break;
+                        case ChatMessageType.Image:
+                            if (!string.IsNullOrEmpty(msg.ImageResourcePath))
+                            {
+                                Sprite sprite = Resources.Load<Sprite>(msg.ImageResourcePath);
+                                if (sprite != null)
+                                {
+                                    AddImageMessage(msg.CharacterID, sprite);
+                                }
+                                else
+                                {
+                                    // 画像が見つからない場合はテキストでフォールバック
+                                    AddMessage(msg.CharacterID, $"[Image: {msg.ImageResourcePath}]");
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+            finally
+            {
+                m_IsRestoringHistory = false;
+            }
+
+            // 復元完了後、最下部へスクロール
+            AutoScroll();
         }
         #endregion
     }
