@@ -54,7 +54,11 @@ namespace ProjectFoundPhone.UI
             {
                 // 話者解決: CharacterName → $speaker 変数 → "npc" フォールバック
                 string charID = ResolveSpeaker(dialogueLine);
-                m_ChatController.AddMessage(charID, lineText);
+                // TextID は Yarn の #line: タグに対応 — 矛盾指摘システムの識別子として使用
+                string lineTag = dialogueLine != null && !string.IsNullOrEmpty(dialogueLine.TextID)
+                    ? dialogueLine.TextID
+                    : null;
+                m_ChatController.AddMessage(charID, lineText, lineTag);
             }
             else
             {

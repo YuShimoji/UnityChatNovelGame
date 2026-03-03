@@ -48,12 +48,12 @@ Difficulty: int                  // 1-3 (視覚的ヒントの量に影響)
 
 ### Ch1 に埋め込まれた矛盾ペア（4件）
 
-| ID | Source | Target | 概要 |
-|----|--------|--------|------|
-| `ch1_admin_reform` | 「2019年の広域行政再編」(Pyramid) | 「そんな再編の話は聞いてない」(Marco) | 年代の矛盾 |
-| `ch1_facility_name` | 「教育支援施設」(Pyramid) | 「あれは学校だったはずだ」(Marco) | 名称の矛盾 |
-| `ch1_search_result` | 「該当する文書は見つかりません」(Pyramid) | 「行政文書が1件確認されました」(Pyramid) | 検索結果の自己矛盾 |
-| `ch1_region_identity` | 「第4管理区域」(Pyramid) | 「ここがどこかもはっきりしない」(Marco) | 地域認識の矛盾 |
+| ID | SourceLineTag | TargetLineTag | 概要 |
+|----|---------------|---------------|------|
+| `ch1_admin_reform` | `ch1_admin_reform_src` (Pyramid: 2019年の広域行政再編) | `ch1_admin_reform_tgt` (Marco: そんな再編の話は聞いてない) | 年代の矛盾 |
+| `ch1_facility_name` | `ch1_facility_name_src` (Pyramid: 教育支援施設) | `ch1_facility_name_tgt` (Marco: あれは学校だったはず) | 名称の矛盾 |
+| `ch1_search_result` | `ch1_search_result_src` (Pyramid: 該当する文書は見つかりません) | `ch1_search_result_tgt` (Pyramid: 行政文書が1件確認) | 検索結果の自己矛盾 |
+| `ch1_region_identity` | `ch1_region_identity_src` (Pyramid: 第4管理区域) | `ch1_region_identity_tgt` (Marco: ここがどこかもはっきりしない) | 地域認識の矛盾 |
 
 ---
 

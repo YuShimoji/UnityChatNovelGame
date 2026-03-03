@@ -168,11 +168,11 @@ title: Ch1_MarcoReacts_Confused
 <<StartWait 0.8>>
 
 <<set $speaker to "marco">>
-...ただ、「この地域」がどこなのかも、正直はっきりしない。
+...ただ、「この地域」がどこなのかも、正直はっきりしない。 #line:ch1_region_identity_tgt
 
 <<set $speaker to "pyramid">>
 <<StartWait 0.5>>
-補足いたします。本プログラムの対象地域は、第4管理区域に分類されています。
+補足いたします。本プログラムの対象地域は、第4管理区域に分類されています。 #line:ch1_region_identity_src
 
 <<set $speaker to "marco">>
 <<StartWait 0.3>>
@@ -192,20 +192,20 @@ title: Ch1_AreaContradiction
 <<set $speaker to "pyramid">>
 <<StartWait 1>>
 
-第4管理区域は、2019年の広域行政再編により設定された区分です。
+第4管理区域は、2019年の広域行政再編により設定された区分です。 #line:ch1_admin_reform_src
 
 <<StartWait 0.5>>
 
-主要施設として、地域コミュニケーションハブ、共有物資拠点、および教育支援施設が含まれます。
+主要施設として、地域コミュニケーションハブ、共有物資拠点、および教育支援施設が含まれます。 #line:ch1_facility_name_src
 
 <<set $speaker to "marco">>
 <<StartWait 0.8>>
 
-2019年？ 俺は2021年にここに来たけど、そんな再編の話は聞いてないぞ。
+2019年？ 俺は2021年にここに来たけど、そんな再編の話は聞いてないぞ。 #line:ch1_admin_reform_tgt
 
 <<StartWait 0.5>>
 
-それに「教育支援施設」って、あの閉鎖された建物のことか？ あれは学校だったはずだが。
+それに「教育支援施設」って、あの閉鎖された建物のことか？ あれは学校だったはずだが。 #line:ch1_facility_name_tgt
 
 <<set $speaker to "pyramid">>
 <<StartWait 0.5>>
@@ -321,7 +321,7 @@ title: Ch1_FragmentDiscovery
 
 <<set $speaker to "pyramid">>
 <<StartWait 0.5>>
-お送りいただいたテキストについて、関連する情報を検索しましたが、該当する文書は見つかりませんでした。
+お送りいただいたテキストについて、関連する情報を検索しましたが、該当する文書は見つかりませんでした。 #line:ch1_search_result_src
 
 <<set $speaker to "marco">>
 <<StartWait 0.3>>
@@ -427,7 +427,7 @@ Barnabyさん、1点補足があります。
 
 <<StartWait 0.5>>
 
-先ほどMarcoさんが共有されたテキスト断片についてですが、改めて検索を実行したところ、「第3次改定」に関連する行政文書が1件確認されました。
+先ほどMarcoさんが共有されたテキスト断片についてですが、改めて検索を実行したところ、「第3次改定」に関連する行政文書が1件確認されました。 #line:ch1_search_result_tgt
 
 <<StartWait 0.3>>
 
