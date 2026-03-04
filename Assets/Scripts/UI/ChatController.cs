@@ -394,33 +394,25 @@ namespace ProjectFoundPhone.UI
                 GameObject textObj = new GameObject("Text");
                 textObj.transform.SetParent(messageBubble.transform, false);
                 textComponent = textObj.AddComponent<TextMeshProUGUI>();
-                
+
                 // RectTransformの設定
                 RectTransform textRect = textComponent.GetComponent<RectTransform>();
                 textRect.anchorMin = new Vector2(0, 0);
                 textRect.anchorMax = new Vector2(1, 1);
                 textRect.offsetMin = new Vector2(10, 10);
                 textRect.offsetMax = new Vector2(-10, -10);
-                
-                // テキストの基本設定
-                textComponent.fontSize = 18;
-                textComponent.color = Color.black;
-                textComponent.alignment = TextAlignmentOptions.TopLeft;
-                textComponent.enableWordWrapping = true;
-
-                // 日本語フォントを設定
-                if (m_JapaneseFontAsset != null)
-                {
-                    textComponent.font = m_JapaneseFontAsset;
-                }
             }
-            else
+
+            // プール再利用時にも確実にメッセージ用の設定を適用
+            float msgFontSize = UIConfig != null ? UIConfig.messageFontSize : 28f;
+            textComponent.fontSize = msgFontSize;
+            textComponent.color = Color.black; // ConfigureBubble で上書きされる
+            textComponent.alignment = TextAlignmentOptions.TopLeft;
+            textComponent.enableWordWrapping = true;
+            textComponent.enableAutoSizing = false;
+            if (m_JapaneseFontAsset != null)
             {
-                // 既存のTextMeshProにも日本語フォントを設定
-                if (m_JapaneseFontAsset != null)
-                {
-                    textComponent.font = m_JapaneseFontAsset;
-                }
+                textComponent.font = m_JapaneseFontAsset;
             }
 
             textComponent.text = finalText;

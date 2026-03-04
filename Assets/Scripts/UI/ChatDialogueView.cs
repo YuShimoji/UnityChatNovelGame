@@ -131,8 +131,9 @@ namespace ProjectFoundPhone.UI
                     if (index >= 0 && index < dialogueOptions.Length)
                     {
                         selectedOption = dialogueOptions[index];
-                        // 選択された内容をプレイヤーの発言としてチャットに追加
-                        m_ChatController.AddMessage("player", choiceTexts[index]);
+                        // 注意: プレイヤー発話の追加は Yarn スクリプト側で行う
+                        // （ジャンプ先ノードの冒頭行がプレイヤーのセリフになっている）
+                        // ここで AddMessage すると二重表示になる
                     }
 
                     choiceMade = true;
