@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9634b99acb05c148ac39be3ec932f96, type: 3}
+  m_Name: ContradictionPair_ch1_admin_reform
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFoundPhone.Data.ContradictionPair
+  m_ContradictionID: ch1_admin_reform
+  m_SourceLineTag: ch1_admin_reform_src
+  m_TargetLineTag: ch1_admin_reform_tgt
+  m_Chapter: 1
+  m_RewardCoin: 10
+  m_UnlockTopic: {fileID: 11400000, guid: f2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7, type: 2}
+  m_ReactionNodeName:
+  m_Difficulty: 1
+  m_Description: "Pyramid は「2019年の広域行政再編」を説明するが、Marco は2021年時点でその再編の話を聞いていない。公式記録と個人の記憶の齟齬。"

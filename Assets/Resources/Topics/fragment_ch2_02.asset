@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88cc88b8365a0794b9698889aff97e99, type: 3}
+  m_Name: fragment_ch2_02
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFoundPhone.Data.TopicData
+  m_TopicID: fragment_ch2_02
+  m_Icon: {fileID: 0}
+  m_Title: "行政区画変遷記録（■■■■年）"
+  m_Description: "Bernardo が解読した古い文書の断片。行政区画の変更が記録されているが、年号が部分的に欠損している。「第■管理区域の設定について（2019年■月■日施行）」という記述があり、Pyramid の発言と部分的に一致するが、詳細が異なる。"

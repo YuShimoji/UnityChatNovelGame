@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88cc88b8365a0794b9698889aff97e99, type: 3}
+  m_Name: fragment_ch1_03
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFoundPhone.Data.TopicData
+  m_TopicID: fragment_ch1_03
+  m_Icon: {fileID: 0}
+  m_Title: "行政再編の記憶欠損"
+  m_Description: "Pyramid は「2019年の広域行政再編により第4管理区域が設定された」と説明するが、Marco は2021年に来た時点でそのような再編の話を聞いていない。公式記録と個人の記憶の間に齟齬が存在する。"

@@ -54,18 +54,30 @@ namespace ProjectFoundPhone.UI
             {
                 // 話者解決: CharacterName → $speaker 変数 → "npc" フォールバック
                 string charID = ResolveSpeaker(dialogueLine);
+
+                // NPC発話の場合のみTypingIndicatorを表示
+                bool isPlayer = charID == "player";
+                if (!isPlayer)
+                {
+                    m_ChatController.ShowTypingIndicator(true);
+                    await YarnTask.Delay((int)(m_LineDisplayDelay * 0.6f * 1000), token.NextContentToken).SuppressCancellationThrow();
+                    m_ChatController.ShowTypingIndicator(false);
+                }
+
                 // TextID は Yarn の #line: タグに対応 — 矛盾指摘システムの識別子として使用
                 string lineTag = dialogueLine != null && !string.IsNullOrEmpty(dialogueLine.TextID)
                     ? dialogueLine.TextID
                     : null;
                 m_ChatController.AddMessage(charID, lineText, lineTag);
+
+                // タイプライター効果の完了を待つ（0.05秒/文字 + バッファ0.3秒）
+                float typewriterDuration = lineText.Length * 0.05f;
+                await YarnTask.Delay((int)((typewriterDuration + 0.3f) * 1000), token.NextContentToken).SuppressCancellationThrow();
             }
             else
             {
                 Debug.LogWarning($"ChatDialogueView: ChatController not found. Line: {lineText}");
             }
-
-            await YarnTask.Delay((int)(m_LineDisplayDelay * 1000), token.NextContentToken).SuppressCancellationThrow();
         }
 
         /// <summary>
