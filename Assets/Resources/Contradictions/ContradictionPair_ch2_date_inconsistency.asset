@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9634b99acb05c148ac39be3ec932f96, type: 3}
+  m_Name: ContradictionPair_ch2_date_inconsistency
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFoundPhone.Data.ContradictionPair
+  m_ContradictionID: ch2_date_inconsistency
+  m_SourceLineTag: ch2_date_inconsistency_src
+  m_TargetLineTag: ch2_date_inconsistency_tgt
+  m_Chapter: 2
+  m_RewardCoin: 10
+  m_UnlockTopic: {fileID: 11400000, guid: 23f278ca915dc8841a9aa01dec75e1f0, type: 2}
+  m_ReactionNodeName:
+  m_Difficulty: 1
+  m_Description: "Bernardo の資料では「2019年■月■日施行」と年号が欠損しているのに対し、Pyramid は「2019年の広域行政再編」と明言している矛盾。情報の完全性に関する問題を示唆。"

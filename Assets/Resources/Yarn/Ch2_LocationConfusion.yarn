@@ -93,7 +93,7 @@ title: Ch2_BernardoIntro
 
 <<set $speaker to "pyramid">>
 <<StartWait 0.8>>
-補足いたします。当該地域は2019年の広域行政再編により「第4管理区域」として再分類されました。「ウェストフィールド地区」は旧称です。
+補足いたします。当該地域は2019年の広域行政再編により「第4管理区域」として再分類されました。「ウェストフィールド地区」は旧称です。 #line:ch2_date_inconsistency_tgt
 
 <<set $ch2_location_realized to true>>
 
@@ -187,7 +187,7 @@ Mason と一緒に偵察していました。無人店舗でレシートを拾�
 
 <<StartWait 0.5>>
 
-でも、コミュニティハブの場所を知っている人はいますか？
+でも、コミュニティハブの場所を知っている人はいますか？ #line:ch2_location_service_failure_tgt
 
 <<set $speaker to "marco">>
 <<StartWait 0.5>>
