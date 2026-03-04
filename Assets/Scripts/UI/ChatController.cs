@@ -206,6 +206,13 @@ namespace ProjectFoundPhone.UI
                 bubbleBackground.color = themeColor;
             }
 
+            // MessageBubble の m_OriginalColor を同期（プール再利用時の色汚染防止）
+            MessageBubble mb = bubble.GetComponent<MessageBubble>();
+            if (mb != null)
+            {
+                mb.SyncOriginalColor();
+            }
+
             // バブルの LayoutElement: 幅を制限
             LayoutElement layoutElement = bubble.GetComponent<LayoutElement>();
             if (layoutElement != null)
@@ -969,10 +976,11 @@ namespace ProjectFoundPhone.UI
                     btnText.text = options[i];
                 }
 
-                // クリックイベント設定
+                // クリックイベント設定（既存リスナーをクリアしてから登録）
                 Button btn = buttonObj.GetComponent<Button>();
                 if (btn != null)
                 {
+                    btn.onClick.RemoveAllListeners();
                     ChoiceButtonHandler handler = buttonObj.GetComponent<ChoiceButtonHandler>();
                     if (handler == null)
                     {
@@ -994,10 +1002,10 @@ namespace ProjectFoundPhone.UI
         {
             if (m_ChoiceContainer != null)
             {
-                // 子要素を全て削除
-                foreach (Transform child in m_ChoiceContainer)
+                // 子要素を即座に削除（Destroy は遅延されるため連続呼び出しで重複が残る）
+                for (int i = m_ChoiceContainer.childCount - 1; i >= 0; i--)
                 {
-                    Destroy(child.gameObject);
+                    DestroyImmediate(m_ChoiceContainer.GetChild(i).gameObject);
                 }
                 m_ChoiceContainer.gameObject.SetActive(false);
             }

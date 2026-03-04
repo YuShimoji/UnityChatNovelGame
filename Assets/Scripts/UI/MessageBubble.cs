@@ -71,6 +71,18 @@ namespace ProjectFoundPhone.UI
             StopHighlight();
         }
 
+        /// <summary>
+        /// ConfigureBubble で色が変更された後に呼び出し、
+        /// m_OriginalColor を現在の Image 色に同期する
+        /// </summary>
+        public void SyncOriginalColor()
+        {
+            if (m_BackgroundImage == null)
+                m_BackgroundImage = GetComponent<Image>();
+            if (m_BackgroundImage != null)
+                m_OriginalColor = m_BackgroundImage.color;
+        }
+
         public void OnPointerDown(PointerEventData eventData)
         {
             if (!IsPointable) return;

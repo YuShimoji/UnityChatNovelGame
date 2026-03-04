@@ -499,7 +499,7 @@ namespace ProjectFoundPhone.Tests
 
             // 繝・ヵ繧ｩ繝ｫ繝医・繝輔か繝ｼ繝ｫ繝舌ャ繧ｯ繧ｫ繝ｩ繝ｼ縺瑚ｿ斐ｋ
             Assert.AreEqual(new Color(0.2f, 0.6f, 1.0f), playerColor);
-            Assert.AreEqual(new Color(0.85f, 0.85f, 0.85f), npcColor);
+            Assert.AreEqual(new Color(0.3f, 0.3f, 0.35f), npcColor);
 
             TeardownCharacterDatabase();
         }

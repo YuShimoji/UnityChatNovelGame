@@ -139,6 +139,13 @@ namespace ProjectFoundPhone.UI
                 messageBubble.ResetState();
             }
 
+            // Image の色をリセット（ResetState 後に実行。StopHighlight による上書きを防止）
+            var bubbleImage = obj.GetComponent<UnityEngine.UI.Image>();
+            if (bubbleImage != null)
+            {
+                bubbleImage.color = Color.white;
+            }
+
             m_Pool.Enqueue(obj);
         }
 
