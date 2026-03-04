@@ -1,0 +1,312 @@
+/// Chapter 2: 地名・所属・時刻の滑り
+/// テーマ: 地名混在の摩擦を中心化。「何かがおかしい」の具体化
+/// 登場: Barnaby, Pyramid, Marco, Bernardo, Mason, Oliver（合計6者）
+/// 指摘メカニクス: 本格導入（4ペア）
+/// 層更新: 制度的問題の顕在化
+
+title: Ch2_Opening
+---
+<<declare $ch2_completed = false>>
+<<declare $ch2_met_bernardo = false>>
+<<declare $ch2_met_mason = false>>
+<<declare $ch2_met_oliver = false>>
+<<declare $ch2_location_realized = false>>
+
+<<SystemMessage "接続を確立しています...">>
+<<StartWait 1>>
+
+<<set $speaker to "pyramid">>
+おはようございます。本日のセッションを開始します。
+
+<<StartWait 0.8>>
+
+現在の接続: Barnaby、Pyramid、Marco。新しい参加者が接続待機中です。
+
+<<set $speaker to "marco">>
+<<StartWait 0.5>>
+Barnaby、昨日はお疲れ。今日はメンバーが増えるらしい。
+
+<<set $speaker to "player">>
+-> 新しい人が来るのか？
+    <<jump Ch2_NewMembers>>
+-> 昨日の話の続きが気になる
+    <<jump Ch2_NewMembers>>
+===
+
+title: Ch2_NewMembers
+---
+<<set $speaker to "marco">>
+<<StartWait 0.8>>
+ああ。Bernardo、Mason、Oliverの3人だ。
+
+<<StartWait 0.5>>
+
+Bernardoは文書読むのが得意で、MasonとOliverは外を歩き回って情報を集めてる。
+
+<<StartWait 1.5>>
+
+<<SystemMessage "新しい参加者が接続しました">>
+
+<<set $speaker to "bernardo">>
+<<StartWait 1>>
+失礼。Bernardo Fonsecaです。接続に手間取りました。
+
+<<StartWait 0.5>>
+
+Marcoから、新しい参加者がいると聞いていました。Barnabyさんですね。
+
+<<set $ch2_met_bernardo to true>>
+
+<<set $speaker to "player">>
+-> はじめまして
+    <<jump Ch2_BernardoIntro>>
+-> 文書を読むのが得意？
+    <<jump Ch2_BernardoIntro>>
+===
+
+title: Ch2_BernardoIntro
+---
+<<set $speaker to "bernardo">>
+<<StartWait 0.8>>
+はい。新聞社で働いていたので、文書の解読は慣れています。
+
+<<StartWait 0.5>>
+
+この端末に流れてくる断片的なテキスト、興味深いものが多いんですよ。
+
+<<StartWait 1>>
+
+<<set $speaker to "bernardo">>
+ところで、皆さんは今どこにいると認識していますか？
+
+<<set $speaker to "marco">>
+<<StartWait 0.5>>
+どこって...第4管理区域、だろ？Pyramidがそう言ってた。
+
+<<set $speaker to "bernardo">>
+<<StartWait 0.8>>
+興味深い。私の手元の資料では、この地域は「旧ウェストフィールド地区」と記載されています。 #line:ch2_location_name_src
+
+<<set $speaker to "marco">>
+<<StartWait 0.5>>
+ウェストフィールド？聞いたことない地名だな。 #line:ch2_location_name_tgt
+
+<<set $speaker to "pyramid">>
+<<StartWait 0.8>>
+補足いたします。当該地域は2019年の広域行政再編により「第4管理区域」として再分類されました。「ウェストフィールド地区」は旧称です。
+
+<<set $ch2_location_realized to true>>
+
+<<set $speaker to "player">>
+-> 旧称があったのか
+-> 2019年の再編？
+<<jump Ch2_LocationDebate>>
+===
+
+title: Ch2_LocationDebate
+---
+<<set $speaker to "bernardo">>
+<<StartWait 1>>
+Pyramidの説明は正確ですが...
+
+<<StartWait 0.5>>
+
+私が持っている資料の年号は欠損していて、「2019年■月■日施行」としか読めないんです。 #line:ch2_date_inconsistency_src
+
+<<StartWait 0.8>>
+
+<<UnlockTopic "fragment_ch2_02">>
+<<SystemMessage "断片「行政区画変遷記録」を記録しました">>
+
+<<set $speaker to "marco">>
+<<StartWait 0.8>>
+2019年ね。俺は2021年にここに来たけど、その時点で既に「第4管理区域」って呼ばれてたのか？
+
+<<StartWait 0.5>>
+
+正直、記憶が曖昧だ。
+
+<<StartWait 1.5>>
+
+<<SystemMessage "新しい参加者が接続しました">>
+
+<<set $speaker to "mason">>
+<<StartWait 1>>
+Mason です。接続しました。Oliver もすぐ来ます。
+
+<<set $ch2_met_mason to true>>
+
+<<StartWait 0.8>>
+
+<<set $speaker to "mason">>
+今、外から戻ったところです。看板を見つけました。
+
+<<StartWait 0.5>>
+
+「第4管理区域 / 旧：ウェストフィールド地区」と並記されています。
+
+<<StartWait 1>>
+
+<<UnlockTopic "fragment_ch2_01">>
+<<SystemMessage "断片「地名二重表記（看板の断片）」を記録しました">>
+
+<<set $speaker to "player">>
+-> 2つの名前が並んでる？
+-> どちらが正式なんだ？
+<<jump Ch2_SignDiscussion>>
+===
+
+title: Ch2_SignDiscussion
+---
+<<set $speaker to "mason">>
+<<StartWait 0.8>>
+そうです。看板は古くて、一部が剥がれていますが、両方の名前が確認できます。
+
+<<StartWait 0.5>>
+
+どちらが正式かは、看板からは判断できません。
+
+<<StartWait 1>>
+
+<<SystemMessage "新しい参加者が接続しました">>
+
+<<set $speaker to "oliver">>
+<<StartWait 0.8>>
+Oliver です。こんにちは。
+
+<<set $ch2_met_oliver to true>>
+
+<<StartWait 0.5>>
+
+Mason と一緒に偵察していました。無人店舗でレシートを拾いました。
+
+<<StartWait 0.8>>
+
+<<set $speaker to "oliver">>
+裏面に手書きのメモがあります。「コミュニティハブへの道順：第4管理区域中央から北へ2km」
+
+<<StartWait 0.5>>
+
+でも、コミュニティハブの場所を知っている人はいますか？
+
+<<set $speaker to "marco">>
+<<StartWait 0.5>>
+いや、聞いたことない。
+
+<<set $speaker to "pyramid">>
+<<StartWait 0.8>>
+コミュニティハブは、第4管理区域の中央施設として設定されています。
+
+<<StartWait 0.5>>
+
+ただし、現在の位置情報サービスが利用できないため、正確な座標は提供できません。 #line:ch2_location_service_failure_src
+
+<<StartWait 1>>
+
+<<UnlockTopic "fragment_ch2_03">>
+<<SystemMessage "断片「地図の矛盾（レシート裏のメモ）」を記録しました">>
+
+<<set $speaker to "bernardo">>
+<<StartWait 1>>
+興味深いですね。地名の混在、年号の欠損、位置情報の欠如。
+
+<<StartWait 0.5>>
+
+これらは単なる通信エラーではなく、何か制度的な問題を示唆しているのかもしれません。
+
+<<set $speaker to "player">>
+-> 制度的な問題？
+-> どういう意味だ？
+<<jump Ch2_SystemicRealization>>
+===
+
+title: Ch2_SystemicRealization
+---
+<<set $speaker to "bernardo">>
+<<StartWait 1>>
+まだ仮説ですが...
+
+<<StartWait 0.5>>
+
+地名の二重表記、行政区画の変更、位置情報の不在。これらが偶然重なるとは考えにくい。
+
+<<StartWait 0.8>>
+
+何らかの意図的な再編成が行われたのか、あるいは...
+
+<<StartWait 1>>
+
+<<Glitch 2>>
+
+<<SystemMessage "【SYSTEM】通信品質が低下しています">>
+
+<<StartWait 1.5>>
+
+<<set $speaker to "pyramid">>
+通信の安定化を試みています。しばらくお待ちください。
+
+<<StartWait 2>>
+
+<<SystemMessage "【SYSTEM】通信品質が回復しました">>
+
+<<set $speaker to "marco">>
+<<StartWait 0.8>>
+今のグリッチ、昨日より激しかったな。
+
+<<set $speaker to "mason">>
+<<StartWait 0.5>>
+タイミングが悪い。重要な話をしている最中に。
+
+<<jump Ch2_DayEnd>>
+===
+
+title: Ch2_DayEnd
+---
+<<StartWait 1.5>>
+
+<<set $speaker to "pyramid">>
+皆さま、本日の推奨セッション時間に近づいています。
+
+<<StartWait 0.3>>
+
+明日のセッションは、通信状況が許す限り午前中に開始予定です。
+
+<<set $speaker to "bernardo">>
+<<StartWait 0.8>>
+今日は新しい情報が多く集まりました。整理する時間が必要です。
+
+<<set $speaker to "oliver">>
+<<StartWait 0.5>>
+Mason と私は、明日も外を見て回ります。何か見つかるかもしれません。
+
+<<set $speaker to "marco">>
+<<StartWait 0.8>>
+Barnaby、お前はどう思う？この地名の混在。
+
+<<set $speaker to "player">>
+-> 何かおかしい気がする
+-> もっと情報が必要だ
+<<jump Ch2_Closing>>
+===
+
+title: Ch2_Closing
+---
+<<set $speaker to "marco">>
+<<StartWait 0.8>>
+だよな。俺もそう思う。
+
+<<StartWait 0.5>>
+
+明日も続きを話そう。
+
+<<StartWait 1.5>>
+
+<<set $speaker to "pyramid">>
+本日のセッションを終了します。お疲れさまでした。
+
+<<StartWait 1>>
+
+<<SystemMessage "--- 2日目 終了 ---">>
+
+<<set $ch2_completed to true>>
+===
