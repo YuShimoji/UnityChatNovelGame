@@ -3,7 +3,7 @@
 **Updated**: 2026-03-04
 **Phase**: Content Authoring — Chapter 1 & 2 統合 + UIバグ修正
 **Branch**: main
-**HEAD**: `6e83e78`
+**HEAD**: `e569c9d`
 
 ## Mission
 
@@ -52,12 +52,21 @@ Chapter 1-2 のコンテンツ統合とUIバグ修正。ContentAuthoring シー�
   - TypingIndicator をリセットし次回使用時に再生成
 - P3 システムメッセージフォントサイズ修正（16pt、0.85x 乗算を除去）
 - P4 Debug Hub ノード順序をチャプター順に変更（GetChapterOrder）
+- ✅ QA フィードバック対応（`a761848`）
+  - Debug Hub にチャプターヘッダー追加（視覚的な区切り）
+  - システムメッセージフォント: プール再利用時も常時適用に修正
+  - スクロール: LateUpdate による連続ピンニングに変更（タイプライター中の巻き戻し防止）
+  - バブル状態汚染: RectTransform/CSF をプール Return + CreateMessageBubble の両方でリセット
+- ✅ ChatUIConfig ScriptableObject 作成（`e569c9d`）
+  - ハードコード値28箇所を SO 参照に置換（フォールバック付き）
+  - Inspector から一覧・調整可能
 
 ### 次のアクション
-1. **手動確認**: Unity ContentAuthoring シーンでの Ch1/Ch2 再生テスト（P1-P4 修正の確認）
-2. **次フェーズ検討**: 矛盾 Phase 2（UIフィードバック/アニメーション）
-3. **UI拡張**: フラグメント一覧画面、ダッシュボード型メイン画面
-4. **レイアウト**: スマホサイズ基準への移行
+1. **Unity 内作業**: ChatUIConfig アセットを作成（ProjectFoundPhone > Chat UI Config）し `Assets/Resources/` に配置
+2. **手動確認**: ContentAuthoring シーンでの Ch1/Ch2 再生テスト（全修正の確認）
+3. **次フェーズ検討**: 矛盾 Phase 2（UIフィードバック/アニメーション）
+4. **UI拡張**: フラグメント一覧画面、ダッシュボード型メイン画面
+5. **レイアウト**: スマホサイズ基準への移行
 
 ## 選別規則
 
