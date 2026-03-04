@@ -105,7 +105,8 @@ namespace ProjectFoundPhone.Data
         public float imageFadeInDuration = 0.6f;
 
         /// <summary>
-        /// Resources から ChatUIConfig をロード (singleton 風アクセス)
+        /// Resources から ChatUIConfig をロード (singleton 風アクセス)。
+        /// アセット未配置時はデフォルト値のランタイムインスタンスを返す（null にならない）。
         /// </summary>
         private static ChatUIConfig s_Instance;
         public static ChatUIConfig Instance
@@ -115,6 +116,10 @@ namespace ProjectFoundPhone.Data
                 if (s_Instance == null)
                 {
                     s_Instance = Resources.Load<ChatUIConfig>("ChatUIConfig");
+                    if (s_Instance == null)
+                    {
+                        s_Instance = CreateInstance<ChatUIConfig>();
+                    }
                 }
                 return s_Instance;
             }
