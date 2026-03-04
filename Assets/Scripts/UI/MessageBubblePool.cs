@@ -91,6 +91,12 @@ namespace ProjectFoundPhone.UI
                 }
             }
 
+            if (obj == null)
+            {
+                Debug.LogWarning("MessageBubblePool: Failed to create pooled object. Prefab may not be assigned.");
+                return null;
+            }
+
             obj.transform.SetParent(parent, false);
             obj.SetActive(true);
             m_ActiveObjects.Add(obj);
@@ -124,6 +130,13 @@ namespace ProjectFoundPhone.UI
             if (textComponent != null)
             {
                 textComponent.text = string.Empty;
+            }
+
+            // MessageBubble の状態をリセット（矛盾指摘用データ）
+            var messageBubble = obj.GetComponent<MessageBubble>();
+            if (messageBubble != null)
+            {
+                messageBubble.ResetState();
             }
 
             m_Pool.Enqueue(obj);

@@ -1,6 +1,6 @@
 {
-    "name": "ProjectFoundPhone.Debug.Editor",
-    "rootNamespace": "ProjectFoundPhone.Debug.Editor",
+    "name": "ProjectFoundPhone.DebugTools.Editor",
+    "rootNamespace": "ProjectFoundPhone.DebugTools.Editor",
     "references": [
         "ProjectFoundPhone",
         "ProjectFoundPhone.Editor",

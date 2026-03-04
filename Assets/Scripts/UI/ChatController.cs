@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using ProjectFoundPhone.Data;
 using Unity.Profiling;
+using System.Linq;
 
 namespace ProjectFoundPhone.UI
 {
@@ -56,6 +57,9 @@ namespace ProjectFoundPhone.UI
         private static readonly ProfilerMarker s_AddSystemMessageMarker = new ProfilerMarker("ChatController.AddSystemMessage");
         private static readonly ProfilerMarker s_ShowChoicesMarker = new ProfilerMarker("ChatController.ShowChoices");
         private static readonly ProfilerMarker s_AutoScrollMarker = new ProfilerMarker("ChatController.AutoScroll");
+
+        private readonly List<SavedChatMessage> m_ChatHistory = new List<SavedChatMessage>();
+        private bool m_IsRestoringHistory = false;
         #endregion
 
         #region Unity Lifecycle
@@ -141,10 +145,13 @@ namespace ProjectFoundPhone.UI
                 }
             }
 
-            // プールにPrefabが未設定の場合は同期
-            if (m_MessageBubblePool != null && m_MessageBubblePrefab != null)
+            // プールにPrefabを設定（Inspector 未設定時はランタイムテンプレートで代替）
+            if (m_MessageBubblePool != null)
             {
-                m_MessageBubblePool.SetPrefab(m_MessageBubblePrefab);
+                GameObject prefab = m_MessageBubblePrefab != null
+                    ? m_MessageBubblePrefab
+                    : GetSafeMessageBubbleTemplate();
+                m_MessageBubblePool.SetPrefab(prefab);
             }
         }
 
@@ -193,14 +200,6 @@ namespace ProjectFoundPhone.UI
             if (bubbleBackground != null)
             {
                 bubbleBackground.color = themeColor;
-            }
-
-            // バブルの ContentSizeFitter: 横幅は親任せ、高さのみテキスト量に追従
-            ContentSizeFitter bubbleFitter = bubble.GetComponent<ContentSizeFitter>();
-            if (bubbleFitter != null)
-            {
-                bubbleFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
-                bubbleFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
             }
 
             // バブルの LayoutElement: 親に幅制御を委ねる
@@ -317,14 +316,14 @@ namespace ProjectFoundPhone.UI
             layoutElement.preferredHeight = -1f; // ContentSizeFitterに任せる
             layoutElement.flexibleHeight = -1f;
 
-            // ContentSizeFitterを追加・設定
+            // ContentSizeFitter はバブル自体には付けない
+            // （Wrapper の HorizontalLayoutGroup + ContentSizeFitter が高さを制御する。
+            //  バブルにも付けると入れ子 ContentSizeFitter の競合でレイアウトが振動する）
             ContentSizeFitter sizeFitter = messageBubble.GetComponent<ContentSizeFitter>();
-            if (sizeFitter == null)
+            if (sizeFitter != null)
             {
-                sizeFitter = messageBubble.AddComponent<ContentSizeFitter>();
+                UnityEngine.Object.Destroy(sizeFitter);
             }
-            sizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-            sizeFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
 
             // プレイヤー判定・テーマカラー・配置を共通処理で設定
             ConfigureBubble(messageBubble, charID);
@@ -405,6 +404,17 @@ namespace ProjectFoundPhone.UI
         /// <param name="text">メッセージテキスト</param>
         public void AddMessage(string charID, string text)
         {
+            AddMessage(charID, text, null);
+        }
+
+        /// <summary>
+        /// LineTag 付きメッセージをチャットに追加（矛盾指摘システム対応）
+        /// </summary>
+        /// <param name="charID">キャラクターID</param>
+        /// <param name="text">メッセージテキスト</param>
+        /// <param name="lineTag">矛盾判定用の識別タグ（null なら通常メッセージ）</param>
+        public void AddMessage(string charID, string text, string lineTag)
+        {
             using var _ = s_AddMessageMarker.Auto();
 
             if (string.IsNullOrEmpty(text))
@@ -413,13 +423,34 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            // メッセージバブルの生成と追加
+            // 履歴に記録（復元中は二重記録しない）
+            if (!m_IsRestoringHistory)
+            {
+                m_ChatHistory.Add(new SavedChatMessage
+                {
+                    Type = ChatMessageType.Normal,
+                    CharacterID = charID,
+                    Text = text,
+                    LineTag = lineTag
+                });
+            }
 
-            // CreateMessageBubble()でメッセージバブルを生成（既にcontentの子として追加済み）
+            // メッセージバブルの生成と追加
             GameObject messageBubble = CreateMessageBubble(charID, text);
             if (messageBubble == null)
             {
                 return;
+            }
+
+            // LineTag が設定されている場合、MessageBubble コンポーネントをアタッチ
+            if (!string.IsNullOrEmpty(lineTag))
+            {
+                MessageBubble bubble = messageBubble.GetComponent<MessageBubble>();
+                if (bubble == null)
+                {
+                    bubble = messageBubble.AddComponent<MessageBubble>();
+                }
+                bubble.Initialize(lineTag, messageBubble.GetComponent<UnityEngine.UI.Image>());
             }
 
             // ユーザーが過去ログを見ていない場合のみAutoScroll()を実行
@@ -442,6 +473,17 @@ namespace ProjectFoundPhone.UI
             {
                 Debug.LogWarning("ChatController: Attempted to add image message with null sprite.");
                 return;
+            }
+
+            // 履歴に記録（復元中は二重記録しない）
+            if (!m_IsRestoringHistory)
+            {
+                m_ChatHistory.Add(new SavedChatMessage
+                {
+                    Type = ChatMessageType.Image,
+                    CharacterID = charID,
+                    ImageResourcePath = imageSprite.name
+                });
             }
 
             // 遅延初期化: ImageBubblePrefabが未設定の場合はランタイム生成
@@ -566,6 +608,16 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
+            // 履歴に記録（復元中は二重記録しない）
+            if (!m_IsRestoringHistory)
+            {
+                m_ChatHistory.Add(new SavedChatMessage
+                {
+                    Type = ChatMessageType.System,
+                    Text = text
+                });
+            }
+
             if (m_ScrollRect == null || m_ScrollRect.content == null)
             {
                 Debug.LogError("ChatController: Cannot create system message. ScrollRect or content is not assigned.");
@@ -596,13 +648,13 @@ namespace ProjectFoundPhone.UI
             }
             systemBubble.SetActive(true);
 
-            // 中央揃え
+            // ストレッチアンカーで全幅（テキストは中央揃え、アンカーはVLG互換に）
             RectTransform rectTransform = systemBubble.GetComponent<RectTransform>();
             if (rectTransform != null)
             {
-                rectTransform.anchorMin = new Vector2(0.5f, 1.0f);
-                rectTransform.anchorMax = new Vector2(0.5f, 1.0f);
-                rectTransform.pivot = new Vector2(0.5f, 1.0f);
+                rectTransform.anchorMin = new Vector2(0f, 1f);
+                rectTransform.anchorMax = new Vector2(1f, 1f);
+                rectTransform.pivot = new Vector2(0.5f, 1f);
             }
 
             // Imageコンポーネントを追加（背景表示用）
@@ -1036,7 +1088,7 @@ namespace ProjectFoundPhone.UI
 
         private GameObject CreateMessageBubbleTemplate()
         {
-            GameObject template = new GameObject("AutoMessageBubblePrefab", typeof(RectTransform), typeof(Image), typeof(LayoutElement), typeof(ContentSizeFitter));
+            GameObject template = new GameObject("AutoMessageBubblePrefab", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
             template.transform.SetParent(transform, false);
             template.SetActive(false);
 
@@ -1053,10 +1105,6 @@ namespace ProjectFoundPhone.UI
             LayoutElement layout = template.GetComponent<LayoutElement>();
             layout.minHeight = 40f;
             layout.flexibleWidth = 1f;
-
-            ContentSizeFitter fitter = template.GetComponent<ContentSizeFitter>();
-            fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
-            fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
             GameObject textObj = new GameObject("Text", typeof(RectTransform));
             textObj.transform.SetParent(template.transform, false);
@@ -1296,6 +1344,7 @@ namespace ProjectFoundPhone.UI
                         Destroy(child.gameObject);
                     }
                 }
+                m_ChatHistory.Clear();
                 return;
             }
 
@@ -1309,6 +1358,65 @@ namespace ProjectFoundPhone.UI
                     m_MessageBubblePool.Return(child.gameObject);
                 }
             }
+            m_ChatHistory.Clear();
+        }
+
+        /// <summary>
+        /// 現在のチャット履歴を取得（セーブ用）
+        /// </summary>
+        public List<SavedChatMessage> GetChatHistory()
+        {
+            return m_ChatHistory.ToList();
+        }
+
+        /// <summary>
+        /// 保存されたチャット履歴からバブルを復元する（ロード用）
+        /// アニメーションなしで即座に表示する
+        /// </summary>
+        public void RestoreChatHistory(List<SavedChatMessage> history)
+        {
+            if (history == null || history.Count == 0) return;
+
+            ClearMessages();
+
+            m_IsRestoringHistory = true;
+            try
+            {
+                foreach (var msg in history)
+                {
+                    switch (msg.Type)
+                    {
+                        case ChatMessageType.Normal:
+                            AddMessage(msg.CharacterID, msg.Text, msg.LineTag);
+                            break;
+                        case ChatMessageType.System:
+                            AddSystemMessage(msg.Text);
+                            break;
+                        case ChatMessageType.Image:
+                            if (!string.IsNullOrEmpty(msg.ImageResourcePath))
+                            {
+                                Sprite sprite = Resources.Load<Sprite>(msg.ImageResourcePath);
+                                if (sprite != null)
+                                {
+                                    AddImageMessage(msg.CharacterID, sprite);
+                                }
+                                else
+                                {
+                                    // 画像が見つからない場合はテキストでフォールバック
+                                    AddMessage(msg.CharacterID, $"[Image: {msg.ImageResourcePath}]");
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+            finally
+            {
+                m_IsRestoringHistory = false;
+            }
+
+            // 復元完了後、最下部へスクロール
+            AutoScroll();
         }
         #endregion
     }

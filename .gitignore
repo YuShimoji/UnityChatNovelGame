@@ -79,3 +79,19 @@ compile_test.log
 
 # Special files
 **/nul
+
+# Build artifacts (prevent accidental commits of Unity builds)
+*.exe
+*.dll
+!Assets/**/*.dll
+*.pdb
+!Assets/**/*.pdb
+*.ilk
+*.exp
+*.lib
+
+# Evidence build artifacts
+docs/evidence/**/MonoBleedingEdge/
+docs/evidence/**/*.exe
+docs/evidence/**/*.dll
+docs/evidence/**/UnityChatNovelGame_Data/

@@ -6,6 +6,35 @@ using Newtonsoft.Json;
 namespace ProjectFoundPhone.Data
 {
     /// <summary>
+    /// チャットメッセージの種類
+    /// </summary>
+    public enum ChatMessageType
+    {
+        Normal,
+        System,
+        Image
+    }
+
+    /// <summary>
+    /// 1件のチャットメッセージを表すシリアライズ可能なクラス
+    /// </summary>
+    [Serializable]
+    public class SavedChatMessage
+    {
+        public ChatMessageType Type;
+        public string CharacterID;
+        public string Text;
+        /// <summary>
+        /// 画像メッセージの場合のリソースパス（Resources/ 配下の相対パス）
+        /// </summary>
+        public string ImageResourcePath;
+        /// <summary>
+        /// 矛盾指摘システム用の識別タグ（Yarn #line: タグまたはカスタムID）
+        /// </summary>
+        public string LineTag;
+    }
+
+    /// <summary>
     /// ゲームの保存データを表すクラス
     /// Newtonsoft.Json によるJSON形式シリアライズ対応
     /// </summary>
@@ -46,6 +75,25 @@ namespace ProjectFoundPhone.Data
         /// 獲得済みトピックのIDリスト
         /// </summary>
         public List<string> UnlockedTopicIDs = new List<string>();
+        #endregion
+
+        #region Contradiction System
+        /// <summary>
+        /// 発見済み矛盾ペアのIDリスト
+        /// </summary>
+        public List<string> DiscoveredContradictionIDs = new List<string>();
+
+        /// <summary>
+        /// 蓄積した HalluciCoin
+        /// </summary>
+        public int HalluciCoin;
+        #endregion
+
+        #region Chat History
+        /// <summary>
+        /// チャット履歴のメッセージリスト
+        /// </summary>
+        public List<SavedChatMessage> ChatHistory = new List<SavedChatMessage>();
         #endregion
 
         #region Synthesis System
