@@ -39,6 +39,10 @@ namespace ProjectFoundPhone.UI
         [Header("Font Settings")]
         [SerializeField] private TMP_FontAsset m_JapaneseFontAsset;
 
+        [Header("Typewriter Effect Settings")]
+        [SerializeField] private bool m_EnableTypewriterEffect = true;
+        [SerializeField] private float m_TypewriterSpeed = 0.05f; // 1文字あたりの表示時間（秒）
+
         private bool m_IsUserScrolling = false;
         private float m_LastScrollPosition = 1.0f;
 
@@ -396,7 +400,31 @@ namespace ProjectFoundPhone.UI
             // アニメーション演出
             AnimateBubbleIn(messageBubble);
 
+            // タイプライター効果を適用
+            ApplyTypewriterEffect(textComponent);
+
             return messageBubble;
+        }
+
+        /// <summary>
+        /// テキストにタイプライター効果を適用（1文字ずつ表示）
+        /// </summary>
+        private void ApplyTypewriterEffect(TextMeshProUGUI textComponent)
+        {
+            if (!m_EnableTypewriterEffect || textComponent == null || string.IsNullOrEmpty(textComponent.text))
+            {
+                return;
+            }
+
+            int totalCharacters = textComponent.text.Length;
+            textComponent.maxVisibleCharacters = 0;
+
+            DOTween.To(
+                () => textComponent.maxVisibleCharacters,
+                x => textComponent.maxVisibleCharacters = x,
+                totalCharacters,
+                totalCharacters * m_TypewriterSpeed
+            ).SetEase(Ease.Linear).SetUpdate(true);
         }
 
         /// <summary>
@@ -772,10 +800,16 @@ namespace ProjectFoundPhone.UI
         /// <param name="show">表示する場合true</param>
         public void ShowTypingIndicator(bool show)
         {
+            // ランタイム生成（未設定時）
+            if (m_TypingIndicator == null)
+            {
+                EnsureTypingIndicator();
+            }
+
             if (m_TypingIndicator != null)
             {
                 m_TypingIndicator.SetActive(show);
-                
+
                 if (show)
                 {
                     // 常に最後尾に表示
@@ -783,6 +817,99 @@ namespace ProjectFoundPhone.UI
                     AutoScroll();
                 }
             }
+        }
+
+        /// <summary>
+        /// TypingIndicatorのランタイム生成（未設定時の自動フォールバック）
+        /// </summary>
+        private void EnsureTypingIndicator()
+        {
+            if (m_TypingIndicator != null || m_ScrollRect == null || m_ScrollRect.content == null)
+            {
+                return;
+            }
+
+            // プール未設定時は初期化
+            if (m_MessageBubblePool == null)
+            {
+                EnsureMessageBubblePool();
+            }
+
+            // メッセージバブルプールから取得
+            GameObject typingBubble;
+            if (m_MessageBubblePool != null)
+            {
+                typingBubble = m_MessageBubblePool.Get(m_ScrollRect.content);
+            }
+            else
+            {
+                // フォールバック
+                if (m_MessageBubblePrefab == null)
+                {
+                    Debug.LogWarning("ChatController: Cannot create typing indicator. MessageBubblePrefab is not assigned.");
+                    return;
+                }
+                typingBubble = Instantiate(m_MessageBubblePrefab, m_ScrollRect.content);
+            }
+
+            if (typingBubble == null)
+            {
+                return;
+            }
+
+            typingBubble.name = "TypingIndicator";
+
+            // Image背景を追加
+            Image bgImage = typingBubble.GetComponent<Image>();
+            if (bgImage == null)
+            {
+                bgImage = typingBubble.AddComponent<Image>();
+            }
+            bgImage.color = new Color(0.3f, 0.3f, 0.35f, 0.9f); // NPC風の色
+            bgImage.raycastTarget = false;
+
+            // LayoutElement設定
+            LayoutElement layoutElement = typingBubble.GetComponent<LayoutElement>();
+            if (layoutElement == null)
+            {
+                layoutElement = typingBubble.AddComponent<LayoutElement>();
+            }
+            layoutElement.minHeight = 60f;
+            layoutElement.preferredHeight = 60f;
+            layoutElement.flexibleWidth = 0f;
+
+            // テキスト設定
+            TextMeshProUGUI textComponent = typingBubble.GetComponentInChildren<TextMeshProUGUI>();
+            if (textComponent == null)
+            {
+                GameObject textObj = new GameObject("Text");
+                textObj.transform.SetParent(typingBubble.transform, false);
+                textComponent = textObj.AddComponent<TextMeshProUGUI>();
+
+                RectTransform textRect = textComponent.GetComponent<RectTransform>();
+                textRect.anchorMin = new Vector2(0, 0);
+                textRect.anchorMax = new Vector2(1, 1);
+                textRect.offsetMin = new Vector2(10, 10);
+                textRect.offsetMax = new Vector2(-10, -10);
+
+                textComponent.fontSize = 18;
+                textComponent.alignment = TextAlignmentOptions.Center;
+                textComponent.enableWordWrapping = false;
+
+                if (m_JapaneseFontAsset != null)
+                {
+                    textComponent.font = m_JapaneseFontAsset;
+                }
+            }
+
+            textComponent.text = "...";
+            textComponent.color = new Color(0.7f, 0.7f, 0.7f, 1f);
+
+            // バブルの配置（NPC側）
+            ConfigureBubble(typingBubble, "npc");
+
+            m_TypingIndicator = typingBubble;
+            m_TypingIndicator.SetActive(false);
         }
 
 

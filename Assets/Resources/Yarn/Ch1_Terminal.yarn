@@ -66,11 +66,9 @@ title: Ch1_AskWhere
 このチャットルームは、地域コミュニケーション支援プログラムの一環として提供されています。
 
 <<set $speaker to "player">>
--> 地域コミュニケーション支援？
-    <<Message "player" "地域コミュニケーション支援プログラム？ 聞いたことがない。">>
+-> 地域コミュニケーション支援プログラム？ 聞いたことがない。
     <<jump Ch1_PyramidExplain>>
--> わかった
-    <<Message "player" "...わかった。">>
+-> ...わかった。
     <<jump Ch1_PyramidExplain>>
 ===
 
@@ -105,13 +103,11 @@ title: Ch1_PyramidExplain
 
 <<set $speaker to "player">>
 -> この端末、前からこんなに遅いのか？
-    <<Message "player" "この端末、前からこんなに遅いのか？">>
 <<set $speaker to "pyramid">>
 <<StartWait 0.8>>
 端末の処理速度は正常範囲内です。通信経路の混雑が原因と考えられます。
 
--> 他に何人いる？
-    <<Message "player" "他に何人参加する予定なんだ？">>
+-> 他に何人参加する予定なんだ？
 <<set $speaker to "pyramid">>
 <<StartWait 0.8>>
 本セッションには最大6名の参加が予定されています。現在、1名が接続待機中です。
@@ -150,11 +146,9 @@ Marco Grossさん、接続を確認しました。セッションへようこそ
 それで、Barnaby？ 君もここに「配属」された口か。
 
 <<set $speaker to "player">>
--> そうらしい。事情がよくわからないんだが
-    <<Message "player" "そうらしい。正直、事情がよくわからない。">>
+-> そうらしい。正直、事情がよくわからない。
     <<jump Ch1_MarcoReacts_Confused>>
--> 配属？ 何の話だ？
-    <<Message "player" "配属？ 何の話をしてるんだ？">>
+-> 配属？ 何の話をしてるんだ？
     <<jump Ch1_MarcoReacts_Confused>>
 ===
 
@@ -183,10 +177,8 @@ title: Ch1_MarcoReacts_Confused
 第4管理区域。聞いたことあるか？
 
 <<set $speaker to "player">>
--> ない
-    <<Message "player" "いや、聞いたことない。">>
--> Pyramid、もっと詳しく
-    <<Message "player" "Pyramid、第4管理区域について詳しく教えてくれ。">>
+-> いや、聞いたことない。
+-> Pyramid、第4管理区域について詳しく教えてくれ。
 
 <<jump Ch1_AreaContradiction>>
 ===
@@ -242,10 +234,8 @@ title: Ch1_TerminalTrouble
 俺の方は今日は特にひどい。文字の変換候補が3つしか出ない日もあれば、10個出る日もある。法則がわからない。
 
 <<set $speaker to "player">>
--> 自分のも遅い気がする
-    <<Message "player" "自分のも反応が遅い。打ったはずの文字が表示されないこともある。">>
--> 端末のことはよくわからない
-    <<Message "player" "端末のことはあまり詳しくない。普通に使えてはいるが...">>
+-> 自分のも反応が遅い。打ったはずの文字が表示されないこともある。
+-> 端末のことはあまり詳しくない。普通に使えてはいるが...
 
 <<set $speaker to "marco">>
 <<StartWait 0.8>>
@@ -257,16 +247,14 @@ title: Ch1_TerminalTrouble
 昨日、ベルナルドが面白いことを言ってた。「この端末は壊れているんじゃない、最初からこういう仕様なんだ」って。
 
 <<set $speaker to "player">>
--> ベルナルド？
-    <<Message "player" "ベルナルド？ まだ会ってない人だ。">>
+-> ベルナルド？ まだ会ってない人だ。
 <<set $speaker to "marco">>
 <<StartWait 0.5>>
 ベルナルド・フォンセカ。新聞社で働いてた人。文章を読むのが異常にうまい。
 <<StartWait 0.3>>
 彼と、あとメイスンとオリバーっていう二人もこのチャットにいるはずだ。今日はまだ来てないけど。
 
--> この仕様なら仕方ないか
-    <<Message "player" "仕様なら仕方ないのか...。">>
+-> 仕様なら仕方ないのか...。
 <<set $speaker to "marco">>
 <<StartWait 0.5>>
 仕方ない。でもさ、仕様だとしても、なぜこんな不便な仕様にしたのかは聞きたいよな。
@@ -310,10 +298,8 @@ title: Ch1_FragmentDiscovery
 途中で切れてる。しかも参照先が伏せ字みたいに欠けてる。
 
 <<set $speaker to "player">>
--> 管理局？ 何の施設の話だ？
-    <<Message "player" "管理局？ 何の施設のことを言ってるんだ？">>
--> それ、保存してあるか？
-    <<Message "player" "そのスクリーンショット、まだ残ってるか？">>
+-> 管理局？ 何の施設のことを言ってるんだ？
+-> そのスクリーンショット、まだ残ってるか？
 
 <<set $speaker to "marco">>
 <<StartWait 0.8>>
@@ -348,10 +334,8 @@ title: Ch1_FragmentDiscovery
 <<set $ch1_fragment_found to true>>
 
 <<set $speaker to "player">>
--> 不可索引物...
-    <<Message "player" "不可索引物... 検索できない情報、か。">>
--> なぜ検索に出ない？
-    <<Message "player" "なぜ検索に引っかからないんだ？">>
+-> 不可索引物... 検索できない情報、か。
+-> なぜ検索に引っかからないんだ？
 
 <<set $speaker to "marco">>
 <<StartWait 0.8>>
@@ -386,10 +370,8 @@ title: Ch1_DayWinding
 まあ、今日はここまでにしよう。Barnaby、明日もここに来られるか？
 
 <<set $speaker to "player">>
--> たぶん
-    <<Message "player" "たぶん。端末が動けば。">>
--> 他に選択肢があるのか？
-    <<Message "player" "他に何かやることがあるわけでもない。">>
+-> たぶん。端末が動けば。
+-> 他に何かやることがあるわけでもない。
 
 <<set $speaker to "marco">>
 <<StartWait 0.5>>
