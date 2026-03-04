@@ -202,11 +202,12 @@ namespace ProjectFoundPhone.UI
                 bubbleBackground.color = themeColor;
             }
 
-            // バブルの LayoutElement: 親に幅制御を委ねる
+            // バブルの LayoutElement: 幅を制限
             LayoutElement layoutElement = bubble.GetComponent<LayoutElement>();
             if (layoutElement != null)
             {
-                layoutElement.flexibleWidth = 1f;
+                layoutElement.flexibleWidth = 0f; // 幅を固定
+                layoutElement.preferredWidth = -1f; // 子要素に合わせる
             }
 
             if (m_ScrollRect == null || m_ScrollRect.content == null) return;
@@ -219,9 +220,9 @@ namespace ProjectFoundPhone.UI
             wrapper.transform.SetSiblingIndex(bubble.transform.GetSiblingIndex());
 
             HorizontalLayoutGroup hlg = wrapper.GetComponent<HorizontalLayoutGroup>();
-            hlg.childForceExpandWidth = true;
+            hlg.childForceExpandWidth = false; // 幅を強制的に拡張しない
             hlg.childForceExpandHeight = false;
-            hlg.childControlWidth = true;
+            hlg.childControlWidth = false; // 子要素の幅を制御しない
             hlg.childControlHeight = true;
             // パディングで左右マージンを作る → player は左に広いマージン、NPC は右に広いマージン
             int sideMargin = (int)(Screen.width * 0.25f);
@@ -313,8 +314,9 @@ namespace ProjectFoundPhone.UI
                 layoutElement = messageBubble.AddComponent<LayoutElement>();
             }
             layoutElement.minHeight = 60f;
-            layoutElement.preferredHeight = -1f; // ContentSizeFitterに任せる
+            layoutElement.preferredHeight = -1f; // 後で動的に設定
             layoutElement.flexibleHeight = -1f;
+            layoutElement.flexibleWidth = 0f; // 幅を固定（拡張しない）
 
             // ContentSizeFitter はバブル自体には付けない
             // （Wrapper の HorizontalLayoutGroup + ContentSizeFitter が高さを制御する。
@@ -375,6 +377,18 @@ namespace ProjectFoundPhone.UI
             }
 
             textComponent.text = finalText;
+
+            // テキストのメッシュを強制更新して高さを計算
+            textComponent.ForceMeshUpdate();
+
+            // テキストの高さに基づいてバブルの高さを動的に設定
+            LayoutElement bubbleLayout = messageBubble.GetComponent<LayoutElement>();
+            if (bubbleLayout != null)
+            {
+                float textHeight = textComponent.preferredHeight;
+                float padding = 20f; // 上下のパディング
+                bubbleLayout.preferredHeight = Mathf.Max(60f, textHeight + padding);
+            }
 
             // レイアウトを即座に更新
             Canvas.ForceUpdateCanvases();

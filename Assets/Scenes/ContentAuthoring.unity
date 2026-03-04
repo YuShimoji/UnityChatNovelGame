@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 252753190}
   - component: {fileID: 252753189}
   - component: {fileID: 252753188}
+  - component: {fileID: 252753193}
   m_Layer: 0
   m_Name: DialogueSystem
   m_TagString: Untagged
@@ -153,9 +154,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: ProjectFoundPhone::ProjectFoundPhone.Core.ScenarioManager
   m_DialogueRunner: {fileID: 252753190}
   m_ChatController: {fileID: 2049599892}
-  m_StartNode: FirstSlice_Start
+  m_StartNode: Ch1_Opening
   m_AutoStartYarn: 1
   m_DebugScenarioID: 
+--- !u!114 &252753193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 252753187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca44fbdc34aa5d24297bcb2a91614d42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ProjectFoundPhone.DebugTools::ProjectFoundPhone.DebugTools.DebugHubController
+  m_DialogueRunner: {fileID: 252753190}
+  m_ShowOnStart: 0
 --- !u!114 &252753189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1689,6 +1704,7 @@ GameObject:
   - component: {fileID: 2049599893}
   - component: {fileID: 2049599894}
   - component: {fileID: 2049599892}
+  - component: {fileID: 2049599895}
   m_Layer: 0
   m_Name: ChatScrollView
   m_TagString: Untagged
@@ -1715,13 +1731,28 @@ MonoBehaviour:
   m_InputField: {fileID: 981245733}
   m_SendButton: {fileID: 982217453}
   m_AutoScrollThreshold: 0.1
-  m_MessageBubblePool: {fileID: 0}
+  m_MessageBubblePool: {fileID: 2049599895}
   m_ImageBubblePrefab: {fileID: 0}
   m_ImageMaxWidth: 300
   m_ImageMaxHeight: 200
   m_ChoiceButtonPrefab: {fileID: 1995694123046171315, guid: c796b8da8e116894786e79a6c209fd07, type: 3}
   m_ChoiceContainer: {fileID: 507678224}
   m_JapaneseFontAsset: {fileID: 11400000, guid: 167bfdfba8f9cfd45b330f80ed0d0f18, type: 2}
+--- !u!114 &2049599895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2049599891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a38d1b6ea0c4134287039a49e0e216e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ProjectFoundPhone::ProjectFoundPhone.UI.MessageBubblePool
+  m_MessageBubblePrefab: {fileID: 11400000, guid: 26b7b210afd94b68a720bb0a31a0b517, type: 3}
+  m_InitialCapacity: 10
+  m_MaxCapacity: 50
 --- !u!224 &2049599893
 RectTransform:
   m_ObjectHideFlags: 0
