@@ -1,7 +1,7 @@
 # WORKFLOW STATE SSOT
 
 **Updated**: 2026-03-04
-**Phase**: Content Authoring — Chapter 1 動作確認完了
+**Phase**: Content Authoring — Chapter 2 実装完了
 **Branch**: feature/task-049-build-gate-fix
 
 ## Mission
@@ -35,11 +35,16 @@ Chapter 1（端末の貧弱さ）のコンテンツ制作と動作確認。Conte
 - ✅ **選択肢2行問題の修正**（Ch1_Terminal.yarn全18箇所から<<Message>>削除）
 - ✅ **入力中表示の実装**（NPC発話前に"..."表示、ランタイム自動生成）
 - ✅ **テキスト逐次表示の実装**（タイプライター効果、0.05秒/文字）
+- ✅ **Ch1全分岐テスト実施**（2周テスト完了、問題を特定）
+- ✅ **UI問題修正**（システムメッセージバブルサイズ、スクロール吸着、タイミング）
+- ✅ **Ch2設計・実装完了**（CharacterProfile×3、TopicData×3、Yarnシナリオ8ノード）
+- ✅ **Ch2矛盾システム実装完了**（ContradictionPair×3、ContradictionDatabase、#line:タグ追加）
 
 ### 次のアクション
-1. **Ch1全分岐テスト**: 全選択肢パターンの2周テスト（手動）
-2. **バブルUI微調整**: 必要に応じて spacing/padding の調整
-3. **次フェーズ**: 矛盾指摘メカニクス Phase 2 または Ch2 設計
+1. **矛盾システムの Scene 統合**: ContradictionDatabase を ContradictionManager に接続（Unity Editor 作業）
+2. **Ch2 実プレイ確認**: Ch2_LocationConfusion.yarn の動作確認と矛盾検出テスト
+3. **バブルUI微調整**: 必要に応じて spacing/padding の調整（保留中）
+4. **次フェーズ**: Ch3 設計 または メカニクス拡張
 
 ## 選別規則
 

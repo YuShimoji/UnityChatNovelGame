@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9634b99acb05c148ac39be3ec932f96, type: 3}
+  m_Name: ContradictionPair_ch1_region_identity
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFoundPhone.Data.ContradictionPair
+  m_ContradictionID: ch1_region_identity
+  m_SourceLineTag: ch1_region_identity_src
+  m_TargetLineTag: ch1_region_identity_tgt
+  m_Chapter: 1
+  m_RewardCoin: 10
+  m_UnlockTopic: {fileID: 11400000, guid: f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6, type: 2}
+  m_ReactionNodeName:
+  m_Difficulty: 1
+  m_Description: "Pyramid は「第4管理区域」と明言しているのに、Marco は「どこなのかもはっきりしない」と述べる矛盾。地域の実在性に関する根本的な疑問を示す。"

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9634b99acb05c148ac39be3ec932f96, type: 3}
+  m_Name: ContradictionPair_ch1_facility_name
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFoundPhone.Data.ContradictionPair
+  m_ContradictionID: ch1_facility_name
+  m_SourceLineTag: ch1_facility_name_src
+  m_TargetLineTag: ch1_facility_name_tgt
+  m_Chapter: 1
+  m_RewardCoin: 10
+  m_UnlockTopic: {fileID: 11400000, guid: f3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8, type: 2}
+  m_ReactionNodeName:
+  m_Difficulty: 1
+  m_Description: "Pyramid が「教育支援施設」と呼ぶ建物を、Marco は「学校」だったと記憶している。公式名称と実態、記憶と現実の乖離。"
