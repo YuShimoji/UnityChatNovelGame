@@ -64,6 +64,10 @@ namespace ProjectFoundPhone.UI
 
         private readonly List<SavedChatMessage> m_ChatHistory = new List<SavedChatMessage>();
         private bool m_IsRestoringHistory = false;
+
+        /// <summary>ChatUIConfig SO へのキャッシュ付きアクセス</summary>
+        private ChatUIConfig m_UIConfig;
+        private ChatUIConfig UIConfig => m_UIConfig ??= ChatUIConfig.Instance;
         #endregion
 
         #region Unity Lifecycle
@@ -120,7 +124,8 @@ namespace ProjectFoundPhone.UI
                 // VerticalLayoutGroupのスペーシング設定を確保
                 if (m_LayoutGroup != null)
                 {
-                    m_LayoutGroup.spacing = Mathf.Max(m_LayoutGroup.spacing, 10f);
+                    float minSpacing = UIConfig != null ? UIConfig.minLayoutSpacing : 10f;
+                    m_LayoutGroup.spacing = Mathf.Max(m_LayoutGroup.spacing, minSpacing);
                     m_LayoutGroup.childControlHeight = false;
                     m_LayoutGroup.childForceExpandHeight = false;
                 }
@@ -247,10 +252,13 @@ namespace ProjectFoundPhone.UI
             hlg.childControlWidth = false; // 子要素の幅を制御しない
             hlg.childControlHeight = true;
             // パディングで左右マージンを作る → player は左に広いマージン、NPC は右に広いマージン
-            int sideMargin = (int)(Screen.width * 0.25f);
+            float marginPct = UIConfig != null ? UIConfig.sideMarginPercent : 0.25f;
+            int edgePad = UIConfig != null ? UIConfig.wrapperEdgePadding : 12;
+            int vPad = UIConfig != null ? UIConfig.wrapperVerticalPadding : 4;
+            int sideMargin = (int)(Screen.width * marginPct);
             hlg.padding = isPlayer
-                ? new RectOffset(sideMargin, 12, 4, 4)
-                : new RectOffset(12, sideMargin, 4, 4);
+                ? new RectOffset(sideMargin, edgePad, vPad, vPad)
+                : new RectOffset(edgePad, sideMargin, vPad, vPad);
 
             LayoutElement wrapperLayout = wrapper.GetComponent<LayoutElement>();
             wrapperLayout.flexibleWidth = 1f;
@@ -266,8 +274,8 @@ namespace ProjectFoundPhone.UI
             if (textComponent != null)
             {
                 textComponent.color = isPlayer
-                    ? Color.white
-                    : new Color(0.9f, 0.9f, 0.9f, 1f);
+                    ? (UIConfig != null ? UIConfig.playerTextColor : Color.white)
+                    : (UIConfig != null ? UIConfig.npcTextColor : new Color(0.9f, 0.9f, 0.9f, 1f));
             }
         }
 
@@ -321,13 +329,14 @@ namespace ProjectFoundPhone.UI
             messageBubble.SetActive(true);
 
             // プール再利用時の状態汚染を防止: RectTransform をデフォルトにリセット
+            float initH = UIConfig != null ? UIConfig.bubbleInitialHeight : 72f;
             RectTransform bubbleRect = messageBubble.GetComponent<RectTransform>();
             if (bubbleRect != null)
             {
                 bubbleRect.anchorMin = new Vector2(0f, 1f);
                 bubbleRect.anchorMax = new Vector2(1f, 1f);
                 bubbleRect.pivot = new Vector2(0.5f, 1f);
-                bubbleRect.sizeDelta = new Vector2(0f, 72f);
+                bubbleRect.sizeDelta = new Vector2(0f, initH);
             }
 
             // Imageコンポーネントを追加（背景表示用）
@@ -345,7 +354,8 @@ namespace ProjectFoundPhone.UI
             {
                 layoutElement = messageBubble.AddComponent<LayoutElement>();
             }
-            layoutElement.minHeight = 60f;
+            float minH = UIConfig != null ? UIConfig.bubbleMinHeight : 60f;
+            layoutElement.minHeight = minH;
             layoutElement.preferredHeight = -1f; // 後で動的に設定
             layoutElement.flexibleHeight = -1f;
             layoutElement.flexibleWidth = 0f; // 幅を固定（拡張しない）
@@ -419,8 +429,8 @@ namespace ProjectFoundPhone.UI
             if (bubbleLayout != null)
             {
                 float textHeight = textComponent.preferredHeight;
-                float padding = 20f; // 上下のパディング
-                bubbleLayout.preferredHeight = Mathf.Max(60f, textHeight + padding);
+                float bPad = UIConfig != null ? UIConfig.bubbleTextPadding : 20f;
+                bubbleLayout.preferredHeight = Mathf.Max(minH, textHeight + bPad);
             }
 
             // レイアウトを即座に更新
@@ -471,8 +481,9 @@ namespace ProjectFoundPhone.UI
         private void AnimateBubbleIn(GameObject bubble)
         {
             if (bubble == null) return;
+            float dur = UIConfig != null ? UIConfig.bubbleAnimationDuration : 0.4f;
             bubble.transform.localScale = Vector3.zero;
-            bubble.transform.DOScale(1f, 0.4f).SetEase(Ease.OutBack).SetUpdate(true);
+            bubble.transform.DOScale(1f, dur).SetEase(Ease.OutBack).SetUpdate(true);
         }
         #endregion
 
@@ -744,7 +755,7 @@ namespace ProjectFoundPhone.UI
                 bubbleBackground = systemBubble.AddComponent<Image>();
                 bubbleBackground.color = new Color(0.15f, 0.15f, 0.2f, 0.7f);
             }
-            bubbleBackground.color = new Color(0.5f, 0.5f, 0.5f, 0.3f);
+            bubbleBackground.color = UIConfig != null ? UIConfig.systemMessageBgColor : new Color(0.5f, 0.5f, 0.5f, 0.3f);
             bubbleBackground.raycastTarget = false;
 
             // LayoutElementを追加
@@ -753,7 +764,8 @@ namespace ProjectFoundPhone.UI
             {
                 layoutElement = systemBubble.AddComponent<LayoutElement>();
             }
-            layoutElement.minHeight = 40f;
+            float sysMinH = UIConfig != null ? UIConfig.systemMessageMinHeight : 40f;
+            layoutElement.minHeight = sysMinH;
             layoutElement.preferredHeight = -1f;
 
             // ContentSizeFitterを追加
@@ -781,8 +793,8 @@ namespace ProjectFoundPhone.UI
             }
 
             // プール再利用時にも確実にシステムメッセージ用の設定を適用
-            textComponent.fontSize = 16;
-            textComponent.color = new Color(0.75f, 0.75f, 0.8f, 1.0f);
+            textComponent.fontSize = UIConfig != null ? UIConfig.systemMessageFontSize : 16f;
+            textComponent.color = UIConfig != null ? UIConfig.systemMessageTextColor : new Color(0.75f, 0.75f, 0.8f, 1.0f);
             textComponent.alignment = TextAlignmentOptions.Center;
             textComponent.fontStyle = FontStyles.Italic;
             textComponent.enableWordWrapping = true;
@@ -801,8 +813,8 @@ namespace ProjectFoundPhone.UI
             if (layoutElement != null)
             {
                 float textHeight = textComponent.preferredHeight;
-                float padding = 20f; // 上下のパディング
-                layoutElement.preferredHeight = Mathf.Max(40f, textHeight + padding);
+                float sysPad = UIConfig != null ? UIConfig.bubbleTextPadding : 20f;
+                layoutElement.preferredHeight = Mathf.Max(sysMinH, textHeight + sysPad);
             }
 
             // レイアウトを即座に更新
@@ -1051,7 +1063,8 @@ namespace ProjectFoundPhone.UI
             }
 
             m_AutoScrollScheduled = true;
-            Invoke(nameof(PerformAutoScroll), 0.1f);
+            float scrollDelay = UIConfig != null ? UIConfig.autoScrollDelay : 0.1f;
+            Invoke(nameof(PerformAutoScroll), scrollDelay);
         }
 
         private void PerformAutoScroll()
@@ -1150,8 +1163,10 @@ namespace ProjectFoundPhone.UI
             background.color = new Color(0.07f, 0.07f, 0.09f, 0f); // 背景は透明に（メッセージの流れと同化）
 
             VerticalLayoutGroup layoutGroup = container.GetComponent<VerticalLayoutGroup>();
-            layoutGroup.spacing = 8f;
-            layoutGroup.padding = new RectOffset(40, 40, 10, 20); // 左右の余白を多めに
+            float cSpacing = UIConfig != null ? UIConfig.choiceSpacing : 8f;
+            int cPadH = UIConfig != null ? UIConfig.choicePaddingHorizontal : 40;
+            layoutGroup.spacing = cSpacing;
+            layoutGroup.padding = new RectOffset(cPadH, cPadH, 10, 20);
             layoutGroup.childForceExpandWidth = true;
             layoutGroup.childForceExpandHeight = false;
             layoutGroup.childControlWidth = true;
@@ -1175,20 +1190,20 @@ namespace ProjectFoundPhone.UI
             template.SetActive(false);
 
             Image buttonBackground = template.GetComponent<Image>();
-            buttonBackground.color = new Color(0.25f, 0.55f, 1.0f, 0.8f); // プレイヤーカラーに近い青色
+            buttonBackground.color = UIConfig != null ? UIConfig.choiceButtonColor : new Color(0.25f, 0.55f, 1.0f, 0.8f);
 
             Button button = template.GetComponent<Button>();
             button.transition = Selectable.Transition.ColorTint;
             button.targetGraphic = buttonBackground;
-            
+
             ColorBlock cb = button.colors;
-            cb.highlightedColor = new Color(0.35f, 0.65f, 1.0f, 1.0f);
-            cb.pressedColor = new Color(0.15f, 0.45f, 0.9f, 1.0f);
+            cb.highlightedColor = UIConfig != null ? UIConfig.choiceButtonHighlightColor : new Color(0.35f, 0.65f, 1.0f, 1.0f);
+            cb.pressedColor = UIConfig != null ? UIConfig.choiceButtonPressedColor : new Color(0.15f, 0.45f, 0.9f, 1.0f);
             button.colors = cb;
 
             LayoutElement layout = template.GetComponent<LayoutElement>();
-            layout.minHeight = 50f;
-            layout.preferredHeight = 60f;
+            layout.minHeight = UIConfig != null ? UIConfig.choiceButtonMinHeight : 50f;
+            layout.preferredHeight = UIConfig != null ? UIConfig.choiceButtonPreferredHeight : 60f;
             layout.flexibleWidth = 1f;
 
             RectTransform rect = template.GetComponent<RectTransform>();
@@ -1208,8 +1223,8 @@ namespace ProjectFoundPhone.UI
             TextMeshProUGUI label = textObj.AddComponent<TextMeshProUGUI>();
             label.text = "Choice";
             label.enableAutoSizing = true;
-            label.fontSizeMin = 20f;
-            label.fontSizeMax = 36f;
+            label.fontSizeMin = UIConfig != null ? UIConfig.choiceFontSizeMin : 20f;
+            label.fontSizeMax = UIConfig != null ? UIConfig.choiceFontSizeMax : 36f;
             label.alignment = TextAlignmentOptions.Midline;
             label.color = Color.white;
             label.raycastTarget = false;
