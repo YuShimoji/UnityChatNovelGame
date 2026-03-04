@@ -69,14 +69,15 @@ namespace ProjectFoundPhone.UI
                     ? dialogueLine.TextID
                     : null;
                 m_ChatController.AddMessage(charID, lineText, lineTag);
+
+                // タイプライター効果の完了を待つ（0.05秒/文字 + バッファ0.3秒）
+                float typewriterDuration = lineText.Length * 0.05f;
+                await YarnTask.Delay((int)((typewriterDuration + 0.3f) * 1000), token.NextContentToken).SuppressCancellationThrow();
             }
             else
             {
                 Debug.LogWarning($"ChatDialogueView: ChatController not found. Line: {lineText}");
             }
-
-            // 残りの待機時間
-            await YarnTask.Delay((int)(m_LineDisplayDelay * 0.4f * 1000), token.NextContentToken).SuppressCancellationThrow();
         }
 
         /// <summary>

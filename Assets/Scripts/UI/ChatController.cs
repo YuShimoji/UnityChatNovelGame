@@ -769,6 +769,20 @@ namespace ProjectFoundPhone.UI
 
             textComponent.text = text;
 
+            // テキストのメッシュを強制更新して高さを計算
+            textComponent.ForceMeshUpdate();
+
+            // テキストの高さに基づいてバブルの高さを動的に設定
+            if (layoutElement != null)
+            {
+                float textHeight = textComponent.preferredHeight;
+                float padding = 20f; // 上下のパディング
+                layoutElement.preferredHeight = Mathf.Max(40f, textHeight + padding);
+            }
+
+            // レイアウトを即座に更新
+            Canvas.ForceUpdateCanvases();
+
             AnimateBubbleIn(systemBubble);
 
             if (!m_IsUserScrolling)
@@ -1022,6 +1036,10 @@ namespace ProjectFoundPhone.UI
             {
                 return;
             }
+
+            // レイアウトを強制更新してから最下部へスクロール
+            Canvas.ForceUpdateCanvases();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(m_ScrollRect.content);
 
             if (m_ScrollTween != null && m_ScrollTween.IsActive())
             {
