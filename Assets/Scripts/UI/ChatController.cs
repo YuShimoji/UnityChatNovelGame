@@ -229,12 +229,12 @@ namespace ProjectFoundPhone.UI
                 mb.SyncOriginalColor();
             }
 
-            // バブルの LayoutElement: 幅を制限
+            // バブルの LayoutElement: HLG が幅を制御するため flexibleWidth で拡張を許可
             LayoutElement layoutElement = bubble.GetComponent<LayoutElement>();
             if (layoutElement != null)
             {
-                layoutElement.flexibleWidth = 0f; // 幅を固定
-                layoutElement.preferredWidth = -1f; // 子要素に合わせる
+                layoutElement.flexibleWidth = 1f;
+                layoutElement.preferredWidth = -1f;
             }
 
             if (m_ScrollRect == null || m_ScrollRect.content == null) return;
@@ -247,9 +247,9 @@ namespace ProjectFoundPhone.UI
             wrapper.transform.SetSiblingIndex(bubble.transform.GetSiblingIndex());
 
             HorizontalLayoutGroup hlg = wrapper.GetComponent<HorizontalLayoutGroup>();
-            hlg.childForceExpandWidth = false; // 幅を強制的に拡張しない
+            hlg.childForceExpandWidth = true;  // 子要素を利用可能幅いっぱいに拡張
             hlg.childForceExpandHeight = false;
-            hlg.childControlWidth = false; // 子要素の幅を制御しない
+            hlg.childControlWidth = true;      // HLG が子要素の幅を制御
             hlg.childControlHeight = true;
             // パディングで左右マージンを作る → player は左に広いマージン、NPC は右に広いマージン
             float marginPct = UIConfig != null ? UIConfig.sideMarginPercent : 0.25f;
@@ -358,7 +358,7 @@ namespace ProjectFoundPhone.UI
             layoutElement.minHeight = minH;
             layoutElement.preferredHeight = -1f; // 後で動的に設定
             layoutElement.flexibleHeight = -1f;
-            layoutElement.flexibleWidth = 0f; // 幅を固定（拡張しない）
+            layoutElement.flexibleWidth = 1f; // HLG の childControlWidth に従い拡張
 
             // ContentSizeFitter はバブル自体には付けない
             // （Wrapper の HorizontalLayoutGroup + ContentSizeFitter が高さを制御する。
@@ -372,6 +372,10 @@ namespace ProjectFoundPhone.UI
 
             // プレイヤー判定・テーマカラー・配置を共通処理で設定
             ConfigureBubble(messageBubble, charID);
+
+            // ラッパー HLG がバブル幅を解決するようにレイアウトを強制更新
+            // （バブル幅が未確定のままテキストを設定すると1文字折り返しになる）
+            Canvas.ForceUpdateCanvases();
 
             // 表示名をCharacterDatabaseから取得（fallback: IDそのまま）
             string displayName = CharacterDatabase.Instance != null
