@@ -48,7 +48,7 @@ namespace ProjectFoundPhone.UI
 
         private bool m_AutoScrollScheduled = false;
         private bool m_IsAutoScrolling = false;
-        private Tween m_ScrollTween;
+        private bool m_PinnedToBottom = false;
 
         private GameObject m_RuntimeChoiceButtonTemplate;
         private GameObject m_RuntimeImageBubbleTemplate;
@@ -88,6 +88,16 @@ namespace ProjectFoundPhone.UI
             if (m_ScrollRect != null)
             {
                 m_ScrollRect.onValueChanged.AddListener(OnScrollValueChanged);
+            }
+        }
+
+        private void LateUpdate()
+        {
+            // タイプライター中のコンテンツ成長に追従するため、
+            // ユーザーが手動スクロールしていない間は毎フレーム最下部に固定
+            if (m_PinnedToBottom && !m_IsUserScrolling && m_ScrollRect != null)
+            {
+                m_ScrollRect.verticalNormalizedPosition = 0f;
             }
         }
         #endregion
@@ -174,6 +184,7 @@ namespace ProjectFoundPhone.UI
             if (verticalPos < (1.0f - m_AutoScrollThreshold))
             {
                 m_IsUserScrolling = true;
+                m_PinnedToBottom = false;
             }
             // スクロール位置が最下部に近い場合、ユーザーは最新メッセージを見ている
             else if (verticalPos >= 0.99f)
@@ -309,6 +320,16 @@ namespace ProjectFoundPhone.UI
             // バブルを確実に表示
             messageBubble.SetActive(true);
 
+            // プール再利用時の状態汚染を防止: RectTransform をデフォルトにリセット
+            RectTransform bubbleRect = messageBubble.GetComponent<RectTransform>();
+            if (bubbleRect != null)
+            {
+                bubbleRect.anchorMin = new Vector2(0f, 1f);
+                bubbleRect.anchorMax = new Vector2(1f, 1f);
+                bubbleRect.pivot = new Vector2(0.5f, 1f);
+                bubbleRect.sizeDelta = new Vector2(0f, 72f);
+            }
+
             // Imageコンポーネントを追加（背景表示用）
             Image bubbleImage = messageBubble.GetComponent<Image>();
             if (bubbleImage == null)
@@ -332,10 +353,11 @@ namespace ProjectFoundPhone.UI
             // ContentSizeFitter はバブル自体には付けない
             // （Wrapper の HorizontalLayoutGroup + ContentSizeFitter が高さを制御する。
             //  バブルにも付けると入れ子 ContentSizeFitter の競合でレイアウトが振動する）
+            // DestroyImmediate でこのフレーム内に確実に除去（Destroy は遅延されレイアウトに影響）
             ContentSizeFitter sizeFitter = messageBubble.GetComponent<ContentSizeFitter>();
             if (sizeFitter != null)
             {
-                UnityEngine.Object.Destroy(sizeFitter);
+                DestroyImmediate(sizeFitter);
             }
 
             // プレイヤー判定・テーマカラー・配置を共通処理で設定
@@ -743,42 +765,31 @@ namespace ProjectFoundPhone.UI
             sizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
             sizeFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
 
-            // テキストを中央揃え・小さめフォントで設定
+            // テキストコンポーネントの取得または作成
             TextMeshProUGUI textComponent = systemBubble.GetComponentInChildren<TextMeshProUGUI>();
             if (textComponent == null)
             {
-                // TextMeshProが存在しない場合は子オブジェクトとして作成
                 GameObject textObj = new GameObject("Text");
                 textObj.transform.SetParent(systemBubble.transform, false);
                 textComponent = textObj.AddComponent<TextMeshProUGUI>();
-                
-                // RectTransformの設定
+
                 RectTransform textRect = textComponent.GetComponent<RectTransform>();
                 textRect.anchorMin = new Vector2(0, 0);
                 textRect.anchorMax = new Vector2(1, 1);
                 textRect.offsetMin = new Vector2(10, 10);
                 textRect.offsetMax = new Vector2(-10, -10);
-                
-                // テキストの基本設定（通常メッセージと同程度のサイズ）
-                textComponent.fontSize = 16;
-                textComponent.color = new Color(0.75f, 0.75f, 0.8f, 1.0f);
-                textComponent.alignment = TextAlignmentOptions.Center;
-                textComponent.fontStyle = FontStyles.Italic;
-                textComponent.enableWordWrapping = true;
-
-                // 日本語フォントを設定
-                if (m_JapaneseFontAsset != null)
-                {
-                    textComponent.font = m_JapaneseFontAsset;
-                }
             }
-            else
+
+            // プール再利用時にも確実にシステムメッセージ用の設定を適用
+            textComponent.fontSize = 16;
+            textComponent.color = new Color(0.75f, 0.75f, 0.8f, 1.0f);
+            textComponent.alignment = TextAlignmentOptions.Center;
+            textComponent.fontStyle = FontStyles.Italic;
+            textComponent.enableWordWrapping = true;
+            textComponent.enableAutoSizing = false;
+            if (m_JapaneseFontAsset != null)
             {
-                // 既存のTextMeshProにも日本語フォントを設定
-                if (m_JapaneseFontAsset != null)
-                {
-                    textComponent.font = m_JapaneseFontAsset;
-                }
+                textComponent.font = m_JapaneseFontAsset;
             }
 
             textComponent.text = text;
@@ -1031,15 +1042,15 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
+            // 連続ピンニングを有効化（LateUpdate で毎フレーム最下部に固定）
+            m_PinnedToBottom = true;
+
             if (m_AutoScrollScheduled)
             {
                 return;
             }
 
             m_AutoScrollScheduled = true;
-
-            // Canvasの更新を待ってからスクロールするためにコルーチンか遅延実行を使うのが一般的だが、
-            // ここでは簡易的にDOTweenで遅延させる
             Invoke(nameof(PerformAutoScroll), 0.1f);
         }
 
@@ -1056,23 +1067,10 @@ namespace ProjectFoundPhone.UI
             Canvas.ForceUpdateCanvases();
             LayoutRebuilder.ForceRebuildLayoutImmediate(m_ScrollRect.content);
 
-            if (m_ScrollTween != null && m_ScrollTween.IsActive())
-            {
-                m_ScrollTween.Kill(false);
-            }
-
             m_IsAutoScrolling = true;
-            m_ScrollTween = DOTween.To(
-                () => m_ScrollRect.verticalNormalizedPosition,
-                x => m_ScrollRect.verticalNormalizedPosition = x,
-                0.0f,
-                0.3f
-            ).OnComplete(() =>
-            {
-                m_LastScrollPosition = 0.0f;
-                m_IsAutoScrolling = false;
-                m_IsUserScrolling = false;
-            });
+            m_ScrollRect.verticalNormalizedPosition = 0f;
+            m_LastScrollPosition = 0f;
+            m_IsAutoScrolling = false;
         }
 
         private void OnDisable()
@@ -1083,10 +1081,7 @@ namespace ProjectFoundPhone.UI
                 m_AutoScrollScheduled = false;
             }
 
-            if (m_ScrollTween != null && m_ScrollTween.IsActive())
-            {
-                m_ScrollTween.Kill(false);
-            }
+            m_PinnedToBottom = false;
         }
 
         private void EnsureChoiceUIElements()

@@ -328,8 +328,18 @@ namespace ProjectFoundPhone.DebugTools
 
             CreateInfoLabel($"{sorted.Length} nodes available");
 
+            int lastChapter = -1;
             foreach (string nodeName in sorted)
             {
+                int chapter = GetChapterOrder(nodeName);
+                if (chapter != lastChapter)
+                {
+                    string header = chapter < 90
+                        ? $"──── Chapter {chapter} ────"
+                        : "──── Other ────";
+                    CreateSectionHeader(header);
+                    lastChapter = chapter;
+                }
                 CreateNodeButton(nodeName);
             }
         }
@@ -417,6 +427,29 @@ namespace ProjectFoundPhone.DebugTools
             label.fontSize = 24f;
             label.color = new Color(0.85f, 0.85f, 0.9f);
             label.alignment = TextAlignmentOptions.MidlineLeft;
+            label.raycastTarget = false;
+            if (TMP_Settings.defaultFontAsset != null)
+            {
+                label.font = TMP_Settings.defaultFontAsset;
+            }
+        }
+
+        private void CreateSectionHeader(string text)
+        {
+            GameObject headerObj = new GameObject("SectionHeader", typeof(RectTransform), typeof(LayoutElement));
+            AssignUILayer(headerObj);
+            headerObj.transform.SetParent(m_NodeListContent, false);
+
+            LayoutElement layout = headerObj.GetComponent<LayoutElement>();
+            layout.minHeight = 40f;
+            layout.flexibleWidth = 1f;
+
+            TextMeshProUGUI label = headerObj.AddComponent<TextMeshProUGUI>();
+            label.text = text;
+            label.fontSize = 22f;
+            label.fontStyle = FontStyles.Bold;
+            label.color = new Color(0.6f, 0.65f, 0.8f);
+            label.alignment = TextAlignmentOptions.Center;
             label.raycastTarget = false;
             if (TMP_Settings.defaultFontAsset != null)
             {

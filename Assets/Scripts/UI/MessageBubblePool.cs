@@ -116,13 +116,25 @@ namespace ProjectFoundPhone.UI
             obj.SetActive(false);
             obj.transform.SetParent(m_PoolContainer, false);
 
-            // 位置と回転をリセット
+            // RectTransform を既知のデフォルト状態にリセット
+            // （システムメッセージ用のアンカーや CSF による sizeDelta 汚染を防止）
             RectTransform rectTransform = obj.GetComponent<RectTransform>();
             if (rectTransform != null)
             {
                 rectTransform.anchoredPosition = Vector2.zero;
                 rectTransform.localRotation = Quaternion.identity;
                 rectTransform.localScale = Vector3.one;
+                rectTransform.anchorMin = new Vector2(0f, 1f);
+                rectTransform.anchorMax = new Vector2(1f, 1f);
+                rectTransform.pivot = new Vector2(0.5f, 1f);
+                rectTransform.sizeDelta = new Vector2(0f, 72f);
+            }
+
+            // システムメッセージ用の ContentSizeFitter が残っていれば除去
+            var csf = obj.GetComponent<UnityEngine.UI.ContentSizeFitter>();
+            if (csf != null)
+            {
+                UnityEngine.Object.DestroyImmediate(csf);
             }
 
             // TextMeshPro のテキストをクリアし、表示状態をリセット
