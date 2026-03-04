@@ -319,9 +319,11 @@ namespace ProjectFoundPhone.DebugTools
                 return;
             }
 
+            // チャプター番号でグループ化し、各グループ内はアルファベット順
             string[] sorted = nodeNames
                 .Where(n => !string.IsNullOrWhiteSpace(n))
-                .OrderBy(n => n, System.StringComparer.Ordinal)
+                .OrderBy(n => GetChapterOrder(n))
+                .ThenBy(n => n, System.StringComparer.Ordinal)
                 .ToArray();
 
             CreateInfoLabel($"{sorted.Length} nodes available");
@@ -330,6 +332,21 @@ namespace ProjectFoundPhone.DebugTools
             {
                 CreateNodeButton(nodeName);
             }
+        }
+
+        /// <summary>
+        /// ノード名からチャプター順序を返す（Ch1=1, Ch2=2, ... その他=99）
+        /// </summary>
+        private static int GetChapterOrder(string nodeName)
+        {
+            if (string.IsNullOrEmpty(nodeName)) return 99;
+            // "Ch1_", "Ch2_" 等のプレフィックスを解析
+            if (nodeName.Length >= 3 && nodeName.StartsWith("Ch") && char.IsDigit(nodeName[2]))
+            {
+                return nodeName[2] - '0';
+            }
+            // FirstSlice等のデバッグ用ノードは後方
+            return 90;
         }
 
         private void OnNodeButtonClicked(string nodeName)

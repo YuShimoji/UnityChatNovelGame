@@ -1,45 +1,63 @@
 # WORKFLOW STATE SSOT
 
-**Updated**: 2026-03-03  
-**Phase**: Content Authoring — Chapter 1 実装  
+**Updated**: 2026-03-04
+**Phase**: Content Authoring — Chapter 1 & 2 統合 + UIバグ修正
 **Branch**: main
+**HEAD**: `6e83e78`
 
 ## Mission
 
-Chapter 1（端末の貧弱さ）のコンテンツ制作と動作確認。ContentAuthoring シーンでの実プレイ可能状態の達成。
+Chapter 1-2 のコンテンツ統合とUIバグ修正。ContentAuthoring シーンでの Ch1/Ch2 プレイテスト準備完了。
 
 ## Done 条件
 
 - [x] Ch1 Yarnスクリプト（Ch1_Terminal.yarn）の作成
 - [x] Ch1必要アセットの作成（CharacterProfile: pyramid/marco, TopicData: fragment_ch1_01）
+- [x] Ch2 Yarnスクリプト（Ch2_LocationConfusion.yarn）の統合
+- [x] Ch2必要アセットの統合（CharacterProfile: bernardo/mason/oliver, TopicData: fragment_ch1_02-04, ch2_01-03）
+- [x] 矛盾ペアアセットの統合（Ch1 x4, Ch2 x3 + ContradictionDatabase）
+- [x] UI演出の統合（タイプライター効果、入力中表示、選択肢レイアウト修正）
+- [x] 色薄バブル問題の修正（プール再利用時の色汚染防止、デフォルトNPC色修正）
+- [x] 選択肢重複表示の修正（DestroyImmediate、onClick リスナークリア）
 - [x] 仕様書の更新（monetization, production_plan, open_questions）
 - [x] ENGINE_FEATURE_INVENTORY.md の作成
-- [x] YarnEditingPipeline.md の拡充
-- [x] Ch1_DRAFT_NOTES.md の作成
-- [ ] ContentAuthoring シーンでの Ch1 再生確認（手動）
+- [ ] ContentAuthoring シーンでの Ch1/Ch2 再生確認（手動）
 - [ ] 全分岐パターンの通しテスト（最低2周）
 
 ## 現在の状態
 
-### 完了済み（2026-03-03）
-- ✅ Ch1_Terminal.yarn 作成完了（10ノード, 455行, 推定50-60メッセージ）
-- ✅ CharacterProfile 作成: `pyramid`（薄い緑系 r:0.55/g:0.82/b:0.6）
-- ✅ CharacterProfile 作成: `marco`（暖色系 r:0.9/g:0.55/b:0.3）
-- ✅ TopicData 作成: `fragment_ch1_01`（施設管理規約（部分））
-- ✅ CharacterProfileCreator.cs 更新（pyramid/marco追加）
-- ✅ Yarn構文の一貫性修正（`=` → `to` 統一）
-- ✅ Ch1_DRAFT_NOTES.md チェックリスト更新
-- ✅ StorySpec 仕様書群の更新（10_monetization, 11_production_plan, 99_open_questions）
-- ✅ ENGINE_FEATURE_INVENTORY.md 新規作成
-- ✅ YarnEditingPipeline.md 大幅拡充
-- ✅ 変数名衝突チェック（$ch1_プレフィックスで安全）
-- ✅ ノード名衝突チェック（Ch1_プレフィックスで安全）
-- ✅ Yarnプロジェクト設定確認（**/*.yarn globで自動取り込み）
+### 完了済み（2026-03-04）
+- ✅ feature/task-049 ブランチから有用な変更を選択的マージ（`a1c76f9`）
+  - Ch2_LocationConfusion.yarn（7ノード, 313行）
+  - CharacterProfile: bernardo/mason/oliver
+  - ContradictionPair: Ch1 x4 + Ch2 x3
+  - TopicData: fragment_ch1_02-04, ch2_01-03
+  - ChatController: タイプライター効果、入力中表示、選択肢修正
+  - ChatDialogueView: システムメッセージバブルサイズ、スクロール吸着
+- ✅ S2 色薄バブル修正（`6e83e78`）
+  - MessageBubble.SyncOriginalColor() 追加
+  - MessageBubblePool.Return() で Image.color リセット
+  - CharacterDatabase デフォルトNPC色を (0.3, 0.3, 0.35) に変更
+- ✅ S3 選択肢重複表示修正（`6e83e78`）
+  - HideChoices: DestroyImmediate で即座削除
+  - ShowChoices: onClick.RemoveAllListeners() でリスナー蓄積防止
+
+- P1 タイプライター文字化け修正
+  - DOTween.Kill(complete:true) で前回 tween を確実に完了
+  - SetTarget + OnComplete でライフサイクル管理
+  - MessageBubblePool.Return() で maxVisibleCharacters リセット
+- P2 ClearMessages プール汚染修正
+  - ラッパー（PlayerRow/NpcRow）をプールに返却していたバグを修正
+  - ReturnAll() で追跡済みバブルを正しく返却、空ラッパーは Destroy
+  - TypingIndicator をリセットし次回使用時に再生成
+- P3 システムメッセージフォントサイズ修正（16pt、0.85x 乗算を除去）
+- P4 Debug Hub ノード順序をチャプター順に変更（GetChapterOrder）
 
 ### 次のアクション
-1. **手動確認**: Unity ContentAuthoring シーンでの Ch1 再生テスト
-2. **改善検討**: Ch1_DRAFT_NOTES.md の「今後の課題」セクション対応
-3. **次フェーズ**: Ch2 設計・指摘メカニクス実装の検討
+1. **手動確認**: Unity ContentAuthoring シーンでの Ch1/Ch2 再生テスト（P1-P4 修正の確認）
+2. **次フェーズ検討**: 矛盾 Phase 2（UIフィードバック/アニメーション）
+3. **UI拡張**: フラグメント一覧画面、ダッシュボード型メイン画面
+4. **レイアウト**: スマホサイズ基準への移行
 
 ## 選別規則
 

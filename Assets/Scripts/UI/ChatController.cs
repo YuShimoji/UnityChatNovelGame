@@ -420,8 +420,14 @@ namespace ProjectFoundPhone.UI
         {
             if (!m_EnableTypewriterEffect || textComponent == null || string.IsNullOrEmpty(textComponent.text))
             {
+                // タイプライター無効時は全文字を即座に表示
+                if (textComponent != null)
+                    textComponent.maxVisibleCharacters = int.MaxValue;
                 return;
             }
+
+            // 前回のタイプライター tween が残っていればキルし、全文字表示にリセット
+            DOTween.Kill(textComponent, complete: true);
 
             int totalCharacters = textComponent.text.Length;
             textComponent.maxVisibleCharacters = 0;
@@ -431,7 +437,10 @@ namespace ProjectFoundPhone.UI
                 x => textComponent.maxVisibleCharacters = x,
                 totalCharacters,
                 totalCharacters * m_TypewriterSpeed
-            ).SetEase(Ease.Linear).SetUpdate(true);
+            ).SetEase(Ease.Linear)
+             .SetUpdate(true)
+             .SetTarget(textComponent)
+             .OnComplete(() => textComponent.maxVisibleCharacters = totalCharacters);
         }
 
         /// <summary>
@@ -750,14 +759,12 @@ namespace ProjectFoundPhone.UI
                 textRect.offsetMin = new Vector2(10, 10);
                 textRect.offsetMax = new Vector2(-10, -10);
                 
-                // テキストの基本設定
+                // テキストの基本設定（通常メッセージと同程度のサイズ）
                 textComponent.fontSize = 16;
-                textComponent.color = new Color(0.4f, 0.4f, 0.4f, 1.0f);
+                textComponent.color = new Color(0.75f, 0.75f, 0.8f, 1.0f);
                 textComponent.alignment = TextAlignmentOptions.Center;
                 textComponent.fontStyle = FontStyles.Italic;
                 textComponent.enableWordWrapping = true;
-                textComponent.fontSize = textComponent.fontSize * 0.85f;
-                textComponent.color = new Color(0.75f, 0.75f, 0.8f, 1.0f);
 
                 // 日本語フォントを設定
                 if (m_JapaneseFontAsset != null)
@@ -1490,6 +1497,8 @@ namespace ProjectFoundPhone.UI
 
         /// <summary>
         /// チャット履歴をクリア（プール返却方式）
+        /// 注意: ConfigureBubble が生成するラッパー（PlayerRow/NpcRow）と
+        /// プール管理対象のバブル本体を正しく分離して処理する
         /// </summary>
         public void ClearMessages()
         {
@@ -1498,10 +1507,9 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            // プールにオブジェクトが返却可能か確認
+            // プール未設定時は従来通りDestroy
             if (m_MessageBubblePool == null)
             {
-                // プール未設定時は従来通りDestroy
                 int childCount = m_ScrollRect.content.childCount;
                 for (int i = childCount - 1; i >= 0; i--)
                 {
@@ -1515,16 +1523,23 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            // m_ScrollRect.contentの子オブジェクト（メッセージバブル）をプールに返却
-            int childCount2 = m_ScrollRect.content.childCount;
-            for (int i = childCount2 - 1; i >= 0; i--)
+            // プール追跡済みオブジェクト（実際のバブル）を正しく返却
+            // ReturnAll はバブル本体をラッパーから取り出してプールコンテナに戻す
+            m_MessageBubblePool.ReturnAll();
+
+            // 残存する子オブジェクト（空ラッパー、ChoiceContainer以外）を破棄
+            for (int i = m_ScrollRect.content.childCount - 1; i >= 0; i--)
             {
                 Transform child = m_ScrollRect.content.GetChild(i);
-                if (child != null)
-                {
-                    m_MessageBubblePool.Return(child.gameObject);
-                }
+                if (child == null) continue;
+                // 選択肢コンテナは保持
+                if (m_ChoiceContainer != null && child == m_ChoiceContainer) continue;
+                Destroy(child.gameObject);
             }
+
+            // TypingIndicator はプールに返却されたためリセット（次回使用時に再生成）
+            m_TypingIndicator = null;
+
             m_ChatHistory.Clear();
         }
 

@@ -125,11 +125,14 @@ namespace ProjectFoundPhone.UI
                 rectTransform.localScale = Vector3.one;
             }
 
-            // TextMeshPro のテキストをクリア
+            // TextMeshPro のテキストをクリアし、表示状態をリセット
             var textComponent = obj.GetComponentInChildren<TMPro.TextMeshProUGUI>();
             if (textComponent != null)
             {
+                // タイプライター tween が残っていればキル
+                DG.Tweening.DOTween.Kill(textComponent, complete: false);
                 textComponent.text = string.Empty;
+                textComponent.maxVisibleCharacters = int.MaxValue;
             }
 
             // MessageBubble の状態をリセット（矛盾指摘用データ）
