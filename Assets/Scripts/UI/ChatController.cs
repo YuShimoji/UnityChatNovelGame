@@ -1005,13 +1005,28 @@ namespace ProjectFoundPhone.UI
 
             if (m_TypingIndicator != null)
             {
-                m_TypingIndicator.SetActive(show);
-
-                if (show)
+                // TypingIndicatorはラッパー内に配置されているため、親（ラッパー）を制御
+                Transform wrapper = m_TypingIndicator.transform.parent;
+                if (wrapper != null)
                 {
-                    // 常に最後尾に表示
-                    m_TypingIndicator.transform.SetAsLastSibling();
-                    AutoScroll();
+                    wrapper.gameObject.SetActive(show);
+
+                    if (show)
+                    {
+                        // ラッパーごと最後尾に表示
+                        wrapper.SetAsLastSibling();
+                        AutoScroll();
+                    }
+                }
+                else
+                {
+                    // フォールバック（ラッパーなしの場合）
+                    m_TypingIndicator.SetActive(show);
+                    if (show)
+                    {
+                        m_TypingIndicator.transform.SetAsLastSibling();
+                        AutoScroll();
+                    }
                 }
             }
         }
@@ -1056,13 +1071,27 @@ namespace ProjectFoundPhone.UI
 
             typingBubble.name = "TypingIndicator";
 
+            // RectTransformをリセット
+            RectTransform bubbleRect = typingBubble.GetComponent<RectTransform>();
+            if (bubbleRect != null)
+            {
+                bubbleRect.anchorMin = new Vector2(0f, 1f);
+                bubbleRect.anchorMax = new Vector2(1f, 1f);
+                bubbleRect.pivot = new Vector2(0.5f, 1f);
+                bubbleRect.sizeDelta = new Vector2(0f, 60f);
+            }
+
             // Image背景を追加
             Image bgImage = typingBubble.GetComponent<Image>();
             if (bgImage == null)
             {
                 bgImage = typingBubble.AddComponent<Image>();
             }
-            bgImage.color = new Color(0.3f, 0.3f, 0.35f, 0.9f); // NPC風の色
+            // NPCのテーマカラーを適用
+            Color npcThemeColor = CharacterDatabase.Instance != null
+                ? CharacterDatabase.Instance.GetThemeColor("npc")
+                : new Color(0.3f, 0.3f, 0.35f);
+            bgImage.color = UIConfig.typingIndicatorColor;
             bgImage.raycastTarget = false;
 
             // LayoutElement設定
@@ -1073,7 +1102,7 @@ namespace ProjectFoundPhone.UI
             }
             layoutElement.minHeight = 60f;
             layoutElement.preferredHeight = 60f;
-            layoutElement.flexibleWidth = 0f;
+            layoutElement.flexibleWidth = 1f;
 
             // テキスト設定
             TextMeshProUGUI textComponent = typingBubble.GetComponentInChildren<TextMeshProUGUI>();
@@ -1088,25 +1117,52 @@ namespace ProjectFoundPhone.UI
                 textRect.anchorMax = new Vector2(1, 1);
                 textRect.offsetMin = new Vector2(10, 10);
                 textRect.offsetMax = new Vector2(-10, -10);
-
-                textComponent.fontSize = 18;
-                textComponent.alignment = TextAlignmentOptions.Center;
-                textComponent.enableWordWrapping = false;
-
-                if (m_JapaneseFontAsset != null)
-                {
-                    textComponent.font = m_JapaneseFontAsset;
-                }
             }
 
             textComponent.text = "...";
-            textComponent.color = new Color(0.7f, 0.7f, 0.7f, 1f);
+            textComponent.fontSize = UIConfig.typingIndicatorFontSize;
+            textComponent.color = UIConfig.typingIndicatorTextColor;
+            textComponent.alignment = TextAlignmentOptions.Center;
+            textComponent.enableWordWrapping = false;
 
-            // バブルの配置（NPC側）
-            ConfigureBubble(typingBubble, "npc");
+            if (m_JapaneseFontAsset != null)
+            {
+                textComponent.font = m_JapaneseFontAsset;
+            }
+
+            // TypingIndicatorは通常メッセージと同様にラッパーで左寄せ配置
+            // ただし、ConfigureBubbleを使わずに手動で構築（連続メッセージ判定を避けるため）
+            GameObject wrapper = new GameObject("TypingIndicatorRow",
+                typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement), typeof(ContentSizeFitter));
+            wrapper.transform.SetParent(m_ScrollRect.content, false);
+
+            HorizontalLayoutGroup hlg = wrapper.GetComponent<HorizontalLayoutGroup>();
+            hlg.childForceExpandWidth = true;
+            hlg.childForceExpandHeight = false;
+            hlg.childControlWidth = true;
+            hlg.childControlHeight = true;
+            hlg.spacing = 0f; // TypingIndicatorにはアイコンがないのでスペーシングなし
+
+            // NPC側のパディング（右に広いマージン）
+            int sideMarginRaw = (int)(Screen.width * UIConfig.sideMarginPercent);
+            int sideMarginMaxByRatio = (int)(Screen.width * UIConfig.sideMarginMaxRatio);
+            int sideMargin = (int)Mathf.Min(sideMarginRaw, UIConfig.sideMarginMaxPx, sideMarginMaxByRatio);
+            int edgePad = UIConfig.wrapperEdgePadding;
+            int vPad = UIConfig.wrapperVerticalPadding;
+            hlg.padding = new RectOffset(edgePad, sideMargin, vPad, vPad);
+
+            LayoutElement wrapperLayout = wrapper.GetComponent<LayoutElement>();
+            wrapperLayout.flexibleWidth = 1f;
+
+            ContentSizeFitter wrapperFitter = wrapper.GetComponent<ContentSizeFitter>();
+            wrapperFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+            wrapperFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+            // バブルをラッパーに移動
+            typingBubble.transform.SetParent(wrapper.transform, false);
 
             m_TypingIndicator = typingBubble;
-            m_TypingIndicator.SetActive(false);
+            wrapper.SetActive(false); // 初期状態は非表示
         }
 
 
