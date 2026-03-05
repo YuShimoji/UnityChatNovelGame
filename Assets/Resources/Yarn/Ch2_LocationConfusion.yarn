@@ -15,6 +15,11 @@ title: Ch2_Opening
 <<SystemMessage "接続を確立しています...">>
 <<StartWait 1>>
 
+// 演出: 2日目セッション開始（Ch1より短め）
+<<Typing true>>
+<<StartWait 1.0>>
+<<Typing false>>
+
 <<set $speaker to "pyramid">>
 おはようございます。本日のセッションを開始します。
 
@@ -48,7 +53,10 @@ Bernardoは文書読むのが得意で、MasonとOliverは外を歩き回って�
 <<SystemMessage "新しい参加者が接続しました">>
 
 <<set $speaker to "bernardo">>
-<<StartWait 1>>
+// 演出: 新キャラクター初登場（Bernardo）
+<<Typing true>>
+<<StartWait 1.5>>
+<<Typing false>>
 失礼。Bernardo Fonsecaです。接続に手間取りました。
 
 <<StartWait 0.5>>
@@ -131,7 +139,10 @@ Pyramidの説明は正確ですが...
 <<SystemMessage "新しい参加者が接続しました">>
 
 <<set $speaker to "mason">>
-<<StartWait 1>>
+// 演出: 新キャラクター初登場（Mason）
+<<Typing true>>
+<<StartWait 1.0>>
+<<Typing false>>
 Mason です。接続しました。Oliver もすぐ来ます。
 
 <<set $ch2_met_mason to true>>
@@ -171,7 +182,10 @@ title: Ch2_SignDiscussion
 <<SystemMessage "新しい参加者が接続しました">>
 
 <<set $speaker to "oliver">>
-<<StartWait 0.8>>
+// 演出: 新キャラクター初登場（Oliver）
+<<Typing true>>
+<<StartWait 1.0>>
+<<Typing false>>
 Oliver です。こんにちは。
 
 <<set $ch2_met_oliver to true>>
@@ -243,6 +257,10 @@ title: Ch2_SystemicRealization
 <<StartWait 1.5>>
 
 <<set $speaker to "pyramid">>
+// 演出: グリッチ後の復帰、緊張感
+<<Typing true>>
+<<StartWait 2.0>>
+<<Typing false>>
 通信の安定化を試みています。しばらくお待ちください。
 
 <<StartWait 2>>
