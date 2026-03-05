@@ -506,13 +506,32 @@ namespace ProjectFoundPhone.UI
             // レイアウトを即座に更新
             Canvas.ForceUpdateCanvases();
 
-            // バブルの最終処理（配置、アニメーション、スクロール）
-            FinalizeBubble(messageBubble, charID, isConsecutive);
+            // バブルの最終処理（配置、アニメーションのみ、スクロールは後で）
+            ConfigureBubble(messageBubble, charID, isConsecutive);
+            AnimateBubbleIn(messageBubble);
 
             // タイプライター効果を適用
             ApplyTypewriterEffect(textComponent);
 
+            // タイプライター効果後にスクロール（ガクガク防止）
+            if (!m_IsUserScrolling)
+            {
+                float typewriterDuration = m_EnableTypewriterEffect ? text.Length * m_TypewriterSpeed : 0f;
+                Invoke(nameof(DelayedAutoScroll), typewriterDuration + 0.1f);
+            }
+
             return messageBubble;
+        }
+
+        /// <summary>
+        /// 遅延AutoScroll（タイプライター効果後に呼ばれる）
+        /// </summary>
+        private void DelayedAutoScroll()
+        {
+            if (!m_IsUserScrolling)
+            {
+                AutoScroll();
+            }
         }
 
         /// <summary>
