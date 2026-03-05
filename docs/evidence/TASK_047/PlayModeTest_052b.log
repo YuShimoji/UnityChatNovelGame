@@ -1,0 +1,22 @@
+[Licensing::Module] Trying to connect to existing licensing client channel...
+Built from '6000.3/staging' branch; Version is '6000.3.3f1 (ef04196de0d6) revision 15664153'; Using compiler version '194234433'; Build Type 'Release'
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-PLANNER007" at "2026-02-19T05:03:45.1229784Z"
+OS: 'Windows 11  (10.0.26200) 64bit Core' Language: 'ja' Physical Memory: 65464 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1
+Date: 2026-02-19T05:03:45Z
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Unity.exe
+-batchmode
+-projectPath
+c:\Users\PLANNER007\UnityChatNovelGame
+-runTests
+-testPlatform
+PlayMode
+-testResults
+c:\Users\PLANNER007\UnityChatNovelGame\docs\evidence\TASK_047\PlayModeResults.xml
+-logFile
+c:\Users\PLANNER007\UnityChatNovelGame\docs\evidence\TASK_047\PlayModeTest_052b.log
+Successfully changed project path to: c:\Users\PLANNER007\UnityChatNovelGame
+C:/Users/PLANNER007/UnityChatNovelGame
+Exiting without the bug reporter. Application will terminate with return code 1
