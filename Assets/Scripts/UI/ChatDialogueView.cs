@@ -148,6 +148,10 @@ namespace ProjectFoundPhone.UI
 
                 m_ChatController.ShowChoices(choiceTexts, (index) =>
                 {
+                    // 二重実行防止：既に選択済みの場合は無視
+                    if (choiceMade) return;
+                    choiceMade = true;
+
                     if (index >= 0 && index < dialogueOptions.Length)
                     {
                         selectedOption = dialogueOptions[index];
@@ -155,8 +159,6 @@ namespace ProjectFoundPhone.UI
                         // プレイヤーの選択をチャットに表示（一般的なチャットUI動作）
                         m_ChatController.AddMessage("player", choiceTexts[index]);
                     }
-
-                    choiceMade = true;
                 });
 
                 // 選択確定待機
