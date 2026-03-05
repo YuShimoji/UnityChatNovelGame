@@ -1,0 +1,82 @@
+title: MVPTest_Start
+---
+
+<<SystemMessage "【SYSTEM】本日のセッションを開始します。参加者の接続状況を確認しています...">>
+<<StartWait 1.0>>
+
+<<set $speaker to "pyramid">>
+<<Typing true>>
+おはようございます。Pyramid アシスタントモデルとしてこのセッションを支援しています。
+
+<<set $speaker to "pyramid">>
+現在の接続: あなた（Barnaby）、Pyramid。他の参加者は未接続です。
+
+-> ここはどこだ？
+    <<jump Branch_WhereAmI>>
+-> 誰がいるのか？
+    <<jump Branch_WhoIsThere>>
+===
+
+title: Branch_WhereAmI
+---
+<<set $speaker to "pyramid">>
+<<StartWait 0.5>>
+ここはアナログチャットルームです。閉鎖的なネットワーク環境で、外部との通信は制限されています。
+
+<<set $speaker to "pyramid">>
+あなたのセッションログは記録されており、必要に応じて参照可能です。
+
+// TopicDataアセット作成後に有効化
+// <<UnlockTopic "chat_room_basics">>
+
+<<jump MVPTest_Continue>>
+===
+
+title: Branch_WhoIsThere
+---
+<<set $speaker to "pyramid">>
+<<StartWait 0.5>>
+現在の接続: あなた（Barnaby）、Pyramid。
+
+<<set $speaker to "pyramid">>
+Pyramid は汎用アシスタントモデルとして、ログ管理、スケジュール調整、情報検索を担当します。
+
+// TopicDataアセット作成後に有効化
+// <<UnlockTopic "pyramid_identity">>
+
+<<jump MVPTest_Continue>>
+===
+
+title: MVPTest_Continue
+---
+<<set $speaker to "pyramid">>
+追加の質問がありますか？
+
+-> セッションを終了する
+    <<jump MVPTest_End>>
+-> もう少し話を聞きたい
+    <<jump MVPTest_MoreInfo>>
+===
+
+title: MVPTest_MoreInfo
+---
+<<set $speaker to "pyramid">>
+はい。私はPyramidです。汎用アシスタントモデルとしてこのセッションを支援しています。
+
+<<set $speaker to "pyramid">>
+<<StartWait 0.8>>
+あなたの質問には可能な限り答えますが、私の知識には限界があります。
+
+<<SystemMessage "【SYSTEM】Pyramid の応答プロトコルが確認されました。">>
+
+<<jump MVPTest_End>>
+===
+
+title: MVPTest_End
+---
+<<set $speaker to "pyramid">>
+本日はありがとうございました。次回のセッションでお会いしましょう。
+
+<<SystemMessage "【SYSTEM】セッションを終了します。接続状況: 正常">>
+<<SkipWait>>
+===
