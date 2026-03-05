@@ -251,7 +251,8 @@ namespace ProjectFoundPhone.UI
             hlg.childControlWidth = true;      // HLG が子要素の幅を制御
             hlg.childControlHeight = true;
             // パディングで左右マージンを作る → player は左に広いマージン、NPC は右に広いマージン
-            int sideMargin = (int)(Screen.width * UIConfig.sideMarginPercent);
+            int sideMarginRaw = (int)(Screen.width * UIConfig.sideMarginPercent);
+            int sideMargin = (int)Mathf.Min(sideMarginRaw, UIConfig.sideMarginMaxPx);
             int edgePad = UIConfig.wrapperEdgePadding;
             int vPad = UIConfig.wrapperVerticalPadding;
             hlg.padding = isPlayer
@@ -1140,7 +1141,7 @@ namespace ProjectFoundPhone.UI
 
             VerticalLayoutGroup layoutGroup = container.GetComponent<VerticalLayoutGroup>();
             float cSpacing = UIConfig.choiceSpacing;
-            int cPadH = UIConfig.choicePaddingHorizontal;
+            int cPadH = (int)Mathf.Min(UIConfig.choicePaddingHorizontal, Screen.width * 0.08f);
             layoutGroup.spacing = cSpacing;
             layoutGroup.padding = new RectOffset(cPadH, cPadH, 10, 20);
             layoutGroup.childForceExpandWidth = true;
@@ -1193,16 +1194,16 @@ namespace ProjectFoundPhone.UI
             RectTransform textRect = textObj.GetComponent<RectTransform>();
             textRect.anchorMin = Vector2.zero;
             textRect.anchorMax = Vector2.one;
-            textRect.offsetMin = new Vector2(20f, 10f);
-            textRect.offsetMax = new Vector2(-20f, -10f);
+            textRect.offsetMin = new Vector2(16f, 8f);
+            textRect.offsetMax = new Vector2(-16f, -8f);
 
             TextMeshProUGUI label = textObj.AddComponent<TextMeshProUGUI>();
             label.text = "Choice";
             label.enableAutoSizing = true;
             label.fontSizeMin = UIConfig.choiceFontSizeMin;
             label.fontSizeMax = UIConfig.choiceFontSizeMax;
-            label.alignment = TextAlignmentOptions.Midline;
-            label.color = Color.white;
+            label.alignment = TextAlignmentOptions.MidlineLeft;
+            label.color = UIConfig.choiceTextColor;
             label.raycastTarget = false;
 
             // 日本語フォントが設定されていればそれを使用、なければデフォルトフォントを使用

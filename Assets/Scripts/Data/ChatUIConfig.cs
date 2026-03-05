@@ -36,6 +36,9 @@ namespace ProjectFoundPhone.Data
         [Range(0f, 0.5f)]
         public float sideMarginPercent = 0.25f;
 
+        [Tooltip("サイドマージンの最大ピクセル値 (狭い画面での崩れ防止)")]
+        public float sideMarginMaxPx = 200f;
+
         [Tooltip("ラッパーの端パディング (px)")]
         public int wrapperEdgePadding = 12;
 
@@ -60,31 +63,34 @@ namespace ProjectFoundPhone.Data
 
         [Header("Choice")]
         [Tooltip("選択肢ボタンの背景色")]
-        public Color choiceButtonColor = new Color(0.25f, 0.55f, 1.0f, 0.8f);
+        public Color choiceButtonColor = new Color(0.22f, 0.25f, 0.35f, 0.85f);
 
         [Tooltip("選択肢ボタンのハイライト色")]
-        public Color choiceButtonHighlightColor = new Color(0.35f, 0.65f, 1.0f, 1.0f);
+        public Color choiceButtonHighlightColor = new Color(0.3f, 0.35f, 0.5f, 0.95f);
 
         [Tooltip("選択肢ボタンの押下色")]
-        public Color choiceButtonPressedColor = new Color(0.15f, 0.45f, 0.9f, 1.0f);
+        public Color choiceButtonPressedColor = new Color(0.2f, 0.28f, 0.45f, 1.0f);
+
+        [Tooltip("選択肢テキストの色")]
+        public Color choiceTextColor = new Color(0.82f, 0.85f, 0.95f, 1f);
 
         [Tooltip("選択肢の最小フォントサイズ")]
-        public float choiceFontSizeMin = 20f;
+        public float choiceFontSizeMin = 18f;
 
         [Tooltip("選択肢の最大フォントサイズ")]
-        public float choiceFontSizeMax = 36f;
+        public float choiceFontSizeMax = 26f;
 
         [Tooltip("選択肢ボタンの最小高さ")]
-        public float choiceButtonMinHeight = 50f;
+        public float choiceButtonMinHeight = 42f;
 
         [Tooltip("選択肢ボタンの推奨高さ")]
-        public float choiceButtonPreferredHeight = 60f;
+        public float choiceButtonPreferredHeight = 50f;
 
         [Tooltip("選択肢コンテナのスペーシング")]
-        public float choiceSpacing = 8f;
+        public float choiceSpacing = 6f;
 
         [Tooltip("選択肢コンテナの左右パディング")]
-        public int choicePaddingHorizontal = 40;
+        public int choicePaddingHorizontal = 20;
 
         [Header("Typing Indicator")]
         [Tooltip("入力中表示の背景色")]
