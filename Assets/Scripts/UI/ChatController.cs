@@ -286,44 +286,12 @@ namespace ProjectFoundPhone.UI
         {
             using var _ = s_CreateMessageBubbleMarker.Auto();
 
-            if (m_ScrollRect == null || m_ScrollRect.content == null)
-            {
-                Debug.LogError("ChatController: Cannot create message bubble. ScrollRect or content is not assigned.");
-                return null;
-            }
-
-            // プール未設定時はフォールバック
-            if (m_MessageBubblePool == null)
-            {
-                EnsureMessageBubblePool();
-            }
-
-            GameObject messageBubble;
-
-            // プールから取得（設定されていれば）
-            if (m_MessageBubblePool != null)
-            {
-                messageBubble = m_MessageBubblePool.Get(m_ScrollRect.content);
-            }
-            else
-            {
-                // フォールバック: 直接Instantiate（Prefabがない場合は失敗）
-                if (m_MessageBubblePrefab == null)
-                {
-                    Debug.LogError("ChatController: Cannot create message bubble. Prefab is not assigned and pool is unavailable.");
-                    return null;
-                }
-                messageBubble = Instantiate(m_MessageBubblePrefab, m_ScrollRect.content);
-            }
-
+            // バブルを取得（プールまたはPrefab）
+            GameObject messageBubble = AcquireBubble();
             if (messageBubble == null)
             {
-                Debug.LogError("ChatController: Failed to create message bubble from pool.");
                 return null;
             }
-
-            // バブルを確実に表示
-            messageBubble.SetActive(true);
 
             // プール再利用時の状態汚染を防止: RectTransform をデフォルトにリセット
             RectTransform bubbleRect = messageBubble.GetComponent<RectTransform>();
@@ -388,13 +356,6 @@ namespace ProjectFoundPhone.UI
                 textComponent.font = m_JapaneseFontAsset;
             }
 
-            // プレイヤー判定・テーマカラー・配置を共通処理で設定
-            // （テキストコンポーネント確保後に呼ぶことでテキスト色が正しく設定される）
-            ConfigureBubble(messageBubble, charID);
-
-            // ラッパー HLG がバブル幅を解決するようにレイアウトを強制更新
-            Canvas.ForceUpdateCanvases();
-
             // 表示名を取得してテキストを設定
             string displayName = CharacterDatabase.Instance != null
                 ? CharacterDatabase.Instance.GetDisplayName(charID)
@@ -416,8 +377,8 @@ namespace ProjectFoundPhone.UI
             // レイアウトを即座に更新
             Canvas.ForceUpdateCanvases();
 
-            // アニメーション演出
-            AnimateBubbleIn(messageBubble);
+            // バブルの最終処理（配置、アニメーション、スクロール）
+            FinalizeBubble(messageBubble, charID);
 
             // タイプライター効果を適用
             ApplyTypewriterEffect(textComponent);
@@ -463,6 +424,79 @@ namespace ProjectFoundPhone.UI
             if (bubble == null) return;
             bubble.transform.localScale = Vector3.zero;
             bubble.transform.DOScale(1f, UIConfig.bubbleAnimationDuration).SetEase(Ease.OutBack).SetUpdate(true);
+        }
+
+        /// <summary>
+        /// プールまたはPrefabからバブルGameObjectを取得する
+        /// </summary>
+        /// <param name="prefab">使用するPrefab（nullの場合はMessageBubblePrefabを使用）</param>
+        /// <returns>取得したバブルGameObject</returns>
+        private GameObject AcquireBubble(GameObject prefab = null)
+        {
+            if (m_ScrollRect == null || m_ScrollRect.content == null)
+            {
+                Debug.LogError("ChatController: Cannot acquire bubble. ScrollRect or content is not assigned.");
+                return null;
+            }
+
+            // Prefabが指定されていない場合はMessageBubblePrefabを使用
+            if (prefab == null)
+            {
+                prefab = m_MessageBubblePrefab;
+            }
+
+            // プール未設定時はフォールバック
+            if (m_MessageBubblePool == null)
+            {
+                EnsureMessageBubblePool();
+            }
+
+            GameObject bubble;
+
+            // プールから取得（プールが有効で、MessageBubblePrefabを使用する場合）
+            if (m_MessageBubblePool != null && prefab == m_MessageBubblePrefab)
+            {
+                bubble = m_MessageBubblePool.Get(m_ScrollRect.content);
+            }
+            else
+            {
+                // フォールバック: 直接Instantiate
+                if (prefab == null)
+                {
+                    Debug.LogError("ChatController: Cannot acquire bubble. Prefab is null.");
+                    return null;
+                }
+                bubble = Instantiate(prefab, m_ScrollRect.content);
+            }
+
+            if (bubble != null)
+            {
+                bubble.SetActive(true);
+            }
+
+            return bubble;
+        }
+
+        /// <summary>
+        /// バブルの最終処理（配置、アニメーション、スクロール）
+        /// </summary>
+        /// <param name="bubble">処理対象のバブル</param>
+        /// <param name="charID">キャラクターID（配置とテーマカラーの決定に使用）</param>
+        private void FinalizeBubble(GameObject bubble, string charID)
+        {
+            if (bubble == null) return;
+
+            // プレイヤー判定・テーマカラー・配置を共通処理で設定
+            ConfigureBubble(bubble, charID);
+
+            // アニメーション演出
+            AnimateBubbleIn(bubble);
+
+            // ユーザーが過去ログを見ていない場合のみAutoScroll()を実行
+            if (!m_IsUserScrolling)
+            {
+                AutoScroll();
+            }
         }
         #endregion
 
@@ -523,11 +557,7 @@ namespace ProjectFoundPhone.UI
                 bubble.Initialize(lineTag, messageBubble.GetComponent<UnityEngine.UI.Image>());
             }
 
-            // ユーザーが過去ログを見ていない場合のみAutoScroll()を実行
-            if (!m_IsUserScrolling)
-            {
-                AutoScroll();
-            }
+            // Note: AutoScrollはCreateMessageBubble内のFinalizeBubbleで実行される
         }
 
         /// <summary>
@@ -559,12 +589,6 @@ namespace ProjectFoundPhone.UI
             // 遅延初期化: ImageBubblePrefabが未設定の場合はランタイム生成
             EnsureImageBubbleTemplate();
 
-            if (m_ScrollRect == null || m_ScrollRect.content == null)
-            {
-                Debug.LogError("ChatController: Cannot create image bubble. ScrollRect or content is not assigned.");
-                return;
-            }
-
             // ImageBubblePrefabが設定されていない場合はテキストバブルにフォールバック
             GameObject prefab = m_ImageBubblePrefab != null ? m_ImageBubblePrefab : m_MessageBubblePrefab;
             if (prefab == null)
@@ -573,28 +597,12 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            // プール未設定時はフォールバック
-            if (m_MessageBubblePool == null)
+            // バブルを取得（プールまたはPrefab）
+            GameObject imageBubble = AcquireBubble(prefab);
+            if (imageBubble == null)
             {
-                EnsureMessageBubblePool();
+                return;
             }
-
-            GameObject imageBubble;
-
-            // プールから取得（プールが有効で、MessageBubblePrefabを使用する場合）
-            if (m_MessageBubblePool != null && prefab == m_MessageBubblePrefab)
-            {
-                imageBubble = m_MessageBubblePool.Get(m_ScrollRect.content);
-            }
-            else
-            {
-                // フォールバック: 直接Instantiate
-                imageBubble = Instantiate(prefab, m_ScrollRect.content);
-            }
-            imageBubble.SetActive(true);
-
-            // プレイヤー判定・テーマカラー・配置を共通処理で設定
-            ConfigureBubble(imageBubble, charID);
 
             // 画像を表示するImageコンポーネントを検索して設定
             // ImageBubblePrefab内に "ImageContent" という名前の子オブジェクトを想定
@@ -655,12 +663,8 @@ namespace ProjectFoundPhone.UI
                 }
             }
 
-            AnimateBubbleIn(imageBubble);
-
-            if (!m_IsUserScrolling)
-            {
-                AutoScroll();
-            }
+            // バブルの最終処理（配置、アニメーション、スクロール）
+            FinalizeBubble(imageBubble, charID);
         }
 
         /// <summary>
