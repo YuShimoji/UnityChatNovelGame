@@ -23,6 +23,11 @@ title: Ch1_Opening
 <<SystemMessage "チャットルームに接続しました">>
 <<StartWait 1>>
 
+// 演出: 最初の接続時は長めにTypingIndicatorを表示
+<<Typing true>>
+<<StartWait 1.5>>
+<<Typing false>>
+
 <<set $speaker to "pyramid">>
 おはようございます。Pyramid アシスタントです。
 
@@ -46,6 +51,7 @@ title: Ch1_AskWhere
 <<set $speaker to "player">>
 ここはどこだ？ なぜこのチャットに繋がっている？
 
+// 通常のTypingは自動表示（0.3秒）に任せる
 <<set $speaker to "pyramid">>
 <<StartWait 1>>
 あなたの現在地は、端末の位置情報によると
