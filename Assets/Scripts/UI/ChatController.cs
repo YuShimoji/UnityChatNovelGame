@@ -468,6 +468,24 @@ namespace ProjectFoundPhone.UI
 
         #region Public Methods
         /// <summary>
+        /// 指定された LineTag を持つ MessageBubble を検索する
+        /// </summary>
+        public MessageBubble FindBubbleByLineTag(string lineTag)
+        {
+            if (string.IsNullOrEmpty(lineTag) || m_ScrollRect == null || m_ScrollRect.content == null)
+                return null;
+
+            var content = m_ScrollRect.content;
+            for (int i = 0; i < content.childCount; i++)
+            {
+                var mb = content.GetChild(i).GetComponentInChildren<MessageBubble>();
+                if (mb != null && mb.LineTag == lineTag)
+                    return mb;
+            }
+            return null;
+        }
+
+        /// <summary>
         /// 新しいメッセージをチャットに追加
         /// </summary>
         /// <param name="charID">キャラクターID（例: "player", "npc_001"）</param>

@@ -6,8 +6,8 @@ using ProjectFoundPhone.Core; // ScenarioManagerのために追加
 namespace ProjectFoundPhone.UI
 {
     /// <summary>
-    /// 推論�Eード！EeductionBoard�E��EUIマネージャー
-    /// プレイヤーが獲得したトピックを管琁E�E表示する
+    /// 推論�Eード！EeductionBoard�E��EUIマネージャー
+    /// プレイヤーが獲得したトピックを管琁E�E表示する
     /// </summary>
     public class DeductionBoard : MonoBehaviour
     {
@@ -44,24 +44,24 @@ namespace ProjectFoundPhone.UI
         [SerializeField] private string m_RecipeLoadPath = "Recipes"; // Resources/Recipes
 
         /// <summary>
-        /// 獲得済みトピチE��のリスチE
+        /// 獲得済みトピチE��のリスチE
         /// </summary>
         private List<TopicData> m_UnlockedTopics = new List<TopicData>();
 
         /// <summary>
-        /// 生�EされたTopicCardのリスチE
+        /// 生�EされたTopicCardのリスチE
         /// </summary>
         private List<TopicCard> m_TopicCards = new List<TopicCard>();
 
         /// <summary>
-        /// ロードされた合�Eレシピ�EリスチE
+        /// ロードされた合�Eレシピ�EリスチE
         /// </summary>
         private List<SynthesisRecipe> m_Recipes = new List<SynthesisRecipe>();
         #endregion
 
         #region Public Properties
         /// <summary>
-        /// 獲得済みトピチE��のリスト（読み取り専用�E�E
+        /// 獲得済みトピチE��のリスト（読み取り専用�E�E
         /// </summary>
         public IReadOnlyList<TopicData> UnlockedTopics => m_UnlockedTopics;
         #endregion
@@ -79,22 +79,52 @@ namespace ProjectFoundPhone.UI
             s_Instance = this;
 
             LoadRecipes();
+            SubscribeContradictionEvents();
         }
 
         private void OnDestroy()
         {
+            UnsubscribeContradictionEvents();
             if (s_Instance == this)
             {
                 s_Instance = null;
+            }
+        }
+
+        private void SubscribeContradictionEvents()
+        {
+            var cm = ContradictionManager.Instance;
+            if (cm != null)
+                cm.OnContradictionDiscovered += HandleContradictionDiscovered;
+        }
+
+        private void UnsubscribeContradictionEvents()
+        {
+            var cm = ContradictionManager.Instance;
+            if (cm != null)
+                cm.OnContradictionDiscovered -= HandleContradictionDiscovered;
+        }
+
+        private void HandleContradictionDiscovered(ContradictionPair pair)
+        {
+            if (pair.UnlockTopic == null) return;
+            if (HasTopic(pair.UnlockTopic.TopicID)) return;
+
+            AddTopic(pair.UnlockTopic);
+
+            var scenarioManager = FindFirstObjectByType<ScenarioManager>();
+            if (scenarioManager != null)
+            {
+                scenarioManager.SetVariable<bool>($"$has_topic_{pair.UnlockTopic.TopicID}", true);
             }
         }
         #endregion
 
         #region Public Methods
         /// <summary>
-        /// トピチE��を推論�Eードに追加する
+        /// トピチE��を推論�Eードに追加する
         /// </summary>
-        /// <param name="topicData">追加するトピチE��チE�Eタ</param>
+        /// <param name="topicData">追加するトピチE��チE�Eタ</param>
         /// <returns>追加に成功した場吁Erue、既に存在する場吁Ealse</returns>
         public bool AddTopic(TopicData topicData)
         {
@@ -104,17 +134,17 @@ namespace ProjectFoundPhone.UI
                 return false;
             }
 
-            // 重褁E��ェチE��
+            // 重褁E��ェチE��
             if (HasTopic(topicData.TopicID))
             {
                 Debug.Log($"DeductionBoard: Topic '{topicData.Title}' already exists.");
                 return false;
             }
 
-            // トピチE��をリストに追加
+            // トピチE��をリストに追加
             m_UnlockedTopics.Add(topicData);
 
-            // カードを生�E
+            // カードを生�E
             CreateTopicCard(topicData);
 
             Debug.Log($"DeductionBoard: Topic added - {topicData.Title} (ID: {topicData.TopicID})");
@@ -128,7 +158,7 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// 推論�Eードを表示する
+        /// 推論�Eードを表示する
         /// </summary>
         public void Show()
         {
@@ -136,7 +166,7 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// 推論�Eードを非表示にする
+        /// 推論�Eードを非表示にする
         /// </summary>
         public void Hide()
         {
@@ -144,9 +174,9 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// トピチE��を推論�Eードから削除する
+        /// トピチE��を推論�Eードから削除する
         /// </summary>
-        /// <param name="topicID">削除するトピチE��のID</param>
+        /// <param name="topicID">削除するトピチE��のID</param>
         /// <returns>削除に成功した場吁Erue</returns>
         public bool RemoveTopic(string topicID)
         {
@@ -172,7 +202,7 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// 持E��したIDのトピチE��が既に獲得済みかどぁE��を確認すめE
+        /// 持E��したIDのトピチE��が既に獲得済みかどぁE��を確認すめE
         /// </summary>
         /// <param name="topicID">確認するトピックのID</param>
         /// <returns>獲得済みの場吁Erue</returns>
@@ -182,7 +212,7 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// 全てのトピチE��をクリアする
+        /// 全てのトピチE��をクリアする
         /// </summary>
         public void ClearAllTopics()
         {
@@ -201,11 +231,11 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// トピチE��ドラチE���E�E��ロチE�E時�E処琁E
+        /// トピチE��ドラチE���E�E��ロチE�E時�E処琁E
         /// </summary>
-        /// <param name="droppedCard">ドラチE��されたカーチE/param>
-        /// <param name="targetCard">ドロチE�E先�EカーチE/param>
-        /// <returns>処琁E��成功�E�合成�E功など�E�した場合�Etrue</returns>
+        /// <param name="droppedCard">ドラチE��されたカーチE/param>
+        /// <param name="targetCard">ドロチE�E先�EカーチE/param>
+        /// <returns>処琁E��成功�E�合成�E功など�E�した場合�Etrue</returns>
         public bool OnTopicDropped(TopicCard droppedCard, TopicCard targetCard)
         {
             if (droppedCard == null || targetCard == null) return false;
@@ -217,7 +247,7 @@ namespace ProjectFoundPhone.UI
 
         #region Private Methods
         /// <summary>
-        /// EditMode�E�テスト環墁E��でも安�Eにオブジェクトを破棁E��めE
+        /// EditMode�E�テスト環墁E��でも安�Eにオブジェクトを破棁E��めE
         /// </summary>
         private void SafeDestroy(Object obj)
         {
@@ -228,7 +258,7 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// Resourcesから合�EレシピをロードすめE
+        /// Resourcesから合�EレシピをロードすめE
         /// </summary>
         private void LoadRecipes()
         {
@@ -242,9 +272,9 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// TopicCardを生成してコンチE��に追加する
+        /// TopicCardを生成してコンチE��に追加する
         /// </summary>
-        /// <param name="topicData">カードに設定するトピックチE�Eタ</param>
+        /// <param name="topicData">カードに設定するトピックチE�Eタ</param>
         private void CreateTopicCard(TopicData topicData)
         {
             if (m_TopicCardPrefab == null)
@@ -265,34 +295,34 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// 2つのトピチE��から合�Eを試みめE
+        /// 2つのトピチE��から合�Eを試みめE
         /// </summary>
-        /// <param name="topicA">トピチE��A</param>
-        /// <param name="topicB">トピチE��B</param>
-        /// <returns>合�E成功ならtrue</returns>
+        /// <param name="topicA">トピチE��A</param>
+        /// <param name="topicB">トピチE��B</param>
+        /// <returns>合�E成功ならtrue</returns>
         private bool CheckSynthesis(TopicData topicA, TopicData topicB)
         {
             foreach (var recipe in m_Recipes)
             {
                 if (recipe.Matches(topicA, topicB))
                 {
-                    // 合�E成功�E�E
+                    // 合�E成功�E�E
                     Debug.Log($"DeductionBoard: Synthesis Successful! {topicA.Title} + {topicB.Title} = {recipe.Result.Title}");
                     
-                    // 結果トピチE��をアンロチE��
-                    // 重褁E��ェチE��はAddTopic冁E��行われるのでそ�Eまま呼ぶ
+                    // 結果トピチE��をアンロチE��
+                    // 重褁E��ェチE��はAddTopic冁E��行われるのでそ�Eまま呼ぶ
                     if (HasTopic(recipe.Result.TopicID))
                     {
                         // 既に持ってめE
                         Debug.Log("DeductionBoard: Result topic already exists.");
-                        // エフェクトだけ�Eすなどの処琁E��ここに追加可能
+                        // エフェクトだけ�Eすなどの処琁E��ここに追加可能
                         return false; 
                     }
                     else
                     {
                          AddTopic(recipe.Result);
 
-                        // ScenarioManager側にフラグを立てるなどの通知が忁E��ならここで行う
+                        // ScenarioManager側にフラグを立てるなどの通知が忁E��ならここで行う
                         // 侁E ScenarioManager.Instance.SetVariable($"$has_topic_{recipe.Result.TopicID}", true);
                         var scenarioManager = FindFirstObjectByType<ScenarioManager>();
                         if (scenarioManager != null)
@@ -300,9 +330,9 @@ namespace ProjectFoundPhone.UI
                             scenarioManager.SetVariable<bool>($"$has_topic_{recipe.Result.TopicID}", true);
                         }
 
-                        // 材料となったトピックを消すかどぁE��は仕様次第
-                        // ここでは「消さなぁE��仕様とする�E�手がかり�E残り続ける！E
-                        // 演�E�E�MetaEffect再生
+                        // 材料となったトピックを消すかどぁE��は仕様次第
+                        // ここでは「消さなぁE��仕様とする�E�手がかり�E残り続ける！E
+                        // 演�E�E�MetaEffect再生
                         // 画面中央などで祝福エフェクトを出ぁE
                         // "Sparkle" or "Success"などのエフェクト名を使用
                         ProjectFoundPhone.Effects.MetaEffectController.Instance?.PlayEffect("Sparkle", Vector3.zero);
