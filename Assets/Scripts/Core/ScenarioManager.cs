@@ -487,7 +487,7 @@ namespace ProjectFoundPhone.Core
         public void StopScenario()
         {
 #if YARN_SPINNER
-            if (m_DialogueRunner != null)
+            if (m_DialogueRunner != null && m_DialogueRunner.IsDialogueRunning)
             {
                 m_DialogueRunner.Stop();
             }

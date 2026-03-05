@@ -855,12 +855,19 @@ namespace ProjectFoundPhone.UI
 
             if (m_TypingIndicator != null)
             {
-                m_TypingIndicator.SetActive(show);
+                // ConfigureBubble がラッパー（PlayerRow/NpcRow）を生成するため、
+                // ラッパーごと表示/非表示・移動する必要がある
+                Transform wrapper = m_TypingIndicator.transform.parent;
+                bool hasWrapper = wrapper != null && m_ScrollRect != null
+                    && wrapper != m_ScrollRect.content;
+                GameObject target = hasWrapper ? wrapper.gameObject : m_TypingIndicator;
+
+                target.SetActive(show);
 
                 if (show)
                 {
-                    // 常に最後尾に表示
-                    m_TypingIndicator.transform.SetAsLastSibling();
+                    // ラッパーごと最後尾に移動
+                    target.transform.SetAsLastSibling();
                     AutoScroll();
                 }
             }

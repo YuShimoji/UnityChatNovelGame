@@ -137,6 +137,9 @@ namespace ProjectFoundPhone.UI
 
             if (m_ChatController != null)
             {
+                // 前のメッセージのアニメーション完了を待つ
+                await YarnTask.Delay(400, cancellationToken.NextContentToken).SuppressCancellationThrow();
+
                 List<string> choiceTexts = new List<string>();
                 for (int i = 0; i < dialogueOptions.Length; i++)
                 {
