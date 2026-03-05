@@ -256,15 +256,24 @@ namespace ProjectFoundPhone.UI
         {
             m_IsPlayingResultAnimation = true;
 
-            // 両バブルの特定
-            string secondTag = (m_CachedFirstLineTag == pair.SourceLineTag)
-                ? pair.TargetLineTag
-                : pair.SourceLineTag;
+            // 両バブルの特定（キャッシュが pair に含まれない場合の防御）
+            string secondTag;
+            if (m_CachedFirstLineTag == pair.SourceLineTag)
+                secondTag = pair.TargetLineTag;
+            else if (m_CachedFirstLineTag == pair.TargetLineTag)
+                secondTag = pair.SourceLineTag;
+            else
+            {
+                Debug.LogWarning($"ContradictionFeedbackController: cached tag '{m_CachedFirstLineTag}' does not match pair.");
+                secondTag = pair.TargetLineTag;
+            }
 
             MessageBubble firstBubble = m_CachedFirstBubble;
             MessageBubble secondBubble = m_ChatController?.FindBubbleByLineTag(secondTag);
 
-            firstBubble?.StopHighlight();
+            // ハイライト + 既存 DOTween を停止してからアニメーション開始
+            KillBubbleTweens(firstBubble);
+            KillBubbleTweens(secondBubble);
 
             if (firstBubble != null && secondBubble != null)
                 ShowConnectionLine(firstBubble, secondBubble);
@@ -279,7 +288,7 @@ namespace ProjectFoundPhone.UI
             MessageBubble bubble = m_CachedFirstBubble;
             if (bubble == null) return;
 
-            bubble.StopHighlight();
+            KillBubbleTweens(bubble);
 
             if (reason == "already_discovered")
             {
@@ -289,6 +298,17 @@ namespace ProjectFoundPhone.UI
             {
                 PlayFailAnimation(bubble, FailNoMatchColor, "矛盾が見つかりませんでした");
             }
+        }
+        /// <summary>
+        /// バブルのハイライト停止 + Image 上の DOTween を確実に停止する
+        /// </summary>
+        private void KillBubbleTweens(MessageBubble bubble)
+        {
+            if (bubble == null) return;
+            bubble.StopHighlight();
+            var img = bubble.GetComponent<Image>();
+            if (img != null)
+                DOTween.Kill(img, complete: false);
         }
         #endregion
 

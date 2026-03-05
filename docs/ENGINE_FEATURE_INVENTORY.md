@@ -1,7 +1,7 @@
 # Engine Feature Inventory
 
-**最終更新**: 2026-03-03
-**エンジン**: Unity 6.0 (6000.0.30f1) + Yarn Spinner 3.1.3
+**最終更新**: 2026-03-06
+**エンジン**: Unity 6.3 LTS (6000.3.6f1) + Yarn Spinner 3.1.3
 
 このドキュメントは、シナリオ執筆者が「今のエンジンで何ができるか」を把握するためのリファレンスです。
 
@@ -14,6 +14,7 @@
 | コマンド | 構文 | 説明 |
 | -------- | ---- | ---- |
 | Message | `<<Message "charID" "テキスト">>` | 指定キャラのメッセージバブルを表示 |
+| MessageTagged | `<<MessageTagged "charID" "テキスト" "lineTag">>` | 矛盾タグ付きメッセージ。矛盾指摘システムの識別子として使用 |
 | SystemMessage | `<<SystemMessage "テキスト">>` | 中央寄せのシステム通知を表示 |
 | Image | `<<Image "charID" "imageID">>` | 画像メッセージを表示（`Resources/Images/` 内） |
 
@@ -83,18 +84,36 @@
 
 ### 基本的な分岐
 
+選択肢のテキストはプレイヤーメッセージとして**自動的にチャットに追加**される（コード側の `RunOptionsAsync` で処理）。Yarn スクリプト側でプレイヤーのセリフをエコーする必要はない。
+
 ```yarn
 title: ExampleNode
 ---
 <<Message "npc" "どうする？">>
 
 -> 選択肢A
-    <<Message "player" "Aを選ぶ">>
     <<jump NodeA>>
 -> 選択肢B
-    <<Message "player" "Bを選ぶ">>
     <<jump NodeB>>
 ===
+
+title: NodeA
+---
+<<set $speaker to "pyramid">>
+応答テキスト。  ← いきなりNPCのセリフでOK（プレイヤーの「選択肢A」は自動表示済み）
+===
+```
+
+### インライン選択肢
+
+ジャンプなしの選択肢も同様に自動表示される:
+
+```yarn
+<<set $speaker to "player">>
+-> この端末は不調か？
+<<set $speaker to "pyramid">>
+<<StartWait 0.8>>
+通信環境による影響と思われます。
 ```
 
 ### 条件付き選択肢
@@ -172,6 +191,13 @@ title: ExampleNode
 <<Message "npc" "...">>  ← 待機後にメッセージ
 ```
 
+### 早送りモード（F11）
+
+- **F11キー**で早送りモードをトグル
+- 有効時: タイピングインジケーター、タイプライター効果、StartWait の待機を全てスキップ（30ms最小遅延）
+- デバッグオーバーレイに `[FF]` タグが表示される
+- 選択肢は早送り中も通常通りプレイヤーの操作を待つ
+
 ---
 
 ## 6. ローカライズ対応状況
@@ -206,15 +232,38 @@ Yarn Spinner 3.x は以下のローカライズをサポート:
 
 ---
 
-## 7. 未実装機能（StorySpec で必要だが現在ない機能）
+## 7. 矛盾指摘システム（Phase 2 実装済み）
+
+### 実装済み機能
+
+| 機能 | 説明 | ファイル |
+| ---- | ---- | -------- |
+| 長押し選択 | バブル0.5秒長押しで1つ目選択、タップで2つ目選択 | `MessageBubble.cs` |
+| 矛盾判定 | ContradictionDatabase の順不同マッチング、クールダウン10秒 | `ContradictionManager.cs` |
+| 成功演出 | 緑フラッシュ + スケールパルス + 接続線 + 通知パネル | `ContradictionFeedbackController.cs` |
+| 失敗演出(不一致) | 赤フラッシュ + 回転シェイク + エラーバナー + クールダウン | 同上 |
+| 失敗演出(既発見) | 黄フラッシュ + 「既に発見済み」バナー | 同上 |
+| ヒントバナー | 1つ目選択時に「2つ目をタップ」表示 | 同上 |
+| 接続線 | 2バブル間の直線（Image回転方式、成功/失敗で色変化→フェードアウト） | 同上 |
+| HalluciCoin | 矛盾発見時に報酬加算、セーブ/ロード対応済み | `ContradictionManager.cs` |
+| トピック自動解放 | 矛盾発見時に ContradictionPair.UnlockTopic を DeductionBoard に追加 | `DeductionBoard.cs` |
+| データ | 7ペア（Ch1x4, Ch2x3）、全報酬10コイン、難易度1 | `Resources/Contradictions/` |
+
+### セットアップ要件
+
+ContentAuthoring シーンの Canvas 直下に `ContradictionFeedbackController` を配置し、
+`ChatController` への参照を Inspector でアサインすること。
+
+---
+
+## 8. 未実装機能（StorySpec で必要だが現在ない機能）
 
 ### 優先度: 高（メインループに必要）
 
 | 機能 | 説明 | 実装難度 |
 | ---- | ---- | -------- |
-| テキスト選択指摘 | チャットログのテキストをタップ/長押しで矛盾を指摘 | 高 |
-| HalluciCoin | 矛盾指摘で獲得する到達権ポイント | 中 |
 | 断片インベントリ | 収集した断片テキストの閲覧UI | 中 |
+| ダッシュボード画面 | チャンネル選択→チャット遷移のメイン画面 | 高 |
 
 ### 優先度: 中（サブコンテンツに必要）
 
@@ -235,7 +284,7 @@ Yarn Spinner 3.x は以下のローカライズをサポート:
 
 ---
 
-## 8. ノード設計のベストプラクティス
+## 9. ノード設計のベストプラクティス
 
 ### ノード命名規則（推奨）
 
