@@ -26,6 +26,10 @@ namespace ProjectFoundPhone.UI
         private string m_CurrentLineId = "-";
         private string m_CurrentTags = "-";
 
+        private bool m_FastForwardEnabled = false;
+        /// <summary>早送りモード（F11 トグル）。有効時はタイピング遅延とタイプライター待ちをスキップする。</summary>
+        public bool FastForwardEnabled { get => m_FastForwardEnabled; set { m_FastForwardEnabled = value; RefreshDebugOverlay(); } }
+
         private void Awake()
         {
             m_DialogueRunner = GetComponent<DialogueRunner>();
@@ -37,6 +41,15 @@ namespace ProjectFoundPhone.UI
         {
             // キャッシュして毎回のFindを回避
             m_ChatController = FindFirstObjectByType<ChatController>();
+        }
+
+        private void Update()
+        {
+            // F11 で早送りトグル（F12 は DebugHub が使用）
+            if (Input.GetKeyDown(KeyCode.F11))
+            {
+                FastForwardEnabled = !FastForwardEnabled;
+            }
         }
 
         public override async YarnTask RunLineAsync(LocalizedLine dialogueLine, LineCancellationToken token)
@@ -55,9 +68,9 @@ namespace ProjectFoundPhone.UI
                 // 話者解決: CharacterName → $speaker 変数 → "npc" フォールバック
                 string charID = ResolveSpeaker(dialogueLine);
 
-                // NPC発話の場合のみTypingIndicatorを表示
+                // NPC発話の場合のみTypingIndicatorを表示（早送り時はスキップ）
                 bool isPlayer = charID == "player";
-                if (!isPlayer)
+                if (!isPlayer && !m_FastForwardEnabled)
                 {
                     m_ChatController.ShowTypingIndicator(true);
                     await YarnTask.Delay((int)(m_LineDisplayDelay * 0.6f * 1000), token.NextContentToken).SuppressCancellationThrow();
@@ -70,9 +83,16 @@ namespace ProjectFoundPhone.UI
                     : null;
                 m_ChatController.AddMessage(charID, lineText, lineTag);
 
-                // タイプライター効果の完了を待つ（0.05秒/文字 + バッファ0.3秒）
-                float typewriterDuration = lineText.Length * 0.05f;
-                await YarnTask.Delay((int)((typewriterDuration + 0.3f) * 1000), token.NextContentToken).SuppressCancellationThrow();
+                // タイプライター効果の完了を待つ（早送り時は最小遅延のみ）
+                if (!m_FastForwardEnabled)
+                {
+                    float typewriterDuration = lineText.Length * 0.05f;
+                    await YarnTask.Delay((int)((typewriterDuration + 0.3f) * 1000), token.NextContentToken).SuppressCancellationThrow();
+                }
+                else
+                {
+                    await YarnTask.Delay(30, token.NextContentToken).SuppressCancellationThrow();
+                }
             }
             else
             {
@@ -324,16 +344,17 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
+            string ffTag = m_FastForwardEnabled ? " [FF]" : "";
             if (m_DebugOverlayExpanded)
             {
                 m_DebugOverlayText.text =
                     $"node: {m_CurrentNodeName}\n" +
                     $"line: {m_CurrentLineId}\n" +
-                    $"tag: {m_CurrentTags}";
+                    $"tag: {m_CurrentTags}{ffTag}";
             }
             else
             {
-                m_DebugOverlayText.text = $"[D] {m_CurrentNodeName}";
+                m_DebugOverlayText.text = $"[D] {m_CurrentNodeName}{ffTag}";
             }
         }
     }

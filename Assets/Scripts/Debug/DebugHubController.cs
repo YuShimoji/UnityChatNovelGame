@@ -1,4 +1,5 @@
 #if YARN_SPINNER
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -319,11 +320,12 @@ namespace ProjectFoundPhone.DebugTools
                 return;
             }
 
-            // チャプター番号でグループ化し、各グループ内はアルファベット順
+            // チャプター番号でグループ化し、各グループ内はYarnファイル定義順（ストーリー順）
+            var storyOrder = BuildStoryOrderMap();
             string[] sorted = nodeNames
                 .Where(n => !string.IsNullOrWhiteSpace(n))
                 .OrderBy(n => GetChapterOrder(n))
-                .ThenBy(n => n, System.StringComparer.Ordinal)
+                .ThenBy(n => storyOrder.TryGetValue(n, out int o) ? o : int.MaxValue)
                 .ToArray();
 
             CreateInfoLabel($"{sorted.Length} nodes available");
@@ -357,6 +359,36 @@ namespace ProjectFoundPhone.DebugTools
             }
             // FirstSlice等のデバッグ用ノードは後方
             return 90;
+        }
+
+        /// <summary>
+        /// Yarn ファイル内のノード定義順（title: 行の出現順）をストーリー順として返す。
+        /// </summary>
+        private static Dictionary<string, int> BuildStoryOrderMap()
+        {
+            var orderMap = new Dictionary<string, int>();
+            TextAsset[] yarnFiles = Resources.LoadAll<TextAsset>("Yarn");
+            if (yarnFiles == null) return orderMap;
+
+            int globalIndex = 0;
+            foreach (var file in yarnFiles.OrderBy(f => f.name))
+            {
+                string[] lines = file.text.Split('\n');
+                foreach (string line in lines)
+                {
+                    string trimmed = line.Trim();
+                    if (trimmed.StartsWith("title:"))
+                    {
+                        string nodeName = trimmed.Substring(6).Trim();
+                        if (!string.IsNullOrEmpty(nodeName) && !orderMap.ContainsKey(nodeName))
+                        {
+                            orderMap[nodeName] = globalIndex++;
+                        }
+                    }
+                }
+            }
+
+            return orderMap;
         }
 
         private void OnNodeButtonClicked(string nodeName)
