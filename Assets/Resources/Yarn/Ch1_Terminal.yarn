@@ -43,9 +43,6 @@ title: Ch1_Opening
 
 title: Ch1_AskWhere
 ---
-<<set $speaker to "player">>
-ここはどこだ？ なぜこのチャットに繋がっている？
-
 <<set $speaker to "pyramid">>
 <<StartWait 1>>
 あなたの現在地は、端末の位置情報によると
@@ -74,9 +71,6 @@ title: Ch1_AskWhere
 
 title: Ch1_AskWho
 ---
-<<set $speaker to "player">>
-...誰かいるのか？
-
 <<set $speaker to "pyramid">>
 <<StartWait 1>>
 はい、私はPyramidです。汎用アシスタントモデルとしてこのセッションを支援しています。

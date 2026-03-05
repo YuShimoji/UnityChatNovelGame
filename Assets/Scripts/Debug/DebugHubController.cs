@@ -409,10 +409,12 @@ namespace ProjectFoundPhone.DebugTools
             ScenarioManager scenarioManager = FindFirstObjectByType<ScenarioManager>();
             if (scenarioManager != null)
             {
+                scenarioManager.StopScenario();
                 scenarioManager.StartScenario(nodeName);
             }
             else if (m_DialogueRunner != null)
             {
+                m_DialogueRunner.Stop();
                 m_DialogueRunner.StartDialogue(nodeName);
             }
         }
