@@ -514,9 +514,11 @@ namespace ProjectFoundPhone.UI
             // タイプライター効果を適用
             ApplyTypewriterEffect(textComponent);
 
-            // タイプライター効果後にスクロール（ガクガク防止）
+            // スクロール吸着を有効化（タイプライター効果中も追従）
             if (!m_IsUserScrolling)
             {
+                m_PinnedToBottom = true;
+                // タイプライター効果後に最終的な位置調整
                 float typewriterDuration = m_EnableTypewriterEffect ? text.Length * m_TypewriterSpeed : 0f;
                 Invoke(nameof(DelayedAutoScroll), typewriterDuration + 0.1f);
             }
