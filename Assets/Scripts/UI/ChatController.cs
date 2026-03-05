@@ -65,6 +65,9 @@ namespace ProjectFoundPhone.UI
         private readonly List<SavedChatMessage> m_ChatHistory = new List<SavedChatMessage>();
         private bool m_IsRestoringHistory = false;
 
+        /// <summary>前回のメッセージの話者（連続メッセージ判定用）</summary>
+        private string m_LastSpeaker = null;
+
         /// <summary>ChatUIConfig SO へのキャッシュ付きアクセス</summary>
         private ChatUIConfig m_UIConfig;
         private ChatUIConfig UIConfig => m_UIConfig ??= ChatUIConfig.Instance;
@@ -204,7 +207,8 @@ namespace ProjectFoundPhone.UI
         /// </summary>
         /// <param name="bubble">設定対象のバブルGameObject</param>
         /// <param name="charID">キャラクターID</param>
-        private void ConfigureBubble(GameObject bubble, string charID)
+        /// <param name="isConsecutive">前回と同じ話者の連続メッセージか</param>
+        private void ConfigureBubble(GameObject bubble, string charID, bool isConsecutive = false)
         {
             bool isPlayer = CharacterDatabase.Instance != null
                 ? CharacterDatabase.Instance.IsPlayer(charID)
@@ -258,9 +262,12 @@ namespace ProjectFoundPhone.UI
             int sideMargin = (int)Mathf.Min(sideMarginRaw, UIConfig.sideMarginMaxPx, sideMarginMaxByRatio);
             int edgePad = UIConfig.wrapperEdgePadding;
             int vPad = UIConfig.wrapperVerticalPadding;
+            // 連続メッセージの場合は上マージンを減らす（バブルスタック）
+            int topPad = isConsecutive ? 2 : vPad;
+            int bottomPad = vPad;
             hlg.padding = isPlayer
-                ? new RectOffset(sideMargin, edgePad, vPad, vPad)
-                : new RectOffset(edgePad, sideMargin, vPad, vPad);
+                ? new RectOffset(sideMargin, edgePad, topPad, bottomPad)
+                : new RectOffset(edgePad, sideMargin, topPad, bottomPad);
 
             LayoutElement wrapperLayout = wrapper.GetComponent<LayoutElement>();
             wrapperLayout.flexibleWidth = 1f;
@@ -269,8 +276,8 @@ namespace ProjectFoundPhone.UI
             wrapperFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
             wrapperFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            // キャラクターアイコンを追加（設定が有効な場合）
-            if (UIConfig.showCharacterIcon && !string.IsNullOrEmpty(charID))
+            // キャラクターアイコンを追加（設定が有効で、連続メッセージでない場合のみ）
+            if (UIConfig.showCharacterIcon && !string.IsNullOrEmpty(charID) && !isConsecutive)
             {
                 GameObject iconObj = CreateCharacterIcon(charID);
                 if (iconObj != null)
@@ -402,8 +409,9 @@ namespace ProjectFoundPhone.UI
         /// </summary>
         /// <param name="charID">キャラクターID（自分/相手の判定に使用）</param>
         /// <param name="text">メッセージテキスト</param>
+        /// <param name="isConsecutive">前回と同じ話者の連続メッセージか</param>
         /// <returns>生成されたGameObject</returns>
-        private GameObject CreateMessageBubble(string charID, string text)
+        private GameObject CreateMessageBubble(string charID, string text, bool isConsecutive = false)
         {
             using var _ = s_CreateMessageBubbleMarker.Auto();
 
@@ -499,7 +507,7 @@ namespace ProjectFoundPhone.UI
             Canvas.ForceUpdateCanvases();
 
             // バブルの最終処理（配置、アニメーション、スクロール）
-            FinalizeBubble(messageBubble, charID);
+            FinalizeBubble(messageBubble, charID, isConsecutive);
 
             // タイプライター効果を適用
             ApplyTypewriterEffect(textComponent);
@@ -603,12 +611,13 @@ namespace ProjectFoundPhone.UI
         /// </summary>
         /// <param name="bubble">処理対象のバブル</param>
         /// <param name="charID">キャラクターID（配置とテーマカラーの決定に使用）</param>
-        private void FinalizeBubble(GameObject bubble, string charID)
+        /// <param name="isConsecutive">前回と同じ話者の連続メッセージか</param>
+        private void FinalizeBubble(GameObject bubble, string charID, bool isConsecutive = false)
         {
             if (bubble == null) return;
 
             // プレイヤー判定・テーマカラー・配置を共通処理で設定
-            ConfigureBubble(bubble, charID);
+            ConfigureBubble(bubble, charID, isConsecutive);
 
             // アニメーション演出
             AnimateBubbleIn(bubble);
@@ -660,8 +669,11 @@ namespace ProjectFoundPhone.UI
                 });
             }
 
+            // 連続メッセージ判定
+            bool isConsecutive = (charID == m_LastSpeaker);
+
             // メッセージバブルの生成と追加
-            GameObject messageBubble = CreateMessageBubble(charID, text);
+            GameObject messageBubble = CreateMessageBubble(charID, text, isConsecutive);
             if (messageBubble == null)
             {
                 return;
@@ -677,6 +689,9 @@ namespace ProjectFoundPhone.UI
                 }
                 bubble.Initialize(lineTag, messageBubble.GetComponent<UnityEngine.UI.Image>());
             }
+
+            // 話者を更新
+            m_LastSpeaker = charID;
 
             // Note: AutoScrollはCreateMessageBubble内のFinalizeBubbleで実行される
         }
@@ -784,8 +799,14 @@ namespace ProjectFoundPhone.UI
                 }
             }
 
+            // 連続メッセージ判定
+            bool isConsecutive = (charID == m_LastSpeaker);
+
             // バブルの最終処理（配置、アニメーション、スクロール）
-            FinalizeBubble(imageBubble, charID);
+            FinalizeBubble(imageBubble, charID, isConsecutive);
+
+            // 話者を更新
+            m_LastSpeaker = charID;
         }
 
         /// <summary>
@@ -929,6 +950,9 @@ namespace ProjectFoundPhone.UI
             {
                 AutoScroll();
             }
+
+            // システムメッセージ後は連続が途切れる
+            m_LastSpeaker = null;
         }
 
         /// <summary>
@@ -1653,6 +1677,9 @@ namespace ProjectFoundPhone.UI
             m_TypingIndicator = null;
 
             m_ChatHistory.Clear();
+
+            // 連続メッセージ状態をリセット
+            m_LastSpeaker = null;
         }
 
         /// <summary>
