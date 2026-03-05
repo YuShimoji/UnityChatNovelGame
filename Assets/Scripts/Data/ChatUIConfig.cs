@@ -39,6 +39,10 @@ namespace ProjectFoundPhone.Data
         [Tooltip("サイドマージンの最大ピクセル値 (狭い画面での崩れ防止)")]
         public float sideMarginMaxPx = 200f;
 
+        [Tooltip("サイドマージンの画面幅に対する最大割合 (モバイル対応)")]
+        [Range(0f, 0.3f)]
+        public float sideMarginMaxRatio = 0.18f;
+
         [Tooltip("ラッパーの端パディング (px)")]
         public int wrapperEdgePadding = 12;
 
@@ -47,6 +51,16 @@ namespace ProjectFoundPhone.Data
 
         [Tooltip("VLG 最小スペーシング")]
         public float minLayoutSpacing = 10f;
+
+        [Header("Character Icon")]
+        [Tooltip("キャラクターアイコンを表示するか")]
+        public bool showCharacterIcon = true;
+
+        [Tooltip("キャラクターアイコンのサイズ (px)")]
+        public float characterIconSize = 40f;
+
+        [Tooltip("アイコンとバブルの間隔 (px)")]
+        public float iconBubbleSpacing = 8f;
 
         [Header("System Message")]
         [Tooltip("システムメッセージのフォントサイズ")]

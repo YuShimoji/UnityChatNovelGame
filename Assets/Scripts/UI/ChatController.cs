@@ -250,9 +250,12 @@ namespace ProjectFoundPhone.UI
             hlg.childForceExpandHeight = false;
             hlg.childControlWidth = true;      // HLG が子要素の幅を制御
             hlg.childControlHeight = true;
+            hlg.spacing = UIConfig.iconBubbleSpacing; // アイコンとバブルの間隔
             // パディングで左右マージンを作る → player は左に広いマージン、NPC は右に広いマージン
             int sideMarginRaw = (int)(Screen.width * UIConfig.sideMarginPercent);
-            int sideMargin = (int)Mathf.Min(sideMarginRaw, UIConfig.sideMarginMaxPx);
+            // 画面幅に対する最大割合も考慮（モバイル対応）
+            int sideMarginMaxByRatio = (int)(Screen.width * UIConfig.sideMarginMaxRatio);
+            int sideMargin = (int)Mathf.Min(sideMarginRaw, UIConfig.sideMarginMaxPx, sideMarginMaxByRatio);
             int edgePad = UIConfig.wrapperEdgePadding;
             int vPad = UIConfig.wrapperVerticalPadding;
             hlg.padding = isPlayer
@@ -266,6 +269,25 @@ namespace ProjectFoundPhone.UI
             wrapperFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
             wrapperFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
+            // キャラクターアイコンを追加（設定が有効な場合）
+            if (UIConfig.showCharacterIcon && !string.IsNullOrEmpty(charID))
+            {
+                GameObject iconObj = CreateCharacterIcon(charID);
+                if (iconObj != null)
+                {
+                    iconObj.transform.SetParent(wrapper.transform, false);
+                    // NPC: アイコン→バブル、Player: バブル→アイコン
+                    if (isPlayer)
+                    {
+                        iconObj.transform.SetAsLastSibling();
+                    }
+                    else
+                    {
+                        iconObj.transform.SetAsFirstSibling();
+                    }
+                }
+            }
+
             bubble.transform.SetParent(wrapper.transform, false);
 
             // テキストの色を調整（プレイヤーは白、NPCは明るいグレー）
@@ -274,6 +296,105 @@ namespace ProjectFoundPhone.UI
             {
                 textComponent.color = isPlayer ? UIConfig.playerTextColor : UIConfig.npcTextColor;
             }
+        }
+
+        /// <summary>
+        /// キャラクターアイコンを作成する（Discord風の円形アイコン）
+        /// </summary>
+        /// <param name="charID">キャラクターID</param>
+        /// <returns>生成されたアイコンGameObject（取得失敗時null）</returns>
+        private GameObject CreateCharacterIcon(string charID)
+        {
+            if (CharacterDatabase.Instance == null)
+            {
+                return null;
+            }
+
+            Sprite iconSprite = CharacterDatabase.Instance.GetIcon(charID);
+            if (iconSprite == null)
+            {
+                // アイコンが設定されていない場合はスキップ
+                return null;
+            }
+
+            float iconSize = UIConfig.characterIconSize;
+
+            // コンテナ（円形マスク用）
+            GameObject container = new GameObject("CharacterIconContainer",
+                typeof(RectTransform), typeof(Image), typeof(Mask), typeof(LayoutElement));
+
+            RectTransform containerRect = container.GetComponent<RectTransform>();
+            containerRect.sizeDelta = new Vector2(iconSize, iconSize);
+
+            // 円形の背景Image（マスク用）
+            Image maskImage = container.GetComponent<Image>();
+            maskImage.sprite = CreateCircleSprite(); // 実行時に円形Spriteを生成
+            maskImage.color = Color.white;
+
+            // Mask component
+            Mask mask = container.GetComponent<Mask>();
+            mask.showMaskGraphic = false; // マスク自体は非表示
+
+            // LayoutElement設定（HLGでのサイズ固定）
+            LayoutElement containerLayout = container.GetComponent<LayoutElement>();
+            containerLayout.minWidth = iconSize;
+            containerLayout.minHeight = iconSize;
+            containerLayout.preferredWidth = iconSize;
+            containerLayout.preferredHeight = iconSize;
+            containerLayout.flexibleWidth = 0f;
+            containerLayout.flexibleHeight = 0f;
+
+            // 実際のアイコンImage（子要素）
+            GameObject iconObj = new GameObject("Icon", typeof(RectTransform), typeof(Image));
+            iconObj.transform.SetParent(container.transform, false);
+
+            RectTransform iconRect = iconObj.GetComponent<RectTransform>();
+            iconRect.anchorMin = Vector2.zero;
+            iconRect.anchorMax = Vector2.one;
+            iconRect.sizeDelta = Vector2.zero;
+
+            Image iconImage = iconObj.GetComponent<Image>();
+            iconImage.sprite = iconSprite;
+            iconImage.preserveAspect = true;
+
+            return container;
+        }
+
+        /// <summary>
+        /// 円形Spriteを実行時に生成する（アイコンマスク用）
+        /// </summary>
+        private Sprite CreateCircleSprite()
+        {
+            int size = 64; // テクスチャサイズ
+            Texture2D texture = new Texture2D(size, size, TextureFormat.RGBA32, false);
+            texture.filterMode = FilterMode.Bilinear;
+
+            float center = size / 2f;
+            float radius = center;
+
+            // 円を描画
+            for (int y = 0; y < size; y++)
+            {
+                for (int x = 0; x < size; x++)
+                {
+                    float dx = x - center;
+                    float dy = y - center;
+                    float distance = Mathf.Sqrt(dx * dx + dy * dy);
+
+                    if (distance <= radius)
+                    {
+                        texture.SetPixel(x, y, Color.white);
+                    }
+                    else
+                    {
+                        texture.SetPixel(x, y, Color.clear);
+                    }
+                }
+            }
+
+            texture.Apply();
+
+            return Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
         }
 
         /// <summary>
