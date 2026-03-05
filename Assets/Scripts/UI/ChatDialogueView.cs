@@ -151,9 +151,9 @@ namespace ProjectFoundPhone.UI
                     if (index >= 0 && index < dialogueOptions.Length)
                     {
                         selectedOption = dialogueOptions[index];
-                        // 注意: プレイヤー発話の追加は Yarn スクリプト側で行う
-                        // （ジャンプ先ノードの冒頭行がプレイヤーのセリフになっている）
-                        // ここで AddMessage すると二重表示になる
+
+                        // プレイヤーの選択をチャットに表示（一般的なチャットUI動作）
+                        m_ChatController.AddMessage("player", choiceTexts[index]);
                     }
 
                     choiceMade = true;
