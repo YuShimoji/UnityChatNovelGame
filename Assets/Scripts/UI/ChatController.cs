@@ -55,6 +55,7 @@ namespace ProjectFoundPhone.UI
         private GameObject m_RuntimeMessageBubbleTemplate;
         private TMP_InputField m_RuntimeInputField;
         private Button m_RuntimeSendButton;
+        private GameObject m_TypingIndicatorWrapper;
         private static readonly ProfilerMarker s_CreateMessageBubbleMarker = new ProfilerMarker("ChatController.CreateMessageBubble");
         private static readonly ProfilerMarker s_AddMessageMarker = new ProfilerMarker("ChatController.AddMessage");
         private static readonly ProfilerMarker s_AddImageMessageMarker = new ProfilerMarker("ChatController.AddImageMessage");
@@ -998,35 +999,21 @@ namespace ProjectFoundPhone.UI
         public void ShowTypingIndicator(bool show)
         {
             // ランタイム生成（未設定時）
-            if (m_TypingIndicator == null)
+            if (m_TypingIndicator == null || m_TypingIndicatorWrapper == null)
             {
                 EnsureTypingIndicator();
             }
 
-            if (m_TypingIndicator != null)
+            // TypingIndicatorWrapperを使用（動的な親取得を避ける）
+            if (m_TypingIndicatorWrapper != null)
             {
-                // TypingIndicatorはラッパー内に配置されているため、親（ラッパー）を制御
-                Transform wrapper = m_TypingIndicator.transform.parent;
-                if (wrapper != null)
-                {
-                    wrapper.gameObject.SetActive(show);
+                m_TypingIndicatorWrapper.SetActive(show);
 
-                    if (show)
-                    {
-                        // ラッパーごと最後尾に表示
-                        wrapper.SetAsLastSibling();
-                        AutoScroll();
-                    }
-                }
-                else
+                if (show)
                 {
-                    // フォールバック（ラッパーなしの場合）
-                    m_TypingIndicator.SetActive(show);
-                    if (show)
-                    {
-                        m_TypingIndicator.transform.SetAsLastSibling();
-                        AutoScroll();
-                    }
+                    // ラッパーごと最後尾に表示
+                    m_TypingIndicatorWrapper.transform.SetAsLastSibling();
+                    AutoScroll();
                 }
             }
         }
@@ -1114,6 +1101,7 @@ namespace ProjectFoundPhone.UI
             }
 
             m_TypingIndicator = typingBubble;
+            m_TypingIndicatorWrapper = wrapper;
             wrapper.SetActive(false); // 初期状態は非表示
         }
 
@@ -1691,15 +1679,14 @@ namespace ProjectFoundPhone.UI
             m_MessageBubblePool.ReturnAll();
 
             // 残存する子オブジェクト（空ラッパー、ChoiceContainer、TypingIndicator以外）を破棄
-            Transform typingIndicatorWrapper = m_TypingIndicator != null ? m_TypingIndicator.transform.parent : null;
             for (int i = m_ScrollRect.content.childCount - 1; i >= 0; i--)
             {
                 Transform child = m_ScrollRect.content.GetChild(i);
                 if (child == null) continue;
                 // 選択肢コンテナは保持
                 if (m_ChoiceContainer != null && child == m_ChoiceContainer) continue;
-                // TypingIndicatorのラッパーは保持
-                if (typingIndicatorWrapper != null && child == typingIndicatorWrapper) continue;
+                // TypingIndicatorのラッパーは保持（保存済み参照を使用）
+                if (m_TypingIndicatorWrapper != null && child == m_TypingIndicatorWrapper.transform) continue;
                 Destroy(child.gameObject);
             }
 
