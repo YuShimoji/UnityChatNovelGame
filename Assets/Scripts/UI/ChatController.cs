@@ -1042,55 +1042,7 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            // TypingIndicatorは専用に作成（プール不使用で既存メッセージとの混同を防ぐ）
-            GameObject typingBubble = new GameObject("TypingIndicator", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
-            typingBubble.transform.SetParent(m_ScrollRect.content, false);
-
-            // RectTransformをリセット
-            RectTransform bubbleRect = typingBubble.GetComponent<RectTransform>();
-            if (bubbleRect != null)
-            {
-                bubbleRect.anchorMin = new Vector2(0f, 1f);
-                bubbleRect.anchorMax = new Vector2(1f, 1f);
-                bubbleRect.pivot = new Vector2(0.5f, 1f);
-                bubbleRect.sizeDelta = new Vector2(0f, 60f);
-            }
-
-            // Image背景を設定
-            Image bgImage = typingBubble.GetComponent<Image>();
-            bgImage.color = UIConfig.typingIndicatorColor;
-            bgImage.raycastTarget = false;
-
-            // LayoutElement設定
-            LayoutElement layoutElement = typingBubble.GetComponent<LayoutElement>();
-            layoutElement.minHeight = 60f;
-            layoutElement.preferredHeight = 60f;
-            layoutElement.flexibleWidth = 1f;
-
-            // テキスト設定
-            GameObject textObj = new GameObject("Text", typeof(RectTransform));
-            textObj.transform.SetParent(typingBubble.transform, false);
-            TextMeshProUGUI textComponent = textObj.AddComponent<TextMeshProUGUI>();
-
-            RectTransform textRect = textComponent.GetComponent<RectTransform>();
-            textRect.anchorMin = new Vector2(0, 0);
-            textRect.anchorMax = new Vector2(1, 1);
-            textRect.offsetMin = new Vector2(10, 10);
-            textRect.offsetMax = new Vector2(-10, -10);
-
-            textComponent.text = "...";
-            textComponent.fontSize = UIConfig.typingIndicatorFontSize;
-            textComponent.color = UIConfig.typingIndicatorTextColor;
-            textComponent.alignment = TextAlignmentOptions.Center;
-            textComponent.enableWordWrapping = false;
-
-            if (m_JapaneseFontAsset != null)
-            {
-                textComponent.font = m_JapaneseFontAsset;
-            }
-
-            // TypingIndicatorは通常メッセージと同様にラッパーで左寄せ配置
-            // ただし、ConfigureBubbleを使わずに手動で構築（連続メッセージ判定を避けるため）
+            // Step 1: ラッパーを先に作成してm_ScrollRect.contentに配置
             GameObject wrapper = new GameObject("TypingIndicatorRow",
                 typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement), typeof(ContentSizeFitter));
             wrapper.transform.SetParent(m_ScrollRect.content, false);
@@ -1100,7 +1052,7 @@ namespace ProjectFoundPhone.UI
             hlg.childForceExpandHeight = false;
             hlg.childControlWidth = true;
             hlg.childControlHeight = true;
-            hlg.spacing = 0f; // TypingIndicatorにはアイコンがないのでスペーシングなし
+            hlg.spacing = 0f;
 
             // NPC側のパディング（右に広いマージン）
             int sideMarginRaw = (int)(Screen.width * UIConfig.sideMarginPercent);
@@ -1117,8 +1069,49 @@ namespace ProjectFoundPhone.UI
             wrapperFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
             wrapperFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            // バブルをラッパーに移動
+            // Step 2: typingBubbleを作成し、最初からwrapperの子として配置
+            GameObject typingBubble = new GameObject("TypingIndicator", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
             typingBubble.transform.SetParent(wrapper.transform, false);
+
+            // RectTransform設定
+            RectTransform bubbleRect = typingBubble.GetComponent<RectTransform>();
+            bubbleRect.anchorMin = new Vector2(0f, 1f);
+            bubbleRect.anchorMax = new Vector2(1f, 1f);
+            bubbleRect.pivot = new Vector2(0.5f, 1f);
+            bubbleRect.sizeDelta = new Vector2(0f, 60f);
+
+            // Image背景を設定
+            Image bgImage = typingBubble.GetComponent<Image>();
+            bgImage.color = UIConfig.typingIndicatorColor;
+            bgImage.raycastTarget = false;
+
+            // LayoutElement設定
+            LayoutElement layoutElement = typingBubble.GetComponent<LayoutElement>();
+            layoutElement.minHeight = 60f;
+            layoutElement.preferredHeight = 60f;
+            layoutElement.flexibleWidth = 1f;
+
+            // Step 3: テキスト設定
+            GameObject textObj = new GameObject("Text", typeof(RectTransform));
+            textObj.transform.SetParent(typingBubble.transform, false);
+            TextMeshProUGUI textComponent = textObj.AddComponent<TextMeshProUGUI>();
+
+            RectTransform textRect = textComponent.GetComponent<RectTransform>();
+            textRect.anchorMin = Vector2.zero;
+            textRect.anchorMax = Vector2.one;
+            textRect.offsetMin = new Vector2(10, 10);
+            textRect.offsetMax = new Vector2(-10, -10);
+
+            textComponent.text = "...";
+            textComponent.fontSize = UIConfig.typingIndicatorFontSize;
+            textComponent.color = UIConfig.typingIndicatorTextColor;
+            textComponent.alignment = TextAlignmentOptions.Center;
+            textComponent.enableWordWrapping = false;
+
+            if (m_JapaneseFontAsset != null)
+            {
+                textComponent.font = m_JapaneseFontAsset;
+            }
 
             m_TypingIndicator = typingBubble;
             wrapper.SetActive(false); // 初期状態は非表示
