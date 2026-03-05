@@ -1,93 +1,114 @@
-﻿# Milestone Plan
+# Milestone Plan
 
-## 基本情報
+## Metadata
 
-- **最終更新**: 2026-02-12T14:00:00+09:00
-- **更新者**: AI Agent
-
----
-
-## 長期目標（Someday / 月次〜四半期）
-
-### LG-1: プロダクション準備とリリース基盤
-
-- **ゴール**: メインストーリー制作と配信基盤（Addressables/CI/CD/QA）を整え、リリース準備に入れること
-- **期限目安**: 2026-06
-- **状態**: 未着手
-- **進捗**: 0%
-- **関連マイルストーン**: MG-1, MG-2
+- Last Updated: 2026-03-02T14:45:00+09:00
+- Updated By: Cascade Orchestrator
 
 ---
 
-## 中期目標（Later / 1〜2週間）
+## Long Milestone
 
-### MG-1: MVP安定化と最低限の品質基盤
+### LG-1: Production readiness
 
-- **ゴール**: MVP完走の検証完了と、性能・通しテストの最小基準を満たす
-- **期限目安**: 2026-02-26
-- **状態**: 進行中
-- **進捗**: 40%
-- **含まれるタスク**: TASK_MVP_04, TASK_025, TASK_027
-- **完了基準**:
-  - [ ] MVPの通し完走（60秒以内）の記録
-  - [ ] Console Error/Exception 0
-  - [ ] TASK_025 After計測の完了
-  - [ ] TASK_027 手動フルプレイの完了
-  - [ ] テスト全通過・ビルド成功
-
----
-
-## 短期目標（Next / 今日〜数日）
-
-### SG-1: MVP縦切りの最終確認
-
-- **ゴール**: MVPチェックリストの確認を完了し、次フェーズへ移行する
-- **対象タスク**: TASK_MVP_04
-- **完了基準**:
-  - [ ] Title→Play→Choice→Endの完走を確認
-  - [ ] 連打時の進行破綻がないことを確認
-  - [ ] Console Error/Exception 0
+- Objective: move Addressables / CI / QA toward a reusable production baseline
+- Target Window: 2026-06
+- Status: started
+- Progress: 50%
+- Related:
+  - `TASK_055_EvidenceReuseAutomation` (COMPLETED)
+  - `TASK_056_CIReadinessBaseline` (Layer A完了、Layer B: リモート実行待ち)
+  - `TASK_057_QACharacterDatabaseEditModeCoverage`
+  - `TASK_058_RemoteUnityEditModeCIPath`
+  - later candidate: Addressables migration planning
 
 ---
 
-## 現在地マップ
+## Mid Milestone
 
+### MG-1: MVP verification and minimum release confidence
+
+- Objective: close the main MVP verification loop and leave a stable state behind
+- Target Window: 2026-03-05
+- Status: completed
+- Progress: 100%
+
+---
+
+## Short Milestone
+
+### SG-1: MVP verification pack closure
+
+- Objective: close the MVP checklist at the minimum acceptable level
+- Target Window: 2026-03-02
+- Status: completed
+- Progress: 100%
+
+---
+
+## Current Map
 ```mermaid
 gantt
-    title プロジェクト進捗
+    title Project Milestones
     dateFormat  YYYY-MM-DD
-    section 長期目標
-    LG-1            :active, lg1, 2026-02-12, 2026-06-30
-    section 中期目標
-    MG-1            :active, mg1, 2026-02-12, 2026-02-26
-    section 短期目標
-    SG-1            :active, sg1, 2026-02-12, 2026-02-16
+    section Long
+    LG-1 :active, lg1, 2026-03-01, 2026-06-30
+    section Mid
+    MG-1 :done, mg1, 2026-02-12, 2026-03-01
+    section Short
+    SG-1 :done, sg1, 2026-02-12, 2026-03-01
 ```
 
 ---
 
-## 振り返りログ（KPT）
+## Keep / Problem / Try
 
-### 2026-02-12: MVP安定化の確認（短期チェックポイント）
+### 2026-03-02
 
-**Keep（続けること）**:
+**Keep**
 
-- MVP最短導線の維持と連打耐性の重視
+- リモート最新状態のマージ完了（競合解決、有用な実装統合）
+- TASK_055完了により証跡再利用ルールが明文化され、ゲート作業の効率化基盤が整った
+- CI/CD初回実行が完了し、repo-guardsワークフローが稼働開始
+- プロジェクト評価レポート作成により、短期・中期・長期のロードマップが明確化
 
-**Problem（課題）**:
+**Problem**
 
-- フォント表示問題で進行確認が遅延
+- ContentAuthoring実コンテンツ制作がユーザーディレクション待ち
+- TASK_056/057/058のLayer B（リモート実行確認）が未完了
+- 手動テスト回避のため、自動化可能な範囲で進行中
 
-**Try（次に試すこと）**:
+**Try**
 
-- MVP検証をタスク化し、証跡と完了条件を明文化
+- CI/CD初回実行結果の確認と必要に応じた修正
+- 自動化可能な改善項目の継続実施
+- ContentAuthoringシーンの準備完了状態を維持
 
-**優先度変更**:
+### 2026-03-01
 
-- TASK_MVP_04 を最優先へ繰り上げ
+**Keep**
+
+- The CI baseline created a reusable remote guard without requiring manual local testing.
+- The QA slice stayed narrow and high-signal by focusing on `CharacterDatabase` EditMode behavior.
+- The Unity EditMode CI path now exists as a concrete Layer B closing route.
+
+**Problem**
+
+- `TASK_056`, `TASK_057`, and `TASK_058` remain open on Layer B until the first remote runs are observed.
+- User-side local modifications and one generated artifact still keep the worktree dirty.
+
+**Try**
+
+- Observe the first remote `repo-guards` and `unity-editmode-tests` runs.
+- After remote execution is confirmed, choose the next LG-1 slice between Addressables planning and CI hardening.
 
 ---
 
-## 履歴
+## History
 
-- 2026-02-12 14:00: MILESTONE_PLAN.md を初期化
+- 2026-03-02 14:45: `TASK_055_EvidenceReuseAutomation` completed, LG-1 progress updated to 50%
+- 2026-03-02 14:30: リモートpush実施、CI/CD初回実行開始
+- 2026-03-02 13:15: リモート最新状態マージ完了、プロジェクト評価レポート作成
+- 2026-03-01 16:29: `TASK_058_RemoteUnityEditModeCIPath` added to define the Unity EditMode CI path
+- 2026-03-01 16:26: `TASK_057_QACharacterDatabaseEditModeCoverage` added to expand EditMode coverage
+- 2026-03-01 16:21: `TASK_056_CIReadinessBaseline` added as the first LG-1 slice

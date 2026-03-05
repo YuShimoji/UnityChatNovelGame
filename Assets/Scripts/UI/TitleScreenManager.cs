@@ -10,6 +10,8 @@ namespace ProjectFoundPhone.UI
     /// </summary>
     public class TitleScreenManager : MonoBehaviour
     {
+        private const string ContentAuthoringSceneName = "ContentAuthoring";
+
         [Header("Scene Settings")]
         [SerializeField] private string m_NewGameSceneName = "DebugChatScene";
 
@@ -22,11 +24,12 @@ namespace ProjectFoundPhone.UI
         /// </summary>
         public void StartNewGame()
         {
-            Debug.Log("TitleScreenManager: Starting New Game...");
+            string targetSceneName = ResolveNewGameSceneName();
+            Debug.Log($"TitleScreenManager: Starting New Game in {targetSceneName}...");
             
             // セーブデータがある場合にリセットするかどうかの確認などは将来的に追加
             // 現状は即座にシーン遷移
-            SceneManager.LoadScene(m_NewGameSceneName);
+            SceneManager.LoadScene(targetSceneName);
         }
 
         /// <summary>
@@ -73,6 +76,16 @@ namespace ProjectFoundPhone.UI
 #else
             Application.Quit();
 #endif
+        }
+
+        private string ResolveNewGameSceneName()
+        {
+            if (Application.CanStreamedLevelBeLoaded(ContentAuthoringSceneName))
+            {
+                return ContentAuthoringSceneName;
+            }
+
+            return m_NewGameSceneName;
         }
     }
 }

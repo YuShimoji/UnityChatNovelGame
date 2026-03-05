@@ -5,6 +5,8 @@ using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using ProjectFoundPhone.Data;
+using Unity.Profiling;
+using System.Linq;
 
 namespace ProjectFoundPhone.UI
 {
@@ -23,6 +25,7 @@ namespace ProjectFoundPhone.UI
         [SerializeField] private TMP_InputField m_InputField;
         [SerializeField] private Button m_SendButton;
         [SerializeField] private float m_AutoScrollThreshold = 0.1f; // 自動スクロールを実行する閾値（0.0-1.0）
+        [SerializeField] private MessageBubblePool m_MessageBubblePool;
 
         [Header("Image Bubble Settings")]
         [SerializeField] private GameObject m_ImageBubblePrefab;
@@ -33,17 +36,38 @@ namespace ProjectFoundPhone.UI
         [SerializeField] private GameObject m_ChoiceButtonPrefab;
         [SerializeField] private Transform m_ChoiceContainer;
 
+        [Header("Font Settings")]
+        [SerializeField] private TMP_FontAsset m_JapaneseFontAsset;
+
+        [Header("Typewriter Effect Settings")]
+        [SerializeField] private bool m_EnableTypewriterEffect = true;
+        [SerializeField] private float m_TypewriterSpeed = 0.05f; // 1文字あたりの表示時間（秒）
 
         private bool m_IsUserScrolling = false;
         private float m_LastScrollPosition = 1.0f;
 
         private bool m_AutoScrollScheduled = false;
-        private Tween m_ScrollTween;
+        private bool m_IsAutoScrolling = false;
+        private bool m_PinnedToBottom = false;
 
         private GameObject m_RuntimeChoiceButtonTemplate;
         private GameObject m_RuntimeImageBubbleTemplate;
+        private GameObject m_RuntimeMessageBubbleTemplate;
         private TMP_InputField m_RuntimeInputField;
         private Button m_RuntimeSendButton;
+        private static readonly ProfilerMarker s_CreateMessageBubbleMarker = new ProfilerMarker("ChatController.CreateMessageBubble");
+        private static readonly ProfilerMarker s_AddMessageMarker = new ProfilerMarker("ChatController.AddMessage");
+        private static readonly ProfilerMarker s_AddImageMessageMarker = new ProfilerMarker("ChatController.AddImageMessage");
+        private static readonly ProfilerMarker s_AddSystemMessageMarker = new ProfilerMarker("ChatController.AddSystemMessage");
+        private static readonly ProfilerMarker s_ShowChoicesMarker = new ProfilerMarker("ChatController.ShowChoices");
+        private static readonly ProfilerMarker s_AutoScrollMarker = new ProfilerMarker("ChatController.AutoScroll");
+
+        private readonly List<SavedChatMessage> m_ChatHistory = new List<SavedChatMessage>();
+        private bool m_IsRestoringHistory = false;
+
+        /// <summary>ChatUIConfig SO へのキャッシュ付きアクセス</summary>
+        private ChatUIConfig m_UIConfig;
+        private ChatUIConfig UIConfig => m_UIConfig ??= ChatUIConfig.Instance;
         #endregion
 
         #region Unity Lifecycle
@@ -70,6 +94,16 @@ namespace ProjectFoundPhone.UI
                 m_ScrollRect.onValueChanged.AddListener(OnScrollValueChanged);
             }
         }
+
+        private void LateUpdate()
+        {
+            // タイプライター中のコンテンツ成長に追従するため、
+            // ユーザーが手動スクロールしていない間は毎フレーム最下部に固定
+            if (m_PinnedToBottom && !m_IsUserScrolling && m_ScrollRect != null)
+            {
+                m_ScrollRect.verticalNormalizedPosition = 0f;
+            }
+        }
         #endregion
 
         #region Private Methods
@@ -86,12 +120,20 @@ namespace ProjectFoundPhone.UI
             if (m_LayoutGroup == null && m_ScrollRect != null && m_ScrollRect.content != null)
             {
                 m_LayoutGroup = m_ScrollRect.content.GetComponent<VerticalLayoutGroup>();
+                
+                // VerticalLayoutGroupのスペーシング設定を確保
+                if (m_LayoutGroup != null)
+                {
+                    m_LayoutGroup.spacing = Mathf.Max(m_LayoutGroup.spacing, UIConfig.minLayoutSpacing);
+                    m_LayoutGroup.childControlHeight = false;
+                    m_LayoutGroup.childForceExpandHeight = false;
+                }
             }
 
             // m_MessageBubblePrefab、m_TypingIndicatorのnullチェックと警告
             if (m_MessageBubblePrefab == null)
             {
-                Debug.LogWarning("ChatController: m_MessageBubblePrefab is not assigned. Message bubbles cannot be created.");
+                Debug.LogWarning("ChatController: m_MessageBubblePrefab is not assigned. Runtime message template will be used.");
             }
 
             if (m_TypingIndicator == null)
@@ -99,9 +141,36 @@ namespace ProjectFoundPhone.UI
                 Debug.LogWarning("ChatController: m_TypingIndicator is not assigned. Typing indicator will not be displayed.");
             }
 
+            // プールの初期化（未設定時は自動生成）
+            EnsureMessageBubblePool();
+
             EnsureChoiceUIElements();
             EnsureImageBubbleTemplate();
             EnsureInputControls();
+        }
+
+        /// <summary>
+        /// MessageBubblePool の初期化（未設定時は自動生成）
+        /// </summary>
+        private void EnsureMessageBubblePool()
+        {
+            if (m_MessageBubblePool == null)
+            {
+                m_MessageBubblePool = GetComponent<MessageBubblePool>();
+                if (m_MessageBubblePool == null)
+                {
+                    m_MessageBubblePool = gameObject.AddComponent<MessageBubblePool>();
+                }
+            }
+
+            // プールにPrefabを設定（Inspector 未設定時はランタイムテンプレートで代替）
+            if (m_MessageBubblePool != null)
+            {
+                GameObject prefab = m_MessageBubblePrefab != null
+                    ? m_MessageBubblePrefab
+                    : GetSafeMessageBubbleTemplate();
+                m_MessageBubblePool.SetPrefab(prefab);
+            }
         }
 
         /// <summary>
@@ -110,12 +179,16 @@ namespace ProjectFoundPhone.UI
         /// </summary>
         private void OnScrollValueChanged(Vector2 scrollPosition)
         {
+            // AutoScroll 中の位置変化はユーザー操作とみなさない
+            if (m_IsAutoScrolling) return;
+
             float verticalPos = scrollPosition.y;
 
             // スクロール位置が下から一定以上離れている場合、ユーザーが過去ログを見ていると判定
             if (verticalPos < (1.0f - m_AutoScrollThreshold))
             {
                 m_IsUserScrolling = true;
+                m_PinnedToBottom = false;
             }
             // スクロール位置が最下部に近い場合、ユーザーは最新メッセージを見ている
             else if (verticalPos >= 0.99f)
@@ -139,17 +212,7 @@ namespace ProjectFoundPhone.UI
 
             Color themeColor = CharacterDatabase.Instance != null
                 ? CharacterDatabase.Instance.GetThemeColor(charID)
-                : (isPlayer ? new Color(0.2f, 0.6f, 1.0f) : new Color(0.85f, 0.85f, 0.85f));
-
-            // 右寄せ（プレイヤー）/ 左寄せ（NPC）を設定
-            RectTransform rectTransform = bubble.GetComponent<RectTransform>();
-            if (rectTransform != null)
-            {
-                float anchorX = isPlayer ? 1.0f : 0.0f;
-                rectTransform.anchorMin = new Vector2(anchorX, 1.0f);
-                rectTransform.anchorMax = new Vector2(anchorX, 1.0f);
-                rectTransform.pivot = new Vector2(anchorX, 1.0f);
-            }
+                : (isPlayer ? new Color(0.2f, 0.6f, 1.0f) : new Color(0.3f, 0.3f, 0.35f));
 
             // バブル背景にテーマカラーを適用
             Image bubbleBackground = bubble.GetComponent<Image>();
@@ -157,21 +220,71 @@ namespace ProjectFoundPhone.UI
             {
                 bubbleBackground.color = themeColor;
             }
+
+            // MessageBubble の m_OriginalColor を同期（プール再利用時の色汚染防止）
+            MessageBubble mb = bubble.GetComponent<MessageBubble>();
+            if (mb != null)
+            {
+                mb.SyncOriginalColor();
+            }
+
+            // バブルの LayoutElement: HLG が幅を制御するため flexibleWidth で拡張を許可
+            LayoutElement layoutElement = bubble.GetComponent<LayoutElement>();
+            if (layoutElement != null)
+            {
+                layoutElement.flexibleWidth = 1f;
+                layoutElement.preferredWidth = -1f;
+            }
+
+            if (m_ScrollRect == null || m_ScrollRect.content == null) return;
+
+            // ラッパーで左右配置を実現
+            // パディングで片側にマージンを作ることで、バブルを左 or 右に寄せる
+            GameObject wrapper = new GameObject(isPlayer ? "PlayerRow" : "NpcRow",
+                typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement), typeof(ContentSizeFitter));
+            wrapper.transform.SetParent(m_ScrollRect.content, false);
+            wrapper.transform.SetSiblingIndex(bubble.transform.GetSiblingIndex());
+
+            HorizontalLayoutGroup hlg = wrapper.GetComponent<HorizontalLayoutGroup>();
+            hlg.childForceExpandWidth = true;  // 子要素を利用可能幅いっぱいに拡張
+            hlg.childForceExpandHeight = false;
+            hlg.childControlWidth = true;      // HLG が子要素の幅を制御
+            hlg.childControlHeight = true;
+            // パディングで左右マージンを作る → player は左に広いマージン、NPC は右に広いマージン
+            int sideMarginRaw = (int)(Screen.width * UIConfig.sideMarginPercent);
+            int sideMargin = (int)Mathf.Min(sideMarginRaw, UIConfig.sideMarginMaxPx);
+            int edgePad = UIConfig.wrapperEdgePadding;
+            int vPad = UIConfig.wrapperVerticalPadding;
+            hlg.padding = isPlayer
+                ? new RectOffset(sideMargin, edgePad, vPad, vPad)
+                : new RectOffset(edgePad, sideMargin, vPad, vPad);
+
+            LayoutElement wrapperLayout = wrapper.GetComponent<LayoutElement>();
+            wrapperLayout.flexibleWidth = 1f;
+
+            ContentSizeFitter wrapperFitter = wrapper.GetComponent<ContentSizeFitter>();
+            wrapperFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+            wrapperFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+            bubble.transform.SetParent(wrapper.transform, false);
+
+            // テキストの色を調整（プレイヤーは白、NPCは明るいグレー）
+            TextMeshProUGUI textComponent = bubble.GetComponentInChildren<TextMeshProUGUI>();
+            if (textComponent != null)
+            {
+                textComponent.color = isPlayer ? UIConfig.playerTextColor : UIConfig.npcTextColor;
+            }
         }
 
         /// <summary>
-        /// メッセージバブルのPrefabをインスタンス化
+        /// メッセージバブルのPrefabをインスタンス化（プール経由）
         /// </summary>
         /// <param name="charID">キャラクターID（自分/相手の判定に使用）</param>
         /// <param name="text">メッセージテキスト</param>
         /// <returns>生成されたGameObject</returns>
         private GameObject CreateMessageBubble(string charID, string text)
         {
-            if (m_MessageBubblePrefab == null)
-            {
-                Debug.LogError("ChatController: Cannot create message bubble. Prefab is not assigned.");
-                return null;
-            }
+            using var _ = s_CreateMessageBubbleMarker.Auto();
 
             if (m_ScrollRect == null || m_ScrollRect.content == null)
             {
@@ -179,31 +292,177 @@ namespace ProjectFoundPhone.UI
                 return null;
             }
 
-            // Prefabからインスタンスを生成
-            GameObject messageBubble = Instantiate(m_MessageBubblePrefab, m_ScrollRect.content);
-
-            // プレイヤー判定・テーマカラー・配置を共通処理で設定
-            ConfigureBubble(messageBubble, charID);
-
-            // TextMeshProコンポーネントにtextを設定
-            TextMeshProUGUI textComponent = messageBubble.GetComponentInChildren<TextMeshProUGUI>();
-            if (textComponent != null)
+            // プール未設定時はフォールバック
+            if (m_MessageBubblePool == null)
             {
-                textComponent.text = text;
+                EnsureMessageBubblePool();
+            }
+
+            GameObject messageBubble;
+
+            // プールから取得（設定されていれば）
+            if (m_MessageBubblePool != null)
+            {
+                messageBubble = m_MessageBubblePool.Get(m_ScrollRect.content);
             }
             else
             {
-                Debug.LogWarning("ChatController: TextMeshProUGUI component not found in message bubble prefab.");
+                // フォールバック: 直接Instantiate（Prefabがない場合は失敗）
+                if (m_MessageBubblePrefab == null)
+                {
+                    Debug.LogError("ChatController: Cannot create message bubble. Prefab is not assigned and pool is unavailable.");
+                    return null;
+                }
+                messageBubble = Instantiate(m_MessageBubblePrefab, m_ScrollRect.content);
             }
 
-            // ContentSizeFitterで高さを自動調整
+            if (messageBubble == null)
+            {
+                Debug.LogError("ChatController: Failed to create message bubble from pool.");
+                return null;
+            }
+
+            // バブルを確実に表示
+            messageBubble.SetActive(true);
+
+            // プール再利用時の状態汚染を防止: RectTransform をデフォルトにリセット
+            RectTransform bubbleRect = messageBubble.GetComponent<RectTransform>();
+            if (bubbleRect != null)
+            {
+                bubbleRect.anchorMin = new Vector2(0f, 1f);
+                bubbleRect.anchorMax = new Vector2(1f, 1f);
+                bubbleRect.pivot = new Vector2(0.5f, 1f);
+                bubbleRect.sizeDelta = new Vector2(0f, UIConfig.bubbleInitialHeight);
+            }
+
+            // Imageコンポーネントを追加（背景表示用）
+            Image bubbleImage = messageBubble.GetComponent<Image>();
+            if (bubbleImage == null)
+            {
+                bubbleImage = messageBubble.AddComponent<Image>();
+                bubbleImage.color = new Color(0.85f, 0.85f, 0.85f);
+                bubbleImage.raycastTarget = false;
+            }
+
+            // LayoutElementを追加・設定（高さを自動調整）
+            LayoutElement layoutElement = messageBubble.GetComponent<LayoutElement>();
+            if (layoutElement == null)
+            {
+                layoutElement = messageBubble.AddComponent<LayoutElement>();
+            }
+            float minH = UIConfig.bubbleMinHeight;
+            layoutElement.minHeight = minH;
+            layoutElement.preferredHeight = -1f;
+            layoutElement.flexibleHeight = -1f;
+            layoutElement.flexibleWidth = 1f;
+
+            // ContentSizeFitter はバブル自体には付けない（入れ子 CSF の競合防止）
             ContentSizeFitter sizeFitter = messageBubble.GetComponent<ContentSizeFitter>();
             if (sizeFitter != null)
             {
-                sizeFitter.SetLayoutVertical();
+                DestroyImmediate(sizeFitter);
             }
 
+            // テキストコンポーネントの取得または作成（ConfigureBubble の前に必要）
+            TextMeshProUGUI textComponent = messageBubble.GetComponentInChildren<TextMeshProUGUI>();
+            if (textComponent == null)
+            {
+                GameObject textObj = new GameObject("Text");
+                textObj.transform.SetParent(messageBubble.transform, false);
+                textComponent = textObj.AddComponent<TextMeshProUGUI>();
+
+                RectTransform textRect = textComponent.GetComponent<RectTransform>();
+                textRect.anchorMin = new Vector2(0, 0);
+                textRect.anchorMax = new Vector2(1, 1);
+                textRect.offsetMin = new Vector2(10, 10);
+                textRect.offsetMax = new Vector2(-10, -10);
+            }
+
+            // フォント・書式プロパティを設定（プール再利用時のリセット兼用）
+            textComponent.fontSize = UIConfig.messageFontSize;
+            textComponent.alignment = TextAlignmentOptions.TopLeft;
+            textComponent.enableWordWrapping = true;
+            textComponent.enableAutoSizing = false;
+            if (m_JapaneseFontAsset != null)
+            {
+                textComponent.font = m_JapaneseFontAsset;
+            }
+
+            // プレイヤー判定・テーマカラー・配置を共通処理で設定
+            // （テキストコンポーネント確保後に呼ぶことでテキスト色が正しく設定される）
+            ConfigureBubble(messageBubble, charID);
+
+            // ラッパー HLG がバブル幅を解決するようにレイアウトを強制更新
+            Canvas.ForceUpdateCanvases();
+
+            // 表示名を取得してテキストを設定
+            string displayName = CharacterDatabase.Instance != null
+                ? CharacterDatabase.Instance.GetDisplayName(charID)
+                : charID;
+            bool isSystemMessage = string.IsNullOrEmpty(charID) || charID.ToLower() == "system";
+            string finalText = isSystemMessage ? text : $"{displayName}: {text}";
+            textComponent.text = finalText;
+
+            // テキストのメッシュを強制更新して高さを計算
+            textComponent.ForceMeshUpdate();
+
+            LayoutElement bubbleLayout = messageBubble.GetComponent<LayoutElement>();
+            if (bubbleLayout != null)
+            {
+                float textHeight = textComponent.preferredHeight;
+                bubbleLayout.preferredHeight = Mathf.Max(minH, textHeight + UIConfig.bubbleTextPadding);
+            }
+
+            // レイアウトを即座に更新
+            Canvas.ForceUpdateCanvases();
+
+            // アニメーション演出
+            AnimateBubbleIn(messageBubble);
+
+            // タイプライター効果を適用
+            ApplyTypewriterEffect(textComponent);
+
             return messageBubble;
+        }
+
+        /// <summary>
+        /// テキストにタイプライター効果を適用（1文字ずつ表示）
+        /// </summary>
+        private void ApplyTypewriterEffect(TextMeshProUGUI textComponent)
+        {
+            if (!m_EnableTypewriterEffect || textComponent == null || string.IsNullOrEmpty(textComponent.text))
+            {
+                // タイプライター無効時は全文字を即座に表示
+                if (textComponent != null)
+                    textComponent.maxVisibleCharacters = int.MaxValue;
+                return;
+            }
+
+            // 前回のタイプライター tween が残っていればキルし、全文字表示にリセット
+            DOTween.Kill(textComponent, complete: true);
+
+            int totalCharacters = textComponent.text.Length;
+            textComponent.maxVisibleCharacters = 0;
+
+            DOTween.To(
+                () => textComponent.maxVisibleCharacters,
+                x => textComponent.maxVisibleCharacters = x,
+                totalCharacters,
+                totalCharacters * m_TypewriterSpeed
+            ).SetEase(Ease.Linear)
+             .SetUpdate(true)
+             .SetTarget(textComponent)
+             .OnComplete(() => textComponent.maxVisibleCharacters = totalCharacters);
+        }
+
+        /// <summary>
+        /// バブルが出現する際のアニメーション演出
+        /// </summary>
+        private void AnimateBubbleIn(GameObject bubble)
+        {
+            if (bubble == null) return;
+            bubble.transform.localScale = Vector3.zero;
+            bubble.transform.DOScale(1f, UIConfig.bubbleAnimationDuration).SetEase(Ease.OutBack).SetUpdate(true);
         }
         #endregion
 
@@ -215,19 +474,53 @@ namespace ProjectFoundPhone.UI
         /// <param name="text">メッセージテキスト</param>
         public void AddMessage(string charID, string text)
         {
+            AddMessage(charID, text, null);
+        }
+
+        /// <summary>
+        /// LineTag 付きメッセージをチャットに追加（矛盾指摘システム対応）
+        /// </summary>
+        /// <param name="charID">キャラクターID</param>
+        /// <param name="text">メッセージテキスト</param>
+        /// <param name="lineTag">矛盾判定用の識別タグ（null なら通常メッセージ）</param>
+        public void AddMessage(string charID, string text, string lineTag)
+        {
+            using var _ = s_AddMessageMarker.Auto();
+
             if (string.IsNullOrEmpty(text))
             {
                 Debug.LogWarning("ChatController: Attempted to add empty message.");
                 return;
             }
 
-            // メッセージバブルの生成と追加
+            // 履歴に記録（復元中は二重記録しない）
+            if (!m_IsRestoringHistory)
+            {
+                m_ChatHistory.Add(new SavedChatMessage
+                {
+                    Type = ChatMessageType.Normal,
+                    CharacterID = charID,
+                    Text = text,
+                    LineTag = lineTag
+                });
+            }
 
-            // CreateMessageBubble()でメッセージバブルを生成（既にcontentの子として追加済み）
+            // メッセージバブルの生成と追加
             GameObject messageBubble = CreateMessageBubble(charID, text);
             if (messageBubble == null)
             {
                 return;
+            }
+
+            // LineTag が設定されている場合、MessageBubble コンポーネントをアタッチ
+            if (!string.IsNullOrEmpty(lineTag))
+            {
+                MessageBubble bubble = messageBubble.GetComponent<MessageBubble>();
+                if (bubble == null)
+                {
+                    bubble = messageBubble.AddComponent<MessageBubble>();
+                }
+                bubble.Initialize(lineTag, messageBubble.GetComponent<UnityEngine.UI.Image>());
             }
 
             // ユーザーが過去ログを見ていない場合のみAutoScroll()を実行
@@ -244,10 +537,23 @@ namespace ProjectFoundPhone.UI
         /// <param name="imageSprite">表示する画像Sprite</param>
         public void AddImageMessage(string charID, Sprite imageSprite)
         {
+            using var _ = s_AddImageMessageMarker.Auto();
+
             if (imageSprite == null)
             {
                 Debug.LogWarning("ChatController: Attempted to add image message with null sprite.");
                 return;
+            }
+
+            // 履歴に記録（復元中は二重記録しない）
+            if (!m_IsRestoringHistory)
+            {
+                m_ChatHistory.Add(new SavedChatMessage
+                {
+                    Type = ChatMessageType.Image,
+                    CharacterID = charID,
+                    ImageResourcePath = imageSprite.name
+                });
             }
 
             // 遅延初期化: ImageBubblePrefabが未設定の場合はランタイム生成
@@ -267,7 +573,24 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            GameObject imageBubble = Instantiate(prefab, m_ScrollRect.content);
+            // プール未設定時はフォールバック
+            if (m_MessageBubblePool == null)
+            {
+                EnsureMessageBubblePool();
+            }
+
+            GameObject imageBubble;
+
+            // プールから取得（プールが有効で、MessageBubblePrefabを使用する場合）
+            if (m_MessageBubblePool != null && prefab == m_MessageBubblePrefab)
+            {
+                imageBubble = m_MessageBubblePool.Get(m_ScrollRect.content);
+            }
+            else
+            {
+                // フォールバック: 直接Instantiate
+                imageBubble = Instantiate(prefab, m_ScrollRect.content);
+            }
             imageBubble.SetActive(true);
 
             // プレイヤー判定・テーマカラー・配置を共通処理で設定
@@ -313,6 +636,10 @@ namespace ProjectFoundPhone.UI
                     }
                     imgRect.sizeDelta = new Vector2(width, height);
                 }
+
+                // 画像のフェードイン演出
+                imageContent.color = new Color(1, 1, 1, 0);
+                imageContent.DOFade(1f, 0.6f).SetUpdate(true);
             }
             else
             {
@@ -320,9 +647,15 @@ namespace ProjectFoundPhone.UI
                 TextMeshProUGUI textComponent = imageBubble.GetComponentInChildren<TextMeshProUGUI>();
                 if (textComponent != null)
                 {
-                    textComponent.text = $"[Image: {imageSprite.name}]";
+                    // 表示名をCharacterDatabaseから取得（fallback: IDそのまま）
+                    string displayName = CharacterDatabase.Instance != null
+                        ? CharacterDatabase.Instance.GetDisplayName(charID)
+                        : charID;
+                    textComponent.text = $"{displayName}: [Image: {imageSprite.name}]";
                 }
             }
+
+            AnimateBubbleIn(imageBubble);
 
             if (!m_IsUserScrolling)
             {
@@ -338,9 +671,21 @@ namespace ProjectFoundPhone.UI
         /// <param name="text">システムメッセージのテキスト</param>
         public void AddSystemMessage(string text)
         {
+            using var _ = s_AddSystemMessageMarker.Auto();
+
             if (string.IsNullOrEmpty(text))
             {
                 return;
+            }
+
+            // 履歴に記録（復元中は二重記録しない）
+            if (!m_IsRestoringHistory)
+            {
+                m_ChatHistory.Add(new SavedChatMessage
+                {
+                    Type = ChatMessageType.System,
+                    Text = text
+                });
             }
 
             if (m_ScrollRect == null || m_ScrollRect.content == null)
@@ -349,40 +694,111 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            if (m_MessageBubblePrefab == null)
+            if (m_MessageBubblePool == null)
             {
-                Debug.LogError("ChatController: Cannot create system message. MessageBubblePrefab is not assigned.");
-                return;
+                EnsureMessageBubblePool();
             }
 
-            GameObject systemBubble = Instantiate(m_MessageBubblePrefab, m_ScrollRect.content);
+            GameObject systemBubble;
 
-            // 中央揃え
+            // プールから取得（設定されていれば）
+            if (m_MessageBubblePool != null)
+            {
+                systemBubble = m_MessageBubblePool.Get(m_ScrollRect.content);
+            }
+            else
+            {
+                // フォールバック: 直接Instantiate
+                if (m_MessageBubblePrefab == null)
+                {
+                    Debug.LogError("ChatController: Cannot create system message. MessageBubblePrefab is not assigned.");
+                    return;
+                }
+                systemBubble = Instantiate(m_MessageBubblePrefab, m_ScrollRect.content);
+            }
+            systemBubble.SetActive(true);
+
+            // ストレッチアンカーで全幅（テキストは中央揃え、アンカーはVLG互換に）
             RectTransform rectTransform = systemBubble.GetComponent<RectTransform>();
             if (rectTransform != null)
             {
-                rectTransform.anchorMin = new Vector2(0.5f, 1.0f);
-                rectTransform.anchorMax = new Vector2(0.5f, 1.0f);
-                rectTransform.pivot = new Vector2(0.5f, 1.0f);
+                rectTransform.anchorMin = new Vector2(0f, 1f);
+                rectTransform.anchorMax = new Vector2(1f, 1f);
+                rectTransform.pivot = new Vector2(0.5f, 1f);
             }
 
-            // 背景を半透明グレーに設定
+            // Imageコンポーネントを追加（背景表示用）
             Image bubbleBackground = systemBubble.GetComponent<Image>();
-            if (bubbleBackground != null)
+            if (bubbleBackground == null)
             {
-                bubbleBackground.color = new Color(0.6f, 0.6f, 0.6f, 0.5f);
+                bubbleBackground = systemBubble.AddComponent<Image>();
+                bubbleBackground.color = new Color(0.15f, 0.15f, 0.2f, 0.7f);
+            }
+            bubbleBackground.color = UIConfig.systemMessageBgColor;
+            bubbleBackground.raycastTarget = false;
+
+            // LayoutElementを追加
+            LayoutElement layoutElement = systemBubble.GetComponent<LayoutElement>();
+            if (layoutElement == null)
+            {
+                layoutElement = systemBubble.AddComponent<LayoutElement>();
+            }
+            float sysMinH = UIConfig.systemMessageMinHeight;
+            layoutElement.minHeight = sysMinH;
+            layoutElement.preferredHeight = -1f;
+
+            // ContentSizeFitterを追加
+            ContentSizeFitter sizeFitter = systemBubble.GetComponent<ContentSizeFitter>();
+            if (sizeFitter == null)
+            {
+                sizeFitter = systemBubble.AddComponent<ContentSizeFitter>();
+            }
+            sizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            sizeFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+
+            // テキストコンポーネントの取得または作成
+            TextMeshProUGUI textComponent = systemBubble.GetComponentInChildren<TextMeshProUGUI>();
+            if (textComponent == null)
+            {
+                GameObject textObj = new GameObject("Text");
+                textObj.transform.SetParent(systemBubble.transform, false);
+                textComponent = textObj.AddComponent<TextMeshProUGUI>();
+
+                RectTransform textRect = textComponent.GetComponent<RectTransform>();
+                textRect.anchorMin = new Vector2(0, 0);
+                textRect.anchorMax = new Vector2(1, 1);
+                textRect.offsetMin = new Vector2(10, 10);
+                textRect.offsetMax = new Vector2(-10, -10);
             }
 
-            // テキストを中央揃え・小さめフォントで設定
-            TextMeshProUGUI textComponent = systemBubble.GetComponentInChildren<TextMeshProUGUI>();
-            if (textComponent != null)
+            // プール再利用時にも確実にシステムメッセージ用の設定を適用
+            textComponent.fontSize = UIConfig.systemMessageFontSize;
+            textComponent.color = UIConfig.systemMessageTextColor;
+            textComponent.alignment = TextAlignmentOptions.Center;
+            textComponent.fontStyle = FontStyles.Italic;
+            textComponent.enableWordWrapping = true;
+            textComponent.enableAutoSizing = false;
+            if (m_JapaneseFontAsset != null)
             {
-                textComponent.text = text;
-                textComponent.alignment = TextAlignmentOptions.Center;
-                textComponent.fontStyle = FontStyles.Italic;
-                textComponent.fontSize = textComponent.fontSize * 0.85f;
-                textComponent.color = new Color(0.4f, 0.4f, 0.4f, 1.0f);
+                textComponent.font = m_JapaneseFontAsset;
             }
+
+            textComponent.text = text;
+
+            // テキストのメッシュを強制更新して高さを計算
+            textComponent.ForceMeshUpdate();
+
+            // テキストの高さに基づいてバブルの高さを動的に設定
+            if (layoutElement != null)
+            {
+                float textHeight = textComponent.preferredHeight;
+                layoutElement.preferredHeight = Mathf.Max(sysMinH, textHeight + UIConfig.bubbleTextPadding);
+            }
+
+            // レイアウトを即座に更新
+            Canvas.ForceUpdateCanvases();
+
+            AnimateBubbleIn(systemBubble);
 
             if (!m_IsUserScrolling)
             {
@@ -413,10 +829,16 @@ namespace ProjectFoundPhone.UI
         /// <param name="show">表示する場合true</param>
         public void ShowTypingIndicator(bool show)
         {
+            // ランタイム生成（未設定時）
+            if (m_TypingIndicator == null)
+            {
+                EnsureTypingIndicator();
+            }
+
             if (m_TypingIndicator != null)
             {
                 m_TypingIndicator.SetActive(show);
-                
+
                 if (show)
                 {
                     // 常に最後尾に表示
@@ -424,6 +846,99 @@ namespace ProjectFoundPhone.UI
                     AutoScroll();
                 }
             }
+        }
+
+        /// <summary>
+        /// TypingIndicatorのランタイム生成（未設定時の自動フォールバック）
+        /// </summary>
+        private void EnsureTypingIndicator()
+        {
+            if (m_TypingIndicator != null || m_ScrollRect == null || m_ScrollRect.content == null)
+            {
+                return;
+            }
+
+            // プール未設定時は初期化
+            if (m_MessageBubblePool == null)
+            {
+                EnsureMessageBubblePool();
+            }
+
+            // メッセージバブルプールから取得
+            GameObject typingBubble;
+            if (m_MessageBubblePool != null)
+            {
+                typingBubble = m_MessageBubblePool.Get(m_ScrollRect.content);
+            }
+            else
+            {
+                // フォールバック
+                if (m_MessageBubblePrefab == null)
+                {
+                    Debug.LogWarning("ChatController: Cannot create typing indicator. MessageBubblePrefab is not assigned.");
+                    return;
+                }
+                typingBubble = Instantiate(m_MessageBubblePrefab, m_ScrollRect.content);
+            }
+
+            if (typingBubble == null)
+            {
+                return;
+            }
+
+            typingBubble.name = "TypingIndicator";
+
+            // Image背景を追加
+            Image bgImage = typingBubble.GetComponent<Image>();
+            if (bgImage == null)
+            {
+                bgImage = typingBubble.AddComponent<Image>();
+            }
+            bgImage.color = new Color(0.3f, 0.3f, 0.35f, 0.9f); // NPC風の色
+            bgImage.raycastTarget = false;
+
+            // LayoutElement設定
+            LayoutElement layoutElement = typingBubble.GetComponent<LayoutElement>();
+            if (layoutElement == null)
+            {
+                layoutElement = typingBubble.AddComponent<LayoutElement>();
+            }
+            layoutElement.minHeight = 60f;
+            layoutElement.preferredHeight = 60f;
+            layoutElement.flexibleWidth = 0f;
+
+            // テキスト設定
+            TextMeshProUGUI textComponent = typingBubble.GetComponentInChildren<TextMeshProUGUI>();
+            if (textComponent == null)
+            {
+                GameObject textObj = new GameObject("Text");
+                textObj.transform.SetParent(typingBubble.transform, false);
+                textComponent = textObj.AddComponent<TextMeshProUGUI>();
+
+                RectTransform textRect = textComponent.GetComponent<RectTransform>();
+                textRect.anchorMin = new Vector2(0, 0);
+                textRect.anchorMax = new Vector2(1, 1);
+                textRect.offsetMin = new Vector2(10, 10);
+                textRect.offsetMax = new Vector2(-10, -10);
+
+                textComponent.fontSize = 18;
+                textComponent.alignment = TextAlignmentOptions.Center;
+                textComponent.enableWordWrapping = false;
+
+                if (m_JapaneseFontAsset != null)
+                {
+                    textComponent.font = m_JapaneseFontAsset;
+                }
+            }
+
+            textComponent.text = "...";
+            textComponent.color = new Color(0.7f, 0.7f, 0.7f, 1f);
+
+            // バブルの配置（NPC側）
+            ConfigureBubble(typingBubble, "npc");
+
+            m_TypingIndicator = typingBubble;
+            m_TypingIndicator.SetActive(false);
         }
 
 
@@ -435,6 +950,8 @@ namespace ProjectFoundPhone.UI
         /// <param name="onSelected">選択時のコールバック (index)</param>
         public void ShowChoices(List<string> options, System.Action<int> onSelected)
         {
+            using var _ = s_ShowChoicesMarker.Auto();
+
             // 遅延初期化: ChoiceButtonPrefab/Containerが未設定の場合はランタイム生成
             EnsureChoiceUIElements();
 
@@ -448,8 +965,9 @@ namespace ProjectFoundPhone.UI
             HideChoices();
 
             m_ChoiceContainer.gameObject.SetActive(true);
+            m_ChoiceContainer.SetAsLastSibling();
 
-            // 入力欄を非表示にする（オプション）
+            // 入力欄を非表示にする（既にSetInputEnabled(false)されていれば、ここでは単に見た目の制御）
             if (m_InputField != null) m_InputField.gameObject.SetActive(false);
             if (m_SendButton != null) m_SendButton.gameObject.SetActive(false);
 
@@ -466,10 +984,11 @@ namespace ProjectFoundPhone.UI
                     btnText.text = options[i];
                 }
 
-                // クリックイベント設定
+                // クリックイベント設定（既存リスナーをクリアしてから登録）
                 Button btn = buttonObj.GetComponent<Button>();
                 if (btn != null)
                 {
+                    btn.onClick.RemoveAllListeners();
                     ChoiceButtonHandler handler = buttonObj.GetComponent<ChoiceButtonHandler>();
                     if (handler == null)
                     {
@@ -491,10 +1010,10 @@ namespace ProjectFoundPhone.UI
         {
             if (m_ChoiceContainer != null)
             {
-                // 子要素を全て削除
-                foreach (Transform child in m_ChoiceContainer)
+                // 子要素を即座に削除（Destroy は遅延されるため連続呼び出しで重複が残る）
+                for (int i = m_ChoiceContainer.childCount - 1; i >= 0; i--)
                 {
-                    Destroy(child.gameObject);
+                    DestroyImmediate(m_ChoiceContainer.GetChild(i).gameObject);
                 }
                 m_ChoiceContainer.gameObject.SetActive(false);
             }
@@ -506,10 +1025,15 @@ namespace ProjectFoundPhone.UI
 
         public void AutoScroll()
         {
+            using var _ = s_AutoScrollMarker.Auto();
+
             if (m_ScrollRect == null || m_IsUserScrolling)
             {
                 return;
             }
+
+            // 連続ピンニングを有効化（LateUpdate で毎フレーム最下部に固定）
+            m_PinnedToBottom = true;
 
             if (m_AutoScrollScheduled)
             {
@@ -517,10 +1041,7 @@ namespace ProjectFoundPhone.UI
             }
 
             m_AutoScrollScheduled = true;
-
-            // Canvasの更新を待ってからスクロールするためにコルーチンか遅延実行を使うのが一般的だが、
-            // ここでは簡易的にDOTweenで遅延させる
-            Invoke(nameof(PerformAutoScroll), 0.1f);
+            Invoke(nameof(PerformAutoScroll), UIConfig.autoScrollDelay);
         }
 
         private void PerformAutoScroll()
@@ -532,20 +1053,14 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            if (m_ScrollTween != null && m_ScrollTween.IsActive())
-            {
-                m_ScrollTween.Kill(false);
-            }
+            // レイアウトを強制更新してから最下部へスクロール
+            Canvas.ForceUpdateCanvases();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(m_ScrollRect.content);
 
-            m_ScrollTween = DOTween.To(
-                () => m_ScrollRect.verticalNormalizedPosition,
-                x => m_ScrollRect.verticalNormalizedPosition = x,
-                0.0f,
-                0.3f
-            ).OnComplete(() =>
-            {
-                m_LastScrollPosition = 0.0f;
-            });
+            m_IsAutoScrolling = true;
+            m_ScrollRect.verticalNormalizedPosition = 0f;
+            m_LastScrollPosition = 0f;
+            m_IsAutoScrolling = false;
         }
 
         private void OnDisable()
@@ -556,10 +1071,7 @@ namespace ProjectFoundPhone.UI
                 m_AutoScrollScheduled = false;
             }
 
-            if (m_ScrollTween != null && m_ScrollTween.IsActive())
-            {
-                m_ScrollTween.Kill(false);
-            }
+            m_PinnedToBottom = false;
         }
 
         private void EnsureChoiceUIElements()
@@ -605,50 +1117,33 @@ namespace ProjectFoundPhone.UI
             footerRect.pivot = new Vector2(0.5f, 0f);
             footerRect.offsetMin = new Vector2(0f, 0f);
             footerRect.offsetMax = new Vector2(0f, footerHeight);
-
-            Image footerBg = footer.GetComponent<Image>();
-            footerBg.color = new Color(0.09f, 0.09f, 0.11f, 0.95f);
-
-            m_RuntimeInputField = CreateRuntimeInputField(footer.transform);
-            m_RuntimeSendButton = CreateRuntimeSendButton(footer.transform);
-
-            if (m_InputField == null)
-            {
-                m_InputField = m_RuntimeInputField;
-            }
-
-            if (m_SendButton == null)
-            {
-                m_SendButton = m_RuntimeSendButton;
-            }
-
-            if (m_ScrollRect != null && m_ScrollRect.viewport != null)
-            {
-                RectTransform viewport = m_ScrollRect.viewport;
-                Vector2 offsetMin = viewport.offsetMin;
-                offsetMin.y = Mathf.Max(offsetMin.y, footerHeight);
-                viewport.offsetMin = offsetMin;
-            }
         }
 
         private Transform CreateRuntimeChoiceContainer()
         {
-            GameObject container = new GameObject("AutoChoiceContainer", typeof(RectTransform), typeof(Image), typeof(VerticalLayoutGroup), typeof(ContentSizeFitter));
-            container.transform.SetParent(transform, false);
-            RectTransform rect = container.GetComponent<RectTransform>();
-            rect.anchorMin = new Vector2(0.05f, 0f);
-            rect.anchorMax = new Vector2(0.95f, 0f);
-            rect.pivot = new Vector2(0.5f, 0f);
-            rect.offsetMin = new Vector2(0f, 24f);
-            rect.offsetMax = new Vector2(0f, 260f);
-            container.transform.SetAsLastSibling();
+            if (m_ScrollRect == null || m_ScrollRect.content == null)
+            {
+                Debug.LogError("ChatController: Cannot create choice container. ScrollRect or content is missing.");
+                return null;
+            }
 
+            GameObject container = new GameObject("AutoChoiceContainer", typeof(RectTransform), typeof(Image), typeof(VerticalLayoutGroup), typeof(ContentSizeFitter), typeof(LayoutElement));
+            container.transform.SetParent(m_ScrollRect.content, false);
+            RectTransform rect = container.GetComponent<RectTransform>();
+            
+            // レイアウトグループ内での配置設定
+            rect.anchorMin = new Vector2(0f, 0f);
+            rect.anchorMax = new Vector2(1f, 0f);
+            rect.pivot = new Vector2(0.5f, 0f);
+            
             Image background = container.GetComponent<Image>();
-            background.color = new Color(0.07f, 0.07f, 0.09f, 0.92f);
+            background.color = new Color(0.07f, 0.07f, 0.09f, 0f); // 背景は透明に（メッセージの流れと同化）
 
             VerticalLayoutGroup layoutGroup = container.GetComponent<VerticalLayoutGroup>();
-            layoutGroup.spacing = 12f;
-            layoutGroup.padding = new RectOffset(20, 20, 20, 20);
+            float cSpacing = UIConfig.choiceSpacing;
+            int cPadH = (int)Mathf.Min(UIConfig.choicePaddingHorizontal, Screen.width * 0.08f);
+            layoutGroup.spacing = cSpacing;
+            layoutGroup.padding = new RectOffset(cPadH, cPadH, 10, 20);
             layoutGroup.childForceExpandWidth = true;
             layoutGroup.childForceExpandHeight = false;
             layoutGroup.childControlWidth = true;
@@ -657,6 +1152,9 @@ namespace ProjectFoundPhone.UI
             ContentSizeFitter fitter = container.GetComponent<ContentSizeFitter>();
             fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
             fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+
+            LayoutElement le = container.GetComponent<LayoutElement>();
+            le.flexibleWidth = 1f;
 
             container.SetActive(false);
             return container.transform;
@@ -669,15 +1167,20 @@ namespace ProjectFoundPhone.UI
             template.SetActive(false);
 
             Image buttonBackground = template.GetComponent<Image>();
-            buttonBackground.color = new Color(0.18f, 0.18f, 0.22f, 0.95f);
+            buttonBackground.color = UIConfig.choiceButtonColor;
 
             Button button = template.GetComponent<Button>();
             button.transition = Selectable.Transition.ColorTint;
             button.targetGraphic = buttonBackground;
 
+            ColorBlock cb = button.colors;
+            cb.highlightedColor = UIConfig.choiceButtonHighlightColor;
+            cb.pressedColor = UIConfig.choiceButtonPressedColor;
+            button.colors = cb;
+
             LayoutElement layout = template.GetComponent<LayoutElement>();
-            layout.minHeight = 60f;
-            layout.preferredHeight = 70f;
+            layout.minHeight = UIConfig.choiceButtonMinHeight;
+            layout.preferredHeight = UIConfig.choiceButtonPreferredHeight;
             layout.flexibleWidth = 1f;
 
             RectTransform rect = template.GetComponent<RectTransform>();
@@ -691,18 +1194,24 @@ namespace ProjectFoundPhone.UI
             RectTransform textRect = textObj.GetComponent<RectTransform>();
             textRect.anchorMin = Vector2.zero;
             textRect.anchorMax = Vector2.one;
-            textRect.offsetMin = new Vector2(20f, 10f);
-            textRect.offsetMax = new Vector2(-20f, -10f);
+            textRect.offsetMin = new Vector2(16f, 8f);
+            textRect.offsetMax = new Vector2(-16f, -8f);
 
             TextMeshProUGUI label = textObj.AddComponent<TextMeshProUGUI>();
             label.text = "Choice";
             label.enableAutoSizing = true;
-            label.fontSizeMin = 20f;
-            label.fontSizeMax = 36f;
-            label.alignment = TextAlignmentOptions.Midline;
-            label.color = Color.white;
+            label.fontSizeMin = UIConfig.choiceFontSizeMin;
+            label.fontSizeMax = UIConfig.choiceFontSizeMax;
+            label.alignment = TextAlignmentOptions.MidlineLeft;
+            label.color = UIConfig.choiceTextColor;
             label.raycastTarget = false;
-            if (TMP_Settings.defaultFontAsset != null)
+
+            // 日本語フォントが設定されていればそれを使用、なければデフォルトフォントを使用
+            if (m_JapaneseFontAsset != null)
+            {
+                label.font = m_JapaneseFontAsset;
+            }
+            else if (TMP_Settings.defaultFontAsset != null)
             {
                 label.font = TMP_Settings.defaultFontAsset;
             }
@@ -736,6 +1245,66 @@ namespace ProjectFoundPhone.UI
             contentImage.preserveAspect = true;
 
             return template;
+        }
+
+        private GameObject CreateMessageBubbleTemplate()
+        {
+            GameObject template = new GameObject("AutoMessageBubblePrefab", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
+            template.transform.SetParent(transform, false);
+            template.SetActive(false);
+
+            RectTransform bubbleRect = template.GetComponent<RectTransform>();
+            bubbleRect.anchorMin = new Vector2(0f, 1f);
+            bubbleRect.anchorMax = new Vector2(1f, 1f);
+            bubbleRect.pivot = new Vector2(0.5f, 1f);
+            bubbleRect.sizeDelta = new Vector2(0f, 72f);
+
+            Image bubbleBackground = template.GetComponent<Image>();
+            bubbleBackground.color = Color.white;
+            bubbleBackground.raycastTarget = false;
+
+            LayoutElement layout = template.GetComponent<LayoutElement>();
+            layout.minHeight = 40f;
+            layout.flexibleWidth = 1f;
+
+            GameObject textObj = new GameObject("Text", typeof(RectTransform));
+            textObj.transform.SetParent(template.transform, false);
+            RectTransform textRect = textObj.GetComponent<RectTransform>();
+            textRect.anchorMin = Vector2.zero;
+            textRect.anchorMax = Vector2.one;
+            textRect.offsetMin = new Vector2(16f, 10f);
+            textRect.offsetMax = new Vector2(-16f, -10f);
+
+            TextMeshProUGUI label = textObj.AddComponent<TextMeshProUGUI>();
+            label.text = "Message";
+            label.textWrappingMode = TextWrappingModes.Normal;
+            label.color = Color.white;
+            label.enableAutoSizing = false;
+            label.fontSize = 28f;
+            label.alignment = TextAlignmentOptions.TopLeft;
+            label.raycastTarget = false;
+
+            // 日本語フォントが設定されていればそれを使用、なければデフォルトフォントを使用
+            if (m_JapaneseFontAsset != null)
+            {
+                label.font = m_JapaneseFontAsset;
+            }
+            else if (TMP_Settings.defaultFontAsset != null)
+            {
+                label.font = TMP_Settings.defaultFontAsset;
+            }
+
+            return template;
+        }
+
+        private GameObject GetSafeMessageBubbleTemplate()
+        {
+            if (m_RuntimeMessageBubbleTemplate == null)
+            {
+                m_RuntimeMessageBubbleTemplate = CreateMessageBubbleTemplate();
+            }
+
+            return m_RuntimeMessageBubbleTemplate;
         }
 
         private TMP_InputField CreateRuntimeInputField(Transform parent)
@@ -788,7 +1357,7 @@ namespace ProjectFoundPhone.UI
             placeholderComponent.text = "Type a message...";
 
             textComponent = CreateTMPText(viewportObj.transform, "Text", Color.white, FontStyles.Normal);
-            textComponent.enableWordWrapping = true;
+            textComponent.textWrappingMode = TextWrappingModes.Normal;
             textComponent.text = string.Empty;
 
             return viewportRect;
@@ -853,7 +1422,12 @@ namespace ProjectFoundPhone.UI
             tmp.alignment = TextAlignmentOptions.MidlineLeft;
             tmp.raycastTarget = false;
 
-            if (TMP_Settings.defaultFontAsset != null)
+            // 日本語フォントが設定されていればそれを使用、なければデフォルトフォントを使用
+            if (m_JapaneseFontAsset != null)
+            {
+                tmp.font = m_JapaneseFontAsset;
+            }
+            else if (TMP_Settings.defaultFontAsset != null)
             {
                 tmp.font = TMP_Settings.defaultFontAsset;
             }
@@ -909,7 +1483,9 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// チャット履歴をクリア
+        /// チャット履歴をクリア（プール返却方式）
+        /// 注意: ConfigureBubble が生成するラッパー（PlayerRow/NpcRow）と
+        /// プール管理対象のバブル本体を正しく分離して処理する
         /// </summary>
         public void ClearMessages()
         {
@@ -918,16 +1494,98 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            // m_ScrollRect.contentの子オブジェクト（メッセージバブル）を全て削除
-            int childCount = m_ScrollRect.content.childCount;
-            for (int i = childCount - 1; i >= 0; i--)
+            // プール未設定時は従来通りDestroy
+            if (m_MessageBubblePool == null)
+            {
+                int childCount = m_ScrollRect.content.childCount;
+                for (int i = childCount - 1; i >= 0; i--)
+                {
+                    Transform child = m_ScrollRect.content.GetChild(i);
+                    if (child != null)
+                    {
+                        Destroy(child.gameObject);
+                    }
+                }
+                m_ChatHistory.Clear();
+                return;
+            }
+
+            // プール追跡済みオブジェクト（実際のバブル）を正しく返却
+            // ReturnAll はバブル本体をラッパーから取り出してプールコンテナに戻す
+            m_MessageBubblePool.ReturnAll();
+
+            // 残存する子オブジェクト（空ラッパー、ChoiceContainer以外）を破棄
+            for (int i = m_ScrollRect.content.childCount - 1; i >= 0; i--)
             {
                 Transform child = m_ScrollRect.content.GetChild(i);
-                if (child != null)
+                if (child == null) continue;
+                // 選択肢コンテナは保持
+                if (m_ChoiceContainer != null && child == m_ChoiceContainer) continue;
+                Destroy(child.gameObject);
+            }
+
+            // TypingIndicator はプールに返却されたためリセット（次回使用時に再生成）
+            m_TypingIndicator = null;
+
+            m_ChatHistory.Clear();
+        }
+
+        /// <summary>
+        /// 現在のチャット履歴を取得（セーブ用）
+        /// </summary>
+        public List<SavedChatMessage> GetChatHistory()
+        {
+            return m_ChatHistory.ToList();
+        }
+
+        /// <summary>
+        /// 保存されたチャット履歴からバブルを復元する（ロード用）
+        /// アニメーションなしで即座に表示する
+        /// </summary>
+        public void RestoreChatHistory(List<SavedChatMessage> history)
+        {
+            if (history == null || history.Count == 0) return;
+
+            ClearMessages();
+
+            m_IsRestoringHistory = true;
+            try
+            {
+                foreach (var msg in history)
                 {
-                    Destroy(child.gameObject);
+                    switch (msg.Type)
+                    {
+                        case ChatMessageType.Normal:
+                            AddMessage(msg.CharacterID, msg.Text, msg.LineTag);
+                            break;
+                        case ChatMessageType.System:
+                            AddSystemMessage(msg.Text);
+                            break;
+                        case ChatMessageType.Image:
+                            if (!string.IsNullOrEmpty(msg.ImageResourcePath))
+                            {
+                                Sprite sprite = Resources.Load<Sprite>(msg.ImageResourcePath);
+                                if (sprite != null)
+                                {
+                                    AddImageMessage(msg.CharacterID, sprite);
+                                }
+                                else
+                                {
+                                    // 画像が見つからない場合はテキストでフォールバック
+                                    AddMessage(msg.CharacterID, $"[Image: {msg.ImageResourcePath}]");
+                                }
+                            }
+                            break;
+                    }
                 }
             }
+            finally
+            {
+                m_IsRestoringHistory = false;
+            }
+
+            // 復元完了後、最下部へスクロール
+            AutoScroll();
         }
         #endregion
     }

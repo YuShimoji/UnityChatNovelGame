@@ -3,7 +3,9 @@
     "rootNamespace": "ProjectFoundPhone.Tests",
     "references": [
         "ProjectFoundPhone",
-        "ProjectFoundPhone.Utils"
+        "ProjectFoundPhone.Utils",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -15,8 +17,5 @@
         "UNITY_INCLUDE_TESTS"
     ],
     "versionDefines": [],
-    "noEngineReferences": false,
-    "optionalUnityReferences": [
-        "TestAssemblies"
-    ]
+    "noEngineReferences": false
 }

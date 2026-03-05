@@ -1,6 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 #if YARN_SPINNER
 using Yarn.Unity;
@@ -13,11 +14,12 @@ using DG.Tweening;
 namespace ProjectFoundPhone.Core
 {
     /// <summary>
-    /// Yarn SpinnerのDialogueRunnerをラチE�Eし、カスタムコマンドを処琁E��るシナリオ管琁E��ラス
-    /// チャチE��シスチE��と連携してメチE��ージ表示めE��ピック解放などを制御する
+    /// Yarn Spinner縺ｮDialogueRunner繧偵Λ繝・・縺励√き繧ｹ繧ｿ繝繧ｳ繝槭Φ繝峨ｒ蜃ｦ逅・☆繧九す繝翫Μ繧ｪ邂｡逅・け繝ｩ繧ｹ
+    /// 繝√Ε繝・ヨ繧ｷ繧ｹ繝・Β縺ｨ騾｣謳ｺ縺励※繝｡繝・そ繝ｼ繧ｸ陦ｨ遉ｺ繧・ヨ繝斐ャ繧ｯ隗｣謾ｾ縺ｪ縺ｩ繧貞宛蠕｡縺吶ｋ
     /// </summary>
     public class ScenarioManager : MonoBehaviour
     {
+        private const string DefaultYarnProjectPath = "Assets/Resources/Yarn/Project.yarnproject";
         #region Private Fields
 #if YARN_SPINNER
         [SerializeField] private DialogueRunner m_DialogueRunner;
@@ -46,13 +48,13 @@ namespace ProjectFoundPhone.Core
         {
             RegisterCustomCommands();
             
-            // チE��チE��用: IDが設定されてぁE��ば SO ベ�Eスシナリオを�E動�E甁E
+            // 繝・ヰ繝・げ逕ｨ: ID縺瑚ｨｭ螳壹＆繧後※縺・ｌ縺ｰ SO 繝吶・繧ｹ繧ｷ繝翫Μ繧ｪ繧定・蜍募・逕・
             if (!string.IsNullOrEmpty(m_DebugScenarioID))
             {
                 PlayScenario(m_DebugScenarioID);
             }
 #if YARN_SPINNER
-            // Yarn シナリオの自動開始！Enspector で有効化！E
+            // Yarn 繧ｷ繝翫Μ繧ｪ縺ｮ閾ｪ蜍暮幕蟋具ｼ・nspector 縺ｧ譛牙柑蛹厄ｼ・
             else if (m_AutoStartYarn && m_DialogueRunner != null)
             {
                 StartScenario(m_StartNode);
@@ -69,7 +71,7 @@ namespace ProjectFoundPhone.Core
 
         #region Private Methods
         /// <summary>
-        /// 忁E��なコンポ�Eネント�E初期匁E
+        /// 蠢・ｦ√↑繧ｳ繝ｳ繝昴・繝阪Φ繝医・蛻晄悄蛹・
         /// </summary>
         private void InitializeComponents()
         {
@@ -87,7 +89,7 @@ namespace ProjectFoundPhone.Core
 
             if (m_ChatController == null)
             {
-                // Unity 6の非推奨APIを新しいAPIに置き換ぁE
+                // Unity 6縺ｮ髱樊耳螂ｨAPI繧呈眠縺励＞API縺ｫ鄂ｮ縺肴鋤縺・
                 m_ChatController = FindFirstObjectByType<ProjectFoundPhone.UI.ChatController>();
             }
 
@@ -98,7 +100,7 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// Yarn Spinnerのカスタムコマンドを登録
+        /// Yarn Spinner縺ｮ繧ｫ繧ｹ繧ｿ繝繧ｳ繝槭Φ繝峨ｒ逋ｻ骭ｲ
         /// </summary>
         private void RegisterCustomCommands()
         {
@@ -108,8 +110,8 @@ namespace ProjectFoundPhone.Core
                 return;
             }
 
-            // DialogueRunnerにカスタムコマンドハンドラを登録
-            // Yarn Spinnerのコマンドハンドラは通常、string[]配�Eで引数を受け取めE
+            // DialogueRunner縺ｫ繧ｫ繧ｹ繧ｿ繝繧ｳ繝槭Φ繝峨ワ繝ｳ繝峨Λ繧堤匳骭ｲ
+            // Yarn Spinner縺ｮ繧ｳ繝槭Φ繝峨ワ繝ｳ繝峨Λ縺ｯ騾壼ｸｸ縲《tring[]驟榊・縺ｧ蠑墓焚繧貞女縺大叙繧・
             m_DialogueRunner.AddCommandHandler<string, string>("Message", MessageCommand);
             m_DialogueRunner.AddCommandHandler<string, string>("Image", ImageCommand);
             m_DialogueRunner.AddCommandHandler<float>("StartWait", StartWaitCommand);
@@ -117,11 +119,12 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.AddCommandHandler<string>("UnlockTopic", UnlockTopicCommand);
             m_DialogueRunner.AddCommandHandler<int>("Glitch", GlitchCommand);
             m_DialogueRunner.AddCommandHandler<string>("SystemMessage", SystemMessageCommand);
+            m_DialogueRunner.AddCommandHandler<string, string, string>("MessageTagged", MessageTaggedCommand);
 #endif
         }
 
         /// <summary>
-        /// カスタムコマンド�E登録を解除
+        /// 繧ｫ繧ｹ繧ｿ繝繧ｳ繝槭Φ繝峨・逋ｻ骭ｲ繧定ｧ｣髯､
         /// </summary>
         private void UnregisterCustomCommands()
         {
@@ -131,7 +134,7 @@ namespace ProjectFoundPhone.Core
                 return;
             }
 
-            // 登録したコマンドハンドラを解除
+            // 逋ｻ骭ｲ縺励◆繧ｳ繝槭Φ繝峨ワ繝ｳ繝峨Λ繧定ｧ｣髯､
             m_DialogueRunner.RemoveCommandHandler("Message");
             m_DialogueRunner.RemoveCommandHandler("Image");
             m_DialogueRunner.RemoveCommandHandler("StartWait");
@@ -139,17 +142,18 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.RemoveCommandHandler("UnlockTopic");
             m_DialogueRunner.RemoveCommandHandler("Glitch");
             m_DialogueRunner.RemoveCommandHandler("SystemMessage");
+            m_DialogueRunner.RemoveCommandHandler("MessageTagged");
 #endif
         }
         #endregion
 
         #region Custom Command Handlers
         /// <summary>
-        /// Messageコマンド�Eハンドラ
-        /// Yarnスクリプトから呼び出されめE <<Message "CharID" "Text">>
+        /// Message繧ｳ繝槭Φ繝峨・繝上Φ繝峨Λ
+        /// Yarn繧ｹ繧ｯ繝ｪ繝励ヨ縺九ｉ蜻ｼ縺ｳ蜃ｺ縺輔ｌ繧・ <<Message "CharID" "Text">>
         /// </summary>
-        /// <param name="charID">キャラクターID</param>
-        /// <param name="text">メチE��ージチE��スチE/param>
+        /// <param name="charID">繧ｭ繝｣繝ｩ繧ｯ繧ｿ繝ｼID</param>
+        /// <param name="text">繝｡繝・そ繝ｼ繧ｸ繝・く繧ｹ繝・/param>
         private void MessageCommand(string charID, string text)
         {
             if (m_ChatController != null)
@@ -163,20 +167,36 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// Imageコマンド�Eハンドラ
-        /// Yarnスクリプトから呼び出されめE <<Image "CharID" "ImageID">>
+        /// LineTag 付きメッセージコマンド
+        /// Yarn: &lt;&lt;MessageTagged "CharID" "Text" "lineTag"&gt;&gt;
         /// </summary>
-        /// <param name="charID">キャラクターID</param>
-        /// <param name="imageID">画像リソースのID</param>
+        private void MessageTaggedCommand(string charID, string text, string lineTag)
+        {
+            if (m_ChatController != null)
+            {
+                m_ChatController.AddMessage(charID, text, lineTag);
+            }
+            else
+            {
+                Debug.LogWarning($"ScenarioManager: ChatController not available. MessageTagged from {charID}: {text} [tag:{lineTag}]");
+            }
+        }
+
+        /// <summary>
+        /// Image繧ｳ繝槭Φ繝峨・繝上Φ繝峨Λ
+        /// Yarn繧ｹ繧ｯ繝ｪ繝励ヨ縺九ｉ蜻ｼ縺ｳ蜃ｺ縺輔ｌ繧・ <<Image "CharID" "ImageID">>
+        /// </summary>
+        /// <param name="charID">繧ｭ繝｣繝ｩ繧ｯ繧ｿ繝ｼID</param>
+        /// <param name="imageID">逕ｻ蜒上Μ繧ｽ繝ｼ繧ｹ縺ｮID</param>
         private void ImageCommand(string charID, string imageID)
         {
-            // Resourcesフォルダから画像を読み込み
+            // Resources繝輔か繝ｫ繝縺九ｉ逕ｻ蜒上ｒ隱ｭ縺ｿ霎ｼ縺ｿ
             Sprite imageSprite = Resources.Load<Sprite>($"Images/{imageID}");
             
             if (imageSprite == null)
             {
                 Debug.LogWarning($"ScenarioManager: Failed to load image from Resources/Images/{imageID}");
-                // 画像が見つからなぁE��合�EチE��ストとしてフォールバック表示
+                // 逕ｻ蜒上′隕九▽縺九ｉ縺ｪ縺・ｴ蜷医・繝・く繧ｹ繝医→縺励※繝輔か繝ｼ繝ｫ繝舌ャ繧ｯ陦ｨ遉ｺ
                 if (m_ChatController != null)
                 {
                     m_ChatController.AddMessage(charID, $"[Image: {imageID}]");
@@ -184,7 +204,7 @@ namespace ProjectFoundPhone.Core
                 return;
             }
 
-            // ChatControllerに画像メチE��ージとして送信
+            // ChatController縺ｫ逕ｻ蜒上Γ繝・そ繝ｼ繧ｸ縺ｨ縺励※騾∽ｿ｡
             if (m_ChatController != null)
             {
                 m_ChatController.AddImageMessage(charID, imageSprite);
@@ -197,36 +217,36 @@ namespace ProjectFoundPhone.Core
 
 #if YARN_SPINNER
         /// <summary>
-        /// StartWaitコマンド�Eハンドラ
-        /// Yarnスクリプトから呼び出されめE <<StartWait 2>>
-        /// YarnTaskを返すことでDialogueRunnerの進行を自動的にブロチE��する
+        /// StartWait繧ｳ繝槭Φ繝峨・繝上Φ繝峨Λ
+        /// Yarn繧ｹ繧ｯ繝ｪ繝励ヨ縺九ｉ蜻ｼ縺ｳ蜃ｺ縺輔ｌ繧・ <<StartWait 2>>
+        /// YarnTask繧定ｿ斐☆縺薙→縺ｧDialogueRunner縺ｮ騾ｲ陦後ｒ閾ｪ蜍慕噪縺ｫ繝悶Ο繝・け縺吶ｋ
         /// </summary>
-        /// <param name="seconds">征E��秒数</param>
+        /// <param name="seconds">蠕・ｩ溽ｧ呈焚</param>
         private async YarnTask StartWaitCommand(float seconds)
         {
             CancelActiveWait();
             m_IsWaiting = true;
             m_WaitCancellation = new CancellationTokenSource();
 
-            // タイピングインジケーターを表示
+            // 繧ｿ繧､繝斐Φ繧ｰ繧､繝ｳ繧ｸ繧ｱ繝ｼ繧ｿ繝ｼ繧定｡ｨ遉ｺ
             if (m_ChatController != null)
             {
                 m_ChatController.ShowTypingIndicator(true);
             }
 
-            // 入力ロチE��を有効匁E
+            // 蜈･蜉帙Ο繝・け繧呈怏蜉ｹ蛹・
             SetInputLocked(true);
 
-            // 持E��秒数征E��！EialogueRunnerの進行�EYarnTask完亁E��でブロチE��される！E
+            // 謖・ｮ夂ｧ呈焚蠕・ｩ滂ｼ・ialogueRunner縺ｮ騾ｲ陦後・YarnTask螳御ｺ・∪縺ｧ繝悶Ο繝・け縺輔ｌ繧具ｼ・
             await YarnTask.Delay((int)(seconds * 1000), m_WaitCancellation.Token).SuppressCancellationThrow();
 
-            // タイピングインジケーターを非表示
+            // 繧ｿ繧､繝斐Φ繧ｰ繧､繝ｳ繧ｸ繧ｱ繝ｼ繧ｿ繝ｼ繧帝撼陦ｨ遉ｺ
             if (m_ChatController != null)
             {
                 m_ChatController.ShowTypingIndicator(false);
             }
 
-            // 入力ロチE��を解除
+            // 蜈･蜉帙Ο繝・け繧定ｧ｣髯､
             SetInputLocked(false);
 
             m_IsWaiting = false;
@@ -244,14 +264,14 @@ namespace ProjectFoundPhone.Core
 #endif
 
         /// <summary>
-        /// UnlockTopicコマンド�Eハンドラ
-        /// Yarnスクリプトから呼び出されめE <<UnlockTopic "TopicID">>
-        /// 推論�Eードに新しいトピチE��を追加する
+        /// UnlockTopic繧ｳ繝槭Φ繝峨・繝上Φ繝峨Λ
+        /// Yarn繧ｹ繧ｯ繝ｪ繝励ヨ縺九ｉ蜻ｼ縺ｳ蜃ｺ縺輔ｌ繧・ <<UnlockTopic "TopicID">>
+        /// 謗ｨ隲悶・繝ｼ繝峨↓譁ｰ縺励＞繝医ヴ繝・け繧定ｿｽ蜉縺吶ｋ
         /// </summary>
-        /// <param name="topicID">解放するトピチE��のID</param>
+        /// <param name="topicID">隗｣謾ｾ縺吶ｋ繝医ヴ繝・け縺ｮID</param>
         private void UnlockTopicCommand(string topicID)
         {
-            // ResourcesフォルダからTopicDataを読み込み
+            // Resources繝輔か繝ｫ繝縺九ｉTopicData繧定ｪｭ縺ｿ霎ｼ縺ｿ
             TopicData topicData = Resources.Load<TopicData>($"Topics/{topicID}");
             
             if (topicData == null)
@@ -260,7 +280,7 @@ namespace ProjectFoundPhone.Core
                 return;
             }
 
-            // 推論�Eード！EeductionBoard�E�にトピチE��を追加
+            // 謗ｨ隲悶・繝ｼ繝会ｼ・eductionBoard・峨↓繝医ヴ繝・け繧定ｿｽ蜉
             if (DeductionBoard.Instance != null)
             {
                 DeductionBoard.Instance.AddTopic(topicData);
@@ -270,20 +290,20 @@ namespace ProjectFoundPhone.Core
                 Debug.LogWarning($"ScenarioManager: DeductionBoard not found. Topic unlocked - {topicData.Title} (ID: {topicID})");
             }
 
-            // Yarn変数を更新: $has_topic_{topicID} = true
+            // Yarn螟画焚繧呈峩譁ｰ: $has_topic_{topicID} = true
             string variableName = $"$has_topic_{topicID}";
             SetVariable<bool>(variableName, true);
         }
 
         /// <summary>
-        /// Glitchコマンド�Eハンドラ
-        /// Yarnスクリプトから呼び出されめE <<Glitch 3>>
-        /// 画面にノイズ演�Eを適用する
+        /// Glitch繧ｳ繝槭Φ繝峨・繝上Φ繝峨Λ
+        /// Yarn繧ｹ繧ｯ繝ｪ繝励ヨ縺九ｉ蜻ｼ縺ｳ蜃ｺ縺輔ｌ繧・ <<Glitch 3>>
+        /// 逕ｻ髱｢縺ｫ繝弱う繧ｺ貍泌・繧帝←逕ｨ縺吶ｋ
         /// </summary>
-        /// <param name="level">グリチE��の強度レベル�E�E-3程度を想定！E/param>
+        /// <param name="level">繧ｰ繝ｪ繝・メ縺ｮ蠑ｷ蠎ｦ繝ｬ繝吶Ν・・-3遞句ｺｦ繧呈Φ螳夲ｼ・/param>
         private void GlitchCommand(int level)
         {
-            // MetaEffectControllerにグリチE��効果を要汁E
+            // MetaEffectController縺ｫ繧ｰ繝ｪ繝・メ蜉ｹ譫懊ｒ隕∵ｱ・
             if (MetaEffectController.Instance != null)
             {
                 // Local implementation uses PlayGlitchEffect
@@ -297,11 +317,11 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// SystemMessageコマンド�Eハンドラ
-        /// Yarnスクリプトから呼び出されめE <<SystemMessage "Text">>
-        /// チャチE��冁E��シスチE��通知�E�中央揁E��グレーチE��スト）を表示する
+        /// SystemMessage繧ｳ繝槭Φ繝峨・繝上Φ繝峨Λ
+        /// Yarn繧ｹ繧ｯ繝ｪ繝励ヨ縺九ｉ蜻ｼ縺ｳ蜃ｺ縺輔ｌ繧・ <<SystemMessage "Text">>
+        /// 繝√Ε繝・ヨ蜀・↓繧ｷ繧ｹ繝・Β騾夂衍・井ｸｭ螟ｮ謠・∴繧ｰ繝ｬ繝ｼ繝・く繧ｹ繝茨ｼ峨ｒ陦ｨ遉ｺ縺吶ｋ
         /// </summary>
-        /// <param name="text">表示するシスチE��メチE��ージ</param>
+        /// <param name="text">陦ｨ遉ｺ縺吶ｋ繧ｷ繧ｹ繝・Β繝｡繝・そ繝ｼ繧ｸ</param>
         private void SystemMessageCommand(string text)
         {
             if (m_ChatController != null)
@@ -317,9 +337,9 @@ namespace ProjectFoundPhone.Core
 
         #region ScriptableObject Scenario System
         /// <summary>
-        /// ID持E��でシナリオをロードして再生
+        /// ID謖・ｮ壹〒繧ｷ繝翫Μ繧ｪ繧偵Ο繝ｼ繝峨＠縺ｦ蜀咲函
         /// </summary>
-        /// <param name="scenarioID">Resources/ChatScenarios/以下�Eパス</param>
+        /// <param name="scenarioID">Resources/ChatScenarios/莉･荳九・繝代せ</param>
         public void PlayScenario(string scenarioID)
         {
             ChatScenarioData data = Resources.Load<ChatScenarioData>($"ChatScenarios/{scenarioID}");
@@ -334,9 +354,9 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// ScriptableObjectベ�EスのシナリオチE�Eタの再生を開姁E
+        /// ScriptableObject繝吶・繧ｹ縺ｮ繧ｷ繝翫Μ繧ｪ繝・・繧ｿ縺ｮ蜀咲函繧帝幕蟋・
         /// </summary>
-        /// <param name="data">再生するシナリオチE�Eタ</param>
+        /// <param name="data">蜀咲函縺吶ｋ繧ｷ繝翫Μ繧ｪ繝・・繧ｿ</param>
         public void PlayScenario(ChatScenarioData data)
         {
             if (data == null)
@@ -350,12 +370,12 @@ namespace ProjectFoundPhone.Core
 
         private IEnumerator PlayScenarioRoutine(ChatScenarioData data)
         {
-            // 入力をロチE��
+            // 蜈･蜉帙ｒ繝ｭ繝・け
             SetInputLocked(true);
 
             foreach (var message in data.Messages)
             {
-                // タイピング演�E
+                // 繧ｿ繧､繝斐Φ繧ｰ貍泌・
                 if (message.TypingDelay > 0)
                 {
                     if (m_ChatController != null) m_ChatController.ShowTypingIndicator(true);
@@ -363,13 +383,13 @@ namespace ProjectFoundPhone.Core
                     if (m_ChatController != null) m_ChatController.ShowTypingIndicator(false);
                 }
 
-                // メチE��ージ表示
+                // 繝｡繝・そ繝ｼ繧ｸ陦ｨ遉ｺ
                 if (m_ChatController != null)
                 {
                     m_ChatController.AddMessage(message.SenderID, message.Text);
                 }
 
-                // 選択肢がある場吁E
+                // 驕ｸ謚櫁い縺後≠繧句ｴ蜷・
                 if (message.Choices != null && message.Choices.Count > 0)
                 {
                     bool choiceMade = false;
@@ -385,7 +405,7 @@ namespace ProjectFoundPhone.Core
                     {
                         m_ChatController.ShowChoices(choiceTexts, (index) =>
                         {
-                            // 選択された次のシナリオを取征E
+                            // 驕ｸ謚槭＆繧後◆谺｡縺ｮ繧ｷ繝翫Μ繧ｪ繧貞叙蠕・
                             if (index >= 0 && index < message.Choices.Count)
                             {
                                 nextScenario = message.Choices[index].NextScenario;
@@ -395,25 +415,25 @@ namespace ProjectFoundPhone.Core
                     }
                     else
                     {
-                        // UIがなぁE��合�E強制進行（また�Eエラー�E�E
+                        // UI縺後↑縺・ｴ蜷医・蠑ｷ蛻ｶ騾ｲ陦鯉ｼ医∪縺溘・繧ｨ繝ｩ繝ｼ・・
                         Debug.LogError("ScenarioManager: ChatController missing for choices.");
                         choiceMade = true;
                     }
 
-                    // 選択征E��
+                    // 驕ｸ謚槫ｾ・■
                     yield return new WaitUntil(() => choiceMade);
 
-                    // 次のシナリオがあれ�E再生�E�現在のループ�E終亁E��E
+                    // 谺｡縺ｮ繧ｷ繝翫Μ繧ｪ縺後≠繧後・蜀咲函・育樟蝨ｨ縺ｮ繝ｫ繝ｼ繝励・邨ゆｺ・ｼ・
                     if (nextScenario != null)
                     {
-                        // 再帰皁E��呼び出す�Eではなく、コルーチンを新しく開始して現在のコルーチンを終亁E
+                        // 蜀榊ｸｰ逧・↓蜻ｼ縺ｳ蜃ｺ縺吶・縺ｧ縺ｯ縺ｪ縺上√さ繝ｫ繝ｼ繝√Φ繧呈眠縺励￥髢句ｧ九＠縺ｦ迴ｾ蝨ｨ縺ｮ繧ｳ繝ｫ繝ｼ繝√Φ繧堤ｵゆｺ・
                         StartCoroutine(PlayScenarioRoutine(nextScenario));
                         yield break;
                     }
                 }
             }
 
-            // シナリオ終亁E��の処琁E
+            // 繧ｷ繝翫Μ繧ｪ邨ゆｺ・凾縺ｮ蜃ｦ逅・
             SetInputLocked(false);
 
         }
@@ -421,12 +441,12 @@ namespace ProjectFoundPhone.Core
 
         #region Public Methods
         /// <summary>
-        /// 入力がロチE��されてぁE��かどぁE��
+        /// 蜈･蜉帙′繝ｭ繝・け縺輔ｌ縺ｦ縺・ｋ縺九←縺・°
         /// </summary>
         public bool IsInputLocked => m_IsInputLocked;
 
         /// <summary>
-        /// 入力ロチE��状態を設定し、ChatControllerの入力欁E��連動制御する
+        /// 蜈･蜉帙Ο繝・け迥ｶ諷九ｒ險ｭ螳壹＠縲，hatController縺ｮ蜈･蜉帶ｬ・ｒ騾｣蜍募宛蠕｡縺吶ｋ
         /// </summary>
         private void SetInputLocked(bool locked)
         {
@@ -438,19 +458,18 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// シナリオを開姁E
+        /// 繧ｷ繝翫Μ繧ｪ繧帝幕蟋・
         /// </summary>
-        /// <param name="nodeName">開始するYarnノ�Eド名�E�省略時�Em_StartNodeを使用�E�E/param>
+        /// <param name="nodeName">髢句ｧ九☆繧戯arn繝弱・繝牙錐・育怐逡･譎ゅ・m_StartNode繧剃ｽｿ逕ｨ・・/param>
         public void StartScenario(string nodeName = null)
         {
 #if YARN_SPINNER
-            if (m_DialogueRunner == null)
+            string targetNode = nodeName ?? m_StartNode;
+            if (!ValidateDialogueStart(targetNode))
             {
-                Debug.LogError("ScenarioManager: DialogueRunner is not initialized!");
                 return;
             }
 
-            string targetNode = nodeName ?? m_StartNode;
             m_DialogueRunner.StartDialogue(targetNode);
 #else
             Debug.LogWarning("ScenarioManager: Yarn Spinner is not available. StartScenario is a no-op.");
@@ -458,7 +477,7 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// シナリオを停止
+        /// 繧ｷ繝翫Μ繧ｪ繧貞●豁｢
         /// </summary>
         public void StopScenario()
         {
@@ -472,11 +491,11 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// Yarn変数の値を取征E
+        /// Yarn螟画焚縺ｮ蛟､繧貞叙蠕・
         /// </summary>
-        /// <typeparam name="T">変数の垁E/typeparam>
-        /// <param name="variableName">変数吁E/param>
-        /// <returns>変数の値</returns>
+        /// <typeparam name="T">螟画焚縺ｮ蝙・/typeparam>
+        /// <param name="variableName">螟画焚蜷・/param>
+        /// <returns>螟画焚縺ｮ蛟､</returns>
         public T GetVariable<T>(string variableName)
         {
 #if YARN_SPINNER
@@ -487,8 +506,8 @@ namespace ProjectFoundPhone.Core
                 return default(T);
             }
 
-            // DialogueRunner.VariableStorage����ϐ����擾
-            // TryGetValue<T>�̌^���S�`�F�b�N
+            // DialogueRunner.VariableStorageから変数を取得
+            // TryGetValue<T>の型安全チェック
             if (m_DialogueRunner.VariableStorage.TryGetValue<T>(normalizedName, out var value))
             {
                 if (value != null)
@@ -509,11 +528,11 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// Yarn�ϐ��̒l��ݒ�
+        /// Yarn変数の値を設定
         /// </summary>
-        /// <typeparam name="T">�ϐ��̌^</typeparam>
-        /// <param name="variableName">�ϐ���</param>
-        /// <param name="value">�ݒ肷��l</param>
+        /// <typeparam name="T">変数の型</typeparam>
+        /// <param name="variableName">変数名</param>
+        /// <param name="value">設定する値</param>
         public void SetVariable<T>(string variableName, T value)
         {
 #if YARN_SPINNER
@@ -524,7 +543,7 @@ namespace ProjectFoundPhone.Core
                 return;
             }
 
-            // string, float, bool�̏��Ō^����
+            // string, float, boolの順で型判定
             if (value is string stringValue)
             {
                 m_DialogueRunner.VariableStorage.SetValue(normalizedName, stringValue);
@@ -573,7 +592,98 @@ namespace ProjectFoundPhone.Core
             return variableName.StartsWith("$") ? variableName : "$" + variableName;
         }
 
+#if YARN_SPINNER
+        private bool ValidateDialogueStart(string targetNode)
+        {
+            if (m_DialogueRunner == null)
+            {
+                LogBrokenYarnFile(DefaultYarnProjectPath, "dialogue_runner_missing");
+                Debug.LogError("ScenarioManager: DialogueRunner is not initialized!");
+                return false;
+            }
+
+            YarnProject yarnProject = m_DialogueRunner.YarnProject;
+            if (yarnProject == null)
+            {
+                LogBrokenYarnFile(DefaultYarnProjectPath, "yarn_project_missing");
+                Debug.LogError("ScenarioManager: YarnProject is not assigned.");
+                return false;
+            }
+
+            if (yarnProject.Program == null || yarnProject.NodeNames == null || yarnProject.NodeNames.Length == 0)
+            {
+                LogBrokenYarnFile(DefaultYarnProjectPath, "program_invalid");
+                Debug.LogError("ScenarioManager: YarnProject does not contain a compiled program.");
+                return false;
+            }
+
+            foreach (string nodeName in yarnProject.NodeNames)
+            {
+                if (nodeName == targetNode)
+                {
+                    return true;
+                }
+            }
+
+            LogBrokenYarnFile(ResolveLikelyBrokenYarnFile(targetNode), $"missing_node:{targetNode}");
+            Debug.LogError($"ScenarioManager: Target node '{targetNode}' was not found in YarnProject.");
+            return false;
+        }
+
+        private void LogBrokenYarnFile(string assetPath, string reason)
+        {
+            Debug.LogError($"ContentAuthoring: broken-yarn-file={assetPath} reason={reason}");
+        }
+
+        private string ResolveLikelyBrokenYarnFile(string targetNode)
+        {
+            string yarnDirectoryPath = Path.Combine(Application.dataPath, "Resources", "Yarn");
+            if (!Directory.Exists(yarnDirectoryPath))
+            {
+                return DefaultYarnProjectPath;
+            }
+
+            string[] yarnFiles = Directory.GetFiles(yarnDirectoryPath, "*.yarn", SearchOption.AllDirectories);
+            foreach (string fullPath in yarnFiles)
+            {
+                try
+                {
+                    string fileText = File.ReadAllText(fullPath);
+                    if (fileText.Contains($"title: {targetNode}", System.StringComparison.Ordinal))
+                    {
+                        return ToAssetPath(fullPath);
+                    }
+                }
+                catch (IOException)
+                {
+                }
+                catch (System.UnauthorizedAccessException)
+                {
+                }
+            }
+
+            return DefaultYarnProjectPath;
+        }
+
+        private string ToAssetPath(string fullPath)
+        {
+            string normalizedFullPath = fullPath.Replace('\\', '/');
+            string normalizedAssetsPath = Application.dataPath.Replace('\\', '/');
+
+            if (normalizedFullPath.StartsWith(normalizedAssetsPath, System.StringComparison.OrdinalIgnoreCase))
+            {
+                return "Assets" + normalizedFullPath.Substring(normalizedAssetsPath.Length);
+            }
+
+            return normalizedFullPath;
+        }
+#endif
+
         #endregion
     }
 }
+
+
+
+
 

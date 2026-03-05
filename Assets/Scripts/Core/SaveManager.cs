@@ -11,8 +11,8 @@ using ProjectFoundPhone.UI;
 namespace ProjectFoundPhone.Core
 {
     /// <summary>
-    /// ゲームのセーブ�Eロード機�Eを管琁E��る�Eネ�Eジャークラス
-    /// シングルトンパターンで実裁E
+    /// ゲームのセーブ/ロード機能を管理するマネージャークラス
+    /// シングルトンパターンで実装
     /// </summary>
     public class SaveManager : MonoBehaviour
     {
@@ -48,19 +48,19 @@ namespace ProjectFoundPhone.Core
         [SerializeField] private int m_MaxSaveSlots = 3;
 
         /// <summary>
-        /// 現在ロードされてぁE��セーブデータ
+        /// 現在ロードされているセーブデータ
         /// </summary>
         private SaveData m_CurrentSaveData;
         #endregion
 
         #region Public Properties
         /// <summary>
-        /// 現在のセーブデータ�E�読み取り専用�E�E
+        /// 現在のセーブデータ（読み取り専用）
         /// </summary>
         public SaveData CurrentSaveData => m_CurrentSaveData;
 
         /// <summary>
-        /// セーブデータが存在するかどぁE��
+        /// セーブデータが存在するかどうか
         /// </summary>
         public bool HasSaveData => m_CurrentSaveData != null;
         #endregion
@@ -88,10 +88,10 @@ namespace ProjectFoundPhone.Core
 
         #region Public Methods - Save
         /// <summary>
-        /// 現在のゲーム状態をセーブすめE
+        /// 現在のゲーム状態をセーブする
         /// </summary>
-        /// <param name="slotNumber">セーブスロチE��番号�E�Eから開始！E/param>
-        /// <returns>セーブ�E功時true</returns>
+        /// <param name="slotNumber">セーブスロット番号（0から開始）</param>
+        /// <returns>セーブ成功時true</returns>
         public bool SaveGame(int slotNumber = 0)
         {
             if (slotNumber < 0 || slotNumber >= m_MaxSaveSlots)
@@ -120,10 +120,10 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// 現在のゲーム状態からSaveDataを作�E
+        /// 現在のゲーム状態からSaveDataを作成
         /// </summary>
-        /// <param name="slotNumber">セーブスロチE��番号</param>
-        /// <returns>作�EされたSaveData</returns>
+        /// <param name="slotNumber">セーブスロット番号</param>
+        /// <returns>作成されたSaveData</returns>
         private SaveData CreateSaveData(int slotNumber)
         {
             SaveData saveData = new SaveData(slotNumber);
@@ -155,11 +155,26 @@ namespace ProjectFoundPhone.Core
                 Debug.LogWarning("SaveManager: DeductionBoard not found. Topic progress will not be saved.");
             }
 
+            // チャット履歴を保存
+            ChatController chatController = FindFirstObjectByType<ChatController>();
+            if (chatController != null)
+            {
+                saveData.ChatHistory = chatController.GetChatHistory();
+            }
+
+            // 矛盾発見データを保存
+            ContradictionManager contradictionManager = FindFirstObjectByType<ContradictionManager>();
+            if (contradictionManager != null)
+            {
+                saveData.DiscoveredContradictionIDs = contradictionManager.GetDiscoveredList();
+                saveData.HalluciCoin = contradictionManager.HalluciCoin;
+            }
+
             return saveData;
         }
 
         /// <summary>
-        /// ScenarioManagerから現在のノ�Eド名を取征E
+        /// ScenarioManagerから現在のノード名を取得
         /// </summary>
         private string GetCurrentNodeName(ScenarioManager scenarioManager)
         {
@@ -167,7 +182,7 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// ScenarioManagerからYarn変数を取征E
+        /// ScenarioManagerからYarn変数を取得
         /// </summary>
         private Dictionary<string, object> GetYarnVariables(ScenarioManager scenarioManager)
         {
@@ -196,10 +211,10 @@ namespace ProjectFoundPhone.Core
 
         #region Public Methods - Load
         /// <summary>
-        /// 持E��スロチE��からゲームをロードすめE
+        /// 指定スロットからゲームをロードする
         /// </summary>
-        /// <param name="slotNumber">ロードするセーブスロチE��番号</param>
-        /// <returns>ロード�E功時true</returns>
+        /// <param name="slotNumber">ロードするセーブスロット番号</param>
+        /// <returns>ロード成功時true</returns>
         public bool LoadGame(int slotNumber = 0)
         {
             if (slotNumber < 0 || slotNumber >= m_MaxSaveSlots)
@@ -268,6 +283,22 @@ namespace ProjectFoundPhone.Core
                 Debug.LogWarning("SaveManager: DeductionBoard not found. Topics will not be restored.");
             }
 
+            // チャット履歴を復元（シナリオ再開前に実行）
+            ChatController chatController = FindFirstObjectByType<ChatController>();
+            if (chatController != null && saveData.ChatHistory != null && saveData.ChatHistory.Count > 0)
+            {
+                chatController.RestoreChatHistory(saveData.ChatHistory);
+            }
+
+            // 矛盾発見データを復元
+            ContradictionManager contradictionManager = FindFirstObjectByType<ContradictionManager>();
+            if (contradictionManager != null)
+            {
+                contradictionManager.RestoreDiscovered(
+                    saveData.DiscoveredContradictionIDs ?? new List<string>(),
+                    saveData.HalluciCoin);
+            }
+
             ScenarioManager scenarioManager = FindFirstObjectByType<ScenarioManager>();
             if (scenarioManager != null)
             {
@@ -320,9 +351,9 @@ namespace ProjectFoundPhone.Core
 
         #region Public Methods - Delete
         /// <summary>
-        /// 持E��スロチE��のセーブデータを削除
+        /// 指定スロットのセーブデータを削除
         /// </summary>
-        /// <param name="slotNumber">削除するセーブスロチE��番号</param>
+        /// <param name="slotNumber">削除するセーブスロット番号</param>
         /// <returns>削除成功時true</returns>
         public bool DeleteSave(int slotNumber)
         {
@@ -359,10 +390,10 @@ namespace ProjectFoundPhone.Core
 
         #region Public Methods - Utility
         /// <summary>
-        /// 持E��スロチE��にセーブデータが存在するか確誁E
+        /// 指定スロットにセーブデータが存在するか確認
         /// </summary>
-        /// <param name="slotNumber">確認するセーブスロチE��番号</param>
-        /// <returns>セーブデータが存在する場吁Erue</returns>
+        /// <param name="slotNumber">確認するセーブスロット番号</param>
+        /// <returns>セーブデータが存在する場合true</returns>
         public bool HasSaveInSlot(int slotNumber)
         {
             if (slotNumber < 0 || slotNumber >= m_MaxSaveSlots)
@@ -375,10 +406,10 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// 持E��スロチE��のセーブデータ惁E��を取得（ロードせずに�E�E
+        /// 指定スロットのセーブデータ情報を取得（ロードせずに）
         /// </summary>
-        /// <param name="slotNumber">惁E��を取得するセーブスロチE��番号</param>
-        /// <returns>セーブデータ、存在しなぁE��吁Eull</returns>
+        /// <param name="slotNumber">情報を取得するセーブスロット番号</param>
+        /// <returns>セーブデータ、存在しない場合null</returns>
         public SaveData GetSaveInfo(int slotNumber)
         {
             if (slotNumber < 0 || slotNumber >= m_MaxSaveSlots)
@@ -405,9 +436,9 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// 全てのセーブスロチE��惁E��を取征E
+        /// 全てのセーブスロット情報を取得
         /// </summary>
-        /// <returns>セーブデータの配�E�E�存在しなぁE��ロチE��はnull�E�E/returns>
+        /// <returns>セーブデータの配列（存在しないスロットはnull）</returns>
         public SaveData[] GetAllSaveInfo()
         {
             SaveData[] saves = new SaveData[m_MaxSaveSlots];
@@ -421,9 +452,9 @@ namespace ProjectFoundPhone.Core
 
         #region Private Methods
         /// <summary>
-        /// セーブファイルのパスを取征E
+        /// セーブファイルのパスを取得
         /// </summary>
-        /// <param name="slotNumber">セーブスロチE��番号</param>
+        /// <param name="slotNumber">セーブスロット番号</param>
         /// <returns>セーブファイルの絶対パス</returns>
         private string GetSaveFilePath(int slotNumber)
         {

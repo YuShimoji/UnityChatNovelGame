@@ -4,6 +4,9 @@ using NUnit.Framework;
 using ProjectFoundPhone.Data;
 using ProjectFoundPhone.UI;
 
+using System.Collections.Generic;
+using System.Reflection;
+
 namespace ProjectFoundPhone.Tests
 {
     /// <summary>
@@ -413,6 +416,18 @@ namespace ProjectFoundPhone.Tests
             SerializedObject so = new SerializedObject(m_Database);
             so.FindProperty("m_LoadPath").stringValue = "__test_nonexistent__";
             so.ApplyModifiedPropertiesWithoutUndo();
+
+            Dictionary<string, CharacterProfile> injectedProfiles = new Dictionary<string, CharacterProfile>();
+            foreach (CharacterProfile profile in profiles)
+            {
+                if (profile != null && !string.IsNullOrEmpty(profile.CharacterID))
+                {
+                    injectedProfiles[profile.CharacterID] = profile;
+                }
+            }
+
+            FieldInfo profilesField = typeof(CharacterDatabase).GetField("m_Profiles", BindingFlags.NonPublic | BindingFlags.Instance);
+            profilesField?.SetValue(m_Database, injectedProfiles);
         }
 
         private void TeardownCharacterDatabase()
@@ -435,6 +450,21 @@ namespace ProjectFoundPhone.Tests
         }
 
         [Test]
+        public void CharacterDatabase_GetProfile_ReturnsInjectedProfile()
+        {
+            CharacterProfile profile = CreateCharacterProfile("npc_001", "NPC", Color.magenta, false);
+            SetupCharacterDatabase(profile);
+
+            CharacterProfile resolved = m_Database.GetProfile("npc_001");
+
+            Assert.IsNotNull(resolved);
+            Assert.AreEqual("NPC", resolved.DisplayName);
+            Assert.AreEqual(1, m_Database.ProfileCount);
+
+            TeardownCharacterDatabase();
+        }
+
+        [Test]
         public void CharacterDatabase_IsPlayer_FallbackForUnknownID()
         {
             SetupCharacterDatabase();
@@ -442,6 +472,19 @@ namespace ProjectFoundPhone.Tests
             // "player" 縺ｨ縺・≧ ID 縺ｯ繝励Ο繝輔ぃ繧､繝ｫ縺ｪ縺励〒繧ゅヵ繧ｩ繝ｼ繝ｫ繝舌ャ繧ｯ縺ｧ true 繧定ｿ斐☆
             Assert.IsTrue(m_Database.IsPlayer("player"));
             Assert.IsFalse(m_Database.IsPlayer("npc_001"));
+
+            TeardownCharacterDatabase();
+        }
+
+        [Test]
+        public void CharacterDatabase_IsPlayer_UsesInjectedProfileFlag()
+        {
+            CharacterProfile npc = CreateCharacterProfile("npc_001", "NPC", Color.white, false);
+            CharacterProfile playerAlias = CreateCharacterProfile("hero", "Hero", Color.cyan, true);
+            SetupCharacterDatabase(npc, playerAlias);
+
+            Assert.IsFalse(m_Database.IsPlayer("npc_001"));
+            Assert.IsTrue(m_Database.IsPlayer("hero"));
 
             TeardownCharacterDatabase();
         }
@@ -456,7 +499,19 @@ namespace ProjectFoundPhone.Tests
 
             // 繝・ヵ繧ｩ繝ｫ繝医・繝輔か繝ｼ繝ｫ繝舌ャ繧ｯ繧ｫ繝ｩ繝ｼ縺瑚ｿ斐ｋ
             Assert.AreEqual(new Color(0.2f, 0.6f, 1.0f), playerColor);
-            Assert.AreEqual(new Color(0.85f, 0.85f, 0.85f), npcColor);
+            Assert.AreEqual(new Color(0.3f, 0.3f, 0.35f), npcColor);
+
+            TeardownCharacterDatabase();
+        }
+
+        [Test]
+        public void CharacterDatabase_GetThemeColor_ReturnsInjectedProfileColor()
+        {
+            Color expected = new Color(0.4f, 0.3f, 0.8f);
+            CharacterProfile profile = CreateCharacterProfile("npc_002", "Guide", expected, false);
+            SetupCharacterDatabase(profile);
+
+            Assert.AreEqual(expected, m_Database.GetThemeColor("npc_002"));
 
             TeardownCharacterDatabase();
         }
@@ -468,6 +523,17 @@ namespace ProjectFoundPhone.Tests
 
             // 繝励Ο繝輔ぃ繧､繝ｫ縺瑚ｦ九▽縺九ｉ縺ｪ縺・ｴ蜷医！D縺後◎縺ｮ縺ｾ縺ｾ霑斐ｋ
             Assert.AreEqual("unknown_char", m_Database.GetDisplayName("unknown_char"));
+
+            TeardownCharacterDatabase();
+        }
+
+        [Test]
+        public void CharacterDatabase_GetDisplayName_ReturnsInjectedProfileName()
+        {
+            CharacterProfile profile = CreateCharacterProfile("npc_003", "Archivist", Color.gray, false);
+            SetupCharacterDatabase(profile);
+
+            Assert.AreEqual("Archivist", m_Database.GetDisplayName("npc_003"));
 
             TeardownCharacterDatabase();
         }

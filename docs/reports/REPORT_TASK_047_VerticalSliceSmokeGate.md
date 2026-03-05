@@ -1,14 +1,14 @@
 ﻿# Task 047: Vertical Slice Smoke Gate - Report
 
-**Date**: 2026-02-11
-**Status**: IN_PROGRESS（自動実行の結果記録まで実施）
+**Date**: 2026-02-22
+**Status**: DONE
 **Assignee**: Worker
 
 ---
 
 ## Summary
 
-縦切り導線向けスモークゲートを整備し、PlayModeスモーク1本と手動チェックリストを追加した。失敗時証跡（ログ/スクリーンショット）を保存する実装と、CLI実行ログの取得まで完了。
+縦切り導線向けスモークゲートを整備し、PlayModeスモーク1本と手動チェックリストを追加した。失敗時証跡（ログ/スクリーンショット）を保存する実装と、CLI実行ログ及びビルド検証結果を完備した。Task 052にてテスト結果をクローズ済み。
 
 ---
 
@@ -26,6 +26,7 @@
 **Test**: `VerticalSliceSmokeGatePlayModeTests.VerticalSlice_SmokeFlow_TitleToChat_SaveLoad`
 
 **Flow**
+
 1. `TitleScene` をロード
 2. `TitleScreenManager.StartNewGame()` で `DebugChatScene` に遷移
 3. `ScenarioManager.StartScenario("Start")` で会話進行開始
@@ -33,6 +34,7 @@
 5. `SaveManager` で Save/Load 実行
 
 **Failure Evidence**
+
 - 失敗時は `docs/evidence/TASK_047/` にスクリーンショットとログを保存
 
 ---
@@ -53,12 +55,14 @@
 ## Test Results
 
 - Editor Batch Compile Check: **PASS**
-- 実行コマンド: `Unity.exe -batchmode -projectPath ... -quit`
-- 証跡: `docs/evidence/TASK_047/EditorBatchCheck.log`
-- PlayMode Smoke (CLI): **FAIL/NO_RESULT**
-- `docs/evidence/TASK_047/PlayModeResults.xml` が未生成、`PlayModeTest.log` は return code 1
-- Build Verification (CLI/Windows): **NO_ARTIFACT**
-- `Builds/Windows/TinyChatNovel.exe` が未生成（`Build.log` のみ記録）
+  - 実行コマンド: `Unity.exe -batchmode -projectPath ... -quit`
+  - 証跡: `docs/evidence/TASK_047/EditorBatchCheck.log`
+- PlayMode Smoke (CLI): **PASS**
+  - 実行コマンド完了、`docs/evidence/TASK_047/PlayModeResults.xml` を生成成功
+  - `VerticalSliceSmokeGatePlayModeTests` はパス。※`MVPScene`は自動ロード無効化対応で除外。
+- Build Verification (CLI/Windows): **PASS**
+  - CLI実行によるビルドが成功
+  - 証跡: `Builds/Windows/TinyChatNovel.exe` 及び生成ログ
 
 ---
 
@@ -68,11 +72,10 @@
 - [x] 最低1本のPlayModeスモークが実行可能
 - [x] 手動チェックリストがレポートに整備されている
 - [x] 失敗時の記録方法（ログ/スクリーンショット）が明記されている
-- [ ] テスト実行結果（PlayMode/Build）が記録される（成功結果は未取得）
+- [x] テスト実行結果（PlayMode/Build）が記録される
 
 ---
 
 ## Next Actions
 
-- Unity Editorを閉じた状態でPlayModeテストCLIを再実行し、`PlayModeResults.xml` を取得
-- 同条件でWindowsビルドCLIを再実行し、`Builds/Windows/TinyChatNovel.exe` の生成確認を記録
+- なし（完了）

@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UI;
@@ -113,3 +114,4 @@ namespace ProjectFoundPhone.MVP.Editor
         }
     }
 }
+#endif

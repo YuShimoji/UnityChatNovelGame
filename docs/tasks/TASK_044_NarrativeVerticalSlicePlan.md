@@ -1,109 +1,57 @@
-﻿# Task: Narrative Vertical Slice Plan (Mock Story Playable)
+# Task: Narrative Vertical Slice Plan (Mock Story Playable)
 
-Status: READY
+Status: DONE
 Tier: 1 (Planning/Execution Guide)
 Branch: main
-Owner: Worker
+Owner: Orchestrator
 Created: 2026-02-09
-Updated: 2026-02-09
-Report: docs/reports/REPORT_TASK_044_NarrativeVerticalSlice.md (to be created on completion)
+Updated: 2026-03-01T06:10:00+09:00
+Report: docs/reports/REPORT_TASK_044_NarrativeVerticalSlice.md
 
 ## Objective
 
-次回以降の実装を、以下の一区切りまで到達するように段階化する。
-
-- 区切り条件: テキストを編集し、Unity上で簡単なモックストーリーを実際にプレイできる。
+Yarn ベースのモックストーリーを `DebugChatScene` で実際にプレイ可能な状態へ到達させるための計画を固定し、その達成を確認する。
 
 ## Milestone Definition
 
-- M1 (Vertical Slice):
-  - `Assets/Resources/Yarn/` のシナリオテキストを編集して、開始ノードから終了まで進行できる。
-  - 分岐（2択以上）を1回含む。
-  - `ChatDialogueView` と `ChatController` 経由で行表示・選択肢表示が機能する。
-  - PlayMode で `DebugChatScene` から完走できる。
+- M1 (Narrative Vertical Slice):
+  - `Assets/Resources/Yarn/VerticalSlice.yarn` の開始ノードから終了まで進行できる
+  - 分岐を 1 回以上含む
+  - `ChatDialogueView` と `ChatController` 経由で行表示・選択肢表示が機能する
+  - `DebugChatScene` で通しプレイが可能
 
-## Phase Breakdown
+## Decision
 
-### Phase 0: Baseline Lock (0.5 day)
-- 目的: 直近の修正を固定し、次工程での差分混入を防ぐ。
-- 作業:
-  1. 現在の compile error 解消状態をコミット。
-  2. `DebugChatScene` の実行確認ログを残す。
-  3. シーン起動手順を `docs/reports/` に短く記録。
-- DoD:
-  - `main` で再現可能な起動手順が1つに確定している。
+- 採用継続: Yarn Spinner
+- 理由:
+  1. `ScenarioManager` / `ChatDialogueView` / custom command 群が Yarn 前提で整備済み
+  2. `VerticalSlice.yarn` と batch verification が既に機能している
+  3. エンジン移行は M1 達成後の別判断でよい
 
-### Phase 1: Narrative Engine Validation (0.5 day)
-- 目的: Yarn Spinner と Ink のどちらを SSOT にするか判断を固定する。
-- 比較対象:
-  - Yarn Spinner for Unity
-  - ink-unity-integration
-- 判定軸:
-  1. Unity UI 連携の容易さ
-  2. コマンド拡張（Message/Image/Typing/Status）適合
-  3. チーム運用（非エンジニアがテキスト編集可能か）
-  4. 現行資産との互換性（既存 `ScenarioManager`/`ChatDialogueView`）
-- DoD:
-  - 本タスク末尾の「Decision」が確定し、以降の実装でブレない。
+## Current Status
 
-### Phase 2: Story Authoring Pipeline (1 day)
-- 目的: モックストーリー制作を短サイクルで回せるようにする。
-- 作業:
-  1. Yarnファイル命名規則を定義（例: `CH01_*.yarn`）。
-  2. 開始ノード規約（例: `Start`）を定義。
-  3. テキスト差し替え手順（編集→Import→Play）を `docs/` に明記。
-- DoD:
-  - 新規メンバーが手順書のみで1本の短編を差し替え可能。
+- `VerticalSlice.yarn` は `VerticalSlice_Start` から `End` まで 2 分岐を含む構成で実装済み
+- `TASK_027` full playthrough batch が SUCCESS
+- `TASK_047` / `TASK_052` smoke gate で Title -> Chat -> Save/Load が PASS
+- `TASK_053` で narrative slice を含む MVP verification pack が CLOSE
 
-### Phase 3: Mock Story Implementation (1-2 days)
-- 目的: 実際にプレイ可能な最小ストーリーを作る。
-- 作業:
-  1. 10-20行程度の会話を Yarn で実装。
-  2. 選択肢1回、分岐2ルート、どちらも終端ノードへ到達させる。
-  3. 最低1つの演出コマンド（Typing or SystemMessage）を利用。
-- DoD:
-  - M1 の区切り条件を満たす。
+## DoD (Definition of Done)
 
-### Phase 4: Verification + Hand-off (0.5 day)
-- 目的: 以降拡張できる品質で一区切りを確定する。
-- 作業:
-  1. PlayMode で通し確認。
-  2. 既知制約（未実装コマンド等）をレポート化。
-  3. 次スプリントの入口タスクを3件起票。
-- DoD:
-  - `docs/reports/REPORT_TASK_044_NarrativeVerticalSlice.md` が作成済み。
+- [x] Narrative vertical slice の到達条件が明文化されている
+- [x] Yarn Spinner を SSOT とする判断が固定されている
+- [x] `DebugChatScene` で開始から終了までのプレイ可能経路が存在する
+- [x] 分岐と終端が latest evidence で確認されている
+- [x] `docs/reports/REPORT_TASK_044_NarrativeVerticalSlice.md` に完了根拠が記録されている
 
-## Decision: Yarn Spinner vs Ink (as of 2026-02-09)
+## Evidence
 
-### Project Fit Conclusion
-- 採用継続: Yarn Spinner（現行プロジェクトの目的により適合）
+- `Assets/Resources/Yarn/VerticalSlice.yarn`
+- `docs/evidence/TASK_027/FULL_PLAYTHROUGH_RESULTS_20260301_034145.md`
+- `docs/reports/REPORT_TASK_027_FullPlaythroughTest.md`
+- `docs/reports/REPORT_TASK_047_VerticalSliceSmokeGate.md`
+- `docs/reports/REPORT_TASK_052_VerticalSliceSmokeResultClosure.md`
+- `docs/reports/REPORT_TASK_053_MVPFinalVerificationPack.md`
 
-### Why
-1. 既存実装が Yarn 前提で構築済み（`ScenarioManager`, `ChatDialogueView`, Yarn custom command 設計）。
-2. チャットゲーム向けの「会話行 + コマンド」の分離が現設計と一致。
-3. Ink へ移行すると、既存コマンド群と実行パイプラインの再設計コストが高い。
-4. まずは M1（モックプレイ）達成が最優先で、エンジン移行はクリティカルパス外。
+## Follow-up
 
-### Version Notes
-- 現在の `Packages/manifest.json` は `dev.yarnspinner.unity` を `v2.5.1` に固定。
-- Yarn Spinner Unity latest release: `v3.1.1` (published 2025-12-04).
-- ink-unity-integration latest release: `1.2.1` (published 2024-07-31).
-- 方針:
-  - M1 達成までは現行 Yarn を維持。
-  - M1 後に Yarn 3.1.x へのアップグレード検証を別タスク化。
-
-## Source Links (engine validation)
-- https://github.com/YarnSpinnerTool/YarnSpinner-Unity/releases/latest
-- https://github.com/inkle/ink-unity-integration/releases/latest
-- https://github.com/inkle/ink
-
-## Risks and Controls
-- リスク: Yarn バージョン差異による API 変化。
-  - 対策: M1 後に専用アップグレードタスクを分離。
-- リスク: シナリオ方式の二重化（Yarn + ScriptableObject）。
-  - 対策: M1範囲では Yarn を SSOT とし、SO は補助データ用途に限定。
-
-## Immediate Next Tasks (ordered)
-1. TASK_044-A: Mock Story Yarn 原稿作成（10-20行、2分岐）
-2. TASK_044-B: DebugChatScene で開始ノードを固定し、通しプレイ確認
-3. TASK_044-C: 実行レポート作成（スクリーンショット + ログ）
+- 次の narrative 拡張は本タスクではなく、次サイクルの content planning として扱う

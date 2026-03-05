@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 #if YARN_SPINNER
 using UnityEngine;
 using UnityEditor;
@@ -510,4 +511,5 @@ namespace ProjectFoundPhone.Logging.Editor
         }
     }
 }
+#endif
 #endif

@@ -1,35 +1,26 @@
-# REPORT: TASK_044_NarrativeVerticalSlice - MVP Playthrough Verification
+# Report: TASK_044 Narrative Vertical Slice
+
+Status: DONE
+Date: 2026-03-01
+Type: Planning Closure
 
 ## Summary
-Verified MVP flow playthrough after restart. Play completed and returned to Title scene, but text rendering is unreadable due to missing Japanese glyphs in the default TMP font. Console shows many TMP missing-glyph warnings (265 warnings total).
 
-## Environment
-- Date: 2026-02-10
-- Unity: 6000.3.3f1 (Unity 6.3 LTS)
-- Scene: `Assets/Scenes/MVPScene.unity`
+- `VerticalSlice.yarn` は `VerticalSlice_Start` から `End` まで 2 分岐を含むモックストーリーとして成立しています。
+- `TASK_027` の latest batch full playthrough で開始、分岐、topic unlock、synthesis、終端まで自動検証済みです。
+- `TASK_047` / `TASK_052` の smoke gate により、Title -> DebugChatScene -> Save/Load を含む縦切り導線も確認済みです。
+- よって `TASK_044` の目的だった「テキストを編集し、Unity 上で簡単なモックストーリーを実際にプレイできる状態」は達成済みです。
 
-## Verification Result
-- [x] Play mode starts from `MVPScene`.
-- [x] Flow completes and returns to Title scene.
-- [ ] Text is readable (missing glyphs; rendered as white squares).
-- [ ] Warnings reduced (265 warnings currently).
+## Evidence
 
-## Observed Warnings (key patterns)
-- TMP missing glyphs in `LiberationSans SDF` (Japanese characters missing) for:
-  - `SubtitleText`, `ChatHeader`, `ChoicePrompt`, `EndMessage`, `EndCredits`, and other UI labels.
-- AI Toolkit warning:
-  - `Account API did not become accessible within 30 seconds...` (cloud/authorization warning).
-
-## Likely Cause
-Default TMP font asset `LiberationSans SDF` lacks Japanese glyphs, causing substitution with `\u25A1` (white squares). This also produces a large number of warnings during layout and rendering.
-
-## Recommended Next Steps
-1. Add a Japanese-capable TMP font asset and set as fallback or replace the UI font.
-2. Re-run playthrough and confirm:
-   - Text is readable.
-   - Warnings drop significantly (TMP missing glyphs removed).
-3. If AI Toolkit features are not needed for MVP, optionally disable or ignore the Account API warning.
+- `Assets/Resources/Yarn/VerticalSlice.yarn`
+- `docs/evidence/TASK_027/FULL_PLAYTHROUGH_RESULTS_20260301_034145.md`
+- `docs/reports/REPORT_TASK_027_FullPlaythroughTest.md`
+- `docs/reports/REPORT_TASK_047_VerticalSliceSmokeGate.md`
+- `docs/reports/REPORT_TASK_052_VerticalSliceSmokeResultClosure.md`
+- `docs/reports/REPORT_TASK_053_MVPFinalVerificationPack.md`
 
 ## Notes
-- The flow appears to auto-advance in parts; behavior is not yet fully documented.
-- MVP completion status is functional but not content-readable due to font issues.
+
+- 2026-02-10 時点の `MVPScene` フォント警告は別件であり、本タスクの narrative mock slice 成立可否とは切り分けます。
+- 次の narrative 作業は「モックを成立させる」ではなく、「内容拡張 / production-ready authoring」に移行します。

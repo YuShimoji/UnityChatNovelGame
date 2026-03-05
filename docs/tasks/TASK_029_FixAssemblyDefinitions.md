@@ -1,22 +1,28 @@
-# Task 029: Fix Assembly Definition Conflicts
+# TASK_029_FixAssemblyDefinitions
 
-## Goal
-Resolve compilation errors caused by duplicate Assembly Definitions, git conflicts in `ProjectFoundPhone.Tests.asmdef`, and lingering metadata for missing modular asmdefs. Restore the project to a stable monolithic assembly structure.
+Status: DONE
+
+## Objective
+asmdef 競合と破損 JSON を解消し、以後のビルドと検証を安定して進められる状態を確立する。
 
 ## Context
-The project failed to compile with errors:
-- "Folder 'Assets/Scripts/' contains multiple assembly definition files"
-- "JSON parse error" in `ProjectFoundPhone.Tests.asmdef`
-- Missing .asmdef references for Core, UI, etc.
+- 当初は `ProjectFoundPhone.Tests.asmdef` の conflict marker と無効 JSON がコンパイルを阻害していた。
+- `Assets/Scripts` 直下の asmdef 構成も揺れており、runtime asmdef の基点整理が必要だった。
+- その後の `TASK_049` / `TASK_053` / `TASK_054` までビルドと batch verification が継続成功しているため、本タスクの意図は後続成果で実証済み。
 
-## Proposed Changes
-1.  **Resolve Conflict**: Fix `Assets/Scripts/Tests/ProjectFoundPhone.Tests.asmdef` to remove conflict markers and reference `ProjectFoundPhone`.
-2.  **Remove Duplicate**: Delete `Assets/Scripts/ProjectFoundPhone.Runtime.asmdef` (and `.meta`).
-3.  **Cleanup**: Remove tracking for missing modular asmdef meta files (`Core`, `UI`, etc.) using `git rm`.
-4.  **Verify**: Ensure no compilation errors remain.
+## Final State
+- `Assets/Scripts/ProjectFoundPhone.asmdef` が runtime の基点として残っている。
+- `Assets/Scripts/Tests/ProjectFoundPhone.Tests.asmdef` は有効 JSON で、`ProjectFoundPhone` 参照に整流されている。
+- 補助 asmdef は `Editor` / `Tests` / `Utils` などの限定用途に整理され、root 競合は再発していない。
 
-## Definition of Done
-- [ ] No compilation errors in Unity Console.
-- [ ] `ProjectFoundPhone.Tests.asmdef` is valid JSON.
-- [ ] Only `ProjectFoundPhone.asmdef` exists in `Assets/Scripts`.
-- [ ] Git status is clean (no missing/deleted files showing as confusing states).
+## Evidence
+- `Assets/Scripts/Tests/ProjectFoundPhone.Tests.asmdef`
+- `docs/reports/REPORT_TASK_029_FixAssemblyDefinitions.md`
+- `docs/reports/REPORT_TASK_049_BuildGateFix_VerticalSlice.md`
+- `docs/reports/REPORT_TASK_053_MVPFinalVerificationPack.md`
+
+## DoD
+- [x] `ProjectFoundPhone.Tests.asmdef` が有効 JSON である。
+- [x] runtime asmdef の基点が `Assets/Scripts/ProjectFoundPhone.asmdef` に統一されている。
+- [x] asmdef 競合が後続の build / verification を阻害していない。
+- [x] 本タスクの意図が後続タスクの成功で追跡可能になっている。

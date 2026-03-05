@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using ProjectFoundPhone.Data;
@@ -139,3 +140,4 @@ namespace ProjectFoundPhone.Logging.Editor
         }
     }
 }
+#endif

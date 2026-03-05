@@ -34,7 +34,7 @@ namespace ProjectFoundPhone.Data
 
         [Header("Fallback")]
         [SerializeField] private Color m_DefaultPlayerColor = new Color(0.2f, 0.6f, 1.0f);
-        [SerializeField] private Color m_DefaultNPCColor = new Color(0.85f, 0.85f, 0.85f);
+        [SerializeField] private Color m_DefaultNPCColor = new Color(0.3f, 0.3f, 0.35f);
 
         /// <summary>
         /// ID -> CharacterProfile のルックアップ辞書

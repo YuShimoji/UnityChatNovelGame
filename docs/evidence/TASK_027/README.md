@@ -1,63 +1,44 @@
-# TASK_027 Evidence Collection Guide
+# TASK_027 Minimum Manual Evidence Guide
 
-このディレクトリは、Full Playthrough Test（TASK_027）のエビデンス（スクリーンショット）を保存する場所です。
+このディレクトリは、`TASK_027 Full Playthrough Test` の最小証跡を保存する場所です。
 
-## 必要なスクリーンショット
+## Goal
 
-以下のタイミングでスクリーンショットを撮影してください:
+- `DebugChatScene` の通し導線を 1 回で確認する
+- 失敗しても、どこで止まったかを日付付きで残す
 
-### 1. 01_initial_scene.png
+## Minimum Runbook
 
-- **タイミング**: PlayMode開始直後
-- **内容**: シーン全体の初期状態
-- **確認ポイント**: UI要素が正しく配置されているか
+1. `Assets/Scenes/DebugChatScene.unity` を開く
+2. Unity Console をクリアする
+3. PlayMode 開始
+4. `Chat -> Topic unlock -> Deduction -> Synthesis -> Effect/End` を 1 回通す
+5. PlayMode 終了後、このフォルダに結果を保存する
 
-### 2. 02_chat_messages.png
+## Required Outputs
 
-- **タイミング**: チャットメッセージが複数表示された後
-- **内容**: Chat UIに複数のメッセージが表示されている状態
-- **確認ポイント**: メッセージバブルのスタイル、送信者の区別、スクロール
+- `FULL_PLAYTHROUGH_RESULTS_YYYYMMDD.md`
+  - 開始時刻
+  - 終了時刻
+  - 到達した最終ステップ
+  - 成功/失敗
+  - Console Error/Exception の有無
+- `Log_YYYYMMDD.txt`
+  - Unity Console のコピー、または関連ログの貼り付け
+- `Capture_01_start.png`
+  - PlayMode 開始直後
+- `Capture_02_topic.png`
+  - Topic unlock または Deduction 表示時
+- `Capture_03_synthesis_or_end.png`
+  - Synthesis 成功時、または End 到達時
 
-### 3. 03_topic_unlocked.png
+## Failure Handling
 
-- **タイミング**: UnlockTopicコマンド実行後
-- **内容**: DeductionBoardに新しいトピックカードが表示されている状態
-- **確認ポイント**: トピックカードの内容、レイアウト
+- 途中で止まった場合も中断しない
+- 最後に成功したステップを `FULL_PLAYTHROUGH_RESULTS_YYYYMMDD.md` に書く
+- 失敗画面を追加で `Capture_blocker.png` として保存する
 
-### 4. 04_synthesis_test.png
+## Notes
 
-- **タイミング**: 合成システムのテスト中または後
-- **内容**: トピックをドラッグ&ドロップしている様子、または合成結果
-- **確認ポイント**: ドラッグ可能性、レシピマッチング、新トピック生成
-
-### 5. 05_glitch_effect.png
-
-- **タイミング**: Glitchエフェクトが最大強度（intensity 5）の時
-- **内容**: 画面にGlitchエフェクトが適用されている状態
-- **確認ポイント**: エフェクトの視認性、UI機能への影響
-
-### 6. 06_console_log.png
-
-- **タイミング**: PlayMode終了後
-- **内容**: Unity Consoleの全ログ
-- **確認ポイント**: エラーや警告の有無
-
-## スクリーンショット撮影方法
-
-### Unity Game Viewのスクリーンショット
-
-1. Unity Editor → Game View にフォーカス
-2. Windows: `Win + Shift + S` でスニッピングツール
-3. または Unity Menu → Assets → Take Screenshot
-
-### Consoleのスクリーンショット
-
-1. Unity Editor → Console Window を開く
-2. ログを全て表示
-3. `Win + Shift + S` でスニッピングツール
-
-## ファイル保存先
-
-すべてのスクリーンショットを **このディレクトリ** (docs/evidence/TASK_027/) に保存してください。
-
-ファイル名は上記の番号付き名前（01_initial_scene.png など）を使用してください。
+- 既知の技術 blocker は解消済みです。今回の目的は「再現確認」ではなく「最終通し証跡の確定」です。
+- `TASK_053` を閉じるため、この証跡は日付付きファイル名を維持してください。

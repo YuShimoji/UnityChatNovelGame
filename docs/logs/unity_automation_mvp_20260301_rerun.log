@@ -1,0 +1,839 @@
+[Licensing::Module] Trying to connect to existing licensing client channel...
+Built from '6000.3/staging' branch; Version is '6000.3.3f1 (ef04196de0d6) revision 15664153'; Using compiler version '194234433'; Build Type 'Release'
+[Licensing::IpcConnector] Channel LicenseClient-thank doesn't exist
+OS: 'Windows 11  (10.0.26200) 64bit Core' Language: 'ja' Physical Memory: 16218 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1
+Date: 2026-02-28T16:56:02Z
+[Licensing::Module] Successfully launched the LicensingClient (PId: 5080)
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Unity.exe
+-batchmode
+-projectPath
+C:\Users\thank\Storage\Game Projects\UnityChatNovelGame
+-executeMethod
+ProjectFoundPhone.EditorTools.VerificationMenu.RunMvpFinalVerificationPackBatch
+-logFile
+C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\docs\logs\unity_automation_mvp_20260301_rerun.log
+Successfully changed project path to: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame
+C:/Users/thank/Storage/Game Projects/UnityChatNovelGame
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-gfx=262144"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+Player connection [29048]  Target information:
+
+Player connection [29048]  * "[IP] 10.108.24.76 [Port] 55504 [Flags] 2 [Guid] 1848343136 [EditorId] 1848343136 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-H53P1T4) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [29048] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [29048] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-thank" at "2026-02-28T16:56:03.5531071Z"
+[Package Manager] Connected to IPC stream "Upm-22144" after 0.7 seconds.
+[Licensing::Module] Licensing is not yet initialized.
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.17.4+4293ba1
+  Session Id:              47bbd5b95bac4117b29526ad5f60c792
+  Correlation Id:          674b4de934efc07088135d0a24da6adf
+  External correlation Id: 7080371715861228820
+  Machine Id:              nLx//OVipz/9JKx+L1gSxSSFrqs=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-thank" (connect: 0.85s, validation: 0.08s, handshake: 2.04s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-thank-notifications" at "2026-02-28T16:56:05.6768663Z"
+[Licensing::Module] Connected to LicensingClient (PId: 5080, launch time: 0.01, total connection time: 2.98s)
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: 1825397-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+[Licensing::Client] Successfully updated license, isAsync: True, time: 0.02
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] Licensing Background thread has ended after 3.03s
+[Licensing::Module] Licensing is initialized (took 1.97s).
+[Licensing::Client] Successfully resolved entitlement details
+Library Redirect Path: Library/
+[Physics::Module] Selected backend.
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+Refreshing native plugins compatible for Editor in 0.78 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 6000.3.3f1 (ef04196de0d6)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/6000.3.3f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/Users/thank/Storage/Game Projects/UnityChatNovelGame/Assets
+GfxDevice: creating device client; kGfxThreadingModeNonThreaded
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: NVIDIA GeForce GTX 1650 Ti (ID=0x1f95)
+    Vendor:   NVIDIA
+    VRAM:     3935 MB
+    Driver:   32.0.15.8157
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/6000.3.3f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/6000.3.3f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/6000.3.3f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56144
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+ImportWorker Server TCP listen port: 0
+AcceleratorClientConnectionCallback - disconnected - :0
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.3.3f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.005148 seconds.
+- Loaded All Assemblies, in  0.678 seconds
+Native extension for WindowsStandalone target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.710 seconds
+Domain Reload Profiling: 1382ms
+	BeginReloadAssembly (209ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (0ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (2ms)
+	RebuildCommonClasses (59ms)
+	RebuildNativeTypeToScriptingClass (23ms)
+	initialDomainReloadingComplete (75ms)
+	LoadAllAssembliesAndSetupDomain (303ms)
+		LoadAssemblies (200ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (298ms)
+			TypeCache.Refresh (295ms)
+				TypeCache.ScanAssembly (269ms)
+			BuildScriptInfoCaches (0ms)
+			ResolveRequiredComponents (1ms)
+	FinalizeReload (713ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (651ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (67ms)
+			SetLoadedEditorAssemblies (5ms)
+			BeforeProcessingInitializeOnLoad (172ms)
+			ProcessInitializeOnLoadAttributes (267ms)
+			ProcessInitializeOnLoadMethodAttributes (139ms)
+			AfterProcessingInitializeOnLoad (0ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (0ms)
+[Licensing::Client] Successfully resolved entitlement details
+Application.AssetDatabase Initial Refresh Start
+Package Manager log level set to [2]
+[Package Manager] Restoring resolved packages state from cache
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Registered 59 packages:
+  Packages from [https://package.openupm.com]:
+    dev.yarnspinner.unity@3.1.3 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\dev.yarnspinner.unity@a248c726b002)
+  Packages from [https://packages.unity.com]:
+    com.unity.2d.enhancers@1.0.0 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.2d.enhancers@1df0eb7756ab)
+    com.unity.ai.assistant@1.5.0-pre.2 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.ai.assistant@e6a38fa97d39)
+    com.unity.ai.generators@1.5.0-pre.2 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.ai.generators@2330e449f479)
+    com.unity.ai.inference@2.5.0 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.ai.inference@e760aa121ec7)
+    com.unity.memoryprofiler@1.1.10 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.memoryprofiler@34fef3cbda0a)
+    com.unity.nuget.newtonsoft-json@3.2.2 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.nuget.newtonsoft-json@4dfd81071c64)
+    com.unity.burst@1.8.27 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.burst@973857688024)
+    com.unity.collections@2.6.2 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.collections@aea9d3bd5e19)
+    com.unity.mathematics@1.3.3 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.mathematics@19a9377c4ffa)
+    com.unity.profiling.core@1.0.3 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.profiling.core@8a49f7027d06)
+    com.unity.editorcoroutines@1.0.1 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.editorcoroutines@54394ed3283c)
+    com.unity.dt.app-ui@2.1.1 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.dt.app-ui@8ac7e730dd5d)
+    com.unity.ai.toolkit@1.5.0-pre.2 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.ai.toolkit@b9677ce01ef8)
+    com.unity.cloud.gltfast@6.14.1 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.cloud.gltfast@0847aee0f6da)
+    com.unity.serialization@3.1.3 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.serialization@7725fb70c685)
+    com.unity.2d.common@12.0.1 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.2d.common@51e9484895c4)
+    com.unity.settings-manager@2.1.1 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.settings-manager@0b8638c5ce86)
+    com.unity.nuget.mono-cecil@1.11.6 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.nuget.mono-cecil@ecb9724e46ff)
+    com.unity.test-framework.performance@3.2.0 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.test-framework.performance@0840f58e4562)
+  Built-in packages:
+    com.unity.multiplayer.center@1.0.1 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.multiplayer.center@f01f4ba8d00a)
+    com.unity.test-framework@1.6.0 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.test-framework@0b7a23ab2e1d)
+    com.unity.ugui@2.0.0 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.ugui@8873725e650d)
+    com.unity.modules.accessibility@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.accessibility)
+    com.unity.modules.ai@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.ai)
+    com.unity.modules.androidjni@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.androidjni)
+    com.unity.modules.animation@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.animation)
+    com.unity.modules.assetbundle@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.assetbundle)
+    com.unity.modules.audio@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.audio)
+    com.unity.modules.cloth@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.cloth)
+    com.unity.modules.director@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.director)
+    com.unity.modules.imageconversion@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.imageconversion)
+    com.unity.modules.imgui@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.imgui)
+    com.unity.modules.jsonserialize@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.jsonserialize)
+    com.unity.modules.particlesystem@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.particlesystem)
+    com.unity.modules.physics@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.physics)
+    com.unity.modules.physics2d@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.physics2d)
+    com.unity.modules.screencapture@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.screencapture)
+    com.unity.modules.terrain@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.terrain)
+    com.unity.modules.terrainphysics@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.terrainphysics)
+    com.unity.modules.tilemap@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.tilemap)
+    com.unity.modules.ui@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.ui)
+    com.unity.modules.uielements@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.uielements)
+    com.unity.modules.umbra@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.umbra)
+    com.unity.modules.unityanalytics@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.unityanalytics)
+    com.unity.modules.unitywebrequest@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.unitywebrequest)
+    com.unity.modules.unitywebrequestassetbundle@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.unitywebrequestassetbundle)
+    com.unity.modules.unitywebrequestaudio@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.unitywebrequestaudio)
+    com.unity.modules.unitywebrequesttexture@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.unitywebrequesttexture)
+    com.unity.modules.unitywebrequestwww@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.unitywebrequestwww)
+    com.unity.modules.vehicles@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.vehicles)
+    com.unity.modules.video@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.video)
+    com.unity.modules.vr@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.vr)
+    com.unity.modules.wind@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.wind)
+    com.unity.modules.xr@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.xr)
+    com.unity.modules.subsystems@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.subsystems)
+    com.unity.modules.hierarchycore@1.0.0 (location: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Resources\PackageManager\BuiltInPackages\com.unity.modules.hierarchycore)
+    com.unity.ext.nunit@2.0.5 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.ext.nunit@d8c07649098d)
+    com.unity.2d.sprite@1.0.0 (location: C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\Library\PackageCache\com.unity.2d.sprite@82f01c8c75ca)
+[Subsystems] No new subsystems found in resolved package list.
+[Package Manager] Done registering packages in 0.05 seconds
+Duplicate assembly 'Microsoft.CodeAnalysis.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/CodeAnalysis/Microsoft.CodeAnalysis.dll, AssemblyName=Microsoft.CodeAnalysis, Version=3.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/Microsoft.CodeAnalysis.dll, AssemblyName=Microsoft.CodeAnalysis, Version=3.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'.Duplicate assembly 'System.Reflection.Metadata.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Reflection.Metadata.dll, AssemblyName=System.Reflection.Metadata, Version=10.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Reflection.Metadata.dll, AssemblyName=System.Reflection.Metadata, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Collections.Immutable.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Collections.Immutable.dll, AssemblyName=System.Collections.Immutable, Version=10.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Collections.Immutable.dll, AssemblyName=System.Collections.Immutable, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Runtime.CompilerServices.Unsafe.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Runtime.CompilerServices.Unsafe.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/com.unity.collections/Unity.Collections.Tests/System.Runtime.CompilerServices.Unsafe/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'Microsoft.CodeAnalysis.CSharp.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/CodeAnalysis/Microsoft.CodeAnalysis.CSharp.dll, AssemblyName=Microsoft.CodeAnalysis.CSharp, Version=3.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/Microsoft.CodeAnalysis.CSharp.dll, AssemblyName=Microsoft.CodeAnalysis.CSharp, Version=3.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'.Assembly for Assembly Definition File 'Assets/Plugins/Demigiant/DOTween/Editor/Demigiant.DOTween.Editor.asmdef' will not be compiled, because it has no scripts associated with it.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[])
+UnityEngine.Debug:LogWarningFormat (string,object[])
+UnityEditor.Scripting.ScriptCompilation.EditorCompilation:WarnIfThereAreAssembliesWithoutAnyScripts (UnityEditor.Scripting.ScriptCompilation.ScriptAssemblySettings,UnityEditor.Scripting.ScriptCompilation.ScriptAssembly[])
+UnityEditor.Scripting.ScriptCompilation.EditorCompilation:CompileScriptsWithSettings (UnityEditor.Scripting.ScriptCompilation.ScriptAssemblySettings)
+UnityEditor.Scripting.ScriptCompilation.EditorCompilation:CompileScripts (UnityEditor.Scripting.ScriptCompilation.EditorScriptCompilationOptions,UnityEditor.BuildTarget,int,string[])
+UnityEditor.Scripting.ScriptCompilation.EditorCompilationInterface/<>c__DisplayClass21_0:<CompileScripts>b__0 ()
+UnityEditor.Scripting.ScriptCompilation.EditorCompilationInterface:EmitExceptionAsError<UnityEditor.Scripting.ScriptCompilation.EditorCompilation/CompileStatus> (System.Func`1<UnityEditor.Scripting.ScriptCompilation.EditorCompilation/CompileStatus>,UnityEditor.Scripting.ScriptCompilation.EditorCompilation/CompileStatus)
+UnityEditor.Scripting.ScriptCompilation.EditorCompilationInterface:CompileScripts (UnityEditor.Scripting.ScriptCompilation.EditorScriptCompilationOptions,UnityEditor.BuildTarget,int,string[])
+
+Refreshing native plugins compatible for Editor in 2.36 ms, found 1 plugins.
+Starting: C:\Program Files\Unity\Hub\Editor\6000.3.3f1\Editor\Data\Tools\BuildPipeline\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: C:/Users/thank/Storage/Game Projects/UnityChatNovelGame
+DisplayProgressbar: Compiling Scripts
+ExitCode: 0 Duration: 0s854ms
+[1004/1323  0s] ILPP-Configuration Library/ilpp-configuration.nevergeneratedoutput
+*** Tundra build success (0.77 seconds), 1 items updated, 1323 evaluated
+AssetDatabase: script compilation time: 1.772734s
+Begin MonoManager ReloadAssembly
+Duplicate assembly 'Microsoft.CodeAnalysis.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/CodeAnalysis/Microsoft.CodeAnalysis.dll, AssemblyName=Microsoft.CodeAnalysis, Version=3.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/Microsoft.CodeAnalysis.dll, AssemblyName=Microsoft.CodeAnalysis, Version=3.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'.Duplicate assembly 'System.Reflection.Metadata.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Reflection.Metadata.dll, AssemblyName=System.Reflection.Metadata, Version=10.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Reflection.Metadata.dll, AssemblyName=System.Reflection.Metadata, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Collections.Immutable.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Collections.Immutable.dll, AssemblyName=System.Collections.Immutable, Version=10.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Collections.Immutable.dll, AssemblyName=System.Collections.Immutable, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Runtime.CompilerServices.Unsafe.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Runtime.CompilerServices.Unsafe.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/com.unity.collections/Unity.Collections.Tests/System.Runtime.CompilerServices.Unsafe/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'Microsoft.CodeAnalysis.CSharp.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/CodeAnalysis/Microsoft.CodeAnalysis.CSharp.dll, AssemblyName=Microsoft.CodeAnalysis.CSharp, Version=3.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/Microsoft.CodeAnalysis.CSharp.dll, AssemblyName=Microsoft.CodeAnalysis.CSharp, Version=3.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'.- Loaded All Assemblies, in  2.049 seconds
+Refreshing native plugins compatible for Editor in 2.69 ms, found 1 plugins.
+Native extension for WindowsStandalone target not found
+Duplicate assembly 'Microsoft.CodeAnalysis.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/CodeAnalysis/Microsoft.CodeAnalysis.dll, AssemblyName=Microsoft.CodeAnalysis, Version=3.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/Microsoft.CodeAnalysis.dll, AssemblyName=Microsoft.CodeAnalysis, Version=3.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'.Duplicate assembly 'System.Reflection.Metadata.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Reflection.Metadata.dll, AssemblyName=System.Reflection.Metadata, Version=10.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Reflection.Metadata.dll, AssemblyName=System.Reflection.Metadata, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Collections.Immutable.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Collections.Immutable.dll, AssemblyName=System.Collections.Immutable, Version=10.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Collections.Immutable.dll, AssemblyName=System.Collections.Immutable, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Runtime.CompilerServices.Unsafe.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Runtime.CompilerServices.Unsafe.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/com.unity.collections/Unity.Collections.Tests/System.Runtime.CompilerServices.Unsafe/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'Microsoft.CodeAnalysis.CSharp.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/CodeAnalysis/Microsoft.CodeAnalysis.CSharp.dll, AssemblyName=Microsoft.CodeAnalysis.CSharp, Version=3.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/Microsoft.CodeAnalysis.CSharp.dll, AssemblyName=Microsoft.CodeAnalysis.CSharp, Version=3.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'.<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Auto-discovered 18 tools and 14 resources (32 total handlers)
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MCPForUnity.Editor.Helpers.McpLog:Info (string,bool) (at Assets/MCPForUnity/Editor/Helpers/McpLog.cs:40)
+MCPForUnity.Editor.Tools.CommandRegistry:AutoDiscoverCommands () (at Assets/MCPForUnity/Editor/Tools/CommandRegistry.cs:101)
+MCPForUnity.Editor.Tools.CommandRegistry:Initialize () (at Assets/MCPForUnity/Editor/Tools/CommandRegistry.cs:50)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:EnsureInitialised () (at Assets/MCPForUnity/Editor/Services/Transport/TransportCommandDispatcher.cs:200)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:.cctor () (at Assets/MCPForUnity/Editor/Services/Transport/TransportCommandDispatcher.cs:73)
+System.Runtime.CompilerServices.RuntimeHelpers:RunClassConstructor (System.RuntimeTypeHandle)
+UnityEditor.EditorAssemblies:ProcessInitializeOnLoadAttributes (System.Type[])
+
+(Filename: Assets/MCPForUnity/Editor/Helpers/McpLog.cs Line: 40)
+
+Refreshing native plugins compatible for Editor in 2.72 ms, found 1 plugins.
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  9.245 seconds
+Domain Reload Profiling: 11276ms
+	BeginReloadAssembly (483ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (41ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (179ms)
+	RebuildCommonClasses (66ms)
+	RebuildNativeTypeToScriptingClass (25ms)
+	initialDomainReloadingComplete (117ms)
+	LoadAllAssembliesAndSetupDomain (1340ms)
+		LoadAssemblies (948ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (591ms)
+			TypeCache.Refresh (508ms)
+				TypeCache.ScanAssembly (481ms)
+			BuildScriptInfoCaches (71ms)
+			ResolveRequiredComponents (6ms)
+	FinalizeReload (9246ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (8990ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (35ms)
+			SetLoadedEditorAssemblies (6ms)
+			BeforeProcessingInitializeOnLoad (445ms)
+			ProcessInitializeOnLoadAttributes (8094ms)
+			ProcessInitializeOnLoadMethodAttributes (397ms)
+			AfterProcessingInitializeOnLoad (12ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (13ms)
+Asset Pipeline Refresh (id=f4d6c8459ef073d40b8316eec1a7ddb7): Total: 14.397 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=10104 ms
+		Asset DB Callback time: managed=316 ms, native=49 ms
+		Scripting: domain reloads=1, domain reload time=2050 ms, compile time=1776 ms, other=99 ms
+		Project Asset Count: scripts=1411, non-scripts=3842
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 52.094ms
+	ApplyChangesToAssetFolders: 0.956ms
+	Scan: 300.746ms
+	OnSourceAssetsModified: 0.003ms
+	CategorizeAssetsWithTransientArtifact: 79.495ms
+	ProcessAssetsWithTransientArtifactChanges: 107.086ms
+	CategorizeAssets: 90.518ms
+	ImportOutOfDateAssets: 9259.985ms (7480.907ms without children)
+		CompileScripts: 1776.483ms
+		ReloadNativeAssets: 0.009ms
+		UnloadImportedAssets: 0.221ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 1.336ms
+		InitializingProgressBar: 0.000ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.001ms
+		OnDemandSchedulerStart: 1.029ms
+	PostProcessAllAssets: 317.074ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.004ms
+	UnloadStreamsBegin: 4.383ms
+	PersistCurrentRevisions: 0.269ms
+	UnloadStreamsEnd: 0.002ms
+	GenerateScriptTypeHashes: 11.877ms
+	Untracked: 4184.120ms
+
+Application.AssetDatabase Initial Refresh End
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.02 seconds
+Scanning for USB devices : 1.946ms
+Initializing Unity extensions:
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-UnityChatNovelGame
+Unloading 50 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 5624 unused Assets / (17.0 MB). Loaded Objects now: 6249.
+Memory consumption went from 193.6 MB to 176.6 MB.
+Total: 24.092800 ms (FindLiveObjects: 1.045700 ms CreateObjectMapping: 3.743200 ms MarkObjects: 12.183000 ms  DeleteObjects: 7.119600 ms)
+
+Start importing ProjectSettings/EditorBuildSettings.asset using Guid(0000000000000000b000000000000000) (LibraryAssetImporter) -> (artifact id: '8e7c9dea582a8b094afeb2a282c2758f') in 0.0189234 seconds
+Refreshing native plugins compatible for Editor in 2.43 ms, found 1 plugins.
+Preloading 1 native plugins for Editor in 0.12 ms.
+Asset Pipeline Refresh (id=8cc75692e868f534f81ee0f2f39c1e98): Total: 0.695 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=7 ms, native=61 ms
+		Asset DB Callback time: managed=614 ms, native=11 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=1411, non-scripts=3842
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 1
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 0.001ms
+	ApplyChangesToAssetFolders: 0.226ms
+	Scan: 32.070ms
+	OnSourceAssetsModified: 0.001ms
+	CategorizeAssetsWithTransientArtifact: 0.018ms
+	ProcessAssetsWithTransientArtifactChanges: 0.124ms
+	CategorizeAssets: 3.146ms
+	ImportOutOfDateAssets: 25.419ms (0.809ms without children)
+		ImportManagerImport: 22.280ms (2.215ms without children)
+			ImportInProcess: 20.024ms
+			UpdateCategorizedAssets: 0.041ms
+		ReloadNativeAssets: 0.011ms
+		UnloadImportedAssets: 0.397ms
+		ReloadImportedAssets: 0.000ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 1.173ms
+		InitializingProgressBar: 0.001ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.001ms
+		OnDemandSchedulerStart: 0.749ms
+	PostProcessAllAssets: 623.188ms
+	Hotreload: 3.052ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.354ms
+	UnloadStreamsBegin: 2.631ms
+	PersistCurrentRevisions: 0.269ms
+	UnloadStreamsEnd: 0.002ms
+	Untracked: 4.729ms
+
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 17 unused Assets / (9.2 KB). Loaded Objects now: 6269.
+Memory consumption went from 168.1 MB to 168.1 MB.
+Total: 14.130600 ms (FindLiveObjects: 0.370900 ms CreateObjectMapping: 0.278800 ms MarkObjects: 13.426600 ms  DeleteObjects: 0.053000 ms)
+
+Starting Verification for MVPScene (mvp_pack)...
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+ProjectFoundPhone.EditorTools.VerificationMenu:SetupAndRun (string,string,bool) (at Assets/Scripts/Editor/VerificationMenu.cs:72)
+ProjectFoundPhone.EditorTools.VerificationMenu:RunMvpFinalVerificationPackBatch () (at Assets/Scripts/Editor/VerificationMenu.cs:36)
+
+(Filename: Assets/Scripts/Editor/VerificationMenu.cs Line: 72)
+
+[Project] Loading completed in 21.287 seconds
+	Project init time: 				19.806 seconds
+		Template init time: 		0.000 seconds
+		Package Manager init time: 		2.667 seconds
+		Asset Database init time: 		0.207 seconds
+		Global illumination init time: 	0.004 seconds
+		Assemblies load time: 			1.424 seconds
+		Unity extensions init time: 	0.013 seconds
+		Asset Database refresh time: 	14.397 seconds
+	Scene opening time: 			1.104 seconds
+##utp:{"type":"ProjectInfo","version":2,"phase":"Immediate","time":1772297783964,"processId":22144,"projectLoad":21.2873613,"projectInit":19.806477,"templateInit":0.0,"packageManagerInit":2.6666549,"assetDatabaseInit":0.2071231,"globalIlluminationInit":0.0037471,"assembliesLoad":1.4239148,"unityExtensionsInit":0.0130197,"assetDatabaseRefresh":14.3969419,"sceneOpening":1.1036445}
+##utp:{"type":"EditorInfo","version":2,"phase":"Immediate","time":1772297783964,"processId":22144,"editorVersion":"6000.3.3f1 (ef04196de0d6)","branch":"6000.3/staging","buildType":"Release","platform":"Windows"}
+Reloading assemblies for play mode.
+Reloading assemblies after forced synchronous recompile.
+Duplicate assembly 'Microsoft.CodeAnalysis.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/CodeAnalysis/Microsoft.CodeAnalysis.dll, AssemblyName=Microsoft.CodeAnalysis, Version=3.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/Microsoft.CodeAnalysis.dll, AssemblyName=Microsoft.CodeAnalysis, Version=3.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'.Duplicate assembly 'System.Reflection.Metadata.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Reflection.Metadata.dll, AssemblyName=System.Reflection.Metadata, Version=10.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Reflection.Metadata.dll, AssemblyName=System.Reflection.Metadata, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Collections.Immutable.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Collections.Immutable.dll, AssemblyName=System.Collections.Immutable, Version=10.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Collections.Immutable.dll, AssemblyName=System.Collections.Immutable, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Runtime.CompilerServices.Unsafe.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Runtime.CompilerServices.Unsafe.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/com.unity.collections/Unity.Collections.Tests/System.Runtime.CompilerServices.Unsafe/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'Microsoft.CodeAnalysis.CSharp.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/CodeAnalysis/Microsoft.CodeAnalysis.CSharp.dll, AssemblyName=Microsoft.CodeAnalysis.CSharp, Version=3.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/Microsoft.CodeAnalysis.CSharp.dll, AssemblyName=Microsoft.CodeAnalysis.CSharp, Version=3.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'.Begin MonoManager ReloadAssembly
+Duplicate assembly 'Microsoft.CodeAnalysis.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/CodeAnalysis/Microsoft.CodeAnalysis.dll, AssemblyName=Microsoft.CodeAnalysis, Version=3.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/Microsoft.CodeAnalysis.dll, AssemblyName=Microsoft.CodeAnalysis, Version=3.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'.Duplicate assembly 'System.Reflection.Metadata.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Reflection.Metadata.dll, AssemblyName=System.Reflection.Metadata, Version=10.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Reflection.Metadata.dll, AssemblyName=System.Reflection.Metadata, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Collections.Immutable.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Collections.Immutable.dll, AssemblyName=System.Collections.Immutable, Version=10.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Collections.Immutable.dll, AssemblyName=System.Collections.Immutable, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Runtime.CompilerServices.Unsafe.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'System.Runtime.CompilerServices.Unsafe.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/Shared/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' and ignoring 'Packages/com.unity.collections/Unity.Collections.Tests/System.Runtime.CompilerServices.Unsafe/System.Runtime.CompilerServices.Unsafe.dll, AssemblyName=System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'.Duplicate assembly 'Microsoft.CodeAnalysis.CSharp.dll' with different versions detected, using 'Packages/com.unity.ai.assistant/Plugins/CodeAnalysis/Microsoft.CodeAnalysis.CSharp.dll, AssemblyName=Microsoft.CodeAnalysis.CSharp, Version=3.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35' and ignoring 'Packages/dev.yarnspinner.unity/Editor/Analysis/DLLs/Microsoft.CodeAnalysis.CSharp.dll, AssemblyName=Microsoft.CodeAnalysis.CSharp, Version=3.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'.- Loaded All Assemblies, in  1.590 seconds
+Refreshing native plugins compatible for Editor in 2.32 ms, found 1 plugins.
+Native extension for WindowsStandalone target not found
+<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Auto-discovered 18 tools and 14 resources (32 total handlers)
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MCPForUnity.Editor.Helpers.McpLog:Info (string,bool) (at Assets/MCPForUnity/Editor/Helpers/McpLog.cs:40)
+MCPForUnity.Editor.Tools.CommandRegistry:AutoDiscoverCommands () (at Assets/MCPForUnity/Editor/Tools/CommandRegistry.cs:101)
+MCPForUnity.Editor.Tools.CommandRegistry:Initialize () (at Assets/MCPForUnity/Editor/Tools/CommandRegistry.cs:50)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:EnsureInitialised () (at Assets/MCPForUnity/Editor/Services/Transport/TransportCommandDispatcher.cs:200)
+MCPForUnity.Editor.Services.Transport.TransportCommandDispatcher:.cctor () (at Assets/MCPForUnity/Editor/Services/Transport/TransportCommandDispatcher.cs:73)
+System.Runtime.CompilerServices.RuntimeHelpers:RunClassConstructor (System.RuntimeTypeHandle)
+UnityEditor.EditorAssemblies:ProcessInitializeOnLoadAttributes (System.Type[])
+
+(Filename: Assets/MCPForUnity/Editor/Helpers/McpLog.cs Line: 40)
+
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  4.451 seconds
+Domain Reload Profiling: 6032ms
+	BeginReloadAssembly (882ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (88ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (506ms)
+	RebuildCommonClasses (77ms)
+	RebuildNativeTypeToScriptingClass (33ms)
+	initialDomainReloadingComplete (103ms)
+	LoadAllAssembliesAndSetupDomain (485ms)
+		LoadAssemblies (281ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (409ms)
+			TypeCache.Refresh (12ms)
+				TypeCache.ScanAssembly (0ms)
+			BuildScriptInfoCaches (385ms)
+			ResolveRequiredComponents (5ms)
+	FinalizeReload (4452ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (4044ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (33ms)
+			SetLoadedEditorAssemblies (7ms)
+			BeforeProcessingInitializeOnLoad (372ms)
+			ProcessInitializeOnLoadAttributes (3260ms)
+			ProcessInitializeOnLoadMethodAttributes (360ms)
+			AfterProcessingInitializeOnLoad (10ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (37ms)
+Asset Pipeline Refresh (id=6023f2ff643847742aa530761ff98551): Total: 6.376 seconds - Initiated by StopAssetImportingV2(ForceSynchronousImport | ForceDomainReload)
+	Summary:
+		Imports: total=0 (actual=0, local cache=0, cache server=0)
+		Asset DB Process Time: managed=0 ms, native=4607 ms
+		Asset DB Callback time: managed=136 ms, native=0 ms
+		Scripting: domain reloads=1, domain reload time=1628 ms, compile time=3 ms, other=0 ms
+		Project Asset Count: scripts=1411, non-scripts=3842
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 2.431ms
+	ApplyChangesToAssetFolders: 0.394ms
+	Scan: 0.001ms
+	OnSourceAssetsModified: 0.003ms
+	CategorizeAssetsWithTransientArtifact: 0.006ms
+	ProcessAssetsWithTransientArtifactChanges: 4.636ms
+	CategorizeAssets: 94.620ms
+	ImportOutOfDateAssets: 4465.682ms (4459.434ms without children)
+		CompileScripts: 2.922ms
+		CollectScriptTypesHashes: 0.059ms
+		ReloadNativeAssets: 0.041ms
+		UnloadImportedAssets: 0.061ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 1.028ms
+		InitializingProgressBar: 0.001ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.184ms
+		OnDemandSchedulerStart: 1.954ms
+	PostProcessAllAssets: 136.365ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.214ms
+	UnloadStreamsBegin: 0.072ms
+	PersistCurrentRevisions: 0.199ms
+	UnloadStreamsEnd: 0.001ms
+	GenerateScriptTypeHashes: 14.212ms
+	Untracked: 1671.141ms
+
+[PerformanceMonitor] Auto-init check. Current Scene: 
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Assets.Scripts.Utils.PerformanceMonitor:OnRuntimeMethodLoad () (at Assets/Scripts/Utils/PerformanceMonitor.cs:50)
+
+(Filename: Assets/Scripts/Utils/PerformanceMonitor.cs Line: 50)
+
+[PerformanceMonitor] Skipping auto-init: Scene is not DebugChatScene.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Assets.Scripts.Utils.PerformanceMonitor:OnRuntimeMethodLoad () (at Assets/Scripts/Utils/PerformanceMonitor.cs:54)
+
+(Filename: Assets/Scripts/Utils/PerformanceMonitor.cs Line: 54)
+
+Loaded scene 'Temp/__Backupscenes/0.backup'
+	Deserialize:            0.870 ms
+	Integration:            452.634 ms
+	Integration of assets:  0.002 ms
+	Thread Wait Time:       0.028 ms
+	Total Operation Time:   453.534 ms
+VerificationAutomator: flow=mvp_pack, targetScene=MVPScene
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Assets.Scripts.Dev.VerificationAutomator/<Start>d__12:MoveNext () (at Assets/Scripts/Automation/VerificationAutomator.cs:50)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/Scripts/Automation/VerificationAutomator.cs Line: 50)
+
+VerificationAutomator: Loading scene MVPScene
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Assets.Scripts.Dev.VerificationAutomator/<LoadTargetScene>d__20:MoveNext () (at Assets/Scripts/Automation/VerificationAutomator.cs:448)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/Scripts/Automation/VerificationAutomator.cs Line: 448)
+
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+Asset Pipeline Refresh (id=60087cce4cfdcf643871d8023cf332bb): Total: 0.142 seconds - Initiated by RefreshV2(NoUpdateAssetOptions)
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[Indexing] Starting Initial Indexing for Assets
+Created GICache directory at C:/Users/thank/AppData/LocalLow/Unity/Caches/GiCache. Took: 0.029s, timestamps: [28.174 - 28.203]
+UnloadTime: 0.162900 ms
+Loaded scene 'Assets/Scenes/MVPScene.unity'
+	Deserialize:            4.022 ms
+	Integration:            398.621 ms
+	Integration of assets:  0.003 ms
+	Thread Wait Time:       717.797 ms
+	Total Operation Time:   1120.444 ms
+Unloading 19 unused Assets / (3.1 KB). Loaded Objects now: 6459.
+Memory consumption went from 196.4 MB to 196.4 MB.
+Total: 11.650100 ms (FindLiveObjects: 0.403200 ms CreateObjectMapping: 0.274400 ms MarkObjects: 10.873100 ms  DeleteObjects: 0.097800 ms)
+
+VerificationAutomator: MVP branch A start.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Assets.Scripts.Dev.VerificationAutomator/<RunMvpFinalVerificationPack>d__16:MoveNext () (at Assets/Scripts/Automation/VerificationAutomator.cs:129)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/Scripts/Automation/VerificationAutomator.cs Line: 129)
+
+ReadPixels was called to read pixels from system frame buffer, while not inside drawing frame.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.Texture2D:ReadPixelsImpl (UnityEngine.Rect,int,int,bool)
+UnityEngine.Texture2D:ReadPixels (UnityEngine.Rect,int,int,bool)
+UnityEngine.Texture2D:ReadPixels (UnityEngine.Rect,int,int)
+Assets.Scripts.Dev.VerificationAutomator/<CaptureScreenshot>d__23:MoveNext () (at Assets/Scripts/Automation/VerificationAutomator.cs:531)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+[Assets/Scripts/Automation/VerificationAutomator.cs line 531]
+
+VerificationAutomator: Screenshot written to C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\docs\evidence\01_Title_Screen.png
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Assets.Scripts.Dev.VerificationAutomator/<CaptureScreenshot>d__23:MoveNext () (at Assets/Scripts/Automation/VerificationAutomator.cs:563)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/Scripts/Automation/VerificationAutomator.cs Line: 563)
+
+ReadPixels was called to read pixels from system frame buffer, while not inside drawing frame.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.Texture2D:ReadPixelsImpl (UnityEngine.Rect,int,int,bool)
+UnityEngine.Texture2D:ReadPixels (UnityEngine.Rect,int,int,bool)
+UnityEngine.Texture2D:ReadPixels (UnityEngine.Rect,int,int)
+Assets.Scripts.Dev.VerificationAutomator/<CaptureScreenshot>d__23:MoveNext () (at Assets/Scripts/Automation/VerificationAutomator.cs:531)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+[Assets/Scripts/Automation/VerificationAutomator.cs line 531]
+
+VerificationAutomator: Screenshot written to C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\docs\evidence\04_End_Screen.png
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Assets.Scripts.Dev.VerificationAutomator/<CaptureScreenshot>d__23:MoveNext () (at Assets/Scripts/Automation/VerificationAutomator.cs:563)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/Scripts/Automation/VerificationAutomator.cs Line: 563)
+
+VerificationAutomator: MVP branch B start.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Assets.Scripts.Dev.VerificationAutomator/<RunMvpFinalVerificationPack>d__16:MoveNext () (at Assets/Scripts/Automation/VerificationAutomator.cs:141)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/Scripts/Automation/VerificationAutomator.cs Line: 141)
+
+VerificationAutomator: Loading scene MVPScene
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Assets.Scripts.Dev.VerificationAutomator/<LoadTargetScene>d__20:MoveNext () (at Assets/Scripts/Automation/VerificationAutomator.cs:448)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/Scripts/Automation/VerificationAutomator.cs Line: 448)
+
+Unloading 13 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 7.366800 ms
+Loaded scene 'Assets/Scenes/MVPScene.unity'
+	Deserialize:            0.622 ms
+	Integration:            393.293 ms
+	Integration of assets:  0.001 ms
+	Thread Wait Time:       0.675 ms
+	Total Operation Time:   394.591 ms
+Unloading 1 unused Assets / (0.5 KB). Loaded Objects now: 6459.
+Memory consumption went from 194.9 MB to 194.9 MB.
+Total: 13.668100 ms (FindLiveObjects: 0.359000 ms CreateObjectMapping: 0.245300 ms MarkObjects: 13.035300 ms  DeleteObjects: 0.027600 ms)
+
+ReadPixels was called to read pixels from system frame buffer, while not inside drawing frame.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.Texture2D:ReadPixelsImpl (UnityEngine.Rect,int,int,bool)
+UnityEngine.Texture2D:ReadPixels (UnityEngine.Rect,int,int,bool)
+UnityEngine.Texture2D:ReadPixels (UnityEngine.Rect,int,int)
+Assets.Scripts.Dev.VerificationAutomator/<CaptureScreenshot>d__23:MoveNext () (at Assets/Scripts/Automation/VerificationAutomator.cs:531)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+[Assets/Scripts/Automation/VerificationAutomator.cs line 531]
+
+VerificationAutomator: Screenshot written to C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\docs\evidence\05_ChoiceB_End_Screen.png
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Assets.Scripts.Dev.VerificationAutomator/<CaptureScreenshot>d__23:MoveNext () (at Assets/Scripts/Automation/VerificationAutomator.cs:563)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/Scripts/Automation/VerificationAutomator.cs Line: 563)
+
+VerificationAutomator: MVP rapid input start.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Assets.Scripts.Dev.VerificationAutomator/<RunMvpFinalVerificationPack>d__16:MoveNext () (at Assets/Scripts/Automation/VerificationAutomator.cs:153)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/Scripts/Automation/VerificationAutomator.cs Line: 153)
+
+VerificationAutomator: Loading scene MVPScene
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Assets.Scripts.Dev.VerificationAutomator/<LoadTargetScene>d__20:MoveNext () (at Assets/Scripts/Automation/VerificationAutomator.cs:448)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/Scripts/Automation/VerificationAutomator.cs Line: 448)
+
+Unloading 1 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 2.334700 ms
+Loaded scene 'Assets/Scenes/MVPScene.unity'
+	Deserialize:            1.856 ms
+	Integration:            508.586 ms
+	Integration of assets:  0.004 ms
+	Thread Wait Time:       1.310 ms
+	Total Operation Time:   511.756 ms
+Unloading 1 unused Assets / (0.5 KB). Loaded Objects now: 6459.
+Memory consumption went from 194.9 MB to 194.9 MB.
+Total: 15.520700 ms (FindLiveObjects: 0.413800 ms CreateObjectMapping: 0.272500 ms MarkObjects: 14.796900 ms  DeleteObjects: 0.036400 ms)
+
+TrimDiskCacheJob: Current cache size 0mb
+ReadPixels was called to read pixels from system frame buffer, while not inside drawing frame.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.Texture2D:ReadPixelsImpl (UnityEngine.Rect,int,int,bool)
+UnityEngine.Texture2D:ReadPixels (UnityEngine.Rect,int,int,bool)
+UnityEngine.Texture2D:ReadPixels (UnityEngine.Rect,int,int)
+Assets.Scripts.Dev.VerificationAutomator/<CaptureScreenshot>d__23:MoveNext () (at Assets/Scripts/Automation/VerificationAutomator.cs:531)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+[Assets/Scripts/Automation/VerificationAutomator.cs line 531]
+
+VerificationAutomator: Screenshot written to C:\Users\thank\Storage\Game Projects\UnityChatNovelGame\docs\evidence\06_RapidInput_End_Screen.png
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Assets.Scripts.Dev.VerificationAutomator/<CaptureScreenshot>d__23:MoveNext () (at Assets/Scripts/Automation/VerificationAutomator.cs:563)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/Scripts/Automation/VerificationAutomator.cs Line: 563)
+
+<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: No process found listening on port 8080
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+MCPForUnity.Editor.Helpers.McpLog:Info (string,bool) (at Assets/MCPForUnity/Editor/Helpers/McpLog.cs:40)
+MCPForUnity.Editor.Services.ServerManagementService:StopLocalHttpServerInternal (bool,System.Nullable`1<int>,bool) (at Assets/MCPForUnity/Editor/Services/ServerManagementService.cs:752)
+MCPForUnity.Editor.Services.ServerManagementService:StopLocalHttpServer () (at Assets/MCPForUnity/Editor/Services/ServerManagementService.cs:511)
+MCPForUnity.Editor.Services.McpEditorShutdownCleanup:OnEditorQuitting () (at Assets/MCPForUnity/Editor/Services/McpEditorShutdownCleanup.cs:60)
+UnityEditor.EditorApplication:Internal_EditorApplicationQuit ()
+Assets.Scripts.Dev.VerificationAutomator:FinishAndExit (int) (at Assets/Scripts/Automation/VerificationAutomator.cs:673)
+Assets.Scripts.Dev.VerificationAutomator/<Start>d__12:MoveNext () (at Assets/Scripts/Automation/VerificationAutomator.cs:74)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: Assets/MCPForUnity/Editor/Helpers/McpLog.cs Line: 40)
+
+Clearing [NotoSansJP-Regular SDF] dynamic font asset data.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+TMPro.EditorEventCallbacks/<>c:<InitializeFontAssetResourceChangeCallBacks>b__0_0 () (at ./Library/PackageCache/com.unity.ugui@8873725e650d/Editor/TMP/TMP_EditorResourceManager.cs:36)
+UnityEditor.EditorApplication:Internal_EditorApplicationQuit ()
+Assets.Scripts.Dev.VerificationAutomator:FinishAndExit (int) (at Assets/Scripts/Automation/VerificationAutomator.cs:673)
+Assets.Scripts.Dev.VerificationAutomator/<Start>d__12:MoveNext () (at Assets/Scripts/Automation/VerificationAutomator.cs:74)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)
+
+(Filename: ./Library/PackageCache/com.unity.ugui@8873725e650d/Editor/TMP/TMP_EditorResourceManager.cs Line: 36)
+
+Start importing Assets/Font/NotoSansJP-Regular SDF.asset using Guid(167bfdfba8f9cfd45b330f80ed0d0f18) (NativeFormatImporter) -> (artifact id: 'af6b34e8a7a522234271de6f76f3bf79') in 0.0128398 seconds
+Refreshing native plugins compatible for Editor in 5.83 ms, found 1 plugins.
+Preloading 1 native plugins for Editor in 0.11 ms.
+Asset Pipeline Refresh (id=b549bbe8974ce7446bae14ac729821c8): Total: 0.578 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+	Summary:
+		Imports: total=1 (actual=1, local cache=0, cache server=0)
+		Asset DB Process Time: managed=2 ms, native=43 ms
+		Asset DB Callback time: managed=518 ms, native=12 ms
+		Scripting: domain reloads=0, domain reload time=0 ms, compile time=0 ms, other=0 ms
+		Project Asset Count: scripts=1411, non-scripts=3842
+		Asset File Changes: new=0, changed=0, moved=0, deleted=0
+		Scan Filter Count: 3
+	InvokeCustomDependenciesCallbacks: 0.001ms
+	InvokePackagesCallback: 0.001ms
+	ApplyChangesToAssetFolders: 0.191ms
+	Scan: 15.876ms
+	OnSourceAssetsModified: 0.000ms
+	CategorizeAssetsWithTransientArtifact: 0.013ms
+	ProcessAssetsWithTransientArtifactChanges: 0.114ms
+	CategorizeAssets: 4.415ms
+	ImportOutOfDateAssets: 21.157ms (1.153ms without children)
+		ImportManagerImport: 16.987ms (3.469ms without children)
+			ImportInProcess: 13.479ms
+			UpdateCategorizedAssets: 0.040ms
+		ReloadNativeAssets: 0.043ms
+		UnloadImportedAssets: 0.559ms
+		ReloadImportedAssets: 0.000ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 1.676ms
+		InitializingProgressBar: 0.008ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.001ms
+		OnDemandSchedulerStart: 0.729ms
+	PostProcessAllAssets: 523.207ms
+	Hotreload: 7.729ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.316ms
+	UnloadStreamsBegin: 0.165ms
+	PersistCurrentRevisions: 0.221ms
+	UnloadStreamsEnd: 0.059ms
+	Untracked: 4.233ms
+
+[Physics::Module] Cleanup current backend.
+[Physics::Module] Id: 0xf2b8ea05
+Input System module state changed to: ShutdownInProgress.
+Input System polling thread exited.
+Input System module state changed to: Shutdown.
+[Licensing::IpcConnector] LicenseClient-thank-notifications channel disconnected successfully.
+[Licensing::IpcConnector] LicenseClient-thank channel disconnected successfully.
+AcceleratorClientConnectionCallback - disconnected - :0
+Cleanup mono
+Leak Detected : Persistent allocates 1 individual allocations. To find out more please enable 'Preferences > Jobs > Leak Detection Level > Enabled With Stack Trace' and reproduce the leak again.
+Checking for leaked weakptr:
+  Found no leaked weakptrs.
+[Package Manager] Server process was shutdown
+##utp:{"type":"MemoryLeaks","version":2,"phase":"Immediate","time":1772297827023,"processId":22144,"allocatedMemory":15047112,"memoryLabels":[{"Default":29313},{"Permanent":15524},{"NewDelete":68515},{"Thread":4230344},{"Manager":34781},{"VertexData":8},{"Geometry":816},{"Texture":296},{"Shader":81662},{"Material":24},{"GfxDevice":55473},{"GfxThread":24},{"Animation":392},{"Audio":3040},{"FontEngine":256},{"Physics":2090},{"Physics2D":16},{"Serialization":80},{"Input":14984},{"JobScheduler":33024},{"TextLib":192},{"Mono":32},{"MonoCode":640},{"ScriptingNativeRuntime":155060},{"BaseObject":1620208},{"Resource":1336},{"Renderer":3000},{"Transform":4685},{"File":6870},{"WebCam":616},{"Culling":32},{"Terrain":11394},{"Wind":24},{"STL":40},{"String":18777},{"DynamicArray":128671},{"HashMap":79699},{"Utility":2659590},{"Curl":2559},{"PoolAlloc":2776},{"AI":40},{"TypeTree":5341},{"ScriptManager":512},{"RuntimeInitializeOnLoadManager":64},{"SpriteAtlas":112},{"GI":7792},{"Director":8240},{"CloudService":8496},{"WebRequest":808},{"VR":47994},{"SceneManager":504},{"Video":208},{"LazyScriptCache":32},{"Camera":17},{"Secure":2113},{"SerializationCache":1576},{"APIUpdating":10320},{"Subsystems":336},{"VirtualTexturing":57888},{"StaticSafetyDebugInfo":278528},{"Analytics":384},{"Hierarchy":608},{"CoreStats":13032},{"Identifiers":12960},{"Gui":88},{"EditorUtility":119578},{"VersionControl":4},{"Undo":947},{"AssetDatabase":5156120},{"EditorGi":328},{"UnityConnect":29232},{"Upm":1896},{"AssetCompliance":64},{"DrivenProperties":72},{"LocalIPC":211},{"ProfilerEditor":9746},{"CoreBusinessMetrics":2866},{"Licensing":1232},{"AssetReference":32},{"IPCStream":32}]}
