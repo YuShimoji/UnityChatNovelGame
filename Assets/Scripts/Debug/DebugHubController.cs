@@ -119,6 +119,20 @@ namespace ProjectFoundPhone.DebugTools
         }
         #endregion
 
+        private void OnFragmentArchiveClicked()
+        {
+            FragmentListUI fragmentUI = FindFirstObjectByType<FragmentListUI>();
+            if (fragmentUI != null)
+            {
+                Hide();
+                fragmentUI.Show();
+            }
+            else
+            {
+                Debug.LogWarning("DebugHubController: FragmentListUI not found. Run Setup > Fragment List UI first.");
+            }
+        }
+
         #region Private Methods
         private void BuildHubUI()
         {
@@ -192,6 +206,49 @@ namespace ProjectFoundPhone.DebugTools
                 subtitleText.font = TMP_Settings.defaultFontAsset;
             }
 
+            // --- Fragment Archive Button ---
+            GameObject fragBtnObj = new GameObject("FragmentArchiveButton", typeof(RectTransform), typeof(Image), typeof(Button));
+            AssignUILayer(fragBtnObj);
+            fragBtnObj.transform.SetParent(m_HubPanel.transform, false);
+
+            RectTransform fragBtnRect = fragBtnObj.GetComponent<RectTransform>();
+            fragBtnRect.anchorMin = new Vector2(0.5f, 1f);
+            fragBtnRect.anchorMax = new Vector2(0.5f, 1f);
+            fragBtnRect.pivot = new Vector2(0.5f, 1f);
+            fragBtnRect.anchoredPosition = new Vector2(0f, -112f);
+            fragBtnRect.sizeDelta = new Vector2(240f, 36f);
+
+            Image fragBtnBg = fragBtnObj.GetComponent<Image>();
+            fragBtnBg.color = new Color(0.15f, 0.2f, 0.35f, 0.9f);
+            fragBtnBg.raycastTarget = true;
+
+            Button fragBtn = fragBtnObj.GetComponent<Button>();
+            fragBtn.transition = Selectable.Transition.ColorTint;
+            fragBtn.targetGraphic = fragBtnBg;
+            ColorBlock fragCb = fragBtn.colors;
+            fragCb.highlightedColor = new Color(0.2f, 0.35f, 0.6f, 0.95f);
+            fragCb.pressedColor = new Color(0.15f, 0.25f, 0.5f, 1f);
+            fragBtn.colors = fragCb;
+            fragBtn.onClick.AddListener(OnFragmentArchiveClicked);
+
+            GameObject fragTextObj = new GameObject("Text", typeof(RectTransform));
+            AssignUILayer(fragTextObj);
+            fragTextObj.transform.SetParent(fragBtnObj.transform, false);
+            RectTransform fragTextRect = fragTextObj.GetComponent<RectTransform>();
+            fragTextRect.anchorMin = Vector2.zero;
+            fragTextRect.anchorMax = Vector2.one;
+            fragTextRect.offsetMin = new Vector2(8f, 2f);
+            fragTextRect.offsetMax = new Vector2(-8f, -2f);
+
+            TextMeshProUGUI fragLabel = fragTextObj.AddComponent<TextMeshProUGUI>();
+            fragLabel.text = "Fragment Archive";
+            fragLabel.fontSize = 20f;
+            fragLabel.color = new Color(0.7f, 0.75f, 0.9f);
+            fragLabel.alignment = TextAlignmentOptions.Center;
+            fragLabel.raycastTarget = false;
+            if (TMP_Settings.defaultFontAsset != null)
+                fragLabel.font = TMP_Settings.defaultFontAsset;
+
             // --- ScrollView ---
             GameObject scrollObj = new GameObject("ScrollView", typeof(RectTransform), typeof(ScrollRect), typeof(Image));
             AssignUILayer(scrollObj);
@@ -201,7 +258,7 @@ namespace ProjectFoundPhone.DebugTools
             scrollRect.anchorMin = new Vector2(0f, 0f);
             scrollRect.anchorMax = new Vector2(1f, 1f);
             scrollRect.offsetMin = new Vector2(20f, 20f);
-            scrollRect.offsetMax = new Vector2(-20f, -120f);
+            scrollRect.offsetMax = new Vector2(-20f, -155f);
 
             Image scrollBg = scrollObj.GetComponent<Image>();
             scrollBg.color = new Color(0.08f, 0.08f, 0.1f, 0.6f);
