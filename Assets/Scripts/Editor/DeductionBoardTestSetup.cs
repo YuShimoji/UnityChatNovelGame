@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using ProjectFoundPhone.UI;
 using ProjectFoundPhone.Tests;
-using Assets.Scripts.Utils;
+using ProjectFoundPhone.Utils;
 
 namespace ProjectFoundPhone.Editor
 {

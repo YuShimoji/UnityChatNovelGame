@@ -53,7 +53,7 @@ namespace ProjectFoundPhone.MVP.Editor
                 return;
             }
 
-            var board = UnityEngine.Object.FindObjectOfType<DeductionBoard>();
+            var board = UnityEngine.Object.FindFirstObjectByType<DeductionBoard>();
             if (board == null)
             {
                  Debug.LogError("[MVPTestHelper] DeductionBoard not found.");

@@ -4,7 +4,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Assets.Scripts.Utils
+namespace ProjectFoundPhone.Utils
 {
     /// <summary>
     /// verification tool to capture screenshot and logs automatically on start.

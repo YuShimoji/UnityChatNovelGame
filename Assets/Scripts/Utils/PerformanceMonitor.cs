@@ -7,7 +7,7 @@ using Unity.Profiling;
 using UnityEngine.Profiling;
 using UnityEngine.SceneManagement;
 
-namespace Assets.Scripts.Utils
+namespace ProjectFoundPhone.Utils
 {
     /// <summary>
     /// Monitors performance metrics (FPS, Memory, GC) and logs them to a report.

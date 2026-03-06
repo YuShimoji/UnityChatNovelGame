@@ -3,7 +3,7 @@ using System.Collections;
 using System.IO;
 using System;
 using System.Linq;
-using Assets.Scripts.Utils;
+using ProjectFoundPhone.Utils;
 using UnityEngine.SceneManagement;
 
 namespace ProjectFoundPhone.Tests

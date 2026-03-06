@@ -466,7 +466,7 @@ namespace Assets.Scripts.Dev
 
         private static void EnsurePerformanceMonitor()
         {
-            Type monitorType = Type.GetType("Assets.Scripts.Utils.PerformanceMonitor, ProjectFoundPhone.Utils");
+            Type monitorType = Type.GetType("ProjectFoundPhone.Utils.PerformanceMonitor, ProjectFoundPhone.Utils");
             if (monitorType == null)
             {
                 Debug.LogWarning("VerificationAutomator: PerformanceMonitor type could not be resolved.");
