@@ -23,6 +23,7 @@ namespace ProjectFoundPhone.Core
         #region Private Fields
 #if YARN_SPINNER
         [SerializeField] private DialogueRunner m_DialogueRunner;
+        private ChatDialogueView m_DialogueView;
 #endif
         [SerializeField] private ProjectFoundPhone.UI.ChatController m_ChatController;
         [SerializeField] private string m_StartNode = "Start";
@@ -85,6 +86,8 @@ namespace ProjectFoundPhone.Core
             {
                 Debug.LogError("ScenarioManager: DialogueRunner component is required!");
             }
+
+            m_DialogueView = FindFirstObjectByType<ChatDialogueView>();
 #endif
 
             if (m_ChatController == null)
@@ -224,29 +227,31 @@ namespace ProjectFoundPhone.Core
         /// <param name="seconds">蠕・ｩ溽ｧ呈焚</param>
         private async YarnTask StartWaitCommand(float seconds)
         {
+            // 早送りモード時は最小遅延のみ
+            if (m_DialogueView != null && m_DialogueView.FastForwardEnabled)
+            {
+                await YarnTask.Delay(30);
+                return;
+            }
+
             CancelActiveWait();
             m_IsWaiting = true;
             m_WaitCancellation = new CancellationTokenSource();
 
-            // 繧ｿ繧､繝斐Φ繧ｰ繧､繝ｳ繧ｸ繧ｱ繝ｼ繧ｿ繝ｼ繧定｡ｨ遉ｺ
             if (m_ChatController != null)
             {
                 m_ChatController.ShowTypingIndicator(true);
             }
 
-            // 蜈･蜉帙Ο繝・け繧呈怏蜉ｹ蛹・
             SetInputLocked(true);
 
-            // 謖・ｮ夂ｧ呈焚蠕・ｩ滂ｼ・ialogueRunner縺ｮ騾ｲ陦後・YarnTask螳御ｺ・∪縺ｧ繝悶Ο繝・け縺輔ｌ繧具ｼ・
             await YarnTask.Delay((int)(seconds * 1000), m_WaitCancellation.Token).SuppressCancellationThrow();
 
-            // 繧ｿ繧､繝斐Φ繧ｰ繧､繝ｳ繧ｸ繧ｱ繝ｼ繧ｿ繝ｼ繧帝撼陦ｨ遉ｺ
             if (m_ChatController != null)
             {
                 m_ChatController.ShowTypingIndicator(false);
             }
 
-            // 蜈･蜉帙Ο繝・け繧定ｧ｣髯､
             SetInputLocked(false);
 
             m_IsWaiting = false;
@@ -482,7 +487,7 @@ namespace ProjectFoundPhone.Core
         public void StopScenario()
         {
 #if YARN_SPINNER
-            if (m_DialogueRunner != null)
+            if (m_DialogueRunner != null && m_DialogueRunner.IsDialogueRunning)
             {
                 m_DialogueRunner.Stop();
             }

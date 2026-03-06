@@ -105,7 +105,10 @@ namespace ProjectFoundPhone.UI
             // ユーザーが手動スクロールしていない間は毎フレーム最下部に固定
             if (m_PinnedToBottom && !m_IsUserScrolling && m_ScrollRect != null)
             {
+                // OnScrollValueChanged が誤検知しないようガード
+                m_IsAutoScrolling = true;
                 m_ScrollRect.verticalNormalizedPosition = 0f;
+                m_IsAutoScrolling = false;
             }
         }
         #endregion
@@ -186,16 +189,17 @@ namespace ProjectFoundPhone.UI
             // AutoScroll 中の位置変化はユーザー操作とみなさない
             if (m_IsAutoScrolling) return;
 
+            // verticalNormalizedPosition: 0=最下部（最新メッセージ）, 1=最上部（最古メッセージ）
             float verticalPos = scrollPosition.y;
 
-            // スクロール位置が下から一定以上離れている場合、ユーザーが過去ログを見ていると判定
-            if (verticalPos < (1.0f - m_AutoScrollThreshold))
+            // 最下部から一定以上離れている場合、ユーザーが過去ログを見ていると判定
+            if (verticalPos > m_AutoScrollThreshold)
             {
                 m_IsUserScrolling = true;
                 m_PinnedToBottom = false;
             }
-            // スクロール位置が最下部に近い場合、ユーザーは最新メッセージを見ている
-            else if (verticalPos >= 0.99f)
+            // 最下部付近にいる場合、ユーザーは最新メッセージを見ている
+            else
             {
                 m_IsUserScrolling = false;
             }
@@ -653,6 +657,24 @@ namespace ProjectFoundPhone.UI
         #endregion
 
         #region Public Methods
+        /// <summary>
+        /// 指定された LineTag を持つ MessageBubble を検索する
+        /// </summary>
+        public MessageBubble FindBubbleByLineTag(string lineTag)
+        {
+            if (string.IsNullOrEmpty(lineTag) || m_ScrollRect == null || m_ScrollRect.content == null)
+                return null;
+
+            var content = m_ScrollRect.content;
+            for (int i = 0; i < content.childCount; i++)
+            {
+                var mb = content.GetChild(i).GetComponentInChildren<MessageBubble>();
+                if (mb != null && mb.LineTag == lineTag)
+                    return mb;
+            }
+            return null;
+        }
+
         /// <summary>
         /// 新しいメッセージをチャットに追加
         /// </summary>
@@ -1165,7 +1187,9 @@ namespace ProjectFoundPhone.UI
                 }
             }
 
-            // 選択肢が表示されたら最下部へスクロール
+            // ChoiceContainer 表示によるコンテンツ高さ変動で m_IsUserScrolling が
+            // 誤って true になる場合があるためリセットしてから最下部へスクロール
+            m_IsUserScrolling = false;
             AutoScroll();
         }
 
@@ -1187,6 +1211,10 @@ namespace ProjectFoundPhone.UI
             // 入力欄を再表示
             if (m_InputField != null) m_InputField.gameObject.SetActive(true);
             if (m_SendButton != null) m_SendButton.gameObject.SetActive(true);
+
+            // 選択肢表示中にズレたスクロール位置を修正
+            m_IsUserScrolling = false;
+            AutoScroll();
         }
 
         public void AutoScroll()
