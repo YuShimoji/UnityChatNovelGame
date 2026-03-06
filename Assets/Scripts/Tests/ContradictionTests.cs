@@ -4,6 +4,7 @@ using NUnit.Framework;
 using ProjectFoundPhone.Core;
 using ProjectFoundPhone.Data;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ProjectFoundPhone.Tests
 {

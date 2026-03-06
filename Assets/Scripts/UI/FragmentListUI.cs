@@ -61,7 +61,7 @@ namespace ProjectFoundPhone.UI
             }
 
             DeductionBoard board = DeductionBoard.Instance;
-            List<TopicData> topics = board != null ? board.UnlockedTopics : null;
+            var topics = board != null ? board.UnlockedTopics : null;
 
             if (topics == null || topics.Count == 0)
             {

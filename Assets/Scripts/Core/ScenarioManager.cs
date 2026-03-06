@@ -88,6 +88,27 @@ namespace ProjectFoundPhone.Core
             }
 
             m_DialogueView = FindFirstObjectByType<ChatDialogueView>();
+
+            // ChatDialogueView が DialogueRunner の Presenter リストに未登録なら追加
+            if (m_DialogueRunner != null && m_DialogueView != null)
+            {
+                bool alreadyRegistered = false;
+                foreach (var p in m_DialogueRunner.DialoguePresenters)
+                {
+                    if (p == m_DialogueView)
+                    {
+                        alreadyRegistered = true;
+                        break;
+                    }
+                }
+                if (!alreadyRegistered)
+                {
+                    var presenters = new System.Collections.Generic.List<DialoguePresenterBase>(m_DialogueRunner.DialoguePresenters);
+                    presenters.Add(m_DialogueView);
+                    m_DialogueRunner.DialoguePresenters = presenters;
+                    Debug.Log("ScenarioManager: ChatDialogueView をランタイムで DialogueRunner に登録しました");
+                }
+            }
 #endif
 
             if (m_ChatController == null)
@@ -123,6 +144,7 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.AddCommandHandler<int>("Glitch", GlitchCommand);
             m_DialogueRunner.AddCommandHandler<string>("SystemMessage", SystemMessageCommand);
             m_DialogueRunner.AddCommandHandler<string, string, string>("MessageTagged", MessageTaggedCommand);
+            m_DialogueRunner.AddCommandHandler<string>("Typing", TypingCommand);
 #endif
         }
 
@@ -146,6 +168,7 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.RemoveCommandHandler("Glitch");
             m_DialogueRunner.RemoveCommandHandler("SystemMessage");
             m_DialogueRunner.RemoveCommandHandler("MessageTagged");
+            m_DialogueRunner.RemoveCommandHandler("Typing");
 #endif
         }
         #endregion
@@ -336,6 +359,15 @@ namespace ProjectFoundPhone.Core
             else
             {
                 Debug.LogWarning($"ScenarioManager: ChatController not available. System message: {text}");
+            }
+        }
+
+        private void TypingCommand(string showStr)
+        {
+            bool show = showStr.Equals("true", System.StringComparison.OrdinalIgnoreCase);
+            if (m_ChatController != null)
+            {
+                m_ChatController.ShowTypingIndicator(show);
             }
         }
         #endregion
@@ -687,8 +719,4 @@ namespace ProjectFoundPhone.Core
         #endregion
     }
 }
-
-
-
-
 
