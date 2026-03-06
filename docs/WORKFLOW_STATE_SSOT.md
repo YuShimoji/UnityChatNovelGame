@@ -1,12 +1,12 @@
 # WORKFLOW STATE SSOT
 
-**Updated**: 2026-03-06
-**Phase**: 矛盾 Phase 2 実装済み — 動作確認 + 次機能開発
+**Updated**: 2026-03-07
+**Phase**: ダッシュボード MVP 実装済み — 手動セットアップ + 動作確認
 **Branch**: main
 
 ## Mission
 
-矛盾 Phase 2 の動作確認を行い、フラグメント一覧 UI およびダッシュボード UI へ進む。
+ダッシュボード MVP の手動セットアップ・動作確認を行い、フラグメント一覧 UI へ進む。
 
 ## Done 条件（現フェーズ）
 
@@ -24,6 +24,9 @@
   - StartWait: FastForwardEnabled 対応
   - ShowTypingIndicator: ラッパーごと移動（上部固定バグ修正）
   - RunOptionsAsync: 選択肢表示前 400ms 遅延
+- [x] レガシードキュメント整理（docs/reports, docs/tasks, docs/evidence, docs/inbox, docs/logs 等 318ファイル削除）
+- [x] ダッシュボード MVP 実装（DashboardController + ChannelData + SaveData拡張 + Editorツール）
+- [ ] ダッシュボード手動セットアップ + 動作確認（Unity手動）
 - [ ] 矛盾 Phase 2 の動作確認（手動: セットアップ + 再生テスト）
 - [ ] ContentAuthoring シーンでの最終再生確認（手動）
   - Ch1 後半: プレイヤーセリフ一部欠落の可能性（要再確認）
@@ -31,6 +34,16 @@
   - Ch2: 選択肢タイミング修正 → 要確認
 
 ## 開発継続プラン
+
+### ダッシュボード MVP セットアップ（未完了）
+
+ContentAuthoring シーンで以下を行う必要あり:
+
+1. `Tools > FoundPhone > Create Default Channel Data` で ch1/ch2 アセット生成
+2. `Tools > FoundPhone > Add Dashboard to Scene` で DashboardController 追加
+3. DebugHubController の `m_ShowOnStart` を false に変更（Inspector）
+4. ScenarioManager の `m_AutoStartYarn` を false に変更（Inspector）
+5. シーン保存
 
 ### 矛盾 Phase 2 セットアップ（未完了）
 
@@ -42,7 +55,16 @@ ContentAuthoring シーンで以下を行う必要あり:
 
 ### 動作確認手順
 
-1. Debug Hub → Ch1_Start で再生開始
+**ダッシュボード:**
+1. シーン再生 → ダッシュボードがデフォルト表示
+2. Ch1 カード [AVAILABLE] → クリック → チャット開始
+3. Ch2 カード [LOCKED]（CompletedChannelIDs 空のため）
+4. Back ボタン or ESC → シナリオ停止 → ダッシュボード復帰
+5. F12 → DebugHub 独立表示（競合なし）
+6. HC 表示 = ContradictionManager.HalluciCoin
+
+**矛盾 Phase 2:**
+1. Ch1 でプレイ開始
 2. `#line:` タグ付きメッセージまで進行（L169, L173 付近の region_identity ペア等）
 3. 矛盾タグ付きバブルを 0.5秒長押し → 青ハイライト + ヒントバナー確認
 4. 対応するもう一方のバブルをタップ → 緑フラッシュ + 通知パネル + 接続線確認
@@ -52,28 +74,29 @@ ContentAuthoring シーンで以下を行う必要あり:
 
 | # | 作業 | 分類 | 前提 |
 |---|------|------|------|
-| 1 | 矛盾 Phase 2 セットアップ + 動作確認 | A | Unity 手動 |
+| 1 | ダッシュボード + 矛盾 Phase 2 セットアップ + 動作確認 | A | Unity 手動 |
 | 2 | 発見バグの修正（あれば） | A | #1 結果 |
 | 3 | フラグメント一覧 UI（収集済みフラグメントの閲覧画面） | A | — |
-| 4 | ダッシュボード型メイン画面（チャンネル選択 → チャット遷移） | A | #3 並行可 |
-| 5 | スマホサイズ基準レイアウト調整 | B | #3-4 の UI 確定後 |
+| 4 | スマホサイズ基準レイアウト調整 | B | #3 の UI 確定後 |
+| 5 | Ch3 シナリオ設計 | A | #1-2 完了後 |
 
-### 今セッションで確認された技術的知見
+### 技術的知見
 
 - **選択肢のプレイヤーメッセージ**: `RunOptionsAsync` でコード側が自動追加。Yarn スクリプトでのエコー行は不要
 - **タイピングインジケーター**: `ConfigureBubble` が生成するラッパー(NpcRow)ごと操作する必要がある
 - **DebugHub**: 前ダイアログの `Stop()` が必須（トークン汚染による早送り状態を防止）
 - **共通処理**: Ch1/Ch2 のコアループは完全に共通。チャプター固有処理は矛盾システムの難易度制御のみ
+- **ダッシュボード**: DebugHubController と同じプログラマティック UI パターン。ChannelData SO でチャプター管理
 - **コード品質**: ScenarioManager.cs / DeductionBoard.cs に文字化けコメント約70行（D分類で凍結中）
 
 ### Claude への依頼パターン
 
 各セッションの冒頭で以下のいずれかを伝えれば即座に作業開始可能:
 
-1. **「矛盾 Phase 2 動作確認した、問題なし → 次へ」** → フラグメント UI に着手
+1. **「セットアップ完了、動作確認した、問題なし → 次へ」** → フラグメント UI に着手
 2. **「動作確認した、バグあり」+ スクショ** → バグ修正
 3. **「フラグメント一覧 UI を作って」** → 設計・実装
-4. **「ダッシュボード UI を作って」** → UI 設計・実装
+4. **「Ch3 シナリオ設計を始めたい」** → StorySpec ベースで設計
 
 ## 選別規則
 

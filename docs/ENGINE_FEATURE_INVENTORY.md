@@ -1,6 +1,6 @@
 # Engine Feature Inventory
 
-**最終更新**: 2026-03-06
+**最終更新**: 2026-03-07
 **エンジン**: Unity 6.3 LTS (6000.3.6f1) + Yarn Spinner 3.1.3
 
 このドキュメントは、シナリオ執筆者が「今のエンジンで何ができるか」を把握するためのリファレンスです。
@@ -148,6 +148,7 @@ title: NodeA
 - 解放済みトピック一覧
 - **チャット履歴**（メッセージバブルの内容: Normal/System/Image 全種別）
 - セーブ日時
+- 完了済みチャンネルID（ダッシュボード進行状態）
 
 ### 保存されない情報
 
@@ -256,14 +257,42 @@ ContentAuthoring シーンの Canvas 直下に `ContradictionFeedbackController`
 
 ---
 
-## 8. 未実装機能（StorySpec で必要だが現在ない機能）
+## 8. ダッシュボード（MVP 実装済み）
+
+### 実装済み機能
+
+| 機能 | 説明 | ファイル |
+| ---- | ---- | -------- |
+| チャンネル一覧 | ChannelData SO ベースのカード表示（Locked/Available/InProgress/Completed） | `DashboardController.cs` |
+| チャンネル遷移 | カードクリック → チャット開始、Back/ESC → ダッシュボード復帰 | 同上 |
+| HalluciCoin 表示 | 右上に "HC: N" 表示（ContradictionManager.HalluciCoin 参照） | 同上 |
+| ChannelData | ScriptableObject: ID, DisplayName, Description, StartNodeName, ChapterNumber, RequiredCompletedChannelID | `ChannelData.cs` |
+| 進行状態管理 | SaveData.CompletedChannelIDs でアンロック条件判定 | `SaveData.cs` |
+| Editor ツール | チャンネルデータ自動生成 + シーンセットアップ | `ChannelDataCreator.cs`, `DashboardSceneSetup.cs` |
+
+### セットアップ要件
+
+1. `Tools > FoundPhone > Create Default Channel Data` でアセット生成
+2. `Tools > FoundPhone > Add Dashboard to Scene` で DashboardController 追加
+3. ScenarioManager の `m_AutoStartYarn` を false に変更
+4. DebugHubController の `m_ShowOnStart` を false に変更
+
+### 未実装（将来拡張）
+
+- チャプター完了トリガー（CompletedChannelIDs の自動更新）
+- サブスレッド UI
+- フラグメントインベントリ連携
+- 検索バー装飾
+
+---
+
+## 9. 未実装機能（StorySpec で必要だが現在ない機能）
 
 ### 優先度: 高（メインループに必要）
 
 | 機能 | 説明 | 実装難度 |
 | ---- | ---- | -------- |
 | 断片インベントリ | 収集した断片テキストの閲覧UI | 中 |
-| ダッシュボード画面 | チャンネル選択→チャット遷移のメイン画面 | 高 |
 
 ### 優先度: 中（サブコンテンツに必要）
 
@@ -284,7 +313,7 @@ ContentAuthoring シーンの Canvas 直下に `ContradictionFeedbackController`
 
 ---
 
-## 9. ノード設計のベストプラクティス
+## 10. ノード設計のベストプラクティス
 
 ### ノード命名規則（推奨）
 
