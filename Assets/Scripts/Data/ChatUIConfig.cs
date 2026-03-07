@@ -31,14 +31,17 @@ namespace ProjectFoundPhone.Data
         [Tooltip("バブル出現アニメーション時間 (秒)")]
         public float bubbleAnimationDuration = 0.4f;
 
+        [Tooltip("バブル幅の上限 (画面幅に対する割合)")]
+        [Range(0.3f, 1.0f)]
+        public float bubbleMaxWidthPercent = 0.7f;
+
+        [Tooltip("バブル幅の上限 (ピクセル絶対値、percentと小さい方を採用)")]
+        public float bubbleMaxWidthPx = 600f;
+
+        [Tooltip("バブル背景スプライト (9-slice角丸、null=矩形)")]
+        public Sprite bubbleSprite;
+
         [Header("Layout")]
-        [Tooltip("サイドマージン (画面幅に対する割合 0.0-0.5)")]
-        [Range(0f, 0.5f)]
-        public float sideMarginPercent = 0.25f;
-
-        [Tooltip("サイドマージンの最大ピクセル値 (狭い画面での崩れ防止)")]
-        public float sideMarginMaxPx = 200f;
-
         [Tooltip("ラッパーの端パディング (px)")]
         public int wrapperEdgePadding = 12;
 
@@ -109,6 +112,10 @@ namespace ProjectFoundPhone.Data
         [Header("Image")]
         [Tooltip("画像フェードイン時間 (秒)")]
         public float imageFadeInDuration = 0.6f;
+
+        [Header("Input Field")]
+        [Tooltip("入力欄を表示するか (false=非表示、選択肢のみで操作)")]
+        public bool showInputField = false;
 
         /// <summary>
         /// Resources から ChatUIConfig をロード (singleton 風アクセス)。

@@ -33,6 +33,8 @@ namespace ProjectFoundPhone.Core
         private string m_SelectedLineTag;
         private float m_CooldownEndTime;
         private int m_HalluciCoin;
+        private bool m_CurrentChannelEnableHints = true;
+        private int m_CurrentChannelMaxHintDifficulty = 1;
 
         public event Action<ContradictionPair> OnContradictionDiscovered;
         public event Action<string> OnPointingFailed;
@@ -106,28 +108,30 @@ namespace ProjectFoundPhone.Core
 
             if (match != null && !m_DiscoveredIDs.Contains(match.ContradictionID))
             {
-                // 矛盾発見
+                // 矛盾発見 — イベント発火後、選択状態のみリセット
+                // OnSelectionCleared は発火しない（アニメーション中に HideConnectionLine されるのを防ぐ）
+                // ContradictionFeedbackController のアニメーション完了時にクリーンアップする
                 m_DiscoveredIDs.Add(match.ContradictionID);
                 m_HalluciCoin += match.RewardCoin;
                 OnContradictionDiscovered?.Invoke(match);
                 Debug.Log($"ContradictionManager: Contradiction '{match.ContradictionID}' discovered! HalluciCoin: {m_HalluciCoin}");
-                ClearSelection();
+                m_SelectedLineTag = null;
                 return true;
             }
             else if (match != null && m_DiscoveredIDs.Contains(match.ContradictionID))
             {
-                // 既に発見済み
+                // 既に発見済み — 同上
                 OnPointingFailed?.Invoke("already_discovered");
-                ClearSelection();
+                m_SelectedLineTag = null;
                 return false;
             }
             else
             {
-                // 不一致 → クールダウン発動
+                // 不一致 → クールダウン発動 — 同上
                 m_CooldownEndTime = Time.time + m_CooldownSeconds;
                 OnPointingFailed?.Invoke("no_match");
                 Debug.Log($"ContradictionManager: No match found. Cooldown {m_CooldownSeconds}s.");
-                ClearSelection();
+                m_SelectedLineTag = null;
                 return false;
             }
         }
@@ -142,16 +146,16 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// 指定 LineTag がヒント対象かどうか（段階的開示ロジック）
+        /// 指定 LineTag がヒント対象かどうか（段階的開示ロジック）。
+        /// ヒント表示ポリシーは ChannelData の EnableHints / MaxHintDifficulty で制御。
         /// </summary>
         public bool ShouldShowHint(string lineTag, int difficulty)
         {
             if (m_Database == null) return false;
 
-            // Ch2-3: 難易度1のペアにヒント表示
-            // Ch4以降: ヒントなし
-            if (m_CurrentChapter >= 4) return false;
-            if (difficulty > 1) return false;
+            // ChannelData ベースのポリシー判定
+            if (!m_CurrentChannelEnableHints) return false;
+            if (difficulty > m_CurrentChannelMaxHintDifficulty) return false;
 
             return m_Database.IsContradictionTag(lineTag, m_CurrentChapter);
         }
@@ -180,6 +184,17 @@ namespace ProjectFoundPhone.Core
         public void SetCurrentChapter(int chapter)
         {
             m_CurrentChapter = chapter;
+        }
+
+        /// <summary>
+        /// ChannelData からチャプター番号とヒントポリシーを一括設定
+        /// </summary>
+        public void SetCurrentChannel(ChannelData channel)
+        {
+            if (channel == null) return;
+            m_CurrentChapter = channel.ChapterNumber;
+            m_CurrentChannelEnableHints = channel.EnableHints;
+            m_CurrentChannelMaxHintDifficulty = channel.MaxHintDifficulty;
         }
     }
 }

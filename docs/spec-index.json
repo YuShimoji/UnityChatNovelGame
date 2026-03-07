@@ -1,5 +1,14 @@
 [
   {
+    "id": "SP-IDX",
+    "title": "StorySpec README / Index",
+    "status": "done",
+    "pct": 100,
+    "cat": "core",
+    "file": "docs/StorySpec/README.md",
+    "summary": "StorySpec directory index and usage guide"
+  },
+  {
     "id": "SP-000",
     "title": "概要 (Overview)",
     "status": "done",
@@ -75,10 +84,10 @@
     "id": "SP-008",
     "title": "UI/UX",
     "status": "partial",
-    "pct": 30,
+    "pct": 50,
     "cat": "ui",
     "file": "docs/StorySpec/08_ui_ux.md",
-    "summary": "ダッシュボード・スレッド・断片インベントリ。ダッシュボードMVP実装済み"
+    "summary": "ダッシュボード・スレッド・断片インベントリ。ダッシュボードMVP+チャットバブル仕様(Section6)実装済み"
   },
   {
     "id": "SP-009",
@@ -132,7 +141,7 @@
     "pct": 30,
     "cat": "system",
     "file": "docs/StorySpec/14_interaction_mechanics.md",
-    "summary": "3メカニクス候補(指摘/ボード/分岐)の整理。設計模索中"
+    "summary": "3メカニクス候補(指摘/ボード/分岐)の整理。方針決定済み: A>B>C、DeductionBoard凍結、矛盾→断片紐づけ解除"
   },
   {
     "id": "SP-099",
@@ -147,10 +156,10 @@
     "id": "EN-001",
     "title": "エンジン機能リファレンス",
     "status": "partial",
-    "pct": 80,
+    "pct": 85,
     "cat": "infra",
     "file": "docs/ENGINE_FEATURE_INVENTORY.md",
-    "summary": "Yarnコマンド・キャラ管理・セーブ・演出・矛盾・ダッシュボード"
+    "summary": "Yarnコマンド・キャラ管理・セーブ・演出・バブル表示設定・矛盾・ダッシュボード"
   },
   {
     "id": "EN-002",

@@ -35,11 +35,21 @@ namespace ProjectFoundPhone.Data
         [Tooltip("Channel ID that must be completed to unlock this channel. Empty = always available.")]
         [SerializeField] private string m_RequiredCompletedChannelID;
 
+        [Header("Contradiction Hints")]
+        [Tooltip("Whether to show hints for contradiction pairs in this chapter")]
+        [SerializeField] private bool m_EnableHints = true;
+
+        [Tooltip("Maximum difficulty level for which hints are shown (1-3)")]
+        [Range(1, 3)]
+        [SerializeField] private int m_MaxHintDifficulty = 1;
+
         public string ChannelID => m_ChannelID;
         public string DisplayName => m_DisplayName;
         public string Description => m_Description;
         public string StartNodeName => m_StartNodeName;
         public int ChapterNumber => m_ChapterNumber;
         public string RequiredCompletedChannelID => m_RequiredCompletedChannelID;
+        public bool EnableHints => m_EnableHints;
+        public int MaxHintDifficulty => m_MaxHintDifficulty;
     }
 }

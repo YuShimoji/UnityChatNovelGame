@@ -118,6 +118,12 @@ namespace ProjectFoundPhone.UI
             // 指摘モード中なら2つ目を選択
             if (cm.IsInPointingMode)
             {
+                // 2つ目選択時のスケールパルス
+                transform.DOKill();
+                transform.localScale = Vector3.one;
+                transform.DOPunchScale(Vector3.one * 0.03f, 0.3f, 1, 0.5f)
+                    .SetUpdate(true);
+
                 cm.SelectSecond(m_LineTag);
             }
         }
@@ -148,6 +154,12 @@ namespace ProjectFoundPhone.UI
 
             StopHighlight();
 
+            // スケールパルス（軽い拡縮で選択を視覚的にフィードバック）
+            transform.DOKill();
+            transform.localScale = Vector3.one;
+            transform.DOPunchScale(Vector3.one * 0.03f, 0.3f, 1, 0.5f)
+                .SetUpdate(true);
+
             Color glowColor = new Color(0.3f, 0.6f, 1.0f, 0.8f);
             m_HighlightTween = m_BackgroundImage
                 .DOColor(glowColor, 0.6f)
@@ -166,6 +178,10 @@ namespace ProjectFoundPhone.UI
                 m_HighlightTween.Kill(false);
                 m_HighlightTween = null;
             }
+
+            // スケールパルスも解除
+            transform.DOKill();
+            transform.localScale = Vector3.one;
 
             if (m_BackgroundImage != null)
             {

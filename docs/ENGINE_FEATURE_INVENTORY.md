@@ -52,9 +52,13 @@
 
 - **CharacterID**: Yarn スクリプト内で参照する一意のID
 - **DisplayName**: UI に表示される名前
-- **Icon**: アバター画像（Sprite）※現在バブルには未表示
-- **ThemeColor**: バブルの背景色
+- **Icon**: アバター画像（Sprite）
+- **ThemeColor**: バブルの背景色（白の9-Slice Spriteに乗算して着色）
 - **IsPlayer**: `true` の場合、メッセージが右寄せ表示
+- **DisplayMode**: バブル横の表示モード
+  - `NameOnly` — テキスト内に名前表示、アイコンなし（デフォルト）
+  - `IconOnly` — バブル横にアイコン表示、名前省略
+  - `IconAndName` — アイコン+名前の両方表示
 
 ### Yarn での使い方
 
@@ -201,7 +205,32 @@ title: NodeA
 
 ---
 
-## 6. ローカライズ対応状況
+## 6. チャットバブル表示設定
+
+### ChatUIConfig（ScriptableObject）
+
+`Resources/ChatUIConfig` で一元管理する主要パラメータ:
+
+| パラメータ | デフォルト値 | 説明 |
+| ---------- | ------------ | ---- |
+| `bubbleMaxWidthPercent` | 0.7 | 画面幅に対するバブル幅上限（割合） |
+| `bubbleMaxWidthPx` | 600 | バブル幅の絶対上限（px）。percentと小さい方を採用 |
+| `bubbleSprite` | null | 9-slice角丸スプライト。null時は矩形 |
+| `showInputField` | false | テキスト入力欄の表示/非表示 |
+
+その他 28 パラメータ（フォントサイズ、色、パディング等）は `ChatUIConfig.cs` を参照。
+
+### タイピングインジケーター
+
+NPC メッセージの前に表示される入力中表示。3つのドットがスケールアニメーション（DOTween Yoyo）で脈動する。メッセージバブルプールとは独立した専用オブジェクト。
+
+### 選択肢UI
+
+プレイヤーの選択肢はプレイヤーバブルと同じスタイル（ThemeColor + bubbleSprite + 右寄せ）で表示。選択後、未選択の選択肢はフェードアウトする。
+
+---
+
+## 8. ローカライズ対応状況
 
 ### 現状
 
@@ -233,13 +262,13 @@ Yarn Spinner 3.x は以下のローカライズをサポート:
 
 ---
 
-## 7. 矛盾指摘システム（Phase 2 実装済み）
+## 9. 矛盾指摘システム（Phase 2 実装済み）
 
 ### 実装済み機能
 
 | 機能 | 説明 | ファイル |
 | ---- | ---- | -------- |
-| 長押し選択 | バブル0.5秒長押しで1つ目選択、タップで2つ目選択 | `MessageBubble.cs` |
+| 長押し選択 | バブル0.5秒長押しで1つ目選択、タップで2つ目選択。選択時にスケールパルス演出 | `MessageBubble.cs` |
 | 矛盾判定 | ContradictionDatabase の順不同マッチング、クールダウン10秒 | `ContradictionManager.cs` |
 | 成功演出 | 緑フラッシュ + スケールパルス + 接続線 + 通知パネル | `ContradictionFeedbackController.cs` |
 | 失敗演出(不一致) | 赤フラッシュ + 回転シェイク + エラーバナー + クールダウン | 同上 |
@@ -257,7 +286,7 @@ ContentAuthoring シーンの Canvas 直下に `ContradictionFeedbackController`
 
 ---
 
-## 8. ダッシュボード（MVP 実装済み）
+## 10. ダッシュボード（MVP 実装済み）
 
 ### 実装済み機能
 
@@ -286,7 +315,7 @@ ContentAuthoring シーンの Canvas 直下に `ContradictionFeedbackController`
 
 ---
 
-## 9. 未実装機能（StorySpec で必要だが現在ない機能）
+## 11. 未実装機能（StorySpec で必要だが現在ない機能）
 
 ### 優先度: 高（メインループに必要）
 
@@ -313,7 +342,7 @@ ContentAuthoring シーンの Canvas 直下に `ContradictionFeedbackController`
 
 ---
 
-## 10. ノード設計のベストプラクティス
+## 12. ノード設計のベストプラクティス
 
 ### ノード命名規則（推奨）
 

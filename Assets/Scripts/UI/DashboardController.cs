@@ -135,7 +135,7 @@ namespace ProjectFoundPhone.UI
                 if (saveData.CompletedChannelIDs.Contains(channel.ChannelID))
                     return ChannelStatus.Completed;
                 if (!string.IsNullOrEmpty(saveData.CurrentNodeName)
-                    && saveData.CurrentNodeName.StartsWith($"Ch{channel.ChapterNumber}_"))
+                    && YarnNodeHelper.BelongsToChapter(saveData.CurrentNodeName, channel.ChapterNumber))
                     return ChannelStatus.InProgress;
             }
 
@@ -476,6 +476,20 @@ namespace ProjectFoundPhone.UI
                 m_BackButton.SetActive(true);
             }
 
+            // StopScenario を ClearMessages より先に実行
+            // （実行中ダイアログの非同期タスクが ClearMessages 後にバブルを追加するのを防止）
+            if (m_ScenarioManager != null)
+            {
+                m_ScenarioManager.StopScenario();
+            }
+
+            // 矛盾指摘モードのリセット + チャプター/ヒントポリシー更新
+            if (m_ContradictionManager != null)
+            {
+                m_ContradictionManager.ClearSelection();
+                m_ContradictionManager.SetCurrentChannel(channel);
+            }
+
             if (m_ChatController != null)
             {
                 m_ChatController.ClearMessages();
@@ -483,7 +497,6 @@ namespace ProjectFoundPhone.UI
 
             if (m_ScenarioManager != null)
             {
-                m_ScenarioManager.StopScenario();
                 m_ScenarioManager.StartScenario(channel.StartNodeName);
             }
         }

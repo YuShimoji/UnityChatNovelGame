@@ -186,6 +186,9 @@ namespace ProjectFoundPhone.UI
         /// </summary>
         public override YarnTask OnDialogueStartedAsync()
         {
+            // チャプター遷移時の早送り状態引き継ぎを防止
+            FastForwardEnabled = false;
+
             if (m_ChatController == null)
             {
                 m_ChatController = FindFirstObjectByType<ChatController>();

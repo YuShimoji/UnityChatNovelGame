@@ -123,6 +123,7 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.AddCommandHandler<int>("Glitch", GlitchCommand);
             m_DialogueRunner.AddCommandHandler<string>("SystemMessage", SystemMessageCommand);
             m_DialogueRunner.AddCommandHandler<string, string, string>("MessageTagged", MessageTaggedCommand);
+            m_DialogueRunner.AddCommandHandler<int>("EndDay", EndDayCommand);
 #endif
         }
 
@@ -146,6 +147,7 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.RemoveCommandHandler("Glitch");
             m_DialogueRunner.RemoveCommandHandler("SystemMessage");
             m_DialogueRunner.RemoveCommandHandler("MessageTagged");
+            m_DialogueRunner.RemoveCommandHandler("EndDay");
 #endif
         }
         #endregion
@@ -247,6 +249,19 @@ namespace ProjectFoundPhone.Core
 
             await YarnTask.Delay((int)(seconds * 1000), m_WaitCancellation.Token).SuppressCancellationThrow();
 
+            // ダイアログが停止された場合、CancelActiveWait が既にクリーンアップ済み。
+            // 最小限の片付けのみ行い return する。
+            if (m_DialogueRunner == null || !m_DialogueRunner.IsDialogueRunning)
+            {
+                m_IsWaiting = false;
+                if (m_WaitCancellation != null)
+                {
+                    m_WaitCancellation.Dispose();
+                    m_WaitCancellation = null;
+                }
+                return;
+            }
+
             if (m_ChatController != null)
             {
                 m_ChatController.ShowTypingIndicator(false);
@@ -292,7 +307,8 @@ namespace ProjectFoundPhone.Core
             }
             else
             {
-                Debug.LogWarning($"ScenarioManager: DeductionBoard not found. Topic unlocked - {topicData.Title} (ID: {topicID})");
+                // DeductionBoard は凍結中（D-1 決定）。警告ではなく通常ログに留める
+                Debug.Log($"ScenarioManager: Topic unlocked - {topicData.Title} (ID: {topicID})");
             }
 
             // Yarn螟画焚繧呈峩譁ｰ: $has_topic_{topicID} = true
@@ -336,6 +352,28 @@ namespace ProjectFoundPhone.Core
             else
             {
                 Debug.LogWarning($"ScenarioManager: ChatController not available. System message: {text}");
+            }
+        }
+
+        /// <summary>
+        /// EndDay コマンドハンドラ: チャプター終了の共通処理
+        /// Yarn: <<EndDay N>> → "--- N日目 終了 ---" システムメッセージ + チャンネル完了登録
+        /// </summary>
+        private void EndDayCommand(int dayNumber)
+        {
+            // 日数ベースの終了メッセージ
+            SystemMessageCommand($"--- {dayNumber}日目 終了 ---");
+
+            // SaveData にチャンネル完了を登録
+            if (SaveManager.Instance != null && SaveManager.Instance.CurrentSaveData != null)
+            {
+                string channelId = $"ch{dayNumber}";
+                var completedList = SaveManager.Instance.CurrentSaveData.CompletedChannelIDs;
+                if (!completedList.Contains(channelId))
+                {
+                    completedList.Add(channelId);
+                    Debug.Log($"ScenarioManager: EndDay {dayNumber} — channel '{channelId}' marked completed.");
+                }
             }
         }
         #endregion

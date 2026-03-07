@@ -93,6 +93,26 @@ namespace ProjectFoundPhone.UI
 
         private void OnDisable()
         {
+            // キャッシュ状態のクリーンアップ（チャプター遷移時の状態汚染防止）
+            if (m_CachedFirstBubble != null)
+            {
+                m_CachedFirstBubble.StopHighlight();
+            }
+            m_CachedFirstBubble = null;
+            m_CachedFirstLineTag = null;
+            m_IsPlayingResultAnimation = false;
+
+            // アクティブなアニメーションを停止
+            m_ResultSequence?.Kill();
+            m_BannerTween?.Kill();
+            m_NotificationSequence?.Kill();
+
+            // UI要素を非表示
+            if (m_HintBanner != null && m_HintBanner.activeSelf)
+                m_HintBanner.SetActive(false);
+            if (m_NotificationPanel != null && m_NotificationPanel.activeSelf)
+                m_NotificationPanel.SetActive(false);
+
             var cm = ContradictionManager.Instance;
             if (cm == null) return;
 
@@ -310,6 +330,21 @@ namespace ProjectFoundPhone.UI
             if (img != null)
                 DOTween.Kill(img, complete: false);
         }
+
+        /// <summary>
+        /// 成功/失敗アニメーション完了後のキャッシュクリーンアップ。
+        /// SelectSecond では OnSelectionCleared を発火しないため、ここで後片付けする。
+        /// </summary>
+        private void CleanupAfterAnimation()
+        {
+            if (m_CachedFirstBubble != null)
+            {
+                KillBubbleTweens(m_CachedFirstBubble);
+            }
+            m_CachedFirstBubble = null;
+            m_CachedFirstLineTag = null;
+            HideHintBanner();
+        }
         #endregion
 
         #region Hint Banner
@@ -407,7 +442,11 @@ namespace ProjectFoundPhone.UI
             FadeOutConnectionLine(SuccessColor, 0.5f);
 
             m_ResultSequence.AppendCallback(() => ShowNotification(pair));
-            m_ResultSequence.OnComplete(() => m_IsPlayingResultAnimation = false);
+            m_ResultSequence.OnComplete(() =>
+            {
+                m_IsPlayingResultAnimation = false;
+                CleanupAfterAnimation();
+            });
         }
 
         private void AnimateBubbleFlash(MessageBubble bubble, Color flashColor, Sequence seq)
@@ -455,7 +494,11 @@ namespace ProjectFoundPhone.UI
             FadeOutConnectionLine(flashColor, 0.3f);
 
             m_ResultSequence.AppendCallback(() => ShowErrorBanner(message));
-            m_ResultSequence.OnComplete(() => m_IsPlayingResultAnimation = false);
+            m_ResultSequence.OnComplete(() =>
+            {
+                m_IsPlayingResultAnimation = false;
+                CleanupAfterAnimation();
+            });
         }
         #endregion
 
