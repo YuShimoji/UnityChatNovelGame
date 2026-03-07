@@ -84,10 +84,10 @@
     "id": "SP-008",
     "title": "UI/UX",
     "status": "partial",
-    "pct": 50,
+    "pct": 55,
     "cat": "ui",
     "file": "docs/StorySpec/08_ui_ux.md",
-    "summary": "ダッシュボード・スレッド・断片インベントリ。ダッシュボードMVP+チャットバブル仕様(Section6)実装済み"
+    "summary": "ダッシュボード・スレッド・断片インベントリ。ダッシュボードMVP+チャットバブル仕様+デバッグ機能(Section6)実装済み。サブスレッド/断片インベントリ未実装"
   },
   {
     "id": "SP-009",
@@ -147,10 +147,10 @@
     "id": "SP-099",
     "title": "未決定事項 (Open Questions)",
     "status": "partial",
-    "pct": 75,
+    "pct": 85,
     "cat": "core",
     "file": "docs/StorySpec/99_open_questions.md",
-    "summary": "決定待ちの設計質問。解決済み30件、未決定8件"
+    "summary": "決定待ちの設計質問。解決済み34件、未決定4件"
   },
   {
     "id": "EN-001",
