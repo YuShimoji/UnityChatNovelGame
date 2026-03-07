@@ -5,7 +5,7 @@
 
 ## このドキュメント群の使い方
 - まず `00_overview.md` を読み、全体像と用語を揃える。
-- 次に `03_chapter_beats.md` を読み、3部×3節（9ブロック）の物語リズムを把握する。
+- 次に `03_chapter_beats.md` を読み、3部 x 3章 x 3節（27ブロック）の物語リズムを把握する。
 - 断片（Fragments）とハルシコインの扱いは `07_fragments.md` と `06_hallucicoin.md` を参照。
 - 未決定事項は `99_open_questions.md` に集約。
 
@@ -21,7 +21,7 @@
 - `00_overview.md` … 企画の要点（ワンページ）
 - `01_gdd_gameplay.md` … ゲーム要件（システム）
 - `02_story_bible.md` … 世界観・人物・語り口
-- `03_chapter_beats.md` … 9ブロック・ビート表（脚本の骨）
+- `03_chapter_beats.md` … 27ブロック（9章）ビート表（脚本の骨。章レベルの概要、節の詳細は未設計）
 - `04_characters.md` … 人物キャラ詳細（人間）
 - `05_ai_models.md` … AIモデル群（キャラ差＝失調の差）
 - `06_hallucicoin.md` … ハルシコイン仕様

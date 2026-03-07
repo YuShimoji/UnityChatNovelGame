@@ -284,7 +284,7 @@ Yarn Spinner 3.x は以下のローカライズをサポート:
 | ヒントバナー | 1つ目選択時に「2つ目をタップ」表示 | 同上 |
 | 接続線 | 2バブル間の直線（Image回転方式、成功/失敗で色変化→フェードアウト） | 同上 |
 | HalluciCoin | 矛盾発見時に報酬加算、セーブ/ロード対応済み | `ContradictionManager.cs` |
-| ~~トピック自動解放~~ | ~~矛盾発見時に ContradictionPair.UnlockTopic を DeductionBoard に追加~~ **廃止予定**: 矛盾報酬は HalluciCoin のみに変更（2026-03-07決定） | `DeductionBoard.cs` |
+| ~~トピック自動解放~~ | ~~矛盾発見時に ContradictionPair.UnlockTopic を DeductionBoard に追加~~ **廃止済み**: 矛盾報酬は HalluciCoin のみに変更（2026-03-07決定） | `DeductionBoard.cs` |
 | データ | 7ペア（Ch1x4, Ch2x3）、全報酬10コイン、難易度1 | `Resources/Contradictions/` |
 
 ### セットアップ要件
