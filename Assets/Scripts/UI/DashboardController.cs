@@ -34,6 +34,12 @@ namespace ProjectFoundPhone.UI
             m_ScenarioManager = FindFirstObjectByType<ScenarioManager>();
             m_ChatController = FindFirstObjectByType<ChatController>();
             m_ContradictionManager = FindFirstObjectByType<ContradictionManager>();
+
+            if (m_ScenarioManager == null)
+                Debug.LogWarning("DashboardController: ScenarioManager not found in scene.");
+            if (m_ChatController == null)
+                Debug.LogWarning("DashboardController: ChatController not found in scene.");
+
             m_Channels = LoadChannelData();
 
             if (m_ShowOnStart)
@@ -58,6 +64,8 @@ namespace ProjectFoundPhone.UI
             {
                 BuildDashboardUI();
             }
+
+            if (m_DashboardPanel == null) return;
 
             RefreshChannelList();
             RefreshCoinDisplay();
@@ -329,7 +337,7 @@ namespace ProjectFoundPhone.UI
 
             for (int i = m_ChannelListContent.childCount - 1; i >= 0; i--)
             {
-                Destroy(m_ChannelListContent.GetChild(i).gameObject);
+                DestroyImmediate(m_ChannelListContent.GetChild(i).gameObject);
             }
 
             if (m_Channels.Length == 0)
