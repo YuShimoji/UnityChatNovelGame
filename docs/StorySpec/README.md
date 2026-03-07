@@ -1,12 +1,12 @@
 # Hallucination Simulator (ハルシネーション・シミュレーター) — Docs Pack
 
-> **更新日**: 2026-03-02  
+> **更新日**: 2026-03-07
 > **目的**: 企画たたき台〜合意済み設計までを、**ストーリーライター／実装者／デザイナーが同じ参照**で使える形に整流する。
 
 ## このドキュメント群の使い方
 - まず `docs/00_overview.md` を読み、全体像と用語を揃える。
 - 次に `docs/03_chapter_beats.md` を読み、3部×3節（9ブロック）の物語リズムを把握する。
-- 断片（Fragments）とハルシコインの扱いは `docs/05_fragments.md` と `docs/06_hallucicoin.md` を参照。
+- 断片（Fragments）とハルシコインの扱いは `docs/07_fragments.md` と `docs/06_hallucicoin.md` を参照。
 - 未決定事項は `docs/99_open_questions.md` に集約。
 
 ## 推奨リポジトリ構成（例）
@@ -32,6 +32,7 @@
 - `docs/11_production_plan.md` … 役割・制作計画（叩き台）
 - `docs/12_reference_works.md` … 参照作品・比較軸
 - `docs/13_glossary.md` … 用語集（理論語）
+- `docs/14_interaction_mechanics.md` … インタラクション・メカニクス（3システム候補 + 設計原則）
 - `docs/99_open_questions.md` … 未決定事項（Askの残）
 
 ## ライターへの引き渡しチェック
