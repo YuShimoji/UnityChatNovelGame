@@ -1,7 +1,7 @@
 # WORKFLOW STATE SSOT
 
-**Updated**: 2026-03-08
-**Phase**: ダッシュボード MVP 実装済み — 手動セットアップ + 動作確認
+**Updated**: 2026-03-09
+**Phase**: ダッシュボード MVP 実装済み — セットアップ反映中 + 動作確認待ち
 **Branch**: main
 
 ## Mission
@@ -27,6 +27,10 @@ Ch1/Ch2 Yarn スクリプトはエンジン検証用モックであり、本番�
   - RunOptionsAsync: 選択肢表示前 400ms 遅延
 - [x] レガシードキュメント整理（docs/reports, docs/tasks, docs/evidence, docs/inbox, docs/logs 等 318ファイル削除）
 - [x] ダッシュボード MVP 実装（DashboardController + ChannelData + SaveData拡張 + Editorツール）
+- [x] ContentAuthoring シーンに `DashboardManager` 追加（DashboardController / `m_ShowOnStart=true`）
+- [x] `Assets/Resources/Channels/` に `ch1.asset`, `ch2.asset` を配置
+- [x] DebugHubController の `m_ShowOnStart=false` 反映
+- [ ] ScenarioManager の `m_AutoStartYarn=false` 反映（現状 `true`）
 - [ ] ダッシュボード手動セットアップ + 動作確認（Unity手動）
 - [ ] 矛盾 Phase 2 の動作確認（手動: セットアップ + 再生テスト）
 - [ ] ContentAuthoring シーンでの最終再生確認（手動）
@@ -36,15 +40,15 @@ Ch1/Ch2 Yarn スクリプトはエンジン検証用モックであり、本番�
 
 ## 開発継続プラン
 
-### ダッシュボード MVP セットアップ（未完了）
+### ダッシュボード MVP セットアップ（反映状況）
 
-ContentAuthoring シーンで以下を行う必要あり:
+ContentAuthoring シーンの現状:
 
-1. `Tools > FoundPhone > Create Default Channel Data` で ch1/ch2 アセット生成
-2. `Tools > FoundPhone > Add Dashboard to Scene` で DashboardController 追加
-3. DebugHubController の `m_ShowOnStart` を false に変更（Inspector）
-4. ScenarioManager の `m_AutoStartYarn` を false に変更（Inspector）
-5. シーン保存
+1. [x] `Tools > FoundPhone > Create Default Channel Data` 相当: `Assets/Resources/Channels/ch1.asset`, `ch2.asset` が存在
+2. [x] `Tools > FoundPhone > Add Dashboard to Scene` 相当: `DashboardManager` + `DashboardController` が存在
+3. [x] DebugHubController の `m_ShowOnStart=false`
+4. [ ] ScenarioManager の `m_AutoStartYarn=false`（現状: `true`）
+5. [ ] 上記反映後の手動再生確認
 
 ### 矛盾 Phase 2 セットアップ（未完了）
 

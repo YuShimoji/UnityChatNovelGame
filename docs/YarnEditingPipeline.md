@@ -296,6 +296,8 @@ title: Ch1_FindFragment
 ## 9. チェックリスト: 新チャプター追加時
 
 - [ ] `.yarn` ファイルを `Assets/Resources/Yarn/` に作成
+- [ ] `Assets/Resources/Channels/` に対応する `ChannelData` を追加/更新（ID, StartNodeName, RequiredCompletedChannelID）
+- [ ] チャプターのヒント方針を `ChannelData` に反映（EnableHints, MaxHintDifficulty）
 - [ ] 全ノードに `title:` と `===` がある
 - [ ] 新キャラの CharacterProfile ScriptableObject を作成済み
 - [ ] 変数宣言 `<<declare>>` がプロジェクト内で重複していない

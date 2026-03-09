@@ -1,6 +1,6 @@
 # Engine Feature Inventory
 
-**最終更新**: 2026-03-07
+**最終更新**: 2026-03-09
 **エンジン**: Unity 6.3 LTS (6000.3.6f1) + Yarn Spinner 3.1.3
 
 このドキュメントは、シナリオ執筆者が「今のエンジンで何ができるか」を把握するためのリファレンスです。
@@ -303,8 +303,9 @@ ContentAuthoring シーンの Canvas 直下に `ContradictionFeedbackController`
 | チャンネル一覧 | ChannelData SO ベースのカード表示（Locked/Available/InProgress/Completed） | `DashboardController.cs` |
 | チャンネル遷移 | カードクリック → チャット開始、Back/ESC → ダッシュボード復帰 | 同上 |
 | HalluciCoin 表示 | 右上に "HC: N" 表示（ContradictionManager.HalluciCoin 参照） | 同上 |
-| ChannelData | ScriptableObject: ID, DisplayName, Description, StartNodeName, ChapterNumber, RequiredCompletedChannelID | `ChannelData.cs` |
+| ChannelData | ScriptableObject: ID, DisplayName, Description, StartNodeName, ChapterNumber, RequiredCompletedChannelID, EnableHints, MaxHintDifficulty | `ChannelData.cs` |
 | 進行状態管理 | SaveData.CompletedChannelIDs でアンロック条件判定 | `SaveData.cs` |
+| チャプター別ヒント制御 | チャンネル選択時に ContradictionManager へ chapter/hint policy を反映（EnableHints, MaxHintDifficulty） | `DashboardController.cs`, `ContradictionManager.cs` |
 | Editor ツール | チャンネルデータ自動生成 + シーンセットアップ | `ChannelDataCreator.cs`, `DashboardSceneSetup.cs` |
 
 ### セットアップ要件
@@ -313,6 +314,28 @@ ContentAuthoring シーンの Canvas 直下に `ContradictionFeedbackController`
 2. `Tools > FoundPhone > Add Dashboard to Scene` で DashboardController 追加
 3. ScenarioManager の `m_AutoStartYarn` を false に変更
 4. DebugHubController の `m_ShowOnStart` を false に変更
+
+### 既定アセット値（Repository 現在値）
+
+#### `Assets/Resources/Channels/ch1.asset`
+
+- ChannelID: `ch1`
+- DisplayName: `Ch.1 -- Terminal`
+- StartNodeName: `Ch1_Opening`
+- ChapterNumber: `1`
+- RequiredCompletedChannelID: `(empty)`
+- EnableHints: `false`
+- MaxHintDifficulty: `1`
+
+#### `Assets/Resources/Channels/ch2.asset`
+
+- ChannelID: `ch2`
+- DisplayName: `Ch.2 -- Location Confusion`
+- StartNodeName: `Ch2_Opening`
+- ChapterNumber: `2`
+- RequiredCompletedChannelID: `ch1`
+- EnableHints: `true`
+- MaxHintDifficulty: `1`
 
 ### 未実装（将来拡張）
 

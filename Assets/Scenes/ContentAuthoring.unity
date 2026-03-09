@@ -157,20 +157,6 @@ MonoBehaviour:
   m_StartNode: Ch1_Opening
   m_AutoStartYarn: 1
   m_DebugScenarioID: 
---- !u!114 &252753193
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 252753187}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca44fbdc34aa5d24297bcb2a91614d42, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: ProjectFoundPhone.DebugTools::ProjectFoundPhone.DebugTools.DebugHubController
-  m_DialogueRunner: {fileID: 252753190}
-  m_ShowOnStart: 0
 --- !u!114 &252753189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,6 +238,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &252753193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 252753187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca44fbdc34aa5d24297bcb2a91614d42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ProjectFoundPhone.DebugTools::ProjectFoundPhone.DebugTools.DebugHubController
+  m_DialogueRunner: {fileID: 252753190}
+  m_ShowOnStart: 0
 --- !u!1 &507678223
 GameObject:
   m_ObjectHideFlags: 0
@@ -467,6 +467,51 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1 &748259811
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 748259813}
+  - component: {fileID: 748259812}
+  m_Layer: 0
+  m_Name: DashboardManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &748259812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 748259811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e24484dba1ce1314e8a5f3ae36a62a4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ProjectFoundPhone::ProjectFoundPhone.UI.DashboardController
+  m_ShowOnStart: 1
+--- !u!4 &748259813
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 748259811}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &819766266
 GameObject:
   m_ObjectHideFlags: 0
@@ -830,7 +875,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -60, y: 0}
+  m_AnchoredPosition: {x: -60.000183, y: 0}
   m_SizeDelta: {x: -160, y: -40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &981245731
@@ -1738,21 +1783,8 @@ MonoBehaviour:
   m_ChoiceButtonPrefab: {fileID: 1995694123046171315, guid: c796b8da8e116894786e79a6c209fd07, type: 3}
   m_ChoiceContainer: {fileID: 507678224}
   m_JapaneseFontAsset: {fileID: 11400000, guid: 167bfdfba8f9cfd45b330f80ed0d0f18, type: 2}
---- !u!114 &2049599895
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2049599891}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a38d1b6ea0c4134287039a49e0e216e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: ProjectFoundPhone::ProjectFoundPhone.UI.MessageBubblePool
-  m_MessageBubblePrefab: {fileID: 11400000, guid: 26b7b210afd94b68a720bb0a31a0b517, type: 3}
-  m_InitialCapacity: 10
-  m_MaxCapacity: 50
+  m_EnableTypewriterEffect: 1
+  m_TypewriterSpeed: 0.05
 --- !u!224 &2049599893
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1803,6 +1835,21 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2049599895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2049599891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a38d1b6ea0c4134287039a49e0e216e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ProjectFoundPhone::ProjectFoundPhone.UI.MessageBubblePool
+  m_MessageBubblePrefab: {fileID: 11400000, guid: 26b7b210afd94b68a720bb0a31a0b517, type: 3}
+  m_InitialCapacity: 10
+  m_MaxCapacity: 50
 --- !u!1 &2082240959
 GameObject:
   m_ObjectHideFlags: 0
@@ -1970,3 +2017,4 @@ SceneRoots:
   - {fileID: 1373616834}
   - {fileID: 252753192}
   - {fileID: 877122395}
+  - {fileID: 748259813}
