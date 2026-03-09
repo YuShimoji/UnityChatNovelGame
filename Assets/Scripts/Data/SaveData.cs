@@ -96,6 +96,13 @@ namespace ProjectFoundPhone.Data
         public List<string> CompletedChannelIDs = new List<string>();
         #endregion
 
+        #region Branch Thread Spike
+        /// <summary>
+        /// Bridge state for C-branch spike.
+        /// </summary>
+        public BranchThreadState BranchThread = new BranchThreadState();
+        #endregion
+
         #region Chat History
         /// <summary>
         /// チャット履歴のメッセージリスト

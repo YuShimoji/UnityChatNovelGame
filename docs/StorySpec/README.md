@@ -39,3 +39,20 @@
 - [ ] `03_chapter_beats.md` ã®å„ç¯€ã€Œæ–­ç‰‡ã€ã€Œåµå¯Ÿã€ã€Œå±¤æ›´æ–°ã€ãŒå…·ä½“åŒ–ã•ã‚Œã¦ã„ã‚‹
 - [ ] `07_fragments.md` ã®æ–‡ä½“ã‚«ãƒ†ã‚´ãƒªãƒ»åª’ä½“ãƒ»æ•‘å‡ºå¯¾è±¡ãŒç¢ºå®šã—ã¦ã„ã‚‹
 - [ ] ä¸»äººå…¬ã®ã€Œè£åˆ‡ã‚ŠB/Cã€æ¼”å‡ºã®æŒ¿å…¥ä½ç½®ãŒåˆæ„ã•ã‚Œã¦ã„ã‚‹
+
+---
+
+## 2026-03-09 Sync Addendum
+
+- This repository is a Unity project. Use this high-level structure in docs:
+  - `Assets/`
+  - `Packages/`
+  - `ProjectSettings/`
+  - `docs/`
+  - `scripts/`
+- Legacy examples such as `/src`, `/assets`, `/tools` are historical references and not the current canonical layout.
+
+## 2026-03-10 Addendum
+- `15_feature_triage_2026-03-10.md` ‚ð’Ç‰ÁB
+  - 4€–ÚiŠçƒAƒCƒRƒ“AƒXƒŒƒbƒhŠÇ—AƒeƒLƒXƒg‰‰oAƒfƒUƒCƒi[Ž·•M“±üj‚ÌŒ»ó•ª—Þ‚Æ—DæƒoƒbƒNƒƒO‚ð®—B
+  - ƒXƒŒƒbƒhŠÇ—‚Í `UIƒTƒuƒXƒŒƒbƒh` ‚Æ `BranchThreadState` ‚ð•ª—£‚µ‚Äˆµ‚¤•ûj‚ð–¾‹LB

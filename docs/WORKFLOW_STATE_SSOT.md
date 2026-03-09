@@ -118,3 +118,33 @@ ContentAuthoring シーンで以下を行う必要あり:
 - MVP の最小導線を破壊しないこと。
 - Console Error / Exception を発生させないこと。
 - 過度なテスト要求、過剰なレポート生成、今の目的に直結しない汎化リファクタリングを行わないこと。
+
+---
+
+## 2026-03-09 Clarification
+
+- `ScenarioManager.m_AutoStartYarn` runtime default is `false`.
+- Scene/setup tools may set `m_AutoStartYarn=true` only for debug or content-authoring preview workflows.
+- For production-like validation, treat `false` as the baseline expectation.
+
+## 2026-03-09 C-Branch Spike Step1
+
+- Implemented: branch bridge model + runtime/save-load wiring.
+- Added data model: `BranchThreadState`.
+- Added ScenarioManager APIs: begin/add-flag/end + snapshot/apply.
+- SaveData/SaveManager now persist branch bridge state (`BranchThread`).
+- Remaining for next step: option entry, branch return hook, deterministic reflected message.
+
+## 2026-03-10 Feature Triage (Handover)
+
+- Added spec note: `docs/StorySpec/15_feature_triage_2026-03-10.md`.
+- Classified current state for 4 items as existing/partial/unimplemented at feature level.
+- Priority order fixed for next phase:
+  1) Thread-management spec split (UI subthread vs branch-state bridge)
+  2) Designer-facing unified authoring guide
+  3) External wiki-ready documentation package
+  4) Face-icon behavior matrix and text-animation responsibility split
+- C-branch implementation scope remains Step2+ for execution work:
+  - option entry
+  - return hook
+  - deterministic reflected message

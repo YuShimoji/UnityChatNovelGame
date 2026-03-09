@@ -31,6 +31,7 @@ namespace ProjectFoundPhone.Core
         private bool m_IsInputLocked = false;
         private CancellationTokenSource m_WaitCancellation;
         private bool m_IsWaiting = false;
+        private BranchThreadState m_BranchThreadState = new BranchThreadState();
 
         [Header("Auto Start")]
         [SerializeField] private bool m_AutoStartYarn = false;
@@ -486,6 +487,61 @@ namespace ProjectFoundPhone.Core
         /// <summary>
         /// 蜈･蜉帙′繝ｭ繝・け縺輔ｌ縺ｦ縺・ｋ縺九←縺・°
         /// </summary>
+        /// <summary>
+        /// Returns a safe snapshot of branch-thread state.
+        /// </summary>
+        public BranchThreadState GetBranchThreadStateSnapshot()
+        {
+            return m_BranchThreadState?.Clone() ?? new BranchThreadState();
+        }
+
+        /// <summary>
+        /// Applies branch-thread state on load.
+        /// </summary>
+        public void ApplyBranchThreadState(BranchThreadState state)
+        {
+            m_BranchThreadState = state?.Clone() ?? new BranchThreadState();
+        }
+
+        /// <summary>
+        /// Starts branch-thread tracking.
+        /// </summary>
+        public void BeginBranchThread(string branchId)
+        {
+            m_BranchThreadState ??= new BranchThreadState();
+            m_BranchThreadState.ActiveBranchId = branchId;
+            m_BranchThreadState.IsActive = true;
+            m_BranchThreadState.WasCompleted = false;
+            m_BranchThreadState.TransferFlags.Clear();
+        }
+
+        /// <summary>
+        /// Adds one transfer flag from branch to main thread.
+        /// </summary>
+        public void AddBranchTransferFlag(string flagId)
+        {
+            if (string.IsNullOrWhiteSpace(flagId))
+            {
+                return;
+            }
+
+            m_BranchThreadState ??= new BranchThreadState();
+            if (!m_BranchThreadState.TransferFlags.Contains(flagId))
+            {
+                m_BranchThreadState.TransferFlags.Add(flagId);
+            }
+        }
+
+        /// <summary>
+        /// Ends branch-thread tracking.
+        /// </summary>
+        public void EndBranchThread(bool completed)
+        {
+            m_BranchThreadState ??= new BranchThreadState();
+            m_BranchThreadState.IsActive = false;
+            m_BranchThreadState.WasCompleted = completed;
+        }
+
         public bool IsInputLocked => m_IsInputLocked;
 
         /// <summary>

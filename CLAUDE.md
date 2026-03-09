@@ -43,3 +43,22 @@ Unity (C#) ãƒãƒ£ãƒƒãƒˆ/ãƒ“ã‚¸ãƒ¥ã‚¢ãƒ«ãƒãƒ™ãƒ«ã‚²ãƒ¼ãƒ ã€‚MVPã‚¢ãƒ¼ã‚­ãƒ†ã‚¯ãƒ
 - Use Serena's symbolic tools (find_symbol, get_symbols_overview) instead of reading entire .cs files
 - When exploring code, start with get_symbols_overview, then read only the specific symbols needed
 - Keep responses concise â€” avoid repeating file contents back to the user
+
+## PROJECT CONTEXT (LATEST 2026-03-10)
+- 4-item triage completed and written to spec: `docs/StorySpec/15_feature_triage_2026-03-10.md`.
+- Current interpretation:
+  - Face icon display: partially implemented (existing CharacterProfile + ChatController DisplayMode behavior).
+  - Thread management: partially implemented, but split track required:
+    - UI subthread (StorySpec-level) is mostly unimplemented.
+    - Internal branch-state bridge (C-branch Step1) is implemented and save/load-wired.
+  - Text animation: partially implemented (typewriter, typing indicator, StartWait, FF skip).
+  - Designer authoring workflow: base exists; unified guide and external-share wiki are missing.
+- Priority for next operator:
+  1) Spec split for thread model (UI vs state bridge)
+  2) Unified designer guide
+  3) External wiki-ready document structure
+
+## DECISION LOG (ADDENDUM 2026-03-10)
+| 2026-03-10 | 4€–Ú‚Ì—Dæ“x‚ğuÄÀ‘•v‚Å‚Í‚È‚­uŠù‘¶‘Y‘O’ñ‚Ì®—v‚ÉŒÅ’è | d—l®— / ƒhƒLƒ…ƒƒ“ƒg®”õ / À‘••ª—£ | Šù‘¶ƒR[ƒhEŠù‘¶ƒhƒLƒ…ƒƒ“ƒg‚ÌÄ”­–¾‚ğ”ğ‚¯Aˆø‚«Œp‚¬‚Ì”»’f‚ğ“ˆê |
+| 2026-03-10 | ƒXƒŒƒbƒhŠÇ—‚Í UIƒTƒuƒXƒŒƒbƒh ‚Æ BranchThreadState ‚ğ•Êƒgƒ‰ƒbƒN‚ÅŠÇ— | UIİŒv / C-branchÀ‘• | StorySpecã‚Ì\‘z‚Æƒ‰ƒ“ƒ^ƒCƒ€ó‘ÔŠÇ—‚ğ¬“¯‚µ‚È‚¢ |
+| 2026-03-10 | –¢‹LÚ–€‚Í StorySpec ‚É’Ç‰Á‹L˜^ (`15_feature_triage_2026-03-10.md`) | d—l‘®”õ | ˆø‚«Œp‚¬‚Ìî•ñŒ‡—‚ğ–h~ |

@@ -183,3 +183,37 @@
 4. ~~**断片インベントリの配置**~~: **決定済み** — ダッシュボード内タブ + フローティングUI。断片は汎用インベントリの一種（`08_ui_ux.md` 参照）
 5. **分岐スレッドとサブスレッドの関係**: 同じUIに統合 / 完全に別概念として分離
 6. ~~**矛盾発見 → 断片入手の紐づけ**~~: **決定済み** — 外す（HalluciCoinのみ）
+
+---
+
+## 2026-03-09 C-Branch Spike Step1 (Implemented)
+
+### Scope
+- Implemented only Step1 from the C-branch spike plan.
+- Added a bridge state model to hold branch-thread runtime state and transfer flags.
+
+### New Data Model
+- `BranchThreadState` (`Assets/Scripts/Data/BranchThreadState.cs`)
+  - `ActiveBranchId` : currently active branch thread id
+  - `IsActive` : branch thread running state
+  - `WasCompleted` : whether branch flow completed before returning
+  - `TransferFlags` : list of transfer flag ids for main-thread reflection
+  - `Clone()` and `Clear()` are provided for safe snapshot/reset operations
+
+### Runtime Integration
+- `ScenarioManager` now owns `m_BranchThreadState`.
+- Added minimal APIs:
+  - `GetBranchThreadStateSnapshot()`
+  - `ApplyBranchThreadState(BranchThreadState state)`
+  - `BeginBranchThread(string branchId)`
+  - `AddBranchTransferFlag(string flagId)`
+  - `EndBranchThread(bool completed)`
+
+### Save/Load Integration
+- `SaveData` now has `BranchThread` field.
+- `SaveManager` saves `ScenarioManager.GetBranchThreadStateSnapshot()`.
+- `SaveManager` restores via `ScenarioManager.ApplyBranchThreadState(...)`.
+
+### Compatibility Notes
+- This step does not yet add UI entry points or automatic return effects.
+- Existing A/B contradiction mechanics are unaffected by this change scope.
