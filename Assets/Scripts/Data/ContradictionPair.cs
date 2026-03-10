@@ -15,7 +15,8 @@ namespace ProjectFoundPhone.Data
         private string m_TargetLineTag;
         [SerializeField] private int m_Chapter;
         [SerializeField] private int m_RewardCoin = 1;
-        [SerializeField, Tooltip("発見時にアンロックされるトピック（任意）")]
+        [SerializeField, Tooltip("【非推奨】矛盾→断片紐づけは解除済み（2026-03-07決定）。DeductionBoard凍結中のため残存。新規ペアではnullのまま運用すること")]
+        [System.Obsolete("矛盾報酬はHalluciCoinのみ。トピック解放はYarnコマンド経由で行う")]
         private TopicData m_UnlockTopic;
         [SerializeField, Tooltip("発見時に再生される Yarn ノード名（任意）")]
         private string m_ReactionNodeName;
@@ -28,6 +29,7 @@ namespace ProjectFoundPhone.Data
         public string TargetLineTag => m_TargetLineTag;
         public int Chapter => m_Chapter;
         public int RewardCoin => m_RewardCoin;
+        [System.Obsolete("矛盾報酬はHalluciCoinのみ。トピック解放はYarnコマンド経由で行う")]
         public TopicData UnlockTopic => m_UnlockTopic;
         public string ReactionNodeName => m_ReactionNodeName;
         public int Difficulty => m_Difficulty;

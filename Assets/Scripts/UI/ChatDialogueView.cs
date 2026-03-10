@@ -155,6 +155,7 @@ namespace ProjectFoundPhone.UI
                     {
                         selectedOption = dialogueOptions[index];
                         // プレイヤーの選択をメッセージとして自動表示（Yarn側でのエコー不要）
+                        Debug.Log($"[RunOptionsAsync] Player selected index={index}, text='{choiceTexts[index]}'");
                         m_ChatController.AddMessage("player", choiceTexts[index]);
                     }
 

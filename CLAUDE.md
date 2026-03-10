@@ -7,7 +7,7 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 環境: Unity 6000.3.6f1 + YarnSpinner 3.1.3 + DOTween + Newtonsoft.Json
 ブランチ戦略: trunk-based (main のみ)
 現フェーズ: プロトタイプ（Ch1/Ch2=エンジン検証用モック、メカニクス方針決定済み）
-直近の状態: 物語構造を3部x3章x3節=27ブロックに修正。StorySpec全体にAI生成ドラフト注記を追加。アルケミーD-3+D-1ハイブリッド/断片UIダッシュボード統合を決定。手動セットアップ+動作確認待ち(ダッシュボード+矛盾Phase2+バブル表示)。Ch1/Ch2はモック（本編非採用）と認識を修正。
+直近の状態: Phase A エンジン検証を実施。m_AutoStartYarn=0に変更しダッシュボード→Ch1/Ch2再生確認済み。矛盾長押しraycastTarget修正済み。選択肢表示位置・選択後プレイヤーメッセージ未表示の2件はデバッグログ追加済みで再テスト待ち。サブスレッドUI仕様(16_subthread_ui.md)策定済み。ROADMAP_TO_PRODUCTION.md作成済み。
 
 ## DECISION LOG
 | 日付 | 決定事項 | 選択肢 | 決定理由 |
@@ -26,6 +26,9 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 | 2026-03-08 | アルケミー方式: D-3+D-1ハイブリッド | パッシブのみ / ミニマルのみ / ハイブリッド / ボードゲーム型 | パッシブ主体が「推理より検証」に整合。重大局面のみ能動合成でゲーム性確保 |
 | 2026-03-08 | ~~断片UIの配置: ダッシュボード統合(i+iv)~~ **撤回** | - | 前提誤り。断片はアイテムの一種であり専用UIは不要。汎用インベントリ/プレイヤーリソース表示域を設計すべき |
 | 2026-03-08 | プレイヤーリソース: 断片/冒険アイテム/HC/トピックの4種を統合表示域で管理 | 断片専用UI / 汎用インベントリ | 断片はアイテムの一種。全リソースを統一的に表示する |
+| 2026-03-11 | サブスレッドUI: 統合型スレッドモデル | 分離型 / 統合型 | StorySpec上の構造とランタイム分岐を同一UIで扱う |
+| 2026-03-11 | サブスレッドUI: フルスクリーンフォーカス+スワイプサイドバー | Discord型 / フルスクリーン / チャンネル切替 | 停滞感回避+世界観整合 |
+| 2026-03-11 | サブスレッドトリガー: 2段階(前提条件+顕在化) | 即時 / 条件 / 2段階 | 前兆→顕在化の自然さ+Yarnフラグ柔軟性 |
 
 ## Key Paths
 
@@ -44,21 +47,26 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 - When exploring code, start with get_symbols_overview, then read only the specific symbols needed
 - Keep responses concise — avoid repeating file contents back to the user
 
-## PROJECT CONTEXT (LATEST 2026-03-10)
-- 4-item triage completed and written to spec: `docs/StorySpec/15_feature_triage_2026-03-10.md`.
-- Current interpretation:
-  - Face icon display: partially implemented (existing CharacterProfile + ChatController DisplayMode behavior).
-  - Thread management: partially implemented, but split track required:
-    - UI subthread (StorySpec-level) is mostly unimplemented.
-    - Internal branch-state bridge (C-branch Step1) is implemented and save/load-wired.
-  - Text animation: partially implemented (typewriter, typing indicator, StartWait, FF skip).
-  - Designer authoring workflow: base exists; unified guide and external-share wiki are missing.
+## PROJECT CONTEXT (LATEST 2026-03-11)
+- Phase A エンジン検証: Ch1/Ch2再生OK、ダッシュボード表示OK
+- バグ修正: 矛盾長押し raycastTarget=false → lineTag付きバブルでtrue設定
+- 未解決バグ(デバッグログ追加済み・再テスト待ち):
+  - 選択後プレイヤーメッセージ未表示: [AddMessage]/[RunOptionsAsync]/[FadeAndHideChoices] ログ
+  - 選択肢中央表示: [CreateRuntimeChoiceContainer] Screen.width計算値ログ
+- 新規ドキュメント: 16_subthread_ui.md (統合型スレッド仕様)、ROADMAP_TO_PRODUCTION.md
+- ContradictionFeedbackController は手動シーン設定が未実施
 - Priority for next operator:
-  1) Spec split for thread model (UI vs state bridge)
-  2) Unified designer guide
-  3) External wiki-ready document structure
+  1) Unityで再テスト → デバッグログ確認 → 選択肢/メッセージ表示バグ修正
+  2) ContradictionFeedbackController シーン設定
+  3) デバッグログ除去 → コミット
 
 ## DECISION LOG (ADDENDUM 2026-03-10)
-| 2026-03-10 | 4���ڂ̗D��x���u�Ď����v�ł͂Ȃ��u�������Y�O��̐����v�ɌŒ� | �d�l���� / �h�L�������g���� / �������� | �����R�[�h�E�����h�L�������g�̍Ĕ���������A�����p�����̔��f�𓝈� |
-| 2026-03-10 | �X���b�h�Ǘ��� UI�T�u�X���b�h �� BranchThreadState ��ʃg���b�N�ŊǗ� | UI�݌v / C-branch���� | StorySpec��̍\�z�ƃ����^�C����ԊǗ����������Ȃ� |
-| 2026-03-10 | ���L�ڎ����� StorySpec �ɒǉ��L�^ (`15_feature_triage_2026-03-10.md`) | �d�l������ | �����p�����̏�񌇗���h�~ |
+| 2026-03-10 | 4項目の優先度を「監視型」ではなく「既存資産の整理」に固定 | 仕様整理 / ドキュメント整理 / 新規実装 | 既存コード・既存ドキュメントの再発掘を優先し、過去パネルの判断を統合 |
+| 2026-03-10 | スレッド管理を UIサブスレッド と BranchThreadState 別トラックで管理 | UI設計 / C-branch実装 | StorySpec上の構造とランタイム状態管理は性質が異なる |
+| 2026-03-10 | 上記項目を StorySpec に追記記録 (`15_feature_triage_2026-03-10.md`) | 仕様記録 | 過去パネルの情報欠落防止 |
+
+## DECISION LOG (ADDENDUM 2026-03-11)
+| 2026-03-11 | サブスレッドUI: 統合型スレッドモデル(サブスレッド+分岐スレッド=同一概念) | 分離型 / 統合型 | StorySpec上の構造とランタイム分岐は同一UIで扱う方が自然 |
+| 2026-03-11 | サブスレッドUI: フルスクリーンフォーカス+スワイプサイドバー | Discord型常時表示 / フルスクリーン+サイドバー / チャンネル切替型 | 停滞感回避+世界観との整合(1スレッドにフォーカスが自然) |
+| 2026-03-11 | サブスレッドトリガー: 2段階(DeclareThread前提条件+ManifestThread顕在化) | 即時出現 / 条件トリガー / 2段階 | ストーリー上の自然さ(前兆→顕在化)とYarnフラグ制御の柔軟性 |
+| 2026-03-11 | ContradictionPair.UnlockTopic に [Obsolete] 追加 | 削除 / Obsolete / 放置 | DeductionBoard凍結中で参照は残すが新規利用を警告 |

@@ -144,6 +144,24 @@
     "summary": "3メカニクス候補(指摘/ボード/分岐)の整理。方針決定済み: A>B>C、DeductionBoard凍結、矛盾→断片紐づけ解除、アルケミーD-3+D-1ハイブリッド(2026-03-08)"
   },
   {
+    "id": "SP-015",
+    "title": "Feature Triage (2026-03-10)",
+    "status": "done",
+    "pct": 100,
+    "cat": "infra",
+    "file": "docs/StorySpec/15_feature_triage_2026-03-10.md",
+    "summary": "4項目(顔アイコン/スレッド管理/テキスト演出/デザイナー環境)の現状分類と優先バックログ"
+  },
+  {
+    "id": "SP-016",
+    "title": "サブスレッドUI仕様",
+    "status": "partial",
+    "pct": 30,
+    "cat": "ui",
+    "file": "docs/StorySpec/16_subthread_ui.md",
+    "summary": "統合型スレッドモデル、2段階トリガー、フルスクリーンフォーカス+スワイプサイドバー。DRAFT"
+  },
+  {
     "id": "SP-099",
     "title": "未決定事項 (Open Questions)",
     "status": "partial",

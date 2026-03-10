@@ -598,9 +598,11 @@ namespace ProjectFoundPhone.UI
             }
 
             // メッセージバブルの生成と追加
+            Debug.Log($"[AddMessage] charID='{charID}', text='{text}', lineTag='{lineTag}'");
             GameObject messageBubble = CreateMessageBubble(charID, text);
             if (messageBubble == null)
             {
+                Debug.LogError($"[AddMessage] CreateMessageBubble returned null for charID='{charID}', text='{text}'");
                 return;
             }
 
@@ -613,6 +615,13 @@ namespace ProjectFoundPhone.UI
                     bubble = messageBubble.AddComponent<MessageBubble>();
                 }
                 bubble.Initialize(lineTag, messageBubble.GetComponent<UnityEngine.UI.Image>());
+
+                // 矛盾指摘のポインターイベントを受け取るために raycastTarget を有効化
+                Image bubbleImg = messageBubble.GetComponent<Image>();
+                if (bubbleImg != null)
+                {
+                    bubbleImg.raycastTarget = true;
+                }
             }
 
             // ユーザーが過去ログを見ていない場合のみAutoScroll()を実行
@@ -1299,6 +1308,7 @@ namespace ProjectFoundPhone.UI
             float maxWidthFromPercent = Screen.width * UIConfig.bubbleMaxWidthPercent;
             float maxWidthC = Mathf.Min(maxWidthFromPercent, UIConfig.bubbleMaxWidthPx);
             int choiceSideMargin = Mathf.Max(0, (int)(Screen.width - maxWidthC - edgePadC));
+            Debug.Log($"[CreateRuntimeChoiceContainer] Screen.width={Screen.width}, maxWidthPercent={UIConfig.bubbleMaxWidthPercent}, maxWidthPx={UIConfig.bubbleMaxWidthPx}, maxWidthFromPercent={maxWidthFromPercent}, maxWidthC={maxWidthC}, edgePad={edgePadC}, choiceSideMargin={choiceSideMargin}");
             layoutGroup.spacing = cSpacing;
             layoutGroup.padding = new RectOffset(choiceSideMargin, edgePadC, 6, 10);
             layoutGroup.childForceExpandWidth = true;
@@ -1631,6 +1641,7 @@ namespace ProjectFoundPhone.UI
         /// </summary>
         internal void FadeAndHideChoices(int selectedIndex)
         {
+            Debug.Log($"[FadeAndHideChoices] selectedIndex={selectedIndex}, childCount={m_ChoiceContainer?.childCount}");
             if (m_ChoiceContainer == null) return;
 
             float fadeTime = 0.25f;

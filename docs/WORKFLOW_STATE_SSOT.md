@@ -30,7 +30,7 @@ Ch1/Ch2 Yarn スクリプトはエンジン検証用モックであり、本番�
 - [x] ContentAuthoring シーンに `DashboardManager` 追加（DashboardController / `m_ShowOnStart=true`）
 - [x] `Assets/Resources/Channels/` に `ch1.asset`, `ch2.asset` を配置
 - [x] DebugHubController の `m_ShowOnStart=false` 反映
-- [ ] ScenarioManager の `m_AutoStartYarn=false` 反映（現状 `true`）
+- [x] ScenarioManager の `m_AutoStartYarn=false` 反映（2026-03-11 シーンファイル直接編集）
 - [ ] ダッシュボード手動セットアップ + 動作確認（Unity手動）
 - [ ] 矛盾 Phase 2 の動作確認（手動: セットアップ + 再生テスト）
 - [ ] ContentAuthoring シーンでの最終再生確認（手動）
@@ -47,7 +47,7 @@ ContentAuthoring シーンの現状:
 1. [x] `Tools > FoundPhone > Create Default Channel Data` 相当: `Assets/Resources/Channels/ch1.asset`, `ch2.asset` が存在
 2. [x] `Tools > FoundPhone > Add Dashboard to Scene` 相当: `DashboardManager` + `DashboardController` が存在
 3. [x] DebugHubController の `m_ShowOnStart=false`
-4. [ ] ScenarioManager の `m_AutoStartYarn=false`（現状: `true`）
+4. [x] ScenarioManager の `m_AutoStartYarn=false`（2026-03-11 反映済み）
 5. [ ] 上記反映後の手動再生確認
 
 ### 矛盾 Phase 2 セットアップ（未完了）
