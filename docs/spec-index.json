@@ -168,7 +168,7 @@
     "pct": 85,
     "cat": "core",
     "file": "docs/StorySpec/99_open_questions.md",
-    "summary": "決定待ちの設計質問。解決済み36件、未決定5件(C/D/G/H残)"
+    "summary": "決定待ちの設計質問。解決済み36件、未決定6件(分岐/サブスレッド関係整理、選択肢→話者自動紐づけ)"
   },
   {
     "id": "EN-001",

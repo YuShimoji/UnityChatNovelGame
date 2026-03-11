@@ -1,6 +1,6 @@
 # Engine Feature Inventory
 
-**最終更新**: 2026-03-09
+**最終更新**: 2026-03-11
 **エンジン**: Unity 6.3 LTS (6000.3.6f1) + Yarn Spinner 3.1.3
 
 このドキュメントは、シナリオ執筆者が「今のエンジンで何ができるか」を把握するためのリファレンスです。
@@ -374,9 +374,25 @@ TopicData の `TopicID` プレフィックスでインベントリの表示カ�
 - `debug_*` はデバッグ用アセット。本番ビルドでは除外を推奨
 - 新カテゴリ追加時は `InventoryItemCategory` enum と `GetCategory()` を拡張する
 
+### インベントリ セットアップ要件
+
+- Fragments / Topics の表示には `DeductionBoard` コンポーネントがシーン内に存在する必要がある
+- 不在時は `DeductionBoard: Instance not found in scene.` Warning が出るが、空リスト表示で動作は継続する
+- ContentAuthoring シーンには現在 DeductionBoard が未配置（2026-03-11 確認）
+
+### 既知の制限
+
+| 制限 | 説明 | 影響 |
+| ---- | ---- | ---- |
+| チャンネルレジューム未実装 | チャンネル選択は常に `StartNodeName` から再開始。途中復帰不可 | セーブ復元はノード単位で可能だが、ダッシュボードからの遷移では未対応 |
+| ESC 停止時の非同期競合 | StartWait 等の Yarn コマンド実行中に ESC → `StopScenario()` で `DialogueException` 発生 | `Cannot continue running dialogue. No node has been selected.` エラー。動作は継続するがログ汚染 |
+| 選択肢クリック競合 | Dialogue が選択待ち状態を離れた後に選択 UI コールバックが発火すると `DialogueException` | `SetSelectedOption was called, but Dialogue wasn't waiting for a selection.` エラー |
+| DeductionBoard 依存 | InventoryTab は `DeductionBoard.Instance` を参照。シーンに不在だと Warning スパム | 動作は継続するがログノイズが多い |
+
 ### 未実装（将来拡張）
 
 - チャプター完了トリガー（CompletedChannelIDs の自動更新）
+- チャンネルレジューム（途中復帰）
 - サブスレッド UI
 - 検索バー装飾
 

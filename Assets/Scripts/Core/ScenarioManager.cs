@@ -612,14 +612,28 @@ namespace ProjectFoundPhone.Core
         /// </summary>
         public void StopScenario()
         {
+            // CancelActiveWait を先に呼び、非同期コマンドハンドラ（StartWaitCommand 等）の
+            // 継続を正常完了させる。Stop() は 1 フレーム遅延して呼ぶことで、
+            // Continue()/SetSelectedOption() が空 VM に対して発火する競合を防ぐ。
+            CancelActiveWait();
 #if YARN_SPINNER
+            if (m_DialogueRunner != null && m_DialogueRunner.IsDialogueRunning)
+            {
+                StartCoroutine(StopDialogueDeferred());
+            }
+#endif
+        }
+
+#if YARN_SPINNER
+        private IEnumerator StopDialogueDeferred()
+        {
+            yield return null;
             if (m_DialogueRunner != null && m_DialogueRunner.IsDialogueRunning)
             {
                 m_DialogueRunner.Stop();
             }
-#endif
-            CancelActiveWait();
         }
+#endif
 
         /// <summary>
         /// Yarn螟画焚縺ｮ蛟､繧貞叙蠕・

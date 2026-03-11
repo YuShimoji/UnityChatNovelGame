@@ -13,9 +13,10 @@ namespace ProjectFoundPhone.UI
     {
         #region Singleton
         private static DeductionBoard s_Instance;
+        private static bool s_WarnedNotFound;
 
         /// <summary>
-        /// DeductionBoardのシングルトンインスタンス
+        /// DeductionBoardのシングルトンインスタンス。シーンに存在しない場合は null を返す。
         /// </summary>
         public static DeductionBoard Instance
         {
@@ -24,9 +25,10 @@ namespace ProjectFoundPhone.UI
                 if (s_Instance == null)
                 {
                     s_Instance = FindFirstObjectByType<DeductionBoard>();
-                    if (s_Instance == null)
+                    if (s_Instance == null && !s_WarnedNotFound)
                     {
                         Debug.LogWarning("DeductionBoard: Instance not found in scene.");
+                        s_WarnedNotFound = true;
                     }
                 }
                 return s_Instance;
