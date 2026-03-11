@@ -20,13 +20,28 @@ namespace ProjectFoundPhone.UI
         private ChatController m_ChatController;
         private ContradictionManager m_ContradictionManager;
 
+        private enum DashboardTab { Channels, Inventory }
+
         private GameObject m_DashboardPanel;
         private GameObject m_BackButton;
         private Transform m_ChannelListContent;
         private TextMeshProUGUI m_CoinDisplay;
+        private TextMeshProUGUI m_SubtitleText;
         private bool m_IsShowing;
 
         private ChannelData[] m_Channels;
+
+        // Tab switching
+        private DashboardTab m_CurrentTab = DashboardTab.Channels;
+        private GameObject m_TabBar;
+        private TextMeshProUGUI m_ChannelTabLabel;
+        private TextMeshProUGUI m_InventoryTabLabel;
+        private GameObject m_ChannelContainer;
+        private InventoryTabController m_InventoryTab;
+        private GameObject m_CloseOverlayButton;
+        private bool m_IsInventoryOverlayMode;
+        private bool m_RestoreBackButtonAfterOverlay;
+        private DashboardTab m_TabBeforeOverlay = DashboardTab.Channels;
 
         #region Unity Lifecycle
         private void Start()
@@ -50,10 +65,20 @@ namespace ProjectFoundPhone.UI
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape) && !m_IsShowing)
+            if (!Input.GetKeyDown(KeyCode.Escape))
+                return;
+
+            if (m_IsShowing)
             {
-                ReturnToDashboard();
+                if (m_IsInventoryOverlayMode)
+                {
+                    HideInventoryOverlay();
+                }
+
+                return;
             }
+
+            ReturnToDashboard();
         }
         #endregion
 
@@ -67,8 +92,18 @@ namespace ProjectFoundPhone.UI
 
             if (m_DashboardPanel == null) return;
 
-            RefreshChannelList();
+            SetOverlayMode(false);
             RefreshCoinDisplay();
+
+            if (m_CurrentTab == DashboardTab.Channels)
+            {
+                RefreshChannelList();
+            }
+            else if (m_InventoryTab != null)
+            {
+                m_InventoryTab.Refresh();
+            }
+
             m_DashboardPanel.SetActive(true);
 
             if (m_BackButton != null)
@@ -85,10 +120,46 @@ namespace ProjectFoundPhone.UI
             {
                 m_DashboardPanel.SetActive(false);
             }
+
+            if (m_CloseOverlayButton != null)
+            {
+                m_CloseOverlayButton.SetActive(false);
+            }
+
+            m_IsInventoryOverlayMode = false;
             m_IsShowing = false;
         }
 
         public bool IsShowing => m_IsShowing;
+
+        public void ShowChannels()
+        {
+            Show();
+            SwitchTab(DashboardTab.Channels);
+        }
+
+        public void ShowInventory()
+        {
+            Show();
+            SwitchTab(DashboardTab.Inventory);
+        }
+
+        public void ShowInventoryOverlay()
+        {
+            if (m_DashboardPanel == null)
+            {
+                BuildDashboardUI();
+            }
+
+            if (m_DashboardPanel == null) return;
+
+            m_TabBeforeOverlay = m_CurrentTab;
+            m_RestoreBackButtonAfterOverlay = m_BackButton != null && m_BackButton.activeSelf;
+
+            Show();
+            SetOverlayMode(true);
+            SwitchTab(DashboardTab.Inventory);
+        }
 
         public void ReturnToDashboard()
         {
@@ -102,7 +173,7 @@ namespace ProjectFoundPhone.UI
                 m_ChatController.ClearMessages();
             }
 
-            Show();
+            ShowChannels();
         }
         #endregion
 
@@ -201,14 +272,14 @@ namespace ProjectFoundPhone.UI
             subtitleRect.offsetMin = new Vector2(20f, -100f);
             subtitleRect.offsetMax = new Vector2(-20f, -72f);
 
-            TextMeshProUGUI subtitleText = subtitleObj.AddComponent<TextMeshProUGUI>();
-            subtitleText.text = "select channel_";
-            subtitleText.fontSize = 16f;
-            subtitleText.fontStyle = FontStyles.Italic;
-            subtitleText.color = new Color(0.4f, 0.4f, 0.45f);
-            subtitleText.alignment = TextAlignmentOptions.Center;
-            subtitleText.raycastTarget = false;
-            AssignDefaultFont(subtitleText);
+            m_SubtitleText = subtitleObj.AddComponent<TextMeshProUGUI>();
+            m_SubtitleText.text = "select channel_";
+            m_SubtitleText.fontSize = 16f;
+            m_SubtitleText.fontStyle = FontStyles.Italic;
+            m_SubtitleText.color = new Color(0.4f, 0.4f, 0.45f);
+            m_SubtitleText.alignment = TextAlignmentOptions.Center;
+            m_SubtitleText.raycastTarget = false;
+            AssignDefaultFont(m_SubtitleText);
 
             // --- HalluciCoin display (top-right) ---
             GameObject coinObj = new GameObject("CoinDisplay", typeof(RectTransform));
@@ -230,16 +301,30 @@ namespace ProjectFoundPhone.UI
             m_CoinDisplay.raycastTarget = false;
             AssignDefaultFont(m_CoinDisplay);
 
+            // --- Tab Bar (Channels | Inventory) ---
+            BuildTabBar(m_DashboardPanel.transform);
+
+            // --- Channel Container (wraps ScrollView, toggleable) ---
+            m_ChannelContainer = new GameObject("ChannelContainer", typeof(RectTransform));
+            AssignUILayer(m_ChannelContainer);
+            m_ChannelContainer.transform.SetParent(m_DashboardPanel.transform, false);
+
+            RectTransform channelContRect = m_ChannelContainer.GetComponent<RectTransform>();
+            channelContRect.anchorMin = Vector2.zero;
+            channelContRect.anchorMax = Vector2.one;
+            channelContRect.offsetMin = Vector2.zero;
+            channelContRect.offsetMax = Vector2.zero;
+
             // --- ScrollView ---
             GameObject scrollObj = new GameObject("ScrollView", typeof(RectTransform), typeof(ScrollRect), typeof(Image));
             AssignUILayer(scrollObj);
-            scrollObj.transform.SetParent(m_DashboardPanel.transform, false);
+            scrollObj.transform.SetParent(m_ChannelContainer.transform, false);
 
             RectTransform scrollRect = scrollObj.GetComponent<RectTransform>();
             scrollRect.anchorMin = new Vector2(0f, 0f);
             scrollRect.anchorMax = new Vector2(1f, 1f);
             scrollRect.offsetMin = new Vector2(20f, 20f);
-            scrollRect.offsetMax = new Vector2(-20f, -110f);
+            scrollRect.offsetMax = new Vector2(-20f, -150f);
 
             Image scrollBg = scrollObj.GetComponent<Image>();
             scrollBg.color = new Color(0.08f, 0.08f, 0.1f, 0.4f);
@@ -288,6 +373,15 @@ namespace ProjectFoundPhone.UI
             scroll.vertical = true;
             scroll.movementType = ScrollRect.MovementType.Elastic;
             scroll.scrollSensitivity = 30f;
+
+            // --- Inventory Tab ---
+            m_InventoryTab = gameObject.AddComponent<InventoryTabController>();
+            m_InventoryTab.BuildUI(m_DashboardPanel.transform);
+            m_InventoryTab.Hide();
+
+            // --- Overlay close button (shown only when opened from chat) ---
+            m_CloseOverlayButton = CreateOverlayCloseButton(m_DashboardPanel.transform);
+            m_CloseOverlayButton.SetActive(false);
 
             // --- Back to Dashboard button (floating, top-left, hidden initially) ---
             m_BackButton = new GameObject("BackToDashboard", typeof(RectTransform), typeof(Image), typeof(Button));
@@ -519,6 +613,187 @@ namespace ProjectFoundPhone.UI
             label.alignment = TextAlignmentOptions.Center;
             label.raycastTarget = false;
             AssignDefaultFont(label);
+        }
+        private void BuildTabBar(Transform parent)
+        {
+            m_TabBar = new GameObject("TabBar", typeof(RectTransform), typeof(Image), typeof(HorizontalLayoutGroup));
+            AssignUILayer(m_TabBar);
+            m_TabBar.transform.SetParent(parent, false);
+
+            RectTransform barRect = m_TabBar.GetComponent<RectTransform>();
+            barRect.anchorMin = new Vector2(0f, 1f);
+            barRect.anchorMax = new Vector2(1f, 1f);
+            barRect.pivot = new Vector2(0.5f, 1f);
+            barRect.offsetMin = new Vector2(20f, -140f);
+            barRect.offsetMax = new Vector2(-20f, -100f);
+
+            Image barBg = m_TabBar.GetComponent<Image>();
+            barBg.color = new Color(0.08f, 0.08f, 0.1f, 0.6f);
+
+            HorizontalLayoutGroup hlg = m_TabBar.GetComponent<HorizontalLayoutGroup>();
+            hlg.spacing = 4f;
+            hlg.padding = new RectOffset(8, 8, 4, 4);
+            hlg.childForceExpandWidth = true;
+            hlg.childForceExpandHeight = true;
+            hlg.childControlWidth = true;
+            hlg.childControlHeight = true;
+
+            m_ChannelTabLabel = CreateTabButton(m_TabBar.transform, "Channels", () => SwitchTab(DashboardTab.Channels));
+            m_InventoryTabLabel = CreateTabButton(m_TabBar.transform, "Inventory", () => SwitchTab(DashboardTab.Inventory));
+
+            m_ChannelTabLabel.color = new Color(0.85f, 0.85f, 0.9f);
+            m_InventoryTabLabel.color = new Color(0.4f, 0.4f, 0.45f);
+        }
+
+        private TextMeshProUGUI CreateTabButton(Transform parent, string text, UnityEngine.Events.UnityAction onClick)
+        {
+            GameObject btnObj = new GameObject($"Tab_{text}", typeof(RectTransform), typeof(Image), typeof(Button));
+            AssignUILayer(btnObj);
+            btnObj.transform.SetParent(parent, false);
+
+            Image btnBg = btnObj.GetComponent<Image>();
+            btnBg.color = new Color(0.1f, 0.1f, 0.13f, 0.8f);
+            btnBg.raycastTarget = true;
+
+            Button btn = btnObj.GetComponent<Button>();
+            btn.transition = Selectable.Transition.ColorTint;
+            btn.targetGraphic = btnBg;
+
+            ColorBlock cb = btn.colors;
+            cb.highlightedColor = new Color(0.18f, 0.18f, 0.24f, 0.9f);
+            cb.pressedColor = new Color(0.14f, 0.14f, 0.2f, 1f);
+            btn.colors = cb;
+
+            btn.onClick.AddListener(onClick);
+
+            GameObject textObj = new GameObject("Text", typeof(RectTransform));
+            AssignUILayer(textObj);
+            textObj.transform.SetParent(btnObj.transform, false);
+
+            RectTransform textRect = textObj.GetComponent<RectTransform>();
+            textRect.anchorMin = Vector2.zero;
+            textRect.anchorMax = Vector2.one;
+            textRect.offsetMin = new Vector2(4f, 2f);
+            textRect.offsetMax = new Vector2(-4f, -2f);
+
+            TextMeshProUGUI label = textObj.AddComponent<TextMeshProUGUI>();
+            label.text = text;
+            label.fontSize = 18f;
+            label.alignment = TextAlignmentOptions.Center;
+            label.raycastTarget = false;
+            AssignDefaultFont(label);
+
+            return label;
+        }
+
+        private GameObject CreateOverlayCloseButton(Transform parent)
+        {
+            GameObject buttonObj = new GameObject("CloseOverlayButton", typeof(RectTransform), typeof(Image), typeof(Button));
+            AssignUILayer(buttonObj);
+            buttonObj.transform.SetParent(parent, false);
+
+            RectTransform rect = buttonObj.GetComponent<RectTransform>();
+            rect.anchorMin = new Vector2(0f, 1f);
+            rect.anchorMax = new Vector2(0f, 1f);
+            rect.pivot = new Vector2(0f, 1f);
+            rect.anchoredPosition = new Vector2(20f, -20f);
+            rect.sizeDelta = new Vector2(140f, 34f);
+
+            Image bg = buttonObj.GetComponent<Image>();
+            bg.color = new Color(0.15f, 0.15f, 0.2f, 0.9f);
+            bg.raycastTarget = true;
+
+            Button button = buttonObj.GetComponent<Button>();
+            button.transition = Selectable.Transition.ColorTint;
+            button.targetGraphic = bg;
+            button.onClick.AddListener(HideInventoryOverlay);
+
+            GameObject textObj = new GameObject("Text", typeof(RectTransform));
+            AssignUILayer(textObj);
+            textObj.transform.SetParent(buttonObj.transform, false);
+
+            RectTransform textRect = textObj.GetComponent<RectTransform>();
+            textRect.anchorMin = Vector2.zero;
+            textRect.anchorMax = Vector2.one;
+            textRect.offsetMin = new Vector2(8f, 4f);
+            textRect.offsetMax = new Vector2(-8f, -4f);
+
+            TextMeshProUGUI label = textObj.AddComponent<TextMeshProUGUI>();
+            label.text = "< return";
+            label.fontSize = 18f;
+            label.color = new Color(0.6f, 0.6f, 0.65f);
+            label.alignment = TextAlignmentOptions.Center;
+            label.raycastTarget = false;
+            AssignDefaultFont(label);
+
+            return buttonObj;
+        }
+
+        private void SetOverlayMode(bool isOverlay)
+        {
+            m_IsInventoryOverlayMode = isOverlay;
+
+            if (m_TabBar != null)
+            {
+                m_TabBar.SetActive(!isOverlay);
+            }
+
+            if (m_CloseOverlayButton != null)
+            {
+                m_CloseOverlayButton.SetActive(isOverlay);
+            }
+        }
+
+        private void HideInventoryOverlay()
+        {
+            if (!m_IsInventoryOverlayMode)
+            {
+                Hide();
+                return;
+            }
+
+            SetOverlayMode(false);
+            Hide();
+            SwitchTab(m_TabBeforeOverlay);
+
+            if (m_BackButton != null && m_RestoreBackButtonAfterOverlay)
+            {
+                m_BackButton.SetActive(true);
+            }
+
+            m_RestoreBackButtonAfterOverlay = false;
+        }
+
+        private void SwitchTab(DashboardTab tab)
+        {
+            if (m_IsInventoryOverlayMode && tab != DashboardTab.Inventory)
+            {
+                return;
+            }
+
+            m_CurrentTab = tab;
+
+            m_ChannelTabLabel.color = tab == DashboardTab.Channels
+                ? new Color(0.85f, 0.85f, 0.9f)
+                : new Color(0.4f, 0.4f, 0.45f);
+            m_InventoryTabLabel.color = tab == DashboardTab.Inventory
+                ? new Color(0.85f, 0.85f, 0.9f)
+                : new Color(0.4f, 0.4f, 0.45f);
+
+            if (m_ChannelContainer != null)
+                m_ChannelContainer.SetActive(tab == DashboardTab.Channels);
+
+            if (tab == DashboardTab.Inventory)
+            {
+                if (m_InventoryTab != null) m_InventoryTab.Show();
+                if (m_SubtitleText != null) m_SubtitleText.text = "inventory_";
+            }
+            else
+            {
+                if (m_InventoryTab != null) m_InventoryTab.Hide();
+                if (m_SubtitleText != null) m_SubtitleText.text = "select channel_";
+                RefreshChannelList();
+            }
         }
         #endregion
 

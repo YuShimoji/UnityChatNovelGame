@@ -10,6 +10,7 @@ namespace ProjectFoundPhone.UI
     /// 収集済みフラグメント（断片）の一覧表示UI。
     /// DeductionBoard.UnlockedTopics を参照してスクロールリストを動的生成する。
     /// </summary>
+    [System.Obsolete("Use InventoryTabController via DashboardController.ShowInventory()")]
     public class FragmentListUI : MonoBehaviour
     {
         private GameObject m_Panel;

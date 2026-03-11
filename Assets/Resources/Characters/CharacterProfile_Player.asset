@@ -15,5 +15,6 @@ MonoBehaviour:
   m_CharacterID: player
   m_DisplayName: "\u3042\u306A\u305F"
   m_Icon: {fileID: 0}
-  m_ThemeColor: {r: 0.2, g: 0.6, b: 1, a: 1}
+  m_ThemeColor: {r: 0.2, g: 0.35, b: 0.55, a: 0.9}
   m_IsPlayer: 1
+  m_DisplayMode: 0

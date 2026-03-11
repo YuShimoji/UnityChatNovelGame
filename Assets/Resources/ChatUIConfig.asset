@@ -19,17 +19,23 @@ MonoBehaviour:
   playerTextColor: {r: 1, g: 1, b: 1, a: 1}
   npcTextColor: {r: 0.9, g: 0.9, b: 0.9, a: 1}
   bubbleAnimationDuration: 0.4
-  sideMarginPercent: 0.25
+  bubbleMaxWidthPercent: 0.7
+  bubbleMaxWidthPx: 600
+  bubbleSprite: {fileID: 0}
   wrapperEdgePadding: 12
   wrapperVerticalPadding: 4
   minLayoutSpacing: 10
+  showCharacterIcon: 1
+  characterIconSize: 40
+  iconBubbleSpacing: 8
   systemMessageFontSize: 16
   systemMessageTextColor: {r: 0.75, g: 0.75, b: 0.8, a: 1}
   systemMessageBgColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.3}
   systemMessageMinHeight: 40
-  choiceButtonColor: {r: 0.25, g: 0.55, b: 1, a: 0.8}
+  choiceButtonColor: {r: 0.22, g: 0.25, b: 0.35, a: 0.85}
   choiceButtonHighlightColor: {r: 0.35, g: 0.65, b: 1, a: 1}
   choiceButtonPressedColor: {r: 0.15, g: 0.45, b: 0.9, a: 1}
+  choiceTextColor: {r: 0.82, g: 0.85, b: 0.95, a: 1}
   choiceFontSizeMin: 20
   choiceFontSizeMax: 36
   choiceButtonMinHeight: 50
@@ -41,3 +47,4 @@ MonoBehaviour:
   typingIndicatorFontSize: 18
   autoScrollDelay: 0.1
   imageFadeInDuration: 0.6
+  showInputField: 0

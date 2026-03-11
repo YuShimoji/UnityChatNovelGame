@@ -234,7 +234,14 @@ NPC メッセージの前に表示される入力中表示。3つのドットが
 
 ### 選択肢UI
 
-選択肢はメッセージ流に溶け込む控えめなデザイン（暗めグレー青、小型、テキスト左揃え）。ScrollRect 内にインライン配置される。選択後、選択テキストがプレイヤーメッセージとして確定表示され、未選択の選択肢は CanvasGroup DOFade でフェードアウトする。色・サイズ・パディングは全て ChatUIConfig SO で調整可能。
+選択肢はメッセージ流に溶け込む控えめなデザイン（暗めグレー青、小型、テキスト左揃え）。ScrollRect 内にインライン配置される。選択後、選択テキストがプレイヤーメッセージとして確定表示され、未選択の選択肢は CanvasGroup DOFade でフェードアウトする。色・サイズ・パディングは全て ChatUIConfig SO で調整可能。選択肢の色は `UIConfig.choiceButtonColor` を使用（プレイヤーのThemeColorとは独立）。
+
+### スクロール制御
+
+- **TopSpacer**: Content先頭にflexibleHeightスペーサーを配置し、メッセージが少ない時に下詰め表示
+- **LateUpdate ピンニング**: タイプライター効果中（`m_IsTypewriterActive`）のみ毎フレーム最下部固定。効果終了後はワンショットAutoScrollのみ
+- **IBeginDragHandler / IEndDragHandler**: ドラッグ開始で即座に吸着解除。ドラッグ終了時に最下部付近なら自動吸着を再開
+- **ApplyThemeColor**: ConfigureBubbleからテーマカラー適用のみを抽出したヘルパー。CreateMessageBubble内ではラッパー生成前にこれを1回、テキスト高さ算出後にConfigureBubbleを1回だけ呼ぶ（二重ラッパー生成を防止）
 
 ---
 
@@ -337,11 +344,40 @@ ContentAuthoring シーンの Canvas 直下に `ContradictionFeedbackController`
 - EnableHints: `true`
 - MaxHintDifficulty: `1`
 
+### インベントリUI（実装済み）
+
+| 機能 | 説明 | ファイル |
+| ---- | ---- | -------- |
+| タブ切替 | ダッシュボードに Channels / Inventory の2タブ | `DashboardController.cs` |
+| 3サブタブ | Fragments / Records / Topics の切替 | `InventoryTabController.cs` |
+| 断片表示 | `fragment_` プレフィックスで DeductionBoard.UnlockedTopics をフィルタ、チャプターバッジ付き | 同上 |
+| トピック表示 | `topic_` プレフィックス + `T_*` / `debug_*` をトピック扱いで表示 | 同上 |
+| Records | プレースホルダー（将来 `record_` プレフィックスで拡張予定） | 同上 |
+| オーバーレイ表示 | チャット画面からINVボタンでダッシュボードをオーバーレイ表示 | `ChatController.cs`, `DashboardController.cs` |
+| DebugHub連携 | Fragment Archive → ShowInventory() に統合 | `DebugHubController.cs` |
+
+### TopicData プレフィックス分類規約
+
+TopicData の `TopicID` プレフィックスでインベントリの表示カテゴリを決定する。
+分類ロジックは `InventoryTabController.GetCategory()` に集約。
+
+| プレフィックス | カテゴリ | 用途 | 命名例 |
+| -------------- | -------- | ---- | ------ |
+| `fragment_` | Fragment | 不可索引物の断片テキスト。章番号+連番 | `fragment_ch1_01`, `fragment_ch2_03` |
+| `record_` | Record | 将来拡張用（ログ・記録系コンテンツ） | `record_ch1_call_log` |
+| 上記以外 | Topic | 一般トピック。調査の手がかり・情報 | `topic_found_phone`, `T_MissingPerson` |
+
+**補足:**
+
+- 判定は大文字小文字を区別しない（`OrdinalIgnoreCase`）
+- `T_*` や `debug_*` は明示的プレフィックスを持たないため Topic に分類される
+- `debug_*` はデバッグ用アセット。本番ビルドでは除外を推奨
+- 新カテゴリ追加時は `InventoryItemCategory` enum と `GetCategory()` を拡張する
+
 ### 未実装（将来拡張）
 
 - チャプター完了トリガー（CompletedChannelIDs の自動更新）
 - サブスレッド UI
-- フラグメントインベントリ連携
 - 検索バー装飾
 
 ---
@@ -350,9 +386,7 @@ ContentAuthoring シーンの Canvas 直下に `ContradictionFeedbackController`
 
 ### 優先度: 高（メインループに必要）
 
-| 機能 | 説明 | 実装難度 |
-| ---- | ---- | -------- |
-| 断片インベントリ | 収集した断片テキストの閲覧UI | 中 |
+（該当機能は全てセクション10に移動済み）
 
 ### 優先度: 中（サブコンテンツに必要）
 

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using ProjectFoundPhone.Data;
 using Unity.Profiling;
 using System.Linq;
+using UnityEngine.EventSystems;
 
 namespace ProjectFoundPhone.UI
 {
@@ -15,7 +16,7 @@ namespace ProjectFoundPhone.UI
     /// ScrollRect + VerticalLayoutGroup + ContentSizeFitterを使用したメッセージ表示システム
     /// </summary>
     [RequireComponent(typeof(ScrollRect))]
-    public class ChatController : MonoBehaviour
+    public class ChatController : MonoBehaviour, IBeginDragHandler, IEndDragHandler
     {
         #region Private Fields
         [SerializeField] private ScrollRect m_ScrollRect;
@@ -49,12 +50,15 @@ namespace ProjectFoundPhone.UI
         private bool m_AutoScrollScheduled = false;
         private bool m_IsAutoScrolling = false;
         private bool m_PinnedToBottom = false;
+        private bool m_IsTypewriterActive = false;
+        private GameObject m_TopSpacer;
 
         private GameObject m_RuntimeChoiceButtonTemplate;
         private GameObject m_RuntimeImageBubbleTemplate;
         private GameObject m_RuntimeMessageBubbleTemplate;
         private TMP_InputField m_RuntimeInputField;
         private Button m_RuntimeSendButton;
+        private Button m_InventoryShortcutButton;
         // m_TypingIndicatorWrapper は廃止: ConfigureBubble がラッパーを生成するため
         // m_TypingIndicator.transform.parent で動的に取得する
         private static readonly ProfilerMarker s_CreateMessageBubbleMarker = new ProfilerMarker("ChatController.CreateMessageBubble");
@@ -106,13 +110,28 @@ namespace ProjectFoundPhone.UI
         private void LateUpdate()
         {
             // タイプライター中のコンテンツ成長に追従するため、
-            // ユーザーが手動スクロールしていない間は毎フレーム最下部に固定
-            if (m_PinnedToBottom && !m_IsUserScrolling && m_ScrollRect != null)
+            // タイプライター効果がアクティブな間のみ毎フレーム最下部に固定
+            if (m_PinnedToBottom && !m_IsUserScrolling && m_ScrollRect != null && m_IsTypewriterActive)
             {
                 // OnScrollValueChanged が誤検知しないようガード
                 m_IsAutoScrolling = true;
                 m_ScrollRect.verticalNormalizedPosition = 0f;
                 m_IsAutoScrolling = false;
+            }
+        }
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            m_IsUserScrolling = true;
+            m_PinnedToBottom = false;
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            // ドラッグ終了後、最下部付近なら自動吸着を再開
+            if (m_ScrollRect != null && m_ScrollRect.verticalNormalizedPosition < m_AutoScrollThreshold)
+            {
+                m_IsUserScrolling = false;
+                m_PinnedToBottom = true;
             }
         }
         #endregion
@@ -141,6 +160,17 @@ namespace ProjectFoundPhone.UI
                 }
             }
 
+            // メッセージが少ない時に下詰めにするフレキシブルスペーサー
+            if (m_ScrollRect != null && m_ScrollRect.content != null && m_TopSpacer == null)
+            {
+                m_TopSpacer = new GameObject("TopSpacer", typeof(RectTransform), typeof(LayoutElement));
+                m_TopSpacer.transform.SetParent(m_ScrollRect.content, false);
+                m_TopSpacer.transform.SetAsFirstSibling();
+                LayoutElement spacerLayout = m_TopSpacer.GetComponent<LayoutElement>();
+                spacerLayout.flexibleHeight = 1f;
+                spacerLayout.minHeight = 0f;
+            }
+
             // m_MessageBubblePrefab、m_TypingIndicatorのnullチェックと警告
             if (m_MessageBubblePrefab == null)
             {
@@ -158,6 +188,7 @@ namespace ProjectFoundPhone.UI
             EnsureChoiceUIElements();
             EnsureImageBubbleTemplate();
             EnsureInputControls();
+            EnsureInventoryShortcutButton();
 
             // 入力欄の表示/非表示制御
             if (!UIConfig.showInputField)
@@ -216,6 +247,38 @@ namespace ProjectFoundPhone.UI
             }
 
             m_LastScrollPosition = verticalPos;
+        }
+
+        /// <summary>
+        /// テーマカラーとバブルスプライトのみを適用する（ラッパー生成なし）。
+        /// ConfigureBubble の前にテキスト色を確定させたい場合に使用。
+        /// </summary>
+        private void ApplyThemeColor(GameObject bubble, string charID)
+        {
+            bool isPlayer = CharacterDatabase.Instance != null
+                ? CharacterDatabase.Instance.IsPlayer(charID)
+                : charID == "player";
+
+            Color themeColor = CharacterDatabase.Instance != null
+                ? CharacterDatabase.Instance.GetThemeColor(charID)
+                : (isPlayer ? new Color(0.2f, 0.6f, 1.0f) : new Color(0.3f, 0.3f, 0.35f));
+
+            Image bubbleBackground = bubble.GetComponent<Image>();
+            if (bubbleBackground != null)
+            {
+                bubbleBackground.color = themeColor;
+                if (UIConfig.bubbleSprite != null)
+                {
+                    bubbleBackground.sprite = UIConfig.bubbleSprite;
+                    bubbleBackground.type = Image.Type.Sliced;
+                }
+            }
+
+            TextMeshProUGUI textComponent = bubble.GetComponentInChildren<TextMeshProUGUI>();
+            if (textComponent != null)
+            {
+                textComponent.color = isPlayer ? UIConfig.playerTextColor : UIConfig.npcTextColor;
+            }
         }
 
         /// <summary>
@@ -535,9 +598,9 @@ namespace ProjectFoundPhone.UI
                 textComponent.font = m_JapaneseFontAsset;
             }
 
-            // プレイヤー判定・テーマカラー・配置を共通処理で設定
-            // （テキストコンポーネント確保後に呼ぶことでテキスト色が正しく設定される）
-            ConfigureBubble(messageBubble, charID);
+            // テーマカラーのみ先行適用（ラッパー生成なし）
+            // ConfigureBubble はテキスト高さ算出後に1回だけ呼ぶ
+            ApplyThemeColor(messageBubble, charID);
 
             // ラッパー HLG がバブル幅を解決するようにレイアウトを強制更新
             Canvas.ForceUpdateCanvases();
@@ -635,6 +698,7 @@ namespace ProjectFoundPhone.UI
 
             int totalCharacters = textComponent.text.Length;
             textComponent.maxVisibleCharacters = 0;
+            m_IsTypewriterActive = true;
 
             DOTween.To(
                 () => textComponent.maxVisibleCharacters,
@@ -644,7 +708,11 @@ namespace ProjectFoundPhone.UI
             ).SetEase(Ease.Linear)
              .SetUpdate(true)
              .SetTarget(textComponent)
-             .OnComplete(() => textComponent.maxVisibleCharacters = totalCharacters);
+             .OnComplete(() =>
+             {
+                 textComponent.maxVisibleCharacters = totalCharacters;
+                 m_IsTypewriterActive = false;
+             });
         }
 
         /// <summary>
@@ -793,7 +861,6 @@ namespace ProjectFoundPhone.UI
             bool isConsecutive = (charID == m_LastSpeaker);
 
             // メッセージバブルの生成と追加
-            Debug.Log($"[AddMessage] charID='{charID}', text='{text}', lineTag='{lineTag}'");
             GameObject messageBubble = CreateMessageBubble(charID, text, isConsecutive);
             if (messageBubble == null)
             {
@@ -1278,22 +1345,17 @@ namespace ProjectFoundPhone.UI
             if (m_InputField != null) m_InputField.gameObject.SetActive(false);
             if (m_SendButton != null) m_SendButton.gameObject.SetActive(false);
 
-            // プレイヤーテーマカラーを取得
-            Color playerColor = CharacterDatabase.Instance != null
-                ? CharacterDatabase.Instance.GetThemeColor("player")
-                : new Color(0.2f, 0.6f, 1.0f);
-
             for (int i = 0; i < options.Count; i++)
             {
                 GameObject buttonObj = Instantiate(m_ChoiceButtonPrefab, m_ChoiceContainer);
                 buttonObj.SetActive(true);
                 buttonObj.name = "Choice" + (char)('A' + i); // For Test Automation (MVPTestHelper)
 
-                // プレイヤーバブル風スタイリング
+                // 選択肢ボタンのスタイリング（UIConfig の choiceButtonColor を使用）
                 Image buttonBg = buttonObj.GetComponent<Image>();
                 if (buttonBg != null)
                 {
-                    buttonBg.color = playerColor;
+                    buttonBg.color = UIConfig.choiceButtonColor;
                     if (UIConfig.bubbleSprite != null)
                     {
                         buttonBg.sprite = UIConfig.bubbleSprite;
@@ -1366,8 +1428,8 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            // 連続ピンニングを有効化（LateUpdate で毎フレーム最下部に固定）
-            m_PinnedToBottom = true;
+            // ピンニングは CreateMessageBubble のタイプライター開始時のみ設定
+            // ここではワンショットスクロールのみ実行
 
             if (m_AutoScrollScheduled)
             {
@@ -1458,6 +1520,71 @@ namespace ProjectFoundPhone.UI
             footerRect.offsetMax = new Vector2(0f, footerHeight);
         }
 
+        private void EnsureInventoryShortcutButton()
+        {
+            if (m_InventoryShortcutButton != null)
+            {
+                return;
+            }
+
+            RectTransform rootRect = transform as RectTransform;
+            if (rootRect == null)
+            {
+                return;
+            }
+
+            GameObject buttonObj = new GameObject("InventoryShortcutButton", typeof(RectTransform), typeof(Image), typeof(Button));
+            AssignUILayer(buttonObj);
+            buttonObj.transform.SetParent(transform, false);
+            buttonObj.transform.SetAsLastSibling();
+
+            RectTransform buttonRect = buttonObj.GetComponent<RectTransform>();
+            buttonRect.anchorMin = new Vector2(1f, 1f);
+            buttonRect.anchorMax = new Vector2(1f, 1f);
+            buttonRect.pivot = new Vector2(1f, 1f);
+            buttonRect.anchoredPosition = new Vector2(-12f, -12f);
+            buttonRect.sizeDelta = new Vector2(60f, 34f);
+
+            Image buttonBg = buttonObj.GetComponent<Image>();
+            buttonBg.color = new Color(0.12f, 0.12f, 0.16f, 0.88f);
+            buttonBg.raycastTarget = true;
+
+            Button button = buttonObj.GetComponent<Button>();
+            button.transition = Selectable.Transition.ColorTint;
+            button.targetGraphic = buttonBg;
+
+            ColorBlock cb = button.colors;
+            cb.highlightedColor = new Color(0.18f, 0.18f, 0.24f, 0.92f);
+            cb.pressedColor = new Color(0.22f, 0.22f, 0.3f, 1f);
+            button.colors = cb;
+            button.onClick.AddListener(OpenInventoryOverlay);
+
+            TextMeshProUGUI label = CreateTMPText(buttonObj.transform, "Text", new Color(0.82f, 0.84f, 0.92f), FontStyles.Bold);
+            RectTransform labelRect = label.GetComponent<RectTransform>();
+            labelRect.anchorMin = Vector2.zero;
+            labelRect.anchorMax = Vector2.one;
+            labelRect.offsetMin = Vector2.zero;
+            labelRect.offsetMax = Vector2.zero;
+            label.alignment = TextAlignmentOptions.Center;
+            label.enableAutoSizing = false;
+            label.fontSize = 16f;
+            label.text = "INV";
+
+            m_InventoryShortcutButton = button;
+        }
+
+        private void OpenInventoryOverlay()
+        {
+            DashboardController dashboard = FindFirstObjectByType<DashboardController>();
+            if (dashboard == null)
+            {
+                Debug.LogWarning("ChatController: DashboardController not found. Inventory overlay cannot be opened.");
+                return;
+            }
+
+            dashboard.ShowInventoryOverlay();
+        }
+
         private Transform CreateRuntimeChoiceContainer()
         {
             if (m_ScrollRect == null || m_ScrollRect.content == null)
@@ -1485,7 +1612,6 @@ namespace ProjectFoundPhone.UI
             float maxWidthFromPercent = Screen.width * UIConfig.bubbleMaxWidthPercent;
             float maxWidthC = Mathf.Min(maxWidthFromPercent, UIConfig.bubbleMaxWidthPx);
             int choiceSideMargin = Mathf.Max(0, (int)(Screen.width - maxWidthC - edgePadC));
-            Debug.Log($"[CreateRuntimeChoiceContainer] Screen.width={Screen.width}, maxWidthPercent={UIConfig.bubbleMaxWidthPercent}, maxWidthPx={UIConfig.bubbleMaxWidthPx}, maxWidthFromPercent={maxWidthFromPercent}, maxWidthC={maxWidthC}, edgePad={edgePadC}, choiceSideMargin={choiceSideMargin}");
             layoutGroup.spacing = cSpacing;
             layoutGroup.padding = new RectOffset(choiceSideMargin, edgePadC, 6, 10);
             layoutGroup.childForceExpandWidth = true;
@@ -1818,7 +1944,6 @@ namespace ProjectFoundPhone.UI
         /// </summary>
         internal void FadeAndHideChoices(int selectedIndex)
         {
-            Debug.Log($"[FadeAndHideChoices] selectedIndex={selectedIndex}, childCount={m_ChoiceContainer?.childCount}");
             if (m_ChoiceContainer == null) return;
 
             float fadeTime = 0.25f;
@@ -1895,13 +2020,14 @@ namespace ProjectFoundPhone.UI
                 for (int i = childCount - 1; i >= 0; i--)
                 {
                     Transform child = m_ScrollRect.content.GetChild(i);
-                    if (child != null)
+                    if (child != null && child.gameObject != m_TopSpacer)
                     {
                         Destroy(child.gameObject);
                     }
                 }
                 m_ChatHistory.Clear();
                 m_TypingIndicator = null;
+                if (m_TopSpacer != null) m_TopSpacer.transform.SetAsFirstSibling();
                 return;
             }
 
@@ -1914,6 +2040,8 @@ namespace ProjectFoundPhone.UI
             {
                 Transform child = m_ScrollRect.content.GetChild(i);
                 if (child == null) continue;
+                // TopSpacerは保持
+                if (m_TopSpacer != null && child.gameObject == m_TopSpacer) continue;
                 // 選択肢コンテナは保持
                 if (m_ChoiceContainer != null && child == m_ChoiceContainer) continue;
                 // TypingIndicatorのラッパーは保持（動的に親を辿って判定）
@@ -1928,6 +2056,9 @@ namespace ProjectFoundPhone.UI
             {
                 ShowTypingIndicator(false); // 非表示にしておく
             }
+
+            // TopSpacerを先頭に維持
+            if (m_TopSpacer != null) m_TopSpacer.transform.SetAsFirstSibling();
 
             m_ChatHistory.Clear();
 

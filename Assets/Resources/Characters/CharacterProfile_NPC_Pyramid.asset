@@ -17,3 +17,4 @@ MonoBehaviour:
   m_Icon: {fileID: 0}
   m_ThemeColor: {r: 0.55, g: 0.82, b: 0.6, a: 1}
   m_IsPlayer: 0
+  m_DisplayMode: 1

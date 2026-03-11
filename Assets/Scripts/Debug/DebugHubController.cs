@@ -121,15 +121,15 @@ namespace ProjectFoundPhone.DebugTools
 
         private void OnFragmentArchiveClicked()
         {
-            FragmentListUI fragmentUI = FindFirstObjectByType<FragmentListUI>();
-            if (fragmentUI != null)
+            DashboardController dashboard = FindFirstObjectByType<DashboardController>();
+            if (dashboard != null)
             {
                 Hide();
-                fragmentUI.Show();
+                dashboard.ShowInventoryOverlay();
             }
             else
             {
-                Debug.LogWarning("DebugHubController: FragmentListUI not found. Run Setup > Fragment List UI first.");
+                Debug.LogWarning("DebugHubController: DashboardController not found in scene.");
             }
         }
 
