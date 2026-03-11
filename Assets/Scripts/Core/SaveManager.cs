@@ -133,6 +133,7 @@ namespace ProjectFoundPhone.Core
             {
                 saveData.CurrentNodeName = GetCurrentNodeName(scenarioManager);
                 saveData.YarnVariables = GetYarnVariables(scenarioManager);
+                saveData.BranchThread = scenarioManager.GetBranchThreadStateSnapshot();
             }
             else
             {
@@ -336,6 +337,8 @@ namespace ProjectFoundPhone.Core
                         scenarioManager.SetVariable(kvp.Key, Convert.ToSingle(kvp.Value));
                     }
                 }
+
+                scenarioManager.ApplyBranchThreadState(saveData.BranchThread);
 
                 if (!string.IsNullOrEmpty(saveData.CurrentNodeName))
                 {

@@ -6,11 +6,10 @@
 
 title: Ch2_Opening
 ---
-<<declare $ch2_completed = false>>
-<<declare $ch2_met_bernardo = false>>
-<<declare $ch2_met_mason = false>>
-<<declare $ch2_met_oliver = false>>
-<<declare $ch2_location_realized = false>>
+<<declare $met_bernardo = false>>
+<<declare $met_mason = false>>
+<<declare $met_oliver = false>>
+<<declare $location_realized = false>>
 
 <<SystemMessage "接続を確立しています...">>
 <<StartWait 1>>
@@ -63,7 +62,7 @@ Bernardoは文書読むのが得意で、MasonとOliverは外を歩き回って�
 
 Marcoから、新しい参加者がいると聞いていました。Barnabyさんですね。
 
-<<set $ch2_met_bernardo to true>>
+<<set $met_bernardo to true>>
 
 <<set $speaker to "player">>
 -> はじめまして
@@ -103,7 +102,7 @@ title: Ch2_BernardoIntro
 <<StartWait 0.8>>
 補足いたします。当該地域は2019年の広域行政再編により「第4管理区域」として再分類されました。「ウェストフィールド地区」は旧称です。 #line:ch2_date_inconsistency_tgt
 
-<<set $ch2_location_realized to true>>
+<<set $location_realized to true>>
 
 <<set $speaker to "player">>
 -> 旧称があったのか
@@ -145,7 +144,7 @@ Pyramidの説明は正確ですが...
 <<Typing false>>
 Mason です。接続しました。Oliver もすぐ来ます。
 
-<<set $ch2_met_mason to true>>
+<<set $met_mason to true>>
 
 <<StartWait 0.8>>
 
@@ -188,7 +187,7 @@ title: Ch2_SignDiscussion
 <<Typing false>>
 Oliver です。こんにちは。
 
-<<set $ch2_met_oliver to true>>
+<<set $met_oliver to true>>
 
 <<StartWait 0.5>>
 
@@ -324,7 +323,5 @@ title: Ch2_Closing
 
 <<StartWait 1>>
 
-<<SystemMessage "--- 2日目 終了 ---">>
-
-<<set $ch2_completed to true>>
+<<EndDay 2>>
 ===

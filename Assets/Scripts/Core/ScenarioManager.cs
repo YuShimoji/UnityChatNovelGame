@@ -31,6 +31,7 @@ namespace ProjectFoundPhone.Core
         private bool m_IsInputLocked = false;
         private CancellationTokenSource m_WaitCancellation;
         private bool m_IsWaiting = false;
+        private BranchThreadState m_BranchThreadState = new BranchThreadState();
 
         [Header("Auto Start")]
         [SerializeField] private bool m_AutoStartYarn = false;
@@ -145,6 +146,7 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.AddCommandHandler<string>("SystemMessage", SystemMessageCommand);
             m_DialogueRunner.AddCommandHandler<string, string, string>("MessageTagged", MessageTaggedCommand);
             m_DialogueRunner.AddCommandHandler<string>("Typing", TypingCommand);
+            m_DialogueRunner.AddCommandHandler<int>("EndDay", EndDayCommand);
 #endif
         }
 
@@ -169,6 +171,7 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.RemoveCommandHandler("SystemMessage");
             m_DialogueRunner.RemoveCommandHandler("MessageTagged");
             m_DialogueRunner.RemoveCommandHandler("Typing");
+            m_DialogueRunner.RemoveCommandHandler("EndDay");
 #endif
         }
         #endregion
@@ -270,6 +273,19 @@ namespace ProjectFoundPhone.Core
 
             await YarnTask.Delay((int)(seconds * 1000), m_WaitCancellation.Token).SuppressCancellationThrow();
 
+            // ダイアログが停止された場合、CancelActiveWait が既にクリーンアップ済み。
+            // 最小限の片付けのみ行い return する。
+            if (m_DialogueRunner == null || !m_DialogueRunner.IsDialogueRunning)
+            {
+                m_IsWaiting = false;
+                if (m_WaitCancellation != null)
+                {
+                    m_WaitCancellation.Dispose();
+                    m_WaitCancellation = null;
+                }
+                return;
+            }
+
             if (m_ChatController != null)
             {
                 m_ChatController.ShowTypingIndicator(false);
@@ -315,7 +331,8 @@ namespace ProjectFoundPhone.Core
             }
             else
             {
-                Debug.LogWarning($"ScenarioManager: DeductionBoard not found. Topic unlocked - {topicData.Title} (ID: {topicID})");
+                // DeductionBoard は凍結中（D-1 決定）。警告ではなく通常ログに留める
+                Debug.Log($"ScenarioManager: Topic unlocked - {topicData.Title} (ID: {topicID})");
             }
 
             // Yarn螟画焚繧呈峩譁ｰ: $has_topic_{topicID} = true
@@ -368,6 +385,28 @@ namespace ProjectFoundPhone.Core
             if (m_ChatController != null)
             {
                 m_ChatController.ShowTypingIndicator(show);
+            }
+        }
+
+        /// <summary>
+        /// EndDay コマンドハンドラ: チャプター終了の共通処理
+        /// Yarn: <<EndDay N>> → "--- N日目 終了 ---" システムメッセージ + チャンネル完了登録
+        /// </summary>
+        private void EndDayCommand(int dayNumber)
+        {
+            // 日数ベースの終了メッセージ
+            SystemMessageCommand($"--- {dayNumber}日目 終了 ---");
+
+            // SaveData にチャンネル完了を登録
+            if (SaveManager.Instance != null && SaveManager.Instance.CurrentSaveData != null)
+            {
+                string channelId = $"ch{dayNumber}";
+                var completedList = SaveManager.Instance.CurrentSaveData.CompletedChannelIDs;
+                if (!completedList.Contains(channelId))
+                {
+                    completedList.Add(channelId);
+                    Debug.Log($"ScenarioManager: EndDay {dayNumber} — channel '{channelId}' marked completed.");
+                }
             }
         }
         #endregion
@@ -480,6 +519,61 @@ namespace ProjectFoundPhone.Core
         /// <summary>
         /// 蜈･蜉帙′繝ｭ繝・け縺輔ｌ縺ｦ縺・ｋ縺九←縺・°
         /// </summary>
+        /// <summary>
+        /// Returns a safe snapshot of branch-thread state.
+        /// </summary>
+        public BranchThreadState GetBranchThreadStateSnapshot()
+        {
+            return m_BranchThreadState?.Clone() ?? new BranchThreadState();
+        }
+
+        /// <summary>
+        /// Applies branch-thread state on load.
+        /// </summary>
+        public void ApplyBranchThreadState(BranchThreadState state)
+        {
+            m_BranchThreadState = state?.Clone() ?? new BranchThreadState();
+        }
+
+        /// <summary>
+        /// Starts branch-thread tracking.
+        /// </summary>
+        public void BeginBranchThread(string branchId)
+        {
+            m_BranchThreadState ??= new BranchThreadState();
+            m_BranchThreadState.ActiveBranchId = branchId;
+            m_BranchThreadState.IsActive = true;
+            m_BranchThreadState.WasCompleted = false;
+            m_BranchThreadState.TransferFlags.Clear();
+        }
+
+        /// <summary>
+        /// Adds one transfer flag from branch to main thread.
+        /// </summary>
+        public void AddBranchTransferFlag(string flagId)
+        {
+            if (string.IsNullOrWhiteSpace(flagId))
+            {
+                return;
+            }
+
+            m_BranchThreadState ??= new BranchThreadState();
+            if (!m_BranchThreadState.TransferFlags.Contains(flagId))
+            {
+                m_BranchThreadState.TransferFlags.Add(flagId);
+            }
+        }
+
+        /// <summary>
+        /// Ends branch-thread tracking.
+        /// </summary>
+        public void EndBranchThread(bool completed)
+        {
+            m_BranchThreadState ??= new BranchThreadState();
+            m_BranchThreadState.IsActive = false;
+            m_BranchThreadState.WasCompleted = completed;
+        }
+
         public bool IsInputLocked => m_IsInputLocked;
 
         /// <summary>

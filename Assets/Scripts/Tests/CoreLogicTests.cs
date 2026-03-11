@@ -281,7 +281,7 @@ namespace ProjectFoundPhone.Tests
         public void SaveData_Serialization_RoundTrip_PreservesData()
         {
             SaveData original = new SaveData(1);
-            original.CurrentNodeName = "Chapter2_Start";
+            original.CurrentNodeName = "Ch2_Opening";
             original.UnlockedTopicIDs.Add("topic_found_phone");
             original.UnlockedTopicIDs.Add("topic_missing_person");
             original.YarnVariables["$has_topic_found_phone"] = true;

@@ -212,6 +212,5 @@ saveLoadUI.Hide();
 - DeductionBoardがシーンに存在するか確認
 
 ## 関連ドキュメント
-- Core Specification: ゲーム全体の仕様
-- HANDOVER.md: プロジェクト引き継ぎドキュメント
-- TASK_028_SaveSystem.md: タスク定義
+- ENGINE_FEATURE_INVENTORY.md: エンジン機能リファレンス
+- WORKFLOW_STATE_SSOT.md: 現在の開発状態

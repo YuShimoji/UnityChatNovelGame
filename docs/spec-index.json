@@ -1,0 +1,209 @@
+[
+  {
+    "id": "SP-IDX",
+    "title": "StorySpec README / Index",
+    "status": "done",
+    "pct": 100,
+    "cat": "core",
+    "file": "docs/StorySpec/README.md",
+    "summary": "StorySpec directory index and usage guide"
+  },
+  {
+    "id": "SP-000",
+    "title": "概要 (Overview)",
+    "status": "done",
+    "pct": 100,
+    "cat": "core",
+    "file": "docs/StorySpec/00_overview.md",
+    "summary": "企画の要点。世界観・コアコンセプト・断片ギミック・進行構造"
+  },
+  {
+    "id": "SP-001",
+    "title": "ゲームプレイ (GDD)",
+    "status": "done",
+    "pct": 100,
+    "cat": "core",
+    "file": "docs/StorySpec/01_gdd_gameplay.md",
+    "summary": "コアループ・サブスレッド・偵察・難易度曲線"
+  },
+  {
+    "id": "SP-002",
+    "title": "ストーリーバイブル",
+    "status": "done",
+    "pct": 100,
+    "cat": "core",
+    "file": "docs/StorySpec/02_story_bible.md",
+    "summary": "世界観・テーマ・語り口・文学的基盤"
+  },
+  {
+    "id": "SP-003",
+    "title": "チャプタービート",
+    "status": "partial",
+    "pct": 40,
+    "cat": "core",
+    "file": "docs/StorySpec/03_chapter_beats.md",
+    "summary": "27ブロック(9章)のビート表。章レベルの概要のみ、節の詳細は未設計。AI生成ドラフト注記あり"
+  },
+  {
+    "id": "SP-004",
+    "title": "キャラクター",
+    "status": "done",
+    "pct": 100,
+    "cat": "core",
+    "file": "docs/StorySpec/04_characters.md",
+    "summary": "6名の人物設定。役割・性格・ストーリー上の機能"
+  },
+  {
+    "id": "SP-005",
+    "title": "AIモデル",
+    "status": "done",
+    "pct": 100,
+    "cat": "core",
+    "file": "docs/StorySpec/05_ai_models.md",
+    "summary": "AI側キャラクター群。壊れ方の差異・変調タイムライン"
+  },
+  {
+    "id": "SP-006",
+    "title": "ハルシコイン",
+    "status": "partial",
+    "pct": 70,
+    "cat": "system",
+    "file": "docs/StorySpec/06_hallucicoin.md",
+    "summary": "獲得方法・難易度曲線・UX演出。コード実装はPhase2まで"
+  },
+  {
+    "id": "SP-007",
+    "title": "断片 (Fragments)",
+    "status": "partial",
+    "pct": 50,
+    "cat": "core",
+    "file": "docs/StorySpec/07_fragments.md",
+    "summary": "不可索引物の定義・設計パターン。コンテンツはCh1-2のみ"
+  },
+  {
+    "id": "SP-008",
+    "title": "UI/UX",
+    "status": "partial",
+    "pct": 55,
+    "cat": "ui",
+    "file": "docs/StorySpec/08_ui_ux.md",
+    "summary": "ダッシュボード・スレッド・プレイヤーリソース表示域。ダッシュボードMVP+チャットバブル仕様+デバッグ機能(Section6)実装済み。プレイヤーリソース表示域(インベントリ)仕様策定済み(2026-03-08)。サブスレッド/インベントリ実装未着手"
+  },
+  {
+    "id": "SP-009",
+    "title": "サウンド/ビジュアル",
+    "status": "todo",
+    "pct": 0,
+    "cat": "ui",
+    "file": "docs/StorySpec/09_audio_visual.md",
+    "summary": "BGM+SEのみ方針。実装未着手"
+  },
+  {
+    "id": "SP-010",
+    "title": "マネタイズ",
+    "status": "todo",
+    "pct": 0,
+    "cat": "system",
+    "file": "docs/StorySpec/10_monetization.md",
+    "summary": "F2P + 広告/スタミナ案。実装未着手"
+  },
+  {
+    "id": "SP-011",
+    "title": "制作計画",
+    "status": "partial",
+    "pct": 20,
+    "cat": "infra",
+    "file": "docs/StorySpec/11_production_plan.md",
+    "summary": "ソロ開発体制・マイルストーン叩き台"
+  },
+  {
+    "id": "SP-012",
+    "title": "参照作品",
+    "status": "done",
+    "pct": 100,
+    "cat": "core",
+    "file": "docs/StorySpec/12_reference_works.md",
+    "summary": "比較軸・インスピレーション元"
+  },
+  {
+    "id": "SP-013",
+    "title": "用語集",
+    "status": "done",
+    "pct": 100,
+    "cat": "core",
+    "file": "docs/StorySpec/13_glossary.md",
+    "summary": "理論語・ゲーム内用語の定義"
+  },
+  {
+    "id": "SP-014",
+    "title": "インタラクション・メカニクス",
+    "status": "partial",
+    "pct": 30,
+    "cat": "system",
+    "file": "docs/StorySpec/14_interaction_mechanics.md",
+    "summary": "3メカニクス候補(指摘/ボード/分岐)の整理。方針決定済み: A>B>C、DeductionBoard凍結、矛盾→断片紐づけ解除、アルケミーD-3+D-1ハイブリッド(2026-03-08)"
+  },
+  {
+    "id": "SP-015",
+    "title": "Feature Triage (2026-03-10)",
+    "status": "done",
+    "pct": 100,
+    "cat": "infra",
+    "file": "docs/StorySpec/15_feature_triage_2026-03-10.md",
+    "summary": "4項目(顔アイコン/スレッド管理/テキスト演出/デザイナー環境)の現状分類と優先バックログ"
+  },
+  {
+    "id": "SP-016",
+    "title": "サブスレッドUI仕様",
+    "status": "partial",
+    "pct": 30,
+    "cat": "ui",
+    "file": "docs/StorySpec/16_subthread_ui.md",
+    "summary": "統合型スレッドモデル、2段階トリガー、フルスクリーンフォーカス+スワイプサイドバー。DRAFT"
+  },
+  {
+    "id": "SP-099",
+    "title": "未決定事項 (Open Questions)",
+    "status": "partial",
+    "pct": 85,
+    "cat": "core",
+    "file": "docs/StorySpec/99_open_questions.md",
+    "summary": "決定待ちの設計質問。解決済み36件、未決定5件(C/D/G/H残)"
+  },
+  {
+    "id": "EN-001",
+    "title": "エンジン機能リファレンス",
+    "status": "partial",
+    "pct": 85,
+    "cat": "infra",
+    "file": "docs/ENGINE_FEATURE_INVENTORY.md",
+    "summary": "Yarnコマンド・キャラ管理・セーブ・演出・バブル表示設定・矛盾・ダッシュボード"
+  },
+  {
+    "id": "EN-002",
+    "title": "ワークフロー SSOT",
+    "status": "partial",
+    "pct": 60,
+    "cat": "infra",
+    "file": "docs/WORKFLOW_STATE_SSOT.md",
+    "summary": "現在の開発状態・セットアップ手順・次ステップ"
+  },
+  {
+    "id": "EN-003",
+    "title": "セーブシステム",
+    "status": "done",
+    "pct": 100,
+    "cat": "data",
+    "file": "docs/SaveSystem_README.md",
+    "summary": "JSON保存・3スロット・チャット履歴・トピック・後方互換"
+  },
+  {
+    "id": "EN-004",
+    "title": "Yarn編集パイプライン",
+    "status": "done",
+    "pct": 100,
+    "cat": "infra",
+    "file": "docs/YarnEditingPipeline.md",
+    "summary": "Yarnファイルの編集・テスト・デプロイ手順"
+  }
+]

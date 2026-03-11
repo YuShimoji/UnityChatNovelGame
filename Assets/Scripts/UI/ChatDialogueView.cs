@@ -161,8 +161,8 @@ namespace ProjectFoundPhone.UI
                     if (index >= 0 && index < dialogueOptions.Length)
                     {
                         selectedOption = dialogueOptions[index];
-
-                        // プレイヤーの選択をチャットに表示（一般的なチャットUI動作）
+                        // プレイヤーの選択をメッセージとして自動表示（Yarn側でのエコー不要）
+                        Debug.Log($"[RunOptionsAsync] Player selected index={index}, text='{choiceTexts[index]}'");
                         m_ChatController.AddMessage("player", choiceTexts[index]);
                     }
                 });
@@ -192,6 +192,9 @@ namespace ProjectFoundPhone.UI
         /// </summary>
         public override YarnTask OnDialogueStartedAsync()
         {
+            // チャプター遷移時の早送り状態引き継ぎを防止
+            FastForwardEnabled = false;
+
             if (m_ChatController == null)
             {
                 m_ChatController = FindFirstObjectByType<ChatController>();

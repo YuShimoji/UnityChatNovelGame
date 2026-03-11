@@ -1,6 +1,6 @@
 # Engine Feature Inventory
 
-**最終更新**: 2026-03-06
+**最終更新**: 2026-03-09
 **エンジン**: Unity 6.3 LTS (6000.3.6f1) + Yarn Spinner 3.1.3
 
 このドキュメントは、シナリオ執筆者が「今のエンジンで何ができるか」を把握するためのリファレンスです。
@@ -52,9 +52,13 @@
 
 - **CharacterID**: Yarn スクリプト内で参照する一意のID
 - **DisplayName**: UI に表示される名前
-- **Icon**: アバター画像（Sprite）※現在バブルには未表示
-- **ThemeColor**: バブルの背景色
+- **Icon**: アバター画像（Sprite）
+- **ThemeColor**: バブルの背景色（白の9-Slice Spriteに乗算して着色）
 - **IsPlayer**: `true` の場合、メッセージが右寄せ表示
+- **DisplayMode**: バブル横の表示モード
+  - `NameOnly` — テキスト内に名前表示、アイコンなし（デフォルト）
+  - `IconOnly` — バブル横にアイコン表示、名前省略
+  - `IconAndName` — アイコン+名前の両方表示
 
 ### Yarn での使い方
 
@@ -148,6 +152,7 @@ title: NodeA
 - 解放済みトピック一覧
 - **チャット履歴**（メッセージバブルの内容: Normal/System/Image 全種別）
 - セーブ日時
+- 完了済みチャンネルID（ダッシュボード進行状態）
 
 ### 保存されない情報
 
@@ -198,9 +203,42 @@ title: NodeA
 - デバッグオーバーレイに `[FF]` タグが表示される
 - 選択肢は早送り中も通常通りプレイヤーの操作を待つ
 
+### Debug Hub（F12）
+
+- **F12キー**でデバッグハブをトグル
+- 全 Yarn ノードの一覧表示（チャプター別グループ、**ストーリー順ソート**）
+- ストーリー順は Yarn ファイル内の `title:` 行出現順で自動決定
+- ノードクリック → 前ダイアログ停止 → メッセージクリア → 選択ノードから再生
+- デバッグオーバーレイ（折りたたみ式）: 現在のノード名・行ID・タグ表示
+
 ---
 
-## 6. ローカライズ対応状況
+## 6. チャットバブル表示設定
+
+### ChatUIConfig（ScriptableObject）
+
+`Resources/ChatUIConfig` で一元管理する主要パラメータ:
+
+| パラメータ | デフォルト値 | 説明 |
+| ---------- | ------------ | ---- |
+| `bubbleMaxWidthPercent` | 0.7 | 画面幅に対するバブル幅上限（割合） |
+| `bubbleMaxWidthPx` | 600 | バブル幅の絶対上限（px）。percentと小さい方を採用 |
+| `bubbleSprite` | null | 9-slice角丸スプライト。null時は矩形 |
+| `showInputField` | false | テキスト入力欄の表示/非表示 |
+
+その他 28 パラメータ（フォントサイズ、色、パディング等）は `ChatUIConfig.cs` を参照。
+
+### タイピングインジケーター
+
+NPC メッセージの前に表示される入力中表示。3つのドットがスケールアニメーション（DOTween Yoyo）で脈動する。メッセージバブルプールとは独立した専用オブジェクト。
+
+### 選択肢UI
+
+選択肢はメッセージ流に溶け込む控えめなデザイン（暗めグレー青、小型、テキスト左揃え）。ScrollRect 内にインライン配置される。選択後、選択テキストがプレイヤーメッセージとして確定表示され、未選択の選択肢は CanvasGroup DOFade でフェードアウトする。色・サイズ・パディングは全て ChatUIConfig SO で調整可能。
+
+---
+
+## 8. ローカライズ対応状況
 
 ### 現状
 
@@ -232,13 +270,13 @@ Yarn Spinner 3.x は以下のローカライズをサポート:
 
 ---
 
-## 7. 矛盾指摘システム（Phase 2 実装済み）
+## 9. 矛盾指摘システム（Phase 2 実装済み）
 
 ### 実装済み機能
 
 | 機能 | 説明 | ファイル |
 | ---- | ---- | -------- |
-| 長押し選択 | バブル0.5秒長押しで1つ目選択、タップで2つ目選択 | `MessageBubble.cs` |
+| 長押し選択 | バブル0.5秒長押しで1つ目選択、タップで2つ目選択。選択時にスケールパルス演出 | `MessageBubble.cs` |
 | 矛盾判定 | ContradictionDatabase の順不同マッチング、クールダウン10秒 | `ContradictionManager.cs` |
 | 成功演出 | 緑フラッシュ + スケールパルス + 接続線 + 通知パネル | `ContradictionFeedbackController.cs` |
 | 失敗演出(不一致) | 赤フラッシュ + 回転シェイク + エラーバナー + クールダウン | 同上 |
@@ -246,7 +284,7 @@ Yarn Spinner 3.x は以下のローカライズをサポート:
 | ヒントバナー | 1つ目選択時に「2つ目をタップ」表示 | 同上 |
 | 接続線 | 2バブル間の直線（Image回転方式、成功/失敗で色変化→フェードアウト） | 同上 |
 | HalluciCoin | 矛盾発見時に報酬加算、セーブ/ロード対応済み | `ContradictionManager.cs` |
-| トピック自動解放 | 矛盾発見時に ContradictionPair.UnlockTopic を DeductionBoard に追加 | `DeductionBoard.cs` |
+| ~~トピック自動解放~~ | ~~矛盾発見時に ContradictionPair.UnlockTopic を DeductionBoard に追加~~ **廃止済み**: 矛盾報酬は HalluciCoin のみに変更（2026-03-07決定） | `DeductionBoard.cs` |
 | データ | 7ペア（Ch1x4, Ch2x3）、全報酬10コイン、難易度1 | `Resources/Contradictions/` |
 
 ### セットアップ要件
@@ -256,14 +294,65 @@ ContentAuthoring シーンの Canvas 直下に `ContradictionFeedbackController`
 
 ---
 
-## 8. 未実装機能（StorySpec で必要だが現在ない機能）
+## 10. ダッシュボード（MVP 実装済み）
+
+### 実装済み機能
+
+| 機能 | 説明 | ファイル |
+| ---- | ---- | -------- |
+| チャンネル一覧 | ChannelData SO ベースのカード表示（Locked/Available/InProgress/Completed） | `DashboardController.cs` |
+| チャンネル遷移 | カードクリック → チャット開始、Back/ESC → ダッシュボード復帰 | 同上 |
+| HalluciCoin 表示 | 右上に "HC: N" 表示（ContradictionManager.HalluciCoin 参照） | 同上 |
+| ChannelData | ScriptableObject: ID, DisplayName, Description, StartNodeName, ChapterNumber, RequiredCompletedChannelID, EnableHints, MaxHintDifficulty | `ChannelData.cs` |
+| 進行状態管理 | SaveData.CompletedChannelIDs でアンロック条件判定 | `SaveData.cs` |
+| チャプター別ヒント制御 | チャンネル選択時に ContradictionManager へ chapter/hint policy を反映（EnableHints, MaxHintDifficulty） | `DashboardController.cs`, `ContradictionManager.cs` |
+| Editor ツール | チャンネルデータ自動生成 + シーンセットアップ | `ChannelDataCreator.cs`, `DashboardSceneSetup.cs` |
+
+### セットアップ要件
+
+1. `Tools > FoundPhone > Create Default Channel Data` でアセット生成
+2. `Tools > FoundPhone > Add Dashboard to Scene` で DashboardController 追加
+3. ScenarioManager の `m_AutoStartYarn` を false に変更
+4. DebugHubController の `m_ShowOnStart` を false に変更
+
+### 既定アセット値（Repository 現在値）
+
+#### `Assets/Resources/Channels/ch1.asset`
+
+- ChannelID: `ch1`
+- DisplayName: `Ch.1 -- Terminal`
+- StartNodeName: `Ch1_Opening`
+- ChapterNumber: `1`
+- RequiredCompletedChannelID: `(empty)`
+- EnableHints: `false`
+- MaxHintDifficulty: `1`
+
+#### `Assets/Resources/Channels/ch2.asset`
+
+- ChannelID: `ch2`
+- DisplayName: `Ch.2 -- Location Confusion`
+- StartNodeName: `Ch2_Opening`
+- ChapterNumber: `2`
+- RequiredCompletedChannelID: `ch1`
+- EnableHints: `true`
+- MaxHintDifficulty: `1`
+
+### 未実装（将来拡張）
+
+- チャプター完了トリガー（CompletedChannelIDs の自動更新）
+- サブスレッド UI
+- フラグメントインベントリ連携
+- 検索バー装飾
+
+---
+
+## 11. 未実装機能（StorySpec で必要だが現在ない機能）
 
 ### 優先度: 高（メインループに必要）
 
 | 機能 | 説明 | 実装難度 |
 | ---- | ---- | -------- |
 | 断片インベントリ | 収集した断片テキストの閲覧UI | 中 |
-| ダッシュボード画面 | チャンネル選択→チャット遷移のメイン画面 | 高 |
 
 ### 優先度: 中（サブコンテンツに必要）
 
@@ -284,7 +373,7 @@ ContentAuthoring シーンの Canvas 直下に `ContradictionFeedbackController`
 
 ---
 
-## 9. ノード設計のベストプラクティス
+## 12. ノード設計のベストプラクティス
 
 ### ノード命名規則（推奨）
 

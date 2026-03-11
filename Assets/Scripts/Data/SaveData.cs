@@ -89,6 +89,20 @@ namespace ProjectFoundPhone.Data
         public int HalluciCoin;
         #endregion
 
+        #region Dashboard Progress
+        /// <summary>
+        /// 完了済みチャンネルIDリスト
+        /// </summary>
+        public List<string> CompletedChannelIDs = new List<string>();
+        #endregion
+
+        #region Branch Thread Spike
+        /// <summary>
+        /// Bridge state for C-branch spike.
+        /// </summary>
+        public BranchThreadState BranchThread = new BranchThreadState();
+        #endregion
+
         #region Chat History
         /// <summary>
         /// チャット履歴のメッセージリスト

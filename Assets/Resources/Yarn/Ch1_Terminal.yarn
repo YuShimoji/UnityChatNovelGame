@@ -6,10 +6,9 @@
 
 title: Ch1_Opening
 ---
-<<declare $ch1_completed = false>>
-<<declare $ch1_met_marco = false>>
-<<declare $ch1_fragment_found = false>>
-<<declare $ch1_noticed_contradiction = false>>
+<<declare $met_marco = false>>
+<<declare $fragment_found = false>>
+<<declare $noticed_contradiction = false>>
 
 <<SystemMessage "端末を起動しています...">>
 <<StartWait 2>>
@@ -106,14 +105,13 @@ title: Ch1_PyramidExplain
 
 <<set $speaker to "player">>
 -> この端末、前からこんなに遅いのか？
-<<set $speaker to "pyramid">>
-<<StartWait 0.8>>
-端末の処理速度は正常範囲内です。通信経路の混雑が原因と考えられます。
-
+    <<set $speaker to "pyramid">>
+    <<StartWait 0.8>>
+    端末の処理速度は正常範囲内です。通信経路の混雑が原因と考えられます。
 -> 他に何人参加する予定なんだ？
-<<set $speaker to "pyramid">>
-<<StartWait 0.8>>
-本セッションには最大6名の参加が予定されています。現在、1名が接続待機中です。
+    <<set $speaker to "pyramid">>
+    <<StartWait 0.8>>
+    本セッションには最大6名の参加が予定されています。現在、1名が接続待機中です。
 
 <<StartWait 1.5>>
 
@@ -124,7 +122,7 @@ title: Ch1_PyramidExplain
 
 title: Ch1_MarcoArrival
 ---
-<<set $ch1_met_marco to true>>
+<<set $met_marco to true>>
 
 <<StartWait 1>>
 
@@ -220,7 +218,7 @@ title: Ch1_AreaContradiction
 <<set $speaker to "marco">>
 まあ、いい。Pyramidに正確な情報を期待するのは、この通信環境じゃ無理か。
 
-<<set $ch1_noticed_contradiction to true>>
+<<set $noticed_contradiction to true>>
 
 <<jump Ch1_TerminalTrouble>>
 ===
@@ -251,16 +249,15 @@ title: Ch1_TerminalTrouble
 
 <<set $speaker to "player">>
 -> ベルナルド？ まだ会ってない人だ。
-<<set $speaker to "marco">>
-<<StartWait 0.5>>
-ベルナルド・フォンセカ。新聞社で働いてた人。文章を読むのが異常にうまい。
-<<StartWait 0.3>>
-彼と、あとメイスンとオリバーっていう二人もこのチャットにいるはずだ。今日はまだ来てないけど。
-
+    <<set $speaker to "marco">>
+    <<StartWait 0.5>>
+    ベルナルド・フォンセカ。新聞社で働いてた人。文章を読むのが異常にうまい。
+    <<StartWait 0.3>>
+    彼と、あとメイスンとオリバーっていう二人もこのチャットにいるはずだ。今日はまだ来てないけど。
 -> 仕様なら仕方ないのか...。
-<<set $speaker to "marco">>
-<<StartWait 0.5>>
-仕方ない。でもさ、仕様だとしても、なぜこんな不便な仕様にしたのかは聞きたいよな。
+    <<set $speaker to "marco">>
+    <<StartWait 0.5>>
+    仕方ない。でもさ、仕様だとしても、なぜこんな不便な仕様にしたのかは聞きたいよな。
 
 <<StartWait 1>>
 
@@ -334,7 +331,7 @@ title: Ch1_FragmentDiscovery
 
 ベルナルドはこれを「不可索引物」って呼んでた。索引に載らない情報。検索しても引っかからない文書の欠片。
 
-<<set $ch1_fragment_found to true>>
+<<set $fragment_found to true>>
 
 <<set $speaker to "player">>
 -> 不可索引物... 検索できない情報、か。
@@ -437,7 +434,5 @@ Barnabyさん、1点補足があります。
 
 <<StartWait 2>>
 
-<<SystemMessage "--- 1日目 終了 ---">>
-
-<<set $ch1_completed to true>>
+<<EndDay 1>>
 ===

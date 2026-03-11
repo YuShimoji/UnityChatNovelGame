@@ -381,7 +381,7 @@ namespace ProjectFoundPhone.DebugTools
             var storyOrder = BuildStoryOrderMap();
             string[] sorted = nodeNames
                 .Where(n => !string.IsNullOrWhiteSpace(n))
-                .OrderBy(n => GetChapterOrder(n))
+                .OrderBy(n => YarnNodeHelper.GetSortOrder(n))
                 .ThenBy(n => storyOrder.TryGetValue(n, out int o) ? o : int.MaxValue)
                 .ToArray();
 
@@ -390,7 +390,7 @@ namespace ProjectFoundPhone.DebugTools
             int lastChapter = -1;
             foreach (string nodeName in sorted)
             {
-                int chapter = GetChapterOrder(nodeName);
+                int chapter = YarnNodeHelper.GetSortOrder(nodeName);
                 if (chapter != lastChapter)
                 {
                     string header = chapter < 90
@@ -403,20 +403,7 @@ namespace ProjectFoundPhone.DebugTools
             }
         }
 
-        /// <summary>
-        /// ノード名からチャプター順序を返す（Ch1=1, Ch2=2, ... その他=99）
-        /// </summary>
-        private static int GetChapterOrder(string nodeName)
-        {
-            if (string.IsNullOrEmpty(nodeName)) return 99;
-            // "Ch1_", "Ch2_" 等のプレフィックスを解析
-            if (nodeName.Length >= 3 && nodeName.StartsWith("Ch") && char.IsDigit(nodeName[2]))
-            {
-                return nodeName[2] - '0';
-            }
-            // FirstSlice等のデバッグ用ノードは後方
-            return 90;
-        }
+        // チャプター番号パースは YarnNodeHelper.GetSortOrder() に統合済み
 
         /// <summary>
         /// Yarn ファイル内のノード定義順（title: 行の出現順）をストーリー順として返す。
@@ -457,21 +444,29 @@ namespace ProjectFoundPhone.DebugTools
                 m_BackButton.SetActive(true);
             }
 
+            // StopScenario を ClearMessages より先に実行（状態汚染防止）
+            ScenarioManager scenarioManager = FindFirstObjectByType<ScenarioManager>();
+            if (scenarioManager != null)
+            {
+                scenarioManager.StopScenario();
+            }
+            else if (m_DialogueRunner != null)
+            {
+                m_DialogueRunner.Stop();
+            }
+
             ChatController chatController = FindFirstObjectByType<ChatController>();
             if (chatController != null)
             {
                 chatController.ClearMessages();
             }
 
-            ScenarioManager scenarioManager = FindFirstObjectByType<ScenarioManager>();
             if (scenarioManager != null)
             {
-                scenarioManager.StopScenario();
                 scenarioManager.StartScenario(nodeName);
             }
             else if (m_DialogueRunner != null)
             {
-                m_DialogueRunner.Stop();
                 m_DialogueRunner.StartDialogue(nodeName);
             }
         }

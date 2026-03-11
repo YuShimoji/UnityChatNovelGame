@@ -3,6 +3,16 @@ using UnityEngine;
 namespace ProjectFoundPhone.Data
 {
     /// <summary>
+    /// キャラクターの表示モード（バブル横のアイコン/名前表示制御）
+    /// </summary>
+    public enum CharacterDisplayMode
+    {
+        NameOnly,
+        IconOnly,
+        IconAndName
+    }
+
+    /// <summary>
     /// キャラクターの静的データを管理するScriptableObject
     /// Yarn Spinnerのキャラクター名と紐づけ、チャットUIの表示制御に使用する
     /// </summary>
@@ -15,6 +25,7 @@ namespace ProjectFoundPhone.Data
         [SerializeField] private Sprite m_Icon;
         [SerializeField] private Color m_ThemeColor = Color.white;
         [SerializeField] private bool m_IsPlayer;
+        [SerializeField] private CharacterDisplayMode m_DisplayMode = CharacterDisplayMode.NameOnly;
         #endregion
 
         #region Public Properties
@@ -42,6 +53,11 @@ namespace ProjectFoundPhone.Data
         /// プレイヤー自身かどうか（右寄せ/左寄せの判定に使用）
         /// </summary>
         public bool IsPlayer => m_IsPlayer;
+
+        /// <summary>
+        /// バブル横の表示モード（アイコンのみ/アイコン+名前/名前のみ）
+        /// </summary>
+        public CharacterDisplayMode DisplayMode => m_DisplayMode;
         #endregion
 
         #region Public Methods
