@@ -183,10 +183,10 @@
     "id": "EN-002",
     "title": "ワークフロー SSOT",
     "status": "partial",
-    "pct": 60,
+    "pct": 75,
     "cat": "infra",
     "file": "docs/WORKFLOW_STATE_SSOT.md",
-    "summary": "現在の開発状態・セットアップ手順・次ステップ"
+    "summary": "現在の開発状態・セットアップ手順・次ステップ。2026-03-11 truth split解消済み"
   },
   {
     "id": "EN-003",
