@@ -38,8 +38,22 @@ namespace ProjectFoundPhone.Data
         [Tooltip("バブル幅の上限 (ピクセル絶対値、percentと小さい方を採用)")]
         public float bubbleMaxWidthPx = 600f;
 
-        [Tooltip("バブル背景スプライト (9-slice角丸、null=矩形)")]
+        [Tooltip("バブル背景スプライト (9-slice角丸、null=自動生成)")]
         public Sprite bubbleSprite;
+
+        [Tooltip("自動生成角丸の半径 (px)。bubbleSprite 指定時は無視")]
+        [Range(0f, 40f)]
+        public float bubbleCornerRadius = 16f;
+
+        [Header("Bubble Shadow")]
+        [Tooltip("バブルに影を付けるか")]
+        public bool bubbleShadowEnabled = true;
+
+        [Tooltip("影の色")]
+        public Color bubbleShadowColor = new Color(0f, 0f, 0f, 0.3f);
+
+        [Tooltip("影のオフセット (px)")]
+        public Vector2 bubbleShadowDistance = new Vector2(2f, -2f);
 
         [Header("Layout")]
         [Tooltip("ラッパーの端パディング (px)")]

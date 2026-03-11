@@ -8,7 +8,7 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
-現在の状況: MVP実装完了（ダッシュボード/インベントリUI/チャットバブル修正/バグ修正3件）。Doc SSOT整備完了（truth split解消、レガシー12ファイル削除）。次セッションの方針相談済み: (1)通知システム仕様策定 (2)既読/未読+タイムスタンプ仕様 (3)UIデザインシステム (4)画面遷移マップ文書化。未着手の実装: 矛盾Phase2セットアップ、C-branch Step2、サブスレッドUI、Records。
+現在の状況 (2026-03-12): チャットバブルUI大幅リファクタ実施（未テスト）。バブル幅計算を構造修正（FinalizeBubbleSize新設: ラッパー配置後に高さ再計算）。名前:本文を改行分離（リッチテキスト）。9-slice角丸+影を追加。SystemMessage分岐ルーティングの準備コメント追加。Debug Overlay デフォルトOFF化。全変更はUnity再生テスト未実施。
 
 ## DECISION LOG
 
@@ -18,6 +18,10 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 | 2026-03-11 | TopicDataプレフィックス分類規約を策定 | fragment_ / record_ / topic_ / その他 | InventoryTabController.GetCategory()に集約。T_*/debug_*はTopicにフォールバック |
 | 2026-03-11 | バブルスクロール制御をタイプライター限定ピンニングに変更 | 常時ピンニング / タイプライター限定 | 常時ピンニングはユーザーのスクロール操作を完全に阻害していた |
 | 2026-03-11 | 選択肢色をUIConfig.choiceButtonColorに統一 | playerThemeColor / choiceButtonColor | playerThemeColorは鮮やかすぎ、選択肢は独立した控えめな色が適切 |
+| 2026-03-12 | NPC名前:本文を改行分離 | 同一行「名前: 本文」/ 改行分離 | 折り返し時に本文開始位置で揃えるため。名前はmessageFontSize*0.75のボールド |
+| 2026-03-12 | バブル幅計算をラッパー配置後に最終確定 | 配置前に確定 / 配置後にFinalize | 配置前だとHLG+アイコンによる幅変動で高さ不整合が発生する構造的問題 |
+| 2026-03-12 | SystemMessage表示先の分岐準備 | 即実装 / ルーティングコメントのみ | ステータスバーUI新設は今は不要。将来の分離に備えて分岐ポイントのみ |
+| 2026-03-12 | Debug Overlay デフォルトOFF | true / false | 通常表示と開発表示の同居で確認対象がぶれるため。Inspector ON で個別有効化可能 |
 
 ## Key Paths
 

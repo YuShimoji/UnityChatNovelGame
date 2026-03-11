@@ -205,5 +205,41 @@
     "cat": "infra",
     "file": "docs/YarnEditingPipeline.md",
     "summary": "Yarnファイルの編集・テスト・デプロイ手順"
+  },
+  {
+    "id": "EN-005",
+    "title": "オートセーブ設計",
+    "status": "partial",
+    "pct": 30,
+    "cat": "system",
+    "file": "docs/AUTOSAVE_DESIGN.md",
+    "summary": "オートセーブの設計方針・タイミング・データ構造"
+  },
+  {
+    "id": "EN-006",
+    "title": "UI実装仕様",
+    "status": "partial",
+    "pct": 50,
+    "cat": "ui",
+    "file": "docs/UI_IMPLEMENTATION_SPEC.md",
+    "summary": "チャットバブル・ダッシュボード・インベントリ等のUI実装詳細"
+  },
+  {
+    "id": "EN-007",
+    "title": "仕様決定記録",
+    "status": "done",
+    "pct": 100,
+    "cat": "infra",
+    "file": "docs/SPEC_DECISIONS.md",
+    "summary": "各機能の設計判断と選択肢の記録"
+  },
+  {
+    "id": "EN-008",
+    "title": "MVPテストガイド",
+    "status": "done",
+    "pct": 100,
+    "cat": "infra",
+    "file": "docs/MVP_TEST_GUIDE.md",
+    "summary": "MVP動作確認の手順書・チェックリスト"
   }
 ]

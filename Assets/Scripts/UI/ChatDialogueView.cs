@@ -15,7 +15,7 @@ namespace ProjectFoundPhone.UI
     public class ChatDialogueView : DialoguePresenterBase
     {
         [SerializeField] private float m_LineDisplayDelay = 0.5f;
-        [SerializeField] private bool m_ShowDebugOverlay = true;
+        [SerializeField] private bool m_ShowDebugOverlay = false;
 
         private DialogueRunner? m_DialogueRunner;
         private ChatController? m_ChatController;

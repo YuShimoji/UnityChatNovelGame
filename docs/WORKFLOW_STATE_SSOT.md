@@ -1,7 +1,7 @@
 # WORKFLOW STATE SSOT
 
-**Updated**: 2026-03-11
-**Phase**: ダッシュボード MVP + インベントリUI 実装済み — 動作確認待ち
+**Updated**: 2026-03-12
+**Phase**: MVP実装完了 + Bug修正済み — 矛盾Phase2セットアップ・本番コンテンツ設計待ち
 **Branch**: main
 
 ## Mission
@@ -41,10 +41,10 @@ Ch1/Ch2 Yarn スクリプトはエンジン検証用モックであり、本番�
   - Ch1 後半: プレイヤーセリフ一部欠落の可能性（要再確認）
   - Ch2: タイピングインジケーター位置修正 → 要確認
   - Ch2: 選択肢タイミング修正 → 要確認
-- [ ] 発見バグ修正（2026-03-11 テストで検出）
-  - Bug-1: ESC 停止時 `DialogueException: Cannot continue running dialogue` (StopScenario 非同期競合)
-  - Bug-2: 選択肢 `DialogueException: SetSelectedOption was called` (UI コールバック競合)
-  - Bug-3: `DeductionBoard: Instance not found in scene` Warning スパム (InventoryTab の null 未ガード)
+- [x] 発見バグ修正（2026-03-11 テスト検出 → d2d2d78 で修正済み）
+  - Bug-1: ESC 停止時 `DialogueException` → StopScenario deferred Stop() via coroutine
+  - Bug-2: 選択肢 `DialogueException` → CancelActiveWait first, Stop next frame
+  - Bug-3: `DeductionBoard: Instance not found` → s_WarnedNotFound flag で warn-once 化
 
 ## 開発継続プラン
 
@@ -90,7 +90,7 @@ ContentAuthoring シーンで以下を行う必要あり:
 | # | 作業 | 分類 | 前提 | 状態 |
 | --- | ------ | ---- | ------ | ------ |
 | 1 | ~~ダッシュボード動作確認~~ | A | — | **済** (2026-03-11) |
-| 2 | 発見バグ修正 (Bug-1/2/3) | A | — | 未着手 |
+| 2 | ~~発見バグ修正 (Bug-1/2/3)~~ | A | — | **済** (d2d2d78) |
 | 3 | ~~インベントリ UI~~ | A | — | **済** (2026-03-11) |
 | 4 | ~~チャットバブル表示 + スクロール修正~~ | A | — | **済** (2026-03-11、目視PASS) |
 | 5 | 矛盾 Phase 2 精査 + 動作確認 | A | ContradictionFeedback セットアップ | 未確認 |

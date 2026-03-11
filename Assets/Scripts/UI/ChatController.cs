@@ -80,6 +80,9 @@ namespace ProjectFoundPhone.UI
         /// <summary>ChatUIConfig SO へのキャッシュ付きアクセス</summary>
         private ChatUIConfig m_UIConfig;
         private ChatUIConfig UIConfig => m_UIConfig ??= ChatUIConfig.Instance;
+
+        /// <summary>ランタイム生成された角丸スプライト (キャッシュ)</summary>
+        private Sprite m_GeneratedRoundedSprite;
         #endregion
 
         #region Unity Lifecycle
@@ -267,12 +270,10 @@ namespace ProjectFoundPhone.UI
             if (bubbleBackground != null)
             {
                 bubbleBackground.color = themeColor;
-                if (UIConfig.bubbleSprite != null)
-                {
-                    bubbleBackground.sprite = UIConfig.bubbleSprite;
-                    bubbleBackground.type = Image.Type.Sliced;
-                }
             }
+
+            // 角丸スプライト + 影を適用
+            ApplyBubbleVisuals(bubble);
 
             TextMeshProUGUI textComponent = bubble.GetComponentInChildren<TextMeshProUGUI>();
             if (textComponent != null)
@@ -302,14 +303,10 @@ namespace ProjectFoundPhone.UI
             if (bubbleBackground != null)
             {
                 bubbleBackground.color = themeColor;
-
-                // 角丸スプライトの適用 (9-slice)
-                if (UIConfig.bubbleSprite != null)
-                {
-                    bubbleBackground.sprite = UIConfig.bubbleSprite;
-                    bubbleBackground.type = Image.Type.Sliced;
-                }
             }
+
+            // 角丸スプライト + 影を適用
+            ApplyBubbleVisuals(bubble);
 
             // MessageBubble の m_OriginalColor を同期（プール再利用時の色汚染防止）
             MessageBubble mb = bubble.GetComponent<MessageBubble>();
@@ -318,13 +315,8 @@ namespace ProjectFoundPhone.UI
                 mb.SyncOriginalColor();
             }
 
-            // バブルの LayoutElement: HLG が幅を制御するため flexibleWidth で拡張を許可
-            LayoutElement layoutElement = bubble.GetComponent<LayoutElement>();
-            if (layoutElement != null)
-            {
-                layoutElement.flexibleWidth = 1f;
-                layoutElement.preferredWidth = -1f;
-            }
+            // バブルの LayoutElement: CreateMessageBubble で設定済みの preferredWidth を維持
+            // flexibleWidth = 0 でテキスト幅フィットを実現
 
             if (m_ScrollRect == null || m_ScrollRect.content == null) return;
 
@@ -336,7 +328,7 @@ namespace ProjectFoundPhone.UI
             wrapper.transform.SetSiblingIndex(bubble.transform.GetSiblingIndex());
 
             HorizontalLayoutGroup hlg = wrapper.GetComponent<HorizontalLayoutGroup>();
-            hlg.childForceExpandWidth = true;  // 子要素を利用可能幅いっぱいに拡張
+            hlg.childForceExpandWidth = false; // テキスト幅にフィット (バブルの preferredWidth を尊重)
             hlg.childForceExpandHeight = false;
             hlg.childControlWidth = true;      // HLG が子要素の幅を制御
             hlg.childControlHeight = true;
@@ -602,15 +594,14 @@ namespace ProjectFoundPhone.UI
             // ConfigureBubble はテキスト高さ算出後に1回だけ呼ぶ
             ApplyThemeColor(messageBubble, charID);
 
-            // ラッパー HLG がバブル幅を解決するようにレイアウトを強制更新
-            Canvas.ForceUpdateCanvases();
-
             // 表示名・テキスト構築 (DisplayMode に応じた切替)
+            // NPC: 名前行と本文行を改行で分離し、折り返し時に本文開始位置で揃える
             bool isSystemMessage = string.IsNullOrEmpty(charID) || charID.ToLower() == "system";
             bool isPlayerMsg = CharacterDatabase.Instance != null
                 ? CharacterDatabase.Instance.IsPlayer(charID) : charID == "player";
 
             string finalText;
+            string nameLineText = null; // 名前行の幅計算用 (名前がある場合のみ)
             if (isSystemMessage)
             {
                 finalText = text;
@@ -632,26 +623,52 @@ namespace ProjectFoundPhone.UI
                 else
                 {
                     string displayName = profile?.DisplayName ?? charID;
-                    finalText = $"{displayName}: {text}";
+                    // 名前行と本文行を改行で分離
+                    // 名前は小さめフォント + ボールドで表示
+                    float nameSize = UIConfig.messageFontSize * 0.75f;
+                    nameLineText = $"{displayName}";
+                    finalText = $"<size={nameSize:F0}><b>{displayName}</b></size>\n{text}";
                 }
             }
             textComponent.text = finalText;
 
-            // テキストのメッシュを強制更新して高さを計算
-            textComponent.ForceMeshUpdate();
+            // --- バブル幅フィット + 高さ計算 ---
+            // テキスト領域の左右パディング合計 (offsetMin.x=10 + |offsetMax.x|=10 = 20)
+            float textPadH = 20f;
+            // フォントメトリクス丸め誤差対策の安全マージン
+            float safetyMargin = 4f;
+            float maxWidthFromPercent = Screen.width * UIConfig.bubbleMaxWidthPercent;
+            float maxBubbleWidth = Mathf.Min(maxWidthFromPercent, UIConfig.bubbleMaxWidthPx);
 
-            LayoutElement bubbleLayout = messageBubble.GetComponent<LayoutElement>();
-            if (bubbleLayout != null)
+            // TMPの GetPreferredValues で折り返しなしのテキスト幅を取得
+            // 名前行がある場合: 名前行と本文行それぞれの自然幅の大きい方を使う
+            float naturalTextWidth;
+            if (nameLineText != null)
             {
-                float textHeight = textComponent.preferredHeight;
-                bubbleLayout.preferredHeight = Mathf.Max(minH, textHeight + UIConfig.bubbleTextPadding);
+                // 本文のみの自然幅
+                Vector2 bodyPref = textComponent.GetPreferredValues(text);
+                // 名前行の自然幅 (リッチテキストタグ含む)
+                float nameSize = UIConfig.messageFontSize * 0.75f;
+                Vector2 namePref = textComponent.GetPreferredValues($"<size={nameSize:F0}><b>{nameLineText}</b></size>");
+                naturalTextWidth = Mathf.Max(bodyPref.x, namePref.x);
             }
+            else
+            {
+                Vector2 preferredSize = textComponent.GetPreferredValues(finalText);
+                naturalTextWidth = preferredSize.x;
+            }
+            float fitWidth = Mathf.Min(naturalTextWidth + textPadH + safetyMargin, maxBubbleWidth);
 
-            // レイアウトを即座に更新
-            Canvas.ForceUpdateCanvases();
+            // バブル幅を仮確定 (ConfigureBubble 後に FinalizeBubbleSize で最終調整)
+            layoutElement.preferredWidth = fitWidth;
+            layoutElement.flexibleWidth = 0f;
 
-            // バブルの最終処理（配置、アニメーションのみ、スクロールは後で）
+            // バブルの最終処理（ラッパー生成 + 配置）
             ConfigureBubble(messageBubble, charID, isConsecutive);
+
+            // ラッパー内での最終幅に基づいて高さを再計算
+            FinalizeBubbleSize(messageBubble, minH);
+
             AnimateBubbleIn(messageBubble);
 
             // タイプライター効果を適用
@@ -995,6 +1012,14 @@ namespace ProjectFoundPhone.UI
                 }
             }
 
+            // 画像バブルの幅をコンテンツサイズに合わせる
+            LayoutElement imgLayout = imageBubble.GetComponent<LayoutElement>();
+            if (imgLayout == null) imgLayout = imageBubble.AddComponent<LayoutElement>();
+            RectTransform imgContentRect = imageContent?.GetComponent<RectTransform>();
+            float imgBubbleWidth = imgContentRect != null ? imgContentRect.sizeDelta.x + 20f : m_ImageMaxWidth + 20f;
+            imgLayout.preferredWidth = imgBubbleWidth;
+            imgLayout.flexibleWidth = 0f;
+
             // 連続メッセージ判定
             bool isConsecutive = (charID == m_LastSpeaker);
 
@@ -1009,6 +1034,11 @@ namespace ProjectFoundPhone.UI
         /// システムメッセージ（通知）をチャットに追加
         /// キャラクターの発言ではなく、中央揃えのグレーテキストで表示する
         /// 例: 「グループに参加しました」「新しいトピックが解放されました」
+        ///
+        /// ルーティング規則:
+        /// - 「【SYSTEM】」プレフィックス: 端末状態通知 (将来的にステータスバーへ移行予定)
+        /// - それ以外: 進行通知 (インライン表示を維持)
+        /// 現時点では両方ともインライン表示するが、分岐ポイントを用意しておく。
         /// </summary>
         /// <param name="text">システムメッセージのテキスト</param>
         public void AddSystemMessage(string text)
@@ -1019,6 +1049,11 @@ namespace ProjectFoundPhone.UI
             {
                 return;
             }
+
+            // ルーティング分岐: 端末状態通知 vs 進行通知
+            // 将来的に status カテゴリはステータスバー/トーストへ移行する
+            // bool isStatusMessage = text.StartsWith("【SYSTEM】");
+            // TODO: isStatusMessage == true の場合、ステータスバー/トーストへルーティング
 
             // 履歴に記録（復元中は二重記録しない）
             if (!m_IsRestoringHistory)
@@ -1078,6 +1113,14 @@ namespace ProjectFoundPhone.UI
             }
             bubbleBackground.color = UIConfig.systemMessageBgColor;
             bubbleBackground.raycastTarget = false;
+
+            // 角丸スプライトを適用 (影はシステムメッセージには付けない)
+            Sprite sysSprite = UIConfig.bubbleSprite ?? GetOrCreateRoundedSprite();
+            if (sysSprite != null)
+            {
+                bubbleBackground.sprite = sysSprite;
+                bubbleBackground.type = Image.Type.Sliced;
+            }
 
             // LayoutElementを追加
             LayoutElement layoutElement = systemBubble.GetComponent<LayoutElement>();
@@ -1356,9 +1399,11 @@ namespace ProjectFoundPhone.UI
                 if (buttonBg != null)
                 {
                     buttonBg.color = UIConfig.choiceButtonColor;
-                    if (UIConfig.bubbleSprite != null)
+                    // 角丸スプライト適用 (選択肢ボタンにも共通)
+                    Sprite choiceSprite = UIConfig.bubbleSprite ?? GetOrCreateRoundedSprite();
+                    if (choiceSprite != null)
                     {
-                        buttonBg.sprite = UIConfig.bubbleSprite;
+                        buttonBg.sprite = choiceSprite;
                         buttonBg.type = Image.Type.Sliced;
                     }
                 }
@@ -2123,6 +2168,139 @@ namespace ProjectFoundPhone.UI
             // 復元完了後、最下部へスクロール
             AutoScroll();
         }
+        #endregion
+
+        #region Bubble Visual Helpers
+
+        /// <summary>
+        /// 角丸矩形の 9-slice 用 Sprite をランタイム生成する。
+        /// 白色テクスチャを生成し、Image.color でテーマカラーを乗算する想定。
+        /// </summary>
+        private Sprite GetOrCreateRoundedSprite()
+        {
+            if (m_GeneratedRoundedSprite != null) return m_GeneratedRoundedSprite;
+
+            float radius = UIConfig.bubbleCornerRadius;
+            if (radius <= 0f) return null;
+
+            // テクスチャサイズ: 角丸半径の2倍 + 中央2px (9-slice の伸縮領域)
+            int r = Mathf.CeilToInt(radius);
+            int size = r * 2 + 2;
+            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false);
+            tex.filterMode = FilterMode.Bilinear;
+            tex.wrapMode = TextureWrapMode.Clamp;
+
+            var pixels = new Color32[size * size];
+            var white = new Color32(255, 255, 255, 255);
+            var clear = new Color32(0, 0, 0, 0);
+
+            for (int y = 0; y < size; y++)
+            {
+                for (int x = 0; x < size; x++)
+                {
+                    // 四隅の角丸判定
+                    float dx = 0f, dy = 0f;
+                    if (x < r && y < r)           { dx = r - x - 0.5f; dy = r - y - 0.5f; }      // 左下
+                    else if (x >= size - r && y < r)    { dx = x - (size - r) + 0.5f; dy = r - y - 0.5f; }  // 右下
+                    else if (x < r && y >= size - r)    { dx = r - x - 0.5f; dy = y - (size - r) + 0.5f; }  // 左上
+                    else if (x >= size - r && y >= size - r) { dx = x - (size - r) + 0.5f; dy = y - (size - r) + 0.5f; } // 右上
+
+                    if (dx > 0f || dy > 0f)
+                    {
+                        float dist = Mathf.Sqrt(dx * dx + dy * dy);
+                        if (dist > r)
+                            pixels[y * size + x] = clear;
+                        else if (dist > r - 1f)
+                        {
+                            // アンチエイリアス: 境界付近のアルファを補間
+                            byte a = (byte)(255 * (r - dist));
+                            pixels[y * size + x] = new Color32(255, 255, 255, a);
+                        }
+                        else
+                            pixels[y * size + x] = white;
+                    }
+                    else
+                    {
+                        pixels[y * size + x] = white;
+                    }
+                }
+            }
+
+            tex.SetPixels32(pixels);
+            tex.Apply();
+
+            // 9-slice border: 角丸領域をボーダーに設定
+            var border = new Vector4(r, r, r, r);
+            m_GeneratedRoundedSprite = Sprite.Create(
+                tex,
+                new Rect(0, 0, size, size),
+                new Vector2(0.5f, 0.5f),
+                100f,
+                0,
+                SpriteMeshType.FullRect,
+                border
+            );
+            m_GeneratedRoundedSprite.name = "GeneratedRoundedBubble";
+            return m_GeneratedRoundedSprite;
+        }
+
+        /// <summary>
+        /// ConfigureBubble でラッパーに配置した後、最終的なバブル幅に基づいてテキスト高さを計算し
+        /// LayoutElement.preferredHeight を確定する。
+        /// これにより「幅計算 → ラッパー配置 → 利用可能幅変化 → 高さ不整合」問題を解消する。
+        /// </summary>
+        private void FinalizeBubbleSize(GameObject bubble, float minHeight)
+        {
+            // ラッパー内でのレイアウトを確定
+            Canvas.ForceUpdateCanvases();
+
+            TextMeshProUGUI textComponent = bubble.GetComponentInChildren<TextMeshProUGUI>();
+            if (textComponent == null) return;
+
+            // テキストメッシュを最終幅で再生成
+            textComponent.ForceMeshUpdate();
+
+            LayoutElement bubbleLayout = bubble.GetComponent<LayoutElement>();
+            if (bubbleLayout != null)
+            {
+                float textHeight = textComponent.preferredHeight;
+                bubbleLayout.preferredHeight = Mathf.Max(minHeight, textHeight + UIConfig.bubbleTextPadding);
+            }
+
+            // 最終レイアウト更新
+            Canvas.ForceUpdateCanvases();
+        }
+
+        /// <summary>
+        /// バブルの Image に角丸スプライトと影を適用する。
+        /// </summary>
+        private void ApplyBubbleVisuals(GameObject bubble)
+        {
+            Image img = bubble.GetComponent<Image>();
+            if (img == null) return;
+
+            // 角丸スプライト
+            Sprite sprite = UIConfig.bubbleSprite ?? GetOrCreateRoundedSprite();
+            if (sprite != null)
+            {
+                img.sprite = sprite;
+                img.type = Image.Type.Sliced;
+                img.pixelsPerUnitMultiplier = 1f;
+            }
+
+            // Shadow コンポーネント
+            if (UIConfig.bubbleShadowEnabled)
+            {
+                Shadow shadow = bubble.GetComponent<Shadow>();
+                if (shadow == null)
+                {
+                    shadow = bubble.AddComponent<Shadow>();
+                }
+                shadow.effectColor = UIConfig.bubbleShadowColor;
+                shadow.effectDistance = UIConfig.bubbleShadowDistance;
+            }
+        }
+
         #endregion
     }
 }

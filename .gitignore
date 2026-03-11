@@ -95,3 +95,6 @@ docs/evidence/**/MonoBleedingEdge/
 docs/evidence/**/*.exe
 docs/evidence/**/*.dll
 docs/evidence/**/UnityChatNovelGame_Data/
+
+# Scene backups
+*.unity.backup
