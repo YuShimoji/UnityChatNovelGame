@@ -8,7 +8,7 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
-現在の状況 (2026-03-13): Yarnディレクトリ分離完了(active/archive)。Ch1_Terminal.yarnをarchiveに移動、Ch1_Day1.yarnがCh1正式ソース。バブルUI修正(P1角丸+P5名前行)は未テスト。Day Resume基盤Phase1は実装済み未テスト。未着手: P2幅/P3+P4色/P6コントラスト。
+現在の状況 (2026-03-13): Yarnディレクトリ分離完了(active/archive)、Ch1再生確認済み。手動テストで発見された問題3件: (1)角丸スプライトが出ない(generatedSprite=null、GetOrCreateRoundedSprite失敗)、(2)名前行が本文の斜体に影響(リッチテキストスコープ)、(3)ハブ選択肢が無限ループ(全トピック消化後も終了選択肢が出ない可能性)。バブル幅変更は動作確認済み。選択肢の表示・機能は正常。Day Resume基盤Phase1は実装済み未テスト。未着手: P2幅/P3+P4色/P6コントラスト。
 
 ## DECISION LOG
 
