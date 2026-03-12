@@ -15,7 +15,7 @@ MonoBehaviour:
   m_ChannelID: ch1
   m_DisplayName: Ch.1 -- Terminal
   m_Description: "Pyramid\u3068\u306E\u6700\u521D\u306E\u30B3\u30F3\u30BF\u30AF\u30C8\u3002\u30BF\u30FC\u30DF\u30CA\u30EB\u306E\u5947\u5999\u306A\u6319\u52D5\u3002"
-  m_StartNodeName: Ch1_Opening
+  m_StartNodeName: Ch1_Day1_Opening
   m_ChapterNumber: 1
   m_RequiredCompletedChannelID: 
   m_EnableHints: 0

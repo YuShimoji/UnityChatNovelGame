@@ -23,7 +23,7 @@ namespace ProjectFoundPhone.Editor
             CreateChannel(folderPath, "ch1",
                 "Ch.1 -- Terminal",
                 "Pyramidとの最初のコンタクト。ターミナルの奇妙な挙動。",
-                "Ch1_Opening", 1, "",
+                "Ch1_Day1_Opening", 1, "",
                 enableHints: false, maxHintDifficulty: 1);
 
             CreateChannel(folderPath, "ch2",

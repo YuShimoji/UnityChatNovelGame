@@ -11,7 +11,7 @@
 
 ### 手順
 
-1. `Assets/Resources/Yarn/` に `Test_MyScene.yarn` を新規作成
+1. `Assets/Resources/Yarn/active/` に `Test_MyScene.yarn` を新規作成
 2. 以下をコピペして保存:
 
 ```yarn
@@ -69,14 +69,15 @@ title: 次のノード
 ### ファイル配置
 
 ```
-Assets/Resources/Yarn/
+Assets/Resources/Yarn/active/
   Ch1_Day1.yarn      ← 第1章 Day 1
   Ch1_Day2.yarn      ← 第1章 Day 2
   Ch1_Day3.yarn      ← 第1章 Day 3
   DebugScript.yarn   ← デバッグ用
 ```
 
-`Assets/Resources/Yarn/` 内に `.yarn` ファイルを置くだけで自動認識される。
+`Assets/Resources/Yarn/active/` 内に `.yarn` ファイルを置くだけでコンパイル対象になる。
+旧モックは `Assets/Resources/Yarn/archive/` に移動すれば除外される。
 
 ---
 
@@ -608,7 +609,7 @@ Error: Variable $met_marco has already been declared
 
 ## 付録: 新チャプター追加チェックリスト
 
-1. `.yarn` ファイルを `Assets/Resources/Yarn/` に作成
+1. `.yarn` ファイルを `Assets/Resources/Yarn/active/` に作成
 2. `Assets/Resources/Channels/` に ChannelData アセットを追加/更新
    - Unity メニュー: `Create > Project FoundPhone > Channel Data`
    - ChannelID, DisplayName, StartNodeName, ChapterNumber を設定

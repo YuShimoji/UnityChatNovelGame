@@ -362,10 +362,10 @@ ContentAuthoring シーンの Canvas 直下に `ContradictionFeedbackController`
 
 - ChannelID: `ch1`
 - DisplayName: `Ch.1 -- Terminal`
-- StartNodeName: `Ch1_Opening`
+- StartNodeName: `Ch1_Day1_Opening`
 - ChapterNumber: `1`
-- TotalDays: `3`
-- DayStartNodeNames: `["Ch1_Day1_Opening", "Ch1_Day2_Opening", "Ch1_Day3_Opening"]`
+- TotalDays: `1` (アセット未更新、デフォルト値)
+- DayStartNodeNames: `(未設定)`
 - RequiredCompletedChannelID: `(empty)`
 - EnableHints: `false`
 - MaxHintDifficulty: `1`

@@ -2,7 +2,7 @@
 
 Windsurf (VS Code) で Yarn ファイルを編集し、Unity で即座に動作確認するための手順書。
 
-**最終更新**: 2026-03-03
+**最終更新**: 2026-03-13
 
 ---
 
@@ -16,17 +16,25 @@ Windsurf (VS Code) で Yarn ファイルを編集し、Unity で即座に動作�
 
 ## 1. ファイル配置
 
-Yarn ファイルはすべて `Assets/Resources/Yarn/` に配置:
+Yarn ファイルはディレクトリで管理:
 
-| ファイル              | ノード数 | 内容                     |
-| --------------------- | -------- | ------------------------ |
-| `FirstSlice.yarn`     | 4        | Act 1 導入シナリオ       |
-| `VerticalSlice.yarn`  | 4        | 垂直スライスデモ         |
-| `DebugScript.yarn`    | 1        | カスタムコマンドテスト用 |
-| `Ch1_Terminal.yarn`   | 7+       | Chapter 1 本編（新規）   |
+```
+Assets/Resources/Yarn/
+  Project.yarnproject        ← sourceFiles: ["active/**/*.yarn"]
+  active/                    ← コンパイル対象（ランタイムで使用）
+    Ch1_Day1.yarn            Chapter 1 Day 1 (ハブ&スポーク型)
+    Ch2_LocationConfusion.yarn  Chapter 2
+    MVPTest.yarn             MVPテスト用
+    FirstSlice.yarn          Act 1 導入シナリオ
+    VerticalSlice.yarn       垂直スライスデモ
+    DebugScript.yarn         カスタムコマンドテスト用
+  archive/                   ← コンパイル対象外（旧モック保管）
+    Ch1_Terminal.yarn         旧 Chapter 1 モック
+```
 
-`Project.yarnproject` が `"sourceFiles": ["**/*.yarn"]` で全 `.yarn` ファイルを自動検出する。
-新しい `.yarn` ファイルを追加する場合、同ディレクトリに置くだけで自動認識される。
+`Project.yarnproject` の `sourceFiles` が `active/` 配下のみを対象とする。
+新しい `.yarn` ファイルは `active/` に配置すればコンパイル対象になる。
+旧モックや不使用ファイルは `archive/` に移動するだけで除外できる。
 
 ---
 
@@ -35,7 +43,7 @@ Yarn ファイルはすべて `Assets/Resources/Yarn/` に配置:
 ### 開き方
 
 1. Windsurf でプロジェクトルートを開く
-2. `Assets/Resources/Yarn/` 内の `.yarn` ファイルを開く
+2. `Assets/Resources/Yarn/active/` 内の `.yarn` ファイルを開く
 3. Yarn Spinner 拡張による構文ハイライトが有効になる
 
 ### ノードグラフ表示
@@ -103,7 +111,7 @@ Ch1_Opening → Ch1_PyramidIntro → Ch1_FirstChat
 ### Step 3: .yarn ファイルを作成
 
 ```text
-Assets/Resources/Yarn/Ch1_Terminal.yarn
+Assets/Resources/Yarn/active/Ch1_Day1.yarn
 ```
 
 ファイル内に複数ノードを記述可能。命名規則:
@@ -173,10 +181,8 @@ title: Ch1_GroupChat
 
 <<set $speaker to "player">>
 -> 確かに、自分の端末もその時間は動かなかった
-    <<Message "player" "確かに、自分の端末もその時間は動かなかった。">>
     <<jump Ch1_ConfirmFreeze>>
 -> Pyramidの記録を信じる
-    <<Message "player" "AIの記録なら正確なんじゃないか？">>
     <<jump Ch1_TrustAI>>
 ===
 ```
@@ -298,7 +304,7 @@ title: Ch1_FindFragment
 
 ## 9. チェックリスト: 新チャプター追加時
 
-- [ ] `.yarn` ファイルを `Assets/Resources/Yarn/` に作成
+- [ ] `.yarn` ファイルを `Assets/Resources/Yarn/active/` に作成
 - [ ] `Assets/Resources/Channels/` に対応する `ChannelData` を追加/更新（ID, StartNodeName, RequiredCompletedChannelID）
 - [ ] チャプターのヒント方針を `ChannelData` に反映（EnableHints, MaxHintDifficulty）
 - [ ] 全ノードに `title:` と `===` がある

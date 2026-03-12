@@ -8,7 +8,7 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
-現在の状況 (2026-03-12): バブルUI修正中(P1-P5)。P1角丸: ChatUIConfig.assetに不足フィールド4件追加+デバッグログ追加、YarnProject Reimport後に動作確認必要。P5名前行: line-height=80%に変更(60%は重なった)、動作未確認。DialogueException修正済み(OnDestroyでStop()先行)。未着手: P3+P4色統一, P2幅調整, P6コントラスト。Day Resume基盤Phase1は実装済み未テスト。
+現在の状況 (2026-03-13): Yarnディレクトリ分離完了(active/archive)。Ch1_Terminal.yarnをarchiveに移動、Ch1_Day1.yarnがCh1正式ソース。バブルUI修正(P1角丸+P5名前行)は未テスト。Day Resume基盤Phase1は実装済み未テスト。未着手: P2幅/P3+P4色/P6コントラスト。
 
 ## DECISION LOG
 
@@ -24,6 +24,7 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 | 2026-03-12 | Debug Overlay デフォルトOFF | true / false | 通常表示と開発表示の同居で確認対象がぶれるため。Inspector ON で個別有効化可能 |
 | 2026-03-12 | EndDay破壊的変更: 「ch{N}完了」→「現在チャンネルのDay N進捗記録」 | 許容/新コマンド追加 | マルチDayチャプター対応に必須。旧挙動はCurrentChannel未設定時にフォールバック |
 | 2026-03-12 | 開発目的の明文化: エンジン基盤+ツール優先、コンテンツ執筆は検証範囲に限定 | N/A | 作業がコンテンツ方向にドリフトする傾向への対策。CLAUDE.mdにガードレール追加 |
+| 2026-03-13 | Yarnディレクトリ分離: active/archive方式 | ディレクトリ分離 / ファイル名変更 / Editorツール | ファイル名変更はUnity+Gitで危険。ディレクトリ分離が最小侵襲。将来Editorツール化を予定 |
 
 ## DEVELOPMENT PURPOSE
 
@@ -61,6 +62,9 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 - Docs: `docs/`
 - Specs: `docs/StorySpec/`, `docs/ENGINE_FEATURE_INVENTORY.md`
 - Spec Index: `docs/spec-index.json`
+- Yarn (active): `Assets/Resources/Yarn/active/`
+- Yarn (archive): `Assets/Resources/Yarn/archive/`
+- YarnProject: `Assets/Resources/Yarn/Project.yarnproject`
 - Topics: `Assets/Resources/Topics/`
 - Channels: `Assets/Resources/Channels/`
 - Characters: `Assets/Resources/Characters/`

@@ -409,7 +409,7 @@ namespace ProjectFoundPhone.Logging.Editor
                 UnityEngine.Debug.LogError($"YarnProject not found at {yarnProjectPath}. Please ensure the file exists.");
                 
                 // Yarnファイルが存在するか確認
-                string[] yarnFiles = System.IO.Directory.GetFiles("Assets/Resources/Yarn", "*.yarn", System.IO.SearchOption.TopDirectoryOnly);
+                string[] yarnFiles = System.IO.Directory.GetFiles("Assets/Resources/Yarn", "*.yarn", System.IO.SearchOption.AllDirectories);
                 if (yarnFiles.Length > 0)
                 {
                     UnityEngine.Debug.LogWarning($"DebugSceneBuilder: Found {yarnFiles.Length} Yarn file(s) in Assets/Resources/Yarn/, but YarnProject asset is missing or invalid.");

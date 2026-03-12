@@ -213,7 +213,7 @@
     "pct": 100,
     "cat": "infra",
     "file": "docs/YarnEditingPipeline.md",
-    "summary": "Yarnファイルの編集・テスト・デプロイ手順"
+    "summary": "Yarnファイルの編集・テスト・デプロイ手順。active/archive ディレクトリ分離対応"
   },
   {
     "id": "EN-005",

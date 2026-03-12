@@ -154,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: ProjectFoundPhone::ProjectFoundPhone.Core.ScenarioManager
   m_DialogueRunner: {fileID: 252753190}
   m_ChatController: {fileID: 2049599892}
-  m_StartNode: Ch1_Opening
+  m_StartNode: Ch1_Day1_Opening
   m_AutoStartYarn: 0
   m_DebugScenarioID: 
 --- !u!114 &252753189
