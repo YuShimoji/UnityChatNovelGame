@@ -1,0 +1,346 @@
+/// Chapter 1 Day 1: 端末の起動
+/// ハブ&スポーク型: Opening → Hub(4トピック全消化) → Winding → End
+/// 登場: Barnaby(player), Pyramid(AI), Marco(人間)
+/// 断片: fragment_ch1_01 (施設管理規約)
+/// 矛盾メカニクス: なし (line tags のみ付与)
+
+title: Ch1_Day1_Opening
+---
+<<declare $d1_asked_region = false>>
+<<declare $d1_asked_terminal = false>>
+<<declare $d1_asked_marco = false>>
+<<declare $d1_asked_fragment = false>>
+
+<<SystemMessage "端末を起動しています...">>
+<<StartWait 2>>
+
+<<Glitch 1>>
+<<StartWait 0.5>>
+
+<<SystemMessage "ネットワーク検出... 不安定">>
+<<StartWait 1.5>>
+
+<<SystemMessage "チャットルームに接続しました">>
+<<StartWait 1>>
+
+<<set $speaker to "pyramid">>
+<<Typing true>>
+<<StartWait 1.5>>
+<<Typing false>>
+
+おはようございます。Pyramid アシスタントです。
+
+<<StartWait 0.8>>
+
+本日のセッションを開始します。参加者の接続状況を確認しています。
+
+<<StartWait 1>>
+
+現在の接続: あなた（Barnaby）、Pyramid。他の参加者は未接続です。
+
+<<StartWait 1.5>>
+
+<<SystemMessage "新しい参加者が接続しました">>
+
+<<StartWait 1>>
+
+<<set $speaker to "marco">>
+...繋がった？ これ、繋がってる？
+
+<<StartWait 0.8>>
+
+3回目の接続でやっとだ。毎回パスワードが変わるのは仕様なのか嫌がらせなのか。
+
+<<set $speaker to "pyramid">>
+<<StartWait 0.5>>
+Marco Grossさん、接続を確認しました。セッションへようこそ。
+
+<<set $speaker to "marco">>
+<<StartWait 0.5>>
+ああ、Pyramid。君はいつも丁寧だな。この端末の調子が最悪でも、挨拶だけは一人前だ。
+
+<<StartWait 0.8>>
+
+それで、Barnaby。君もここに「配属」された口か？
+
+<<set $speaker to "pyramid">>
+<<StartWait 0.5>>
+何かお手伝いできることはありますか？
+
+<<jump Ch1_Day1_Hub>>
+===
+
+title: Ch1_Day1_Hub
+---
+<<set $speaker to "player">>
+-> この場所はどこなんだ？ <<if not $d1_asked_region>>
+    <<set $d1_asked_region to true>>
+    <<jump Ch1_Day1_Region>>
+-> この端末、調子が悪いのか？ <<if not $d1_asked_terminal>>
+    <<set $d1_asked_terminal to true>>
+    <<jump Ch1_Day1_Terminal>>
+-> Marco、他にも人がいるのか？ <<if not $d1_asked_marco>>
+    <<set $d1_asked_marco to true>>
+    <<jump Ch1_Day1_AskMarco>>
+-> さっきの変なテキストは何だ？ <<if not $d1_asked_fragment>>
+    <<set $d1_asked_fragment to true>>
+    <<jump Ch1_Day1_Fragment>>
+-> 今日はここまでにしよう <<if $d1_asked_region and $d1_asked_terminal and $d1_asked_marco and $d1_asked_fragment>>
+    <<jump Ch1_Day1_Winding>>
+===
+
+title: Ch1_Day1_Region
+---
+<<set $speaker to "pyramid">>
+<<StartWait 1>>
+
+本プログラムの対象地域は、第4管理区域に分類されています。 #line:ch1_region_identity_src
+
+<<StartWait 0.5>>
+
+2019年の広域行政再編により設定された区分です。 #line:ch1_admin_reform_src
+
+<<StartWait 0.3>>
+
+主要施設として、地域コミュニケーションハブ、共有物資拠点、および教育支援施設が含まれます。 #line:ch1_facility_name_src
+
+<<set $speaker to "marco">>
+<<StartWait 0.8>>
+
+第4管理区域？ 聞いたことないな。 #line:ch1_region_identity_tgt
+
+<<StartWait 0.5>>
+
+2019年？ 俺は2021年にここに来たけど、そんな再編の話は聞いてないぞ。 #line:ch1_admin_reform_tgt
+
+<<StartWait 0.3>>
+
+それに「教育支援施設」って、あの閉鎖された建物のことか？ あれは学校だったはずだが。 #line:ch1_facility_name_tgt
+
+<<set $speaker to "pyramid">>
+<<StartWait 0.5>>
+
+申し訳ありません。「教育支援施設」は正式名称に基づいた表記です。地域によっては「学校」と呼称される場合もあります。
+
+<<set $speaker to "marco">>
+<<StartWait 0.3>>
+...地域によっては？ ここの話をしてるんだけど。
+
+<<StartWait 0.5>>
+
+まあ、いい。Pyramidに正確な情報を期待するのは、この通信環境じゃ無理か。
+
+<<jump Ch1_Day1_Hub>>
+===
+
+title: Ch1_Day1_Terminal
+---
+<<set $speaker to "marco">>
+<<StartWait 0.8>>
+
+そっちの端末も反応が遅いだろ？
+
+<<StartWait 0.5>>
+
+俺の方は今日は特にひどい。文字の変換候補が3つしか出ない日もあれば、10個出る日もある。法則がわからない。
+
+<<StartWait 1>>
+
+<<Glitch 1>>
+
+<<SystemMessage "【SYSTEM】通信品質が低下しています">>
+
+<<StartWait 1>>
+
+<<set $speaker to "pyramid">>
+通信の安定化を試みています。しばらくお待ちください。
+
+<<StartWait 1.5>>
+
+<<SystemMessage "【SYSTEM】通信品質が回復しました">>
+
+<<set $speaker to "marco">>
+<<StartWait 0.5>>
+
+な？ こんなのが日常だ。
+
+<<StartWait 0.3>>
+
+昨日、ベルナルドが面白いことを言ってた。「この端末は壊れているんじゃない、最初からこういう仕様なんだ」って。
+
+<<set $speaker to "pyramid">>
+<<StartWait 0.5>>
+
+端末の処理速度は正常範囲内です。通信経路の混雑が原因と考えられます。
+
+<<set $speaker to "marco">>
+<<StartWait 0.3>>
+「正常範囲内」の定義が広すぎるんだよ。
+
+<<jump Ch1_Day1_Hub>>
+===
+
+title: Ch1_Day1_AskMarco
+---
+<<set $speaker to "marco">>
+<<StartWait 0.8>>
+
+ああ、他に3人いる。
+
+<<StartWait 0.5>>
+
+ベルナルド・フォンセカ。新聞社で働いてた人。文章を読むのが異常にうまい。
+
+<<StartWait 0.5>>
+
+メイスン。外を歩き回って情報を集めてる。寡黙だけど、やることはやる。
+
+<<StartWait 0.5>>
+
+オリバー。...穏やかな奴だ。いると場が落ち着く。
+
+<<StartWait 0.8>>
+
+今日はまだ誰も来てないけどな。通信環境のせいか、気分のせいか。
+
+<<set $speaker to "pyramid">>
+<<StartWait 0.5>>
+
+本セッションには最大6名の参加が予定されています。他の参加者の接続状況は現時点で確認できません。
+
+<<set $speaker to "marco">>
+<<StartWait 0.3>>
+
+「確認できません」。便利な言葉だな。
+
+<<jump Ch1_Day1_Hub>>
+===
+
+title: Ch1_Day1_Fragment
+---
+<<set $speaker to "marco">>
+<<StartWait 0.8>>
+
+ああ、それだ。聞きたかったんだ。
+
+<<StartWait 0.5>>
+
+昨日、端末の通知欄に変なテキストが表示されてた。読もうとしたら消えたんだけど、一部だけスクリーンショットが撮れた。
+
+<<StartWait 1>>
+
+「...第3次改定に基づき、本施設は■■■管理局の管轄下にあるものとする。ただし、参照先文書（付録C）は現時点で■■■」
+
+<<StartWait 0.5>>
+
+途中で切れてる。しかも参照先が伏せ字みたいに欠けてる。
+
+<<set $speaker to "pyramid">>
+<<StartWait 0.8>>
+
+<<Typing true>>
+<<StartWait 1.5>>
+<<Typing false>>
+
+お送りいただいたテキストについて、関連する情報を検索しましたが、該当する文書は見つかりませんでした。 #line:ch1_search_result_src
+
+<<set $speaker to "marco">>
+<<StartWait 0.3>>
+
+ほらな。検索しても出てこない。
+
+<<StartWait 0.5>>
+
+<<UnlockTopic "fragment_ch1_01">>
+<<SystemMessage "断片「施設管理規約（部分）」を記録しました">>
+
+<<set $speaker to "marco">>
+<<StartWait 0.5>>
+
+こういう「検索しても出てこない」テキストの断片が、ときどき端末に現れるんだ。
+
+<<StartWait 0.3>>
+
+ベルナルドはこれを「不可索引物」って呼んでた。索引に載らない情報。検索しても引っかからない文書の欠片。
+
+<<set $speaker to "pyramid">>
+<<StartWait 0.5>>
+
+「不可索引物」という用語は本端末のデータベースに登録されていません。
+
+<<set $speaker to "marco">>
+<<StartWait 0.3>>
+
+だろうな。
+
+<<jump Ch1_Day1_Hub>>
+===
+
+title: Ch1_Day1_Winding
+---
+<<set $speaker to "pyramid">>
+<<StartWait 1>>
+
+皆さま、本日の推奨セッション時間に近づいています。
+
+<<StartWait 0.3>>
+
+明日のセッションは、通信状況が許す限り午前中に開始予定です。
+
+<<set $speaker to "marco">>
+<<StartWait 0.8>>
+
+「通信状況が許す限り」な。保証はないってことだ。
+
+<<StartWait 0.5>>
+
+まあ、今日はここまでにしよう。
+
+<<StartWait 0.8>>
+
+ああ、一つだけ。この辺りに小さな無人の売店がある。電源が生きてれば、飲み物くらいは手に入る。
+
+<<StartWait 0.3>>
+
+甘いものが欲しくなったら寄ってみるといい。...甘いものが残ってればの話だけど。
+
+<<StartWait 1>>
+
+<<SystemMessage "Marco Gross が切断しました">>
+
+<<StartWait 2>>
+
+<<jump Ch1_Day1_End>>
+===
+
+title: Ch1_Day1_End
+---
+<<set $speaker to "pyramid">>
+<<StartWait 1>>
+
+Barnabyさん、1点補足があります。
+
+<<StartWait 0.5>>
+
+先ほどMarcoさんが共有されたテキスト断片についてですが、改めて検索を実行したところ、「第3次改定」に関連する行政文書が1件確認されました。 #line:ch1_search_result_tgt
+
+<<StartWait 0.3>>
+
+ただし、当該文書の発行年は2017年となっており、Marcoさんの断片とは内容が一致しません。
+
+<<StartWait 1>>
+
+...なお、先ほどのセッション中に「2019年の広域行政再編」と申し上げましたが、手元の記録では該当する再編の実施記録が確認できません。
+
+<<StartWait 0.5>>
+
+通信環境による情報の不整合かもしれません。ご不便をおかけします。
+
+<<StartWait 1.5>>
+
+<<SystemMessage "...">>
+
+<<StartWait 2>>
+
+<<EndDay 1>>
+===

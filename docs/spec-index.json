@@ -45,6 +45,15 @@
     "summary": "27ブロック(9章)のビート表。章レベルの概要のみ、節の詳細は未設計。AI生成ドラフト注記あり"
   },
   {
+    "id": "SP-003a",
+    "title": "第1章セクションビート (3日間詳細)",
+    "status": "partial",
+    "pct": 30,
+    "cat": "core",
+    "file": "docs/StorySpec/03a_ch1_section_beats.md",
+    "summary": "Ch1の3日間(3節)の詳細ビート。Day1:Pyramid+Marco(導入+断片発見)、Day2:Bernardo(断片分析)、Day3:Mason(偵察+比較分析)。断片3個、矛盾ペア8個(メカニクス未発火)。DRAFT/user review required"
+  },
+  {
     "id": "SP-004",
     "title": "キャラクター",
     "status": "done",
@@ -177,7 +186,7 @@
     "pct": 90,
     "cat": "infra",
     "file": "docs/ENGINE_FEATURE_INVENTORY.md",
-    "summary": "Yarnコマンド・キャラ管理・セーブ・演出・バブル表示設定・矛盾・ダッシュボード・インベントリUI"
+    "summary": "Yarnコマンド・キャラ管理・セーブ・演出・バブル表示設定(名前分離・角丸・影・FinalizeBubbleSize・DebugOverlay OFF)・矛盾・ダッシュボード(Day Resume実装済み・マルチDay対応)・インベントリUI"
   },
   {
     "id": "EN-002",
@@ -219,10 +228,10 @@
     "id": "EN-006",
     "title": "UI実装仕様",
     "status": "partial",
-    "pct": 50,
+    "pct": 85,
     "cat": "ui",
     "file": "docs/UI_IMPLEMENTATION_SPEC.md",
-    "summary": "チャットバブル・ダッシュボード・インベントリ等のUI実装詳細"
+    "summary": "チャットバブル(名前分離・角丸・影・幅フィット・FinalizeBubbleSize)・スクロール吸着・選択肢UI・ChatUIConfig全40パラメータ。70fe16bリファクタ反映済み"
   },
   {
     "id": "EN-007",
@@ -241,5 +250,14 @@
     "cat": "infra",
     "file": "docs/MVP_TEST_GUIDE.md",
     "summary": "MVP動作確認の手順書・チェックリスト"
+  },
+  {
+    "id": "EN-009",
+    "title": "シナリオオーサリングガイド",
+    "status": "done",
+    "pct": 100,
+    "cat": "infra",
+    "file": "docs/SCENARIO_AUTHORING_GUIDE.md",
+    "summary": "Yarnシナリオ執筆ハンズオン。5分クイックスタート、全10コマンドリファレンス、キャラクターID一覧、コンテンツパターン集(断片発見/キャラ合流/Day終了/矛盾種まき)、キャラクターの声ガイド"
   }
 ]

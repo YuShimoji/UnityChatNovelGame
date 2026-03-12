@@ -104,6 +104,6 @@ MVPTest.yarnシナリオを使用して、UnityChatNovelGameエンジンの基�
 3. 追加のシナリオ作成（複雑な分岐、画像表示、矛盾指摘など）
 
 ## 関連ドキュメント
-- [GAME_DESIGN_DOCUMENT.md](../GAME_DESIGN_DOCUMENT.md) - 設計書
-- [TASK_027](../tasks/TASK_027_Full_Playthrough_Test.md) - Full Playthrough Test
-- [AI_CONTEXT.md](../AI_CONTEXT.md) - プロジェクト概要
+
+- [ENGINE_FEATURE_INVENTORY.md](ENGINE_FEATURE_INVENTORY.md) - エンジン機能リファレンス
+- [UI_IMPLEMENTATION_SPEC.md](UI_IMPLEMENTATION_SPEC.md) - UI実装仕様

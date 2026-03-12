@@ -9,12 +9,14 @@
 - 断片（Fragments）とハルシコインの扱いは `07_fragments.md` と `06_hallucicoin.md` を参照。
 - 未決定事項は `99_open_questions.md` に集約。
 
-## 推奨リポジトリ構成（例）
+## リポジトリ構成
+
 ```
-/docs                # 本パックを配置
-/src                 # ゲーム実装
-/assets              # 素材（権利管理は別途）
-/tools               # 生成・検証・ビルド補助
+Assets/              # Unity ソース・リソース
+Packages/            # Unity パッケージ
+ProjectSettings/     # Unity プロジェクト設定
+docs/                # 本パック（仕様・設計ドキュメント）
+scripts/             # ビルド・検証補助スクリプト
 ```
 
 ## Docs Index
@@ -37,6 +39,12 @@
 - `16_subthread_ui.md` … サブスレッドUI仕様（統合型スレッドモデル + 2段階トリガー）
 - `99_open_questions.md` … 未決定事項（Askの残）
 
+### 関連ドキュメント（docs/ 直下）
+
+- `../SCENARIO_AUTHORING_GUIDE.md` … Yarn シナリオ執筆ハンズオン（コマンドリファレンス + コンテンツパターン集）
+- `../ENGINE_FEATURE_INVENTORY.md` … エンジン機能リファレンス
+- `../YarnEditingPipeline.md` … Yarn 編集パイプライン（技術手順）
+
 ## ライターへの引き渡しチェック
 - [ ] `03_chapter_beats.md` の各節「断片」「偵察」「層更新」が具体化されている
 - [ ] `07_fragments.md` の文体カテゴリ・媒体・救出対象が確定している
@@ -44,17 +52,9 @@
 
 ---
 
-## 2026-03-09 Sync Addendum
+## 更新履歴
 
-- This repository is a Unity project. Use this high-level structure in docs:
-  - `Assets/`
-  - `Packages/`
-  - `ProjectSettings/`
-  - `docs/`
-  - `scripts/`
-- Legacy examples such as `/src`, `/assets`, `/tools` are historical references and not the current canonical layout.
-
-## 2026-03-10 Addendum
-- `15_feature_triage_2026-03-10.md` を追加。
-  - 4項目（顔アイコン、スレッド管理、テキスト演出、デザイナー環境）の現状分類と優先バックログを整理。
-  - スレッド管理を `UIサブスレッド` と `BranchThreadState` を分離して扱う方針を明記。
+- **2026-03-12**: リポジトリ構成を現在の Unity プロジェクト構造に修正。旧 Addendum を統合。
+- **2026-03-10**: `15_feature_triage_2026-03-10.md` 追加（顔アイコン/スレッド管理/テキスト演出/デザイナー環境のトリアージ）。
+- **2026-03-09**: Sync Addendum — Unity プロジェクト構成に準拠。
+- **2026-03-07**: 初版。

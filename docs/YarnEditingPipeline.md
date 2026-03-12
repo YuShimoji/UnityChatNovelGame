@@ -73,6 +73,9 @@ ScenarioManager に登録済みのコマンド:
 | `<<Image "charID" "imageID">>` | 画像メッセージ | `<<Image "player" "photo_01">>` |
 | `<<UnlockTopic "topicID">>` | トピック解放 | `<<UnlockTopic "signal_01">>` |
 | `<<Glitch level>>` | グリッチ演出 (1-5) | `<<Glitch 2>>` |
+| `<<Typing true\|false>>` | タイピングインジケーター手動制御 | `<<Typing true>>` |
+| `<<MessageTagged "charID" "text" "tag">>` | 矛盾タグ付きメッセージ | `<<MessageTagged "pyramid" "..." "ch2_src">>` |
+| `<<EndDay N>>` | Day 終了 + Day進捗記録 + オートセーブ。最終Dayのみチャンネル完了 | `<<EndDay 1>>` |
 
 ---
 

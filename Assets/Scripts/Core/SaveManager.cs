@@ -171,6 +171,15 @@ namespace ProjectFoundPhone.Core
                 saveData.HalluciCoin = contradictionManager.HalluciCoin;
             }
 
+            // ダッシュボード進捗を保存（CompletedChannelIDs, ChannelDayProgress）
+            // これらは EndDayCommand から CurrentSaveData に直接書き込まれるため、引き継ぎが必要
+            if (m_CurrentSaveData != null)
+            {
+                saveData.CompletedChannelIDs = new List<string>(m_CurrentSaveData.CompletedChannelIDs);
+                saveData.ChannelDayProgress = new Dictionary<string, int>(m_CurrentSaveData.ChannelDayProgress);
+                saveData.UsedRecipeIDs = new List<string>(m_CurrentSaveData.UsedRecipeIDs);
+            }
+
             return saveData;
         }
 

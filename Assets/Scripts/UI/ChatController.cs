@@ -624,10 +624,10 @@ namespace ProjectFoundPhone.UI
                 {
                     string displayName = profile?.DisplayName ?? charID;
                     // 名前行と本文行を改行で分離
-                    // 名前は小さめフォント + ボールドで表示
+                    // 名前は小さめフォント + ボールド、行高さを縮小して1行占有感を軽減
                     float nameSize = UIConfig.messageFontSize * 0.75f;
                     nameLineText = $"{displayName}";
-                    finalText = $"<size={nameSize:F0}><b>{displayName}</b></size>\n{text}";
+                    finalText = $"<line-height=80%><size={nameSize:F0}><b>{displayName}</b></size>\n</line-height>{text}";
                 }
             }
             textComponent.text = finalText;
@@ -2281,6 +2281,9 @@ namespace ProjectFoundPhone.UI
 
             // 角丸スプライト
             Sprite sprite = UIConfig.bubbleSprite ?? GetOrCreateRoundedSprite();
+            #if UNITY_EDITOR
+            Debug.Log($"[ApplyBubbleVisuals] cornerRadius={UIConfig.bubbleCornerRadius}, bubbleSprite={(UIConfig.bubbleSprite != null ? "set" : "null")}, generatedSprite={(sprite != null ? sprite.name : "null")}, shadowEnabled={UIConfig.bubbleShadowEnabled}");
+            #endif
             if (sprite != null)
             {
                 img.sprite = sprite;

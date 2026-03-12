@@ -35,6 +35,13 @@ namespace ProjectFoundPhone.Data
         [Tooltip("Channel ID that must be completed to unlock this channel. Empty = always available.")]
         [SerializeField] private string m_RequiredCompletedChannelID;
 
+        [Header("Chapter Structure")]
+        [Tooltip("Total number of days in this chapter (default 1 for single-day chapters)")]
+        [SerializeField] private int m_TotalDays = 1;
+
+        [Tooltip("Yarn start node names for each day (e.g. 'Ch1_Day1_Opening', 'Ch1_Day2_Opening'). Required when TotalDays > 1.")]
+        [SerializeField] private string[] m_DayStartNodeNames;
+
         [Header("Contradiction Hints")]
         [Tooltip("Whether to show hints for contradiction pairs in this chapter")]
         [SerializeField] private bool m_EnableHints = true;
@@ -49,6 +56,8 @@ namespace ProjectFoundPhone.Data
         public string StartNodeName => m_StartNodeName;
         public int ChapterNumber => m_ChapterNumber;
         public string RequiredCompletedChannelID => m_RequiredCompletedChannelID;
+        public int TotalDays => m_TotalDays;
+        public string[] DayStartNodeNames => m_DayStartNodeNames;
         public bool EnableHints => m_EnableHints;
         public int MaxHintDifficulty => m_MaxHintDifficulty;
     }

@@ -22,6 +22,10 @@ MonoBehaviour:
   bubbleMaxWidthPercent: 0.7
   bubbleMaxWidthPx: 600
   bubbleSprite: {fileID: 0}
+  bubbleCornerRadius: 16
+  bubbleShadowEnabled: 1
+  bubbleShadowColor: {r: 0, g: 0, b: 0, a: 0.3}
+  bubbleShadowDistance: {x: 2, y: -2}
   wrapperEdgePadding: 12
   wrapperVerticalPadding: 4
   minLayoutSpacing: 10

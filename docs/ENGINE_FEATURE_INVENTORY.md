@@ -1,6 +1,6 @@
 # Engine Feature Inventory
 
-**最終更新**: 2026-03-11
+**最終更新**: 2026-03-12
 **エンジン**: Unity 6.3 LTS (6000.3.6f1) + Yarn Spinner 3.1.3
 
 このドキュメントは、シナリオ執筆者が「今のエンジンで何ができるか」を把握するためのリファレンスです。
@@ -24,6 +24,7 @@
 | -------- | ---- | ---- |
 | StartWait | `<<StartWait 秒数>>` | 指定秒数の待機 + タイピングインジケーター表示 |
 | SkipWait | `<<SkipWait>>` | 待機をキャンセル |
+| Typing | `<<Typing true\|false>>` | タイピングインジケーターの手動表示/非表示。StartWait より細かいタイミング制御が必要な場合に使用 |
 | Glitch | `<<Glitch レベル>>` | グリッチ演出（1-5段階） |
 
 ### ゲームシステム系
@@ -31,6 +32,7 @@
 | コマンド | 構文 | 説明 |
 | -------- | ---- | ---- |
 | UnlockTopic | `<<UnlockTopic "topicID">>` | トピックカードを推理ボードに追加 |
+| EndDay | `<<EndDay 日数>>` | Day 終了処理。「--- N日目 終了 ---」システムメッセージ表示 + Day進捗記録 + オートセーブ。マルチDayチャプターでは最終Day完了時のみチャンネルを完了にする |
 
 ### Yarn 標準機能
 
@@ -215,6 +217,8 @@ title: NodeA
 
 ## 6. チャットバブル表示設定
 
+> 詳細な実装仕様は `docs/UI_IMPLEMENTATION_SPEC.md` を参照。
+
 ### ChatUIConfig（ScriptableObject）
 
 `Resources/ChatUIConfig` で一元管理する主要パラメータ:
@@ -223,10 +227,34 @@ title: NodeA
 | ---------- | ------------ | ---- |
 | `bubbleMaxWidthPercent` | 0.7 | 画面幅に対するバブル幅上限（割合） |
 | `bubbleMaxWidthPx` | 600 | バブル幅の絶対上限（px）。percentと小さい方を採用 |
-| `bubbleSprite` | null | 9-slice角丸スプライト。null時は矩形 |
+| `bubbleSprite` | null | 9-slice角丸スプライト。null時はランタイム自動生成 |
+| `bubbleCornerRadius` | 16 | 自動生成角丸の半径（px）。bubbleSprite指定時は無視 |
+| `bubbleShadowEnabled` | true | バブルに影を付けるか |
 | `showInputField` | false | テキスト入力欄の表示/非表示 |
 
-その他 28 パラメータ（フォントサイズ、色、パディング等）は `ChatUIConfig.cs` を参照。
+その他 40 パラメータ（フォントサイズ、色、パディング等）の全一覧は `UI_IMPLEMENTATION_SPEC.md` セクション3.3 を参照。
+
+### NPC 名前/本文分離（70fe16b）
+
+NPC バブルでは名前行と本文行を改行で分離して表示する:
+
+- **名前行**: `messageFontSize * 0.75` のボールドフォント（リッチテキスト `<size=N><b>名前</b></size>`）
+- **本文行**: `messageFontSize` の通常フォント
+- Player バブルには名前を表示しない
+- `DisplayMode.IconOnly` のキャラクターにも名前を表示しない
+- バブル幅は名前行と本文行それぞれの `GetPreferredValues` の大きい方を採用
+
+### 角丸スプライト + 影（70fe16b）
+
+- `bubbleSprite` が null の場合、`GetOrCreateRoundedSprite()` で白色の角丸テクスチャをランタイム生成（アンチエイリアス付き、9-slice対応）
+- `bubbleShadowEnabled = true` の場合、`Shadow` コンポーネントを動的追加（既存チェック済み）
+- 選択肢ボタンにも角丸スプライトを適用
+- SystemMessage には影を付けない
+
+### バブル幅フィット + FinalizeBubbleSize（70fe16b）
+
+- `GetPreferredValues` でテキスト自然幅を取得 → `maxBubbleWidth` でクランプ → `LayoutElement.preferredWidth` に設定
+- **`FinalizeBubbleSize`**: `ConfigureBubble` でラッパー配置後に `Canvas.ForceUpdateCanvases()` + `ForceMeshUpdate()` で高さを再計算。HLG+アイコンによる幅変動で高さが不整合になる問題を解消
 
 ### タイピングインジケーター
 
@@ -242,6 +270,11 @@ NPC メッセージの前に表示される入力中表示。3つのドットが
 - **LateUpdate ピンニング**: タイプライター効果中（`m_IsTypewriterActive`）のみ毎フレーム最下部固定。効果終了後はワンショットAutoScrollのみ
 - **IBeginDragHandler / IEndDragHandler**: ドラッグ開始で即座に吸着解除。ドラッグ終了時に最下部付近なら自動吸着を再開
 - **ApplyThemeColor**: ConfigureBubbleからテーマカラー適用のみを抽出したヘルパー。CreateMessageBubble内ではラッパー生成前にこれを1回、テキスト高さ算出後にConfigureBubbleを1回だけ呼ぶ（二重ラッパー生成を防止）
+
+### Debug Overlay（70fe16b）
+
+- `ChatDialogueView.m_ShowDebugOverlay` のデフォルト値を `true` → `false` に変更
+- Inspector で `true` に設定すれば個別有効化可能
 
 ---
 
@@ -310,8 +343,9 @@ ContentAuthoring シーンの Canvas 直下に `ContradictionFeedbackController`
 | チャンネル一覧 | ChannelData SO ベースのカード表示（Locked/Available/InProgress/Completed） | `DashboardController.cs` |
 | チャンネル遷移 | カードクリック → チャット開始、Back/ESC → ダッシュボード復帰 | 同上 |
 | HalluciCoin 表示 | 右上に "HC: N" 表示（ContradictionManager.HalluciCoin 参照） | 同上 |
-| ChannelData | ScriptableObject: ID, DisplayName, Description, StartNodeName, ChapterNumber, RequiredCompletedChannelID, EnableHints, MaxHintDifficulty | `ChannelData.cs` |
-| 進行状態管理 | SaveData.CompletedChannelIDs でアンロック条件判定 | `SaveData.cs` |
+| ChannelData | ScriptableObject: ID, DisplayName, Description, StartNodeName, ChapterNumber, RequiredCompletedChannelID, TotalDays, DayStartNodeNames, EnableHints, MaxHintDifficulty | `ChannelData.cs` |
+| 進行状態管理 | SaveData.CompletedChannelIDs でアンロック条件判定。ChannelDayProgress でマルチDay進捗管理 | `SaveData.cs` |
+| Day Resume | マルチDayチャプターの途中再開。ChannelDayProgress から次のDay開始ノードを決定 | `DashboardController.cs` |
 | チャプター別ヒント制御 | チャンネル選択時に ContradictionManager へ chapter/hint policy を反映（EnableHints, MaxHintDifficulty） | `DashboardController.cs`, `ContradictionManager.cs` |
 | Editor ツール | チャンネルデータ自動生成 + シーンセットアップ | `ChannelDataCreator.cs`, `DashboardSceneSetup.cs` |
 
@@ -330,6 +364,8 @@ ContentAuthoring シーンの Canvas 直下に `ContradictionFeedbackController`
 - DisplayName: `Ch.1 -- Terminal`
 - StartNodeName: `Ch1_Opening`
 - ChapterNumber: `1`
+- TotalDays: `3`
+- DayStartNodeNames: `["Ch1_Day1_Opening", "Ch1_Day2_Opening", "Ch1_Day3_Opening"]`
 - RequiredCompletedChannelID: `(empty)`
 - EnableHints: `false`
 - MaxHintDifficulty: `1`
@@ -384,16 +420,14 @@ TopicData の `TopicID` プレフィックスでインベントリの表示カ�
 
 | 制限 | 説明 | 影響 |
 | ---- | ---- | ---- |
-| チャンネルレジューム未実装 | チャンネル選択は常に `StartNodeName` から再開始。途中復帰不可 | セーブ復元はノード単位で可能だが、ダッシュボードからの遷移では未対応 |
+| ~~チャンネルレジューム~~ | 実装済み。マルチDayチャプターは ChannelDayProgress + DayStartNodeNames で途中再開可能 | — |
 | ESC 停止時の非同期競合 | StartWait 等の Yarn コマンド実行中に ESC → `StopScenario()` で `DialogueException` 発生 | `Cannot continue running dialogue. No node has been selected.` エラー。動作は継続するがログ汚染 |
 | 選択肢クリック競合 | Dialogue が選択待ち状態を離れた後に選択 UI コールバックが発火すると `DialogueException` | `SetSelectedOption was called, but Dialogue wasn't waiting for a selection.` エラー |
 | DeductionBoard 依存 | InventoryTab は `DeductionBoard.Instance` を参照。シーンに不在だと Warning スパム | 動作は継続するがログノイズが多い |
 
 ### 未実装（将来拡張）
 
-- チャプター完了トリガー（CompletedChannelIDs の自動更新）
-- チャンネルレジューム（途中復帰）
-- サブスレッド UI
+- サブスレッド UI（データモデル Phase 2 予定）
 - 検索バー装飾
 
 ---

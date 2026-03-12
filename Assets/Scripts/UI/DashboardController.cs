@@ -205,6 +205,12 @@ namespace ProjectFoundPhone.UI
             {
                 if (saveData.CompletedChannelIDs.Contains(channel.ChannelID))
                     return ChannelStatus.Completed;
+
+                // マルチDayチャプター: Day進捗がある場合もInProgress
+                if (channel.TotalDays > 1
+                    && saveData.ChannelDayProgress.ContainsKey(channel.ChannelID))
+                    return ChannelStatus.InProgress;
+
                 if (!string.IsNullOrEmpty(saveData.CurrentNodeName)
                     && YarnNodeHelper.BelongsToChapter(saveData.CurrentNodeName, channel.ChapterNumber))
                     return ChannelStatus.InProgress;
@@ -591,7 +597,27 @@ namespace ProjectFoundPhone.UI
 
             if (m_ScenarioManager != null)
             {
-                m_ScenarioManager.StartScenario(channel.StartNodeName);
+                // 再開ノードの決定
+                string resumeNode = channel.StartNodeName;
+                var saveData = SaveManager.Instance?.CurrentSaveData;
+
+                if (saveData != null && channel.TotalDays > 1)
+                {
+                    if (saveData.ChannelDayProgress.TryGetValue(channel.ChannelID, out int completedDay))
+                    {
+                        int nextDay = completedDay + 1;
+                        if (nextDay <= channel.TotalDays
+                            && channel.DayStartNodeNames != null
+                            && channel.DayStartNodeNames.Length >= nextDay)
+                        {
+                            resumeNode = channel.DayStartNodeNames[nextDay - 1];
+                            Debug.Log($"DashboardController: Resuming channel '{channel.ChannelID}' from day {nextDay} node '{resumeNode}'");
+                        }
+                    }
+                }
+
+                m_ScenarioManager.SetCurrentChannel(channel);
+                m_ScenarioManager.StartScenario(resumeNode);
             }
         }
 

@@ -32,6 +32,7 @@ namespace ProjectFoundPhone.Core
         private CancellationTokenSource m_WaitCancellation;
         private bool m_IsWaiting = false;
         private BranchThreadState m_BranchThreadState = new BranchThreadState();
+        private ChannelData m_CurrentChannel;
 
         [Header("Auto Start")]
         [SerializeField] private bool m_AutoStartYarn = false;
@@ -67,6 +68,13 @@ namespace ProjectFoundPhone.Core
         private void OnDestroy()
         {
             UnregisterCustomCommands();
+            // Play停止時: CancelActiveWait の Cancel() が Yarn の非同期継続を発火し、
+            // 既に node が無い DialogueRunner.Continue() で DialogueException が出るのを防止。
+            // ダイアログを先に停止してから Wait をキャンセルする。
+            if (m_DialogueRunner != null && m_DialogueRunner.IsDialogueRunning)
+            {
+                m_DialogueRunner.Stop();
+            }
             CancelActiveWait();
         }
         #endregion
@@ -389,24 +397,59 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// EndDay コマンドハンドラ: チャプター終了の共通処理
-        /// Yarn: <<EndDay N>> → "--- N日目 終了 ---" システムメッセージ + チャンネル完了登録
+        /// 現在再生中のチャンネルを設定する。
+        /// DashboardController.OnChannelClicked から呼び出される。
+        /// EndDayCommand が正しいチャンネルにDay進捗を記録するために必要。
+        /// </summary>
+        public void SetCurrentChannel(ChannelData channel)
+        {
+            m_CurrentChannel = channel;
+        }
+
+        /// <summary>
+        /// EndDay コマンドハンドラ: Day終了の共通処理
+        /// Yarn: <<EndDay N>> → "--- N日目 終了 ---" システムメッセージ + Day進捗記録
+        /// マルチDayチャプターでは最終Day完了時のみチャンネルを完了にする。
         /// </summary>
         private void EndDayCommand(int dayNumber)
         {
-            // 日数ベースの終了メッセージ
             SystemMessageCommand($"--- {dayNumber}日目 終了 ---");
 
-            // SaveData にチャンネル完了を登録
             if (SaveManager.Instance != null && SaveManager.Instance.CurrentSaveData != null)
             {
-                string channelId = $"ch{dayNumber}";
-                var completedList = SaveManager.Instance.CurrentSaveData.CompletedChannelIDs;
-                if (!completedList.Contains(channelId))
+                var saveData = SaveManager.Instance.CurrentSaveData;
+
+                if (m_CurrentChannel != null)
                 {
-                    completedList.Add(channelId);
-                    Debug.Log($"ScenarioManager: EndDay {dayNumber} — channel '{channelId}' marked completed.");
+                    string channelId = m_CurrentChannel.ChannelID;
+
+                    // Day進捗を記録
+                    saveData.ChannelDayProgress[channelId] = dayNumber;
+                    Debug.Log($"ScenarioManager: EndDay {dayNumber} — channel '{channelId}' day progress recorded.");
+
+                    // 最終Dayならチャンネル完了
+                    if (dayNumber >= m_CurrentChannel.TotalDays)
+                    {
+                        if (!saveData.CompletedChannelIDs.Contains(channelId))
+                        {
+                            saveData.CompletedChannelIDs.Add(channelId);
+                            Debug.Log($"ScenarioManager: Channel '{channelId}' marked completed (final day).");
+                        }
+                    }
                 }
+                else
+                {
+                    // フォールバック: CurrentChannel未設定時は旧挙動
+                    string channelId = $"ch{dayNumber}";
+                    if (!saveData.CompletedChannelIDs.Contains(channelId))
+                    {
+                        saveData.CompletedChannelIDs.Add(channelId);
+                        Debug.Log($"ScenarioManager: EndDay {dayNumber} (fallback) — channel '{channelId}' marked completed.");
+                    }
+                }
+
+                // EndDay時にオートセーブ
+                SaveManager.Instance.SaveGame(saveData.SlotNumber);
             }
         }
         #endregion

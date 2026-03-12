@@ -1,6 +1,6 @@
 # 仕様決定記録
 
-Q&Aセッションで確定した仕様のまとめ。GAME_DESIGN_DOCUMENT.md への反映元。
+Q&Aセッションで確定した仕様のまとめ。ENGINE_FEATURE_INVENTORY.md / UI_IMPLEMENTATION_SPEC.md への反映元。
 
 **作成日**: 2026-03-05
 

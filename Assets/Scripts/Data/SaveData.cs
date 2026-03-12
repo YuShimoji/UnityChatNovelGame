@@ -94,6 +94,12 @@ namespace ProjectFoundPhone.Data
         /// 完了済みチャンネルIDリスト
         /// </summary>
         public List<string> CompletedChannelIDs = new List<string>();
+
+        /// <summary>
+        /// チャンネルごとの完了済みDay数 (例: {"ch1": 2} = Day2まで完了)
+        /// マルチDay チャプターの途中再開に使用
+        /// </summary>
+        public Dictionary<string, int> ChannelDayProgress = new Dictionary<string, int>();
         #endregion
 
         #region Branch Thread Spike
