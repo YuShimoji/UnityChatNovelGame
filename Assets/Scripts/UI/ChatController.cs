@@ -84,6 +84,9 @@ namespace ProjectFoundPhone.UI
 
         /// <summary>ランタイム生成された角丸スプライト (キャッシュ)</summary>
         private Sprite m_GeneratedRoundedSprite;
+
+        /// <summary>ScrollRect の RectTransform キャッシュ（バブル幅計算用）</summary>
+        private RectTransform m_ScrollRectTransform;
         #endregion
 
         #region Unity Lifecycle
@@ -142,6 +145,20 @@ namespace ProjectFoundPhone.UI
 
         #region Private Methods
         /// <summary>
+        /// ScrollRect の Canvas スケーリング後の幅を返す。
+        /// Screen.width の代わりに使用し、リサイズに追従させる。
+        /// </summary>
+        private float GetContainerWidth()
+        {
+            if (m_ScrollRectTransform != null)
+            {
+                return m_ScrollRectTransform.rect.width;
+            }
+            // フォールバック: キャッシュ未初期化時は Screen.width を使用
+            return Screen.width;
+        }
+
+        /// <summary>
         /// 必要なコンポーネントの初期化
         /// </summary>
         private void InitializeComponents()
@@ -149,6 +166,12 @@ namespace ProjectFoundPhone.UI
             if (m_ScrollRect == null)
             {
                 m_ScrollRect = GetComponent<ScrollRect>();
+            }
+
+            // ScrollRect の RectTransform をキャッシュ（バブル幅計算用）
+            if (m_ScrollRect != null)
+            {
+                m_ScrollRectTransform = m_ScrollRect.GetComponent<RectTransform>();
             }
 
             if (m_LayoutGroup == null && m_ScrollRect != null && m_ScrollRect.content != null)
@@ -337,9 +360,10 @@ namespace ProjectFoundPhone.UI
             // パディングで左右マージンを作る → player は左に広いマージン、NPC は右に広いマージン
             // バブル幅上限: bubbleMaxWidthPercent と bubbleMaxWidthPx の小さい方
             int edgePad = UIConfig.wrapperEdgePadding;
-            float maxWidthFromPercent = Screen.width * UIConfig.bubbleMaxWidthPercent;
+            float containerWidth = GetContainerWidth();
+            float maxWidthFromPercent = containerWidth * UIConfig.bubbleMaxWidthPercent;
             float maxWidth = Mathf.Min(maxWidthFromPercent, UIConfig.bubbleMaxWidthPx);
-            int sideMargin = Mathf.Max(0, (int)(Screen.width - maxWidth - edgePad));
+            int sideMargin = Mathf.Max(0, (int)(containerWidth - maxWidth - edgePad));
             int vPad = UIConfig.wrapperVerticalPadding;
             // 連続メッセージの場合は上マージンを減らす（バブルスタック）
             int topPad = isConsecutive ? 2 : vPad;
@@ -640,7 +664,7 @@ namespace ProjectFoundPhone.UI
             float textPadH = 20f;
             // フォントメトリクス丸め誤差対策の安全マージン
             float safetyMargin = 4f;
-            float maxWidthFromPercent = Screen.width * UIConfig.bubbleMaxWidthPercent;
+            float maxWidthFromPercent = GetContainerWidth() * UIConfig.bubbleMaxWidthPercent;
             float maxBubbleWidth = Mathf.Min(maxWidthFromPercent, UIConfig.bubbleMaxWidthPx);
 
             // TMPの GetPreferredValues で折り返しなしのテキスト幅を取得
@@ -1660,9 +1684,10 @@ namespace ProjectFoundPhone.UI
             float cSpacing = UIConfig.choiceSpacing;
             // プレイヤーバブル風の右寄せレイアウト（ConfigureBubble と同じ計算）
             int edgePadC = UIConfig.wrapperEdgePadding;
-            float maxWidthFromPercent = Screen.width * UIConfig.bubbleMaxWidthPercent;
+            float containerWidthC = GetContainerWidth();
+            float maxWidthFromPercent = containerWidthC * UIConfig.bubbleMaxWidthPercent;
             float maxWidthC = Mathf.Min(maxWidthFromPercent, UIConfig.bubbleMaxWidthPx);
-            int choiceSideMargin = Mathf.Max(0, (int)(Screen.width - maxWidthC - edgePadC));
+            int choiceSideMargin = Mathf.Max(0, (int)(containerWidthC - maxWidthC - edgePadC));
             layoutGroup.spacing = cSpacing;
             layoutGroup.padding = new RectOffset(choiceSideMargin, edgePadC, 6, 10);
             layoutGroup.childForceExpandWidth = true;
