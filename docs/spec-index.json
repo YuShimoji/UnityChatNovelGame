@@ -75,10 +75,10 @@
     "id": "SP-006",
     "title": "ハルシコイン",
     "status": "partial",
-    "pct": 70,
+    "pct": 85,
     "cat": "system",
     "file": "docs/StorySpec/06_hallucicoin.md",
-    "summary": "獲得方法・難易度曲線・UX演出。コード実装はPhase2まで"
+    "summary": "コア報酬システム実装済み(矛盾発見→HalluciCoin付与、Dashboard表示、Save/Load永続化)。未実装: silent increment演出、ゲート/しきい値メカニクス、増加通知バッジ"
   },
   {
     "id": "SP-007",
@@ -93,10 +93,10 @@
     "id": "SP-008",
     "title": "UI/UX",
     "status": "partial",
-    "pct": 65,
+    "pct": 75,
     "cat": "ui",
     "file": "docs/StorySpec/08_ui_ux.md",
-    "summary": "ダッシュボード・スレッド・プレイヤーリソース表示域。ダッシュボードMVP+チャットバブル仕様+デバッグ機能(Section6)実装済み。インベントリUI実装済み(3サブタブ+オーバーレイ導線、2026-03-11)。バブル表示8問題修正済み(スクロール吸着・二重ラッパー・色・下詰め)。サブスレッド未着手"
+    "summary": "ダッシュボード・スレッド・プレイヤーリソース表示域。ダッシュボードMVP+チャットバブル仕様+デバッグ機能(Section6)実装済み。インベントリUI実装済み(3サブタブ+オーバーレイ導線)。バブル表示修正完了(角丸フォールバック・リッチテキストスコープ・スクロール吸着・名前分離・影・FinalizeBubbleSize)。サブスレッドUI未着手(~15-20%)"
   },
   {
     "id": "SP-009",
@@ -147,10 +147,10 @@
     "id": "SP-014",
     "title": "インタラクション・メカニクス",
     "status": "partial",
-    "pct": 30,
+    "pct": 45,
     "cat": "system",
     "file": "docs/StorySpec/14_interaction_mechanics.md",
-    "summary": "3メカニクス候補(指摘/ボード/分岐)の整理。方針決定済み: A>B>C、DeductionBoard凍結、矛盾→断片紐づけ解除、アルケミーD-3+D-1ハイブリッド(2026-03-08)"
+    "summary": "3メカニクス候補(指摘/ボード/分岐)の整理。矛盾Phase2完全実装(長押し+タップ、7ペア、HalluciCoin報酬、成功/失敗演出、クールダウン)。DeductionBoard凍結。Branch Step1実装済み(BranchThreadState+Save/Load)、Step2+(UIエントリ/リターンフック)未着手"
   },
   {
     "id": "SP-015",
@@ -186,7 +186,7 @@
     "pct": 90,
     "cat": "infra",
     "file": "docs/ENGINE_FEATURE_INVENTORY.md",
-    "summary": "Yarnコマンド・キャラ管理・セーブ・演出・バブル表示設定(名前分離・角丸・影・FinalizeBubbleSize・DebugOverlay OFF)・矛盾・ダッシュボード(Day Resume実装済み・マルチDay対応)・インベントリUI"
+    "summary": "Yarnコマンド・キャラ管理・セーブ・演出・バブル表示設定(名前分離・角丸フォールバック・影・FinalizeBubbleSize・DebugOverlay OFF)・矛盾(#line:タグ方式、<<MessageTagged>>は非推奨)・ダッシュボード(Day Resume実装済み・マルチDay対応)・インベントリUI"
   },
   {
     "id": "EN-002",
@@ -222,16 +222,16 @@
     "pct": 30,
     "cat": "system",
     "file": "docs/AUTOSAVE_DESIGN.md",
-    "summary": "オートセーブの設計方針・タイミング・データ構造"
+    "summary": "設計ドキュメント完了(9セクション)。コード実装はEndDay時のSaveGame呼び出しのみ。専用AutoSave()メソッド・クールダウン・UI通知・トリガーフック等は未実装"
   },
   {
     "id": "EN-006",
     "title": "UI実装仕様",
     "status": "partial",
-    "pct": 85,
+    "pct": 90,
     "cat": "ui",
     "file": "docs/UI_IMPLEMENTATION_SPEC.md",
-    "summary": "チャットバブル(名前分離・角丸・影・幅フィット・FinalizeBubbleSize)・スクロール吸着・選択肢UI・ChatUIConfig全40パラメータ。70fe16bリファクタ反映済み"
+    "summary": "チャットバブル(名前分離・角丸フォールバック・影・幅フィット・FinalizeBubbleSize・リッチテキストスコープ修正)・スクロール吸着・選択肢UI・ChatUIConfig全40パラメータ。残存: ウィンドウリサイズ時の再計算(~5%)"
   },
   {
     "id": "EN-007",
