@@ -25,6 +25,10 @@
   - `HasSaveInSlot(slotNumber)`: セーブデータの存在確認
   - `GetSaveInfo(slotNumber)`: セーブデータ情報の取得
   - `GetAllSaveInfo()`: 全スロットの情報取得
+  - `AutoSave(forceSave)`: オートセーブ実行（slot 99、30秒クールダウン付き）→ 詳細は `AUTOSAVE_DESIGN.md`
+  - `HasAutoSave()`: オートセーブデータの存在確認
+  - `GetAutoSaveInfo()`: オートセーブデータ情報の取得
+  - `IsValidSlot(slotNumber)`: 通常スロット (0-2) またはオートセーブ (99) の判定
 
 ### 2. UIコンポーネント
 
@@ -32,11 +36,13 @@
 - セーブ・ロードUIのメインコントローラー
 - セーブモード/ロードモードの切り替え
 - スロット一覧の表示と管理
+- ロードモード時、オートセーブスロットを先頭に表示（`HasAutoSave()` が true の場合）
 
 #### SaveSlotUI (`Assets/Scripts/UI/SaveSlotUI.cs`)
 - 個別のセーブスロットUIコンポーネント
 - セーブデータの表示
 - クリックイベントのハンドリング
+- オートセーブスロット表示対応（ラベル「Auto Save」、削除ボタン非表示）
 
 ### 3. デバッグツール
 
@@ -157,7 +163,7 @@ saveLoadUI.Hide();
 - **Mac**: `~/Library/Application Support/<CompanyName>/<ProductName>/`
 - **Linux**: `~/.config/unity3d/<CompanyName>/<ProductName>/`
 
-ファイル名形式: `SaveData_<SlotNumber>.json`
+ファイル名形式: `SaveData_<SlotNumber>.json`（オートセーブは `SaveData_99.json`）
 
 ## テスト手順
 
@@ -174,6 +180,18 @@ saveLoadUI.Hide();
 3. `SaveSystemTests`を実行
 4. 全テストが通過することを確認
 
+### チャット履歴復元時の名前重複防止
+
+`ChatController.RestoreChatHistory()` では、保存データから NPC メッセージを復元する際に `StripNamePrefix()` を呼び出す。
+これは `CreateMessageBubble` が名前行リッチテキストを再付加するため、保存データに含まれる名前プレフィックスを事前に除去して二重表示を防ぐ。
+
+パターン: `<line-height=N%><size=N><b>名前</b></size>\n</line-height>` を先頭から1回だけ除去。
+
+### EndDay のセーブ先
+
+`ScenarioManager.EndDayCommand()` は Day 進捗記録後に `SaveManager.Instance.AutoSave(forceSave: true)` を呼ぶ。
+以前の `SaveGame(slotNumber)` による通常スロットへの保存ではなく、オートセーブスロット (99) に強制保存する。
+
 ### 3. 実機テスト
 1. トピックを複数獲得
 2. セーブを実行
@@ -186,7 +204,7 @@ saveLoadUI.Hide();
 ### Phase 2
 - [ ] セーブデータの暗号化
 - [ ] 複数スロット対応（3スロット以上）
-- [ ] オートセーブ機能
+- [x] オートセーブ機能（EN-005, 6cc1a63）→ 詳細は `AUTOSAVE_DESIGN.md`
 - [ ] クラウドセーブ対応
 
 ### Phase 3

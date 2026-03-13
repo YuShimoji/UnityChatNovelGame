@@ -3,8 +3,8 @@
 ## 概要
 FoundPhone のチャットUIシステムの実装仕様。ENGINE_FEATURE_INVENTORY.md のセクション6/9と対になる詳細リファレンス。
 
-**最終更新**: 2026-03-12
-**対象コミット**: 70fe16b (バブルリファクタ)
+**最終更新**: 2026-03-13
+**対象コミット**: be96e86 (SystemMessage角丸除外), 8b22b71 (バブル幅RectTransform), 147b36d (StripNamePrefix)
 
 ---
 
@@ -38,7 +38,7 @@ ScrollRect.content
 |   +-- MessageBubble (Image[9-slice角丸] + Shadow + TextMeshProUGUI)
 |       +-- Text: "本文のみ"
 +-- SystemMessageRow
-    +-- SystemBubble (Image[9-slice角丸] + TextMeshProUGUI)
+    +-- SystemBubble (Image[背景色のみ、角丸スプライト非適用] + TextMeshProUGUI)
 ```
 
 ### 1.3 NPC 名前/本文分離
@@ -59,7 +59,8 @@ NPC バブルでは名前行と本文行を改行で分離する。
 1. `GetPreferredValues` で折り返しなしのテキスト自然幅を取得
 2. `naturalTextWidth + textPadH(20px) + safetyMargin(4px)` を算出
 3. `min(上記, maxBubbleWidth)` でクランプ
-   - `maxBubbleWidth = min(Screen.width * bubbleMaxWidthPercent, bubbleMaxWidthPx)`
+   - `maxBubbleWidth = min(GetContainerWidth() * bubbleMaxWidthPercent, bubbleMaxWidthPx)`
+   - `GetContainerWidth()`: ScrollRect の `RectTransform.rect.width` を返す（Canvas スケーリング対応）。未初期化時は `Screen.width` にフォールバック
 4. `LayoutElement.preferredWidth` に設定、`flexibleWidth = 0`
 5. `ConfigureBubble` でラッパー配置
 6. **`FinalizeBubbleSize`** でラッパー配置後に高さを再計算
@@ -81,7 +82,8 @@ FinalizeBubbleSize:
 ### 1.5 角丸スプライト + 影
 
 #### 角丸スプライト (`GetOrCreateRoundedSprite`)
-- `UIConfig.bubbleSprite` が null の場合、ランタイムで白色の角丸テクスチャを生成
+- `UIConfig.bubbleSprite != null` の場合はそちらを使用、null の場合はランタイムで白色の角丸テクスチャを生成
+- **重要**: null 判定には `!= null` を使うこと。`??` 演算子は Unity の `operator ==` オーバーロードを迂回し、Inspector 未設定の fake null を透過させるため使用禁止 (147b36d)
 - **半径**: `bubbleCornerRadius` (デフォルト 16px)
 - **テクスチャサイズ**: `radius * 2 + 2` (9-slice の伸縮領域含む)
 - **アンチエイリアス**: 境界付近のアルファ補間あり
@@ -271,10 +273,10 @@ FinalizeBubbleSize:
 | 制限 | 説明 |
 |------|------|
 | SystemMessage ルーティング | 現在は全てチャットバブルとして表示。ステータスバー/トースト分岐は TODO (ChatController.cs:1056) |
-| 画面リサイズ | `Screen.width` は初回計算時の値。ウィンドウリサイズ後の再計算が走らない |
-| セーブ復元時の名前表示 | 復元パスでも `finalText` に名前を埋め込むため、保存データに名前が含まれていると重複の可能性あり |
+| ~~画面リサイズ~~ | **修正済み** (8b22b71): `GetContainerWidth()` で `RectTransform.rect.width` を使用。Canvas スケーリングに追従 |
+| ~~セーブ復元時の名前表示~~ | **修正済み** (147b36d): `StripNamePrefix()` で復元前に名前リッチテキストを除去 |
 | チャンネルレジューム | チャンネル選択は常に `StartNodeName` から再開始。途中復帰は未対応 |
-| 文字化けコメント | ScenarioManager.cs / DeductionBoard.cs に約70行 (D分類で凍結中) |
+| ~~文字化けコメント~~ | **修正済み** (2a34836): ScenarioManager / CoreLogicTests / SaveLoadUI / SaveSlotUI の全92行を UTF-8 日本語に復元 |
 
 ---
 
