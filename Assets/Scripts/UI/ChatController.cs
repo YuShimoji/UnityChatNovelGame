@@ -2288,7 +2288,10 @@ namespace ProjectFoundPhone.UI
             // 角丸スプライト
             Sprite sprite = UIConfig.bubbleSprite ?? GetOrCreateRoundedSprite();
             #if UNITY_EDITOR
-            Debug.Log($"[ApplyBubbleVisuals] cornerRadius={UIConfig.bubbleCornerRadius}, bubbleSprite={(UIConfig.bubbleSprite != null ? "set" : "null")}, generatedSprite={(sprite != null ? sprite.name : "null")}, shadowEnabled={UIConfig.bubbleShadowEnabled}");
+            if (sprite == null)
+            {
+                Debug.LogWarning($"[ApplyBubbleVisuals] sprite is null. cornerRadius={UIConfig.bubbleCornerRadius}, bubbleSprite={(UIConfig.bubbleSprite != null ? "set" : "null")}");
+            }
             #endif
             if (sprite != null)
             {

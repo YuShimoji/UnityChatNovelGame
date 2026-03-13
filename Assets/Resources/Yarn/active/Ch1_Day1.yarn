@@ -87,7 +87,7 @@ title: Ch1_Day1_Hub
     <<jump Ch1_Day1_Fragment>>
 -> 今日はここまでにしよう <<if $d1_asked_region and $d1_asked_terminal and $d1_asked_marco and $d1_asked_fragment>>
     <<jump Ch1_Day1_Winding>>
--> もう少し考えよう <<if $d1_asked_region or $d1_asked_terminal or $d1_asked_marco or $d1_asked_fragment>>
+-> もう少し考えよう <<if ($d1_asked_region or $d1_asked_terminal or $d1_asked_marco or $d1_asked_fragment) and not ($d1_asked_region and $d1_asked_terminal and $d1_asked_marco and $d1_asked_fragment)>>
     <<jump Ch1_Day1_Hub>>
 ===
 

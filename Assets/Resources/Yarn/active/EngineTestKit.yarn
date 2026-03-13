@@ -1,0 +1,296 @@
+/// EngineTestKit: エンジン機能の個別テスト用シナリオ
+/// F12 Debug Hub から各ノードを直接起動してテスト可能
+/// テスト対象: リッチテキスト / 矛盾指摘 / Hub&Spoke / コマンド全般 / Day Resume
+
+/// --------------------------------------------------
+/// ETK_Menu: テストメニュー (Hub&Spoke)
+/// --------------------------------------------------
+title: ETK_Menu
+---
+<<declare $etk_done_richtext = false>>
+<<declare $etk_done_contradiction = false>>
+<<declare $etk_done_commands = false>>
+<<declare $etk_done_choices = false>>
+
+<<SystemMessage "=== Engine Test Kit ===">>
+<<StartWait 0.5>>
+
+<<set $speaker to "pyramid">>
+テスト項目を選んでください。
+
+<<set $speaker to "player">>
+-> リッチテキスト テスト <<if not $etk_done_richtext>>
+    <<set $etk_done_richtext to true>>
+    <<jump ETK_RichText>>
+-> 矛盾指摘 テスト <<if not $etk_done_contradiction>>
+    <<set $etk_done_contradiction to true>>
+    <<jump ETK_Contradiction>>
+-> コマンド テスト <<if not $etk_done_commands>>
+    <<set $etk_done_commands to true>>
+    <<jump ETK_Commands>>
+-> 選択肢 テスト <<if not $etk_done_choices>>
+    <<set $etk_done_choices to true>>
+    <<jump ETK_Choices>>
+-> テスト完了 <<if $etk_done_richtext and $etk_done_contradiction and $etk_done_commands and $etk_done_choices>>
+    <<jump ETK_End>>
+-> もう一度メニューを見る <<if ($etk_done_richtext or $etk_done_contradiction or $etk_done_commands or $etk_done_choices) and not ($etk_done_richtext and $etk_done_contradiction and $etk_done_commands and $etk_done_choices)>>
+    <<jump ETK_Menu>>
+===
+
+/// --------------------------------------------------
+/// ETK_RichText: リッチテキストタグのスコープ分離テスト
+/// 確認: 太字/斜体/下線/取消線がバブル間で漏れないこと
+/// --------------------------------------------------
+title: ETK_RichText
+---
+<<SystemMessage "--- リッチテキスト テスト ---">>
+<<StartWait 0.3>>
+
+<<set $speaker to "pyramid">>
+これは<b>太字</b>を含むメッセージです。次のバブルに漏れないことを確認。
+
+<<StartWait 0.3>>
+
+これは太字なしの通常メッセージです。太字になっていなければOK。
+
+<<StartWait 0.3>>
+
+これは<i>斜体テスト</i>です。次のバブルへの漏れを確認。
+
+<<StartWait 0.3>>
+
+斜体なしの通常メッセージ。斜体になっていなければOK。
+
+<<StartWait 0.3>>
+
+これは<b>太字の中に<i>斜体がネスト</i>されたケース</b>です。
+
+<<StartWait 0.3>>
+
+ネスト後の通常メッセージ。書式が残っていなければOK。
+
+<<StartWait 0.3>>
+
+これは<u>下線</u>と<s>取消線</s>のテストです。
+
+<<StartWait 0.3>>
+
+<<set $speaker to "marco">>
+マルコのメッセージ: <b>太字テスト。ここで閉じタグがない
+
+<<StartWait 0.3>>
+
+<<set $speaker to "pyramid">>
+Pyramidに戻る。マルコの未閉じ太字がここに漏れていなければ Bug 4c 修正OK。
+
+<<StartWait 0.3>>
+
+<<SystemMessage "リッチテキスト テスト完了">>
+<<StartWait 0.3>>
+
+<<jump ETK_Menu>>
+===
+
+/// --------------------------------------------------
+/// ETK_Contradiction: 矛盾指摘メカニクスのテスト
+/// 使用タグ: ch1_region_identity_src / ch1_region_identity_tgt (既存ペア)
+/// 手順: ソースを長押し → ターゲットをタップ
+/// --------------------------------------------------
+title: ETK_Contradiction
+---
+<<SystemMessage "--- 矛盾指摘 テスト ---">>
+<<SystemMessage "手順: (1) ソースバブルを0.5秒以上長押し (2) ターゲットバブルをタップ">>
+<<StartWait 0.5>>
+
+<<set $speaker to "pyramid">>
+本プログラムの対象地域は、第4管理区域に分類されています。 #line:ch1_region_identity_src
+
+<<StartWait 0.3>>
+
+<<set $speaker to "marco">>
+第4管理区域？ 聞いたことないな。 #line:ch1_region_identity_tgt
+
+<<StartWait 0.3>>
+
+<<set $speaker to "pyramid">>
+上の2つのバブルで矛盾指摘を試してください。
+
+<<StartWait 0.3>>
+
+ソース(Pyramid)を長押し → ターゲット(Marco)をタップで成功判定。
+
+<<StartWait 0.3>>
+
+別の組み合わせで失敗判定とクールダウンも確認可能です。
+
+<<set $speaker to "player">>
+-> 確認した、メニューに戻る
+    <<jump ETK_Menu>>
+===
+
+/// --------------------------------------------------
+/// ETK_Commands: カスタムコマンドのテスト
+/// SystemMessage / StartWait / Typing / Glitch / UnlockTopic
+/// --------------------------------------------------
+title: ETK_Commands
+---
+<<SystemMessage "--- コマンド テスト ---">>
+<<StartWait 0.5>>
+
+<<set $speaker to "pyramid">>
+<<Typing true>>
+<<StartWait 1>>
+<<Typing false>>
+タイピングインジケーター: 上の「...」が1秒表示されていればOK。
+
+<<StartWait 0.3>>
+
+<<SystemMessage "SystemMessage: 中央に表示されるシステムメッセージ">>
+<<StartWait 0.5>>
+
+<<Glitch 1>>
+<<StartWait 0.5>>
+Glitch Level 1: 画面にグリッチエフェクトが走ればOK。
+
+<<StartWait 0.3>>
+
+<<Glitch 2>>
+<<StartWait 0.5>>
+Glitch Level 2: より強いグリッチ。
+
+<<StartWait 0.3>>
+
+<<UnlockTopic "test_fragment_01">>
+<<SystemMessage "テスト断片「test_fragment_01」をアンロックしました">>
+
+<<StartWait 0.3>>
+
+<<set $speaker to "pyramid">>
+全コマンドのテスト完了。
+
+<<set $speaker to "player">>
+-> メニューに戻る
+    <<jump ETK_Menu>>
+===
+
+/// --------------------------------------------------
+/// ETK_Choices: 選択肢UIのテスト
+/// 2択 / 4択 / 条件付き選択肢
+/// --------------------------------------------------
+title: ETK_Choices
+---
+<<declare $etk_choice_a = false>>
+<<declare $etk_choice_b = false>>
+
+<<SystemMessage "--- 選択肢 テスト ---">>
+<<StartWait 0.3>>
+
+<<set $speaker to "pyramid">>
+2択テスト:
+
+<<set $speaker to "player">>
+-> 選択肢A
+    <<set $etk_choice_a to true>>
+    <<set $speaker to "pyramid">>
+    Aが選択されました。
+-> 選択肢B
+    <<set $etk_choice_b to true>>
+    <<set $speaker to "pyramid">>
+    Bが選択されました。
+
+<<StartWait 0.3>>
+
+4択テスト:
+
+<<set $speaker to "player">>
+-> 選択肢1
+    <<set $speaker to "pyramid">>
+    1を選択。
+-> 選択肢2
+    <<set $speaker to "pyramid">>
+    2を選択。
+-> 選択肢3
+    <<set $speaker to "pyramid">>
+    3を選択。
+-> 選択肢4
+    <<set $speaker to "pyramid">>
+    4を選択。
+
+<<StartWait 0.3>>
+
+条件付き選択肢テスト:
+
+<<set $speaker to "player">>
+-> この選択肢は常に表示
+    <<set $speaker to "pyramid">>
+    常時表示の選択肢。
+-> Aを選んだ人だけ見える <<if $etk_choice_a>>
+    <<set $speaker to "pyramid">>
+    条件付き選択肢(A)。
+-> Bを選んだ人だけ見える <<if $etk_choice_b>>
+    <<set $speaker to "pyramid">>
+    条件付き選択肢(B)。
+
+<<StartWait 0.3>>
+
+<<SystemMessage "選択肢テスト完了">>
+
+<<jump ETK_Menu>>
+===
+
+/// --------------------------------------------------
+/// ETK_End: テスト完了
+/// --------------------------------------------------
+title: ETK_End
+---
+<<SystemMessage "=== 全テスト完了 ===">>
+<<StartWait 0.5>>
+
+<<set $speaker to "pyramid">>
+全テスト項目を実行しました。Console にエラーが出ていないことを確認してください。
+
+<<StartWait 0.5>>
+
+<<SystemMessage "Engine Test Kit 終了">>
+===
+
+/// --------------------------------------------------
+/// ETK_DayResume_Day1: Day Resume テスト用 Day 1
+/// Dashboard の ch_test チャンネルから起動
+/// --------------------------------------------------
+title: ETK_DayResume_Day1
+---
+<<SystemMessage "=== Day Resume テスト: Day 1 ===">>
+<<StartWait 0.3>>
+
+<<set $speaker to "pyramid">>
+Day 1 のコンテンツです。
+
+<<StartWait 0.3>>
+
+EndDay 1 を実行します。ダッシュボードに戻って ch_test を再選択すると Day 2 から開始されます。
+
+<<set $speaker to "player">>
+-> Day 1 を終了する
+    <<EndDay 1>>
+===
+
+/// --------------------------------------------------
+/// ETK_DayResume_Day2: Day Resume テスト用 Day 2
+/// --------------------------------------------------
+title: ETK_DayResume_Day2
+---
+<<SystemMessage "=== Day Resume テスト: Day 2 ===">>
+<<StartWait 0.3>>
+
+<<set $speaker to "pyramid">>
+Day 2 から正しく再開されました。Day Resume 成功です。
+
+<<StartWait 0.3>>
+
+EndDay 2 を実行します。これが最終Dayなので、チャンネルは Completed になります。
+
+<<set $speaker to "player">>
+-> Day 2 を終了する (チャンネル完了)
+    <<EndDay 2>>
+===
