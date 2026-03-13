@@ -186,7 +186,7 @@
     "pct": 90,
     "cat": "infra",
     "file": "docs/ENGINE_FEATURE_INVENTORY.md",
-    "summary": "Yarnコマンド・キャラ管理・セーブ・演出・バブル表示設定(名前分離・角丸フォールバック・影・FinalizeBubbleSize・DebugOverlay OFF)・矛盾(#line:タグ方式に統一)・ダッシュボード(Day Resume実装済み・マルチDay対応)・インベントリUI"
+    "summary": "Yarnコマンド・キャラ管理・セーブ(AutoSave含む)・演出・バブル表示設定(名前分離・角丸9-slice・影・FinalizeBubbleSize・DebugOverlay OFF)・矛盾(#line:タグ方式に統一)・ダッシュボード(Day Resume実装済み・マルチDay対応)・インベントリUI・EngineTestKit(ETK)"
   },
   {
     "id": "EN-002",
@@ -204,7 +204,7 @@
     "pct": 100,
     "cat": "data",
     "file": "docs/SaveSystem_README.md",
-    "summary": "JSON保存・3スロット・チャット履歴・トピック・後方互換"
+    "summary": "JSON保存・3スロット+AutoSave(slot=99)・チャット履歴・トピック・後方互換。復元時の名前重複防止(StripNamePrefix)実装済み"
   },
   {
     "id": "EN-004",
@@ -218,11 +218,11 @@
   {
     "id": "EN-005",
     "title": "オートセーブ設計",
-    "status": "partial",
-    "pct": 30,
+    "status": "done",
+    "pct": 100,
     "cat": "system",
     "file": "docs/AUTOSAVE_DESIGN.md",
-    "summary": "設計ドキュメント完了(9セクション)。コード実装はEndDay時のSaveGame呼び出しのみ。専用AutoSave()メソッド・クールダウン・UI通知・トリガーフック等は未実装"
+    "summary": "設計+実装完了。AutoSave(slot=99, 30秒クールダウン, forceSave対応)。トリガー: ノード遷移・選択肢選択・EndDay。Canvas直下インジケーター。SaveLoadUIにAutoSaveスロット表示"
   },
   {
     "id": "EN-006",
@@ -231,7 +231,7 @@
     "pct": 90,
     "cat": "ui",
     "file": "docs/UI_IMPLEMENTATION_SPEC.md",
-    "summary": "チャットバブル(名前分離・角丸フォールバック・影・幅フィット・FinalizeBubbleSize・リッチテキストスコープ修正)・スクロール吸着・選択肢UI・ChatUIConfig全40パラメータ。残存: ウィンドウリサイズ時の再計算(~5%)"
+    "summary": "チャットバブル(名前分離・角丸9-slice・影・幅フィット・FinalizeBubbleSize・リッチテキストスコープ修正)・スクロール吸着・選択肢UI・ChatUIConfig全40パラメータ。バブル幅: Screen.width→RectTransform.rect.width(リサイズ追従)。bubbleSprite fake null修正済み(??→!=null)"
   },
   {
     "id": "EN-007",

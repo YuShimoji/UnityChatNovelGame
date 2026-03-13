@@ -1,7 +1,7 @@
 # WORKFLOW STATE SSOT
 
 **Updated**: 2026-03-13
-**Phase**: エンジン検証 Phase A — バグ3件修正済み、矛盾タグ検証済み、手動テスト待ち
+**Phase**: エンジン検証 Phase A — delegation-prompts 全6タスク完了、手動テスト待ち
 **Branch**: main
 
 ## Mission
@@ -108,7 +108,12 @@ ContentAuthoring シーンで以下を行う必要あり:
 - **DebugHub**: 前ダイアログの `Stop()` が必須（トークン汚染による早送り状態を防止）
 - **共通処理**: Ch1/Ch2 のコアループは完全に共通。チャプター固有処理は矛盾システムの難易度制御のみ
 - **ダッシュボード**: DebugHubController と同じプログラマティック UI パターン。ChannelData SO でチャプター管理
-- **コード品質**: ScenarioManager.cs / DeductionBoard.cs に文字化けコメント約70行（D分類で凍結中）
+- **コード品質**: 文字化けコメント修正済み (Task B: 2a34836)。ScenarioManager/CoreLogicTests/SaveLoadUI/SaveSlotUI の全92行を UTF-8 日本語に復元
+- **オートセーブ**: EN-005 実装済み (6cc1a63)。slot=99, 30秒CD, ノード遷移/選択肢/EndDay トリガー
+- **bubbleSprite fake null**: 修正済み (147b36d)。?? → != null で Unity overloaded == 対応。角丸9-sliceが初めて有効化
+- **セーブ復元名前重複**: 修正済み (147b36d)。StripNamePrefix で後方互換
+- **バブル幅リサイズ対応**: 修正済み (8b22b71)。Screen.width → RectTransform.rect.width
+- **EngineTestKit**: 追加済み (6da0aba)。F12 Debug Hub + ch_test Dashboard テスト用8ノード
 
 ### Claude への依頼パターン
 
