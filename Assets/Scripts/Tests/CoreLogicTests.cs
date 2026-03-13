@@ -10,12 +10,12 @@ using System.Reflection;
 namespace ProjectFoundPhone.Tests
 {
     /// <summary>
-    /// TopicData, SynthesisRecipe, DeductionBoard 縺ｮ繧ｳ繧｢繝ｭ繧ｸ繝・け繝・せ繝・    /// </summary>
+    /// TopicData, SynthesisRecipe, DeductionBoard のコアロジックテスト
     public class CoreLogicTests
     {
         #region Helper Methods
         /// <summary>
-        /// 繝・せ繝育畑縺ｮTopicData繧剃ｽ懈・縺吶ｋ
+        /// テスト用のTopicDataを作成する
         /// </summary>
         private TopicData CreateTopicData(string topicID, string title, string description = "")
         {
@@ -29,7 +29,7 @@ namespace ProjectFoundPhone.Tests
         }
 
         /// <summary>
-        /// 繝・せ繝育畑縺ｮSynthesisRecipe繧剃ｽ懈・縺吶ｋ
+        /// テスト用のSynthesisRecipeを作成する
         /// </summary>
         private SynthesisRecipe CreateRecipe(TopicData ingredientA, TopicData ingredientB, TopicData result)
         {
@@ -469,7 +469,7 @@ namespace ProjectFoundPhone.Tests
         {
             SetupCharacterDatabase();
 
-            // "player" 縺ｨ縺・≧ ID 縺ｯ繝励Ο繝輔ぃ繧､繝ｫ縺ｪ縺励〒繧ゅヵ繧ｩ繝ｼ繝ｫ繝舌ャ繧ｯ縺ｧ true 繧定ｿ斐☆
+            // "player" という ID はプロファイルなしでもフォールバックで true を返す
             Assert.IsTrue(m_Database.IsPlayer("player"));
             Assert.IsFalse(m_Database.IsPlayer("npc_001"));
 
@@ -497,7 +497,7 @@ namespace ProjectFoundPhone.Tests
             Color playerColor = m_Database.GetThemeColor("player");
             Color npcColor = m_Database.GetThemeColor("npc_001");
 
-            // 繝・ヵ繧ｩ繝ｫ繝医・繝輔か繝ｼ繝ｫ繝舌ャ繧ｯ繧ｫ繝ｩ繝ｼ縺瑚ｿ斐ｋ
+            // デフォルトのフォールバックカラーが返る
             Assert.AreEqual(new Color(0.2f, 0.6f, 1.0f), playerColor);
             Assert.AreEqual(new Color(0.3f, 0.3f, 0.35f), npcColor);
 
@@ -521,7 +521,7 @@ namespace ProjectFoundPhone.Tests
         {
             SetupCharacterDatabase();
 
-            // 繝励Ο繝輔ぃ繧､繝ｫ縺瑚ｦ九▽縺九ｉ縺ｪ縺・ｴ蜷医！D縺後◎縺ｮ縺ｾ縺ｾ霑斐ｋ
+            // プロファイルが見つからない場合はIDがそのまま返る
             Assert.AreEqual("unknown_char", m_Database.GetDisplayName("unknown_char"));
 
             TeardownCharacterDatabase();

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using ProjectFoundPhone.Core;
@@ -8,8 +8,8 @@ using System.Collections.Generic;
 namespace ProjectFoundPhone.UI
 {
     /// <summary>
-    /// 繧ｻ繝ｼ繝悶・繝ｭ繝ｼ繝蔚I繧堤ｮ｡逅・☆繧九け繝ｩ繧ｹ
-    /// 繧ｻ繝ｼ繝悶せ繝ｭ繝・ヨ縺ｮ陦ｨ遉ｺ縲√そ繝ｼ繝・繝ｭ繝ｼ繝・蜑企勁謫堺ｽ懊ｒ謠蝉ｾ・    /// </summary>
+    /// セーブ・ロードUIを管理するクラス
+    /// セーブスロットの表示、セーブ・ロード・削除操作を担当
     public class SaveLoadUI : MonoBehaviour
     {
         #region Private Fields
@@ -61,7 +61,7 @@ namespace ProjectFoundPhone.UI
 
         #region Public Methods
         /// <summary>
-        /// 繧ｻ繝ｼ繝悶Δ繝ｼ繝峨〒UI繧定｡ｨ遉ｺ
+        /// セーブモードでUIを表示
         /// </summary>
         public void ShowSaveMode()
         {
@@ -75,7 +75,7 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// 繝ｭ繝ｼ繝峨Δ繝ｼ繝峨〒UI繧定｡ｨ遉ｺ
+        /// ロードモードでUIを表示
         /// </summary>
         public void ShowLoadMode()
         {
@@ -89,7 +89,7 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// UI繧定｡ｨ遉ｺ
+        /// UIを表示
         /// </summary>
         public void Show()
         {
@@ -100,7 +100,7 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// UI繧帝撼陦ｨ遉ｺ
+        /// UIを非表示
         /// </summary>
         public void Hide()
         {
@@ -113,7 +113,7 @@ namespace ProjectFoundPhone.UI
 
         #region Private Methods
         /// <summary>
-        /// 繧ｻ繝ｼ繝悶せ繝ｭ繝・ヨUI繧呈峩譁ｰ
+        /// セーブスロットUIを更新
         /// </summary>
         private void RefreshSlots()
         {
@@ -140,9 +140,9 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// 繧ｻ繝ｼ繝悶せ繝ｭ繝・ヨUI繧堤函謌・        /// </summary>
-        /// <param name="slotNumber">繧ｹ繝ｭ繝・ヨ逡ｪ蜿ｷ</param>
-        /// <param name="saveData">繧ｻ繝ｼ繝悶ョ繝ｼ繧ｿ・亥ｭ伜惠縺励↑縺・ｴ蜷・ull・・/param>
+        /// セーブスロットUIを生成
+        /// <param name="slotNumber">スロット番号</param>
+        /// <param name="saveData">セーブデータ（存在しない場合null）</param>
         private void CreateSlotUI(int slotNumber, SaveData saveData)
         {
             if (m_SlotPrefab == null || m_SlotContainer == null)
@@ -159,8 +159,8 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// 繧ｹ繝ｭ繝・ヨ縺後け繝ｪ繝・け縺輔ｌ縺滓凾縺ｮ蜃ｦ逅・        /// </summary>
-        /// <param name="slotNumber">繧ｯ繝ｪ繝・け縺輔ｌ縺溘せ繝ｭ繝・ヨ逡ｪ蜿ｷ</param>
+        /// スロットがクリックされた時の処理
+        /// <param name="slotNumber">クリックされたスロット番号</param>
         private void OnSlotClicked(int slotNumber)
         {
             if (SaveManager.Instance == null)
@@ -196,8 +196,8 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// 蜑企勁繝懊ち繝ｳ縺後け繝ｪ繝・け縺輔ｌ縺滓凾縺ｮ蜃ｦ逅・        /// </summary>
-        /// <param name="slotNumber">蜑企勁縺吶ｋ繧ｹ繝ｭ繝・ヨ逡ｪ蜿ｷ</param>
+        /// 削除ボタンがクリックされた時の処理
+        /// <param name="slotNumber">削除するスロット番号</param>
         private void OnDeleteClicked(int slotNumber)
         {
             if (SaveManager.Instance == null)

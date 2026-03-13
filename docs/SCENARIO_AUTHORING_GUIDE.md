@@ -90,7 +90,7 @@ Assets/Resources/Yarn/active/
 | (直接セリフ) | `テキスト` | `$speaker` に設定されたキャラのバブルとして表示 |
 | Message | `<<Message "charID" "テキスト">>` | 指定キャラのメッセージバブルを直接表示 |
 | (矛盾タグ) | `テキスト #line:タグ名` | **推奨方式**: Yarn標準の `#line:` タグで矛盾識別子を付与。例: `対象地域は... #line:ch1_region_identity_src` |
-| MessageTagged | `<<MessageTagged "charID" "テキスト" "lineTag">>` | 矛盾タグ付きメッセージ（代替方式、`#line:` タグ推奨） |
+| ~~MessageTagged~~ | `<<MessageTagged "charID" "テキスト" "lineTag">>` | 非推奨（互換のため残存）。`#line:` タグ方式を使うこと |
 | SystemMessage | `<<SystemMessage "テキスト">>` | 中央寄せのシステム通知（接続/切断/断片獲得等） |
 | Image | `<<Image "charID" "imageID">>` | 画像メッセージ（`Resources/Images/` 内の画像） |
 

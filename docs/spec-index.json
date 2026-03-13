@@ -186,7 +186,7 @@
     "pct": 90,
     "cat": "infra",
     "file": "docs/ENGINE_FEATURE_INVENTORY.md",
-    "summary": "Yarnコマンド・キャラ管理・セーブ・演出・バブル表示設定(名前分離・角丸フォールバック・影・FinalizeBubbleSize・DebugOverlay OFF)・矛盾(#line:タグ方式、<<MessageTagged>>は非推奨)・ダッシュボード(Day Resume実装済み・マルチDay対応)・インベントリUI"
+    "summary": "Yarnコマンド・キャラ管理・セーブ・演出・バブル表示設定(名前分離・角丸フォールバック・影・FinalizeBubbleSize・DebugOverlay OFF)・矛盾(#line:タグ方式に統一)・ダッシュボード(Day Resume実装済み・マルチDay対応)・インベントリUI"
   },
   {
     "id": "EN-002",

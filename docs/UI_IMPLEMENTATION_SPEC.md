@@ -164,7 +164,8 @@ FinalizeBubbleSize:
 | コマンド | 機能 |
 |---------|------|
 | `<<Message charID text>>` | 指定キャラのメッセージ表示 |
-| `<<MessageTagged charID text lineTag>>` | 矛盾タグ付きメッセージ |
+| `テキスト #line:タグ名` | 矛盾タグ付きメッセージ（推奨。Yarn標準 `#line:` タグ方式） |
+| `<<MessageTagged charID text lineTag>>` | 矛盾タグ付きメッセージ（非推奨。互換のため残存） |
 | `<<SystemMessage text>>` | システムメッセージ（中央揃え） |
 | `<<StartWait seconds>>` | 指定秒数待機 + タイピングインジケーター |
 | `<<SkipWait>>` | 待機をスキップ |
