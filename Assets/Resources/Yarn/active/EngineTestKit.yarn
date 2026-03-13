@@ -93,7 +93,7 @@ Pyramidに戻る。マルコの未閉じ太字がここに漏れていなけれ�
 
 /// --------------------------------------------------
 /// ETK_Contradiction: 矛盾指摘メカニクスのテスト
-/// 使用タグ: ch1_region_identity_src / ch1_region_identity_tgt (既存ペア)
+/// 使用タグ: etk_region_identity_src / etk_region_identity_tgt (ETK専用ペア)
 /// 手順: ソースを長押し → ターゲットをタップ
 /// --------------------------------------------------
 title: ETK_Contradiction
@@ -103,12 +103,12 @@ title: ETK_Contradiction
 <<StartWait 0.5>>
 
 <<set $speaker to "pyramid">>
-本プログラムの対象地域は、第4管理区域に分類されています。 #line:ch1_region_identity_src
+本プログラムの対象地域は、第4管理区域に分類されています。 #line:etk_region_identity_src
 
 <<StartWait 0.3>>
 
 <<set $speaker to "marco">>
-第4管理区域？ 聞いたことないな。 #line:ch1_region_identity_tgt
+第4管理区域？ 聞いたことないな。 #line:etk_region_identity_tgt
 
 <<StartWait 0.3>>
 
