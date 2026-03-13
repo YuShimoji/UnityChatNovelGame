@@ -137,6 +137,13 @@ namespace ProjectFoundPhone.UI
 
             if (m_ChatController != null)
             {
+                // 全選択肢の条件が偽の場合のセーフティ: 無限待機を防止
+                if (dialogueOptions.Length == 0)
+                {
+                    Debug.LogWarning("[ChatDialogueView] RunOptionsAsync received 0 available options. Ending dialogue to prevent infinite loop.");
+                    return null;
+                }
+
                 // タイプライター効果が完全に終了するまで短い遅延を追加（食い気味防止）
                 if (!m_FastForwardEnabled)
                 {

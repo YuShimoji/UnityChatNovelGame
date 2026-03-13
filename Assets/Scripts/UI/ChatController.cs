@@ -627,7 +627,9 @@ namespace ProjectFoundPhone.UI
                     // 名前は小さめフォント + ボールド、行高さを縮小して1行占有感を軽減
                     float nameSize = UIConfig.messageFontSize * 0.75f;
                     nameLineText = $"{displayName}";
-                    finalText = $"<line-height=80%><size={nameSize:F0}><b>{displayName}</b></size>\n</line-height>{text}";
+                    // body の未閉リッチテキストタグを補完し、name への逆伝播を防止
+                    string safeBody = CloseUnclosedRichTextTags(text);
+                    finalText = $"<line-height=80%><size={nameSize:F0}><b>{displayName}</b></size>\n</line-height>{safeBody}";
                 }
             }
             textComponent.text = finalText;
@@ -2181,7 +2183,11 @@ namespace ProjectFoundPhone.UI
             if (m_GeneratedRoundedSprite != null) return m_GeneratedRoundedSprite;
 
             float radius = UIConfig.bubbleCornerRadius;
-            if (radius <= 0f) return null;
+            if (radius <= 0f)
+            {
+                radius = 16f;
+                Debug.LogWarning($"[ChatController] bubbleCornerRadius is {UIConfig.bubbleCornerRadius}. Using default 16f.");
+            }
 
             // テクスチャサイズ: 角丸半径の2倍 + 中央2px (9-slice の伸縮領域)
             int r = Mathf.CeilToInt(radius);
@@ -2302,6 +2308,48 @@ namespace ProjectFoundPhone.UI
                 shadow.effectColor = UIConfig.bubbleShadowColor;
                 shadow.effectDistance = UIConfig.bubbleShadowDistance;
             }
+        }
+
+        /// <summary>
+        /// TMP リッチテキストの未閉タグ (b/i/u/s) を検出し、末尾にクローズタグを補完する。
+        /// name + body を同一 TMP コンポーネントで結合する際のスコープ漏れを防止する。
+        /// </summary>
+        private static string CloseUnclosedRichTextTags(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return text;
+
+            // 対象タグ: b, i, u, s (TMP 基本装飾タグ)
+            ReadOnlySpan<string> tags = new[] { "b", "i", "u", "s" };
+            var suffix = new System.Text.StringBuilder();
+
+            foreach (var tag in tags)
+            {
+                int openCount = 0;
+                int closeCount = 0;
+                string openTag = $"<{tag}>";
+                string closeTag = $"</{tag}>";
+
+                int idx = 0;
+                while ((idx = text.IndexOf(openTag, idx, System.StringComparison.OrdinalIgnoreCase)) >= 0)
+                {
+                    openCount++;
+                    idx += openTag.Length;
+                }
+                idx = 0;
+                while ((idx = text.IndexOf(closeTag, idx, System.StringComparison.OrdinalIgnoreCase)) >= 0)
+                {
+                    closeCount++;
+                    idx += closeTag.Length;
+                }
+
+                int unclosed = openCount - closeCount;
+                for (int j = 0; j < unclosed; j++)
+                {
+                    suffix.Append(closeTag);
+                }
+            }
+
+            return suffix.Length > 0 ? text + suffix.ToString() : text;
         }
 
         #endregion
