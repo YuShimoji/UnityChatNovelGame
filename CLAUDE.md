@@ -9,17 +9,13 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
 現在の状況 (2026-03-13):
-  - delegation-prompts 全6タスク完了+push済み:
-    A) docs MessageTagged→#line:統一 (2a34836)
-    B) C# 文字化けコメント修正 (2a34836)
-    C) オートセーブ EN-005 実装 (6cc1a63)
-    D) セーブ復元名前重複防止 (147b36d)
-    E) バブル幅 Screen.width→RectTransform (8b22b71)
-    F) bubbleSprite fake null修正 ??→!=null (147b36d)
+  - delegation-prompts 全6タスク完了+push済み (A-F)
   - ETKタグ重複修正+SystemMessage角丸除外 (7f3d495, be96e86)
+  - ドキュメント同期完了: 21件の乖離を5ファイルに反映 (50a9fb7)
+    - AUTOSAVE_DESIGN.md全面リライト、UI_SPEC既知制限更新、#line:一意性制約追記等
   - Unity手動テスト中: 角丸バブル確認OK、システムメッセージ修正済み
   - 残テスト: オートセーブインジケーター/名前重複/ETK全項目/リサイズ
-  - E2E未実行 (Unity手動テスト優先)
+  - 矛盾Phase2: タグ検証済み、ContradictionFeedbackセットアップ+手動テスト待ち
   - 未対応タスク洗い出し済み (65件、優先度別に整理済み)
 
 ## DECISION LOG
