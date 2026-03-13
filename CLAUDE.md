@@ -8,7 +8,19 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
-現在の状況 (2026-03-13): バグ3件修正済み(d472c6e): (1)角丸スプライト: radius<=0時にデフォルト16fフォールバック、(2)リッチテキスト: 未閉タグ自動補完(CloseUnclosedRichTextTags)、(3)Hubループ: C#側0選択肢セーフティ+Yarnフォールバック選択肢。矛盾Phase2タグ検証完了(全7ペアYarn#line:タグとContradictionPairアセット一致)。手動テスト(Unity Editor)待ち。Day Resume基盤Phase1は実装済み未テスト。
+現在の状況 (2026-03-13):
+  - delegation-prompts 全6タスク完了+push済み:
+    A) docs MessageTagged→#line:統一 (2a34836)
+    B) C# 文字化けコメント修正 (2a34836)
+    C) オートセーブ EN-005 実装 (6cc1a63)
+    D) セーブ復元名前重複防止 (147b36d)
+    E) バブル幅 Screen.width→RectTransform (8b22b71)
+    F) bubbleSprite fake null修正 ??→!=null (147b36d)
+  - ETKタグ重複修正+SystemMessage角丸除外 (7f3d495, be96e86)
+  - Unity手動テスト中: 角丸バブル確認OK、システムメッセージ修正済み
+  - 残テスト: オートセーブインジケーター/名前重複/ETK全項目/リサイズ
+  - E2E未実行 (Unity手動テスト優先)
+  - 未対応タスク洗い出し済み (65件、優先度別に整理済み)
 
 ## DECISION LOG
 
@@ -25,6 +37,9 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 | 2026-03-12 | EndDay破壊的変更: 「ch{N}完了」→「現在チャンネルのDay N進捗記録」 | 許容/新コマンド追加 | マルチDayチャプター対応に必須。旧挙動はCurrentChannel未設定時にフォールバック |
 | 2026-03-12 | 開発目的の明文化: エンジン基盤+ツール優先、コンテンツ執筆は検証範囲に限定 | N/A | 作業がコンテンツ方向にドリフトする傾向への対策。CLAUDE.mdにガードレール追加 |
 | 2026-03-13 | Yarnディレクトリ分離: active/archive方式 | ディレクトリ分離 / ファイル名変更 / Editorツール | ファイル名変更はUnity+Gitで危険。ディレクトリ分離が最小侵襲。将来Editorツール化を予定 |
+| 2026-03-13 | UnityEngine.Object派生型に??/?.を使わない | ??使用 / !=null三項演算子 | Unity operator==オーバーロードを??が迂回し、Inspector未設定のfake nullを透過する。全バブルで角丸が効いていなかった原因 |
+| 2026-03-13 | SystemMessageに角丸スプライトを適用しない | 角丸適用 / 角丸除外 | 9-sliceのcornerRadius=16がバー高さに対して大きすぎ表示が圧迫される。ステータスインジケーターにバブル装飾は不適切 |
+| 2026-03-13 | #line:タグはYarnプロジェクト内で一意でなければならない | タグ再利用 / ETK専用タグ | Yarn Spinnerが重複#line:でプロジェクト全体のコンパイルに失敗する。ETK用に独自ペア(etk_region_identity)を作成 |
 
 ## DEVELOPMENT PURPOSE
 
