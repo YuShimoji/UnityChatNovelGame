@@ -346,3 +346,38 @@ Barnabyさん、1点補足があります。
 
 <<EndDay 1>>
 ===
+
+/// Chapter 1 Day 2: Day Resume テスト用最小ノード
+/// Day1 の EndDay 後にダッシュボードから再選択すると、このノードから再開する
+
+title: Ch1_Day2_Opening
+---
+<<SystemMessage "--- 2日目 ---">>
+
+<<StartWait 1>>
+
+<<set $speaker to "pyramid">>
+おはようございます、Barnaby。昨日の続きですね。
+
+<<StartWait 0.5>>
+本日のセッションを開始します。
+
+<<set $speaker to "player">>
+-> ああ、続きを頼む
+    <<set $speaker to "pyramid">>
+    <<StartWait 0.5>>
+    承知しました。
+    <<jump Ch1_Day2_Winding>>
+===
+
+title: Ch1_Day2_Winding
+---
+<<set $speaker to "pyramid">>
+<<StartWait 1>>
+本日のセッションは以上です。
+
+<<SystemMessage "...">>
+<<StartWait 1>>
+
+<<EndDay 2>>
+===
