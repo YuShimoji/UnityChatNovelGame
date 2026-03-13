@@ -1,6 +1,9 @@
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 using System;
 using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -41,6 +44,23 @@ namespace ProjectFoundPhone.Core
         }
         #endregion
 
+        #region Constants
+        /// <summary>
+        /// オートセーブ専用スロット番号（通常スロットとは別管理）
+        /// </summary>
+        public const int AutoSaveSlot = 99;
+
+        /// <summary>
+        /// オートセーブのクールダウン秒数
+        /// </summary>
+        private const float AutoSaveCooldownSeconds = 30f;
+
+        /// <summary>
+        /// オートセーブインジケーターの表示秒数
+        /// </summary>
+        private const float AutoSaveIndicatorDuration = 1f;
+        #endregion
+
         #region Private Fields
         [Header("Settings")]
         [SerializeField] private string m_SaveFilePrefix = "SaveData";
@@ -51,6 +71,18 @@ namespace ProjectFoundPhone.Core
         /// 現在ロードされているセーブデータ
         /// </summary>
         private SaveData m_CurrentSaveData;
+
+        /// <summary>
+        /// 最後にオートセーブが実行された時刻
+        /// </summary>
+        private float m_LastAutoSaveTime = -AutoSaveCooldownSeconds;
+
+        /// <summary>
+        /// オートセーブインジケーターUI（Canvas直下に動的生成）
+        /// </summary>
+        private GameObject m_AutoSaveIndicator;
+        private CanvasGroup m_AutoSaveCanvasGroup;
+        private Coroutine m_AutoSaveIndicatorCoroutine;
         #endregion
 
         #region Public Properties
@@ -94,9 +126,9 @@ namespace ProjectFoundPhone.Core
         /// <returns>セーブ成功時true</returns>
         public bool SaveGame(int slotNumber = 0)
         {
-            if (slotNumber < 0 || slotNumber >= m_MaxSaveSlots)
+            if (!IsValidSlot(slotNumber))
             {
-                Debug.LogError($"SaveManager: Invalid slot number {slotNumber}. Must be between 0 and {m_MaxSaveSlots - 1}.");
+                Debug.LogError($"SaveManager: Invalid slot number {slotNumber}. Must be between 0 and {m_MaxSaveSlots - 1}, or {AutoSaveSlot} (auto-save).");
                 return false;
             }
 
@@ -227,9 +259,9 @@ namespace ProjectFoundPhone.Core
         /// <returns>ロード成功時true</returns>
         public bool LoadGame(int slotNumber = 0)
         {
-            if (slotNumber < 0 || slotNumber >= m_MaxSaveSlots)
+            if (!IsValidSlot(slotNumber))
             {
-                Debug.LogError($"SaveManager: Invalid slot number {slotNumber}. Must be between 0 and {m_MaxSaveSlots - 1}.");
+                Debug.LogError($"SaveManager: Invalid slot number {slotNumber}. Must be between 0 and {m_MaxSaveSlots - 1}, or {AutoSaveSlot} (auto-save).");
                 return false;
             }
 
@@ -369,9 +401,9 @@ namespace ProjectFoundPhone.Core
         /// <returns>削除成功時true</returns>
         public bool DeleteSave(int slotNumber)
         {
-            if (slotNumber < 0 || slotNumber >= m_MaxSaveSlots)
+            if (!IsValidSlot(slotNumber))
             {
-                Debug.LogError($"SaveManager: Invalid slot number {slotNumber}. Must be between 0 and {m_MaxSaveSlots - 1}.");
+                Debug.LogError($"SaveManager: Invalid slot number {slotNumber}. Must be between 0 and {m_MaxSaveSlots - 1}, or {AutoSaveSlot} (auto-save).");
                 return false;
             }
 
@@ -408,7 +440,7 @@ namespace ProjectFoundPhone.Core
         /// <returns>セーブデータが存在する場合true</returns>
         public bool HasSaveInSlot(int slotNumber)
         {
-            if (slotNumber < 0 || slotNumber >= m_MaxSaveSlots)
+            if (!IsValidSlot(slotNumber))
             {
                 return false;
             }
@@ -424,7 +456,7 @@ namespace ProjectFoundPhone.Core
         /// <returns>セーブデータ、存在しない場合null</returns>
         public SaveData GetSaveInfo(int slotNumber)
         {
-            if (slotNumber < 0 || slotNumber >= m_MaxSaveSlots)
+            if (!IsValidSlot(slotNumber))
             {
                 return null;
             }
@@ -462,7 +494,59 @@ namespace ProjectFoundPhone.Core
         }
         #endregion
 
+        #region Public Methods - AutoSave
+        /// <summary>
+        /// オートセーブを実行する。
+        /// 専用スロット (slot=99) を使用し、クールダウン内の連続呼び出しを無視する。
+        /// </summary>
+        /// <param name="forceSave">trueの場合、クールダウンを無視して即座に保存する（EndDay等の重要イベント用）</param>
+        /// <returns>セーブが実行された場合true、クールダウン中でスキップされた場合false</returns>
+        public bool AutoSave(bool forceSave = false)
+        {
+            float now = Time.unscaledTime;
+            if (!forceSave && now - m_LastAutoSaveTime < AutoSaveCooldownSeconds)
+            {
+                Debug.Log($"SaveManager: AutoSave skipped (cooldown). Next available in {AutoSaveCooldownSeconds - (now - m_LastAutoSaveTime):F1}s");
+                return false;
+            }
+
+            bool success = SaveGame(AutoSaveSlot);
+            if (success)
+            {
+                m_LastAutoSaveTime = now;
+                ShowAutoSaveIndicator();
+                Debug.Log("SaveManager: AutoSave completed.");
+            }
+            return success;
+        }
+
+        /// <summary>
+        /// オートセーブスロットにデータが存在するか
+        /// </summary>
+        public bool HasAutoSave()
+        {
+            return HasSaveInSlot(AutoSaveSlot);
+        }
+
+        /// <summary>
+        /// オートセーブスロットのデータ情報を取得
+        /// </summary>
+        public SaveData GetAutoSaveInfo()
+        {
+            return GetSaveInfo(AutoSaveSlot);
+        }
+        #endregion
+
         #region Private Methods
+        /// <summary>
+        /// スロット番号が有効かチェックする（通常スロット + オートセーブスロット）
+        /// </summary>
+        private bool IsValidSlot(int slotNumber)
+        {
+            if (slotNumber == AutoSaveSlot) return true;
+            return slotNumber >= 0 && slotNumber < m_MaxSaveSlots;
+        }
+
         /// <summary>
         /// セーブファイルのパスを取得
         /// </summary>
@@ -472,6 +556,117 @@ namespace ProjectFoundPhone.Core
         {
             string fileName = $"{m_SaveFilePrefix}_{slotNumber}{m_SaveFileExtension}";
             return Path.Combine(Application.persistentDataPath, fileName);
+        }
+        #endregion
+
+        #region AutoSave Indicator
+        /// <summary>
+        /// オートセーブインジケーターを表示する（Canvas直下に軽量表示）
+        /// </summary>
+        private void ShowAutoSaveIndicator()
+        {
+            EnsureAutoSaveIndicator();
+            if (m_AutoSaveIndicator == null) return;
+
+            if (m_AutoSaveIndicatorCoroutine != null)
+            {
+                StopCoroutine(m_AutoSaveIndicatorCoroutine);
+            }
+            m_AutoSaveIndicatorCoroutine = StartCoroutine(AutoSaveIndicatorRoutine());
+        }
+
+        /// <summary>
+        /// インジケーターをフェードイン→表示→フェードアウトするコルーチン
+        /// </summary>
+        private IEnumerator AutoSaveIndicatorRoutine()
+        {
+            if (m_AutoSaveCanvasGroup == null) yield break;
+
+            m_AutoSaveIndicator.SetActive(true);
+
+            // フェードイン (0.15s)
+            float elapsed = 0f;
+            while (elapsed < 0.15f)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                m_AutoSaveCanvasGroup.alpha = Mathf.Clamp01(elapsed / 0.15f);
+                yield return null;
+            }
+            m_AutoSaveCanvasGroup.alpha = 1f;
+
+            // 表示維持
+            yield return new WaitForSecondsRealtime(AutoSaveIndicatorDuration);
+
+            // フェードアウト (0.3s)
+            elapsed = 0f;
+            while (elapsed < 0.3f)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                m_AutoSaveCanvasGroup.alpha = 1f - Mathf.Clamp01(elapsed / 0.3f);
+                yield return null;
+            }
+            m_AutoSaveCanvasGroup.alpha = 0f;
+            m_AutoSaveIndicator.SetActive(false);
+            m_AutoSaveIndicatorCoroutine = null;
+        }
+
+        /// <summary>
+        /// オートセーブインジケーターUIを動的生成する（まだ存在しない場合のみ）
+        /// </summary>
+        private void EnsureAutoSaveIndicator()
+        {
+            if (m_AutoSaveIndicator != null) return;
+
+            Canvas canvas = FindFirstObjectByType<Canvas>();
+            if (canvas == null) return;
+
+            // ルートオブジェクト
+            GameObject indicator = new GameObject("AutoSaveIndicator", typeof(RectTransform), typeof(CanvasGroup));
+            indicator.transform.SetParent(canvas.transform, false);
+
+            RectTransform rt = indicator.GetComponent<RectTransform>();
+            // 右下に配置
+            rt.anchorMin = new Vector2(1f, 0f);
+            rt.anchorMax = new Vector2(1f, 0f);
+            rt.pivot = new Vector2(1f, 0f);
+            rt.anchoredPosition = new Vector2(-16f, 16f);
+            rt.sizeDelta = new Vector2(160f, 32f);
+
+            m_AutoSaveCanvasGroup = indicator.GetComponent<CanvasGroup>();
+            m_AutoSaveCanvasGroup.alpha = 0f;
+            m_AutoSaveCanvasGroup.blocksRaycasts = false;
+            m_AutoSaveCanvasGroup.interactable = false;
+
+            // 背景
+            GameObject bg = new GameObject("Background", typeof(RectTransform), typeof(Image));
+            bg.transform.SetParent(indicator.transform, false);
+            RectTransform bgRect = bg.GetComponent<RectTransform>();
+            bgRect.anchorMin = Vector2.zero;
+            bgRect.anchorMax = Vector2.one;
+            bgRect.offsetMin = Vector2.zero;
+            bgRect.offsetMax = Vector2.zero;
+            Image bgImage = bg.GetComponent<Image>();
+            bgImage.color = new Color(0f, 0f, 0f, 0.5f);
+            bgImage.raycastTarget = false;
+
+            // テキスト
+            GameObject textObj = new GameObject("Label", typeof(RectTransform));
+            textObj.transform.SetParent(indicator.transform, false);
+            RectTransform textRect = textObj.GetComponent<RectTransform>();
+            textRect.anchorMin = Vector2.zero;
+            textRect.anchorMax = Vector2.one;
+            textRect.offsetMin = new Vector2(8f, 2f);
+            textRect.offsetMax = new Vector2(-8f, -2f);
+
+            TextMeshProUGUI label = textObj.AddComponent<TextMeshProUGUI>();
+            label.text = "Auto Saving...";
+            label.fontSize = 14f;
+            label.color = new Color(1f, 1f, 1f, 0.9f);
+            label.alignment = TextAlignmentOptions.Center;
+            label.raycastTarget = false;
+
+            indicator.SetActive(false);
+            m_AutoSaveIndicator = indicator;
         }
         #endregion
     }

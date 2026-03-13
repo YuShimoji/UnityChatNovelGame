@@ -448,8 +448,8 @@ namespace ProjectFoundPhone.Core
                     }
                 }
 
-                // EndDay時にオートセーブ
-                SaveManager.Instance.SaveGame(saveData.SlotNumber);
+                // EndDay時にオートセーブ（重要イベントのためクールダウンを無視）
+                SaveManager.Instance.AutoSave(forceSave: true);
             }
         }
         #endregion

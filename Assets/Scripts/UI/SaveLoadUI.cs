@@ -132,6 +132,13 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
+            // オートセーブスロットを先頭に表示（ロードモード時のみ）
+            if (m_CurrentMode == SaveLoadMode.Load && SaveManager.Instance.HasAutoSave())
+            {
+                SaveData autoSaveData = SaveManager.Instance.GetAutoSaveInfo();
+                CreateSlotUI(SaveManager.AutoSaveSlot, autoSaveData, isAutoSave: true);
+            }
+
             SaveData[] allSaves = SaveManager.Instance.GetAllSaveInfo();
             for (int i = 0; i < allSaves.Length; i++)
             {
@@ -143,7 +150,8 @@ namespace ProjectFoundPhone.UI
         /// セーブスロットUIを生成
         /// <param name="slotNumber">スロット番号</param>
         /// <param name="saveData">セーブデータ（存在しない場合null）</param>
-        private void CreateSlotUI(int slotNumber, SaveData saveData)
+        /// <param name="isAutoSave">オートセーブスロットかどうか</param>
+        private void CreateSlotUI(int slotNumber, SaveData saveData, bool isAutoSave = false)
         {
             if (m_SlotPrefab == null || m_SlotContainer == null)
             {
@@ -152,7 +160,7 @@ namespace ProjectFoundPhone.UI
             }
 
             SaveSlotUI slotUI = Instantiate(m_SlotPrefab, m_SlotContainer);
-            slotUI.Setup(slotNumber, saveData, m_CurrentMode);
+            slotUI.Setup(slotNumber, saveData, m_CurrentMode, isAutoSave);
             slotUI.OnSlotClicked += OnSlotClicked;
             slotUI.OnDeleteClicked += OnDeleteClicked;
             m_SlotUIs.Add(slotUI);

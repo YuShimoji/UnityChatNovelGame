@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Yarn.Unity;
+using ProjectFoundPhone.Core;
 
 namespace ProjectFoundPhone.UI
 {
@@ -187,6 +188,12 @@ namespace ProjectFoundPhone.UI
                     await YarnTask.Yield();
                 }
 
+                // 選択肢選択後にオートセーブをトリガー
+                if (SaveManager.Instance != null)
+                {
+                    SaveManager.Instance.AutoSave();
+                }
+
                 return selectedOption;
             }
 
@@ -246,6 +253,12 @@ namespace ProjectFoundPhone.UI
             }
 
             RefreshDebugOverlay();
+
+            // ノード遷移時にオートセーブをトリガー
+            if (SaveManager.Instance != null)
+            {
+                SaveManager.Instance.AutoSave();
+            }
         }
 
         private void UpdateDebugState(LocalizedLine? dialogueLine)

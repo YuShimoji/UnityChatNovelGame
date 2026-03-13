@@ -34,6 +34,7 @@ namespace ProjectFoundPhone.UI
         private int m_SlotNumber;
         private SaveData m_SaveData;
         private SaveLoadUI.SaveLoadMode m_Mode;
+        private bool m_IsAutoSave;
         #endregion
 
         #region Unity Lifecycle
@@ -71,11 +72,13 @@ namespace ProjectFoundPhone.UI
         /// <param name="slotNumber">スロット番号</param>
         /// <param name="saveData">セーブデータ（存在しない場合null）</param>
         /// <param name="mode">表示モード（Save/Load）</param>
-        public void Setup(int slotNumber, SaveData saveData, SaveLoadUI.SaveLoadMode mode)
+        /// <param name="isAutoSave">オートセーブスロットかどうか</param>
+        public void Setup(int slotNumber, SaveData saveData, SaveLoadUI.SaveLoadMode mode, bool isAutoSave = false)
         {
             m_SlotNumber = slotNumber;
             m_SaveData = saveData;
             m_Mode = mode;
+            m_IsAutoSave = isAutoSave;
 
             UpdateUI();
         }
@@ -89,7 +92,7 @@ namespace ProjectFoundPhone.UI
         {
             if (m_SlotNumberText != null)
             {
-                m_SlotNumberText.text = $"Slot {m_SlotNumber + 1}";
+                m_SlotNumberText.text = m_IsAutoSave ? "Auto Save" : $"Slot {m_SlotNumber + 1}";
             }
 
             bool hasSaveData = m_SaveData != null;
@@ -113,7 +116,8 @@ namespace ProjectFoundPhone.UI
 
                 if (m_DeleteButton != null)
                 {
-                    m_DeleteButton.gameObject.SetActive(true);
+                    // オートセーブスロットの削除ボタンは非表示
+                    m_DeleteButton.gameObject.SetActive(!m_IsAutoSave);
                 }
             }
             else
