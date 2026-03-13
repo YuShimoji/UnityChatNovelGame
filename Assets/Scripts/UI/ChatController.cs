@@ -1141,15 +1141,8 @@ namespace ProjectFoundPhone.UI
             bubbleBackground.color = UIConfig.systemMessageBgColor;
             bubbleBackground.raycastTarget = false;
 
-            // 角丸スプライトを適用 (影はシステムメッセージには付けない)
-            // NOTE: ?? は C# 参照 null のみ判定し Unity の "fake null" を透過するため、
-            //       Unity overloaded == で明示判定する。
-            Sprite sysSprite = UIConfig.bubbleSprite != null ? UIConfig.bubbleSprite : GetOrCreateRoundedSprite();
-            if (sysSprite != null)
-            {
-                bubbleBackground.sprite = sysSprite;
-                bubbleBackground.type = Image.Type.Sliced;
-            }
+            // システムメッセージは薄いバー表示のため、角丸スプライトを適用しない。
+            // 9-slice の cornerRadius がバー高さに対して大きすぎ、表示が圧迫される。
 
             // LayoutElementを追加
             LayoutElement layoutElement = systemBubble.GetComponent<LayoutElement>();
