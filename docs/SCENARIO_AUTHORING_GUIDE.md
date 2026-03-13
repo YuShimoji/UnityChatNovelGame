@@ -89,7 +89,8 @@ Assets/Resources/Yarn/active/
 |----------|------|------|
 | (直接セリフ) | `テキスト` | `$speaker` に設定されたキャラのバブルとして表示 |
 | Message | `<<Message "charID" "テキスト">>` | 指定キャラのメッセージバブルを直接表示 |
-| MessageTagged | `<<MessageTagged "charID" "テキスト" "lineTag">>` | 矛盾タグ付きメッセージ（Ch2以降で使用） |
+| (矛盾タグ) | `テキスト #line:タグ名` | **推奨方式**: Yarn標準の `#line:` タグで矛盾識別子を付与。例: `対象地域は... #line:ch1_region_identity_src` |
+| MessageTagged | `<<MessageTagged "charID" "テキスト" "lineTag">>` | 矛盾タグ付きメッセージ（代替方式、`#line:` タグ推奨） |
 | SystemMessage | `<<SystemMessage "テキスト">>` | 中央寄せのシステム通知（接続/切断/断片獲得等） |
 | Image | `<<Image "charID" "imageID">>` | 画像メッセージ（`Resources/Images/` 内の画像） |
 
@@ -343,16 +344,19 @@ Barnabyさん、1点補足があります。
 ### パターン E: 矛盾指摘（Ch2以降 --- メカニクスあり）
 
 ```yarn
-// MessageTagged を使う方法（Ch2以降）
-<<MessageTagged "pyramid" "この地域の正式名称は「東部統合区」です。" "ch2_location_east_src">>
+// #line: タグを使う方法（推奨）
+<<set $speaker to "pyramid">>
+この地域の正式名称は「東部統合区」です。 #line:ch2_location_east_src
 
 <<StartWait 0.8>>
 
-<<MessageTagged "marco" "統合区？ 俺の住所には「西区」と書いてあるが。" "ch2_location_east_tgt">>
+<<set $speaker to "marco">>
+統合区？ 俺の住所には「西区」と書いてあるが。 #line:ch2_location_east_tgt
 ```
 
-Ch2以降は `<<MessageTagged>>` を使うと、メッセージに矛盾タグが埋め込まれ、
-プレイヤーが長押し+タップで矛盾を指摘できるようになる。
+`#line:` タグを付与したメッセージは矛盾指摘の対象になる。
+プレイヤーが長押し+タップで矛盾を指摘できる。
+`ChatDialogueView` が `TextID` として自動取得し、`MessageBubble.LineTag` に伝播する。
 
 ---
 

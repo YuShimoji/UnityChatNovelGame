@@ -82,7 +82,8 @@ ScenarioManager に登録済みのコマンド:
 | `<<UnlockTopic "topicID">>` | トピック解放 | `<<UnlockTopic "signal_01">>` |
 | `<<Glitch level>>` | グリッチ演出 (1-5) | `<<Glitch 2>>` |
 | `<<Typing true\|false>>` | タイピングインジケーター手動制御 | `<<Typing true>>` |
-| `<<MessageTagged "charID" "text" "tag">>` | 矛盾タグ付きメッセージ | `<<MessageTagged "pyramid" "..." "ch2_src">>` |
+| `テキスト #line:タグ名` | 矛盾タグ付きメッセージ（推奨） | `対象地域は... #line:ch1_region_identity_src` |
+| `<<MessageTagged "charID" "text" "tag">>` | 矛盾タグ付きメッセージ（代替） | `<<MessageTagged "pyramid" "..." "ch2_src">>` |
 | `<<EndDay N>>` | Day 終了 + Day進捗記録 + オートセーブ。最終Dayのみチャンネル完了 | `<<EndDay 1>>` |
 
 ---

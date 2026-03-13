@@ -14,7 +14,7 @@
 | コマンド | 構文 | 説明 |
 | -------- | ---- | ---- |
 | Message | `<<Message "charID" "テキスト">>` | 指定キャラのメッセージバブルを表示 |
-| MessageTagged | `<<MessageTagged "charID" "テキスト" "lineTag">>` | 矛盾タグ付きメッセージ。矛盾指摘システムの識別子として使用 |
+| (矛盾タグ) | `テキスト #line:タグ名` | Yarn 標準の `#line:` タグで矛盾指摘システムの識別子を付与。`ChatDialogueView` が `TextID` として自動取得し `AddMessage` の lineTag に渡す。例: `本プログラムの対象地域は... #line:ch1_region_identity_src` |
 | SystemMessage | `<<SystemMessage "テキスト">>` | 中央寄せのシステム通知を表示 |
 | Image | `<<Image "charID" "imageID">>` | 画像メッセージを表示（`Resources/Images/` 内） |
 
@@ -326,6 +326,7 @@ Yarn Spinner 3.x は以下のローカライズをサポート:
 | HalluciCoin | 矛盾発見時に報酬加算、セーブ/ロード対応済み | `ContradictionManager.cs` |
 | ~~トピック自動解放~~ | ~~矛盾発見時に ContradictionPair.UnlockTopic を DeductionBoard に追加~~ **廃止済み**: 矛盾報酬は HalluciCoin のみに変更（2026-03-07決定） | `DeductionBoard.cs` |
 | データ | 7ペア（Ch1x4, Ch2x3）、全報酬10コイン、難易度1 | `Resources/Contradictions/` |
+| タグ方式 | Yarn 標準 `#line:` タグを使用。`ChatDialogueView.TextID` → `AddMessage` lineTag → `MessageBubble.LineTag` に自動伝播。`<<MessageTagged>>` は非推奨 | `ChatDialogueView.cs` |
 
 ### セットアップ要件
 
