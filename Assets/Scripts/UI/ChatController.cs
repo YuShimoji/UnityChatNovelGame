@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using ProjectFoundPhone.Data;
 using Unity.Profiling;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine.EventSystems;
 
 namespace ProjectFoundPhone.UI
@@ -1117,7 +1118,9 @@ namespace ProjectFoundPhone.UI
             bubbleBackground.raycastTarget = false;
 
             // 角丸スプライトを適用 (影はシステムメッセージには付けない)
-            Sprite sysSprite = UIConfig.bubbleSprite ?? GetOrCreateRoundedSprite();
+            // NOTE: ?? は C# 参照 null のみ判定し Unity の "fake null" を透過するため、
+            //       Unity overloaded == で明示判定する。
+            Sprite sysSprite = UIConfig.bubbleSprite != null ? UIConfig.bubbleSprite : GetOrCreateRoundedSprite();
             if (sysSprite != null)
             {
                 bubbleBackground.sprite = sysSprite;
@@ -1402,7 +1405,8 @@ namespace ProjectFoundPhone.UI
                 {
                     buttonBg.color = UIConfig.choiceButtonColor;
                     // 角丸スプライト適用 (選択肢ボタンにも共通)
-                    Sprite choiceSprite = UIConfig.bubbleSprite ?? GetOrCreateRoundedSprite();
+                    // NOTE: ?? は Unity "fake null" を透過するため明示判定
+                    Sprite choiceSprite = UIConfig.bubbleSprite != null ? UIConfig.bubbleSprite : GetOrCreateRoundedSprite();
                     if (choiceSprite != null)
                     {
                         buttonBg.sprite = choiceSprite;
@@ -2139,7 +2143,11 @@ namespace ProjectFoundPhone.UI
                     switch (msg.Type)
                     {
                         case ChatMessageType.Normal:
-                            AddMessage(msg.CharacterID, msg.Text, msg.LineTag);
+                            // 古いセーブデータには名前リッチテキストが埋め込まれている場合がある。
+                            // AddMessage → CreateMessageBubble で名前が再付加されるため、
+                            // 復元前にストリップして二重表示を防止する。
+                            string bodyText = StripNamePrefix(msg.Text);
+                            AddMessage(msg.CharacterID, bodyText, msg.LineTag);
                             break;
                         case ChatMessageType.System:
                             AddSystemMessage(msg.Text);
@@ -2169,6 +2177,21 @@ namespace ProjectFoundPhone.UI
 
             // 復元完了後、最下部へスクロール
             AutoScroll();
+        }
+
+        /// <summary>
+        /// CreateMessageBubble が付加する名前リッチテキストプレフィックスを除去する。
+        /// 古いセーブデータとの後方互換用。名前プレフィックスがなければテキストをそのまま返す。
+        /// パターン: &lt;line-height=80%&gt;&lt;size=XX&gt;&lt;b&gt;名前&lt;/b&gt;&lt;/size&gt;\n&lt;/line-height&gt;本文
+        /// </summary>
+        private static readonly Regex s_NamePrefixPattern = new Regex(
+            @"^<line-height=\d+%><size=[\d.]+><b>.+?</b></size>\n</line-height>",
+            RegexOptions.Compiled | RegexOptions.Singleline);
+
+        private static string StripNamePrefix(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return text;
+            return s_NamePrefixPattern.Replace(text, "", 1);
         }
         #endregion
 
@@ -2286,7 +2309,9 @@ namespace ProjectFoundPhone.UI
             if (img == null) return;
 
             // 角丸スプライト
-            Sprite sprite = UIConfig.bubbleSprite ?? GetOrCreateRoundedSprite();
+            // NOTE: ?? は C# 参照 null のみ判定し Unity の "fake null" (Inspector 未設定の
+            //       SerializedField) を透過する。Unity overloaded != で明示判定する。
+            Sprite sprite = UIConfig.bubbleSprite != null ? UIConfig.bubbleSprite : GetOrCreateRoundedSprite();
             #if UNITY_EDITOR
             if (sprite == null)
             {
