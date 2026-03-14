@@ -494,6 +494,16 @@ namespace ProjectFoundPhone.UI
             cardBtn.transition = Selectable.Transition.ColorTint;
             cardBtn.targetGraphic = cardBg;
 
+            // ColorBlockを明示設定（UnityデフォルトのdisabledColorが背景色を上書きする問題を防止）
+            Color baseColor = GetCardColor(status);
+            ColorBlock cb = cardBtn.colors;
+            cb.normalColor = Color.white;
+            cb.highlightedColor = new Color(1.15f, 1.15f, 1.2f, 1f);
+            cb.pressedColor = new Color(0.85f, 0.85f, 0.9f, 1f);
+            cb.disabledColor = Color.white; // interactable=false時もImage色をそのまま表示
+            cb.colorMultiplier = 1f;
+            cardBtn.colors = cb;
+
             if (status == ChannelStatus.Locked)
             {
                 cardBtn.interactable = false;
@@ -520,7 +530,7 @@ namespace ProjectFoundPhone.UI
             titleText.fontSize = 22f;
             titleText.fontStyle = FontStyles.Bold;
             titleText.color = status == ChannelStatus.Locked
-                ? new Color(0.35f, 0.35f, 0.4f)
+                ? new Color(0.45f, 0.45f, 0.5f)
                 : new Color(0.85f, 0.85f, 0.9f);
             titleText.alignment = TextAlignmentOptions.MidlineLeft;
             titleText.raycastTarget = false;
@@ -541,7 +551,7 @@ namespace ProjectFoundPhone.UI
             descText.text = channel.Description;
             descText.fontSize = 15f;
             descText.color = status == ChannelStatus.Locked
-                ? new Color(0.3f, 0.3f, 0.33f)
+                ? new Color(0.38f, 0.38f, 0.42f)
                 : new Color(0.5f, 0.5f, 0.55f);
             descText.alignment = TextAlignmentOptions.TopLeft;
             descText.raycastTarget = false;

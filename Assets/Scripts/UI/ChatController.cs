@@ -606,6 +606,7 @@ namespace ProjectFoundPhone.UI
             }
 
             // フォント・書式プロパティを設定（プール再利用時のリセット兼用）
+            textComponent.fontStyle = FontStyles.Normal;
             textComponent.fontSize = UIConfig.messageFontSize;
             textComponent.alignment = TextAlignmentOptions.TopLeft;
             textComponent.enableWordWrapping = true;
@@ -1143,6 +1144,9 @@ namespace ProjectFoundPhone.UI
 
             // システムメッセージは薄いバー表示のため、角丸スプライトを適用しない。
             // 9-slice の cornerRadius がバー高さに対して大きすぎ、表示が圧迫される。
+            // プール再利用時に前バブルのスプライトが残存するため、明示的にクリアする。
+            bubbleBackground.sprite = null;
+            bubbleBackground.type = Image.Type.Simple;
 
             // LayoutElementを追加
             LayoutElement layoutElement = systemBubble.GetComponent<LayoutElement>();
@@ -2298,7 +2302,9 @@ namespace ProjectFoundPhone.UI
         /// </summary>
         private void FinalizeBubbleSize(GameObject bubble, float minHeight)
         {
-            // ラッパー内でのレイアウトを確定
+            // ラッパー内でのレイアウトを確定（2回呼ぶことでネスト構造のレイアウトを確実に更新）
+            Canvas.ForceUpdateCanvases();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(bubble.GetComponent<RectTransform>());
             Canvas.ForceUpdateCanvases();
 
             TextMeshProUGUI textComponent = bubble.GetComponentInChildren<TextMeshProUGUI>();
@@ -2311,7 +2317,8 @@ namespace ProjectFoundPhone.UI
             if (bubbleLayout != null)
             {
                 float textHeight = textComponent.preferredHeight;
-                bubbleLayout.preferredHeight = Mathf.Max(minHeight, textHeight + UIConfig.bubbleTextPadding);
+                // 名前行のline-height=80%やフォントメトリクス丸めの安全マージンを追加
+                bubbleLayout.preferredHeight = Mathf.Max(minHeight, textHeight + UIConfig.bubbleTextPadding + 4f);
             }
 
             // 最終レイアウト更新

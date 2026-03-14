@@ -379,6 +379,7 @@ namespace ProjectFoundPhone.Core
         {
             if (m_ChatController != null)
             {
+                m_ChatController.ShowTypingIndicator(false);
                 m_ChatController.AddSystemMessage(text);
             }
             else

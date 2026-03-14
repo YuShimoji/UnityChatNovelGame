@@ -22,8 +22,7 @@ title: ETK_Menu
 -> リッチテキスト テスト <<if not $etk_done_richtext>>
     <<set $etk_done_richtext to true>>
     <<jump ETK_RichText>>
--> 矛盾指摘 テスト <<if not $etk_done_contradiction>>
-    <<set $etk_done_contradiction to true>>
+-> 矛盾指摘 テスト
     <<jump ETK_Contradiction>>
 -> コマンド テスト <<if not $etk_done_commands>>
     <<set $etk_done_commands to true>>
@@ -99,7 +98,7 @@ Pyramidに戻る。マルコの未閉じ太字がここに漏れていなけれ�
 title: ETK_Contradiction
 ---
 <<SystemMessage "--- 矛盾指摘 テスト ---">>
-<<SystemMessage "手順: (1) ソースバブルを0.5秒以上長押し (2) ターゲットバブルをタップ">>
+<<SystemMessage "手順: (1) Pyramidバブルを0.5秒以上長押し (2) Marcoバブルをタップ">>
 <<StartWait 0.5>>
 
 <<set $speaker to "pyramid">>
@@ -112,19 +111,16 @@ title: ETK_Contradiction
 
 <<StartWait 0.3>>
 
-<<set $speaker to "pyramid">>
-上の2つのバブルで矛盾指摘を試してください。
+<<SystemMessage "上の2つのバブルで矛盾指摘を試してください">>
+<<SystemMessage "Pyramidを長押し → Marcoをタップ = 成功">>
+<<SystemMessage "別の組み合わせ = 失敗(10秒クールダウン)">>
+<<SystemMessage "テスト後はF11早送りで次へ進めます">>
 
-<<StartWait 0.3>>
-
-ソース(Pyramid)を長押し → ターゲット(Marco)をタップで成功判定。
-
-<<StartWait 0.3>>
-
-別の組み合わせで失敗判定とクールダウンも確認可能です。
+<<StartWait 60>>
 
 <<set $speaker to "player">>
 -> 確認した、メニューに戻る
+    <<set $etk_done_contradiction to true>>
     <<jump ETK_Menu>>
 ===
 

@@ -583,6 +583,7 @@ namespace ProjectFoundPhone.Core
             if (m_AutoSaveCanvasGroup == null) yield break;
 
             m_AutoSaveIndicator.SetActive(true);
+            m_AutoSaveIndicator.transform.SetAsLastSibling();
 
             // フェードイン (0.15s)
             float elapsed = 0f;
@@ -618,7 +619,11 @@ namespace ProjectFoundPhone.Core
             if (m_AutoSaveIndicator != null) return;
 
             Canvas canvas = FindFirstObjectByType<Canvas>();
-            if (canvas == null) return;
+            if (canvas == null)
+            {
+                Debug.LogWarning("SaveManager: AutoSave indicator skipped — no Canvas found in scene.");
+                return;
+            }
 
             // ルートオブジェクト
             GameObject indicator = new GameObject("AutoSaveIndicator", typeof(RectTransform), typeof(CanvasGroup));
@@ -665,6 +670,8 @@ namespace ProjectFoundPhone.Core
             label.alignment = TextAlignmentOptions.Center;
             label.raycastTarget = false;
 
+            // 最前面に配置（他のUI要素の下に隠れないようにする）
+            indicator.transform.SetAsLastSibling();
             indicator.SetActive(false);
             m_AutoSaveIndicator = indicator;
         }

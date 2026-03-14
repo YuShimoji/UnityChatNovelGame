@@ -347,11 +347,15 @@ Barnabyさん、1点補足があります。
 <<EndDay 1>>
 ===
 
-/// Chapter 1 Day 2: Day Resume テスト用最小ノード
-/// Day1 の EndDay 後にダッシュボードから再選択すると、このノードから再開する
+/// Chapter 1 Day 2: Day Resume 検証モック
+/// Hub&Spoke: Opening → Hub(2トピック) → Winding → EndDay 2(チャンネル完了)
+/// Day1 の EndDay 後にダッシュボードからCh1を再選択すると、このノードから再開
 
 title: Ch1_Day2_Opening
 ---
+<<declare $d2_asked_update = false>>
+<<declare $d2_asked_status = false>>
+
 <<SystemMessage "--- 2日目 ---">>
 
 <<StartWait 1>>
@@ -364,20 +368,63 @@ title: Ch1_Day2_Opening
 
 <<set $speaker to "player">>
 -> ああ、続きを頼む
-    <<set $speaker to "pyramid">>
-    <<StartWait 0.5>>
-    承知しました。
+    <<jump Ch1_Day2_Hub>>
+===
+
+title: Ch1_Day2_Hub
+---
+<<set $speaker to "pyramid">>
+<<StartWait 0.5>>
+何か確認したいことはありますか？
+
+<<set $speaker to "player">>
+-> 昨日の続報はあるか？ <<if not $d2_asked_update>>
+    <<set $d2_asked_update to true>>
+    <<jump Ch1_Day2_Update>>
+-> システムの状態は？ <<if not $d2_asked_status>>
+    <<set $d2_asked_status to true>>
+    <<jump Ch1_Day2_Status>>
+-> 今日はここまでにしよう <<if $d2_asked_update and $d2_asked_status>>
     <<jump Ch1_Day2_Winding>>
+-> もう少し考えよう <<if ($d2_asked_update or $d2_asked_status) and not ($d2_asked_update and $d2_asked_status)>>
+    <<jump Ch1_Day2_Hub>>
+===
+
+title: Ch1_Day2_Update
+---
+<<set $speaker to "pyramid">>
+<<StartWait 0.8>>
+
+昨日の件について追加情報を検索しましたが、通信状態の影響で十分な結果が得られませんでした。
+
+<<StartWait 0.5>>
+
+引き続き監視を続けます。
+
+<<jump Ch1_Day2_Hub>>
+===
+
+title: Ch1_Day2_Status
+---
+<<set $speaker to "pyramid">>
+<<StartWait 0.8>>
+
+現在の通信品質は昨日より若干改善しています。
+
+<<StartWait 0.5>>
+
+ただし、一部の外部ノードへの接続がまだ不安定です。
+
+<<jump Ch1_Day2_Hub>>
 ===
 
 title: Ch1_Day2_Winding
 ---
 <<set $speaker to "pyramid">>
 <<StartWait 1>>
-本日のセッションは以上です。
+本日のセッションは以上です。お疲れさまでした。
 
 <<SystemMessage "...">>
-<<StartWait 1>>
 
 <<EndDay 2>>
 ===

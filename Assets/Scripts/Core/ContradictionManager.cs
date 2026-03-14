@@ -116,6 +116,7 @@ namespace ProjectFoundPhone.Core
                 OnContradictionDiscovered?.Invoke(match);
                 Debug.Log($"ContradictionManager: Contradiction '{match.ContradictionID}' discovered! HalluciCoin: {m_HalluciCoin}");
                 m_SelectedLineTag = null;
+                m_CooldownEndTime = 0f;
                 return true;
             }
             else if (match != null && m_DiscoveredIDs.Contains(match.ContradictionID))
@@ -123,6 +124,7 @@ namespace ProjectFoundPhone.Core
                 // 既に発見済み — 同上
                 OnPointingFailed?.Invoke("already_discovered");
                 m_SelectedLineTag = null;
+                m_CooldownEndTime = 0f;
                 return false;
             }
             else
