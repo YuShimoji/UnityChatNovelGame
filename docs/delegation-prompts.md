@@ -269,3 +269,187 @@ CLAUDE.md が共有されるため、コーディング規約・アーキテク�
 | Task C: オートセーブ | `6cc1a63` | done |
 
 全6タスク完了。Unity手動確認は未実施。
+
+---
+
+# Batch 2 (2026-03-16)
+
+以下のタスクはサブスレッド拡張と並行して実行可能。
+各タスクは独立しており、互いに依存しない。
+
+---
+
+## Task G: ETK サブスレッドテストノード追加
+
+```
+UnityChatNovelGame の EngineTestKit (Assets/Resources/Yarn/active/EngineTestKit.yarn) に
+サブスレッドのテスト項目を追加してください。
+
+### 背景
+サブスレッドUI最小スライスが実装済み (b53cbac):
+- <<DeclareThread "threadId" "displayName">> でサブスレッドを宣言
+- <<AddThreadMessage "threadId" "text">> でサブスレッドにメッセージ追加
+- 右上のトグルボタンでメイン⇔サブスレッド切替
+
+EngineTestKit はF12 Debug Hubから各機能をテストできるシナリオ集。
+ETK_Menu (Hub&Spoke) に新しいテスト項目を追加する。
+
+### 作業内容
+1. ETK_Menu に「サブスレッド テスト」選択肢を追加
+   - `<<declare $etk_done_subthread = false>>` を追加
+   - 他のテスト項目と同じパターン (<<if not $etk_done_subthread>>)
+   - 「テスト完了」条件に $etk_done_subthread を追加
+
+2. ETK_Subthread ノードを新規作成
+   - DeclareThread でテスト用スレッドを宣言
+   - AddThreadMessage でスレッドに3件程度のメッセージ追加
+   - SystemMessage で「右上のボタンでスレッドを切り替えてください」の案内
+   - 60秒の StartWait (テスト時間確保、F11で早送り可能)
+   - 「メニューに戻る」選択肢で $etk_done_subthread = true に設定
+
+3. 既存の SubthreadTest.yarn (Assets/Resources/Yarn/active/SubthreadTest.yarn) は
+   独立テスト用として残す（削除しない）
+
+### 検証
+- ETK_Menu で「サブスレッド テスト」が表示される
+- テスト実行中にスレッド切替ボタンが出現する
+- 全テスト完了後に「テスト完了」選択肢が表示される
+
+### 注意
+- EngineTestKit.yarn の既存構造 (ETK_ プレフィックス、Hub&Spoke パターン) を踏襲
+- テスト内容は最小限に。目的は「DeclareThread/AddThreadMessage/切替が動く」の確認
+```
+
+---
+
+## Task H: UI_IMPLEMENTATION_SPEC サブスレッド追記
+
+```
+UnityChatNovelGame の docs/UI_IMPLEMENTATION_SPEC.md にサブスレッドUI関連の
+実装仕様を追記してください。
+
+### 背景
+サブスレッドUI最小スライスが実装済み (b53cbac)。
+ENGINE_FEATURE_INVENTORY.md にはセクション10aとして概要を記載済みだが、
+UI_IMPLEMENTATION_SPEC.md には未反映。
+
+### 追記内容
+
+1. ChatController のサブスレッド対応セクションを追加:
+   - m_ActiveThreadId / m_ThreadHistories / m_ThreadScrollPositions の役割
+   - SwitchToThread() のデータスワップ方式 (ClearMessages + RestoreChatHistory)
+   - GetAllThreadHistories() / SetThreadHistories() / SetActiveThreadId() の用途
+
+2. ThreadSwitcherController セクションを追加:
+   - プログラマティックUI (Canvas右上にトグルボタン)
+   - ScenarioManager.OnThreadDeclared イベント購読
+   - メイン⇔サブスレッド切替のフロー
+
+3. SaveData のサブスレッド拡張:
+   - Subthreads (List<SubthreadData>)
+   - ActiveThreadId
+
+### 関連ファイル (読み取り対象)
+- Assets/Scripts/UI/ChatController.cs — SwitchToThread 等のメソッド
+- Assets/Scripts/UI/ThreadSwitcherController.cs — 全体
+- Assets/Scripts/Data/SubthreadData.cs — データモデル
+- Assets/Scripts/Data/SaveData.cs — Subthreads / ActiveThreadId
+- Assets/Scripts/Core/SaveManager.cs — CreateSaveData / ApplySaveData のサブスレッド部分
+- docs/ENGINE_FEATURE_INVENTORY.md — セクション10a (整合性確認)
+
+### 制約
+- 既存セクションの構造を維持
+- コード変更は不要 (ドキュメントのみ)
+- 「最小スライス」であることを明記し、将来拡張との境界を示す
+```
+
+---
+
+## Task I: EngineTestKit のダッシュボードチャンネル登録確認
+
+```
+UnityChatNovelGame の ETK (EngineTestKit) テストシナリオが
+Dashboard から正しく起動できるか確認し、不足があれば修正してください。
+
+### 背景
+- ETK は F12 Debug Hub から起動する設計
+- Dashboard には ch_test チャンネル (Assets/Resources/Channels/ch_test.asset) が
+  存在し、ETK_DayResume_Day1 を参照している
+- しかし ETK_Menu (メインテスト) の Dashboard 経由起動は未確認
+
+### 調査・作業内容
+1. Assets/Resources/Channels/ にある全 .asset を確認
+2. ch_test.asset の設定を読み取り:
+   - ChannelID, DisplayName, StartNode, TotalDays
+   - 依存関係 (RequiredChannelIDs)
+3. ETK_Menu を Dashboard から起動するには:
+   - ch_test.asset の StartNode が ETK_DayResume_Day1 → これは Day Resume テスト用
+   - ETK_Menu 用のチャンネル (ch_etk.asset 等) が必要か検討
+4. 不足があれば:
+   - ch_etk.asset を作成 (StartNode=ETK_Menu, TotalDays=1, RequiredChannelIDs=[])
+   - または既存の ch_test.asset を ETK_Menu に変更
+5. 対応方針を判断して実行
+
+### 関連ファイル
+- Assets/Resources/Channels/*.asset
+- Assets/Resources/Yarn/active/EngineTestKit.yarn
+- Assets/Scripts/Data/ChannelData.cs (SO定義)
+- Assets/Scripts/UI/DashboardController.cs (チャンネル読み込みロジック)
+
+### 制約
+- Ch1/Ch2 のチャンネルに影響を与えない
+- ChannelData SO は ScriptableObject のため、直接 .asset ファイルの
+  テキスト編集は難しい場合がある。その場合は手順書を残す
+```
+
+---
+
+## Task J: SaveSystem_README サブスレッド対応更新
+
+```
+UnityChatNovelGame の docs/SaveSystem_README.md を更新し、
+サブスレッドのセーブ/ロード対応を反映してください。
+
+### 背景
+サブスレッドUI最小スライスが実装済み (b53cbac)。
+SaveData に以下が追加された:
+- Subthreads: List<SubthreadData> (宣言済みサブスレッド)
+- ActiveThreadId: string (現在表示中のスレッドID、null=メイン)
+
+SubthreadData の構造:
+- ThreadId: string
+- DisplayName: string
+- ChatHistory: List<SavedChatMessage>
+
+SaveManager の変更:
+- CreateSaveData: ScenarioManager.GetAllDeclaredThreads() → saveData.Subthreads
+- ApplySaveData: Subthreads → ScenarioManager.RegisterDeclaredThread() で再登録
+  + ActiveThreadId → ChatController.SwitchToThread() で復元
+
+### 作業内容
+1. SaveData のフィールド一覧にサブスレッド関連を追加
+2. セーブ/ロードフローの説明にサブスレッド復元手順を追記
+3. 後方互換性の説明 (旧セーブデータにSubthreads がない場合→空リスト)
+4. JSON サンプルの更新 (Subthreads の例を追加)
+
+### 関連ファイル (読み取り対象)
+- docs/SaveSystem_README.md (更新対象)
+- Assets/Scripts/Data/SaveData.cs
+- Assets/Scripts/Data/SubthreadData.cs
+- Assets/Scripts/Core/SaveManager.cs (CreateSaveData / ApplySaveData)
+
+### 制約
+- コード変更は不要 (ドキュメントのみ)
+- 既存のセクション構造を維持
+```
+
+---
+
+### Batch 2 実行結果
+
+| タスク | コミット | 状態 |
+|--------|----------|------|
+| Task G: ETK サブスレッドテスト | — | 未実行 |
+| Task H: UI_IMPL_SPEC 追記 | — | 未実行 |
+| Task I: ETK ダッシュボード確認 | — | 未実行 |
+| Task J: SaveSystem_README 更新 | — | 未実行 |

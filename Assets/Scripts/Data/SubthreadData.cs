@@ -16,6 +16,9 @@ namespace ProjectFoundPhone.Data
         /// <summary>UI表示名 (例: "Pyramidの覚書")</summary>
         public string DisplayName;
 
+        /// <summary>未読メッセージ数</summary>
+        public int UnreadCount;
+
         /// <summary>スレッド内の会話履歴</summary>
         public List<SavedChatMessage> ChatHistory = new List<SavedChatMessage>();
     }

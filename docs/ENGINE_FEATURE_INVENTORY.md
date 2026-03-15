@@ -446,22 +446,24 @@ TopicData の `TopicID` プレフィックスでインベントリの表示カ�
 
 ## 10a. サブスレッドUI（最小スライス実装済み）
 
-メイン⇔サブスレッド1本の切替機能。Discord的マルチスレッドの最小実装。
+メイン⇔複数サブスレッドの切替機能。Discord的マルチスレッドの基盤実装。
 
 ### アーキテクチャ
 
-- **データモデル**: `SubthreadData.cs` — ThreadId, DisplayName, ChatHistory
+- **データモデル**: `SubthreadData.cs` — ThreadId, DisplayName, UnreadCount, ChatHistory
 - **Yarnコマンド**: `DeclareThread` / `AddThreadMessage` (ScenarioManager登録)
 - **切替方式**: ChatControllerのデータスワップ (ClearMessages + RestoreChatHistory)
-- **UI**: `ThreadSwitcherController.cs` — 右上にトグルボタン1個
+- **UI**: `ThreadSwitcherController.cs` — 右上ドロップダウン (Main + 全スレッド、未読バッジ付き)
 - **Save/Load**: SaveData.Subthreads + ActiveThreadId, SaveManager対応済み
 - **スクロール位置**: スレッド別に保存・復元
+- **未読管理**: AddThreadMessage時にUnreadCountインクリメント、スレッド切替時にリセット
 
 ### 制限事項（将来Step）
 
-- 同時に1サブスレッドのみ対応（2本目のDeclareThreadは無視）
 - サブスレッド内でのYarnノード実行は未対応
-- サイドバーアイコントレイは未実装（ボタン1個のみ）
+- サイドバーアイコントレイは未実装（ドロップダウンのみ）
+- ThreadType (A/B/C/Branch) による型別アイコン・色は未実装
+- 2段階トリガー条件エンジンは未実装
 - サブスレッド内矛盾指摘は未対応
 
 ### 使用例

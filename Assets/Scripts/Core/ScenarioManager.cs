@@ -42,6 +42,9 @@ namespace ProjectFoundPhone.Core
         /// <summary>サブスレッドが宣言されたときのイベント (threadId, displayName)</summary>
         public event Action<string, string> OnThreadDeclared;
 
+        /// <summary>サブスレッドにメッセージが追加されたときのイベント (threadId)</summary>
+        public event Action<string> OnThreadMessageAdded;
+
         [Header("Auto Start")]
         [SerializeField] private bool m_AutoStartYarn = false;
 
@@ -513,6 +516,8 @@ namespace ProjectFoundPhone.Core
                 CharacterID = null,
                 Text = text
             });
+            thread.UnreadCount++;
+            OnThreadMessageAdded?.Invoke(threadId);
         }
 
         /// <summary>宣言済みスレッドを取得</summary>

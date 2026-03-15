@@ -1,10 +1,10 @@
 /// SubthreadTest: サブスレッド切替の検証用シナリオ
 /// F12 Debug Hub から起動
-/// 検証: DeclareThread → AddThreadMessage → ボタン切替 → メイン復帰
+/// 検証: 複数DeclareThread → AddThreadMessage → ドロップダウン切替 → 未読バッジ → メイン復帰
 
 title: SubthreadTest
 ---
-<<SystemMessage "=== サブスレッド テスト ===">>
+<<SystemMessage "=== サブスレッド テスト (複数スレッド) ===">>
 <<StartWait 0.5>>
 
 <<set $speaker to "pyramid">>
@@ -17,24 +17,36 @@ title: SubthreadTest
 <<DeclareThread "test_note" "Pyramidの覚書">>
 <<AddThreadMessage "test_note" "覚書1: タイムスタンプが一致しない">>
 <<AddThreadMessage "test_note" "覚書2: Marcoの証言と照合が必要">>
-<<AddThreadMessage "test_note" "覚書3: 「不可索引物」との関連性は未確認">>
 
-<<StartWait 1>>
+<<StartWait 0.5>>
 
-覚書をまとめました。右上のボタンでスレッドを切り替えられます。
+覚書を記録しました。
 
 <<StartWait 1>>
 
 <<set $speaker to "marco">>
-覚書？ 何を記録してるんだ？
+俺の方でも気になることをまとめておく。
+
+<<DeclareThread "test_log" "Marco調査ログ">>
+<<AddThreadMessage "test_log" "ログ1: 第4管理区域の名称に矛盾あり">>
+<<AddThreadMessage "test_log" "ログ2: 2019年の再編記録が見つからない">>
+<<AddThreadMessage "test_log" "ログ3: ベルナルドの証言を要確認">>
 
 <<StartWait 0.5>>
 
 <<set $speaker to "pyramid">>
-セッション中の不整合を整理しています。確認が必要な事項を記録しました。
+システム側の記録も残しておきます。
 
-<<SystemMessage "右上のスレッドボタンで「Pyramidの覚書」を確認してください">>
-<<SystemMessage "メインに戻るにはもう一度ボタンを押してください">>
+<<DeclareThread "test_sys" "システム通知">>
+<<AddThreadMessage "test_sys" "通知: セッション中に異常な通信パターンを検知">>
+
+<<StartWait 0.5>>
+
+3つのスレッドを作成しました。
+
+<<SystemMessage "右上のドロップダウンで3つのスレッドを切り替えてください">>
+<<SystemMessage "各スレッドの未読バッジが表示されます">>
+<<SystemMessage "スレッドを開くと未読がリセットされます">>
 
 <<StartWait 60>>
 
