@@ -1,7 +1,7 @@
 # WORKFLOW STATE SSOT
 
-**Updated**: 2026-03-15
-**Phase**: エンジン検証 Phase A — サブスレッドUI最小スライス実装完了、手動テスト確認済み
+**Updated**: 2026-03-16
+**Phase**: エンジン検証 Phase A — サブスレッドUI ThreadType + 型別レンダリング実装完了
 **Branch**: main
 
 ## Mission
@@ -42,6 +42,7 @@ Ch1/Ch2 Yarn スクリプトはエンジン検証用モックであり、本番�
   - Ch2: タイピングインジケーター位置修正 → 要確認
   - Ch2: 選択肢タイミング修正 → 要確認
 - [x] サブスレッドUI最小スライス実装（2026-03-15）— DeclareThread/AddThreadMessage + トグルボタン切替 + Save/Load対応
+- [x] サブスレッドUI ThreadType 導入（2026-03-16）— ThreadType enum (Annotation/Tracking/Scout/Branch) + DeclareThreadTyped コマンド + 型別アイコン/色 + スレッド切替時ヘッダーバー
 - [x] 発見バグ修正（2026-03-11 テスト検出 → d2d2d78 で修正済み）
   - Bug-1: ESC 停止時 `DialogueException` → StopScenario deferred Stop() via coroutine
   - Bug-2: 選択肢 `DialogueException` → CancelActiveWait first, Stop next frame
@@ -100,6 +101,10 @@ ContentAuthoring シーンで以下を行う必要あり:
 | 4d | ~~Hub選択肢ループ修正~~ | A | — | **済** (d472c6e: C#側0選択肢セーフティ + Yarnフォールバック選択肢) |
 | 5 | 矛盾 Phase 2 動作確認 | A | ContradictionFeedback セットアップ | **タグ検証済** (7ペア全一致、手動テスト待ち) |
 | 5a | ~~サブスレッドUI最小スライス~~ | A | — | **済** (2026-03-15: DeclareThread/AddThreadMessage + トグルUI + Save/Load) |
+| 5b | ~~サブスレッドUI ThreadType + 型別レンダリング~~ | A | #5a | **済** (2026-03-16: ThreadType enum + DeclareThreadTyped + ヘッダーバー) |
+| 5c | 通知バナー（新着スレッドメッセージ表示） | A | #5b | 未着手 |
+| 5d | サイドバー型スレッド一覧UI | B | #5b | 未着手 |
+| 5e | 複数サブスレッド同時並走 / B・C型の実用検証 | B | #5b | 未着手 |
 | 6 | スマホサイズ基準レイアウト調整 | B | #4b,4c 完了後 | 未着手 |
 | 7 | Ch3 シナリオ設計 | A | #2,5 完了後 | 未着手 |
 
@@ -114,6 +119,12 @@ ContentAuthoring シーンで以下を行う必要あり:
 - **オートセーブ**: EN-005 実装済み (6cc1a63)。slot=99, 30秒CD, ノード遷移/選択肢/EndDay トリガー
 - **bubbleSprite fake null**: 修正済み (147b36d)。?? → != null で Unity overloaded == 対応。角丸9-sliceが初めて有効化
 - **サブスレッドUI**: データスワップ方式 (ClearMessages + RestoreChatHistory)。スレッド別にスクロール位置保存。DeclareThread/AddThreadMessageでYarnから宣言
+- **DeclareThreadTyped**: `DeclareThread` (2引数) と別コマンド名で登録。Yarn Spinner は同名の引数違いオーバーロードを解決できないため分離が必要。既存の `DeclareThread` は Annotation フォールバックとして維持
+- **ThreadType 取得方法**: `OnThreadDeclared` イベントシグネチャは変更なし (`Action<string, string>`)。型情報は `ScenarioManager.GetDeclaredThread(threadId).Type` 経由で取得
+- **ヘッダーバー表示制御**: スレッド切替時にのみ表示・非表示を切替。Main スレッド選択時は非表示。型別色は 15% alpha の背景帯 + 90% alpha のラベルで構成
+- **型別アイコン/色**: Annotation=[A], Tracking=[B], Scout=[C], Branch=[>]。色は ThreadSwitcherController 定数 (TypeColorAnnotation 等) で一元管理
+- **Yarn コマンド数**: 全14コマンド (DeclareThreadTyped 追加後)
+- **SubthreadTest.yarn**: DeclareThreadTyped 対応に更新済み。型指定の検証モックとして機能
 - **セーブ復元名前重複**: 修正済み (147b36d)。StripNamePrefix で後方互換
 - **バブル幅リサイズ対応**: 修正済み (8b22b71)。Screen.width → RectTransform.rect.width
 - **EngineTestKit**: 追加済み (6da0aba)。F12 Debug Hub + ch_test Dashboard テスト用8ノード

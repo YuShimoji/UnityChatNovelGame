@@ -453,3 +453,144 @@ SaveManager の変更:
 | Task H: UI_IMPL_SPEC 追記 | — | 未実行 |
 | Task I: ETK ダッシュボード確認 | — | 未実行 |
 | Task J: SaveSystem_README 更新 | — | 未実行 |
+
+**注意**: Task G, H, J は ThreadType 追加 (e8e53cc) を反映する必要がある。
+- DeclareThread は2引数版(type=Annotation) + DeclareThreadTyped は3引数版(type指定)
+- SubthreadData に ThreadType フィールド追加済み
+- ThreadSwitcherController にヘッダーバー(型色帯)追加済み
+
+---
+
+# Batch 3 (2026-03-16)
+
+以下のタスクは基盤開発と並行して実行可能。
+
+---
+
+## Task K: ETK サブスレッド ThreadType テスト拡張
+
+```
+UnityChatNovelGame の EngineTestKit (Assets/Resources/Yarn/active/EngineTestKit.yarn) に
+サブスレッド ThreadType のテスト項目を追加してください。
+
+### 背景
+サブスレッドUI に ThreadType システムが追加済み (e8e53cc):
+- <<DeclareThreadTyped "threadId" "type" "displayName">> で型指定サブスレッド宣言
+  - type: "A"(注釈)/"B"(追跡)/"C"(偵察)/"branch"(分岐)
+- <<DeclareThread "threadId" "displayName">> は type=Annotation にフォールバック
+- <<AddThreadMessage "threadId" "text">> / <<AddThreadChat "threadId" "charID" "text">>
+- ドロップダウンに型アイコン [A]/[B]/[C]/[>] と型別色を表示
+- スレッド切替時にチャット上部にヘッダーバー（型色帯+型名）を表示
+
+### 作業内容
+1. ETK_Menu に「サブスレッド/ThreadType テスト」選択肢を追加
+   - <<declare $etk_done_threadtype = false>> を追加
+   - 他のテスト項目と同じパターン
+
+2. ETK_ThreadType ノードを新規作成:
+   - DeclareThreadTyped で 3種類のスレッドを宣言 (A, B, C)
+   - 各スレッドに AddThreadMessage / AddThreadChat で2-3件メッセージ追加
+   - SystemMessage で「ドロップダウンで型アイコンと色を確認してください」の案内
+   - SystemMessage で「スレッド切替後、上部のヘッダーバーの色帯を確認してください」
+   - 60秒の StartWait (テスト時間確保)
+   - 「メニューに戻る」選択肢で $etk_done_threadtype = true
+
+3. 既存の SubthreadTest.yarn は独立テスト用として残す
+
+### 検証
+- ETK_Menu で「サブスレッド/ThreadType テスト」が表示される
+- 3種のスレッドがドロップダウンに [A]/[B]/[C] アイコンで表示される
+- スレッド切替で型色帯ヘッダーバーが表示される
+- Mainに戻るとヘッダーバーが消える
+
+### 参考ファイル
+- Assets/Resources/Yarn/active/SubthreadTest.yarn (実装例)
+- Assets/Resources/Yarn/active/EngineTestKit.yarn (既存構造)
+```
+
+---
+
+## Task L: スレッド通知バナー実装
+
+```
+UnityChatNovelGame のメインチャット画面に、未読サブスレッドの通知バナーを
+実装してください。
+
+### 背景
+サブスレッドにメッセージが追加されると UnreadCount がインクリメントされるが、
+ユーザーがドロップダウンを開かないと未読に気づけない。
+メインチャット画面上にインライン通知バナーを表示して、
+未読サブスレッドへの誘導を改善する。
+
+### 仕様
+1. ScenarioManager.OnThreadMessageAdded イベントを購読
+2. メインスレッド閲覧中に未読メッセージが追加されたら:
+   - チャットエリア下部（入力欄の上）に通知バナーを表示
+   - バナー内容: 「[A] {スレッド名} に新着メッセージ (+{件数})」
+   - バナー背景色: スレッド型色 (alpha=0.2)
+   - テキスト色: スレッド型色
+   - タップでそのスレッドに切替 (ThreadSwitcherController.OnSelectThread呼出)
+   - 5秒後に自動フェードアウト (DOTween DOFade)
+3. 複数スレッドの通知は最新のもので上書き（スタックしない）
+4. サブスレッド閲覧中は通知バナーを表示しない
+
+### 実装場所
+- ThreadSwitcherController.cs に通知バナー機能を追加
+  - CreateUI() 内でバナー用 GameObject を Canvas 下部に生成
+  - OnThreadMessageAdded で表示制御
+
+### 関連ファイル
+- Assets/Scripts/UI/ThreadSwitcherController.cs
+- Assets/Scripts/Core/ScenarioManager.cs (OnThreadMessageAdded イベント)
+- Assets/Scripts/Data/SubthreadData.cs (ThreadType, UnreadCount)
+
+### 制約
+- ChatController.cs への変更は最小限（できれば不要）
+- DOTween の DOFade を使用（既存の依存に含まれる）
+
+### 検証
+- SubthreadTest を実行
+- メインスレッド閲覧中にサブスレッドにメッセージが追加されると下部にバナー表示
+- バナータップでスレッド切替
+- 5秒後にバナーが消える
+```
+
+---
+
+## Task M: WORKFLOW_STATE_SSOT 更新
+
+```
+UnityChatNovelGame の docs/WORKFLOW_STATE_SSOT.md を更新し、
+ThreadType 導入 + 型別レンダリング(ヘッダーバー) の完了を反映してください。
+
+### 背景
+サブスレッドUI に以下が追加された (e8e53cc):
+- ThreadType enum (Annotation/Tracking/Scout/Branch)
+- DeclareThreadTyped コマンド (3引数、型指定)
+- ドロップダウンに型アイコン [A]/[B]/[C]/[>] + 型別色
+- スレッド切替時のヘッダーバー（型色帯）
+- SubthreadTest.yarn を DeclareThreadTyped に更新
+
+### 作業内容
+1. 「サブスレッドUI」関連の完了ステータスを更新
+2. ThreadType を Done 条件に追加
+3. 次ステップ（通知バナー、サイドバー等）を future に記載
+4. 技術的インサイトに DeclareThreadTyped の設計判断を追記
+
+### 関連ファイル
+- docs/WORKFLOW_STATE_SSOT.md (更新対象)
+- docs/ENGINE_FEATURE_INVENTORY.md (参照: セクション10a)
+
+### 制約
+- コード変更不要（ドキュメントのみ）
+```
+
+---
+
+### Batch 3 実行結果
+
+| タスク | コミット | 状態 |
+|--------|----------|------|
+| Task K: ETK ThreadType テスト | — | 未実行 |
+| Task L: スレッド通知バナー | — | 未実行 |
+| Task M: SSOT 更新 | — | 未実行 |

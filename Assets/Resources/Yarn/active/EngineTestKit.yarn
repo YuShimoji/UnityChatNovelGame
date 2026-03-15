@@ -11,6 +11,7 @@ title: ETK_Menu
 <<declare $etk_done_contradiction = false>>
 <<declare $etk_done_commands = false>>
 <<declare $etk_done_choices = false>>
+<<declare $etk_done_threadtype = false>>
 
 <<SystemMessage "=== Engine Test Kit ===">>
 <<StartWait 0.5>>
@@ -30,9 +31,11 @@ title: ETK_Menu
 -> 選択肢 テスト <<if not $etk_done_choices>>
     <<set $etk_done_choices to true>>
     <<jump ETK_Choices>>
--> テスト完了 <<if $etk_done_richtext and $etk_done_contradiction and $etk_done_commands and $etk_done_choices>>
+-> サブスレッド/ThreadType テスト <<if not $etk_done_threadtype>>
+    <<jump ETK_ThreadType>>
+-> テスト完了 <<if $etk_done_richtext and $etk_done_contradiction and $etk_done_commands and $etk_done_choices and $etk_done_threadtype>>
     <<jump ETK_End>>
--> もう一度メニューを見る <<if ($etk_done_richtext or $etk_done_contradiction or $etk_done_commands or $etk_done_choices) and not ($etk_done_richtext and $etk_done_contradiction and $etk_done_commands and $etk_done_choices)>>
+-> もう一度メニューを見る <<if ($etk_done_richtext or $etk_done_contradiction or $etk_done_commands or $etk_done_choices or $etk_done_threadtype) and not ($etk_done_richtext and $etk_done_contradiction and $etk_done_commands and $etk_done_choices and $etk_done_threadtype)>>
     <<jump ETK_Menu>>
 ===
 
@@ -232,6 +235,60 @@ title: ETK_Choices
 <<SystemMessage "選択肢テスト完了">>
 
 <<jump ETK_Menu>>
+===
+
+/// --------------------------------------------------
+/// ETK_ThreadType: サブスレッド ThreadType のテスト
+/// 確認: DeclareThreadTyped (A/B/C) → ドロップダウン型アイコン・型別色 → ヘッダーバー
+/// --------------------------------------------------
+title: ETK_ThreadType
+---
+<<SystemMessage "--- サブスレッド/ThreadType テスト ---">>
+<<StartWait 0.5>>
+
+<<set $speaker to "pyramid">>
+3種類のスレッドタイプを宣言します。
+
+<<DeclareThreadTyped "etk_note" "A" "ETK覚書 [A]">>
+<<AddThreadMessage "etk_note" "注釈型スレッドのメッセージ1: タイムスタンプを確認してください">>
+<<AddThreadMessage "etk_note" "注釈型スレッドのメッセージ2: 内容の整合性を記録します">>
+<<AddThreadChat "etk_note" "pyramid" "追記: この覚書はAnnotation(注釈)タイプです">>
+
+<<StartWait 0.5>>
+
+<<set $speaker to "marco">>
+調査ログも追加しておきます。
+
+<<DeclareThreadTyped "etk_track" "B" "ETK追跡ログ [B]">>
+<<AddThreadChat "etk_track" "marco" "追跡型スレッドのメッセージ1: 対象の動向を記録">>
+<<AddThreadChat "etk_track" "marco" "追跡型スレッドのメッセージ2: 昨日との差分を照合">>
+<<AddThreadMessage "etk_track" "追跡型スレッドのメッセージ3: 次の観測ポイントを設定">>
+
+<<StartWait 0.5>>
+
+<<set $speaker to "pyramid">>
+偵察チャンネルも宣言します。
+
+<<DeclareThreadTyped "etk_scout" "C" "ETK偵察 [C]">>
+<<AddThreadMessage "etk_scout" "偵察型スレッドのメッセージ1: 周辺情報を収集中">>
+<<AddThreadChat "etk_scout" "bernardo" "偵察型スレッドのメッセージ2: 異常なパターンを検知しました">>
+<<AddThreadMessage "etk_scout" "偵察型スレッドのメッセージ3: レポートは後ほど送付します">>
+
+<<StartWait 0.5>>
+
+3種類のスレッドを宣言しました。
+
+<<SystemMessage "右上のドロップダウンで3つのスレッドを切り替えてください">>
+<<SystemMessage "各スレッドに [A]/[B]/[C] の型アイコンと型別の色が表示されればOKです">>
+<<SystemMessage "スレッドを切り替えると、チャット上部にヘッダーバー（型色帯+型名）が表示されます">>
+<<SystemMessage "ヘッダーバーの色帯が各型に対応した色になっていることを確認してください">>
+
+<<StartWait 60>>
+
+<<set $speaker to "player">>
+-> 確認した、メニューに戻る
+    <<set $etk_done_threadtype to true>>
+    <<jump ETK_Menu>>
 ===
 
 /// --------------------------------------------------
