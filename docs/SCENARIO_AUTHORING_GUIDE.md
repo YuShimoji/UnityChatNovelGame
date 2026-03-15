@@ -81,7 +81,7 @@ Assets/Resources/Yarn/active/
 
 ---
 
-## 2. コマンドリファレンス（全12コマンド）
+## 2. コマンドリファレンス（全13コマンド）
 
 ### メッセージ系
 
@@ -109,8 +109,9 @@ Assets/Resources/Yarn/active/
 |----------|------|------|
 | UnlockTopic | `<<UnlockTopic "topicID">>` | 断片/トピックをインベントリに追加 |
 | EndDay | `<<EndDay 日数>>` | Day 終了。システムメッセージ表示 + Day進捗記録 + オートセーブ。最終Dayのみチャンネル完了 |
-| DeclareThread | `<<DeclareThread "threadId" "displayName">>` | サブスレッドを宣言。メインに通知表示 + 切替ボタン出現 |
-| AddThreadMessage | `<<AddThreadMessage "threadId" "text">>` | サブスレッドにメッセージ追加（メイン画面には非表示） |
+| DeclareThread | `<<DeclareThread "threadId" "displayName">>` | サブスレッドを宣言。メインに通知表示 + ドロップダウンに追加 |
+| AddThreadMessage | `<<AddThreadMessage "threadId" "text">>` | サブスレッドにシステムメッセージ追加（メイン非表示） |
+| AddThreadChat | `<<AddThreadChat "threadId" "charID" "text">>` | サブスレッドにキャラクター付きメッセージ追加 |
 
 ### Yarn 標準機能
 

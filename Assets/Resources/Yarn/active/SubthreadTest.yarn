@@ -1,6 +1,6 @@
 /// SubthreadTest: サブスレッド切替の検証用シナリオ
 /// F12 Debug Hub から起動
-/// 検証: 複数DeclareThread → AddThreadMessage → ドロップダウン切替 → 未読バッジ → メイン復帰
+/// 検証: 複数DeclareThread → AddThreadMessage/AddThreadChat → ドロップダウン切替 → 未読バッジ
 
 title: SubthreadTest
 ---
@@ -28,9 +28,9 @@ title: SubthreadTest
 俺の方でも気になることをまとめておく。
 
 <<DeclareThread "test_log" "Marco調査ログ">>
-<<AddThreadMessage "test_log" "ログ1: 第4管理区域の名称に矛盾あり">>
-<<AddThreadMessage "test_log" "ログ2: 2019年の再編記録が見つからない">>
-<<AddThreadMessage "test_log" "ログ3: ベルナルドの証言を要確認">>
+<<AddThreadChat "test_log" "marco" "第4管理区域の名称に矛盾がある。Pyramidは正式名称だと言ったが。">>
+<<AddThreadChat "test_log" "marco" "2019年の再編記録が見つからない。誰に聞いても知らないと言う。">>
+<<AddThreadChat "test_log" "marco" "ベルナルドなら何か知ってるかもしれない。次のセッションで聞いてみる。">>
 
 <<StartWait 0.5>>
 

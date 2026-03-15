@@ -33,8 +33,9 @@
 | -------- | ---- | ---- |
 | UnlockTopic | `<<UnlockTopic "topicID">>` | トピックカードを推理ボードに追加 |
 | EndDay | `<<EndDay 日数>>` | Day 終了処理。「--- N日目 終了 ---」システムメッセージ表示 + Day進捗記録 + オートセーブ。マルチDayチャプターでは最終Day完了時のみチャンネルを完了にする |
-| DeclareThread | `<<DeclareThread "threadId" "displayName">>` | サブスレッドを宣言。メインチャットに通知表示 + 切替ボタン出現。最小スライスでは1スレッドのみ対応 |
-| AddThreadMessage | `<<AddThreadMessage "threadId" "text">>` | 宣言済みサブスレッドにメッセージを追加（メイン画面には表示しない）。切替時に履歴として表示される |
+| DeclareThread | `<<DeclareThread "threadId" "displayName">>` | サブスレッドを宣言。メインチャットに通知表示 + ドロップダウンにエントリ追加。複数スレッド対応 |
+| AddThreadMessage | `<<AddThreadMessage "threadId" "text">>` | サブスレッドにシステムメッセージを追加（メイン画面には非表示） |
+| AddThreadChat | `<<AddThreadChat "threadId" "charID" "text">>` | サブスレッドにキャラクター付きメッセージを追加（バブル表示） |
 
 ### Yarn 標準機能
 

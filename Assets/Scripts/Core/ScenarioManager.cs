@@ -168,6 +168,7 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.AddCommandHandler<int>("EndDay", EndDayCommand);
             m_DialogueRunner.AddCommandHandler<string, string>("DeclareThread", DeclareThreadCommand);
             m_DialogueRunner.AddCommandHandler<string, string>("AddThreadMessage", AddThreadMessageCommand);
+            m_DialogueRunner.AddCommandHandler<string, string, string>("AddThreadChat", AddThreadChatCommand);
 #endif
         }
 
@@ -195,6 +196,7 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.RemoveCommandHandler("EndDay");
             m_DialogueRunner.RemoveCommandHandler("DeclareThread");
             m_DialogueRunner.RemoveCommandHandler("AddThreadMessage");
+            m_DialogueRunner.RemoveCommandHandler("AddThreadChat");
 #endif
         }
         #endregion
@@ -514,6 +516,28 @@ namespace ProjectFoundPhone.Core
             {
                 Type = ChatMessageType.System,
                 CharacterID = null,
+                Text = text
+            });
+            thread.UnreadCount++;
+            OnThreadMessageAdded?.Invoke(threadId);
+        }
+
+        /// <summary>
+        /// サブスレッドにキャラクター付きメッセージを追加する。
+        /// Yarn: &lt;&lt;AddThreadChat "threadId" "charID" "text"&gt;&gt;
+        /// </summary>
+        private void AddThreadChatCommand(string threadId, string charID, string text)
+        {
+            if (!m_DeclaredThreads.TryGetValue(threadId, out var thread))
+            {
+                Debug.LogWarning($"ScenarioManager: Thread '{threadId}' not found. Declare it first.");
+                return;
+            }
+
+            thread.ChatHistory.Add(new SavedChatMessage
+            {
+                Type = ChatMessageType.Normal,
+                CharacterID = charID,
                 Text = text
             });
             thread.UnreadCount++;
