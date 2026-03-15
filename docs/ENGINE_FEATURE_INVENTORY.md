@@ -460,6 +460,7 @@ TopicData の `TopicID` プレフィックスでインベントリの表示カ�
 - **Save/Load**: SaveData.Subthreads + ActiveThreadId, SaveManager対応済み（ThreadType含む）
 - **スクロール位置**: スレッド別に保存・復元
 - **未読管理**: AddThreadMessage時にUnreadCountインクリメント、スレッド切替時にリセット
+- **通知バナー**: 非アクティブスレッドへのメッセージ追加時に画面上部にトースト通知。型色/アイコン付き、DOTweenフェード (0.25s in → 3.5s表示 → 0.4s out)、クリックでスレッド切替
 
 ### 制限事項（将来Step）
 

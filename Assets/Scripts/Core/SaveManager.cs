@@ -189,11 +189,20 @@ namespace ProjectFoundPhone.Core
             }
 
             // チャット履歴を保存
+            // サブスレッド表示中でもメインスレッドの履歴を確実に保存する
             ChatController chatController = FindFirstObjectByType<ChatController>();
             if (chatController != null)
             {
-                saveData.ChatHistory = chatController.GetChatHistory();
                 saveData.ActiveThreadId = chatController.ActiveThreadId;
+                var allHistories = chatController.GetAllThreadHistories();
+                if (allHistories.TryGetValue("__main__", out var mainHistory))
+                {
+                    saveData.ChatHistory = mainHistory;
+                }
+                else
+                {
+                    saveData.ChatHistory = chatController.GetChatHistory();
+                }
             }
 
             // サブスレッドを保存
@@ -344,6 +353,10 @@ namespace ProjectFoundPhone.Core
             ScenarioManager scenarioManagerForThreads = FindFirstObjectByType<ScenarioManager>();
             if (scenarioManagerForThreads != null && saveData.Subthreads != null)
             {
+                // スレッドUIをリセット（古いエントリの重複防止）
+                var threadSwitcher = FindFirstObjectByType<ThreadSwitcherController>();
+                threadSwitcher?.Reset();
+
                 scenarioManagerForThreads.ClearDeclaredThreads();
                 foreach (var thread in saveData.Subthreads)
                 {
@@ -352,9 +365,10 @@ namespace ProjectFoundPhone.Core
             }
 
             // ActiveThreadIdを復元
+            // SetActiveThreadIdを先に呼ぶとSwitchToThread内のm_ThreadHistories保存キーがずれるため、
+            // SwitchToThreadに直接任せる（内部でメイン履歴を__main__に正しく保存してから切替）
             if (chatController != null && !string.IsNullOrEmpty(saveData.ActiveThreadId))
             {
-                chatController.SetActiveThreadId(saveData.ActiveThreadId);
                 var thread = scenarioManagerForThreads?.GetDeclaredThread(saveData.ActiveThreadId);
                 if (thread != null)
                 {
