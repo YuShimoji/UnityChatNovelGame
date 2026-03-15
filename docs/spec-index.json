@@ -96,7 +96,7 @@
     "pct": 75,
     "cat": "ui",
     "file": "docs/StorySpec/08_ui_ux.md",
-    "summary": "ダッシュボード・スレッド・プレイヤーリソース表示域。ダッシュボードMVP+チャットバブル仕様+デバッグ機能(Section6)実装済み。インベントリUI実装済み(3サブタブ+オーバーレイ導線)。バブル表示修正完了(角丸フォールバック・リッチテキストスコープ・スクロール吸着・名前分離・影・FinalizeBubbleSize)。サブスレッドUI未着手(~15-20%)"
+    "summary": "ダッシュボード・スレッド・プレイヤーリソース表示域。ダッシュボードMVP+チャットバブル仕様+デバッグ機能(Section6)実装済み。インベントリUI実装済み(3サブタブ+オーバーレイ導線)。バブル表示修正完了。サブスレッドUI最小スライス実装済み(DeclareThread/AddThreadMessage+トグルボタン+Save/Load)"
   },
   {
     "id": "SP-009",
@@ -165,10 +165,10 @@
     "id": "SP-016",
     "title": "サブスレッドUI仕様",
     "status": "partial",
-    "pct": 30,
+    "pct": 45,
     "cat": "ui",
     "file": "docs/StorySpec/16_subthread_ui.md",
-    "summary": "統合型スレッドモデル、2段階トリガー、フルスクリーンフォーカス+スワイプサイドバー。DRAFT"
+    "summary": "統合型スレッドモデル、2段階トリガー、フルスクリーンフォーカス+スワイプサイドバー。最小スライス(Main+1Aスレッド切替)実装済み。サイドバー/B,C型/複数スレッド/条件エンジンは未実装"
   },
   {
     "id": "SP-099",
@@ -186,7 +186,7 @@
     "pct": 90,
     "cat": "infra",
     "file": "docs/ENGINE_FEATURE_INVENTORY.md",
-    "summary": "Yarnコマンド・キャラ管理・セーブ(AutoSave含む)・演出・バブル表示設定(名前分離・角丸9-slice・影・FinalizeBubbleSize・DebugOverlay OFF)・矛盾(#line:タグ方式に統一)・ダッシュボード(Day Resume実装済み・マルチDay対応)・インベントリUI・EngineTestKit(ETK)"
+    "summary": "Yarnコマンド(DeclareThread/AddThreadMessage追加)・キャラ管理・セーブ(AutoSave含む)・演出・バブル表示設定・矛盾(#line:タグ方式)・ダッシュボード(Day Resume+マルチDay)・インベントリUI・サブスレッドUI(10a)・ETK"
   },
   {
     "id": "EN-002",

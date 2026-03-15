@@ -1,7 +1,7 @@
 # WORKFLOW STATE SSOT
 
-**Updated**: 2026-03-13
-**Phase**: エンジン検証 Phase A — delegation-prompts 全6タスク完了、手動テスト待ち
+**Updated**: 2026-03-15
+**Phase**: エンジン検証 Phase A — サブスレッドUI最小スライス実装完了、手動テスト確認済み
 **Branch**: main
 
 ## Mission
@@ -41,6 +41,7 @@ Ch1/Ch2 Yarn スクリプトはエンジン検証用モックであり、本番�
   - Ch1 後半: プレイヤーセリフ一部欠落の可能性（要再確認）
   - Ch2: タイピングインジケーター位置修正 → 要確認
   - Ch2: 選択肢タイミング修正 → 要確認
+- [x] サブスレッドUI最小スライス実装（2026-03-15）— DeclareThread/AddThreadMessage + トグルボタン切替 + Save/Load対応
 - [x] 発見バグ修正（2026-03-11 テスト検出 → d2d2d78 で修正済み）
   - Bug-1: ESC 停止時 `DialogueException` → StopScenario deferred Stop() via coroutine
   - Bug-2: 選択肢 `DialogueException` → CancelActiveWait first, Stop next frame
@@ -98,6 +99,7 @@ ContentAuthoring シーンで以下を行う必要あり:
 | 4c | ~~名前行リッチテキストスコープ修正~~ | A | — | **済** (d472c6e: CloseUnclosedRichTextTags で未閉タグ補完) |
 | 4d | ~~Hub選択肢ループ修正~~ | A | — | **済** (d472c6e: C#側0選択肢セーフティ + Yarnフォールバック選択肢) |
 | 5 | 矛盾 Phase 2 動作確認 | A | ContradictionFeedback セットアップ | **タグ検証済** (7ペア全一致、手動テスト待ち) |
+| 5a | ~~サブスレッドUI最小スライス~~ | A | — | **済** (2026-03-15: DeclareThread/AddThreadMessage + トグルUI + Save/Load) |
 | 6 | スマホサイズ基準レイアウト調整 | B | #4b,4c 完了後 | 未着手 |
 | 7 | Ch3 シナリオ設計 | A | #2,5 完了後 | 未着手 |
 
@@ -111,6 +113,7 @@ ContentAuthoring シーンで以下を行う必要あり:
 - **コード品質**: 文字化けコメント修正済み (Task B: 2a34836)。ScenarioManager/CoreLogicTests/SaveLoadUI/SaveSlotUI の全92行を UTF-8 日本語に復元
 - **オートセーブ**: EN-005 実装済み (6cc1a63)。slot=99, 30秒CD, ノード遷移/選択肢/EndDay トリガー
 - **bubbleSprite fake null**: 修正済み (147b36d)。?? → != null で Unity overloaded == 対応。角丸9-sliceが初めて有効化
+- **サブスレッドUI**: データスワップ方式 (ClearMessages + RestoreChatHistory)。スレッド別にスクロール位置保存。DeclareThread/AddThreadMessageでYarnから宣言
 - **セーブ復元名前重複**: 修正済み (147b36d)。StripNamePrefix で後方互換
 - **バブル幅リサイズ対応**: 修正済み (8b22b71)。Screen.width → RectTransform.rect.width
 - **EngineTestKit**: 追加済み (6da0aba)。F12 Debug Hub + ch_test Dashboard テスト用8ノード

@@ -72,6 +72,17 @@ namespace ProjectFoundPhone.UI
         private readonly List<SavedChatMessage> m_ChatHistory = new List<SavedChatMessage>();
         private bool m_IsRestoringHistory = false;
 
+        /// <summary>現在表示中のスレッドID (null = メインスレッド)</summary>
+        private string m_ActiveThreadId;
+
+        /// <summary>スレッド別の会話履歴 (メインスレッドは null キーで管理)</summary>
+        private readonly Dictionary<string, List<SavedChatMessage>> m_ThreadHistories
+            = new Dictionary<string, List<SavedChatMessage>>();
+
+        /// <summary>スレッド別のスクロール位置</summary>
+        private readonly Dictionary<string, float> m_ThreadScrollPositions
+            = new Dictionary<string, float>();
+
         /// <summary>前回のメッセージの話者（連続メッセージ判定用）</summary>
         private string m_LastSpeaker = null;
 
@@ -2215,6 +2226,105 @@ namespace ProjectFoundPhone.UI
             if (string.IsNullOrEmpty(text)) return text;
             return s_NamePrefixPattern.Replace(text, "", 1);
         }
+        #endregion
+
+        #region Subthread System
+
+        /// <summary>現在表示中のスレッドID (null = メインスレッド)</summary>
+        public string ActiveThreadId => m_ActiveThreadId;
+
+        /// <summary>
+        /// スレッドを切り替える。現在のスレッドの履歴とスクロール位置を保存し、
+        /// 対象スレッドの履歴を復元する。
+        /// </summary>
+        /// <param name="threadId">切替先スレッドID (null = メインスレッド)</param>
+        /// <param name="history">初回切替時に使用する履歴 (省略可)</param>
+        public void SwitchToThread(string threadId, List<SavedChatMessage> history = null)
+        {
+            // 同じスレッドなら何もしない
+            if (m_ActiveThreadId == threadId) return;
+
+            // 現在のスレッドの履歴とスクロール位置を保存
+            string currentKey = m_ActiveThreadId ?? "__main__";
+            m_ThreadHistories[currentKey] = m_ChatHistory.ToList();
+            if (m_ScrollRect != null)
+            {
+                m_ThreadScrollPositions[currentKey] = m_ScrollRect.verticalNormalizedPosition;
+            }
+
+            // 切替先を設定
+            m_ActiveThreadId = threadId;
+            string targetKey = threadId ?? "__main__";
+
+            // 対象スレッドの履歴を取得
+            List<SavedChatMessage> targetHistory;
+            if (m_ThreadHistories.TryGetValue(targetKey, out var saved))
+            {
+                targetHistory = saved;
+            }
+            else if (history != null)
+            {
+                targetHistory = history;
+            }
+            else
+            {
+                targetHistory = new List<SavedChatMessage>();
+            }
+
+            // 履歴を復元
+            RestoreChatHistory(targetHistory);
+
+            // スクロール位置を復元 (1フレーム後)
+            if (m_ThreadScrollPositions.TryGetValue(targetKey, out float scrollPos))
+            {
+                StartCoroutine(RestoreScrollPositionNextFrame(scrollPos));
+            }
+        }
+
+        private System.Collections.IEnumerator RestoreScrollPositionNextFrame(float position)
+        {
+            yield return null;
+            if (m_ScrollRect != null)
+            {
+                m_ScrollRect.verticalNormalizedPosition = position;
+            }
+        }
+
+        /// <summary>
+        /// 全スレッドの履歴を取得（セーブ用）。
+        /// 現在表示中のスレッドはm_ChatHistoryから、それ以外はキャッシュから返す。
+        /// </summary>
+        public Dictionary<string, List<SavedChatMessage>> GetAllThreadHistories()
+        {
+            // 現在のスレッドの履歴を更新
+            string currentKey = m_ActiveThreadId ?? "__main__";
+            m_ThreadHistories[currentKey] = m_ChatHistory.ToList();
+            return new Dictionary<string, List<SavedChatMessage>>(m_ThreadHistories);
+        }
+
+        /// <summary>
+        /// スレッド履歴をまとめて設定（ロード用）
+        /// </summary>
+        public void SetThreadHistories(Dictionary<string, List<SavedChatMessage>> histories)
+        {
+            m_ThreadHistories.Clear();
+            if (histories != null)
+            {
+                foreach (var kvp in histories)
+                {
+                    m_ThreadHistories[kvp.Key] = kvp.Value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 現在のActiveThreadIdを設定（ロード復元用。SwitchToThreadと違いUI操作なし）
+        /// </summary>
+        public void SetActiveThreadId(string threadId)
+        {
+            m_ActiveThreadId = threadId;
+        }
+
         #endregion
 
         #region Bubble Visual Helpers

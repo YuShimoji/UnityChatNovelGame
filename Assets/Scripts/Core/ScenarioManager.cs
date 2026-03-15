@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -33,6 +34,13 @@ namespace ProjectFoundPhone.Core
         private bool m_IsWaiting = false;
         private BranchThreadState m_BranchThreadState = new BranchThreadState();
         private ChannelData m_CurrentChannel;
+
+        /// <summary>宣言済みサブスレッド (threadId -> SubthreadData)</summary>
+        private readonly Dictionary<string, SubthreadData> m_DeclaredThreads
+            = new Dictionary<string, SubthreadData>();
+
+        /// <summary>サブスレッドが宣言されたときのイベント (threadId, displayName)</summary>
+        public event Action<string, string> OnThreadDeclared;
 
         [Header("Auto Start")]
         [SerializeField] private bool m_AutoStartYarn = false;
@@ -155,6 +163,8 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.AddCommandHandler<string, string, string>("MessageTagged", MessageTaggedCommand);
             m_DialogueRunner.AddCommandHandler<string>("Typing", TypingCommand);
             m_DialogueRunner.AddCommandHandler<int>("EndDay", EndDayCommand);
+            m_DialogueRunner.AddCommandHandler<string, string>("DeclareThread", DeclareThreadCommand);
+            m_DialogueRunner.AddCommandHandler<string, string>("AddThreadMessage", AddThreadMessageCommand);
 #endif
         }
 
@@ -180,6 +190,8 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.RemoveCommandHandler("MessageTagged");
             m_DialogueRunner.RemoveCommandHandler("Typing");
             m_DialogueRunner.RemoveCommandHandler("EndDay");
+            m_DialogueRunner.RemoveCommandHandler("DeclareThread");
+            m_DialogueRunner.RemoveCommandHandler("AddThreadMessage");
 #endif
         }
         #endregion
@@ -452,6 +464,82 @@ namespace ProjectFoundPhone.Core
                 // EndDay時にオートセーブ（重要イベントのためクールダウンを無視）
                 SaveManager.Instance.AutoSave(forceSave: true);
             }
+        }
+
+        /// <summary>
+        /// サブスレッドを宣言し、メインチャットに通知を表示する。
+        /// Yarn: &lt;&lt;DeclareThread "threadId" "displayName"&gt;&gt;
+        /// </summary>
+        private void DeclareThreadCommand(string threadId, string displayName)
+        {
+            if (m_DeclaredThreads.ContainsKey(threadId))
+            {
+                Debug.LogWarning($"ScenarioManager: Thread '{threadId}' already declared, skipping.");
+                return;
+            }
+
+            var thread = new SubthreadData
+            {
+                ThreadId = threadId,
+                DisplayName = displayName
+            };
+            m_DeclaredThreads[threadId] = thread;
+
+            // メインチャットに通知
+            if (m_ChatController != null)
+            {
+                m_ChatController.AddSystemMessage($"スレッド「{displayName}」が作成されました");
+            }
+
+            OnThreadDeclared?.Invoke(threadId, displayName);
+            Debug.Log($"ScenarioManager: Thread declared — id='{threadId}', name='{displayName}'");
+        }
+
+        /// <summary>
+        /// サブスレッドにメッセージを追加する（チャット画面には表示しない）。
+        /// Yarn: &lt;&lt;AddThreadMessage "threadId" "text"&gt;&gt;
+        /// </summary>
+        private void AddThreadMessageCommand(string threadId, string text)
+        {
+            if (!m_DeclaredThreads.TryGetValue(threadId, out var thread))
+            {
+                Debug.LogWarning($"ScenarioManager: Thread '{threadId}' not found. Declare it first.");
+                return;
+            }
+
+            thread.ChatHistory.Add(new SavedChatMessage
+            {
+                Type = ChatMessageType.System,
+                CharacterID = null,
+                Text = text
+            });
+        }
+
+        /// <summary>宣言済みスレッドを取得</summary>
+        public SubthreadData GetDeclaredThread(string threadId)
+        {
+            m_DeclaredThreads.TryGetValue(threadId, out var thread);
+            return thread;
+        }
+
+        /// <summary>宣言済みの全スレッドを返す</summary>
+        public IReadOnlyDictionary<string, SubthreadData> GetAllDeclaredThreads()
+        {
+            return m_DeclaredThreads;
+        }
+
+        /// <summary>ロード時にサブスレッドを再登録する</summary>
+        public void RegisterDeclaredThread(SubthreadData thread)
+        {
+            if (thread == null || string.IsNullOrEmpty(thread.ThreadId)) return;
+            m_DeclaredThreads[thread.ThreadId] = thread;
+            OnThreadDeclared?.Invoke(thread.ThreadId, thread.DisplayName);
+        }
+
+        /// <summary>宣言済みスレッドをクリア（シナリオ開始時）</summary>
+        public void ClearDeclaredThreads()
+        {
+            m_DeclaredThreads.Clear();
         }
         #endregion
 

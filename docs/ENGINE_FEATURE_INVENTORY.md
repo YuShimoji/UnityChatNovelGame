@@ -33,6 +33,8 @@
 | -------- | ---- | ---- |
 | UnlockTopic | `<<UnlockTopic "topicID">>` | トピックカードを推理ボードに追加 |
 | EndDay | `<<EndDay 日数>>` | Day 終了処理。「--- N日目 終了 ---」システムメッセージ表示 + Day進捗記録 + オートセーブ。マルチDayチャプターでは最終Day完了時のみチャンネルを完了にする |
+| DeclareThread | `<<DeclareThread "threadId" "displayName">>` | サブスレッドを宣言。メインチャットに通知表示 + 切替ボタン出現。最小スライスでは1スレッドのみ対応 |
+| AddThreadMessage | `<<AddThreadMessage "threadId" "text">>` | 宣言済みサブスレッドにメッセージを追加（メイン画面には表示しない）。切替時に履歴として表示される |
 
 ### Yarn 標準機能
 
@@ -442,6 +444,40 @@ TopicData の `TopicID` プレフィックスでインベントリの表示カ�
 
 ---
 
+## 10a. サブスレッドUI（最小スライス実装済み）
+
+メイン⇔サブスレッド1本の切替機能。Discord的マルチスレッドの最小実装。
+
+### アーキテクチャ
+
+- **データモデル**: `SubthreadData.cs` — ThreadId, DisplayName, ChatHistory
+- **Yarnコマンド**: `DeclareThread` / `AddThreadMessage` (ScenarioManager登録)
+- **切替方式**: ChatControllerのデータスワップ (ClearMessages + RestoreChatHistory)
+- **UI**: `ThreadSwitcherController.cs` — 右上にトグルボタン1個
+- **Save/Load**: SaveData.Subthreads + ActiveThreadId, SaveManager対応済み
+- **スクロール位置**: スレッド別に保存・復元
+
+### 制限事項（将来Step）
+
+- 同時に1サブスレッドのみ対応（2本目のDeclareThreadは無視）
+- サブスレッド内でのYarnノード実行は未対応
+- サイドバーアイコントレイは未実装（ボタン1個のみ）
+- サブスレッド内矛盾指摘は未対応
+
+### 使用例
+
+```yarn
+<<DeclareThread "note_1" "Pyramidの覚書">>
+<<AddThreadMessage "note_1" "覚書1: タイムスタンプが不一致">>
+<<AddThreadMessage "note_1" "覚書2: 要照合">>
+```
+
+### 検証モック
+
+`Assets/Resources/Yarn/active/SubthreadTest.yarn` — F12 Debug Hub から起動
+
+---
+
 ## 10. 未実装機能（StorySpec で必要だが現在ない機能）
 
 ### 優先度: 高（メインループに必要）
@@ -452,7 +488,7 @@ TopicData の `TopicID` プレフィックスでインベントリの表示カ�
 
 | 機能 | 説明 | 実装難度 |
 | ---- | ---- | -------- |
-| サブスレッドUI | Discord 的なマルチスレッド表示 | 高 |
+| サブスレッドUI | Discord 的なマルチスレッド表示 → **最小スライス実装済み (セクション10a)** | — |
 | 偵察システム | ロケーション探索・アイテム収集 | 高 |
 | 断片クロスリファレンス | 断片同士の照合・矛盾検出 | 中 |
 

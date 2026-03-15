@@ -193,6 +193,14 @@ namespace ProjectFoundPhone.Core
             if (chatController != null)
             {
                 saveData.ChatHistory = chatController.GetChatHistory();
+                saveData.ActiveThreadId = chatController.ActiveThreadId;
+            }
+
+            // サブスレッドを保存
+            if (scenarioManager != null)
+            {
+                var threads = scenarioManager.GetAllDeclaredThreads();
+                saveData.Subthreads = new List<SubthreadData>(threads.Values);
             }
 
             // 矛盾発見データを保存
@@ -330,6 +338,28 @@ namespace ProjectFoundPhone.Core
             if (chatController != null && saveData.ChatHistory != null && saveData.ChatHistory.Count > 0)
             {
                 chatController.RestoreChatHistory(saveData.ChatHistory);
+            }
+
+            // サブスレッドを復元
+            ScenarioManager scenarioManagerForThreads = FindFirstObjectByType<ScenarioManager>();
+            if (scenarioManagerForThreads != null && saveData.Subthreads != null)
+            {
+                scenarioManagerForThreads.ClearDeclaredThreads();
+                foreach (var thread in saveData.Subthreads)
+                {
+                    scenarioManagerForThreads.RegisterDeclaredThread(thread);
+                }
+            }
+
+            // ActiveThreadIdを復元
+            if (chatController != null && !string.IsNullOrEmpty(saveData.ActiveThreadId))
+            {
+                chatController.SetActiveThreadId(saveData.ActiveThreadId);
+                var thread = scenarioManagerForThreads?.GetDeclaredThread(saveData.ActiveThreadId);
+                if (thread != null)
+                {
+                    chatController.SwitchToThread(saveData.ActiveThreadId, thread.ChatHistory);
+                }
             }
 
             // 矛盾発見データを復元

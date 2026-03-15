@@ -1,0 +1,44 @@
+/// SubthreadTest: サブスレッド切替の検証用シナリオ
+/// F12 Debug Hub から起動
+/// 検証: DeclareThread → AddThreadMessage → ボタン切替 → メイン復帰
+
+title: SubthreadTest
+---
+<<SystemMessage "=== サブスレッド テスト ===">>
+<<StartWait 0.5>>
+
+<<set $speaker to "pyramid">>
+メインスレッドのメッセージ1。
+
+<<StartWait 1>>
+
+興味深いログを発見しました。覚書としてまとめます。
+
+<<DeclareThread "test_note" "Pyramidの覚書">>
+<<AddThreadMessage "test_note" "覚書1: タイムスタンプが一致しない">>
+<<AddThreadMessage "test_note" "覚書2: Marcoの証言と照合が必要">>
+<<AddThreadMessage "test_note" "覚書3: 「不可索引物」との関連性は未確認">>
+
+<<StartWait 1>>
+
+覚書をまとめました。右上のボタンでスレッドを切り替えられます。
+
+<<StartWait 1>>
+
+<<set $speaker to "marco">>
+覚書？ 何を記録してるんだ？
+
+<<StartWait 0.5>>
+
+<<set $speaker to "pyramid">>
+セッション中の不整合を整理しています。確認が必要な事項を記録しました。
+
+<<SystemMessage "右上のスレッドボタンで「Pyramidの覚書」を確認してください">>
+<<SystemMessage "メインに戻るにはもう一度ボタンを押してください">>
+
+<<StartWait 60>>
+
+<<set $speaker to "player">>
+-> テスト完了
+    <<SystemMessage "=== サブスレッド テスト 完了 ===">>
+===

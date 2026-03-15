@@ -111,9 +111,21 @@ namespace ProjectFoundPhone.Data
 
         #region Chat History
         /// <summary>
-        /// チャット履歴のメッセージリスト
+        /// チャット履歴のメッセージリスト（メインスレッド）
         /// </summary>
         public List<SavedChatMessage> ChatHistory = new List<SavedChatMessage>();
+        #endregion
+
+        #region Subthread System
+        /// <summary>
+        /// 宣言済みサブスレッドのリスト
+        /// </summary>
+        public List<SubthreadData> Subthreads = new List<SubthreadData>();
+
+        /// <summary>
+        /// 現在表示中のスレッドID (null = メインスレッド)
+        /// </summary>
+        public string ActiveThreadId;
         #endregion
 
         #region Synthesis System
