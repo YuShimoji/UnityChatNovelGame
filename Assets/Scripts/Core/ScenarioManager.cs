@@ -167,6 +167,7 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.AddCommandHandler<string>("Typing", TypingCommand);
             m_DialogueRunner.AddCommandHandler<int>("EndDay", EndDayCommand);
             m_DialogueRunner.AddCommandHandler<string, string>("DeclareThread", DeclareThreadCommand);
+            m_DialogueRunner.AddCommandHandler<string, string, string>("DeclareThreadTyped", DeclareThreadTypedCommand);
             m_DialogueRunner.AddCommandHandler<string, string>("AddThreadMessage", AddThreadMessageCommand);
             m_DialogueRunner.AddCommandHandler<string, string, string>("AddThreadChat", AddThreadChatCommand);
 #endif
@@ -195,6 +196,7 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.RemoveCommandHandler("Typing");
             m_DialogueRunner.RemoveCommandHandler("EndDay");
             m_DialogueRunner.RemoveCommandHandler("DeclareThread");
+            m_DialogueRunner.RemoveCommandHandler("DeclareThreadTyped");
             m_DialogueRunner.RemoveCommandHandler("AddThreadMessage");
             m_DialogueRunner.RemoveCommandHandler("AddThreadChat");
 #endif
@@ -472,10 +474,25 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// サブスレッドを宣言し、メインチャットに通知を表示する。
+        /// サブスレッドを宣言し、メインチャットに通知を表示する（2引数版、type=Annotation）。
         /// Yarn: &lt;&lt;DeclareThread "threadId" "displayName"&gt;&gt;
         /// </summary>
         private void DeclareThreadCommand(string threadId, string displayName)
+        {
+            DeclareThreadInternal(threadId, displayName, ThreadType.Annotation);
+        }
+
+        /// <summary>
+        /// サブスレッドを宣言（3引数版、type指定）。
+        /// Yarn: &lt;&lt;DeclareThreadTyped "threadId" "type" "displayName"&gt;&gt;
+        /// type: "A"=Annotation, "B"=Tracking, "C"=Scout, "branch"=Branch
+        /// </summary>
+        private void DeclareThreadTypedCommand(string threadId, string typeStr, string displayName)
+        {
+            DeclareThreadInternal(threadId, displayName, ParseThreadType(typeStr));
+        }
+
+        private void DeclareThreadInternal(string threadId, string displayName, ThreadType type)
         {
             if (m_DeclaredThreads.ContainsKey(threadId))
             {
@@ -486,7 +503,8 @@ namespace ProjectFoundPhone.Core
             var thread = new SubthreadData
             {
                 ThreadId = threadId,
-                DisplayName = displayName
+                DisplayName = displayName,
+                Type = type
             };
             m_DeclaredThreads[threadId] = thread;
 
@@ -497,7 +515,29 @@ namespace ProjectFoundPhone.Core
             }
 
             OnThreadDeclared?.Invoke(threadId, displayName);
-            Debug.Log($"ScenarioManager: Thread declared — id='{threadId}', name='{displayName}'");
+            Debug.Log($"ScenarioManager: Thread declared — id='{threadId}', type={type}, name='{displayName}'");
+        }
+
+        private static ThreadType ParseThreadType(string typeStr)
+        {
+            if (string.IsNullOrEmpty(typeStr)) return ThreadType.Annotation;
+            switch (typeStr.Trim().ToLowerInvariant())
+            {
+                case "a":
+                case "annotation":
+                    return ThreadType.Annotation;
+                case "b":
+                case "tracking":
+                    return ThreadType.Tracking;
+                case "c":
+                case "scout":
+                    return ThreadType.Scout;
+                case "branch":
+                    return ThreadType.Branch;
+                default:
+                    Debug.LogWarning($"ScenarioManager: Unknown thread type '{typeStr}', defaulting to Annotation.");
+                    return ThreadType.Annotation;
+            }
         }
 
         /// <summary>

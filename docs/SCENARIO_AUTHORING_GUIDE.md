@@ -81,7 +81,7 @@ Assets/Resources/Yarn/active/
 
 ---
 
-## 2. コマンドリファレンス（全13コマンド）
+## 2. コマンドリファレンス（全14コマンド）
 
 ### メッセージ系
 
@@ -109,7 +109,8 @@ Assets/Resources/Yarn/active/
 |----------|------|------|
 | UnlockTopic | `<<UnlockTopic "topicID">>` | 断片/トピックをインベントリに追加 |
 | EndDay | `<<EndDay 日数>>` | Day 終了。システムメッセージ表示 + Day進捗記録 + オートセーブ。最終Dayのみチャンネル完了 |
-| DeclareThread | `<<DeclareThread "threadId" "displayName">>` | サブスレッドを宣言。メインに通知表示 + ドロップダウンに追加 |
+| DeclareThread | `<<DeclareThread "threadId" "displayName">>` | サブスレッドを宣言（type=Annotation）。メインに通知表示 + ドロップダウンに追加 |
+| DeclareThreadTyped | `<<DeclareThreadTyped "threadId" "type" "displayName">>` | 型指定でサブスレッド宣言。type: "A"/"B"/"C"/"branch" |
 | AddThreadMessage | `<<AddThreadMessage "threadId" "text">>` | サブスレッドにシステムメッセージ追加（メイン非表示） |
 | AddThreadChat | `<<AddThreadChat "threadId" "charID" "text">>` | サブスレッドにキャラクター付きメッセージ追加 |
 

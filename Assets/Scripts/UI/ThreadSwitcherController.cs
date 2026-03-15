@@ -25,13 +25,20 @@ namespace ProjectFoundPhone.UI
         private Transform m_DropdownContent;
         private bool m_IsDropdownOpen;
 
+        // スレッド型ヘッダーバー (チャットエリア上部の色帯)
+        private GameObject m_ThreadHeaderBar;
+        private Image m_ThreadHeaderBarBg;
+        private TextMeshProUGUI m_ThreadHeaderBarLabel;
+
         // スレッドエントリ管理
         private class ThreadEntry
         {
             public string ThreadId;
             public string DisplayName;
+            public ThreadType Type;
             public GameObject ListItemObj;
             public TextMeshProUGUI BadgeLabel;
+            public TextMeshProUGUI TypeLabel;
         }
         private readonly List<ThreadEntry> m_Threads = new List<ThreadEntry>();
 
@@ -40,6 +47,12 @@ namespace ProjectFoundPhone.UI
         private static readonly Color ItemHoverColor = new Color(0.25f, 0.3f, 0.4f, 0.95f);
         private static readonly Color ActiveItemColor = new Color(0.3f, 0.35f, 0.5f, 0.95f);
         private static readonly Color BadgeColor = new Color(0.9f, 0.3f, 0.3f, 1f);
+
+        // ThreadType 別色
+        private static readonly Color TypeColorAnnotation = new Color(0.29f, 0.56f, 0.85f, 1f); // #4A90D9
+        private static readonly Color TypeColorTracking = new Color(0.30f, 0.69f, 0.31f, 1f);   // #4CAF50
+        private static readonly Color TypeColorScout = new Color(1f, 0.60f, 0f, 1f);             // #FF9800
+        private static readonly Color TypeColorBranch = new Color(0.61f, 0.15f, 0.69f, 1f);      // #9C27B0
 
         private void Start()
         {
@@ -137,6 +150,36 @@ namespace ProjectFoundPhone.UI
             m_DropdownContent = m_DropdownPanel.transform;
             m_DropdownPanel.SetActive(false);
             m_IsDropdownOpen = false;
+
+            // スレッド型ヘッダーバー (画面上部の横長色帯)
+            m_ThreadHeaderBar = new GameObject("ThreadHeaderBar");
+            m_ThreadHeaderBar.transform.SetParent(canvas.transform, false);
+            var barRt = m_ThreadHeaderBar.AddComponent<RectTransform>();
+            barRt.anchorMin = new Vector2(0f, 1f);
+            barRt.anchorMax = new Vector2(1f, 1f);
+            barRt.pivot = new Vector2(0.5f, 1f);
+            barRt.anchoredPosition = new Vector2(0f, -70f); // ステータスバー下あたり
+            barRt.sizeDelta = new Vector2(0f, 28f);
+
+            m_ThreadHeaderBarBg = m_ThreadHeaderBar.AddComponent<Image>();
+            m_ThreadHeaderBarBg.color = Color.clear;
+
+            var barLabelObj = new GameObject("BarLabel");
+            barLabelObj.transform.SetParent(m_ThreadHeaderBar.transform, false);
+            var barLabelRt = barLabelObj.AddComponent<RectTransform>();
+            barLabelRt.anchorMin = Vector2.zero;
+            barLabelRt.anchorMax = Vector2.one;
+            barLabelRt.offsetMin = new Vector2(12f, 0f);
+            barLabelRt.offsetMax = new Vector2(-12f, 0f);
+
+            m_ThreadHeaderBarLabel = barLabelObj.AddComponent<TextMeshProUGUI>();
+            m_ThreadHeaderBarLabel.fontSize = 12f;
+            m_ThreadHeaderBarLabel.alignment = TextAlignmentOptions.MidlineLeft;
+            m_ThreadHeaderBarLabel.color = Color.white;
+            m_ThreadHeaderBarLabel.text = "";
+            AssignDefaultFont(m_ThreadHeaderBarLabel);
+
+            m_ThreadHeaderBar.SetActive(false);
         }
 
         private void OnThreadDeclared(string threadId, string displayName)
@@ -171,10 +214,15 @@ namespace ProjectFoundPhone.UI
 
         private void AddThreadEntry(string threadId, string displayName)
         {
+            // ScenarioManager から ThreadType を取得
+            var threadData = m_ScenarioManager?.GetDeclaredThread(threadId);
+            ThreadType threadType = threadData?.Type ?? ThreadType.Annotation;
+
             var entry = new ThreadEntry
             {
                 ThreadId = threadId,
-                DisplayName = displayName
+                DisplayName = displayName,
+                Type = threadType
             };
 
             // リストアイテム
@@ -191,13 +239,32 @@ namespace ProjectFoundPhone.UI
             string capturedId = threadId;
             itemBtn.onClick.AddListener(() => OnSelectThread(capturedId));
 
-            // スレッド名ラベル
+            // 型アイコンラベル (左端)
+            var typeObj = new GameObject("TypeIcon");
+            typeObj.transform.SetParent(itemObj.transform, false);
+            var typeRt = typeObj.AddComponent<RectTransform>();
+            typeRt.anchorMin = new Vector2(0f, 0f);
+            typeRt.anchorMax = new Vector2(0f, 1f);
+            typeRt.pivot = new Vector2(0f, 0.5f);
+            typeRt.anchoredPosition = new Vector2(4f, 0f);
+            typeRt.sizeDelta = new Vector2(22f, 0f);
+
+            var typeLabel = typeObj.AddComponent<TextMeshProUGUI>();
+            typeLabel.fontSize = 10f;
+            typeLabel.alignment = TextAlignmentOptions.Center;
+            typeLabel.text = GetTypeIcon(threadType);
+            typeLabel.color = GetTypeColor(threadType);
+            typeLabel.fontStyle = FontStyles.Bold;
+            AssignDefaultFont(typeLabel);
+            entry.TypeLabel = typeLabel;
+
+            // スレッド名ラベル (型アイコンの右)
             var nameObj = new GameObject("Name");
             nameObj.transform.SetParent(itemObj.transform, false);
             var nameRt = nameObj.AddComponent<RectTransform>();
             nameRt.anchorMin = Vector2.zero;
             nameRt.anchorMax = Vector2.one;
-            nameRt.offsetMin = new Vector2(10f, 2f);
+            nameRt.offsetMin = new Vector2(28f, 2f); // 型アイコン分を右にずらす
             nameRt.offsetMax = new Vector2(-36f, -2f); // 右側にバッジ分のスペース
 
             var nameLabel = nameObj.AddComponent<TextMeshProUGUI>();
@@ -258,6 +325,7 @@ namespace ProjectFoundPhone.UI
             }
 
             UpdateHeaderLabel();
+            UpdateThreadHeaderBar(threadId);
             UpdateAllBadges();
             CloseDropdown();
         }
@@ -349,7 +417,8 @@ namespace ProjectFoundPhone.UI
                 {
                     if (entry.ThreadId == activeId)
                     {
-                        m_HeaderLabel.text = entry.DisplayName + " \u25BC";
+                        string icon = GetTypeIcon(entry.Type);
+                        m_HeaderLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(GetTypeColor(entry.Type))}>{icon}</color> {entry.DisplayName} \u25BC";
                         return;
                     }
                 }
@@ -398,6 +467,37 @@ namespace ProjectFoundPhone.UI
             }
         }
 
+        private void UpdateThreadHeaderBar(string threadId)
+        {
+            if (m_ThreadHeaderBar == null) return;
+
+            if (threadId == null)
+            {
+                // Mainスレッド → ヘッダーバー非表示
+                m_ThreadHeaderBar.SetActive(false);
+                return;
+            }
+
+            // サブスレッドの型情報を取得
+            ThreadType type = ThreadType.Annotation;
+            string displayName = threadId;
+            foreach (var entry in m_Threads)
+            {
+                if (entry.ThreadId == threadId)
+                {
+                    type = entry.Type;
+                    displayName = entry.DisplayName;
+                    break;
+                }
+            }
+
+            Color typeColor = GetTypeColor(type);
+            m_ThreadHeaderBarBg.color = new Color(typeColor.r, typeColor.g, typeColor.b, 0.15f);
+            m_ThreadHeaderBarLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(typeColor)}>{GetTypeIcon(type)}</color>  {displayName}";
+            m_ThreadHeaderBarLabel.color = new Color(typeColor.r, typeColor.g, typeColor.b, 0.9f);
+            m_ThreadHeaderBar.SetActive(true);
+        }
+
         /// <summary>スレッド切替状態をリセット（シナリオ再開始時用）</summary>
         public void Reset()
         {
@@ -420,6 +520,35 @@ namespace ProjectFoundPhone.UI
             if (m_HeaderLabel != null)
             {
                 m_HeaderLabel.text = "Main";
+            }
+
+            if (m_ThreadHeaderBar != null)
+            {
+                m_ThreadHeaderBar.SetActive(false);
+            }
+        }
+
+        private static string GetTypeIcon(ThreadType type)
+        {
+            switch (type)
+            {
+                case ThreadType.Annotation: return "[A]";
+                case ThreadType.Tracking:   return "[B]";
+                case ThreadType.Scout:      return "[C]";
+                case ThreadType.Branch:     return "[>]";
+                default:                    return "[A]";
+            }
+        }
+
+        private static Color GetTypeColor(ThreadType type)
+        {
+            switch (type)
+            {
+                case ThreadType.Annotation: return TypeColorAnnotation;
+                case ThreadType.Tracking:   return TypeColorTracking;
+                case ThreadType.Scout:      return TypeColorScout;
+                case ThreadType.Branch:     return TypeColorBranch;
+                default:                    return TypeColorAnnotation;
             }
         }
 

@@ -1,6 +1,6 @@
 /// SubthreadTest: サブスレッド切替の検証用シナリオ
 /// F12 Debug Hub から起動
-/// 検証: 複数DeclareThread → AddThreadMessage/AddThreadChat → ドロップダウン切替 → 未読バッジ
+/// 検証: DeclareThreadTyped(型指定) → AddThreadMessage/AddThreadChat → ドロップダウン切替 → 型アイコン・色・未読バッジ
 
 title: SubthreadTest
 ---
@@ -14,7 +14,7 @@ title: SubthreadTest
 
 興味深いログを発見しました。覚書としてまとめます。
 
-<<DeclareThread "test_note" "Pyramidの覚書">>
+<<DeclareThreadTyped "test_note" "A" "Pyramidの覚書">>
 <<AddThreadMessage "test_note" "覚書1: タイムスタンプが一致しない">>
 <<AddThreadMessage "test_note" "覚書2: Marcoの証言と照合が必要">>
 
@@ -27,7 +27,7 @@ title: SubthreadTest
 <<set $speaker to "marco">>
 俺の方でも気になることをまとめておく。
 
-<<DeclareThread "test_log" "Marco調査ログ">>
+<<DeclareThreadTyped "test_log" "B" "Marco調査ログ">>
 <<AddThreadChat "test_log" "marco" "第4管理区域の名称に矛盾がある。Pyramidは正式名称だと言ったが。">>
 <<AddThreadChat "test_log" "marco" "2019年の再編記録が見つからない。誰に聞いても知らないと言う。">>
 <<AddThreadChat "test_log" "marco" "ベルナルドなら何か知ってるかもしれない。次のセッションで聞いてみる。">>
@@ -37,7 +37,7 @@ title: SubthreadTest
 <<set $speaker to "pyramid">>
 システム側の記録も残しておきます。
 
-<<DeclareThread "test_sys" "システム通知">>
+<<DeclareThreadTyped "test_sys" "C" "システム通知">>
 <<AddThreadMessage "test_sys" "通知: セッション中に異常な通信パターンを検知">>
 
 <<StartWait 0.5>>

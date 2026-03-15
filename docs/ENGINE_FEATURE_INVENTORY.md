@@ -33,7 +33,8 @@
 | -------- | ---- | ---- |
 | UnlockTopic | `<<UnlockTopic "topicID">>` | トピックカードを推理ボードに追加 |
 | EndDay | `<<EndDay 日数>>` | Day 終了処理。「--- N日目 終了 ---」システムメッセージ表示 + Day進捗記録 + オートセーブ。マルチDayチャプターでは最終Day完了時のみチャンネルを完了にする |
-| DeclareThread | `<<DeclareThread "threadId" "displayName">>` | サブスレッドを宣言。メインチャットに通知表示 + ドロップダウンにエントリ追加。複数スレッド対応 |
+| DeclareThread | `<<DeclareThread "threadId" "displayName">>` | サブスレッドを宣言（type=Annotation）。メインチャットに通知表示 + ドロップダウンにエントリ追加 |
+| DeclareThreadTyped | `<<DeclareThreadTyped "threadId" "type" "displayName">>` | 型指定でサブスレッドを宣言。type: "A"(注釈)/"B"(追跡)/"C"(偵察)/"branch"(分岐)。ドロップダウンに型アイコン・色表示 |
 | AddThreadMessage | `<<AddThreadMessage "threadId" "text">>` | サブスレッドにシステムメッセージを追加（メイン画面には非表示） |
 | AddThreadChat | `<<AddThreadChat "threadId" "charID" "text">>` | サブスレッドにキャラクター付きメッセージを追加（バブル表示） |
 
@@ -451,11 +452,12 @@ TopicData の `TopicID` プレフィックスでインベントリの表示カ�
 
 ### アーキテクチャ
 
-- **データモデル**: `SubthreadData.cs` — ThreadId, DisplayName, UnreadCount, ChatHistory
-- **Yarnコマンド**: `DeclareThread` / `AddThreadMessage` (ScenarioManager登録)
+- **データモデル**: `SubthreadData.cs` — ThreadId, DisplayName, Type (ThreadType enum), UnreadCount, ChatHistory
+- **ThreadType**: Annotation(A)/Tracking(B)/Scout(C)/Branch — `DeclareThreadTyped` で指定、`DeclareThread` はAnnotationにフォールバック
+- **Yarnコマンド**: `DeclareThread` / `DeclareThreadTyped` / `AddThreadMessage` / `AddThreadChat` (ScenarioManager登録)
 - **切替方式**: ChatControllerのデータスワップ (ClearMessages + RestoreChatHistory)
-- **UI**: `ThreadSwitcherController.cs` — 右上ドロップダウン (Main + 全スレッド、未読バッジ付き)
-- **Save/Load**: SaveData.Subthreads + ActiveThreadId, SaveManager対応済み
+- **UI**: `ThreadSwitcherController.cs` — 右上ドロップダウン (Main + 全スレッド、型アイコン [A]/[B]/[C]/[>] + 型別色 + 未読バッジ)
+- **Save/Load**: SaveData.Subthreads + ActiveThreadId, SaveManager対応済み（ThreadType含む）
 - **スクロール位置**: スレッド別に保存・復元
 - **未読管理**: AddThreadMessage時にUnreadCountインクリメント、スレッド切替時にリセット
 
@@ -463,16 +465,19 @@ TopicData の `TopicID` プレフィックスでインベントリの表示カ�
 
 - サブスレッド内でのYarnノード実行は未対応
 - サイドバーアイコントレイは未実装（ドロップダウンのみ）
-- ThreadType (A/B/C/Branch) による型別アイコン・色は未実装
+- 型別コンテンツレンダリング差異は未実装（A=カード / B=Wiki / C=成果物）
 - 2段階トリガー条件エンジンは未実装
 - サブスレッド内矛盾指摘は未対応
 
 ### 使用例
 
 ```yarn
-<<DeclareThread "note_1" "Pyramidの覚書">>
+<<DeclareThreadTyped "note_1" "A" "Pyramidの覚書">>
 <<AddThreadMessage "note_1" "覚書1: タイムスタンプが不一致">>
 <<AddThreadMessage "note_1" "覚書2: 要照合">>
+
+<<DeclareThreadTyped "log_1" "B" "Marco調査ログ">>
+<<AddThreadChat "log_1" "marco" "第4管理区域の名称に矛盾がある。">>
 ```
 
 ### 検証モック
