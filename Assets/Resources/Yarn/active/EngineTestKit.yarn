@@ -282,6 +282,62 @@ title: ETK_ThreadType
 <<SystemMessage "各スレッドに [A]/[B]/[C] の型アイコンと型別の色が表示されればOKです">>
 <<SystemMessage "スレッドを切り替えると、チャット上部にヘッダーバー（型色帯+型名）が表示されます">>
 <<SystemMessage "ヘッダーバーの色帯が各型に対応した色になっていることを確認してください">>
+<<SystemMessage "通知バナーが画面上部に表示されたことも確認してください（クリックでスレッド切替可能）">>
+
+<<StartWait 60>>
+
+<<set $speaker to "player">>
+-> 並走テストへ進む
+    <<jump ETK_ThreadParallel>>
+-> 確認した、メニューに戻る
+    <<set $etk_done_threadtype to true>>
+    <<jump ETK_Menu>>
+===
+
+/// --------------------------------------------------
+/// ETK_ThreadParallel: 複数スレッド並走テスト (5e)
+/// 確認: ノード遷移をまたいだスレッド維持 + メッセージ交互追加 + Save/Load復元
+/// --------------------------------------------------
+title: ETK_ThreadParallel
+---
+<<SystemMessage "--- 並走テスト: ノード遷移後のスレッド維持 ---">>
+<<StartWait 0.5>>
+
+<<set $speaker to "pyramid">>
+ノード遷移後もスレッドが維持されているか確認します。
+
+<<AddThreadChat "etk_note" "pyramid" "覚書追記 (ノード遷移後): データ整合性を再確認">>
+<<AddThreadChat "etk_track" "marco" "追跡更新 (ノード遷移後): 新しい動きを検知">>
+<<AddThreadMessage "etk_scout" "偵察続報 (ノード遷移後): 追加情報あり">>
+
+<<StartWait 0.5>>
+
+3つのスレッドにノード遷移後のメッセージを追加しました。
+
+<<SystemMessage "確認項目:">>
+<<SystemMessage "1. 各スレッドに前のノードのメッセージが残っていること">>
+<<SystemMessage "2. 新しく追加したメッセージが各スレッドの末尾にあること">>
+<<SystemMessage "3. 通知バナーが表示されたこと（Mainスレッド表示中）">>
+<<SystemMessage "4. 未読バッジの数が増えていること">>
+
+<<StartWait 0.5>>
+
+<<set $speaker to "marco">>
+次は交互追加テストだ。同じスレッドに違うキャラが書き込む。
+
+<<AddThreadChat "etk_track" "pyramid" "追跡: Pyramidからのメモ追記">>
+<<AddThreadChat "etk_track" "bernardo" "追跡: Bernardoからの証言追加">>
+<<AddThreadChat "etk_note" "marco" "覚書: Marcoによる補足">>
+
+<<StartWait 0.5>>
+
+<<set $speaker to "pyramid">>
+交互追加も完了です。
+
+<<SystemMessage "確認項目:">>
+<<SystemMessage "5. etk_track に pyramid, bernardo のメッセージが追加されていること">>
+<<SystemMessage "6. etk_note に marco のメッセージが追加されていること">>
+<<SystemMessage "7. セーブしてロードした後、全スレッドのメッセージが復元されること">>
 
 <<StartWait 60>>
 
