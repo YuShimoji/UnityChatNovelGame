@@ -102,7 +102,7 @@ ContentAuthoring シーンで以下を行う必要あり:
 | 5 | 矛盾 Phase 2 動作確認 | A | ContradictionFeedback セットアップ | **タグ検証済** (7ペア全一致、手動テスト待ち) |
 | 5a | ~~サブスレッドUI最小スライス~~ | A | — | **済** (2026-03-15: DeclareThread/AddThreadMessage + トグルUI + Save/Load) |
 | 5b | ~~サブスレッドUI ThreadType + 型別レンダリング~~ | A | #5a | **済** (2026-03-16: ThreadType enum + DeclareThreadTyped + ヘッダーバー) |
-| 5c | 通知バナー（新着スレッドメッセージ表示） | A | #5b | 未着手 |
+| 5c | ~~通知バナー（新着スレッドメッセージ表示）~~ | A | #5b | **済** (2026-03-16: DOTweenフェードイン/アウト + クリックでスレッド切替 + 型色/アイコン表示) |
 | 5d | サイドバー型スレッド一覧UI | B | #5b | 未着手 |
 | 5e | 複数サブスレッド同時並走 / B・C型の実用検証 | B | #5b | 未着手 |
 | 6 | スマホサイズ基準レイアウト調整 | B | #4b,4c 完了後 | 未着手 |
@@ -125,6 +125,7 @@ ContentAuthoring シーンで以下を行う必要あり:
 - **型別アイコン/色**: Annotation=[A], Tracking=[B], Scout=[C], Branch=[>]。色は ThreadSwitcherController 定数 (TypeColorAnnotation 等) で一元管理
 - **Yarn コマンド数**: 全14コマンド (DeclareThreadTyped 追加後)
 - **SubthreadTest.yarn**: DeclareThreadTyped 対応に更新済み。型指定の検証モックとして機能
+- **通知バナー**: OnThreadMessageAdded で非アクティブスレッドへのメッセージ検出 → DOTween Sequence (fadeIn 0.25s → 3.5s表示 → fadeOut 0.4s)。クリックで OnSelectThread 呼出。Reset/OnSelectThread で HideNotificationBanner
 - **セーブ復元名前重複**: 修正済み (147b36d)。StripNamePrefix で後方互換
 - **バブル幅リサイズ対応**: 修正済み (8b22b71)。Screen.width → RectTransform.rect.width
 - **EngineTestKit**: 追加済み (6da0aba)。F12 Debug Hub + ch_test Dashboard テスト用8ノード

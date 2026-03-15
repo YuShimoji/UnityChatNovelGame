@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 using ProjectFoundPhone.Core;
 using ProjectFoundPhone.Data;
 
@@ -54,6 +55,16 @@ namespace ProjectFoundPhone.UI
         private static readonly Color TypeColorScout = new Color(1f, 0.60f, 0f, 1f);             // #FF9800
         private static readonly Color TypeColorBranch = new Color(0.61f, 0.15f, 0.69f, 1f);      // #9C27B0
 
+        // 通知バナー
+        private GameObject m_NotificationBanner;
+        private Image m_NotificationBg;
+        private TextMeshProUGUI m_NotificationLabel;
+        private CanvasGroup m_NotificationCanvasGroup;
+        private string m_NotificationThreadId;
+        private Tween m_NotificationTween;
+        private const float NotificationDuration = 3.5f;
+        private static readonly Color NotificationBgColor = new Color(0.12f, 0.14f, 0.22f, 0.95f);
+
         private void Start()
         {
             m_ScenarioManager = FindFirstObjectByType<ScenarioManager>();
@@ -79,6 +90,7 @@ namespace ProjectFoundPhone.UI
                 m_ScenarioManager.OnThreadDeclared -= OnThreadDeclared;
                 m_ScenarioManager.OnThreadMessageAdded -= OnThreadMessageAdded;
             }
+            m_NotificationTween?.Kill();
         }
 
         private void CreateUI()
@@ -180,6 +192,42 @@ namespace ProjectFoundPhone.UI
             AssignDefaultFont(m_ThreadHeaderBarLabel);
 
             m_ThreadHeaderBar.SetActive(false);
+
+            // 通知バナー (画面上部中央、スレッドヘッダーバーの下)
+            m_NotificationBanner = new GameObject("ThreadNotificationBanner");
+            m_NotificationBanner.transform.SetParent(canvas.transform, false);
+            var notifRt = m_NotificationBanner.AddComponent<RectTransform>();
+            notifRt.anchorMin = new Vector2(0.5f, 1f);
+            notifRt.anchorMax = new Vector2(0.5f, 1f);
+            notifRt.pivot = new Vector2(0.5f, 1f);
+            notifRt.anchoredPosition = new Vector2(0f, -100f); // ヘッダーバー下
+            notifRt.sizeDelta = new Vector2(280f, 36f);
+
+            m_NotificationBg = m_NotificationBanner.AddComponent<Image>();
+            m_NotificationBg.color = NotificationBgColor;
+
+            m_NotificationCanvasGroup = m_NotificationBanner.AddComponent<CanvasGroup>();
+            m_NotificationCanvasGroup.alpha = 0f;
+
+            var notifBtn = m_NotificationBanner.AddComponent<Button>();
+            notifBtn.onClick.AddListener(OnNotificationClicked);
+
+            var notifLabelObj = new GameObject("NotifLabel");
+            notifLabelObj.transform.SetParent(m_NotificationBanner.transform, false);
+            var notifLabelRt = notifLabelObj.AddComponent<RectTransform>();
+            notifLabelRt.anchorMin = Vector2.zero;
+            notifLabelRt.anchorMax = Vector2.one;
+            notifLabelRt.offsetMin = new Vector2(10f, 0f);
+            notifLabelRt.offsetMax = new Vector2(-10f, 0f);
+
+            m_NotificationLabel = notifLabelObj.AddComponent<TextMeshProUGUI>();
+            m_NotificationLabel.fontSize = 12f;
+            m_NotificationLabel.alignment = TextAlignmentOptions.MidlineCenter;
+            m_NotificationLabel.color = Color.white;
+            m_NotificationLabel.text = "";
+            AssignDefaultFont(m_NotificationLabel);
+
+            m_NotificationBanner.SetActive(false);
         }
 
         private void OnThreadDeclared(string threadId, string displayName)
@@ -207,6 +255,13 @@ namespace ProjectFoundPhone.UI
                 if (entry.ThreadId == threadId)
                 {
                     UpdateBadge(entry);
+
+                    // 非アクティブスレッドへのメッセージなら通知バナーを表示
+                    string activeId = m_ChatController?.ActiveThreadId;
+                    if (threadId != activeId)
+                    {
+                        ShowNotificationBanner(entry);
+                    }
                     break;
                 }
             }
@@ -328,6 +383,12 @@ namespace ProjectFoundPhone.UI
             UpdateThreadHeaderBar(threadId);
             UpdateAllBadges();
             CloseDropdown();
+
+            // 切替先スレッドの通知バナーを消す
+            if (m_NotificationThreadId == threadId)
+            {
+                HideNotificationBanner();
+            }
         }
 
         private void ToggleDropdown()
@@ -498,6 +559,62 @@ namespace ProjectFoundPhone.UI
             m_ThreadHeaderBar.SetActive(true);
         }
 
+        private void ShowNotificationBanner(ThreadEntry entry)
+        {
+            if (m_NotificationBanner == null) return;
+
+            // 進行中のアニメーションをキャンセル
+            m_NotificationTween?.Kill();
+
+            m_NotificationThreadId = entry.ThreadId;
+
+            // バナーテキスト: "[A] スレッド名 に新着"
+            Color typeColor = GetTypeColor(entry.Type);
+            string icon = GetTypeIcon(entry.Type);
+            string colorHex = ColorUtility.ToHtmlStringRGB(typeColor);
+            m_NotificationLabel.text = $"<color=#{colorHex}>{icon}</color> {entry.DisplayName} に新着";
+
+            // バナー背景に型色の帯を左側に付ける
+            m_NotificationBg.color = new Color(
+                NotificationBgColor.r + typeColor.r * 0.08f,
+                NotificationBgColor.g + typeColor.g * 0.08f,
+                NotificationBgColor.b + typeColor.b * 0.08f,
+                NotificationBgColor.a);
+
+            m_NotificationBanner.SetActive(true);
+            m_NotificationCanvasGroup.alpha = 0f;
+
+            // フェードイン → 待機 → フェードアウト
+            m_NotificationTween = DOTween.Sequence()
+                .Append(m_NotificationCanvasGroup.DOFade(1f, 0.25f))
+                .AppendInterval(NotificationDuration)
+                .Append(m_NotificationCanvasGroup.DOFade(0f, 0.4f))
+                .OnComplete(() =>
+                {
+                    m_NotificationBanner.SetActive(false);
+                    m_NotificationThreadId = null;
+                });
+        }
+
+        private void HideNotificationBanner()
+        {
+            if (m_NotificationBanner == null || !m_NotificationBanner.activeSelf) return;
+
+            m_NotificationTween?.Kill();
+            m_NotificationCanvasGroup.alpha = 0f;
+            m_NotificationBanner.SetActive(false);
+            m_NotificationThreadId = null;
+        }
+
+        private void OnNotificationClicked()
+        {
+            if (m_NotificationThreadId == null) return;
+
+            string threadId = m_NotificationThreadId;
+            HideNotificationBanner();
+            OnSelectThread(threadId);
+        }
+
         /// <summary>スレッド切替状態をリセット（シナリオ再開始時用）</summary>
         public void Reset()
         {
@@ -526,6 +643,8 @@ namespace ProjectFoundPhone.UI
             {
                 m_ThreadHeaderBar.SetActive(false);
             }
+
+            HideNotificationBanner();
         }
 
         private static string GetTypeIcon(ThreadType type)
