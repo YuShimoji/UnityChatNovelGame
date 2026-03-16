@@ -199,6 +199,68 @@ saveLoadUI.Hide();
 4. ロードを実行
 5. トピックが復元されていることを確認
 
+## サブスレッドのセーブ/ロード
+
+### 追加フィールド (SaveData)
+
+| フィールド | 型 | 説明 |
+|-----------|-----|------|
+| `Subthreads` | `List<SubthreadData>` | 宣言済みサブスレッド一覧 |
+| `ActiveThreadId` | `string` | セーブ時に表示中のスレッドID（null = メイン） |
+
+### SubthreadData の構造
+
+```csharp
+public class SubthreadData
+{
+    public string ThreadId;
+    public string DisplayName;
+    public ThreadType Type;          // Annotation / Tracking / Scout / Branch
+    public List<SavedChatMessage> ChatHistory;
+    public int UnreadCount;
+}
+```
+
+### セーブフロー
+
+1. `SaveManager.CreateSaveData()` が `ScenarioManager.GetAllDeclaredThreads()` を呼出
+2. 各スレッドの `ChatHistory` はスレッド別に保持済み
+3. `ChatController.GetAllThreadHistories()` からメインスレッド履歴を取得
+4. `ActiveThreadId` を記録（サブスレッド表示中でもメイン履歴が正しく保存される）
+
+### ロードフロー
+
+1. `ThreadSwitcherController.Reset()` で UI をクリア
+2. `ScenarioManager.ClearDeclaredThreads()` で既存スレッドをクリア
+3. `saveData.Subthreads` から `ScenarioManager.RegisterDeclaredThread()` で再登録
+4. `ChatController.SetThreadHistories()` でスレッド別履歴を復元
+5. `ChatController.SwitchToThread(activeThreadId)` で表示スレッドを復元
+
+### 後方互換性
+
+旧セーブデータに `Subthreads` フィールドがない場合、デシリアライズ時に空リスト (`null` → `new List<SubthreadData>()`) として扱われる。`ActiveThreadId` が `null` の場合はメインスレッドとして処理される。
+
+### JSON サンプル（サブスレッド部分）
+
+```json
+{
+  "Subthreads": [
+    {
+      "ThreadId": "thread_notes",
+      "DisplayName": "調査メモ",
+      "Type": 0,
+      "ChatHistory": [
+        { "CharacterID": "", "Text": "初期メモ", "IsPlayerMessage": false }
+      ],
+      "UnreadCount": 0
+    }
+  ],
+  "ActiveThreadId": null
+}
+```
+
+---
+
 ## 今後の拡張予定
 
 ### Phase 2

@@ -165,10 +165,10 @@
     "id": "SP-016",
     "title": "サブスレッドUI仕様",
     "status": "partial",
-    "pct": 65,
+    "pct": 80,
     "cat": "ui",
     "file": "docs/StorySpec/16_subthread_ui.md",
-    "summary": "統合型スレッドモデル、2段階トリガー。Step1(データモデル+最小UI)+Step2(サイドバー+切替+ヘッダー)実装済み。5a-5e完了(DeclareThread/AddThreadMessage/ThreadType/通知バナー/並走検証)+5d(左スライドインサイドバー)。未実装: Step3(種別差異+通知)、Step4(条件トリガーエンジン)"
+    "summary": "統合型スレッドモデル、2段階トリガー。Step1+Step2完全実装済み(5a-5e+5d: DeclareThread/DeclareThreadTyped/AddThreadMessage/AddThreadChat/ThreadType/サイドバー/通知バナー/Save/Load/並走検証)。未実装: Step3(種別差異レンダリング)、Step4(条件トリガーエンジン)"
   },
   {
     "id": "SP-099",
@@ -183,19 +183,19 @@
     "id": "EN-001",
     "title": "エンジン機能リファレンス",
     "status": "partial",
-    "pct": 90,
+    "pct": 95,
     "cat": "infra",
     "file": "docs/ENGINE_FEATURE_INVENTORY.md",
-    "summary": "Yarnコマンド(DeclareThread/AddThreadMessage追加)・キャラ管理・セーブ(AutoSave含む)・演出・バブル表示設定・矛盾(#line:タグ方式)・ダッシュボード(Day Resume+マルチDay)・インベントリUI・サブスレッドUI(10a)・ETK"
+    "summary": "Yarnコマンド14種(DeclareThread/DeclareThreadTyped/AddThreadMessage/AddThreadChat含む)・キャラ管理・セーブ(AutoSave+スレッド対応)・演出・バブル表示設定・矛盾(#line:タグ方式)・ダッシュボード(Day Resume+マルチDay)・インベントリUI・サブスレッドUI(サイドバー+ThreadType+通知バナー+Save/Load)・ETK"
   },
   {
     "id": "EN-002",
     "title": "ワークフロー SSOT",
     "status": "partial",
-    "pct": 75,
+    "pct": 85,
     "cat": "infra",
     "file": "docs/WORKFLOW_STATE_SSOT.md",
-    "summary": "現在の開発状態・セットアップ手順・次ステップ。2026-03-11 truth split解消済み"
+    "summary": "現在の開発状態・セットアップ手順・次ステップ。サブスレッドUI 5a-5e+5d全完了反映済み。残: 矛盾Phase2手動テスト、スマホレイアウト、Ch3設計"
   },
   {
     "id": "EN-003",
@@ -204,7 +204,7 @@
     "pct": 100,
     "cat": "data",
     "file": "docs/SaveSystem_README.md",
-    "summary": "JSON保存・3スロット+AutoSave(slot=99)・チャット履歴・トピック・後方互換。復元時の名前重複防止(StripNamePrefix)実装済み"
+    "summary": "JSON保存・3スロット+AutoSave(slot=99)・チャット履歴・トピック・後方互換。復元時の名前重複防止(StripNamePrefix)実装済み。サブスレッド対応(Subthreads/ActiveThreadId/ThreadType保存・復元)"
   },
   {
     "id": "EN-004",
@@ -258,6 +258,6 @@
     "pct": 100,
     "cat": "infra",
     "file": "docs/SCENARIO_AUTHORING_GUIDE.md",
-    "summary": "Yarnシナリオ執筆ハンズオン。5分クイックスタート、全10コマンドリファレンス、キャラクターID一覧、コンテンツパターン集(断片発見/キャラ合流/Day終了/矛盾種まき)、キャラクターの声ガイド"
+    "summary": "Yarnシナリオ執筆ハンズオン。5分クイックスタート、全14コマンドリファレンス(DeclareThread/DeclareThreadTyped/AddThreadMessage/AddThreadChat含む)、キャラクターID一覧、コンテンツパターン集、キャラクターの声ガイド"
   }
 ]

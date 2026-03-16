@@ -212,7 +212,7 @@ Play mode 中の Console を通して確認:
 - Test D がパス → 矛盾指摘 Phase 2 動作確認完了
 - Test E〜F がパス → デバッグツール + エラーフリー確認完了
 
-全パスで ROADMAP_TO_PRODUCTION.md Phase A を完了とする。
+全パスで WORKFLOW_STATE_SSOT.md の Phase A Done 条件を完了とする。
 
 ---
 
@@ -225,4 +225,4 @@ Play mode 中の Console を通して確認:
 
 - [ENGINE_FEATURE_INVENTORY.md](ENGINE_FEATURE_INVENTORY.md) - エンジン機能リファレンス
 - [UI_IMPLEMENTATION_SPEC.md](UI_IMPLEMENTATION_SPEC.md) - UI実装仕様
-- [ROADMAP_TO_PRODUCTION.md](ROADMAP_TO_PRODUCTION.md) - 本編制作ロードマップ
+- [WORKFLOW_STATE_SSOT.md](WORKFLOW_STATE_SSOT.md) - ワークフロー状態管理

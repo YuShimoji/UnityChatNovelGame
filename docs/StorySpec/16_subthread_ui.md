@@ -48,9 +48,13 @@
 - デザイナーが「このスレッドはこの時点以降で出現可能」と宣言する手段
 
 ```yarn
-<<DeclareThread "annot_pyramid_theory" "A" "Pyramidの理論体系">>
-// → スレッド "annot_pyramid_theory" が潜在状態で登録される
+// 現在の実装（即時可視化）:
+<<DeclareThreadTyped "annot_pyramid_theory" "A" "Pyramidの理論体系">>
+// → スレッド "annot_pyramid_theory" が即座に可視状態で登録される
 // → 種別A（注釈）、表示名「Pyramidの理論体系」
+
+// type省略時（Annotationフォールバック）:
+<<DeclareThread "annot_pyramid_theory" "Pyramidの理論体系">>
 ```
 
 ### 2.2 顕在化条件（Manifestation）
@@ -64,13 +68,13 @@
   - 即時（前提条件と同時にフラグ注入 → ストーリー上で即出現させたい場合）
 
 ```yarn
-// 条件と紐づけ（DeclareThread時に指定）
+// 将来実装（条件トリガー、Step 4）:
 <<DeclareThread "annot_pyramid_theory" "A" "Pyramidの理論体系" "topic:pyramid_intro">>
 // → トピック "pyramid_intro" が解放されたときに顕在化
 
-// 即時出現させたい場合
-<<DeclareThread "branch_pyramid_solo" "branch" "Pyramidの独白" "immediate">>
-// → 宣言と同時に可視化
+// 現在の実装では全て即時可視化:
+<<DeclareThreadTyped "branch_pyramid_solo" "branch" "Pyramidの独白">>
+// → 宣言と同時に可視化（conditionパラメータは未実装）
 ```
 
 ### 2.3 状態遷移
@@ -187,15 +191,28 @@ public List<ThreadData> Threads;  // 全スレッドの状態
 
 ---
 
-## 5. Yarnコマンド（新規）
+## 5. Yarnコマンド
+
+### 実装済み
 
 | コマンド | 構文 | 説明 |
 |----------|------|------|
-| DeclareThread | `<<DeclareThread "threadID" "type" "displayName" "condition">>` | スレッドを潜在登録 |
+| DeclareThread | `<<DeclareThread "threadID" "displayName">>` | サブスレッドを宣言（type=Annotation）。即時可視化 |
+| DeclareThreadTyped | `<<DeclareThreadTyped "threadID" "type" "displayName">>` | 型指定でサブスレッドを宣言。type: "A"/"B"/"C"/"branch"。即時可視化 |
+| AddThreadMessage | `<<AddThreadMessage "threadID" "text">>` | サブスレッドにシステムメッセージを追加 |
+| AddThreadChat | `<<AddThreadChat "threadID" "charID" "text">>` | サブスレッドにキャラクター付きメッセージを追加 |
+
+> **注**: Yarn Spinner は同名コマンドの引数違いオーバーロードを解決できないため、`DeclareThread`(2引数) と `DeclareThreadTyped`(3引数) に分離している。
+
+### 未実装（Step 4 で対応予定）
+
+| コマンド | 構文 | 説明 |
+|----------|------|------|
+| DeclareThread (条件付き) | `<<DeclareThread "threadID" "type" "displayName" "condition">>` | 条件トリガー付きスレッド宣言（潜在登録） |
 | ManifestThread | `<<ManifestThread "threadID">>` | スレッドを即座に顕在化（条件無視） |
 | CompleteThread | `<<CompleteThread "threadID">>` | スレッドを完了状態にする |
 
-- `DeclareThread` の `condition` パラメータ:
+- `condition` パラメータ（将来実装）:
   - `"topic:topicID"` — トピック解放時
   - `"fragment:fragmentID"` — 断片取得時
   - `"contradiction:pairID"` — 矛盾指摘成功時

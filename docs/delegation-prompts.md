@@ -26,7 +26,7 @@ active な Yarn ファイルでは使われていない。
 ### 対象ファイル (7件)
 1. docs/UI_IMPLEMENTATION_SPEC.md
 2. docs/StorySpec/14_interaction_mechanics.md
-3. docs/ROADMAP_TO_PRODUCTION.md
+3. ~~docs/ROADMAP_TO_PRODUCTION.md~~ (archived 2026-03-16)
 4. docs/ENGINE_FEATURE_INVENTORY.md (既に部分修正済み、残存確認)
 5. docs/SCENARIO_AUTHORING_GUIDE.md (既に部分修正済み、残存確認)
 6. docs/YarnEditingPipeline.md (既に部分修正済み、残存確認)
@@ -449,15 +449,13 @@ SaveManager の変更:
 
 | タスク | コミット | 状態 |
 |--------|----------|------|
-| Task G: ETK サブスレッドテスト | — | 未実行 |
+| Task G: ETK サブスレッドテスト | — | Task K に統合（ThreadType 対応版で実装済み） |
 | Task H: UI_IMPL_SPEC 追記 | — | 未実行 |
 | Task I: ETK ダッシュボード確認 | — | 未実行 |
-| Task J: SaveSystem_README 更新 | — | 未実行 |
+| Task J: SaveSystem_README 更新 | — | 未実行（サブスレッド+ThreadType の追記が必要） |
 
-**注意**: Task G, H, J は ThreadType 追加 (e8e53cc) を反映する必要がある。
-- DeclareThread は2引数版(type=Annotation) + DeclareThreadTyped は3引数版(type指定)
-- SubthreadData に ThreadType フィールド追加済み
-- ThreadSwitcherController にヘッダーバー(型色帯)追加済み
+**注意**: Task G は Batch 3 の Task K (ETK_ThreadType) で代替実装済み。
+Task H, J は ThreadType + サイドバー(5d) の追加を反映する必要がある。
 
 ---
 
@@ -591,6 +589,6 @@ ThreadType 導入 + 型別レンダリング(ヘッダーバー) の完了を反
 
 | タスク | コミット | 状態 |
 |--------|----------|------|
-| Task K: ETK ThreadType テスト | — | 未実行 |
-| Task L: スレッド通知バナー | — | 未実行 |
-| Task M: SSOT 更新 | — | 未実行 |
+| Task K: ETK ThreadType テスト | `20b9f18` | done (ETK_ThreadType + ETK_ThreadParallel 追加) |
+| Task L: スレッド通知バナー | `761625d` | done (DOTween フェードイン/アウト、クリック切替、型色/アイコン) |
+| Task M: SSOT 更新 | `de44142` | done (ThreadType + ThreadParallel 完了反映) |
