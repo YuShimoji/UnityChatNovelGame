@@ -8,15 +8,18 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
-現在の状況 (2026-03-13):
-  - delegation-prompts 全6タスク完了+push済み (A-F)
-  - ETKタグ重複修正+SystemMessage角丸除外 (7f3d495, be96e86)
-  - ドキュメント同期完了: 21件の乖離を5ファイルに反映 (50a9fb7)
-    - AUTOSAVE_DESIGN.md全面リライト、UI_SPEC既知制限更新、#line:一意性制約追記等
-  - Unity手動テスト中: 角丸バブル確認OK、システムメッセージ修正済み
-  - 残テスト: オートセーブインジケーター/名前重複/ETK全項目/リサイズ
-  - 矛盾Phase2: タグ検証済み、ContradictionFeedbackセットアップ+手動テスト待ち
-  - 未対応タスク洗い出し済み (65件、優先度別に整理済み)
+現在の状況 (2026-03-16):
+  - サブスレッドUI系列 5a-5e 全完了+push済み:
+    - 5a: DeclareThread/AddThreadMessage + トグルボタン (b53cbac)
+    - 5b: ドロップダウン切替 + 未読バッジ (429bf69)
+    - 5b+: AddThreadChat コマンド (1086e4c)
+    - 5c: ThreadType system + ヘッダーバー + 通知バナー (e8e53cc, 761625d)
+    - 5e: 複数スレッド並走検証 ETK_ThreadParallel (aecbd62)
+  - Save/Loadスレッド履歴消失バグ修正 (3d0a0f6)
+  - ETK: ThreadType + ThreadParallel テストノード追加
+  - delegation-prompts Batch 2 (G-J) + Batch 3 (K-M) 切り出し済み
+  - 未着手: バブルP2-P6修正、矛盾Phase2手動テスト、サイドバーUI(5d)
+  - Serena: .NET 10.0 必須だが未導入（シンボリックツール使用不可）
 
 ## DECISION LOG
 
