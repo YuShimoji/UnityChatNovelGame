@@ -103,7 +103,7 @@ ContentAuthoring シーンで以下を行う必要あり:
 | 5a | ~~サブスレッドUI最小スライス~~ | A | — | **済** (2026-03-15: DeclareThread/AddThreadMessage + トグルUI + Save/Load) |
 | 5b | ~~サブスレッドUI ThreadType + 型別レンダリング~~ | A | #5a | **済** (2026-03-16: ThreadType enum + DeclareThreadTyped + ヘッダーバー) |
 | 5c | ~~通知バナー（新着スレッドメッセージ表示）~~ | A | #5b | **済** (2026-03-16: DOTweenフェードイン/アウト + クリックでスレッド切替 + 型色/アイコン表示) |
-| 5d | サイドバー型スレッド一覧UI | B | #5b | 未着手 |
+| 5d | サイドバー型スレッド一覧UI | B | #5b | **済** (2026-03-16: ドロップダウン→左スライドインサイドバー、ThreadTypeグループ、ハンバーガーボタン+未読合計バッジ、DOTweenアニメ、オーバーレイ) |
 | 5e | ~~複数サブスレッド同時並走 / B・C型の実用検証~~ | B | #5b | **済** (2026-03-16: ETK_ThreadParallel追加。ノード遷移維持+交互追加+Save/Load復元確認項目) |
 | 6 | スマホサイズ基準レイアウト調整 | B | #4b,4c 完了後 | 未着手 |
 | 7 | Ch3 シナリオ設計 | A | #2,5 完了後 | 未着手 |
@@ -131,6 +131,7 @@ ContentAuthoring シーンで以下を行う必要あり:
 - **セーブ復元名前重複**: 修正済み (147b36d)。StripNamePrefix で後方互換
 - **バブル幅リサイズ対応**: 修正済み (8b22b71)。Screen.width → RectTransform.rect.width
 - **EngineTestKit**: 追加済み (6da0aba)。F12 Debug Hub + ch_test Dashboard テスト用8ノード
+- **サイドバーUI (5d)**: ドロップダウン→左スライドインサイドバーに全面置換。ハンバーガーボタン(≡)+未読合計バッジ、半透明オーバーレイ(タップで閉じ)、ThreadTypeグループヘッダー、DOTween スライドアニメ(0.25s OutCubic/InCubic)、ScrollRect内蔵でスレッド多数でもスクロール可。Main エントリは常に先頭
 
 ### Claude への依頼パターン
 

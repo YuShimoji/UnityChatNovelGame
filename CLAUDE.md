@@ -9,16 +9,17 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
 現在の状況 (2026-03-16):
-  - サブスレッドUI系列 5a-5e 全完了+push済み:
+  - サブスレッドUI系列 5a-5e + 5d 全完了:
     - 5a: DeclareThread/AddThreadMessage + トグルボタン (b53cbac)
     - 5b: ドロップダウン切替 + 未読バッジ (429bf69)
     - 5b+: AddThreadChat コマンド (1086e4c)
     - 5c: ThreadType system + ヘッダーバー + 通知バナー (e8e53cc, 761625d)
+    - 5d: サイドバー型スレッド一覧UI (ドロップダウン→左スライドインサイドバーに置換)
     - 5e: 複数スレッド並走検証 ETK_ThreadParallel (aecbd62)
   - Save/Loadスレッド履歴消失バグ修正 (3d0a0f6)
   - ETK: ThreadType + ThreadParallel テストノード追加
   - delegation-prompts Batch 2 (G-J) + Batch 3 (K-M) 切り出し済み
-  - 未着手: バブルP2-P6修正、矛盾Phase2手動テスト、サイドバーUI(5d)
+  - 未着手: バブルP2-P6修正、矛盾Phase2手動テスト
   - Serena: .NET 10.0 必須だが未導入（シンボリックツール使用不可）
 
 ## DECISION LOG
@@ -39,6 +40,7 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 | 2026-03-13 | UnityEngine.Object派生型に??/?.を使わない | ??使用 / !=null三項演算子 | Unity operator==オーバーロードを??が迂回し、Inspector未設定のfake nullを透過する。全バブルで角丸が効いていなかった原因 |
 | 2026-03-13 | SystemMessageに角丸スプライトを適用しない | 角丸適用 / 角丸除外 | 9-sliceのcornerRadius=16がバー高さに対して大きすぎ表示が圧迫される。ステータスインジケーターにバブル装飾は不適切 |
 | 2026-03-13 | #line:タグはYarnプロジェクト内で一意でなければならない | タグ再利用 / ETK専用タグ | Yarn Spinnerが重複#line:でプロジェクト全体のコンパイルに失敗する。ETK用に独自ペア(etk_region_identity)を作成 |
+| 2026-03-16 | スレッド切替UIをドロップダウン→左サイドバーに置換 | ドロップダウン維持 / 左サイドバー / 右サイドバー / ボトムシート | SP-016仕様(アイコントレイ)準拠。モバイル9:16で左スワイプ操作が自然。ThreadTypeグループ分類で視認性向上。ドロップダウンは小画面で見切れるリスクがあった |
 
 ## DEVELOPMENT PURPOSE
 

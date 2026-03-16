@@ -96,7 +96,7 @@
     "pct": 75,
     "cat": "ui",
     "file": "docs/StorySpec/08_ui_ux.md",
-    "summary": "ダッシュボード・スレッド・プレイヤーリソース表示域。ダッシュボードMVP+チャットバブル仕様+デバッグ機能(Section6)実装済み。インベントリUI実装済み(3サブタブ+オーバーレイ導線)。バブル表示修正完了。サブスレッドUI最小スライス実装済み(DeclareThread/AddThreadMessage+トグルボタン+Save/Load)"
+    "summary": "ダッシュボード・スレッド・プレイヤーリソース表示域。ダッシュボードMVP+チャットバブル仕様+デバッグ機能(Section6)実装済み。インベントリUI実装済み(3サブタブ+オーバーレイ導線)。バブル表示修正完了。サブスレッドUI実装済み(左サイドバー+ThreadTypeグループ+通知バナー+Save/Load)。詳細はSP-016参照"
   },
   {
     "id": "SP-009",
@@ -165,10 +165,10 @@
     "id": "SP-016",
     "title": "サブスレッドUI仕様",
     "status": "partial",
-    "pct": 45,
+    "pct": 65,
     "cat": "ui",
     "file": "docs/StorySpec/16_subthread_ui.md",
-    "summary": "統合型スレッドモデル、2段階トリガー、フルスクリーンフォーカス+スワイプサイドバー。最小スライス(Main+1Aスレッド切替)実装済み。サイドバー/B,C型/複数スレッド/条件エンジンは未実装"
+    "summary": "統合型スレッドモデル、2段階トリガー。Step1(データモデル+最小UI)+Step2(サイドバー+切替+ヘッダー)実装済み。5a-5e完了(DeclareThread/AddThreadMessage/ThreadType/通知バナー/並走検証)+5d(左スライドインサイドバー)。未実装: Step3(種別差異+通知)、Step4(条件トリガーエンジン)"
   },
   {
     "id": "SP-099",

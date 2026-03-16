@@ -3,7 +3,7 @@
 > **対象**: このプロジェクトで初めて Yarn スクリプトを書く人（自分自身を含む）
 > **前提知識**: Yarn Spinner の基本構文を知らなくても OK。このガイドだけで書ける
 > **関連ドキュメント**: [YarnEditingPipeline.md](YarnEditingPipeline.md)（技術的なパイプライン詳細）、[ENGINE_FEATURE_INVENTORY.md](ENGINE_FEATURE_INVENTORY.md)（エンジン機能リファレンス）
-> **最終更新**: 2026-03-12
+> **最終更新**: 2026-03-16
 
 ---
 
@@ -109,8 +109,8 @@ Assets/Resources/Yarn/active/
 |----------|------|------|
 | UnlockTopic | `<<UnlockTopic "topicID">>` | 断片/トピックをインベントリに追加 |
 | EndDay | `<<EndDay 日数>>` | Day 終了。システムメッセージ表示 + Day進捗記録 + オートセーブ。最終Dayのみチャンネル完了 |
-| DeclareThread | `<<DeclareThread "threadId" "displayName">>` | サブスレッドを宣言（type=Annotation）。メインに通知表示 + ドロップダウンに追加 |
-| DeclareThreadTyped | `<<DeclareThreadTyped "threadId" "type" "displayName">>` | 型指定でサブスレッド宣言。type: "A"/"B"/"C"/"branch" |
+| DeclareThread | `<<DeclareThread "threadId" "displayName">>` | サブスレッドを宣言（type=Annotation）。メインに通知表示 + 左サイドバーに追加 |
+| DeclareThreadTyped | `<<DeclareThreadTyped "threadId" "type" "displayName">>` | 型指定でサブスレッド宣言。type: "A"/"B"/"C"/"branch"。サイドバーに型グループ分類+色表示 |
 | AddThreadMessage | `<<AddThreadMessage "threadId" "text">>` | サブスレッドにシステムメッセージ追加（メイン非表示） |
 | AddThreadChat | `<<AddThreadChat "threadId" "charID" "text">>` | サブスレッドにキャラクター付きメッセージ追加 |
 

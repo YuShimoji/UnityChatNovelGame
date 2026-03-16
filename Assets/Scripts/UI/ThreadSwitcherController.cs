@@ -10,8 +10,8 @@ namespace ProjectFoundPhone.UI
 {
     /// <summary>
     /// 複数サブスレッドの切替UIを管理するコントローラ。
-    /// 右上のドロップダウンボタンで Main + 全サブスレッドを切替可能。
-    /// 各スレッドの未読バッジを表示する。
+    /// 左サイドバーでスレッド一覧を表示し、種別グループごとに整理する。
+    /// ハンバーガーボタンまたは通知バナータップで開閉する。
     /// </summary>
     public class ThreadSwitcherController : MonoBehaviour
     {
@@ -19,12 +19,17 @@ namespace ProjectFoundPhone.UI
 
         private ScenarioManager m_ScenarioManager;
 
-        // UI要素
-        private GameObject m_HeaderButton;
-        private TextMeshProUGUI m_HeaderLabel;
-        private GameObject m_DropdownPanel;
-        private Transform m_DropdownContent;
-        private bool m_IsDropdownOpen;
+        // サイドバー UI
+        private GameObject m_SidebarPanel;
+        private RectTransform m_SidebarRt;
+        private Transform m_SidebarContent;
+        private GameObject m_Overlay;
+        private bool m_IsSidebarOpen;
+        private Tween m_SidebarTween;
+
+        // ハンバーガーボタン (左上)
+        private GameObject m_HamburgerButton;
+        private TextMeshProUGUI m_HamburgerBadge;
 
         // スレッド型ヘッダーバー (チャットエリア上部の色帯)
         private GameObject m_ThreadHeaderBar;
@@ -38,22 +43,34 @@ namespace ProjectFoundPhone.UI
             public string DisplayName;
             public ThreadType Type;
             public GameObject ListItemObj;
+            public TextMeshProUGUI NameLabel;
             public TextMeshProUGUI BadgeLabel;
             public TextMeshProUGUI TypeLabel;
+            public Image ItemBg;
         }
         private readonly List<ThreadEntry> m_Threads = new List<ThreadEntry>();
 
-        private static readonly Color HeaderColor = new Color(0.2f, 0.25f, 0.35f, 0.95f);
-        private static readonly Color ItemColor = new Color(0.15f, 0.18f, 0.25f, 0.95f);
-        private static readonly Color ItemHoverColor = new Color(0.25f, 0.3f, 0.4f, 0.95f);
-        private static readonly Color ActiveItemColor = new Color(0.3f, 0.35f, 0.5f, 0.95f);
+        // サイドバー内のグループヘッダー (種別ごとに1つ)
+        private readonly Dictionary<ThreadType, GameObject> m_GroupHeaders
+            = new Dictionary<ThreadType, GameObject>();
+
+        // 色定数
+        private static readonly Color SidebarBgColor = new Color(0.10f, 0.12f, 0.18f, 0.98f);
+        private static readonly Color OverlayColor = new Color(0f, 0f, 0f, 0.5f);
+        private static readonly Color ItemColor = new Color(0.14f, 0.16f, 0.24f, 1f);
+        private static readonly Color ActiveItemColor = new Color(0.22f, 0.26f, 0.38f, 1f);
         private static readonly Color BadgeColor = new Color(0.9f, 0.3f, 0.3f, 1f);
+        private static readonly Color MainEntryColor = new Color(0.18f, 0.20f, 0.30f, 1f);
+        private static readonly Color GroupHeaderColor = new Color(0.12f, 0.14f, 0.20f, 1f);
 
         // ThreadType 別色
         private static readonly Color TypeColorAnnotation = new Color(0.29f, 0.56f, 0.85f, 1f); // #4A90D9
         private static readonly Color TypeColorTracking = new Color(0.30f, 0.69f, 0.31f, 1f);   // #4CAF50
         private static readonly Color TypeColorScout = new Color(1f, 0.60f, 0f, 1f);             // #FF9800
         private static readonly Color TypeColorBranch = new Color(0.61f, 0.15f, 0.69f, 1f);      // #9C27B0
+
+        private const float SidebarWidth = 240f;
+        private const float SlideAnimDuration = 0.25f;
 
         // 通知バナー
         private GameObject m_NotificationBanner;
@@ -80,7 +97,7 @@ namespace ProjectFoundPhone.UI
             }
 
             CreateUI();
-            m_HeaderButton.SetActive(false);
+            m_HamburgerButton.SetActive(false);
         }
 
         private void OnDestroy()
@@ -90,8 +107,11 @@ namespace ProjectFoundPhone.UI
                 m_ScenarioManager.OnThreadDeclared -= OnThreadDeclared;
                 m_ScenarioManager.OnThreadMessageAdded -= OnThreadMessageAdded;
             }
+            m_SidebarTween?.Kill();
             m_NotificationTween?.Kill();
         }
+
+        #region UI Creation
 
         private void CreateUI()
         {
@@ -103,74 +123,187 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            // ヘッダーボタン (右上)
-            m_HeaderButton = new GameObject("ThreadSwitchHeader");
-            m_HeaderButton.transform.SetParent(canvas.transform, false);
-            var headerRt = m_HeaderButton.AddComponent<RectTransform>();
-            headerRt.anchorMin = new Vector2(1f, 1f);
-            headerRt.anchorMax = new Vector2(1f, 1f);
-            headerRt.pivot = new Vector2(1f, 1f);
-            headerRt.anchoredPosition = new Vector2(-12f, -80f);
-            headerRt.sizeDelta = new Vector2(180f, 36f);
+            CreateHamburgerButton(canvas);
+            CreateOverlay(canvas);
+            CreateSidebar(canvas);
+            CreateThreadHeaderBar(canvas);
+            CreateNotificationBanner(canvas);
+        }
 
-            var headerBg = m_HeaderButton.AddComponent<Image>();
-            headerBg.color = HeaderColor;
+        private void CreateHamburgerButton(Canvas canvas)
+        {
+            m_HamburgerButton = new GameObject("ThreadHamburger");
+            m_HamburgerButton.transform.SetParent(canvas.transform, false);
+            var rt = m_HamburgerButton.AddComponent<RectTransform>();
+            rt.anchorMin = new Vector2(0f, 1f);
+            rt.anchorMax = new Vector2(0f, 1f);
+            rt.pivot = new Vector2(0f, 1f);
+            rt.anchoredPosition = new Vector2(8f, -76f);
+            rt.sizeDelta = new Vector2(40f, 36f);
 
-            var headerBtn = m_HeaderButton.AddComponent<Button>();
-            headerBtn.onClick.AddListener(ToggleDropdown);
+            var bg = m_HamburgerButton.AddComponent<Image>();
+            bg.color = new Color(0.18f, 0.22f, 0.32f, 0.9f);
 
-            // ヘッダーラベル
-            var labelObj = new GameObject("Label");
-            labelObj.transform.SetParent(m_HeaderButton.transform, false);
-            var labelRt = labelObj.AddComponent<RectTransform>();
-            labelRt.anchorMin = Vector2.zero;
-            labelRt.anchorMax = Vector2.one;
-            labelRt.offsetMin = new Vector2(10f, 2f);
-            labelRt.offsetMax = new Vector2(-10f, -2f);
+            var btn = m_HamburgerButton.AddComponent<Button>();
+            btn.onClick.AddListener(ToggleSidebar);
 
-            m_HeaderLabel = labelObj.AddComponent<TextMeshProUGUI>();
-            m_HeaderLabel.fontSize = 13f;
-            m_HeaderLabel.alignment = TextAlignmentOptions.MidlineLeft;
-            m_HeaderLabel.color = Color.white;
-            m_HeaderLabel.text = "Main";
-            AssignDefaultFont(m_HeaderLabel);
+            // ハンバーガーアイコン (≡)
+            var iconObj = new GameObject("Icon");
+            iconObj.transform.SetParent(m_HamburgerButton.transform, false);
+            var iconRt = iconObj.AddComponent<RectTransform>();
+            iconRt.anchorMin = Vector2.zero;
+            iconRt.anchorMax = Vector2.one;
+            iconRt.offsetMin = new Vector2(2f, 2f);
+            iconRt.offsetMax = new Vector2(-2f, -2f);
 
-            // ドロップダウンパネル (ヘッダーの直下)
-            m_DropdownPanel = new GameObject("ThreadDropdown");
-            m_DropdownPanel.transform.SetParent(canvas.transform, false);
-            var dropRt = m_DropdownPanel.AddComponent<RectTransform>();
-            dropRt.anchorMin = new Vector2(1f, 1f);
-            dropRt.anchorMax = new Vector2(1f, 1f);
-            dropRt.pivot = new Vector2(1f, 1f);
-            dropRt.anchoredPosition = new Vector2(-12f, -118f); // ヘッダーの下
-            dropRt.sizeDelta = new Vector2(180f, 0f); // ContentSizeFitter で自動調整
+            var iconLabel = iconObj.AddComponent<TextMeshProUGUI>();
+            iconLabel.fontSize = 18f;
+            iconLabel.alignment = TextAlignmentOptions.Center;
+            iconLabel.color = Color.white;
+            iconLabel.text = "\u2261"; // ≡
+            AssignDefaultFont(iconLabel);
 
-            var dropBg = m_DropdownPanel.AddComponent<Image>();
-            dropBg.color = new Color(0.12f, 0.14f, 0.2f, 0.98f);
+            // 未読合計バッジ (右上)
+            var badgeObj = new GameObject("TotalBadge");
+            badgeObj.transform.SetParent(m_HamburgerButton.transform, false);
+            var badgeRt = badgeObj.AddComponent<RectTransform>();
+            badgeRt.anchorMin = new Vector2(1f, 1f);
+            badgeRt.anchorMax = new Vector2(1f, 1f);
+            badgeRt.pivot = new Vector2(0.5f, 0.5f);
+            badgeRt.anchoredPosition = new Vector2(2f, 2f);
+            badgeRt.sizeDelta = new Vector2(18f, 18f);
 
-            var vlg = m_DropdownPanel.AddComponent<VerticalLayoutGroup>();
-            vlg.padding = new RectOffset(0, 0, 2, 2);
-            vlg.spacing = 1f;
+            var badgeBg = badgeObj.AddComponent<Image>();
+            badgeBg.color = BadgeColor;
+
+            m_HamburgerBadge = badgeObj.AddComponent<TextMeshProUGUI>();
+            m_HamburgerBadge.fontSize = 9f;
+            m_HamburgerBadge.alignment = TextAlignmentOptions.Center;
+            m_HamburgerBadge.color = Color.white;
+            m_HamburgerBadge.text = "";
+            AssignDefaultFont(m_HamburgerBadge);
+            badgeObj.SetActive(false);
+        }
+
+        private void CreateOverlay(Canvas canvas)
+        {
+            m_Overlay = new GameObject("SidebarOverlay");
+            m_Overlay.transform.SetParent(canvas.transform, false);
+            var rt = m_Overlay.AddComponent<RectTransform>();
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+
+            var bg = m_Overlay.AddComponent<Image>();
+            bg.color = OverlayColor;
+
+            var btn = m_Overlay.AddComponent<Button>();
+            btn.onClick.AddListener(CloseSidebar);
+
+            // 透明ターゲットグラフィック
+            bg.raycastTarget = true;
+
+            m_Overlay.SetActive(false);
+        }
+
+        private void CreateSidebar(Canvas canvas)
+        {
+            m_SidebarPanel = new GameObject("ThreadSidebar");
+            m_SidebarPanel.transform.SetParent(canvas.transform, false);
+            m_SidebarRt = m_SidebarPanel.AddComponent<RectTransform>();
+            m_SidebarRt.anchorMin = new Vector2(0f, 0f);
+            m_SidebarRt.anchorMax = new Vector2(0f, 1f);
+            m_SidebarRt.pivot = new Vector2(0f, 0.5f);
+            m_SidebarRt.anchoredPosition = new Vector2(-SidebarWidth, 0f); // 初期: 画面外
+            m_SidebarRt.sizeDelta = new Vector2(SidebarWidth, 0f);
+
+            var bg = m_SidebarPanel.AddComponent<Image>();
+            bg.color = SidebarBgColor;
+
+            // ScrollView でスレッドが多くてもスクロール可能
+            var scrollObj = new GameObject("SidebarScroll");
+            scrollObj.transform.SetParent(m_SidebarPanel.transform, false);
+            var scrollRt = scrollObj.AddComponent<RectTransform>();
+            scrollRt.anchorMin = Vector2.zero;
+            scrollRt.anchorMax = Vector2.one;
+            scrollRt.offsetMin = new Vector2(0f, 0f);
+            scrollRt.offsetMax = new Vector2(0f, -70f); // 上部にタイトル余白
+
+            var scrollRect = scrollObj.AddComponent<ScrollRect>();
+            scrollRect.horizontal = false;
+            scrollRect.vertical = true;
+            scrollRect.movementType = ScrollRect.MovementType.Clamped;
+
+            // マスク
+            var maskObj = new GameObject("Viewport");
+            maskObj.transform.SetParent(scrollObj.transform, false);
+            var maskRt = maskObj.AddComponent<RectTransform>();
+            maskRt.anchorMin = Vector2.zero;
+            maskRt.anchorMax = Vector2.one;
+            maskRt.offsetMin = Vector2.zero;
+            maskRt.offsetMax = Vector2.zero;
+            var maskImg = maskObj.AddComponent<Image>();
+            maskImg.color = Color.white;
+            maskObj.AddComponent<Mask>().showMaskGraphic = false;
+
+            scrollRect.viewport = maskRt;
+
+            // コンテンツ
+            var contentObj = new GameObject("Content");
+            contentObj.transform.SetParent(maskObj.transform, false);
+            var contentRt = contentObj.AddComponent<RectTransform>();
+            contentRt.anchorMin = new Vector2(0f, 1f);
+            contentRt.anchorMax = new Vector2(1f, 1f);
+            contentRt.pivot = new Vector2(0.5f, 1f);
+            contentRt.anchoredPosition = Vector2.zero;
+            contentRt.sizeDelta = new Vector2(0f, 0f);
+
+            var vlg = contentObj.AddComponent<VerticalLayoutGroup>();
+            vlg.padding = new RectOffset(6, 6, 4, 8);
+            vlg.spacing = 2f;
             vlg.childForceExpandWidth = true;
             vlg.childForceExpandHeight = false;
             vlg.childControlWidth = true;
             vlg.childControlHeight = true;
 
-            var csf = m_DropdownPanel.AddComponent<ContentSizeFitter>();
+            var csf = contentObj.AddComponent<ContentSizeFitter>();
             csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            m_DropdownContent = m_DropdownPanel.transform;
-            m_DropdownPanel.SetActive(false);
-            m_IsDropdownOpen = false;
+            scrollRect.content = contentRt;
+            m_SidebarContent = contentObj.transform;
 
-            // スレッド型ヘッダーバー (画面上部の横長色帯)
+            // サイドバータイトル
+            var titleObj = new GameObject("SidebarTitle");
+            titleObj.transform.SetParent(m_SidebarPanel.transform, false);
+            var titleRt = titleObj.AddComponent<RectTransform>();
+            titleRt.anchorMin = new Vector2(0f, 1f);
+            titleRt.anchorMax = new Vector2(1f, 1f);
+            titleRt.pivot = new Vector2(0.5f, 1f);
+            titleRt.anchoredPosition = new Vector2(0f, -8f);
+            titleRt.sizeDelta = new Vector2(0f, 50f);
+
+            var titleLabel = titleObj.AddComponent<TextMeshProUGUI>();
+            titleLabel.fontSize = 15f;
+            titleLabel.alignment = TextAlignmentOptions.MidlineLeft;
+            titleLabel.color = new Color(0.7f, 0.72f, 0.8f, 1f);
+            titleLabel.text = "  Threads";
+            titleLabel.fontStyle = FontStyles.Bold;
+            AssignDefaultFont(titleLabel);
+
+            m_SidebarPanel.SetActive(true); // 常にアクティブ (位置で可視制御)
+            m_IsSidebarOpen = false;
+        }
+
+        private void CreateThreadHeaderBar(Canvas canvas)
+        {
             m_ThreadHeaderBar = new GameObject("ThreadHeaderBar");
             m_ThreadHeaderBar.transform.SetParent(canvas.transform, false);
             var barRt = m_ThreadHeaderBar.AddComponent<RectTransform>();
             barRt.anchorMin = new Vector2(0f, 1f);
             barRt.anchorMax = new Vector2(1f, 1f);
             barRt.pivot = new Vector2(0.5f, 1f);
-            barRt.anchoredPosition = new Vector2(0f, -70f); // ステータスバー下あたり
+            barRt.anchoredPosition = new Vector2(0f, -70f);
             barRt.sizeDelta = new Vector2(0f, 28f);
 
             m_ThreadHeaderBarBg = m_ThreadHeaderBar.AddComponent<Image>();
@@ -181,7 +314,7 @@ namespace ProjectFoundPhone.UI
             var barLabelRt = barLabelObj.AddComponent<RectTransform>();
             barLabelRt.anchorMin = Vector2.zero;
             barLabelRt.anchorMax = Vector2.one;
-            barLabelRt.offsetMin = new Vector2(12f, 0f);
+            barLabelRt.offsetMin = new Vector2(54f, 0f); // ハンバーガーボタン分右に寄せる
             barLabelRt.offsetMax = new Vector2(-12f, 0f);
 
             m_ThreadHeaderBarLabel = barLabelObj.AddComponent<TextMeshProUGUI>();
@@ -192,15 +325,17 @@ namespace ProjectFoundPhone.UI
             AssignDefaultFont(m_ThreadHeaderBarLabel);
 
             m_ThreadHeaderBar.SetActive(false);
+        }
 
-            // 通知バナー (画面上部中央、スレッドヘッダーバーの下)
+        private void CreateNotificationBanner(Canvas canvas)
+        {
             m_NotificationBanner = new GameObject("ThreadNotificationBanner");
             m_NotificationBanner.transform.SetParent(canvas.transform, false);
             var notifRt = m_NotificationBanner.AddComponent<RectTransform>();
             notifRt.anchorMin = new Vector2(0.5f, 1f);
             notifRt.anchorMax = new Vector2(0.5f, 1f);
             notifRt.pivot = new Vector2(0.5f, 1f);
-            notifRt.anchoredPosition = new Vector2(0f, -100f); // ヘッダーバー下
+            notifRt.anchoredPosition = new Vector2(0f, -100f);
             notifRt.sizeDelta = new Vector2(280f, 36f);
 
             m_NotificationBg = m_NotificationBanner.AddComponent<Image>();
@@ -230,6 +365,10 @@ namespace ProjectFoundPhone.UI
             m_NotificationBanner.SetActive(false);
         }
 
+        #endregion
+
+        #region Thread Events
+
         private void OnThreadDeclared(string threadId, string displayName)
         {
             // 重複チェック
@@ -238,10 +377,10 @@ namespace ProjectFoundPhone.UI
                 if (entry.ThreadId == threadId) return;
             }
 
-            // 初回スレッド宣言時にヘッダーを表示
-            if (!m_HeaderButton.activeSelf)
+            // 初回スレッド宣言時にハンバーガーボタンを表示
+            if (!m_HamburgerButton.activeSelf)
             {
-                m_HeaderButton.SetActive(true);
+                m_HamburgerButton.SetActive(true);
             }
 
             AddThreadEntry(threadId, displayName);
@@ -249,12 +388,12 @@ namespace ProjectFoundPhone.UI
 
         private void OnThreadMessageAdded(string threadId)
         {
-            // ドロップダウン内の該当エントリのバッジを更新
             foreach (var entry in m_Threads)
             {
                 if (entry.ThreadId == threadId)
                 {
                     UpdateBadge(entry);
+                    UpdateHamburgerBadge();
 
                     // 非アクティブスレッドへのメッセージなら通知バナーを表示
                     string activeId = m_ChatController?.ActiveThreadId;
@@ -267,11 +406,17 @@ namespace ProjectFoundPhone.UI
             }
         }
 
+        #endregion
+
+        #region Sidebar Entries
+
         private void AddThreadEntry(string threadId, string displayName)
         {
-            // ScenarioManager から ThreadType を取得
             var threadData = m_ScenarioManager?.GetDeclaredThread(threadId);
             ThreadType threadType = threadData?.Type ?? ThreadType.Annotation;
+
+            // グループヘッダーがなければ作成
+            EnsureGroupHeader(threadType);
 
             var entry = new ThreadEntry
             {
@@ -282,13 +427,14 @@ namespace ProjectFoundPhone.UI
 
             // リストアイテム
             var itemObj = new GameObject($"ThreadItem_{threadId}");
-            itemObj.transform.SetParent(m_DropdownContent, false);
+            itemObj.transform.SetParent(m_SidebarContent, false);
 
             var itemLayout = itemObj.AddComponent<LayoutElement>();
-            itemLayout.preferredHeight = 32f;
+            itemLayout.preferredHeight = 38f;
 
             var itemBg = itemObj.AddComponent<Image>();
             itemBg.color = ItemColor;
+            entry.ItemBg = itemBg;
 
             var itemBtn = itemObj.AddComponent<Button>();
             string capturedId = threadId;
@@ -301,11 +447,11 @@ namespace ProjectFoundPhone.UI
             typeRt.anchorMin = new Vector2(0f, 0f);
             typeRt.anchorMax = new Vector2(0f, 1f);
             typeRt.pivot = new Vector2(0f, 0.5f);
-            typeRt.anchoredPosition = new Vector2(4f, 0f);
-            typeRt.sizeDelta = new Vector2(22f, 0f);
+            typeRt.anchoredPosition = new Vector2(6f, 0f);
+            typeRt.sizeDelta = new Vector2(24f, 0f);
 
             var typeLabel = typeObj.AddComponent<TextMeshProUGUI>();
-            typeLabel.fontSize = 10f;
+            typeLabel.fontSize = 11f;
             typeLabel.alignment = TextAlignmentOptions.Center;
             typeLabel.text = GetTypeIcon(threadType);
             typeLabel.color = GetTypeColor(threadType);
@@ -313,23 +459,24 @@ namespace ProjectFoundPhone.UI
             AssignDefaultFont(typeLabel);
             entry.TypeLabel = typeLabel;
 
-            // スレッド名ラベル (型アイコンの右)
+            // スレッド名ラベル
             var nameObj = new GameObject("Name");
             nameObj.transform.SetParent(itemObj.transform, false);
             var nameRt = nameObj.AddComponent<RectTransform>();
             nameRt.anchorMin = Vector2.zero;
             nameRt.anchorMax = Vector2.one;
-            nameRt.offsetMin = new Vector2(28f, 2f); // 型アイコン分を右にずらす
-            nameRt.offsetMax = new Vector2(-36f, -2f); // 右側にバッジ分のスペース
+            nameRt.offsetMin = new Vector2(34f, 2f);
+            nameRt.offsetMax = new Vector2(-36f, -2f);
 
             var nameLabel = nameObj.AddComponent<TextMeshProUGUI>();
-            nameLabel.fontSize = 12f;
+            nameLabel.fontSize = 13f;
             nameLabel.alignment = TextAlignmentOptions.MidlineLeft;
             nameLabel.color = new Color(0.85f, 0.85f, 0.9f, 1f);
             nameLabel.text = displayName;
             nameLabel.enableWordWrapping = false;
             nameLabel.overflowMode = TextOverflowModes.Ellipsis;
             AssignDefaultFont(nameLabel);
+            entry.NameLabel = nameLabel;
 
             // 未読バッジ
             var badgeObj = new GameObject("Badge");
@@ -355,90 +502,34 @@ namespace ProjectFoundPhone.UI
             entry.BadgeLabel = badgeLabel;
             m_Threads.Add(entry);
 
+            // グループヘッダーの直後に配置
+            RepositionEntryAfterGroupHeader(entry);
+
             UpdateBadge(entry);
-        }
-
-        private void OnSelectThread(string threadId)
-        {
-            if (m_ChatController == null) return;
-
-            // "Main" 選択 (threadId == null)
-            if (threadId == null)
-            {
-                m_ChatController.SwitchToThread(null);
-            }
-            else
-            {
-                var thread = m_ScenarioManager?.GetDeclaredThread(threadId);
-                m_ChatController.SwitchToThread(threadId, thread?.ChatHistory);
-
-                // 未読リセット
-                if (thread != null)
-                {
-                    thread.UnreadCount = 0;
-                }
-            }
-
-            UpdateHeaderLabel();
-            UpdateThreadHeaderBar(threadId);
-            UpdateAllBadges();
-            CloseDropdown();
-
-            // 切替先スレッドの通知バナーを消す
-            if (m_NotificationThreadId == threadId)
-            {
-                HideNotificationBanner();
-            }
-        }
-
-        private void ToggleDropdown()
-        {
-            if (m_IsDropdownOpen)
-            {
-                CloseDropdown();
-            }
-            else
-            {
-                OpenDropdown();
-            }
-        }
-
-        private void OpenDropdown()
-        {
-            // ドロップダウンを開く前に Main エントリを先頭に挿入（なければ）
-            EnsureMainEntry();
-            UpdateAllHighlights();
-            m_DropdownPanel.SetActive(true);
-            m_IsDropdownOpen = true;
-        }
-
-        private void CloseDropdown()
-        {
-            m_DropdownPanel.SetActive(false);
-            m_IsDropdownOpen = false;
+            UpdateHamburgerBadge();
         }
 
         private void EnsureMainEntry()
         {
-            // "Main" エントリが先頭にあるか確認
             if (m_Threads.Count > 0 && m_Threads[0].ThreadId == null) return;
 
-            // Main エントリを作成して先頭に挿入
             var mainEntry = new ThreadEntry
             {
                 ThreadId = null,
-                DisplayName = "Main"
+                DisplayName = "Main",
+                Type = ThreadType.Annotation // ダミー
             };
 
             var itemObj = new GameObject("ThreadItem_Main");
-            itemObj.transform.SetParent(m_DropdownContent, false);
+            itemObj.transform.SetParent(m_SidebarContent, false);
             itemObj.transform.SetAsFirstSibling();
 
             var itemLayout = itemObj.AddComponent<LayoutElement>();
-            itemLayout.preferredHeight = 32f;
+            itemLayout.preferredHeight = 42f;
 
             var itemBg = itemObj.AddComponent<Image>();
-            itemBg.color = ItemColor;
+            itemBg.color = MainEntryColor;
+            mainEntry.ItemBg = itemBg;
 
             var itemBtn = itemObj.AddComponent<Button>();
             itemBtn.onClick.AddListener(() => OnSelectThread(null));
@@ -448,44 +539,150 @@ namespace ProjectFoundPhone.UI
             var nameRt = nameObj.AddComponent<RectTransform>();
             nameRt.anchorMin = Vector2.zero;
             nameRt.anchorMax = Vector2.one;
-            nameRt.offsetMin = new Vector2(10f, 2f);
-            nameRt.offsetMax = new Vector2(-10f, -2f);
+            nameRt.offsetMin = new Vector2(12f, 2f);
+            nameRt.offsetMax = new Vector2(-12f, -2f);
 
             var nameLabel = nameObj.AddComponent<TextMeshProUGUI>();
-            nameLabel.fontSize = 12f;
+            nameLabel.fontSize = 14f;
             nameLabel.alignment = TextAlignmentOptions.MidlineLeft;
             nameLabel.color = new Color(0.95f, 0.95f, 1f, 1f);
             nameLabel.text = "Main";
+            nameLabel.fontStyle = FontStyles.Bold;
             AssignDefaultFont(nameLabel);
+            mainEntry.NameLabel = nameLabel;
 
             mainEntry.ListItemObj = itemObj;
-            mainEntry.BadgeLabel = null; // Main には未読バッジなし
+            mainEntry.BadgeLabel = null;
             m_Threads.Insert(0, mainEntry);
         }
 
-        private void UpdateHeaderLabel()
+        private void EnsureGroupHeader(ThreadType type)
         {
-            if (m_HeaderLabel == null) return;
+            if (m_GroupHeaders.ContainsKey(type)) return;
 
-            string activeId = m_ChatController?.ActiveThreadId;
-            if (activeId == null)
+            var headerObj = new GameObject($"GroupHeader_{type}");
+            headerObj.transform.SetParent(m_SidebarContent, false);
+
+            var layout = headerObj.AddComponent<LayoutElement>();
+            layout.preferredHeight = 26f;
+
+            var bg = headerObj.AddComponent<Image>();
+            bg.color = GroupHeaderColor;
+
+            var labelObj = new GameObject("Label");
+            labelObj.transform.SetParent(headerObj.transform, false);
+            var labelRt = labelObj.AddComponent<RectTransform>();
+            labelRt.anchorMin = Vector2.zero;
+            labelRt.anchorMax = Vector2.one;
+            labelRt.offsetMin = new Vector2(8f, 0f);
+            labelRt.offsetMax = new Vector2(-8f, 0f);
+
+            Color typeColor = GetTypeColor(type);
+            var label = labelObj.AddComponent<TextMeshProUGUI>();
+            label.fontSize = 10f;
+            label.alignment = TextAlignmentOptions.MidlineLeft;
+            label.color = new Color(typeColor.r, typeColor.g, typeColor.b, 0.7f);
+            label.text = $"{GetTypeIcon(type)} {GetTypeName(type)}";
+            label.fontStyle = FontStyles.Bold;
+            AssignDefaultFont(label);
+
+            m_GroupHeaders[type] = headerObj;
+        }
+
+        private void RepositionEntryAfterGroupHeader(ThreadEntry entry)
+        {
+            if (!m_GroupHeaders.TryGetValue(entry.Type, out var header)) return;
+
+            int headerIndex = header.transform.GetSiblingIndex();
+
+            // グループ内の最後の位置を探す
+            int targetIndex = headerIndex + 1;
+            foreach (var other in m_Threads)
             {
-                m_HeaderLabel.text = "Main \u25BC";
+                if (other == entry) continue;
+                if (other.Type == entry.Type && other.ListItemObj != null)
+                {
+                    int otherIdx = other.ListItemObj.transform.GetSiblingIndex();
+                    if (otherIdx >= targetIndex) targetIndex = otherIdx + 1;
+                }
+            }
+
+            entry.ListItemObj.transform.SetSiblingIndex(targetIndex);
+        }
+
+        #endregion
+
+        #region Sidebar Open / Close
+
+        private void ToggleSidebar()
+        {
+            if (m_IsSidebarOpen)
+                CloseSidebar();
+            else
+                OpenSidebar();
+        }
+
+        private void OpenSidebar()
+        {
+            EnsureMainEntry();
+            UpdateAllHighlights();
+            UpdateAllBadges();
+
+            m_Overlay.SetActive(true);
+            m_IsSidebarOpen = true;
+
+            m_SidebarTween?.Kill();
+            m_SidebarTween = m_SidebarRt.DOAnchorPosX(0f, SlideAnimDuration)
+                .SetEase(Ease.OutCubic);
+        }
+
+        private void CloseSidebar()
+        {
+            m_IsSidebarOpen = false;
+
+            m_SidebarTween?.Kill();
+            m_SidebarTween = m_SidebarRt.DOAnchorPosX(-SidebarWidth, SlideAnimDuration)
+                .SetEase(Ease.InCubic)
+                .OnComplete(() => m_Overlay.SetActive(false));
+        }
+
+        #endregion
+
+        #region Thread Selection
+
+        private void OnSelectThread(string threadId)
+        {
+            if (m_ChatController == null) return;
+
+            if (threadId == null)
+            {
+                m_ChatController.SwitchToThread(null);
             }
             else
             {
-                foreach (var entry in m_Threads)
+                var thread = m_ScenarioManager?.GetDeclaredThread(threadId);
+                m_ChatController.SwitchToThread(threadId, thread?.ChatHistory);
+
+                if (thread != null)
                 {
-                    if (entry.ThreadId == activeId)
-                    {
-                        string icon = GetTypeIcon(entry.Type);
-                        m_HeaderLabel.text = $"<color=#{ColorUtility.ToHtmlStringRGB(GetTypeColor(entry.Type))}>{icon}</color> {entry.DisplayName} \u25BC";
-                        return;
-                    }
+                    thread.UnreadCount = 0;
                 }
-                m_HeaderLabel.text = activeId + " \u25BC";
+            }
+
+            UpdateThreadHeaderBar(threadId);
+            UpdateAllBadges();
+            UpdateHamburgerBadge();
+            CloseSidebar();
+
+            if (m_NotificationThreadId == threadId)
+            {
+                HideNotificationBanner();
             }
         }
+
+        #endregion
+
+        #region Badge & Highlight Updates
 
         private void UpdateBadge(ThreadEntry entry)
         {
@@ -513,17 +710,54 @@ namespace ProjectFoundPhone.UI
             }
         }
 
+        private void UpdateHamburgerBadge()
+        {
+            if (m_HamburgerBadge == null) return;
+
+            int total = 0;
+            foreach (var entry in m_Threads)
+            {
+                if (entry.ThreadId == null) continue; // Main は除外
+                var thread = m_ScenarioManager?.GetDeclaredThread(entry.ThreadId);
+                total += thread?.UnreadCount ?? 0;
+            }
+
+            var badgeObj = m_HamburgerBadge.transform.parent?.gameObject ?? m_HamburgerBadge.gameObject;
+            if (total > 0)
+            {
+                m_HamburgerBadge.text = total > 99 ? "99+" : total.ToString();
+                badgeObj.SetActive(true);
+            }
+            else
+            {
+                badgeObj.SetActive(false);
+            }
+        }
+
         private void UpdateAllHighlights()
         {
             string activeId = m_ChatController?.ActiveThreadId;
             foreach (var entry in m_Threads)
             {
-                if (entry.ListItemObj == null) continue;
-                var bg = entry.ListItemObj.GetComponent<Image>();
-                if (bg != null)
+                if (entry.ItemBg == null) continue;
+
+                bool isActive = entry.ThreadId == activeId;
+                if (entry.ThreadId == null)
                 {
-                    bool isActive = entry.ThreadId == activeId;
-                    bg.color = isActive ? ActiveItemColor : ItemColor;
+                    // Main エントリ
+                    entry.ItemBg.color = isActive ? ActiveItemColor : MainEntryColor;
+                }
+                else
+                {
+                    entry.ItemBg.color = isActive ? ActiveItemColor : ItemColor;
+                }
+
+                // アクティブなスレッドの名前を明るく
+                if (entry.NameLabel != null)
+                {
+                    entry.NameLabel.color = isActive
+                        ? new Color(1f, 1f, 1f, 1f)
+                        : new Color(0.85f, 0.85f, 0.9f, 1f);
                 }
             }
         }
@@ -534,12 +768,10 @@ namespace ProjectFoundPhone.UI
 
             if (threadId == null)
             {
-                // Mainスレッド → ヘッダーバー非表示
                 m_ThreadHeaderBar.SetActive(false);
                 return;
             }
 
-            // サブスレッドの型情報を取得
             ThreadType type = ThreadType.Annotation;
             string displayName = threadId;
             foreach (var entry in m_Threads)
@@ -559,22 +791,23 @@ namespace ProjectFoundPhone.UI
             m_ThreadHeaderBar.SetActive(true);
         }
 
+        #endregion
+
+        #region Notification Banner
+
         private void ShowNotificationBanner(ThreadEntry entry)
         {
             if (m_NotificationBanner == null) return;
 
-            // 進行中のアニメーションをキャンセル
             m_NotificationTween?.Kill();
 
             m_NotificationThreadId = entry.ThreadId;
 
-            // バナーテキスト: "[A] スレッド名 に新着"
             Color typeColor = GetTypeColor(entry.Type);
             string icon = GetTypeIcon(entry.Type);
             string colorHex = ColorUtility.ToHtmlStringRGB(typeColor);
             m_NotificationLabel.text = $"<color=#{colorHex}>{icon}</color> {entry.DisplayName} に新着";
 
-            // バナー背景に型色の帯を左側に付ける
             m_NotificationBg.color = new Color(
                 NotificationBgColor.r + typeColor.r * 0.08f,
                 NotificationBgColor.g + typeColor.g * 0.08f,
@@ -584,7 +817,6 @@ namespace ProjectFoundPhone.UI
             m_NotificationBanner.SetActive(true);
             m_NotificationCanvasGroup.alpha = 0f;
 
-            // フェードイン → 待機 → フェードアウト
             m_NotificationTween = DOTween.Sequence()
                 .Append(m_NotificationCanvasGroup.DOFade(1f, 0.25f))
                 .AppendInterval(NotificationDuration)
@@ -615,10 +847,13 @@ namespace ProjectFoundPhone.UI
             OnSelectThread(threadId);
         }
 
-        /// <summary>スレッド切替状態をリセット（シナリオ再開始時用）</summary>
+        #endregion
+
+        #region Reset
+
+        /// <summary>スレッド切替状態をリセット (シナリオ再開始時用)</summary>
         public void Reset()
         {
-            // ドロップダウン内のエントリを破棄
             foreach (var entry in m_Threads)
             {
                 if (entry.ListItemObj != null)
@@ -628,16 +863,18 @@ namespace ProjectFoundPhone.UI
             }
             m_Threads.Clear();
 
-            if (m_HeaderButton != null)
+            foreach (var kv in m_GroupHeaders)
             {
-                m_HeaderButton.SetActive(false);
+                if (kv.Value != null) Destroy(kv.Value);
             }
-            CloseDropdown();
+            m_GroupHeaders.Clear();
 
-            if (m_HeaderLabel != null)
+            if (m_HamburgerButton != null)
             {
-                m_HeaderLabel.text = "Main";
+                m_HamburgerButton.SetActive(false);
             }
+
+            CloseSidebar();
 
             if (m_ThreadHeaderBar != null)
             {
@@ -645,7 +882,12 @@ namespace ProjectFoundPhone.UI
             }
 
             HideNotificationBanner();
+            UpdateHamburgerBadge();
         }
+
+        #endregion
+
+        #region Static Helpers
 
         private static string GetTypeIcon(ThreadType type)
         {
@@ -656,6 +898,18 @@ namespace ProjectFoundPhone.UI
                 case ThreadType.Scout:      return "[C]";
                 case ThreadType.Branch:     return "[>]";
                 default:                    return "[A]";
+            }
+        }
+
+        private static string GetTypeName(ThreadType type)
+        {
+            switch (type)
+            {
+                case ThreadType.Annotation: return "Annotation";
+                case ThreadType.Tracking:   return "Tracking";
+                case ThreadType.Scout:      return "Scout";
+                case ThreadType.Branch:     return "Branch";
+                default:                    return "Other";
             }
         }
 
@@ -677,5 +931,7 @@ namespace ProjectFoundPhone.UI
             TMP_FontAsset[] fonts = Resources.FindObjectsOfTypeAll<TMP_FontAsset>();
             if (fonts.Length > 0) text.font = fonts[0];
         }
+
+        #endregion
     }
 }

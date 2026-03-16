@@ -212,11 +212,17 @@ public List<ThreadData> Threads;  // 全スレッドの状態
 - SaveData 拡張
 - DeclareThread / ManifestThread Yarnコマンド実装
 
-### Step 2: フルスクリーンフォーカス + サイドバー（中期）
-- アイコントレイ（スワイプサイドバー）
-- スレッド切替
-- ヘッダー表示
-- スレッド内チャットUI（既存ChatController再利用）
+### Step 2: フルスクリーンフォーカス + サイドバー（中期） ✅ 実装済み (2026-03-16)
+- ~~アイコントレイ（スワイプサイドバー）~~ → 左スライドインサイドバー実装
+  - ハンバーガーボタン(≡) + 未読合計バッジ (左上)
+  - 半透明オーバーレイ (タップで閉じ)
+  - ThreadType グループヘッダーで種別ごとに分類
+  - DOTween スライドアニメ (0.25s)
+  - ScrollRect 内蔵 (スレッド多数対応)
+  - Main エントリは常に先頭、太字表示
+- ~~スレッド切替~~ → OnSelectThread でサイドバー閉じ + 履歴スワップ
+- ~~ヘッダー表示~~ → ThreadHeaderBar (型色15%帯 + 型アイコン + 表示名)
+- ~~スレッド内チャットUI~~ → 既存 ChatController.SwitchToThread 再利用
 
 ### Step 3: 種別ごとの差異 + 通知（中〜長期）
 - A/B/C/分岐ごとのカード表示差異
