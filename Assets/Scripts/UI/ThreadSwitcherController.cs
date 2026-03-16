@@ -176,7 +176,15 @@ namespace ProjectFoundPhone.UI
             var badgeBg = badgeObj.AddComponent<Image>();
             badgeBg.color = BadgeColor;
 
-            m_HamburgerBadge = badgeObj.AddComponent<TextMeshProUGUI>();
+            var badgeLabelObj = new GameObject("Label");
+            badgeLabelObj.transform.SetParent(badgeObj.transform, false);
+            var badgeLabelRt = badgeLabelObj.AddComponent<RectTransform>();
+            badgeLabelRt.anchorMin = Vector2.zero;
+            badgeLabelRt.anchorMax = Vector2.one;
+            badgeLabelRt.offsetMin = Vector2.zero;
+            badgeLabelRt.offsetMax = Vector2.zero;
+
+            m_HamburgerBadge = badgeLabelObj.AddComponent<TextMeshProUGUI>();
             m_HamburgerBadge.fontSize = 9f;
             m_HamburgerBadge.alignment = TextAlignmentOptions.Center;
             m_HamburgerBadge.color = Color.white;
@@ -357,7 +365,7 @@ namespace ProjectFoundPhone.UI
 
             m_NotificationLabel = notifLabelObj.AddComponent<TextMeshProUGUI>();
             m_NotificationLabel.fontSize = 12f;
-            m_NotificationLabel.alignment = TextAlignmentOptions.MidlineCenter;
+            m_NotificationLabel.alignment = TextAlignmentOptions.Center;
             m_NotificationLabel.color = Color.white;
             m_NotificationLabel.text = "";
             AssignDefaultFont(m_NotificationLabel);
@@ -491,7 +499,15 @@ namespace ProjectFoundPhone.UI
             var badgeBg = badgeObj.AddComponent<Image>();
             badgeBg.color = BadgeColor;
 
-            var badgeLabel = badgeObj.AddComponent<TextMeshProUGUI>();
+            var badgeLabelObj = new GameObject("Label");
+            badgeLabelObj.transform.SetParent(badgeObj.transform, false);
+            var badgeLabelRt = badgeLabelObj.AddComponent<RectTransform>();
+            badgeLabelRt.anchorMin = Vector2.zero;
+            badgeLabelRt.anchorMax = Vector2.one;
+            badgeLabelRt.offsetMin = Vector2.zero;
+            badgeLabelRt.offsetMax = Vector2.zero;
+
+            var badgeLabel = badgeLabelObj.AddComponent<TextMeshProUGUI>();
             badgeLabel.fontSize = 10f;
             badgeLabel.alignment = TextAlignmentOptions.Center;
             badgeLabel.color = Color.white;

@@ -81,6 +81,11 @@ namespace ProjectFoundPhone.Core
         /// オートセーブインジケーターUI（Canvas直下に動的生成）
         /// </summary>
         private GameObject m_AutoSaveIndicator;
+
+        /// <summary>
+        /// DeductionBoard不在警告を既に出力したか
+        /// </summary>
+        private bool m_DeductionBoardWarningShown;
         private CanvasGroup m_AutoSaveCanvasGroup;
         private Coroutine m_AutoSaveIndicatorCoroutine;
         #endregion
@@ -185,7 +190,11 @@ namespace ProjectFoundPhone.Core
             }
             else
             {
-                Debug.LogWarning("SaveManager: DeductionBoard not found. Topic progress will not be saved.");
+                if (!m_DeductionBoardWarningShown)
+                {
+                    Debug.LogWarning("SaveManager: DeductionBoard not found. Topic progress will not be saved.");
+                    m_DeductionBoardWarningShown = true;
+                }
             }
 
             // チャット履歴を保存
@@ -339,7 +348,11 @@ namespace ProjectFoundPhone.Core
             }
             else
             {
-                Debug.LogWarning("SaveManager: DeductionBoard not found. Topics will not be restored.");
+                if (!m_DeductionBoardWarningShown)
+                {
+                    Debug.LogWarning("SaveManager: DeductionBoard not found. Topics will not be restored.");
+                    m_DeductionBoardWarningShown = true;
+                }
             }
 
             // チャット履歴を復元（シナリオ再開前に実行）

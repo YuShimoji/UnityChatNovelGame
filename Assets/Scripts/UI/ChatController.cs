@@ -46,11 +46,12 @@ namespace ProjectFoundPhone.UI
         [SerializeField] private float m_TypewriterSpeed = 0.05f; // 1文字あたりの表示時間（秒）
 
         private bool m_IsUserScrolling = false;
+        private bool m_IsUserDragging = false;
         private float m_LastScrollPosition = 1.0f;
 
         private bool m_AutoScrollScheduled = false;
         private bool m_IsAutoScrolling = false;
-        private bool m_PinnedToBottom = false;
+        private bool m_PinnedToBottom = true;
         private bool m_IsTypewriterActive = false;
         private GameObject m_TopSpacer;
 
@@ -139,12 +140,14 @@ namespace ProjectFoundPhone.UI
         }
         public void OnBeginDrag(PointerEventData eventData)
         {
+            m_IsUserDragging = true;
             m_IsUserScrolling = true;
             m_PinnedToBottom = false;
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            m_IsUserDragging = false;
             // ドラッグ終了後、最下部付近なら自動吸着を再開
             if (m_ScrollRect != null && m_ScrollRect.verticalNormalizedPosition < m_AutoScrollThreshold)
             {
@@ -269,6 +272,10 @@ namespace ProjectFoundPhone.UI
             // AutoScroll 中の位置変化はユーザー操作とみなさない
             if (m_IsAutoScrolling) return;
 
+            // ドラッグ中は OnScrollValueChanged で状態を変更しない
+            // （OnBeginDrag/OnEndDrag で管理する）
+            if (m_IsUserDragging) return;
+
             // verticalNormalizedPosition: 0=最下部（最新メッセージ）, 1=最上部（最古メッセージ）
             float verticalPos = scrollPosition.y;
 
@@ -278,9 +285,10 @@ namespace ProjectFoundPhone.UI
                 m_IsUserScrolling = true;
                 m_PinnedToBottom = false;
             }
-            // 最下部付近にいる場合、ユーザーは最新メッセージを見ている
             else
             {
+                // 最下部付近: コンテンツ追加後のレイアウト変化で一時的に離れても
+                // 最下部に戻ったらユーザースクロール状態を解除する
                 m_IsUserScrolling = false;
             }
 
@@ -1482,10 +1490,12 @@ namespace ProjectFoundPhone.UI
         {
             if (m_ChoiceContainer != null)
             {
-                // 子要素を即座に削除（Destroy は遅延されるため連続呼び出しで重複が残る）
+                // DOTween のフェードアニメーションを完了させてから破棄
                 for (int i = m_ChoiceContainer.childCount - 1; i >= 0; i--)
                 {
-                    DestroyImmediate(m_ChoiceContainer.GetChild(i).gameObject);
+                    var go = m_ChoiceContainer.GetChild(i).gameObject;
+                    DOTween.Kill(go);
+                    DestroyImmediate(go);
                 }
                 m_ChoiceContainer.gameObject.SetActive(false);
             }
@@ -1506,9 +1516,17 @@ namespace ProjectFoundPhone.UI
         {
             using var _ = s_AutoScrollMarker.Auto();
 
-            if (m_ScrollRect == null || m_IsUserScrolling)
+            if (m_ScrollRect == null) return;
+
+            // m_PinnedToBottom が true なら、コンテンツ追加による一時的な
+            // m_IsUserScrolling 誤検知を無視してスクロールを実行する
+            if (m_IsUserScrolling && !m_PinnedToBottom)
             {
                 return;
+            }
+            if (m_IsUserScrolling && m_PinnedToBottom)
+            {
+                m_IsUserScrolling = false;
             }
 
             // ピンニングは CreateMessageBubble のタイプライター開始時のみ設定
@@ -1527,10 +1545,8 @@ namespace ProjectFoundPhone.UI
         {
             m_AutoScrollScheduled = false;
 
-            if (m_ScrollRect == null || m_IsUserScrolling)
-            {
-                return;
-            }
+            if (m_ScrollRect == null) return;
+            if (m_IsUserScrolling && !m_PinnedToBottom) return;
 
             // レイアウトを強制更新してから最下部へスクロール
             Canvas.ForceUpdateCanvases();
@@ -1551,7 +1567,8 @@ namespace ProjectFoundPhone.UI
             }
 
             m_IsUserScrolling = false;
-            m_PinnedToBottom = false;
+            m_IsUserDragging = false;
+            m_PinnedToBottom = true;
             m_IsAutoScrolling = false;
         }
 
@@ -2047,7 +2064,7 @@ namespace ProjectFoundPhone.UI
                     // 未選択はフェードアウト
                     CanvasGroup cg = child.gameObject.GetComponent<CanvasGroup>();
                     if (cg == null) cg = child.gameObject.AddComponent<CanvasGroup>();
-                    cg.DOFade(0f, fadeTime).SetUpdate(true);
+                    cg.DOFade(0f, fadeTime).SetTarget(child.gameObject).SetUpdate(true);
                 }
             }
 
@@ -2084,7 +2101,8 @@ namespace ProjectFoundPhone.UI
 
             // チャプター遷移時の状態汚染を防止: スクロール状態をリセット
             m_IsUserScrolling = false;
-            m_PinnedToBottom = false;
+            m_IsUserDragging = false;
+            m_PinnedToBottom = true;
             m_AutoScrollScheduled = false;
             m_IsAutoScrolling = false;
 

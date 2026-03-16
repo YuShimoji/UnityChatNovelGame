@@ -184,7 +184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: YarnSpinner.Unity::Yarn.Unity.DialogueRunner
   yarnProject: {fileID: 7545569452688597077, guid: a47e6935cb6cadf4d9247e39c563dd95, type: 3}
-  variableStorage: {fileID: 0}
+  variableStorage: {fileID: 252753191}
   lineProvider: {fileID: 0}
   saliencyStrategy: 0
   dialoguePresenters:
@@ -818,12 +818,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 935293707}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53d91f98a2664f5cb9af11de72ac54ec, type: 3}
+  m_Script: {fileID: 11500000, guid: b9320b04f6b5a5846a7eb2ef29c57829, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChatController
-  ChatInputField: {fileID: 0}
-  ChatDisplayOutput: {fileID: 0}
-  ChatScrollbar: {fileID: 0}
+  m_ChatController: {fileID: 2049599892}
 --- !u!4 &935293709
 Transform:
   m_ObjectHideFlags: 0
