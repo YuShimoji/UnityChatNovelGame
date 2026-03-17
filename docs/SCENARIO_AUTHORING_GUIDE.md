@@ -113,6 +113,9 @@ Assets/Resources/Yarn/active/
 | DeclareThreadTyped | `<<DeclareThreadTyped "threadId" "type" "displayName">>` | 型指定でサブスレッド宣言。type: "A"/"B"/"C"/"branch"。サイドバーに型グループ分類+色表示 |
 | AddThreadMessage | `<<AddThreadMessage "threadId" "text">>` | サブスレッドにシステムメッセージ追加（メイン非表示） |
 | AddThreadChat | `<<AddThreadChat "threadId" "charID" "text">>` | サブスレッドにキャラクター付きメッセージ追加 |
+| BeginBranch | `<<BeginBranch "branchId" "displayName">>` | 分岐スレッドを宣言し自動切替。以降のメッセージは分岐に流れる |
+| EndBranch | `<<EndBranch true\|false>>` | 分岐終了+メイン自動復帰。ReflectionMessage があればメインに反映 |
+| SetBranchReflection | `<<SetBranchReflection "text">>` | EndBranch 時にメインに投入する反映メッセージを設定 |
 
 ### Yarn 標準機能
 
@@ -361,6 +364,30 @@ Barnabyさん、1点補足があります。
 `#line:` タグを付与したメッセージは矛盾指摘の対象になる。
 プレイヤーが長押し+タップで矛盾を指摘できる。
 `ChatDialogueView` が `TextID` として自動取得し、`MessageBubble.LineTag` に伝播する。
+
+### パターン F: 分岐スレッド（if ストーリー）
+
+```yarn
+<<set $speaker to "pyramid">>
+気になる仮説がある。聞くか？
+
+<<set $speaker to "player">>
+-> 聞かせてくれ
+    <<BeginBranch "branch_hypothesis" "Pyramidの仮説">>
+    <<set $speaker to "pyramid">>
+    <<StartWait 0.5>>
+    これはメインの話題とは少し外れるが...
+    <<StartWait 0.5>>
+    データの不整合が計画的なものだとしたら？
+    <<SetBranchReflection "Pyramidの仮説: データ不整合は計画的である可能性">>
+    <<EndBranch true>>
+-> 今はいい
+    // 分岐に入らずメインを続行
+```
+
+`BeginBranch` で自動的に分岐スレッドに切り替わり、以降のメッセージは分岐に流れる。
+`SetBranchReflection` で設定した反映メッセージが `EndBranch` 時にメインスレッドに投入される。
+分岐中もサイドバーで Main に自由に切り替え可能（Yarn フローはブランチで継続）。
 
 ---
 
