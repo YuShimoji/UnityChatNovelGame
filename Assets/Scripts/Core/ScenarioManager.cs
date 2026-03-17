@@ -508,10 +508,13 @@ namespace ProjectFoundPhone.Core
             };
             m_DeclaredThreads[threadId] = thread;
 
-            // メインチャットに通知
+            // メインチャットに出現通知（型アイコン+型色付き）
             if (m_ChatController != null)
             {
-                m_ChatController.AddSystemMessage($"スレッド「{displayName}」が作成されました");
+                string icon = GetTypeIcon(type);
+                string colorHex = GetTypeColorHex(type);
+                m_ChatController.AddSystemMessage(
+                    $"<color=#{colorHex}>{icon}</color> 新しいスレッド「{displayName}」が利用可能です");
             }
 
             OnThreadDeclared?.Invoke(threadId, displayName);
@@ -537,6 +540,32 @@ namespace ProjectFoundPhone.Core
                 default:
                     Debug.LogWarning($"ScenarioManager: Unknown thread type '{typeStr}', defaulting to Annotation.");
                     return ThreadType.Annotation;
+            }
+        }
+
+        /// <summary>ThreadType の表示アイコンを返す</summary>
+        private static string GetTypeIcon(ThreadType type)
+        {
+            switch (type)
+            {
+                case ThreadType.Annotation: return "[A]";
+                case ThreadType.Tracking: return "[B]";
+                case ThreadType.Scout: return "[C]";
+                case ThreadType.Branch: return "[>]";
+                default: return "[?]";
+            }
+        }
+
+        /// <summary>ThreadType の色を16進数文字列で返す (リッチテキスト用)</summary>
+        private static string GetTypeColorHex(ThreadType type)
+        {
+            switch (type)
+            {
+                case ThreadType.Annotation: return "4A90D9";
+                case ThreadType.Tracking: return "4CAF50";
+                case ThreadType.Scout: return "FF9800";
+                case ThreadType.Branch: return "9C27B0";
+                default: return "4A90D9";
             }
         }
 

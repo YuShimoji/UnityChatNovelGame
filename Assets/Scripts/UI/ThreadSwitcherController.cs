@@ -81,6 +81,7 @@ namespace ProjectFoundPhone.UI
         private Tween m_NotificationTween;
         private const float NotificationDuration = 3.5f;
         private static readonly Color NotificationBgColor = new Color(0.12f, 0.14f, 0.22f, 0.95f);
+        private Tween m_HamburgerPulseTween;
 
         private void Start()
         {
@@ -109,6 +110,7 @@ namespace ProjectFoundPhone.UI
             }
             m_SidebarTween?.Kill();
             m_NotificationTween?.Kill();
+            m_HamburgerPulseTween?.Kill();
         }
 
         #region UI Creation
@@ -392,6 +394,30 @@ namespace ProjectFoundPhone.UI
             }
 
             AddThreadEntry(threadId, displayName);
+
+            // ハンバーガーボタンにパルスアニメ（新スレッド出現の視覚キュー）
+            PulseHamburgerButton(threadId);
+        }
+
+        /// <summary>ハンバーガーボタンを型色でパルスさせて新スレッド出現を通知する</summary>
+        private void PulseHamburgerButton(string threadId)
+        {
+            if (m_HamburgerButton == null) return;
+
+            var threadData = m_ScenarioManager?.GetDeclaredThread(threadId);
+            Color typeColor = threadData != null ? GetTypeColor(threadData.Type) : TypeColorAnnotation;
+
+            Image bg = m_HamburgerButton.GetComponent<Image>();
+            if (bg == null) return;
+
+            Color originalColor = bg.color;
+            // 型色で2回パルス → 元色に戻る
+            m_HamburgerPulseTween?.Kill();
+            m_HamburgerPulseTween = DOTween.Sequence()
+                .Append(bg.DOColor(typeColor, 0.25f))
+                .Append(bg.DOColor(originalColor, 0.25f))
+                .Append(bg.DOColor(typeColor, 0.25f))
+                .Append(bg.DOColor(originalColor, 0.25f));
         }
 
         private void OnThreadMessageAdded(string threadId)
