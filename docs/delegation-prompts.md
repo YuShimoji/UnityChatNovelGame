@@ -658,6 +658,16 @@ SP-099 (pct=90) に未決定事項が4件残っている。
 
 ---
 
+### Batch 4 実行結果
+
+| タスク | コミット | 状態 |
+|--------|----------|------|
+| Task N: spec-index 棚卸し | `253b45a` | done (pct/summary/乖離修正3件: 16_subthread_ui, 14_interaction_mechanics, ENGINE_FEATURE_INVENTORY) |
+| Task O: SP-099 棚卸し | — | done (調査のみ: 4件未決定、全てHUMAN_AUTHORITY。DeclareThreadLatentCond実装でG再訪トリガー到達) |
+| Task P: Phase A checklist 更新 | 前セッション | done (73項目。D-8〜D-11追加済み: 潜在/完了/分岐/自動追跡) |
+
+---
+
 ## Task P: Phase A クロージングチェックリスト更新
 
 ```
