@@ -34,6 +34,9 @@ namespace ProjectFoundPhone.Data
         /// <summary>スレッド種別</summary>
         public ThreadType Type;
 
+        /// <summary>潜在状態 (UIに表示しない)</summary>
+        public bool IsLatent;
+
         /// <summary>未読メッセージ数</summary>
         public int UnreadCount;
 

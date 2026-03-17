@@ -359,11 +359,35 @@ title: ETK_ThreadParallel
 /// --------------------------------------------------
 title: ETK_Branch
 ---
-<<SystemMessage "--- 分岐スレッド テスト ---">>
+<<SystemMessage "--- 分岐スレッド + 潜在スレッド テスト ---">>
 <<StartWait 0.5>>
 
 <<set $speaker to "pyramid">>
-分岐スレッドのテストを開始します。BeginBranch で自動的に分岐に入ります。
+まず潜在スレッド (DeclareThreadLatent) のテストです。
+
+<<DeclareThreadLatent "etk_latent_note" "A" "隠された覚書">>
+
+<<StartWait 0.5>>
+潜在スレッド「隠された覚書」を登録しました。サイドバーにはまだ表示されていないはずです。
+
+<<AddThreadMessage "etk_latent_note" "潜在メッセージ1: この覚書はまだ見えない">>
+
+<<SystemMessage "確認: サイドバーに「隠された覚書」が表示されていないこと">>
+<<StartWait 3>>
+
+<<set $speaker to "pyramid">>
+では顕在化 (ManifestThread) します。
+
+<<ManifestThread "etk_latent_note">>
+
+<<StartWait 0.5>>
+サイドバーに「隠された覚書」が出現したはずです。既に追加済みのメッセージも閲覧できます。
+
+<<SystemMessage "確認: サイドバーに「隠された覚書」が表示され、メッセージが見えること">>
+<<StartWait 5>>
+
+<<set $speaker to "pyramid">>
+次に分岐スレッドのテストです。BeginBranch で自動的に分岐に入ります。
 
 <<StartWait 1>>
 

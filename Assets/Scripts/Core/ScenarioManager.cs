@@ -170,6 +170,8 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.AddCommandHandler<string, string, string>("DeclareThreadTyped", DeclareThreadTypedCommand);
             m_DialogueRunner.AddCommandHandler<string, string>("AddThreadMessage", AddThreadMessageCommand);
             m_DialogueRunner.AddCommandHandler<string, string, string>("AddThreadChat", AddThreadChatCommand);
+            m_DialogueRunner.AddCommandHandler<string, string, string>("DeclareThreadLatent", DeclareThreadLatentCommand);
+            m_DialogueRunner.AddCommandHandler<string>("ManifestThread", ManifestThreadCommand);
             m_DialogueRunner.AddCommandHandler<string, string>("BeginBranch", BeginBranchCommand);
             m_DialogueRunner.AddCommandHandler<bool>("EndBranch", EndBranchCommand);
             m_DialogueRunner.AddCommandHandler<string>("SetBranchReflection", SetBranchReflectionCommand);
@@ -202,6 +204,8 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.RemoveCommandHandler("DeclareThreadTyped");
             m_DialogueRunner.RemoveCommandHandler("AddThreadMessage");
             m_DialogueRunner.RemoveCommandHandler("AddThreadChat");
+            m_DialogueRunner.RemoveCommandHandler("DeclareThreadLatent");
+            m_DialogueRunner.RemoveCommandHandler("ManifestThread");
             m_DialogueRunner.RemoveCommandHandler("BeginBranch");
             m_DialogueRunner.RemoveCommandHandler("EndBranch");
             m_DialogueRunner.RemoveCommandHandler("SetBranchReflection");
@@ -498,7 +502,7 @@ namespace ProjectFoundPhone.Core
             DeclareThreadInternal(threadId, displayName, ParseThreadType(typeStr));
         }
 
-        private void DeclareThreadInternal(string threadId, string displayName, ThreadType type)
+        private void DeclareThreadInternal(string threadId, string displayName, ThreadType type, bool latent = false)
         {
             if (m_DeclaredThreads.ContainsKey(threadId))
             {
@@ -510,9 +514,17 @@ namespace ProjectFoundPhone.Core
             {
                 ThreadId = threadId,
                 DisplayName = displayName,
-                Type = type
+                Type = type,
+                IsLatent = latent
             };
             m_DeclaredThreads[threadId] = thread;
+
+            if (latent)
+            {
+                // 潜在登録: UIに通知せず、データのみ登録
+                Debug.Log($"ScenarioManager: Thread declared (latent) — id='{threadId}', type={type}, name='{displayName}'");
+                return;
+            }
 
             // メインチャットに出現通知（型アイコン+型色付き）
             if (m_ChatController != null)
@@ -547,6 +559,50 @@ namespace ProjectFoundPhone.Core
                     Debug.LogWarning($"ScenarioManager: Unknown thread type '{typeStr}', defaulting to Annotation.");
                     return ThreadType.Annotation;
             }
+        }
+
+        /// <summary>
+        /// Yarn: &lt;&lt;DeclareThreadLatent "threadId" "type" "displayName"&gt;&gt;
+        /// スレッドを潜在登録する。UIに表示せず、ManifestThread で顕在化するまで見えない。
+        /// </summary>
+        private void DeclareThreadLatentCommand(string threadId, string typeStr, string displayName)
+        {
+            DeclareThreadInternal(threadId, displayName, ParseThreadType(typeStr), latent: true);
+        }
+
+        /// <summary>
+        /// Yarn: &lt;&lt;ManifestThread "threadId"&gt;&gt;
+        /// 潜在スレッドを顕在化する。通知メッセージ+サイドバー追加を発火する。
+        /// </summary>
+        private void ManifestThreadCommand(string threadId)
+        {
+            if (!m_DeclaredThreads.TryGetValue(threadId, out var thread))
+            {
+                Debug.LogWarning($"ScenarioManager: Thread '{threadId}' not found. DeclareThreadLatent first.");
+                return;
+            }
+
+            if (!thread.IsLatent)
+            {
+                Debug.LogWarning($"ScenarioManager: Thread '{threadId}' is already visible.");
+                return;
+            }
+
+            thread.IsLatent = false;
+
+            // 通知メッセージ
+            if (m_ChatController != null)
+            {
+                string icon = GetTypeIcon(thread.Type);
+                string colorHex = GetTypeColorHex(thread.Type);
+                m_ChatController.AddSystemMessage(
+                    $"<color=#{colorHex}>{icon}</color> 新しいスレッド「{thread.DisplayName}」が利用可能です");
+            }
+
+            // UI更新 (サイドバーにエントリ追加)
+            OnThreadDeclared?.Invoke(threadId, thread.DisplayName);
+
+            Debug.Log($"ScenarioManager: Thread manifested — id='{threadId}', type={thread.Type}, name='{thread.DisplayName}'");
         }
 
         /// <summary>ThreadType の表示アイコンを返す</summary>

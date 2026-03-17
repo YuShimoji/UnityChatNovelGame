@@ -165,10 +165,10 @@
     "id": "SP-016",
     "title": "サブスレッドUI仕様",
     "status": "partial",
-    "pct": 85,
+    "pct": 90,
     "cat": "ui",
     "file": "docs/StorySpec/16_subthread_ui.md",
-    "summary": "統合型スレッドモデル、2段階トリガー。Step1+Step2完全実装済み(5a-5e+5d)。Step3 Phase3a+3b実装済み(A型注釈カード+B/C/分岐ティント+出現通知+ハンバーガーパルス)。未実装: Step3残(Wikiリンク/成果物カード)、Step4(条件トリガーエンジン)"
+    "summary": "統合型スレッドモデル、2段階トリガー。Step1-3+Step4a実装済み。DeclareThreadLatent(潜在登録)+ManifestThread(顕在化)で2段階トリガー基盤完了。未実装: Step3残(Wikiリンク/成果物カード)、Step4残(自動トリガー/CompleteThread)"
   },
   {
     "id": "SP-099",
