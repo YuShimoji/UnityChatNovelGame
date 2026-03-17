@@ -172,6 +172,14 @@ namespace ProjectFoundPhone.UI
                         // プレイヤーの選択をメッセージとして自動表示（Yarn側でのエコー不要）
                         Debug.Log($"[RunOptionsAsync] Player selected index={index}, text='{choiceTexts[index]}'");
                         m_ChatController.AddMessage("player", choiceTexts[index]);
+
+                        // AutoSpeakerAfterChoice: 選択後に $speaker を "player" に自動設定
+                        if (m_DialogueRunner?.VariableStorage != null &&
+                            m_DialogueRunner.VariableStorage.TryGetValue<bool>("$auto_speaker_after_choice", out bool autoSpeaker) &&
+                            autoSpeaker)
+                        {
+                            m_DialogueRunner.VariableStorage.SetValue("$speaker", "player");
+                        }
                     }
                 });
 

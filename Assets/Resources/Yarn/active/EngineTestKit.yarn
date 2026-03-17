@@ -13,6 +13,7 @@ title: ETK_Menu
 <<declare $etk_done_choices = false>>
 <<declare $etk_done_threadtype = false>>
 <<declare $etk_done_branch = false>>
+<<declare $auto_speaker_after_choice = false>>
 
 <<SystemMessage "=== Engine Test Kit ===">>
 <<StartWait 0.5>>

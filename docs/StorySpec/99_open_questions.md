@@ -62,8 +62,7 @@
 - [x] ~~矛盾発見→断片入手の紐づけ~~ → **外す**。矛盾報酬=HalluciCoinのみ。断片は別入手経路（2026-03-07決定）
 - [x] ~~分岐スレッド（Ifストーリー）とサブスレッド(A/B/C)の関係整理~~
   - **2026-03-17 解決**: Branch Step 2+ (582862b) で方針 b を採用し実装完了。UI層は ThreadType.Branch で統合、データ層は BranchThreadState + SubthreadData の二系統を維持。BeginBranch が DeclareThreadInternal(Branch型) を内部で呼び、UI統合とデータ分離を両立。将来的に a (データモデル統合) への移行は可能だが現状で機能している
-- [ ] 選択肢→後続メッセージの話者/色の自動紐づけ: 現状は Yarn 側で `$speaker` を逐次指定。選択肢選択時にコード側が自動で話者を切り替える仕組みの検討（2026-03-11 観察）
-  - **2026-03-16 分析**: RunOptionsAsync がプレイヤーメッセージとして自動再表示済み。ResolveSpeaker は CharacterName → $speaker → "npc" の3段階。選択肢選択後に `$speaker = "player"` を自動セットすれば、選択直後のメッセージが自動的にプレイヤー色になる。ただし「選択肢の後に別NPCが即座に反応する」パターンではむしろ邪魔になるため、opt-in 方式が安全
-  - **エンジン側推奨**: `<<AutoSpeakerAfterChoice true>>` のような Yarn コマンドで制御可能に
+- [x] ~~選択肢→後続メッセージの話者/色の自動紐づけ~~
+  - **2026-03-17 解決**: Yarn 変数 `$auto_speaker_after_choice` (bool) で opt-in 制御。`true` の場合、選択後に `$speaker = "player"` を自動セット。ChatDialogueView.RunOptionsAsync 内で処理。専用コマンド不要 (Yarn 標準変数)
 - [x] ~~断片インベントリのUI配置~~ → **プレイヤーリソース表示域（インベントリ）**としてダッシュボード内タブ+フローティングUI。断片は汎用インベントリの一種（2026-03-08決定、`08_ui_ux.md` 参照）
 - [x] ~~アルケミー方式~~ → **D-3+D-1ハイブリッド**（パッシブ主体、重大局面のみ能動合成）（2026-03-08決定、`14_interaction_mechanics.md` 参照）
