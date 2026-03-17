@@ -81,7 +81,7 @@ Assets/Resources/Yarn/active/
 
 ---
 
-## 2. コマンドリファレンス（全21コマンド）
+## 2. コマンドリファレンス（全22コマンド）
 
 ### メッセージ系
 
@@ -118,6 +118,7 @@ Assets/Resources/Yarn/active/
 | SetBranchReflection | `<<SetBranchReflection "text">>` | EndBranch 時にメインに投入する反映メッセージを手動設定。未設定時は分岐内UnlockTopicのトピック名から自動生成 |
 | AddHalluciCoin | `<<AddHalluciCoin amount>>` | HC を静かに加算 (通知なし、ダッシュボードバッジで検知) |
 | DeclareThreadLatent | `<<DeclareThreadLatent "id" "type" "name">>` | スレッドを潜在登録。ManifestThread で顕在化 |
+| DeclareThreadLatentCond | `<<DeclareThreadLatentCond "id" "type" "name" "$condition">>` | 条件付き潜在スレッド。条件が真になると自動顕在化 (リアクティブ評価) |
 | ManifestThread | `<<ManifestThread "id">>` | 潜在スレッドを顕在化 |
 | CompleteThread | `<<CompleteThread "id">>` | スレッドを完了状態にする (サイドバーグレーアウト) |
 

@@ -1,13 +1,13 @@
 # WORKFLOW STATE SSOT
 
-**Updated**: 2026-03-16
-**Phase**: エンジン検証 Phase A — サブスレッドUI ThreadType + 型別レンダリング実装完了
+**Updated**: 2026-03-17
+**Phase**: エンジン検証 Phase A — 全主要機能実装完了、手動検証待ち
 **Branch**: main
 
 ## Mission
 
 ダッシュボード MVP + インベントリ UI + チャットバブル修正 + サブスレッドUI (5a-5e+5d) の動作確認を行い、安定ベースラインを確立する。
-残: 矛盾Phase2手動テスト → Ch3シナリオ設計 or サブスレッドStep3へ進む。
+残: Phase Aクロージング手動検証(56項目) → Ch3シナリオ設計。
 Ch1/Ch2 Yarn スクリプトはエンジン検証用モックであり、本番コンテンツではない。
 
 ## Done 条件（現フェーズ）
@@ -110,7 +110,7 @@ ContentAuthoring シーンで以下を行う必要あり:
 | 6 | ~~スマホレスポンシブ基盤 (CRITICAL+HIGH)~~ | B | #4b,4c 完了後 | **済** (2026-03-17: バブル幅/フォント/サイドバー幅レスポンシブ) |
 | 7 | ~~SP-014 Phase 1: 分岐内トピック自動追跡~~ | A | #5a | **済** (2026-03-17: UnlockTopic→TransferFlags自動登録, ResolveReflectionMessage自動生成) |
 | 8 | SP-014 Phase 2: 条件付き分岐トリガー | A | #7 | 未着手 |
-| 9 | SP-006 ゲートメカニクス | A | — | 未着手 |
+| 9 | ~~SP-006 ゲートメカニクス~~ | A | — | **済** (2026-03-17: HCゲートUI+ChannelData.RequiredHalluciCoin+ダッシュボードHC N/M表示) |
 | 10 | Ch3 シナリオ設計 | A | #2,5 完了後 | 未着手 |
 
 ### 技術的知見
@@ -128,7 +128,7 @@ ContentAuthoring シーンで以下を行う必要あり:
 - **ThreadType 取得方法**: `OnThreadDeclared` イベントシグネチャは変更なし (`Action<string, string>`)。型情報は `ScenarioManager.GetDeclaredThread(threadId).Type` 経由で取得
 - **ヘッダーバー表示制御**: スレッド切替時にのみ表示・非表示を切替。Main スレッド選択時は非表示。型別色は 15% alpha の背景帯 + 90% alpha のラベルで構成
 - **型別アイコン/色**: Annotation=[A], Tracking=[B], Scout=[C], Branch=[>]。色は ThreadSwitcherController 定数 (TypeColorAnnotation 等) で一元管理
-- **Yarn コマンド数**: 全21コマンド (CompleteThread 追加後)
+- **Yarn コマンド数**: 全22コマンド (DeclareThreadLatentCond 追加後)
 - **SubthreadTest.yarn**: DeclareThreadTyped 対応に更新済み。型指定の検証モックとして機能
 - **通知バナー**: OnThreadMessageAdded で非アクティブスレッドへのメッセージ検出 → DOTween Sequence (fadeIn 0.25s → 3.5s表示 → fadeOut 0.4s)。クリックで OnSelectThread 呼出。Reset/OnSelectThread で HideNotificationBanner
 - **スレッドのノード遷移維持**: m_DeclaredThreads はノード遷移(jump)で消えない。ClearDeclaredThreads は SaveManager.LoadGame のみで呼ばれる
@@ -143,6 +143,9 @@ ContentAuthoring シーンで以下を行う必要あり:
 - **Branch TransferFlags自動追跡 (SP-014 Phase 1)**: 分岐内でUnlockTopicを呼ぶとTransferFlagsに自動登録。EndBranch時にSetBranchReflection未設定ならTransferFlagsのトピック名から反映メッセージを自動生成 (ResolveReflectionMessage)。優先順位: Yarn指定 > TransferFlags自動 > なし
 - **スマホレスポンシブ (SP-008)**: GetResponsiveBubblePercent (canvas幅<800→0.85) / GetResponsiveFontScale (canvas幅<900→縮小) / GetSidebarWidth (canvas幅40%上限)
 - **HalluciCoin通知バッジ (SP-006)**: RefreshCoinDisplay で前回値と比較、増加時にDOTweenパルス (scale 1.3x + 色ハイライト)
+- **HCゲート (SP-006)**: ChannelData.RequiredHalluciCoin + ダッシュボードLocked表示 (HC N/M形式)。ch2.asset に RequiredHalluciCoin=2 設定済み
+- **DeclareThreadLatentCond (SP-016 Step4)**: 条件付き潜在スレッド。Yarn変数変更時にリアクティブ評価し、trueで自動顕在化。Branch型はAutoBeginBranch。安全弁付き
+- **Ch1 BranchPyramid**: BeginBranch/EndBranch/UnlockTopicのエンジン検証モック。Day2にDeclareThreadLatentCondも組込済み
 
 ### Claude への依頼パターン
 

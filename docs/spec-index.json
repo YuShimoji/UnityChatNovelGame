@@ -74,9 +74,8 @@
   {
     "id": "SP-006",
     "title": "ハルシコイン",
-    "status": "partial",
-    "pct": 100,
     "status": "done",
+    "pct": 100,
     "cat": "system",
     "file": "docs/StorySpec/06_hallucicoin.md",
     "summary": "コア報酬システム全実装。矛盾発見→HalluciCoin付与+Dashboard表示+Save/Load永続化+増加通知バッジ+AddHalluciCoinコマンド+$halluci_coin Yarn変数同期+ダッシュボードHCゲート(ChannelData.RequiredHalluciCoin)+HC不足時Locked表示(HC N/M形式)"
@@ -187,7 +186,7 @@
     "pct": 100,
     "cat": "infra",
     "file": "docs/ENGINE_FEATURE_INVENTORY.md",
-    "summary": "Yarnコマンド21種・キャラ管理・セーブ(AutoSave+スレッド対応)・演出・バブル表示設定・矛盾(#line:タグ方式)・ダッシュボード(Day Resume+マルチDay)・インベントリUI・サブスレッドUI(Step1-3: サイドバー+ThreadType+種別差異レンダリング+出現通知+Save/Load)・ETK(ch_etk対応)。全機能反映済み"
+    "summary": "Yarnコマンド22種(DeclareThreadLatentCond含む)・キャラ管理・セーブ(AutoSave+スレッド対応)・演出・バブル表示設定・矛盾(#line:タグ方式)・ダッシュボード(Day Resume+マルチDay+HCゲート)・インベントリUI・サブスレッドUI(Step1-4: サイドバー+ThreadType+種別差異レンダリング+出現通知+条件付き潜在+Save/Load)・Branch(BeginBranch/EndBranch/TransferFlags自動追跡)・ETK(ch_etk対応)。全機能反映済み"
   },
   {
     "id": "EN-002",
@@ -196,7 +195,7 @@
     "pct": 100,
     "cat": "infra",
     "file": "docs/WORKFLOW_STATE_SSOT.md",
-    "summary": "現在の開発状態・セットアップ手順・次ステップ。サブスレッドUI 5a-5e+5d全完了反映済み。残: 矛盾Phase2手動テスト、スマホレイアウト、Ch3設計"
+    "summary": "現在の開発状態・セットアップ手順・次ステップ。全主要機能実装完了(22コマンド+HCゲート+Branch+レスポンシブ)。残: Phase Aクロージング手動検証(56項目)、Ch3設計"
   },
   {
     "id": "EN-003",
@@ -259,6 +258,6 @@
     "pct": 100,
     "cat": "infra",
     "file": "docs/SCENARIO_AUTHORING_GUIDE.md",
-    "summary": "Yarnシナリオ執筆ハンズオン。5分クイックスタート、全17コマンドリファレンス(DeclareThread/DeclareThreadTyped/AddThreadMessage/AddThreadChat含む)、キャラクターID一覧、コンテンツパターン集、キャラクターの声ガイド"
+    "summary": "Yarnシナリオ執筆ハンズオン。5分クイックスタート、全22コマンドリファレンス(DeclareThreadLatentCond/BeginBranch/EndBranch/AddHalluciCoin含む)、キャラクターID一覧、コンテンツパターン集、キャラクターの声ガイド"
   }
 ]
