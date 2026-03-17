@@ -40,6 +40,9 @@
 | BeginBranch | `<<BeginBranch "branchId" "displayName">>` | 分岐スレッドを宣言し自動切替。以降のメッセージは分岐に流れる |
 | EndBranch | `<<EndBranch true\|false>>` | 分岐を終了しメインに自動復帰。ReflectionMessage があれば反映メッセージを投入 |
 | SetBranchReflection | `<<SetBranchReflection "text">>` | EndBranch 時にメインへ投入する反映メッセージを設定 |
+| AddHalluciCoin | `<<AddHalluciCoin amount>>` | HalluciCoin を静かに加算 (通知なし、ダッシュボードバッジパルスで検知) |
+| DeclareThreadLatent | `<<DeclareThreadLatent "id" "type" "name">>` | スレッドを潜在登録 (UIに出さない)。ManifestThread で顕在化 |
+| ManifestThread | `<<ManifestThread "id">>` | 潜在スレッドを顕在化。通知メッセージ+サイドバー追加 |
 
 ### Yarn 標準機能
 

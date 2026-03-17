@@ -81,7 +81,7 @@ Assets/Resources/Yarn/active/
 
 ---
 
-## 2. コマンドリファレンス（全17コマンド）
+## 2. コマンドリファレンス（全20コマンド）
 
 ### メッセージ系
 
@@ -116,6 +116,9 @@ Assets/Resources/Yarn/active/
 | BeginBranch | `<<BeginBranch "branchId" "displayName">>` | 分岐スレッドを宣言し自動切替。以降のメッセージは分岐に流れる |
 | EndBranch | `<<EndBranch true\|false>>` | 分岐終了+メイン自動復帰。ReflectionMessage があればメインに反映 |
 | SetBranchReflection | `<<SetBranchReflection "text">>` | EndBranch 時にメインに投入する反映メッセージを設定 |
+| AddHalluciCoin | `<<AddHalluciCoin amount>>` | HC を静かに加算 (通知なし、ダッシュボードバッジで検知) |
+| DeclareThreadLatent | `<<DeclareThreadLatent "id" "type" "name">>` | スレッドを潜在登録。ManifestThread で顕在化 |
+| ManifestThread | `<<ManifestThread "id">>` | 潜在スレッドを顕在化 |
 
 ### Yarn 標準機能
 
