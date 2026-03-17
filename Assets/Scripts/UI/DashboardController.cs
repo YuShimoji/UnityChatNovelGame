@@ -1,5 +1,6 @@
 #if YARN_SPINNER
 using System.Linq;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,6 +29,8 @@ namespace ProjectFoundPhone.UI
         private TextMeshProUGUI m_CoinDisplay;
         private TextMeshProUGUI m_SubtitleText;
         private bool m_IsShowing;
+        private int m_LastCoinValue = -1;
+        private Tween m_CoinPulseTween;
 
         private ChannelData[] m_Channels;
 
@@ -61,6 +64,11 @@ namespace ProjectFoundPhone.UI
             {
                 Show();
             }
+        }
+
+        private void OnDestroy()
+        {
+            m_CoinPulseTween?.Kill();
         }
 
         private void Update()
@@ -472,6 +480,30 @@ namespace ProjectFoundPhone.UI
             }
 
             m_CoinDisplay.text = $"HC: {coin}";
+
+            // 値が増加した場合にパルスアニメーション
+            if (m_LastCoinValue >= 0 && coin > m_LastCoinValue)
+            {
+                PulseCoinDisplay();
+            }
+            m_LastCoinValue = coin;
+        }
+
+        /// <summary>HC 表示をパルスさせて増加を視覚通知する</summary>
+        private void PulseCoinDisplay()
+        {
+            if (m_CoinDisplay == null) return;
+            m_CoinPulseTween?.Kill();
+
+            Color originalColor = new Color(0.8f, 0.75f, 0.4f);
+            Color highlightColor = new Color(1f, 0.9f, 0.3f);
+            Transform coinTransform = m_CoinDisplay.transform;
+
+            m_CoinPulseTween = DOTween.Sequence()
+                .Append(coinTransform.DOScale(1.3f, 0.15f).SetEase(Ease.OutBack))
+                .Join(m_CoinDisplay.DOColor(highlightColor, 0.15f))
+                .Append(coinTransform.DOScale(1f, 0.25f).SetEase(Ease.InOutSine))
+                .Join(m_CoinDisplay.DOColor(originalColor, 0.25f));
         }
 
         private void CreateChannelCard(ChannelData channel, ChannelStatus status)
