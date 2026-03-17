@@ -147,10 +147,10 @@
     "id": "SP-014",
     "title": "インタラクション・メカニクス",
     "status": "partial",
-    "pct": 45,
+    "pct": 60,
     "cat": "system",
     "file": "docs/StorySpec/14_interaction_mechanics.md",
-    "summary": "3メカニクス候補(指摘/ボード/分岐)の整理。矛盾Phase2完全実装(長押し+タップ、7ペア、HalluciCoin報酬、成功/失敗演出、クールダウン)。DeductionBoard凍結。Branch Step1実装済み(BranchThreadState+Save/Load)、Step2+(UIエントリ/リターンフック)未着手"
+    "summary": "3メカニクス候補(指摘/ボード/分岐)の整理。矛盾Phase2完全実装。DeductionBoard凍結。Branch Step1+Step2実装済み(BeginBranch自動切替/EndBranch自動復帰/SetBranchReflection反映メッセージ/Save/Load)。未実装: deterministic reflected messageの自動生成、分岐条件エンジン"
   },
   {
     "id": "SP-015",

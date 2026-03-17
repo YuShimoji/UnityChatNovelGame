@@ -817,6 +817,12 @@ namespace ProjectFoundPhone.UI
             }
         }
 
+        /// <summary>外部からヘッダーバー表示を強制更新する (BeginBranch/EndBranch用)</summary>
+        public void ForceUpdateHeaderBar(string threadId)
+        {
+            UpdateThreadHeaderBar(threadId);
+        }
+
         private void UpdateThreadHeaderBar(string threadId)
         {
             if (m_ThreadHeaderBar == null) return;

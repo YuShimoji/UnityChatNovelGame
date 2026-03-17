@@ -15,6 +15,9 @@ namespace ProjectFoundPhone.Data
         public bool WasCompleted;
         public List<string> TransferFlags = new List<string>();
 
+        /// <summary>EndBranch 時にメインスレッドへ投入する反映メッセージ (Yarn指定)</summary>
+        public string ReflectionMessage;
+
         public BranchThreadState Clone()
         {
             return new BranchThreadState
@@ -22,7 +25,8 @@ namespace ProjectFoundPhone.Data
                 ActiveBranchId = ActiveBranchId,
                 IsActive = IsActive,
                 WasCompleted = WasCompleted,
-                TransferFlags = new List<string>(TransferFlags ?? new List<string>())
+                TransferFlags = new List<string>(TransferFlags ?? new List<string>()),
+                ReflectionMessage = ReflectionMessage
             };
         }
 
@@ -32,6 +36,7 @@ namespace ProjectFoundPhone.Data
             IsActive = false;
             WasCompleted = false;
             TransferFlags.Clear();
+            ReflectionMessage = null;
         }
     }
 }

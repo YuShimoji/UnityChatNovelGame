@@ -12,6 +12,7 @@ title: ETK_Menu
 <<declare $etk_done_commands = false>>
 <<declare $etk_done_choices = false>>
 <<declare $etk_done_threadtype = false>>
+<<declare $etk_done_branch = false>>
 
 <<SystemMessage "=== Engine Test Kit ===">>
 <<StartWait 0.5>>
@@ -33,9 +34,11 @@ title: ETK_Menu
     <<jump ETK_Choices>>
 -> サブスレッド/ThreadType テスト <<if not $etk_done_threadtype>>
     <<jump ETK_ThreadType>>
--> テスト完了 <<if $etk_done_richtext and $etk_done_contradiction and $etk_done_commands and $etk_done_choices and $etk_done_threadtype>>
+-> 分岐スレッド テスト <<if not $etk_done_branch>>
+    <<jump ETK_Branch>>
+-> テスト完了 <<if $etk_done_richtext and $etk_done_contradiction and $etk_done_commands and $etk_done_choices and $etk_done_threadtype and $etk_done_branch>>
     <<jump ETK_End>>
--> もう一度メニューを見る <<if ($etk_done_richtext or $etk_done_contradiction or $etk_done_commands or $etk_done_choices or $etk_done_threadtype) and not ($etk_done_richtext and $etk_done_contradiction and $etk_done_commands and $etk_done_choices and $etk_done_threadtype)>>
+-> もう一度メニューを見る <<if ($etk_done_richtext or $etk_done_contradiction or $etk_done_commands or $etk_done_choices or $etk_done_threadtype or $etk_done_branch) and not ($etk_done_richtext and $etk_done_contradiction and $etk_done_commands and $etk_done_choices and $etk_done_threadtype and $etk_done_branch)>>
     <<jump ETK_Menu>>
 ===
 
@@ -346,6 +349,67 @@ title: ETK_ThreadParallel
 <<set $speaker to "player">>
 -> 確認した、メニューに戻る
     <<set $etk_done_threadtype to true>>
+    <<jump ETK_Menu>>
+===
+
+/// --------------------------------------------------
+/// ETK_Branch: 分岐スレッドテスト (Step 2+)
+/// 確認: BeginBranch→自動切替 / 分岐内対話 / SetBranchReflection / EndBranch→自動復帰+反映メッセージ
+/// --------------------------------------------------
+title: ETK_Branch
+---
+<<SystemMessage "--- 分岐スレッド テスト ---">>
+<<StartWait 0.5>>
+
+<<set $speaker to "pyramid">>
+分岐スレッドのテストを開始します。BeginBranch で自動的に分岐に入ります。
+
+<<StartWait 1>>
+
+<<BeginBranch "etk_branch_solo" "Pyramidの独白">>
+
+<<set $speaker to "pyramid">>
+ここは分岐スレッドです。メインとは別の会話空間に入りました。
+
+<<StartWait 0.5>>
+この世界には、まだ観測されていない事象がある。
+
+<<StartWait 0.5>>
+<<set $speaker to "player">>
+-> どういうこと？
+    <<set $speaker to "pyramid">>
+    <<StartWait 0.5>>
+    すべてのデータが均一ではない、ということだ。
+    <<SetBranchReflection "Pyramidの独白で「データの不均一性」について新しい知見を得た">>
+-> それは知っている
+    <<set $speaker to "pyramid">>
+    <<StartWait 0.5>>
+    では、その知識をどう活かすかが問題だ。
+    <<SetBranchReflection "Pyramidの独白で「知識の活用」について示唆を受けた">>
+
+<<StartWait 0.5>>
+<<SystemMessage "--- 確認項目 ---">>
+<<SystemMessage "1. BeginBranch で自動的にブランチスレッドに切替されたこと">>
+<<SystemMessage "2. ヘッダーバーに紫色の [>] Pyramidの独白 が表示されていること">>
+<<SystemMessage "3. サイドバーでMainに自由に切替・復帰できること">>
+<<SystemMessage "4. EndBranch 後にメインに自動復帰し、反映メッセージが表示されること">>
+
+<<StartWait 3>>
+
+<<set $speaker to "pyramid">>
+分岐を終了します。
+
+<<EndBranch true>>
+
+<<StartWait 0.5>>
+<<set $speaker to "pyramid">>
+メインスレッドに戻りました。上に反映メッセージが表示されているはずです。
+
+<<StartWait 30>>
+
+<<set $speaker to "player">>
+-> 確認した、メニューに戻る
+    <<set $etk_done_branch to true>>
     <<jump ETK_Menu>>
 ===
 

@@ -170,6 +170,9 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.AddCommandHandler<string, string, string>("DeclareThreadTyped", DeclareThreadTypedCommand);
             m_DialogueRunner.AddCommandHandler<string, string>("AddThreadMessage", AddThreadMessageCommand);
             m_DialogueRunner.AddCommandHandler<string, string, string>("AddThreadChat", AddThreadChatCommand);
+            m_DialogueRunner.AddCommandHandler<string, string>("BeginBranch", BeginBranchCommand);
+            m_DialogueRunner.AddCommandHandler<bool>("EndBranch", EndBranchCommand);
+            m_DialogueRunner.AddCommandHandler<string>("SetBranchReflection", SetBranchReflectionCommand);
 #endif
         }
 
@@ -199,6 +202,9 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.RemoveCommandHandler("DeclareThreadTyped");
             m_DialogueRunner.RemoveCommandHandler("AddThreadMessage");
             m_DialogueRunner.RemoveCommandHandler("AddThreadChat");
+            m_DialogueRunner.RemoveCommandHandler("BeginBranch");
+            m_DialogueRunner.RemoveCommandHandler("EndBranch");
+            m_DialogueRunner.RemoveCommandHandler("SetBranchReflection");
 #endif
         }
         #endregion
@@ -802,6 +808,87 @@ namespace ProjectFoundPhone.Core
             m_BranchThreadState ??= new BranchThreadState();
             m_BranchThreadState.IsActive = false;
             m_BranchThreadState.WasCompleted = completed;
+        }
+
+        /// <summary>
+        /// Yarn: &lt;&lt;BeginBranch "branchId" "displayName"&gt;&gt;
+        /// 分岐スレッドを宣言し、自動的にスレッド切替を行う。
+        /// 以降のメッセージは分岐スレッドに流れる。
+        /// </summary>
+        private void BeginBranchCommand(string branchId, string displayName)
+        {
+            // 分岐スレッドを宣言 (未宣言の場合)
+            if (!m_DeclaredThreads.ContainsKey(branchId))
+            {
+                DeclareThreadInternal(branchId, displayName, ThreadType.Branch);
+            }
+
+            // ブランチ状態を開始
+            BeginBranchThread(branchId);
+
+            // ChatController を分岐スレッドに自動切替
+            if (m_ChatController != null)
+            {
+                var thread = GetDeclaredThread(branchId);
+                m_ChatController.SetActiveThreadType(ThreadType.Branch);
+                m_ChatController.SwitchToThread(branchId, thread?.ChatHistory);
+            }
+
+            // ThreadSwitcherController のヘッダーバー更新
+            var threadSwitcher = FindFirstObjectByType<ThreadSwitcherController>();
+            threadSwitcher?.ForceUpdateHeaderBar(branchId);
+
+            Debug.Log($"ScenarioManager: Branch started — id='{branchId}', name='{displayName}'");
+        }
+
+        /// <summary>
+        /// Yarn: &lt;&lt;EndBranch true|false&gt;&gt;
+        /// 分岐スレッドを終了し、メインスレッドに自動復帰する。
+        /// ReflectionMessage が設定されていればメインスレッドに反映メッセージを投入する。
+        /// </summary>
+        private void EndBranchCommand(bool completed)
+        {
+            string branchId = m_BranchThreadState?.ActiveBranchId;
+
+            // 反映メッセージをメインスレッドに投入
+            if (m_ChatController != null && !string.IsNullOrEmpty(m_BranchThreadState?.ReflectionMessage))
+            {
+                // 一時的にメインスレッドに切替えてシステムメッセージを追加
+                string currentThread = m_ChatController.ActiveThreadId;
+                m_ChatController.SetActiveThreadType(null);
+                m_ChatController.SwitchToThread(null);
+
+                string colorHex = GetTypeColorHex(ThreadType.Branch);
+                m_ChatController.AddSystemMessage(
+                    $"<color=#{colorHex}>[>]</color> {m_BranchThreadState.ReflectionMessage}");
+
+                // 状態をリセットしてからメインに留まる
+            }
+            else if (m_ChatController != null)
+            {
+                // 反映メッセージなし: そのままメインに復帰
+                m_ChatController.SetActiveThreadType(null);
+                m_ChatController.SwitchToThread(null);
+            }
+
+            // ブランチ状態を終了
+            EndBranchThread(completed);
+
+            // ThreadSwitcherController のヘッダーバー更新 (メイン表示)
+            var threadSwitcher = FindFirstObjectByType<ThreadSwitcherController>();
+            threadSwitcher?.ForceUpdateHeaderBar(null);
+
+            Debug.Log($"ScenarioManager: Branch ended — id='{branchId}', completed={completed}");
+        }
+
+        /// <summary>
+        /// Yarn: &lt;&lt;SetBranchReflection "text"&gt;&gt;
+        /// EndBranch 時にメインスレッドへ投入する反映メッセージを設定する。
+        /// </summary>
+        private void SetBranchReflectionCommand(string text)
+        {
+            m_BranchThreadState ??= new BranchThreadState();
+            m_BranchThreadState.ReflectionMessage = text;
         }
 
         public bool IsInputLocked => m_IsInputLocked;
