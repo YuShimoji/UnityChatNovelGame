@@ -312,7 +312,7 @@ title: Ch1_Day1_BranchPyramid
     <<UnlockTopic "topic_suspicious_message">>
     <<StartWait 0.3>>
     この不整合は、単なる通信エラーでは説明がつきません。
-    <<EndBranch true>>
+    <<EndBranch true "select">>
 -> 今はいい
     // 分岐に入らずHubに戻る
 
