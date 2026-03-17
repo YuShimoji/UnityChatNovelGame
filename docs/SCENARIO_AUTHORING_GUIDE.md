@@ -81,7 +81,7 @@ Assets/Resources/Yarn/active/
 
 ---
 
-## 2. コマンドリファレンス（全20コマンド）
+## 2. コマンドリファレンス（全21コマンド）
 
 ### メッセージ系
 
@@ -114,11 +114,12 @@ Assets/Resources/Yarn/active/
 | AddThreadMessage | `<<AddThreadMessage "threadId" "text">>` | サブスレッドにシステムメッセージ追加（メイン非表示） |
 | AddThreadChat | `<<AddThreadChat "threadId" "charID" "text">>` | サブスレッドにキャラクター付きメッセージ追加 |
 | BeginBranch | `<<BeginBranch "branchId" "displayName">>` | 分岐スレッドを宣言し自動切替。以降のメッセージは分岐に流れる |
-| EndBranch | `<<EndBranch true\|false>>` | 分岐終了+メイン自動復帰。ReflectionMessage があればメインに反映 |
-| SetBranchReflection | `<<SetBranchReflection "text">>` | EndBranch 時にメインに投入する反映メッセージを設定 |
+| EndBranch | `<<EndBranch true\|false>>` | 分岐終了+メイン自動復帰。反映メッセージ投入 (SetBranchReflection指定 > 分岐内UnlockTopicから自動生成 > なし) |
+| SetBranchReflection | `<<SetBranchReflection "text">>` | EndBranch 時にメインに投入する反映メッセージを手動設定。未設定時は分岐内UnlockTopicのトピック名から自動生成 |
 | AddHalluciCoin | `<<AddHalluciCoin amount>>` | HC を静かに加算 (通知なし、ダッシュボードバッジで検知) |
 | DeclareThreadLatent | `<<DeclareThreadLatent "id" "type" "name">>` | スレッドを潜在登録。ManifestThread で顕在化 |
 | ManifestThread | `<<ManifestThread "id">>` | 潜在スレッドを顕在化 |
+| CompleteThread | `<<CompleteThread "id">>` | スレッドを完了状態にする (サイドバーグレーアウト) |
 
 ### Yarn 標準機能
 

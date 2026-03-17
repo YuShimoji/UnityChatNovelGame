@@ -43,6 +43,7 @@
 | AddHalluciCoin | `<<AddHalluciCoin amount>>` | HalluciCoin を静かに加算 (通知なし、ダッシュボードバッジパルスで検知) |
 | DeclareThreadLatent | `<<DeclareThreadLatent "id" "type" "name">>` | スレッドを潜在登録 (UIに出さない)。ManifestThread で顕在化 |
 | ManifestThread | `<<ManifestThread "id">>` | 潜在スレッドを顕在化。通知メッセージ+サイドバー追加 |
+| CompleteThread | `<<CompleteThread "id">>` | スレッドを完了状態にする。サイドバーでグレーアウト+チェックマーク |
 
 ### Yarn 標準機能
 

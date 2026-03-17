@@ -108,7 +108,10 @@ ContentAuthoring シーンで以下を行う必要あり:
 | 5f | ~~種別差異レンダリング (Step 3 Phase 3a)~~ | A | #5b | **済** (2026-03-17: A型注釈カード+B/C/分岐ティント+SystemMessageティント) |
 | 5g | ~~出現通知 (Step 3 Phase 3b)~~ | A | #5b | **済** (2026-03-17: 型色リッチテキスト通知+ハンバーガーパルス) |
 | 6 | ~~スマホレスポンシブ基盤 (CRITICAL+HIGH)~~ | B | #4b,4c 完了後 | **済** (2026-03-17: バブル幅/フォント/サイドバー幅レスポンシブ) |
-| 7 | Ch3 シナリオ設計 | A | #2,5 完了後 | 未着手 |
+| 7 | ~~SP-014 Phase 1: 分岐内トピック自動追跡~~ | A | #5a | **済** (2026-03-17: UnlockTopic→TransferFlags自動登録, ResolveReflectionMessage自動生成) |
+| 8 | SP-014 Phase 2: 条件付き分岐トリガー | A | #7 | 未着手 |
+| 9 | SP-006 ゲートメカニクス | A | — | 未着手 |
+| 10 | Ch3 シナリオ設計 | A | #2,5 完了後 | 未着手 |
 
 ### 技術的知見
 
@@ -125,7 +128,7 @@ ContentAuthoring シーンで以下を行う必要あり:
 - **ThreadType 取得方法**: `OnThreadDeclared` イベントシグネチャは変更なし (`Action<string, string>`)。型情報は `ScenarioManager.GetDeclaredThread(threadId).Type` 経由で取得
 - **ヘッダーバー表示制御**: スレッド切替時にのみ表示・非表示を切替。Main スレッド選択時は非表示。型別色は 15% alpha の背景帯 + 90% alpha のラベルで構成
 - **型別アイコン/色**: Annotation=[A], Tracking=[B], Scout=[C], Branch=[>]。色は ThreadSwitcherController 定数 (TypeColorAnnotation 等) で一元管理
-- **Yarn コマンド数**: 全20コマンド (DeclareThreadTyped 追加後)
+- **Yarn コマンド数**: 全21コマンド (CompleteThread 追加後)
 - **SubthreadTest.yarn**: DeclareThreadTyped 対応に更新済み。型指定の検証モックとして機能
 - **通知バナー**: OnThreadMessageAdded で非アクティブスレッドへのメッセージ検出 → DOTween Sequence (fadeIn 0.25s → 3.5s表示 → fadeOut 0.4s)。クリックで OnSelectThread 呼出。Reset/OnSelectThread で HideNotificationBanner
 - **スレッドのノード遷移維持**: m_DeclaredThreads はノード遷移(jump)で消えない。ClearDeclaredThreads は SaveManager.LoadGame のみで呼ばれる
@@ -136,7 +139,8 @@ ContentAuthoring シーンで以下を行う必要あり:
 - **サイドバーUI (5d)**: ドロップダウン→左スライドインサイドバーに全面置換。ハンバーガーボタン(≡)+未読合計バッジ、半透明オーバーレイ(タップで閉じ)、ThreadTypeグループヘッダー、DOTween スライドアニメ(0.25s OutCubic/InCubic)、ScrollRect内蔵でスレッド多数でもスクロール可。Main エントリは常に先頭
 - **種別差異レンダリング (5f)**: ChatController.m_ActiveThreadType で表示中スレッドの型を追跡。A型(注釈): 中央配置カード(キャラアイコン/名前省略、型色ベース暗背景、型色明テキスト)。B/C/分岐: キャラ色に型色を12%混合したティント。SystemMessage: サブスレッド内で型色10%ティント。ThreadSwitcherController.OnSelectThread と SaveManager.ApplySaveData の両方で SetActiveThreadType を呼ぶ
 - **出現通知 (5g)**: DeclareThread時に型アイコン+型色リッチテキスト付きSystemMessage。ハンバーガーボタンが型色で2回パルス (DOTween)
-- **Branch Step 2+ (SP-014)**: BeginBranch(自動切替) / EndBranch(自動復帰+反映メッセージ) / SetBranchReflection(Yarn指定型)。分岐中はサイドバーで自由切替可。Yarnコマンド数17
+- **Branch Step 2+ (SP-014)**: BeginBranch(自動切替) / EndBranch(自動復帰+反映メッセージ) / SetBranchReflection(Yarn指定型)。分岐中はサイドバーで自由切替可
+- **Branch TransferFlags自動追跡 (SP-014 Phase 1)**: 分岐内でUnlockTopicを呼ぶとTransferFlagsに自動登録。EndBranch時にSetBranchReflection未設定ならTransferFlagsのトピック名から反映メッセージを自動生成 (ResolveReflectionMessage)。優先順位: Yarn指定 > TransferFlags自動 > なし
 - **スマホレスポンシブ (SP-008)**: GetResponsiveBubblePercent (canvas幅<800→0.85) / GetResponsiveFontScale (canvas幅<900→縮小) / GetSidebarWidth (canvas幅40%上限)
 - **HalluciCoin通知バッジ (SP-006)**: RefreshCoinDisplay で前回値と比較、増加時にDOTweenパルス (scale 1.3x + 色ハイライト)
 
