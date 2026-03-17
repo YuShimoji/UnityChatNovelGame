@@ -10,6 +10,11 @@ title: Ch2_Opening
 <<declare $met_mason = false>>
 <<declare $met_oliver = false>>
 <<declare $location_realized = false>>
+<<declare $halluci_coin = 0>>
+
+// 潜在スレッド: 地名矛盾が表面化したら顕在化
+<<DeclareThreadLatent "ch2_track_location" "B" "地名矛盾追跡">>
+<<AddThreadMessage "ch2_track_location" "調査対象: 地名・所属の不一致パターン">>
 
 <<SystemMessage "接続を確立しています...">>
 <<StartWait 1>>
@@ -124,6 +129,11 @@ Pyramidの説明は正確ですが...
 
 <<UnlockTopic "fragment_ch2_02">>
 <<SystemMessage "断片「行政区画変遷記録」を記録しました">>
+
+// 地名矛盾が表面化: 潜在スレッドを顕在化
+<<ManifestThread "ch2_track_location">>
+<<AddThreadMessage "ch2_track_location" "年号の欠損: 「2019年■月■日施行」。詳細不明">>
+<<AddThreadMessage "ch2_track_location" "[link:ch1_note_facility:Ch1施設管理規約との関連] を確認すべき">>
 
 <<set $speaker to "marco">>
 <<StartWait 0.8>>
@@ -320,6 +330,10 @@ title: Ch2_Closing
 
 <<set $speaker to "pyramid">>
 本日のセッションを終了します。お疲れさまでした。
+
+// Ch2 セッション参加報酬 (silent) + 追跡スレッドに最終更新
+<<AddHalluciCoin 3>>
+<<AddThreadMessage "ch2_track_location" "Day2終了時点: 地名矛盾4件を記録。照合は継続">>
 
 <<StartWait 1>>
 
