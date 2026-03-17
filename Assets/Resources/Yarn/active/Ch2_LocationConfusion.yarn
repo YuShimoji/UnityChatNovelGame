@@ -10,7 +10,7 @@ title: Ch2_Opening
 <<declare $met_mason = false>>
 <<declare $met_oliver = false>>
 <<declare $location_realized = false>>
-<<declare $halluci_coin = 0>>
+// $halluci_coin は Ch1_Day1.yarn で宣言済み（プロジェクト全体で一意）
 
 // 潜在スレッド: 地名矛盾が表面化したら顕在化
 <<DeclareThreadLatent "ch2_track_location" "B" "地名矛盾追跡">>
