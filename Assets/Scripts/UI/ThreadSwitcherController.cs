@@ -125,10 +125,10 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            CreateHamburgerButton(canvas);
+            CreateThreadHeaderBar(canvas);  // ヘッダーバーを先に生成（背面）
+            CreateHamburgerButton(canvas);  // ハンバーガーを後に生成（前面、ヘッダーバーの上）
             CreateOverlay(canvas);
             CreateSidebar(canvas);
-            CreateThreadHeaderBar(canvas);
             CreateNotificationBanner(canvas);
         }
 
@@ -318,6 +318,7 @@ namespace ProjectFoundPhone.UI
 
             m_ThreadHeaderBarBg = m_ThreadHeaderBar.AddComponent<Image>();
             m_ThreadHeaderBarBg.color = Color.clear;
+            m_ThreadHeaderBarBg.raycastTarget = false; // ハンバーガーボタンのクリックを遮らない
 
             var barLabelObj = new GameObject("BarLabel");
             barLabelObj.transform.SetParent(m_ThreadHeaderBar.transform, false);
