@@ -1416,51 +1416,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 988787055}
   m_CullTransparentMesh: 1
---- !u!1 &1359702883
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1359702885}
-  - component: {fileID: 1359702884}
-  m_Layer: 0
-  m_Name: ThreadSwitcher
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1359702884
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1359702883}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9320b04f6b5a5846a7eb2ef29c57829, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: ProjectFoundPhone::ProjectFoundPhone.UI.ThreadSwitcherController
-  m_ChatController: {fileID: 2049599892}
---- !u!4 &1359702885
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1359702883}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 340.86554, y: -0, z: -841.3069}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1373616833
 GameObject:
   m_ObjectHideFlags: 0
@@ -2207,4 +2162,3 @@ SceneRoots:
   - {fileID: 748259813}
   - {fileID: 661041216}
   - {fileID: 935293709}
-  - {fileID: 1359702885}
