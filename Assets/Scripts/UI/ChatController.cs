@@ -76,6 +76,9 @@ namespace ProjectFoundPhone.UI
         /// <summary>現在表示中のスレッドID (null = メインスレッド)</summary>
         private string m_ActiveThreadId;
 
+        /// <summary>現在表示中のスレッドの種別 (null = メインスレッド)</summary>
+        private ThreadType? m_ActiveThreadType;
+
         /// <summary>スレッド別の会話履歴 (メインスレッドは null キーで管理)</summary>
         private readonly Dictionary<string, List<SavedChatMessage>> m_ThreadHistories
             = new Dictionary<string, List<SavedChatMessage>>();
@@ -309,10 +312,25 @@ namespace ProjectFoundPhone.UI
                 ? CharacterDatabase.Instance.GetThemeColor(charID)
                 : (isPlayer ? new Color(0.2f, 0.6f, 1.0f) : new Color(0.3f, 0.3f, 0.35f));
 
+            bool isAnnotationCard = m_ActiveThreadType == ThreadType.Annotation;
+
             Image bubbleBackground = bubble.GetComponent<Image>();
             if (bubbleBackground != null)
             {
-                bubbleBackground.color = themeColor;
+                if (isAnnotationCard)
+                {
+                    Color typeColor = GetThreadTypeColor(ThreadType.Annotation);
+                    bubbleBackground.color = Color.Lerp(new Color(0.15f, 0.15f, 0.2f, 0.85f), typeColor, 0.15f);
+                }
+                else if (m_ActiveThreadType.HasValue)
+                {
+                    Color typeColor = GetThreadTypeColor(m_ActiveThreadType.Value);
+                    bubbleBackground.color = Color.Lerp(themeColor, typeColor, 0.12f);
+                }
+                else
+                {
+                    bubbleBackground.color = themeColor;
+                }
             }
 
             // 角丸スプライト + 影を適用
@@ -321,7 +339,19 @@ namespace ProjectFoundPhone.UI
             TextMeshProUGUI textComponent = bubble.GetComponentInChildren<TextMeshProUGUI>();
             if (textComponent != null)
             {
-                textComponent.color = isPlayer ? UIConfig.playerTextColor : UIConfig.npcTextColor;
+                if (isAnnotationCard)
+                {
+                    Color typeColor = GetThreadTypeColor(ThreadType.Annotation);
+                    textComponent.color = new Color(
+                        Mathf.Min(typeColor.r + 0.3f, 1f),
+                        Mathf.Min(typeColor.g + 0.3f, 1f),
+                        Mathf.Min(typeColor.b + 0.3f, 1f),
+                        1f);
+                }
+                else
+                {
+                    textComponent.color = isPlayer ? UIConfig.playerTextColor : UIConfig.npcTextColor;
+                }
             }
         }
 
@@ -341,11 +371,29 @@ namespace ProjectFoundPhone.UI
                 ? CharacterDatabase.Instance.GetThemeColor(charID)
                 : (isPlayer ? new Color(0.2f, 0.6f, 1.0f) : new Color(0.3f, 0.3f, 0.35f));
 
-            // バブル背景にテーマカラーを適用
+            bool isAnnotationCard = m_ActiveThreadType == ThreadType.Annotation;
+
+            // バブル背景色を決定
             Image bubbleBackground = bubble.GetComponent<Image>();
             if (bubbleBackground != null)
             {
-                bubbleBackground.color = themeColor;
+                if (isAnnotationCard)
+                {
+                    // A型(注釈): 型色ベースのカード背景
+                    Color typeColor = GetThreadTypeColor(ThreadType.Annotation);
+                    bubbleBackground.color = Color.Lerp(new Color(0.15f, 0.15f, 0.2f, 0.85f), typeColor, 0.15f);
+                }
+                else if (m_ActiveThreadType.HasValue)
+                {
+                    // B/C/分岐: 型色ティント（キャラ色に12%混合）
+                    Color typeColor = GetThreadTypeColor(m_ActiveThreadType.Value);
+                    bubbleBackground.color = Color.Lerp(themeColor, typeColor, 0.12f);
+                }
+                else
+                {
+                    // メインスレッド: 通常
+                    bubbleBackground.color = themeColor;
+                }
             }
 
             // 角丸スプライト + 影を適用
@@ -363,9 +411,9 @@ namespace ProjectFoundPhone.UI
 
             if (m_ScrollRect == null || m_ScrollRect.content == null) return;
 
-            // ラッパーで左右配置を実現
-            // パディングで片側にマージンを作ることで、バブルを左 or 右に寄せる
-            GameObject wrapper = new GameObject(isPlayer ? "PlayerRow" : "NpcRow",
+            // ラッパーで配置を実現
+            string wrapperName = isAnnotationCard ? "AnnotationRow" : (isPlayer ? "PlayerRow" : "NpcRow");
+            GameObject wrapper = new GameObject(wrapperName,
                 typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement), typeof(ContentSizeFitter));
             wrapper.transform.SetParent(m_ScrollRect.content, false);
             wrapper.transform.SetSiblingIndex(bubble.transform.GetSiblingIndex());
@@ -376,20 +424,30 @@ namespace ProjectFoundPhone.UI
             hlg.childControlWidth = true;      // HLG が子要素の幅を制御
             hlg.childControlHeight = true;
             hlg.spacing = UIConfig.iconBubbleSpacing; // アイコンとバブルの間隔
-            // パディングで左右マージンを作る → player は左に広いマージン、NPC は右に広いマージン
-            // バブル幅上限: bubbleMaxWidthPercent と bubbleMaxWidthPx の小さい方
+
             int edgePad = UIConfig.wrapperEdgePadding;
             float containerWidth = GetContainerWidth();
             float maxWidthFromPercent = containerWidth * UIConfig.bubbleMaxWidthPercent;
             float maxWidth = Mathf.Min(maxWidthFromPercent, UIConfig.bubbleMaxWidthPx);
             int sideMargin = Mathf.Max(0, (int)(containerWidth - maxWidth - edgePad));
             int vPad = UIConfig.wrapperVerticalPadding;
-            // 連続メッセージの場合は上マージンを減らす（バブルスタック）
             int topPad = isConsecutive ? 2 : vPad;
             int bottomPad = vPad;
-            hlg.padding = isPlayer
-                ? new RectOffset(sideMargin, edgePad, topPad, bottomPad)
-                : new RectOffset(edgePad, sideMargin, topPad, bottomPad);
+
+            if (isAnnotationCard)
+            {
+                // A型(注釈): 中央配置、対称マージン
+                int symPad = edgePad * 2;
+                hlg.padding = new RectOffset(symPad, symPad, topPad, bottomPad);
+                hlg.childAlignment = TextAnchor.MiddleCenter;
+            }
+            else
+            {
+                // 通常: パディングで片側にマージン → 左 or 右寄せ
+                hlg.padding = isPlayer
+                    ? new RectOffset(sideMargin, edgePad, topPad, bottomPad)
+                    : new RectOffset(edgePad, sideMargin, topPad, bottomPad);
+            }
 
             LayoutElement wrapperLayout = wrapper.GetComponent<LayoutElement>();
             wrapperLayout.flexibleWidth = 1f;
@@ -398,8 +456,8 @@ namespace ProjectFoundPhone.UI
             wrapperFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
             wrapperFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            // キャラクターアイコンを追加（設定が有効で、連続メッセージでない場合のみ）
-            if (UIConfig.showCharacterIcon && !string.IsNullOrEmpty(charID) && !isConsecutive)
+            // キャラクターアイコンを追加（A型注釈カードでは省略）
+            if (!isAnnotationCard && UIConfig.showCharacterIcon && !string.IsNullOrEmpty(charID) && !isConsecutive)
             {
                 GameObject iconObj = CreateCharacterIcon(charID);
                 if (iconObj != null)
@@ -419,8 +477,8 @@ namespace ProjectFoundPhone.UI
 
             bubble.transform.SetParent(wrapper.transform, false);
 
-            // アイコン表示 (NPC + DisplayMode がアイコン含む場合のみ)
-            if (!isPlayer)
+            // アイコン表示 (A型注釈カードでは省略、NPC + DisplayMode がアイコン含む場合のみ)
+            if (!isAnnotationCard && !isPlayer)
             {
                 var profile = CharacterDatabase.Instance?.GetProfile(charID);
                 if (profile != null && profile.Icon != null &&
@@ -446,11 +504,24 @@ namespace ProjectFoundPhone.UI
                 }
             }
 
-            // テキストの色を調整（プレイヤーは白、NPCは明るいグレー）
+            // テキストの色を調整
             TextMeshProUGUI textComponent = bubble.GetComponentInChildren<TextMeshProUGUI>();
             if (textComponent != null)
             {
-                textComponent.color = isPlayer ? UIConfig.playerTextColor : UIConfig.npcTextColor;
+                if (isAnnotationCard)
+                {
+                    // 注釈カード: 型色で統一
+                    Color typeColor = GetThreadTypeColor(ThreadType.Annotation);
+                    textComponent.color = new Color(
+                        Mathf.Min(typeColor.r + 0.3f, 1f),
+                        Mathf.Min(typeColor.g + 0.3f, 1f),
+                        Mathf.Min(typeColor.b + 0.3f, 1f),
+                        1f);
+                }
+                else
+                {
+                    textComponent.color = isPlayer ? UIConfig.playerTextColor : UIConfig.npcTextColor;
+                }
             }
         }
 
@@ -644,10 +715,17 @@ namespace ProjectFoundPhone.UI
             bool isSystemMessage = string.IsNullOrEmpty(charID) || charID.ToLower() == "system";
             bool isPlayerMsg = CharacterDatabase.Instance != null
                 ? CharacterDatabase.Instance.IsPlayer(charID) : charID == "player";
+            bool isAnnotationCard = m_ActiveThreadType == ThreadType.Annotation;
 
             string finalText;
             string nameLineText = null; // 名前行の幅計算用 (名前がある場合のみ)
-            if (isSystemMessage)
+            if (isAnnotationCard)
+            {
+                // A型(注釈)スレッド: 情報カード表示。キャラクター名は省略し中央テキスト
+                finalText = text;
+                textComponent.alignment = TextAlignmentOptions.Center;
+            }
+            else if (isSystemMessage)
             {
                 finalText = text;
             }
@@ -1158,7 +1236,16 @@ namespace ProjectFoundPhone.UI
                 bubbleBackground = systemBubble.AddComponent<Image>();
                 bubbleBackground.color = new Color(0.15f, 0.15f, 0.2f, 0.7f);
             }
-            bubbleBackground.color = UIConfig.systemMessageBgColor;
+            // サブスレッド内: 型色でシステムメッセージ背景をティント
+            if (m_ActiveThreadType.HasValue)
+            {
+                Color typeColor = GetThreadTypeColor(m_ActiveThreadType.Value);
+                bubbleBackground.color = Color.Lerp(UIConfig.systemMessageBgColor, typeColor, 0.10f);
+            }
+            else
+            {
+                bubbleBackground.color = UIConfig.systemMessageBgColor;
+            }
             bubbleBackground.raycastTarget = false;
 
             // システムメッセージは薄いバー表示のため、角丸スプライトを適用しない。
@@ -2250,6 +2337,34 @@ namespace ProjectFoundPhone.UI
 
         /// <summary>現在表示中のスレッドID (null = メインスレッド)</summary>
         public string ActiveThreadId => m_ActiveThreadId;
+
+        /// <summary>現在表示中のスレッドの種別 (null = メインスレッド)</summary>
+        public ThreadType? ActiveThreadType => m_ActiveThreadType;
+
+        /// <summary>アクティブスレッドの種別を設定する</summary>
+        public void SetActiveThreadType(ThreadType? type)
+        {
+            m_ActiveThreadType = type;
+        }
+
+        // ThreadType 別色定数 (ThreadSwitcherController と同一値)
+        private static readonly Color s_TypeColorAnnotation = new Color(0.29f, 0.56f, 0.85f, 1f);
+        private static readonly Color s_TypeColorTracking = new Color(0.30f, 0.69f, 0.31f, 1f);
+        private static readonly Color s_TypeColorScout = new Color(1f, 0.60f, 0f, 1f);
+        private static readonly Color s_TypeColorBranch = new Color(0.61f, 0.15f, 0.69f, 1f);
+
+        /// <summary>ThreadType から色を取得</summary>
+        private static Color GetThreadTypeColor(ThreadType type)
+        {
+            switch (type)
+            {
+                case ThreadType.Annotation: return s_TypeColorAnnotation;
+                case ThreadType.Tracking: return s_TypeColorTracking;
+                case ThreadType.Scout: return s_TypeColorScout;
+                case ThreadType.Branch: return s_TypeColorBranch;
+                default: return s_TypeColorAnnotation;
+            }
+        }
 
         /// <summary>
         /// スレッドを切り替える。現在のスレッドの履歴とスクロール位置を保存し、

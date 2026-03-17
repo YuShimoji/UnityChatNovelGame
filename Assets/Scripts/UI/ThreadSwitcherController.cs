@@ -672,11 +672,13 @@ namespace ProjectFoundPhone.UI
 
             if (threadId == null)
             {
+                m_ChatController.SetActiveThreadType(null);
                 m_ChatController.SwitchToThread(null);
             }
             else
             {
                 var thread = m_ScenarioManager?.GetDeclaredThread(threadId);
+                m_ChatController.SetActiveThreadType(thread?.Type);
                 m_ChatController.SwitchToThread(threadId, thread?.ChatHistory);
 
                 if (thread != null)

@@ -165,10 +165,10 @@
     "id": "SP-016",
     "title": "サブスレッドUI仕様",
     "status": "partial",
-    "pct": 80,
+    "pct": 85,
     "cat": "ui",
     "file": "docs/StorySpec/16_subthread_ui.md",
-    "summary": "統合型スレッドモデル、2段階トリガー。Step1+Step2完全実装済み(5a-5e+5d: DeclareThread/DeclareThreadTyped/AddThreadMessage/AddThreadChat/ThreadType/サイドバー/通知バナー/Save/Load/並走検証)。未実装: Step3(種別差異レンダリング)、Step4(条件トリガーエンジン)"
+    "summary": "統合型スレッドモデル、2段階トリガー。Step1+Step2完全実装済み(5a-5e+5d)。Step3 Phase3a実装済み(A型注釈カード表示+B/C/分岐型色ティント+SystemMessageティント)。未実装: Step3残(出現通知/Wikiリンク/成果物カード)、Step4(条件トリガーエンジン)"
   },
   {
     "id": "SP-099",

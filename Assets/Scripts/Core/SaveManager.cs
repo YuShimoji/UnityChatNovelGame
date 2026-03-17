@@ -385,6 +385,7 @@ namespace ProjectFoundPhone.Core
                 var thread = scenarioManagerForThreads?.GetDeclaredThread(saveData.ActiveThreadId);
                 if (thread != null)
                 {
+                    chatController.SetActiveThreadType(thread.Type);
                     chatController.SwitchToThread(saveData.ActiveThreadId, thread.ChatHistory);
                 }
             }
