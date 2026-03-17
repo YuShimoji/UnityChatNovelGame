@@ -3,7 +3,7 @@
 > **対象**: このプロジェクトで初めて Yarn スクリプトを書く人（自分自身を含む）
 > **前提知識**: Yarn Spinner の基本構文を知らなくても OK。このガイドだけで書ける
 > **関連ドキュメント**: [YarnEditingPipeline.md](YarnEditingPipeline.md)（技術的なパイプライン詳細）、[ENGINE_FEATURE_INVENTORY.md](ENGINE_FEATURE_INVENTORY.md)（エンジン機能リファレンス）
-> **最終更新**: 2026-03-16
+> **最終更新**: 2026-03-17
 
 ---
 

@@ -460,7 +460,7 @@ TopicData の `TopicID` プレフィックスでインベントリの表示カ�
 
 ### アーキテクチャ
 
-- **データモデル**: `SubthreadData.cs` — ThreadId, DisplayName, Type (ThreadType enum), UnreadCount, ChatHistory
+- **データモデル**: `SubthreadData.cs` — ThreadId, DisplayName, Type (ThreadType enum), IsLatent, ManifestCondition, AutoBeginBranch, IsCompleted, AcquiredTopicCount, UnreadCount, ChatHistory
 - **ThreadType**: Annotation(A)/Tracking(B)/Scout(C)/Branch — `DeclareThreadTyped` で指定、`DeclareThread` はAnnotationにフォールバック
 - **Yarnコマンド**: `DeclareThread` / `DeclareThreadTyped` / `AddThreadMessage` / `AddThreadChat` (ScenarioManager登録)
 - **切替方式**: ChatControllerのデータスワップ (ClearMessages + RestoreChatHistory)
