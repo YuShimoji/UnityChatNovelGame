@@ -93,6 +93,40 @@
 
 ---
 
+## 8. Day2 再開 (Day Resume)
+
+ステップ 6 のダッシュボードから:
+
+- [ ] Ch1 カードが [IN PROGRESS] 表示 (Day1完了、Day2残)
+- [ ] Ch1 クリック → Ch1_Day2_Opening から再開
+- [ ] SystemMessage「--- 2日目 ---」が表示
+
+### 8a. Day2 内容確認
+
+- [ ] Bernardo のメッセージが表示される
+- [ ] 「施設管理規約メモ」サブスレッド (A型) がDay1で宣言済みなら表示継続
+
+### 8b. Day2 終了
+
+- [ ] EndDay 2 でチャンネル完了
+- [ ] ダッシュボード復帰 → Ch1 カードが [COMPLETED]
+- [ ] Ch2 カードが [AVAILABLE] (HC >= 2 かつ ch1 完了)
+
+---
+
+## 9. Save/Load 確認 (Day Resume パス)
+
+Day1 完了後にセーブ/ロードを挟むパス:
+
+1. [ ] Day1 完了 → ダッシュボードでセーブ
+2. [ ] シーン停止 → 再生 → ロード
+3. [ ] Ch1 カードが [IN PROGRESS]
+4. [ ] Ch1 クリック → Day2 から再開 (Ch1_Day2_Opening)
+5. [ ] Day1 で解錠した $has_topic_fragment_ch1_01 が復元されている (DeclareThreadLatentCond が発火すれば OK)
+6. [ ] Console に Error/Exception がないこと
+
+---
+
 ## Console エラー確認
 - [ ] Exception / Error が出ていないこと
 - [ ] DialogueException が出ていないこと
