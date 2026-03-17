@@ -173,6 +173,7 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.AddCommandHandler<int>("AddHalluciCoin", AddHalluciCoinCommand);
             m_DialogueRunner.AddCommandHandler<string>("CompleteThread", CompleteThreadCommand);
             m_DialogueRunner.AddCommandHandler<string, string, string>("DeclareThreadLatent", DeclareThreadLatentCommand);
+            m_DialogueRunner.AddCommandHandler<string, string, string, string>("DeclareThreadLatentCond", DeclareThreadLatentCondCommand);
             m_DialogueRunner.AddCommandHandler<string>("ManifestThread", ManifestThreadCommand);
             m_DialogueRunner.AddCommandHandler<string, string>("BeginBranch", BeginBranchCommand);
             m_DialogueRunner.AddCommandHandler<bool>("EndBranch", EndBranchCommand);
@@ -209,6 +210,7 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.RemoveCommandHandler("AddHalluciCoin");
             m_DialogueRunner.RemoveCommandHandler("CompleteThread");
             m_DialogueRunner.RemoveCommandHandler("DeclareThreadLatent");
+            m_DialogueRunner.RemoveCommandHandler("DeclareThreadLatentCond");
             m_DialogueRunner.RemoveCommandHandler("ManifestThread");
             m_DialogueRunner.RemoveCommandHandler("BeginBranch");
             m_DialogueRunner.RemoveCommandHandler("EndBranch");
@@ -636,6 +638,28 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
+        /// Yarn: &lt;&lt;DeclareThreadLatentCond "threadId" "type" "displayName" "$condition"&gt;&gt;
+        /// 条件付き潜在スレッドを登録する。条件がtrueになると自動で顕在化する。
+        /// Branch型の場合は顕在化時に自動でBeginBranchも発火する。
+        /// </summary>
+        private void DeclareThreadLatentCondCommand(string threadId, string typeStr, string displayName, string condition)
+        {
+            var type = ParseThreadType(typeStr);
+            DeclareThreadInternal(threadId, displayName, type, latent: true);
+
+            if (m_DeclaredThreads.TryGetValue(threadId, out var thread))
+            {
+                thread.ManifestCondition = condition;
+                thread.AutoBeginBranch = (type == ThreadType.Branch);
+            }
+
+            Debug.Log($"ScenarioManager: Latent thread with condition — id='{threadId}', condition='{condition}', autoBeginBranch={type == ThreadType.Branch}");
+
+            // 即時評価: 条件が既に満たされている場合
+            EvaluateLatentCondition(threadId);
+        }
+
+        /// <summary>
         /// Yarn: &lt;&lt;ManifestThread "threadId"&gt;&gt;
         /// 潜在スレッドを顕在化する。通知メッセージ+サイドバー追加を発火する。
         /// </summary>
@@ -668,6 +692,94 @@ namespace ProjectFoundPhone.Core
             OnThreadDeclared?.Invoke(threadId, thread.DisplayName);
 
             Debug.Log($"ScenarioManager: Thread manifested — id='{threadId}', type={thread.Type}, name='{thread.DisplayName}'");
+
+            // AutoBeginBranch: Branch型スレッドの場合、顕在化と同時に自動で分岐開始
+            if (thread.AutoBeginBranch && thread.Type == ThreadType.Branch)
+            {
+                Debug.Log($"ScenarioManager: Auto-begin branch for manifested thread '{threadId}'");
+                BeginBranchThread(threadId);
+                if (m_ChatController != null)
+                {
+                    m_ChatController.SetActiveThreadType(ThreadType.Branch);
+                    m_ChatController.SwitchToThread(threadId, thread.ChatHistory);
+                }
+                var threadSwitcher = FindFirstObjectByType<ThreadSwitcherController>();
+                threadSwitcher?.ForceUpdateHeaderBar(threadId);
+            }
+        }
+
+        /// <summary>
+        /// 指定スレッドの潜在条件を評価し、trueなら自動顕在化する。
+        /// </summary>
+        private void EvaluateLatentCondition(string threadId)
+        {
+            if (!m_DeclaredThreads.TryGetValue(threadId, out var thread)) return;
+            if (!thread.IsLatent || string.IsNullOrEmpty(thread.ManifestCondition)) return;
+
+            if (EvaluateConditionExpression(thread.ManifestCondition))
+            {
+                Debug.Log($"ScenarioManager: Condition met for latent thread '{threadId}' — auto-manifesting");
+                ManifestThreadCommand(threadId);
+            }
+        }
+
+        /// <summary>
+        /// 全ての潜在条件付きスレッドを評価する。Yarn変数変更時に呼ばれる。
+        /// </summary>
+        private void EvaluateAllLatentConditions()
+        {
+            // イテレーション中にコレクション変更を避けるためキーをコピー
+            var threadIds = new List<string>(m_DeclaredThreads.Keys);
+            foreach (var threadId in threadIds)
+            {
+                if (m_DeclaredThreads.TryGetValue(threadId, out var thread)
+                    && thread.IsLatent
+                    && !string.IsNullOrEmpty(thread.ManifestCondition))
+                {
+                    EvaluateLatentCondition(threadId);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Yarn変数式を評価する。単一変数 ("$var") はbool取得、
+        /// 比較式 ("$var >= N") は数値比較を評価する。
+        /// </summary>
+        private bool EvaluateConditionExpression(string expression)
+        {
+            if (string.IsNullOrEmpty(expression)) return false;
+
+            expression = expression.Trim();
+
+            // 比較演算子を検出: >=, <=, >, <, ==, !=
+            string[] operators = { ">=", "<=", "!=", "==", ">", "<" };
+            foreach (var op in operators)
+            {
+                int idx = expression.IndexOf(op, StringComparison.Ordinal);
+                if (idx > 0)
+                {
+                    string varName = expression.Substring(0, idx).Trim();
+                    string valueStr = expression.Substring(idx + op.Length).Trim();
+
+                    float varValue = GetVariable<float>(varName);
+                    if (float.TryParse(valueStr, out float threshold))
+                    {
+                        switch (op)
+                        {
+                            case ">=": return varValue >= threshold;
+                            case "<=": return varValue <= threshold;
+                            case ">": return varValue > threshold;
+                            case "<": return varValue < threshold;
+                            case "==": return Math.Abs(varValue - threshold) < 0.001f;
+                            case "!=": return Math.Abs(varValue - threshold) >= 0.001f;
+                        }
+                    }
+                    return false;
+                }
+            }
+
+            // 単一変数名: bool として評価
+            return GetVariable<bool>(expression);
         }
 
         /// <summary>ThreadType の表示アイコンを返す</summary>
@@ -1174,6 +1286,9 @@ namespace ProjectFoundPhone.Core
                 m_DialogueRunner.VariableStorage.SetValue(normalizedName, value?.ToString() ?? string.Empty);
                 Debug.LogWarning($"ScenarioManager: Variable {normalizedName} set as string (type: {typeof(T).Name})");
             }
+
+            // 変数変更後に潜在条件付きスレッドを評価
+            EvaluateAllLatentConditions();
 #endif
         }
 

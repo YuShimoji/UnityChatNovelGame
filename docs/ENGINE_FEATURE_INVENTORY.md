@@ -42,6 +42,7 @@
 | SetBranchReflection | `<<SetBranchReflection "text">>` | EndBranch 時にメインへ投入する反映メッセージを設定。未設定時は分岐内UnlockTopicのトピック名から自動生成 |
 | AddHalluciCoin | `<<AddHalluciCoin amount>>` | HalluciCoin を静かに加算 (通知なし、ダッシュボードバッジパルスで検知) |
 | DeclareThreadLatent | `<<DeclareThreadLatent "id" "type" "name">>` | スレッドを潜在登録 (UIに出さない)。ManifestThread で顕在化 |
+| DeclareThreadLatentCond | `<<DeclareThreadLatentCond "id" "type" "name" "$condition">>` | 条件付き潜在登録。Yarn変数変更時に条件を自動評価し、trueで自動顕在化。Branch型は自動BeginBranch |
 | ManifestThread | `<<ManifestThread "id">>` | 潜在スレッドを顕在化。通知メッセージ+サイドバー追加 |
 | CompleteThread | `<<CompleteThread "id">>` | スレッドを完了状態にする。サイドバーでグレーアウト+チェックマーク |
 

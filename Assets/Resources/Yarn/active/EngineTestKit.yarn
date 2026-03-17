@@ -13,6 +13,8 @@ title: ETK_Menu
 <<declare $etk_done_choices = false>>
 <<declare $etk_done_threadtype = false>>
 <<declare $etk_done_branch = false>>
+<<declare $etk_done_condbranch = false>>
+<<declare $etk_cond_trigger = false>>
 <<declare $auto_speaker_after_choice = false>>
 
 <<SystemMessage "=== Engine Test Kit ===">>
@@ -37,9 +39,13 @@ title: ETK_Menu
     <<jump ETK_ThreadType>>
 -> 分岐スレッド テスト <<if not $etk_done_branch>>
     <<jump ETK_Branch>>
--> テスト完了 <<if $etk_done_richtext and $etk_done_contradiction and $etk_done_commands and $etk_done_choices and $etk_done_threadtype and $etk_done_branch>>
+-> 条件付き分岐 テスト <<if not $etk_done_condbranch>>
+    <<jump ETK_CondBranch>>
+-> 自動検証 (Phase A Block D/E)
+    <<jump ETK_AutoVerify>>
+-> テスト完了 <<if $etk_done_richtext and $etk_done_contradiction and $etk_done_commands and $etk_done_choices and $etk_done_threadtype and $etk_done_branch and $etk_done_condbranch>>
     <<jump ETK_End>>
--> もう一度メニューを見る <<if ($etk_done_richtext or $etk_done_contradiction or $etk_done_commands or $etk_done_choices or $etk_done_threadtype or $etk_done_branch) and not ($etk_done_richtext and $etk_done_contradiction and $etk_done_commands and $etk_done_choices and $etk_done_threadtype and $etk_done_branch)>>
+-> もう一度メニューを見る <<if ($etk_done_richtext or $etk_done_contradiction or $etk_done_commands or $etk_done_choices or $etk_done_threadtype or $etk_done_branch or $etk_done_condbranch) and not ($etk_done_richtext and $etk_done_contradiction and $etk_done_commands and $etk_done_choices and $etk_done_threadtype and $etk_done_branch and $etk_done_condbranch)>>
     <<jump ETK_Menu>>
 ===
 
@@ -513,6 +519,121 @@ title: ETK_Branch
 ===
 
 /// --------------------------------------------------
+/// ETK_AutoVerify: Phase A 自動検証 (Block D/E)
+/// スレッド宣言→切替→未読→潜在→顕在→完了→Save/Load の導線を自動実行
+/// --------------------------------------------------
+title: ETK_AutoVerify
+---
+<<SystemMessage "=== Phase A 自動検証開始 ===">>
+<<StartWait 0.3>>
+
+// --- Block D: スレッド基本操作 ---
+<<SystemMessage "[D-1] スレッド宣言テスト">>
+<<DeclareThreadTyped "av_note" "A" "検証用覚書">>
+<<DeclareThreadTyped "av_track" "B" "検証用追跡">>
+<<DeclareThreadTyped "av_scout" "C" "検証用偵察">>
+<<StartWait 0.3>>
+
+<<SystemMessage "[D-2] メッセージ追加テスト">>
+<<AddThreadMessage "av_note" "覚書メッセージ1">>
+<<AddThreadMessage "av_note" "覚書メッセージ2">>
+<<AddThreadChat "av_track" "pyramid" "追跡メッセージ1">>
+<<AddThreadChat "av_scout" "marco" "偵察メッセージ1">>
+<<StartWait 0.3>>
+
+<<SystemMessage "[D-3] 通知バナー: 上記メッセージ追加で通知バナーが表示されたか確認">>
+<<StartWait 0.5>>
+
+<<SystemMessage "[D-4] 潜在スレッドテスト">>
+<<DeclareThreadLatent "av_hidden" "A" "潜在スレッド">>
+<<AddThreadMessage "av_hidden" "潜在中のメッセージ">>
+<<StartWait 0.3>>
+<<SystemMessage "[D-4] 潜在: サイドバーに「潜在スレッド」が表示されていないことを確認">>
+<<StartWait 0.5>>
+
+<<ManifestThread "av_hidden">>
+<<SystemMessage "[D-4] 顕在化: サイドバーに「潜在スレッド」が出現したことを確認">>
+<<StartWait 0.5>>
+
+<<SystemMessage "[D-5] CompleteThread テスト">>
+<<CompleteThread "av_hidden">>
+<<SystemMessage "[D-5] 完了: サイドバーで「潜在スレッド」がグレーアウト+チェックマーク表示を確認">>
+<<StartWait 0.5>>
+
+// --- Block E: Save/Load ---
+<<SystemMessage "[E] Save/Load テスト: セーブを実行します">>
+<<StartWait 0.3>>
+
+<<set $speaker to "pyramid">>
+サイドバーを開いて、4つのスレッド (覚書/追跡/偵察/潜在) と各メッセージが見えることを確認してください。
+
+<<SystemMessage "確認後、手動でセーブ→シーン停止→再生→ロードして、スレッドが復元されることを確認してください">>
+
+<<StartWait 30>>
+
+<<SystemMessage "=== Phase A 自動検証 Block D/E 完了 ===">>
+<<SystemMessage "Console に Exception/Error がないことを確認してください (Block F)">>
+
+<<set $speaker to "player">>
+-> メニューに戻る
+    <<jump ETK_Menu>>
+===
+
+/// --------------------------------------------------
+/// ETK_CondBranch: 条件付き潜在スレッド + 自動顕在化テスト
+/// 確認: DeclareThreadLatentCond → 条件変化で自動ManifestThread → AutoBeginBranch
+/// --------------------------------------------------
+title: ETK_CondBranch
+---
+<<SystemMessage "--- 条件付き分岐トリガー テスト ---">>
+<<StartWait 0.5>>
+
+<<set $speaker to "pyramid">>
+条件付き潜在スレッドのテストです。$etk_cond_trigger が true になると自動で分岐が開始します。
+
+<<StartWait 0.5>>
+
+<<DeclareThreadLatentCond "etk_cond_branch" "branch" "条件付き分岐" "$etk_cond_trigger">>
+
+<<SystemMessage "DeclareThreadLatentCond 登録完了。サイドバーにはまだ表示されていないはずです。">>
+<<StartWait 3>>
+
+<<set $speaker to "pyramid">>
+では $etk_cond_trigger を true に設定します。自動的に分岐スレッドに切り替わるはずです。
+
+<<StartWait 1>>
+
+<<set $etk_cond_trigger to true>>
+
+<<StartWait 0.5>>
+<<set $speaker to "pyramid">>
+自動的に分岐スレッド「条件付き分岐」に入りました。
+
+<<StartWait 0.5>>
+ここは条件トリガーで自動的に開始された分岐です。
+
+<<SystemMessage "--- 確認項目 ---">>
+<<SystemMessage "1. DeclareThreadLatentCond 登録時にはサイドバーに表示されなかったこと">>
+<<SystemMessage "2. $etk_cond_trigger を true にした瞬間に自動で分岐スレッドに切り替わったこと">>
+<<SystemMessage "3. ヘッダーバーに [>] 条件付き分岐 が表示されていること">>
+
+<<StartWait 5>>
+
+<<SetBranchReflection "条件トリガーによる自動分岐が正常動作">>
+<<EndBranch true>>
+
+<<StartWait 0.5>>
+<<set $speaker to "pyramid">>
+メインに戻りました。条件付き分岐の反映メッセージが表示されているはずです。
+
+<<StartWait 30>>
+
+<<set $speaker to "player">>
+-> 確認した、メニューに戻る
+    <<set $etk_done_condbranch to true>>
+    <<jump ETK_Menu>>
+===
+
 /// ETK_End: テスト完了
 /// --------------------------------------------------
 title: ETK_End

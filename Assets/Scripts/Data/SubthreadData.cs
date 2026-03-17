@@ -37,6 +37,12 @@ namespace ProjectFoundPhone.Data
         /// <summary>潜在状態 (UIに表示しない)</summary>
         public bool IsLatent;
 
+        /// <summary>顕在化条件 (Yarn変数式。例: "$has_topic_x"。null=手動ManifestThread)</summary>
+        public string ManifestCondition;
+
+        /// <summary>顕在化時に自動でBeginBranchを発火するか (Branch型スレッド向け)</summary>
+        public bool AutoBeginBranch;
+
         /// <summary>完了状態 (サイドバーでグレーアウト表示)</summary>
         public bool IsCompleted;
 

@@ -591,3 +591,99 @@ ThreadType 導入 + 型別レンダリング(ヘッダーバー) の完了を反
 | Task K: ETK ThreadType テスト | `20b9f18` | done (ETK_ThreadType + ETK_ThreadParallel 追加) |
 | Task L: スレッド通知バナー | `761625d` | done (DOTween フェードイン/アウト、クリック切替、型色/アイコン) |
 | Task M: SSOT 更新 | `de44142` | done (ThreadType + ThreadParallel 完了反映) |
+
+---
+
+# Batch 4 (2026-03-17)
+
+以下のタスクはドキュメント整合・仕様棚卸し系。コード変更なし。
+
+---
+
+## Task N: spec-index.json 完成度棚卸し
+
+```
+UnityChatNovelGame の docs/spec-index.json を実コードと照合し、
+pct (完成度) と summary を最新化してください。
+
+### 背景
+複数セッションで機能追加が進み、spec-index の pct が実態と乖離している可能性がある。
+特に以下が要確認:
+- SP-008 (UI/UX): pct=80 だが、サブスレッドUI/レスポンシブ/バブル修正が完了済み
+- SP-016 (サブスレッドUI): pct=95 だが、CompleteThread実装済み
+- SP-006 (ハルシコイン): pct=95 だが、AddHalluciCoin実装済み
+- EN-001 (エンジン機能リファレンス): Yarnコマンド数が21に増加
+
+### 作業内容
+1. spec-index.json の全エントリを読む
+2. status が "partial" のエントリについて:
+   - 対応する仕様ファイルを読み、実装状況を確認
+   - pct を実態に合わせて更新
+   - summary を最新の実装状況に更新
+3. status が "done" のエントリについて:
+   - summary が古い場合のみ更新
+4. 変更した箇所を一覧で報告
+
+### 制約
+- コード変更は不要（ドキュメントのみ）
+- pct の判定基準: 仕様書に記載された要件のうち、実装済みの割合
+- 楽観的に盛らない
+```
+
+---
+
+## Task O: SP-099 未決定事項の棚卸し
+
+```
+UnityChatNovelGame の docs/StorySpec/99_open_questions.md を読み、
+未決定の4件の現状を確認してください。
+
+### 背景
+SP-099 (pct=90) に未決定事項が4件残っている。
+これらが基盤設計に影響する可能性があるため、
+現時点で「決定可能か / 保留継続か / 論点整理が必要か」を判定する。
+
+### 作業内容
+1. 99_open_questions.md を全文読む
+2. 未決定4件を抽出し、それぞれについて:
+   - 現在の実装状況との関連
+   - 決定に必要な情報
+   - 推奨アクション (決定案 / 保留理由 / 論点整理)
+3. 結果を短いレポートとして報告（ファイル変更不要）
+
+### 制約
+- コード変更・ドキュメント変更は不要（調査のみ）
+- HUMAN_AUTHORITY に触れる判断は推奨案の提示に留める
+```
+
+---
+
+## Task P: Phase A クロージングチェックリスト更新
+
+```
+UnityChatNovelGame の docs/acceptance/phase-a-closing-checklist.md を更新し、
+2026-03-17 の実装追加分を反映してください。
+
+### 背景
+チェックリストは 2026-03-16 作成。その後以下が追加された:
+- SP-014 Phase 1: 分岐内トピック自動追跡 + 自動反映メッセージ
+- SP-006: AddHalluciCoin コマンド
+- SP-016: CompleteThread + DeclareThreadLatent/ManifestThread
+
+### 作業内容
+1. 既存のブロック D (サブスレッドUI) に以下を追加:
+   - D-8: CompleteThread 確認 (ETK_Branch 内の潜在→顕在→完了フロー)
+   - D-9: DeclareThreadLatent + ManifestThread 確認 (ETK_Branch 内)
+2. ブロック D の末尾に D-10 を追加:
+   - 分岐内 UnlockTopic → 自動反映メッセージ確認 (ETK_Branch 内 etk_branch_auto)
+3. HalluciCoin 関連の確認項目がなければ追加
+4. 項目番号の整合を確認
+
+### 関連ファイル (読み取り対象)
+- docs/acceptance/phase-a-closing-checklist.md (更新対象)
+- Assets/Resources/Yarn/active/EngineTestKit.yarn (テストフロー参照)
+
+### 制約
+- コード変更は不要（ドキュメントのみ）
+- 既存の確認項目の構造を維持
+```

@@ -393,6 +393,20 @@ Barnabyさん、1点補足があります。
 `SetBranchReflection` で設定した反映メッセージが `EndBranch` 時にメインスレッドに投入される。
 分岐中もサイドバーで Main に自由に切り替え可能（Yarn フローはブランチで継続）。
 
+**自動反映メッセージ**: `SetBranchReflection` を省略した場合でも、分岐内で `UnlockTopic` を呼んでいれば、
+EndBranch 時にトピック名から「分岐で新情報を確認: {トピック名}」という反映メッセージが自動生成される。
+
+```yarn
+// 自動反映の例: SetBranchReflection を使わない
+<<BeginBranch "branch_investigation" "調査メモ">>
+<<set $speaker to "pyramid">>
+<<StartWait 0.5>>
+興味深いデータを見つけた。
+<<UnlockTopic "topic_data_anomaly">>
+<<EndBranch true>>
+// → メインに自動反映: "[>] 分岐で新情報を確認: データ異常"
+```
+
 ---
 
 ## 6. 命名規則

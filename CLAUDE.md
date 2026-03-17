@@ -9,17 +9,16 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
 現在の状況 (2026-03-17):
-  - 2026-03-17 セッションで18コミット push済み (ad6fdd9)
-  - SP-016 Step 3 (3a+3b): 種別差異レンダリング + 出現通知
-  - SP-016 Step 4 (4a): DeclareThreadLatent/ManifestThread (潜在/顕在トリガー)
-  - SP-014 Branch Step 2+: BeginBranch/EndBranch/SetBranchReflection
+  - SP-014 Phase 1完了: 分岐内トピック自動追跡 (UnlockTopic→TransferFlags) + ResolveReflectionMessage自動生成
+  - SP-016 Step 3 (3a+3b) + Step 4a + CompleteThread: サブスレッドUI全機能実装済み
+  - SP-014 Branch Step 2+: BeginBranch/EndBranch/SetBranchReflection + 自動反映メッセージ
   - SP-008: スマホレスポンシブ基盤 + CanvasScaler MatchWidthOrHeight=1.0
   - SP-006: HCバッジパルス + AddHalluciCoin (silent increment)
-  - SP-099: AutoSpeakerAfterChoice + 未解決質問4件に削減
-  - Docs: EN-001/002/006/009 全て100%、Batch 2全完了、ch_etk.asset
-  - Yarnコマンド数: 14→20 (+6種)
-  - 手動検証待ち: Step 3外観(一部確認済), レスポンシブ, HCバッジ, Branch, 潜在/顕在
-  - 未着手: 矛盾Phase2手動テスト, SP-006ゲート/しきい値, SP-016 CompleteThread/自動トリガー
+  - Docs: EN-001/002/006/009 全て100%、Batch 1-3全完了、Batch 4(N/O/P)定義済み
+  - Yarnコマンド数: 21 (CompleteThread追加後)
+  - delegation-prompts: Batch 4定義済み (spec棚卸し/SP-099棚卸し/acceptance更新)
+  - 手動検証待ち: Phase Aクロージング53項目 (矛盾Phase2/サブスレッド/Branch/Save-Load)
+  - 未着手: SP-006ゲート/しきい値, SP-014 Phase 2(条件付き分岐), Ch3シナリオ設計
 
 ## DECISION LOG
 

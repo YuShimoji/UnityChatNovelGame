@@ -239,7 +239,34 @@
 - ETK_Branch ノードに自動反映テスト追加 (etk_branch_auto)
 - ETK用 TopicData アセット追加: etk_topic_alpha ("Alpha Signal"), etk_topic_beta ("Beta Pattern")
 
-### 未実装 (Phase 2以降)
-- 条件付き分岐トリガー (ConditionalBranch コマンド)
+### 未実装 (Phase 3以降)
 - 分岐収束の自動判定
 - ブランチ間知識受け渡しUI
+
+---
+
+## 2026-03-17 Branch Step2+ Phase 2: 条件付き分岐トリガー (Implemented)
+
+### Scope
+- DeclareThreadLatentCond コマンド: 条件付き潜在スレッド登録
+- Yarn変数変更時にリアクティブに条件評価 (EvaluateAllLatentConditions)
+- 条件trueで自動ManifestThread + Branch型は自動BeginBranch
+- 条件式: 単一変数 ($var) + 比較式 ($var >= N)
+
+### 新コマンド
+
+| コマンド | 構文 | 説明 |
+|---------|------|------|
+| DeclareThreadLatentCond | `<<DeclareThreadLatentCond "id" "type" "name" "$condition">>` | 条件付き潜在スレッド。条件trueで自動顕在化。Branch型は自動BeginBranch |
+
+### データモデル拡張
+- SubthreadData.ManifestCondition: Yarn変数条件式 (null=手動ManifestThread)
+- SubthreadData.AutoBeginBranch: 顕在化時に自動BeginBranch (Branch型でtrue)
+
+### 条件評価
+- SetVariable<T> 呼び出し時に EvaluateAllLatentConditions() を自動実行
+- EvaluateConditionExpression: 単一bool変数 or 比較演算子 (>=, <=, >, <, ==, !=)
+- 即時評価: DeclareThreadLatentCond 登録時に条件が既に満たされている場合も対応
+
+### テスト
+- ETK_CondBranch ノード追加: $etk_cond_trigger をtrue→自動分岐開始を検証

@@ -138,6 +138,53 @@ ETK_ThreadType から「並走テストへ進む」を選択。
 - [ ] D-7d. etk_note に marco のメッセージ追加
 - [ ] D-7e. メッセージ追加時に通知バナーが適切に表示（Main 表示中）
 
+### D-8. 潜在スレッド (DeclareThreadLatent + ManifestThread)
+
+ETK_Branch テスト内で確認。
+
+- [ ] D-8a. DeclareThreadLatent 後、サイドバーに「隠された覚書」が表示されていないこと
+- [ ] D-8b. 潜在中に AddThreadMessage でメッセージ蓄積されていること (顕在化後に確認)
+- [ ] D-8c. ManifestThread 後、サイドバーに「隠された覚書」が出現すること
+- [ ] D-8d. 出現通知 (型色付きシステムメッセージ + ハンバーガーパルス) が表示されること
+
+### D-9. CompleteThread
+
+ETK_Branch テスト内で確認。
+
+- [ ] D-9a. CompleteThread 後、サイドバーで対象スレッドがグレーアウト表示
+- [ ] D-9b. スレッド名の前にチェックマーク (✓) が付いていること
+- [ ] D-9c. 完了スレッドの未読バッジが消えていること
+
+### D-10. 分岐スレッド (BeginBranch / EndBranch)
+
+ETK_Branch テスト内で確認。
+
+- [ ] D-10a. BeginBranch で自動的にブランチスレッドに切替されること
+- [ ] D-10b. ヘッダーバーに紫色の [>] + スレッド名が表示されること
+- [ ] D-10c. 分岐中にサイドバーで Main に自由に切替・復帰できること
+- [ ] D-10d. EndBranch 後にメインに自動復帰し、反映メッセージが表示されること
+- [ ] D-10e. SetBranchReflection で指定したテキストが反映メッセージに使われること
+
+### D-11. 分岐内トピック自動追跡 → 自動反映メッセージ
+
+ETK_Branch 内 etk_branch_auto で確認。
+
+- [ ] D-11a. 分岐内で UnlockTopic 実行後、EndBranch 時に自動反映メッセージが Main に表示されること
+- [ ] D-11b. 自動反映メッセージにトピック名が含まれること
+- [ ] D-11c. SetBranchReflection 未指定時でも自動反映メッセージが生成されること
+
+---
+
+## G: HalluciCoin 確認
+
+### G-1. Silent Increment
+
+ETK_Commands → AddHalluciCoin テストで確認。
+
+- [ ] G-1a. AddHalluciCoin 実行後、ダッシュボードに戻ると HC 値が増加している
+- [ ] G-1b. HC 表示がパルスアニメーション (scale + 色ハイライト) すること
+- [ ] G-1c. チャット画面では HC 増加の通知が表示されないこと (silent)
+
 ---
 
 ## E: Save / Load スレッド履歴保持
@@ -170,10 +217,12 @@ ETK_ThreadType から「並走テストへ進む」を選択。
 | 優先 | ブロック | 理由 |
 |------|----------|------|
 | 1 | A (スモーク) | 基本導線の破綻確認。全ブロックの前提 |
-| 2 | C (矛盾 Phase2) | 最長未確認。セットアップ必要で完全未テスト |
-| 3 | D + E (サブスレッド + Save/Load) | 5a-5e の受け入れ。ETK から単独起動可能 |
-| 4 | B (Ch1/Ch2 再生) | 回帰確認。既知バグ修正の最終目視 |
-| 5 | F (Console) | 各ブロック通じて都度確認 |
+| 2 | D-8/9/10/11 (潜在/完了/分岐/自動追跡) | 2026-03-17 新機能。ETK_Branch から起動可能 |
+| 3 | C (矛盾 Phase2) | 最長未確認。セットアップ必要で完全未テスト |
+| 4 | D-1〜7 + E (サブスレッド + Save/Load) | 5a-5e の受け入れ。ETK から単独起動可能 |
+| 5 | G (HalluciCoin) | ETK_Commands から起動、ダッシュボード復帰で確認 |
+| 6 | B (Ch1/Ch2 再生) | 回帰確認。Ch1 に新コマンド組込あり |
+| 7 | F (Console) | 各ブロック通じて都度確認 |
 
 ---
 

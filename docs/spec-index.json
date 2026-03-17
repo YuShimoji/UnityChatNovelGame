@@ -93,10 +93,10 @@
     "id": "SP-008",
     "title": "UI/UX",
     "status": "partial",
-    "pct": 80,
+    "pct": 90,
     "cat": "ui",
     "file": "docs/StorySpec/08_ui_ux.md",
-    "summary": "ダッシュボード・スレッド・プレイヤーリソース表示域。ダッシュボードMVP+チャットバブル仕様+デバッグ機能(Section6)実装済み。インベントリUI実装済み(3サブタブ+オーバーレイ導線)。バブル表示修正完了。サブスレッドUI実装済み(左サイドバー+ThreadTypeグループ+通知バナー+Save/Load)。詳細はSP-016参照"
+    "summary": "ダッシュボード・スレッド・プレイヤーリソース表示域。ダッシュボードMVP+チャットバブル仕様+デバッグ機能+インベントリUI+バブル表示修正+サブスレッドUI(左サイドバー+ThreadType+通知+Save/Load)+スマホレスポンシブ基盤(バブル幅/フォント/サイドバー幅)+HalluciCoinバッジ 全実装済み。未実装: BGM/SE統合UI、サウンド設定画面"
   },
   {
     "id": "SP-009",
@@ -147,10 +147,10 @@
     "id": "SP-014",
     "title": "インタラクション・メカニクス",
     "status": "partial",
-    "pct": 65,
+    "pct": 75,
     "cat": "system",
     "file": "docs/StorySpec/14_interaction_mechanics.md",
-    "summary": "3メカニクス候補(指摘/ボード/分岐)の整理。矛盾Phase2完全実装。DeductionBoard凍結。Branch Step1+Step2+Phase1実装済み(BeginBranch自動切替/EndBranch自動復帰/SetBranchReflection/Save/Load/分岐内トピック自動追跡/TransferFlags→自動反映メッセージ生成)。未実装: 条件付き分岐トリガー、分岐収束自動判定、ブランチ間知識受け渡しUI"
+    "summary": "3メカニクス候補(指摘/ボード/分岐)の整理。矛盾Phase2完全実装。DeductionBoard凍結。Branch全Phase実装済み(BeginBranch/EndBranch/SetBranchReflection/Save/Load/TransferFlags自動追跡/自動反映メッセージ/DeclareThreadLatentCond条件付き潜在登録/リアクティブ条件評価/AutoBeginBranch)。未実装: 分岐収束自動判定、ブランチ間知識受け渡しUI"
   },
   {
     "id": "SP-015",
