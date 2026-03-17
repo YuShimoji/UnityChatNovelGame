@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Yarn.Unity;
 using ProjectFoundPhone.Data;
 using ProjectFoundPhone.UI;
 
@@ -250,29 +251,38 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// ScenarioManagerからYarn変数を取得
+        /// VariableStorageから全Yarn変数を取得。
+        /// DeductionBoard依存を排除し、動的生成された$has_topic_X等も確実に保存する。
         /// </summary>
         private Dictionary<string, object> GetYarnVariables(ScenarioManager scenarioManager)
         {
             Dictionary<string, object> variables = new Dictionary<string, object>();
-            
-            DeductionBoard deductionBoard = DeductionBoard.Instance;
-            if (deductionBoard != null)
+
+            // VariableStorage から全変数を直接取得
+            var dialogueRunner = FindFirstObjectByType<DialogueRunner>();
+            if (dialogueRunner != null && dialogueRunner.VariableStorage != null)
             {
-                foreach (var topic in deductionBoard.UnlockedTopics)
+                var (floats, strings, bools) = dialogueRunner.VariableStorage.GetAllVariables();
+                foreach (var kvp in bools)
                 {
-                    if (topic != null)
-                    {
-                        string varName = $"$has_topic_{topic.TopicID}";
-                        bool hasTopicVar = scenarioManager.GetVariable<bool>(varName);
-                        if (hasTopicVar)
-                        {
-                            variables[varName] = hasTopicVar;
-                        }
-                    }
+                    variables[kvp.Key] = kvp.Value;
+                }
+                foreach (var kvp in floats)
+                {
+                    variables[kvp.Key] = kvp.Value;
+                }
+                foreach (var kvp in strings)
+                {
+                    // $speaker や $current_node は別途保存されるためスキップ
+                    if (kvp.Key == "$speaker" || kvp.Key == "$current_node") continue;
+                    variables[kvp.Key] = kvp.Value;
                 }
             }
-            
+            else
+            {
+                Debug.LogWarning("SaveManager: DialogueRunner or VariableStorage not found. Yarn variables will not be saved.");
+            }
+
             return variables;
         }
         #endregion

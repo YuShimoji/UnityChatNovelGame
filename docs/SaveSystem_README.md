@@ -12,9 +12,10 @@
 - JSON形式で保存
 - 保存内容:
   - セーブメタデータ（バージョン、日時、スロット番号）
-  - シナリオ進行状況（現在のノード名、Yarn変数）
+  - シナリオ進行状況（現在のノード名、全Yarn変数）
   - 獲得済みトピックIDリスト
   - 使用済みレシピIDリスト（将来の拡張用）
+- Yarn変数の保存は `DialogueRunner.VariableStorage.GetAllVariables()` で全変数を直接取得（DeductionBoard非依存）
 
 #### SaveManager (`Assets/Scripts/Core/SaveManager.cs`)
 - セーブ・ロード機能を管理するシングルトンマネージャー
