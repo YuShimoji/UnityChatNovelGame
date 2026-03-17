@@ -8,17 +8,17 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
-現在の状況 (2026-03-17 session 2):
-  - SP-014 done (80%): Phase1-3全完了。TransferFlags自動追跡+自動反映メッセージ+DeclareThreadLatentCond(条件付き自動顕在化)+安全弁+サイドバートピックバッジ
-  - SP-016 done (100%): Step1-4全完了。条件トリガーエンジン(DeclareThreadLatentCond)追加
-  - SP-006 done (100%): HCゲートUI (ChannelData.RequiredHalluciCoin + ダッシュボードHC N/M表示)
+現在の状況 (2026-03-17 session 3):
+  - SP-014 partial (90%): Phase1-4全完了。Phase4: 知識転送選択UI (EndBranch "select" + TransferSelectionUI)
+  - SP-016 done (100%): Step1-4全完了。仕様書ステータスDRAFT→done修正済み
+  - SP-006 done (100%): HCゲートUI完了。spec-index重複フィールド修正済み
   - SP-008 90%: スマホレスポンシブ基盤完了
-  - SharedWorkflowレガシー根絶: .cursorrules + REPORT_CONFIG.yml削除 + CI submodules削除
-  - Yarnコマンド数: 22 (DeclareThreadLatentCond追加)
-  - delegation-prompts: Batch 4定義済み (N:spec棚卸し/O:SP-099棚卸し/P:acceptance更新)
-  - 手動検証待ち: Phase Aクロージング56項目 (矛盾Phase2/サブスレッド/Branch/CondBranch/Save-Load)
-  - Ch1+Ch2: 全新コマンド組込済み (DeclareThreadLatent/ManifestThread/AddHalluciCoin/リンクカード)
-  - Phase A checklist: ~60項目 + ETK_AutoVerify自動検証ノード
+  - Yarnコマンド数: 22 (全ドキュメント同期済み: EN-001/EN-009/SSOT/AUTHORING_GUIDE)
+  - SSOT整合修正: コマンド数22化+SP-006重複除去+SP-016 done化+SSOT 2026-03-17更新
+  - Ch1 BranchPyramid: EndBranch "select" モード適用済み (知識転送選択UI体験可能)
+  - Ch1 Day2: DeclareThreadLatentCond組込済み, Ch2: HCゲート値(RequiredHalluciCoin=2)設定済み
+  - ETK: ETK_BranchTransferSelect テストノード追加 (選択UI + 後方互換テスト)
+  - 手動検証待ち: Phase Aクロージング56項目 + SP-014 Phase 4選択UI動作確認
   - 未着手: SP-009(サウンド), Ch3シナリオ設計, SP-017(解放トリガー仕様)
 
 ## DECISION LOG
@@ -43,6 +43,7 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 | 2026-03-17 | SP-016 Step3 Phase3a: 型色ティント+A型カード表示 | 全型カード / ティントのみ / フルStep3 / 仕様先行 | 最小工数で「スレッドごとに見た目が違う」を実現。A型は仕様通りSystemMessage風カード。B/C/分岐はティントで差別化。Wiki/成果物カードは後送り |
 | 2026-03-17 | スマホレスポンシブ: CRITICAL+HIGH 3件一括 | CRITICAL+HIGH / CRITICALのみ / エンジン優先 / 両方並行 | バブル幅(canvas幅<800→0.85) + サイドバー幅(max 40%占有) + フォントサイズ(canvas幅<900→縮小)。CanvasScaler MatchWidthOrHeight=1.0推奨は別途 |
 | 2026-03-17 | SP-014 Branch Step2+: 全自動切替/自由切替/Yarn指定型反映 | 全自動/エントリ自動+復帰手動/両方手動, 自由切替/ロック, Yarn指定/自動生成/両方 | BeginBranch→自動切替、EndBranch→自動復帰。分岐中もサイドバーでMainに戻れる(自由切替)。反映メッセージはSetBranchReflectionでYarn作者が指定 |
+| 2026-03-17 | SP-014 Phase 4: 知識転送選択UIは能動選択型(B型)を採用 | 受動表示+活用選択 / 能動選択型 / 保留(現行維持) | EndBranch時にプレイヤーが「何を持ち帰るか」を選択。戦略性が最も高い。$has_topic変数はtrue維持(知っているが見せないだけ) |
 
 ## DEVELOPMENT PURPOSE
 
