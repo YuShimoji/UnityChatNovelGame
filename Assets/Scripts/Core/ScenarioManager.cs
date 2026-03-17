@@ -170,6 +170,7 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.AddCommandHandler<string, string, string>("DeclareThreadTyped", DeclareThreadTypedCommand);
             m_DialogueRunner.AddCommandHandler<string, string>("AddThreadMessage", AddThreadMessageCommand);
             m_DialogueRunner.AddCommandHandler<string, string, string>("AddThreadChat", AddThreadChatCommand);
+            m_DialogueRunner.AddCommandHandler<int>("AddHalluciCoin", AddHalluciCoinCommand);
             m_DialogueRunner.AddCommandHandler<string, string, string>("DeclareThreadLatent", DeclareThreadLatentCommand);
             m_DialogueRunner.AddCommandHandler<string>("ManifestThread", ManifestThreadCommand);
             m_DialogueRunner.AddCommandHandler<string, string>("BeginBranch", BeginBranchCommand);
@@ -204,6 +205,7 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.RemoveCommandHandler("DeclareThreadTyped");
             m_DialogueRunner.RemoveCommandHandler("AddThreadMessage");
             m_DialogueRunner.RemoveCommandHandler("AddThreadChat");
+            m_DialogueRunner.RemoveCommandHandler("AddHalluciCoin");
             m_DialogueRunner.RemoveCommandHandler("DeclareThreadLatent");
             m_DialogueRunner.RemoveCommandHandler("ManifestThread");
             m_DialogueRunner.RemoveCommandHandler("BeginBranch");
@@ -558,6 +560,24 @@ namespace ProjectFoundPhone.Core
                 default:
                     Debug.LogWarning($"ScenarioManager: Unknown thread type '{typeStr}', defaulting to Annotation.");
                     return ThreadType.Annotation;
+            }
+        }
+
+        /// <summary>
+        /// Yarn: &lt;&lt;AddHalluciCoin amount&gt;&gt;
+        /// HalluciCoin を静かに加算する。通知なし（ダッシュボード復帰時にバッジパルスで気づく）。
+        /// </summary>
+        private void AddHalluciCoinCommand(int amount)
+        {
+            var cm = FindFirstObjectByType<ContradictionManager>();
+            if (cm != null)
+            {
+                cm.AddCoinSilent(amount);
+                Debug.Log($"ScenarioManager: AddHalluciCoin — +{amount} (silent)");
+            }
+            else
+            {
+                Debug.LogWarning("ScenarioManager: ContradictionManager not found. Cannot add HalluciCoin.");
             }
         }
 

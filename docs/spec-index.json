@@ -75,10 +75,10 @@
     "id": "SP-006",
     "title": "ハルシコイン",
     "status": "partial",
-    "pct": 90,
+    "pct": 95,
     "cat": "system",
     "file": "docs/StorySpec/06_hallucicoin.md",
-    "summary": "コア報酬システム実装済み(矛盾発見→HalluciCoin付与、Dashboard表示、Save/Load永続化)。増加通知バッジ実装済み(パルスアニメ)。未実装: silent increment演出、ゲート/しきい値メカニクス"
+    "summary": "コア報酬システム実装済み(矛盾発見→HalluciCoin付与、Dashboard表示、Save/Load永続化)。増加通知バッジ+AddHalluciCoinコマンド(silent increment)実装済み。未実装: ゲート/しきい値メカニクス"
   },
   {
     "id": "SP-007",

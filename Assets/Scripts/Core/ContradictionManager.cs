@@ -44,6 +44,12 @@ namespace ProjectFoundPhone.Core
         public bool IsInPointingMode => m_SelectedLineTag != null;
         public bool IsOnCooldown => Time.time < m_CooldownEndTime;
         public int HalluciCoin => m_HalluciCoin;
+
+        /// <summary>HalluciCoin を静かに加算する（通知なし）</summary>
+        public void AddCoinSilent(int amount)
+        {
+            m_HalluciCoin += amount;
+        }
         public int CurrentChapter => m_CurrentChapter;
         public IReadOnlyCollection<string> DiscoveredIDs => m_DiscoveredIDs;
 
