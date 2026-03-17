@@ -631,6 +631,42 @@ Error: program_invalid (Yarn プロジェクト全体のコンパイル失敗)
 
 ---
 
+## 9a. 暗黙の仕組み（知っておくべき自動動作）
+
+### `$has_topic_X` 変数の自動生成
+
+`<<UnlockTopic "fragment_ch1_01">>` を実行すると、エンジンが自動的に Yarn 変数 `$has_topic_fragment_ch1_01` を `true` にセットする。この変数は Yarn の `<<declare>>` なしで動的に生成される。
+
+```yarn
+// UnlockTopic が自動で $has_topic_fragment_ch1_01 = true をセットする
+<<UnlockTopic "fragment_ch1_01">>
+
+// この変数を DeclareThreadLatentCond の条件に使える
+<<DeclareThreadLatentCond "analysis" "B" "分析レポート" "$has_topic_fragment_ch1_01">>
+// → fragment_ch1_01 が解錠された時点で自動顕在化
+```
+
+**注意**: `$has_topic_X` は `<<declare>>` 不要だが、`<<if>>` で参照する場合は `<<declare $has_topic_X = false>>` を書くこと（未宣言変数を `<<if>>` で参照するとコンパイルエラー）。
+
+### EndDay の引数とチャンネル完了
+
+`<<EndDay N>>` の `N` はストーリー上のグローバルな日数番号ではなく、**チャンネル内の相対 Day 番号**として扱われる。`N >= ChannelData.TotalDays` のとき、チャンネルが完了としてマークされる。
+
+```
+Ch1 (TotalDays=2):
+  EndDay 1 → Day1 完了、チャンネル継続
+  EndDay 2 → Day2 完了、チャンネル完了 (2 >= 2)
+
+Ch2 (TotalDays=1):
+  EndDay 1 → Day1 完了、チャンネル完了 (1 >= 1)
+```
+
+### Save/Load と Yarn 変数
+
+全ての Yarn 変数（`$has_topic_*`、`$d1_asked_*`、ユーザー定義変数）はセーブ時に自動保存され、ロード時に復元される。`DeclareThreadLatentCond` の条件変数もロード後に正しく評価される。
+
+---
+
 ## 10. キャラクターの声（執筆参考）
 
 ### Pyramid（AI アシスタント）
