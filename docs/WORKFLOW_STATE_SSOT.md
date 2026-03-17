@@ -135,6 +135,10 @@ ContentAuthoring シーンで以下を行う必要あり:
 - **EngineTestKit**: 追加済み (6da0aba)。F12 Debug Hub + ch_test Dashboard テスト用8ノード
 - **サイドバーUI (5d)**: ドロップダウン→左スライドインサイドバーに全面置換。ハンバーガーボタン(≡)+未読合計バッジ、半透明オーバーレイ(タップで閉じ)、ThreadTypeグループヘッダー、DOTween スライドアニメ(0.25s OutCubic/InCubic)、ScrollRect内蔵でスレッド多数でもスクロール可。Main エントリは常に先頭
 - **種別差異レンダリング (5f)**: ChatController.m_ActiveThreadType で表示中スレッドの型を追跡。A型(注釈): 中央配置カード(キャラアイコン/名前省略、型色ベース暗背景、型色明テキスト)。B/C/分岐: キャラ色に型色を12%混合したティント。SystemMessage: サブスレッド内で型色10%ティント。ThreadSwitcherController.OnSelectThread と SaveManager.ApplySaveData の両方で SetActiveThreadType を呼ぶ
+- **出現通知 (5g)**: DeclareThread時に型アイコン+型色リッチテキスト付きSystemMessage。ハンバーガーボタンが型色で2回パルス (DOTween)
+- **Branch Step 2+ (SP-014)**: BeginBranch(自動切替) / EndBranch(自動復帰+反映メッセージ) / SetBranchReflection(Yarn指定型)。分岐中はサイドバーで自由切替可。Yarnコマンド数17
+- **スマホレスポンシブ (SP-008)**: GetResponsiveBubblePercent (canvas幅<800→0.85) / GetResponsiveFontScale (canvas幅<900→縮小) / GetSidebarWidth (canvas幅40%上限)
+- **HalluciCoin通知バッジ (SP-006)**: RefreshCoinDisplay で前回値と比較、増加時にDOTweenパルス (scale 1.3x + 色ハイライト)
 
 ### Claude への依頼パターン
 

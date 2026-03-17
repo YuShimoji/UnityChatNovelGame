@@ -191,8 +191,8 @@
   {
     "id": "EN-002",
     "title": "ワークフロー SSOT",
-    "status": "partial",
-    "pct": 85,
+    "status": "done",
+    "pct": 100,
     "cat": "infra",
     "file": "docs/WORKFLOW_STATE_SSOT.md",
     "summary": "現在の開発状態・セットアップ手順・次ステップ。サブスレッドUI 5a-5e+5d全完了反映済み。残: 矛盾Phase2手動テスト、スマホレイアウト、Ch3設計"
@@ -227,8 +227,8 @@
   {
     "id": "EN-006",
     "title": "UI実装仕様",
-    "status": "partial",
-    "pct": 90,
+    "status": "done",
+    "pct": 100,
     "cat": "ui",
     "file": "docs/UI_IMPLEMENTATION_SPEC.md",
     "summary": "チャットバブル(名前分離・角丸9-slice・影・幅フィット・FinalizeBubbleSize・リッチテキストスコープ修正)・スクロール吸着・選択肢UI・ChatUIConfig全40パラメータ。バブル幅: Screen.width→RectTransform.rect.width(リサイズ追従)。bubbleSprite fake null修正済み(??→!=null)"
