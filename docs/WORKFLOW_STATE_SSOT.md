@@ -125,7 +125,7 @@ ContentAuthoring シーンで以下を行う必要あり:
 - **ThreadType 取得方法**: `OnThreadDeclared` イベントシグネチャは変更なし (`Action<string, string>`)。型情報は `ScenarioManager.GetDeclaredThread(threadId).Type` 経由で取得
 - **ヘッダーバー表示制御**: スレッド切替時にのみ表示・非表示を切替。Main スレッド選択時は非表示。型別色は 15% alpha の背景帯 + 90% alpha のラベルで構成
 - **型別アイコン/色**: Annotation=[A], Tracking=[B], Scout=[C], Branch=[>]。色は ThreadSwitcherController 定数 (TypeColorAnnotation 等) で一元管理
-- **Yarn コマンド数**: 全14コマンド (DeclareThreadTyped 追加後)
+- **Yarn コマンド数**: 全17コマンド (DeclareThreadTyped 追加後)
 - **SubthreadTest.yarn**: DeclareThreadTyped 対応に更新済み。型指定の検証モックとして機能
 - **通知バナー**: OnThreadMessageAdded で非アクティブスレッドへのメッセージ検出 → DOTween Sequence (fadeIn 0.25s → 3.5s表示 → fadeOut 0.4s)。クリックで OnSelectThread 呼出。Reset/OnSelectThread で HideNotificationBanner
 - **スレッドのノード遷移維持**: m_DeclaredThreads はノード遷移(jump)で消えない。ClearDeclaredThreads は SaveManager.LoadGame のみで呼ばれる

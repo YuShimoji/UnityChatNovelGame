@@ -37,6 +37,9 @@
 | DeclareThreadTyped | `<<DeclareThreadTyped "threadId" "type" "displayName">>` | 型指定でサブスレッドを宣言。type: "A"(注釈)/"B"(追跡)/"C"(偵察)/"branch"(分岐)。サイドバーに型グループ分類+アイコン・色表示 |
 | AddThreadMessage | `<<AddThreadMessage "threadId" "text">>` | サブスレッドにシステムメッセージを追加（メイン画面には非表示） |
 | AddThreadChat | `<<AddThreadChat "threadId" "charID" "text">>` | サブスレッドにキャラクター付きメッセージを追加（バブル表示） |
+| BeginBranch | `<<BeginBranch "branchId" "displayName">>` | 分岐スレッドを宣言し自動切替。以降のメッセージは分岐に流れる |
+| EndBranch | `<<EndBranch true\|false>>` | 分岐を終了しメインに自動復帰。ReflectionMessage があれば反映メッセージを投入 |
+| SetBranchReflection | `<<SetBranchReflection "text">>` | EndBranch 時にメインへ投入する反映メッセージを設定 |
 
 ### Yarn 標準機能
 

@@ -186,7 +186,7 @@
     "pct": 100,
     "cat": "infra",
     "file": "docs/ENGINE_FEATURE_INVENTORY.md",
-    "summary": "Yarnコマンド14種・キャラ管理・セーブ(AutoSave+スレッド対応)・演出・バブル表示設定・矛盾(#line:タグ方式)・ダッシュボード(Day Resume+マルチDay)・インベントリUI・サブスレッドUI(Step1-3: サイドバー+ThreadType+種別差異レンダリング+出現通知+Save/Load)・ETK(ch_etk対応)。全機能反映済み"
+    "summary": "Yarnコマンド17種・キャラ管理・セーブ(AutoSave+スレッド対応)・演出・バブル表示設定・矛盾(#line:タグ方式)・ダッシュボード(Day Resume+マルチDay)・インベントリUI・サブスレッドUI(Step1-3: サイドバー+ThreadType+種別差異レンダリング+出現通知+Save/Load)・ETK(ch_etk対応)。全機能反映済み"
   },
   {
     "id": "EN-002",
@@ -258,6 +258,6 @@
     "pct": 100,
     "cat": "infra",
     "file": "docs/SCENARIO_AUTHORING_GUIDE.md",
-    "summary": "Yarnシナリオ執筆ハンズオン。5分クイックスタート、全14コマンドリファレンス(DeclareThread/DeclareThreadTyped/AddThreadMessage/AddThreadChat含む)、キャラクターID一覧、コンテンツパターン集、キャラクターの声ガイド"
+    "summary": "Yarnシナリオ執筆ハンズオン。5分クイックスタート、全17コマンドリファレンス(DeclareThread/DeclareThreadTyped/AddThreadMessage/AddThreadChat含む)、キャラクターID一覧、コンテンツパターン集、キャラクターの声ガイド"
   }
 ]
