@@ -68,13 +68,18 @@
   - 即時（前提条件と同時にフラグ注入 → ストーリー上で即出現させたい場合）
 
 ```yarn
-// 将来実装（条件トリガー、Step 4）:
-<<DeclareThread "annot_pyramid_theory" "A" "Pyramidの理論体系" "topic:pyramid_intro">>
-// → トピック "pyramid_intro" が解放されたときに顕在化
+// 条件付き潜在登録（Step 4 実装済み）:
+<<DeclareThreadLatentCond "annot_pyramid_theory" "A" "Pyramidの理論体系" "$has_topic_pyramid_intro">>
+// → Yarn変数 $has_topic_pyramid_intro が true になったときに自動顕在化
 
-// 現在の実装では全て即時可視化:
+// 手動顕在化:
+<<DeclareThreadLatent "branch_pyramid_solo" "branch" "Pyramidの独白">>
+<<ManifestThread "branch_pyramid_solo">>
+// → ManifestThread で明示的に顕在化
+
+// 即時可視化（従来通り）:
 <<DeclareThreadTyped "branch_pyramid_solo" "branch" "Pyramidの独白">>
-// → 宣言と同時に可視化（conditionパラメータは未実装）
+// → 宣言と同時に可視化
 ```
 
 ### 2.3 状態遷移
@@ -204,20 +209,19 @@ public List<ThreadData> Threads;  // 全スレッドの状態
 
 > **注**: Yarn Spinner は同名コマンドの引数違いオーバーロードを解決できないため、`DeclareThread`(2引数) と `DeclareThreadTyped`(3引数) に分離している。
 
-### 未実装（Step 4 で対応予定）
+### 実装済み（Step 4 完了）
 
 | コマンド | 構文 | 説明 |
 |----------|------|------|
-| DeclareThread (条件付き) | `<<DeclareThread "threadID" "type" "displayName" "condition">>` | 条件トリガー付きスレッド宣言（潜在登録） |
-| ManifestThread | `<<ManifestThread "threadID">>` | スレッドを即座に顕在化（条件無視） |
-| CompleteThread | `<<CompleteThread "threadID">>` | スレッドを完了状態にする |
+| DeclareThreadLatent | `<<DeclareThreadLatent "threadID" "type" "displayName">>` | 潜在登録（UIに出さない）。ManifestThread で顕在化 |
+| DeclareThreadLatentCond | `<<DeclareThreadLatentCond "threadID" "type" "displayName" "$condition">>` | 条件付き潜在登録。Yarn変数変更時に条件を自動評価し、trueで自動顕在化。Branch型は自動BeginBranch |
+| ManifestThread | `<<ManifestThread "threadID">>` | 潜在スレッドを即座に顕在化（通知メッセージ+サイドバー追加） |
+| CompleteThread | `<<CompleteThread "threadID">>` | スレッドを完了状態にする（サイドバーでグレーアウト+チェックマーク） |
 
-- `condition` パラメータ（将来実装）:
-  - `"topic:topicID"` — トピック解放時
-  - `"fragment:fragmentID"` — 断片取得時
-  - `"contradiction:pairID"` — 矛盾指摘成功時
-  - `"hc:amount"` — HalluciCoin閾値到達時
-  - `"immediate"` — 即時顕在化
+- `$condition` パラメータ（DeclareThreadLatentCond）:
+  - 単一bool変数: `"$var_name"` — 変数がtrueで顕在化
+  - 比較式: `"$var_name >= N"` — 比較演算子(>=, <=, >, <, ==, !=)対応
+  - Yarn変数の `SetVariable<T>` 呼び出し時にリアクティブ評価
 
 ---
 

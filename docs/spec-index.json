@@ -186,7 +186,7 @@
     "pct": 100,
     "cat": "infra",
     "file": "docs/ENGINE_FEATURE_INVENTORY.md",
-    "summary": "Yarnコマンド22種(DeclareThreadLatentCond含む)・キャラ管理・セーブ(AutoSave+スレッド対応)・演出・バブル表示設定・矛盾(#line:タグ方式)・ダッシュボード(Day Resume+マルチDay+HCゲート)・インベントリUI・サブスレッドUI(Step1-4: サイドバー+ThreadType+種別差異レンダリング+出現通知+条件付き潜在+Save/Load)・Branch(BeginBranch/EndBranch/TransferFlags自動追跡)・ETK(ch_etk対応)。全機能反映済み"
+    "summary": "Yarnコマンド22種(DeclareThreadLatentCond含む)・キャラ管理・セーブ(AutoSave+スレッド対応)・演出・バブル表示設定・矛盾(#line:タグ方式)・ダッシュボード(Day Resume+マルチDay+HCゲート)・インベントリUI・サブスレッドUI(Step1-4全実装済み: サイドバー+ThreadType+種別差異レンダリング+出現通知+条件付き潜在+Save/Load)・Branch(Phase1-4: BeginBranch/EndBranch select/TransferFlags自動追跡/知識転送選択UI)・ETK(ch_etk対応)。全機能反映済み"
   },
   {
     "id": "EN-002",
@@ -195,7 +195,7 @@
     "pct": 100,
     "cat": "infra",
     "file": "docs/WORKFLOW_STATE_SSOT.md",
-    "summary": "現在の開発状態・セットアップ手順・次ステップ。全主要機能実装完了(22コマンド+HCゲート+Branch+レスポンシブ)。残: Phase Aクロージング手動検証(56項目)、Ch3設計"
+    "summary": "現在の開発状態・セットアップ手順・次ステップ。全主要機能実装完了(22コマンド+HCゲート+Branch+レスポンシブ)。残: Phase Aクロージング手動検証(73項目)、Ch3設計"
   },
   {
     "id": "EN-003",

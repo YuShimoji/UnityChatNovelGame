@@ -8,17 +8,12 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
-現在の状況 (2026-03-17 session 3):
-  - SP-014 partial (90%): Phase1-4全完了。Phase4: 知識転送選択UI (EndBranch "select" + TransferSelectionUI)
-  - SP-016 done (100%): Step1-4全完了。仕様書ステータスDRAFT→done修正済み
-  - SP-006 done (100%): HCゲートUI完了。spec-index重複フィールド修正済み
-  - SP-008 90%: スマホレスポンシブ基盤完了
-  - Yarnコマンド数: 22 (全ドキュメント同期済み: EN-001/EN-009/SSOT/AUTHORING_GUIDE)
-  - SSOT整合修正: コマンド数22化+SP-006重複除去+SP-016 done化+SSOT 2026-03-17更新
-  - Ch1 BranchPyramid: EndBranch "select" モード適用済み (知識転送選択UI体験可能)
-  - Ch1 Day2: DeclareThreadLatentCond組込済み, Ch2: HCゲート値(RequiredHalluciCoin=2)設定済み
-  - ETK: ETK_BranchTransferSelect テストノード追加 (選択UI + 後方互換テスト)
-  - 手動検証待ち: Phase Aクロージング56項目 + SP-014 Phase 4選択UI動作確認
+現在の状況 (2026-03-17 session 4):
+  - エンジン基盤: 全主要機能実装完了 (Yarnコマンド22種, サブスレッドStep1-4, Branch Phase1-4, HCゲート, レスポンシブ)
+  - SP-014 partial (90%): Phase1-4全完了。残: ブランチ間クロスリファレンスUI, アルケミーボード
+  - SP-016 done (100%), SP-006 done (100%), SP-008 90%
+  - 仕様ドキュメント乖離修正完了: 16_subthread_ui.md, 14_interaction_mechanics.md, ENGINE_FEATURE_INVENTORY.md
+  - 手動検証待ち: Phase Aクロージング73項目 (全未チェック)
   - 未着手: SP-009(サウンド), Ch3シナリオ設計, SP-017(解放トリガー仕様)
 
 ## DECISION LOG

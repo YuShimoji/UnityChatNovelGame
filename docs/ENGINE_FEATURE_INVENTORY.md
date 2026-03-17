@@ -39,6 +39,7 @@
 | AddThreadChat | `<<AddThreadChat "threadId" "charID" "text">>` | サブスレッドにキャラクター付きメッセージを追加（バブル表示） |
 | BeginBranch | `<<BeginBranch "branchId" "displayName">>` | 分岐スレッドを宣言し自動切替。以降のメッセージは分岐に流れる |
 | EndBranch | `<<EndBranch true\|false>>` | 分岐を終了しメインに自動復帰。反映メッセージを投入 (優先順位: SetBranchReflection指定 > TransferFlags自動生成 > なし) |
+| EndBranch (select) | `<<EndBranch true "select">>` | 知識転送選択UIを表示。プレイヤーが「どの知識を持ち帰るか」を選択後にメイン復帰 |
 | SetBranchReflection | `<<SetBranchReflection "text">>` | EndBranch 時にメインへ投入する反映メッセージを設定。未設定時は分岐内UnlockTopicのトピック名から自動生成 |
 | AddHalluciCoin | `<<AddHalluciCoin amount>>` | HalluciCoin を静かに加算 (通知なし、ダッシュボードバッジパルスで検知) |
 | DeclareThreadLatent | `<<DeclareThreadLatent "id" "type" "name">>` | スレッドを潜在登録 (UIに出さない)。ManifestThread で顕在化 |
@@ -386,8 +387,8 @@ ContentAuthoring シーンの Canvas 直下に `ContradictionFeedbackController`
 - DisplayName: `Ch.1 -- Terminal`
 - StartNodeName: `Ch1_Day1_Opening`
 - ChapterNumber: `1`
-- TotalDays: `1` (アセット未更新、デフォルト値)
-- DayStartNodeNames: `(未設定)`
+- TotalDays: `2`
+- DayStartNodeNames: `[Ch1_Day1_Opening, Ch1_Day2_Opening]`
 - RequiredCompletedChannelID: `(empty)`
 - EnableHints: `false`
 - MaxHintDifficulty: `1`
@@ -453,7 +454,7 @@ TopicData の `TopicID` プレフィックスでインベントリの表示カ�
 
 ---
 
-## 10a. サブスレッドUI（Step 1-3 実装済み）
+## 10a. サブスレッドUI（Step 1-4 全実装済み）
 
 メイン⇔複数サブスレッドの切替機能。種別差異レンダリング + 出現通知対応。
 
@@ -482,11 +483,9 @@ TopicData の `TopicID` プレフィックスでインベントリの表示カ�
 - **システムメッセージ**: `DeclareThread` 時にメインチャットへ型アイコン+型色リッチテキスト付き通知 (例: `<color=#4A90D9>[A]</color> 新しいスレッド「覚書」が利用可能です`)
 - **ハンバーガーパルス**: 新スレッド宣言時にボタン背景が型色で2回パルス (DOTween)
 
-### 制限事項（将来Step）
+### 制限事項
 
 - サブスレッド内でのYarnノード実行は未対応
-- B型Wikiリンク遷移 / C型成果物カードは未実装
-- 2段階トリガー条件エンジンは未実装 (Step 4)
 - サブスレッド内矛盾指摘は未対応
 
 ### 使用例
@@ -518,7 +517,7 @@ TopicData の `TopicID` プレフィックスでインベントリの表示カ�
 
 | 機能 | 説明 | 実装難度 |
 | ---- | ---- | -------- |
-| サブスレッドUI | Discord 的なマルチスレッド表示 → **Step1-3実装済み (セクション10a)** | — |
+| サブスレッドUI | Discord 的なマルチスレッド表示 → **Step1-4全実装済み (セクション10a)** | — |
 | 偵察システム | ロケーション探索・アイテム収集 | 高 |
 | 断片クロスリファレンス | 断片同士の照合・矛盾検出 | 中 |
 

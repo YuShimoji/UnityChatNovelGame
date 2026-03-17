@@ -95,13 +95,18 @@
 - ただし「ブランチ間の知識受け渡し」は StorySpec に記述なし（新規アイデア）
 
 **コード実態**:
-- 未実装
+- `BranchThreadState.cs`: 分岐状態モデル (ActiveBranchId/TransferFlags/TransferredFlags/HiddenFlags)
+- `ScenarioManager.cs`: BeginBranch/EndBranch/SetBranchReflection Yarnコマンド
+- `TransferSelectionUI.cs`: 知識転送選択UIオーバーレイ (EndBranch "select" モード)
+- `SubthreadData.cs`: ManifestCondition/AutoBeginBranch (条件付き潜在+自動分岐開始)
+- Phase 1-4 全実装済み
 
 **課題**:
 - ~~サブスレッド（A/B/C）との関係整理が必要~~ → **決定済み**: 統合型（`16_subthread_ui.md`）
 - ~~分岐の発生条件・収束条件が未定義~~ → **決定済み**: 2段階トリガー（前提条件+顕在化条件、`16_subthread_ui.md` Section 2）
-- 知識の受け渡しの具体的な UI/UX が未定義
-- Yarn での実装方式: `DeclareThread` / `ManifestThread` / `CompleteThread` コマンドを定義済み（`16_subthread_ui.md` Section 5）
+- ~~知識の受け渡しの具体的な UI/UX が未定義~~ → **実装済み**: EndBranch "select" + TransferSelectionUI (Phase 4)
+- ~~Yarn での実装方式~~ → **実装済み**: 全22コマンド (`ENGINE_FEATURE_INVENTORY.md` Section 1)
+- 未実装: ブランチ間クロスリファレンスUI（別分岐の知識を参照・提示するUI）
 
 ---
 
@@ -168,8 +173,8 @@
 | `DeductionBoard` | B (ボード) | 先行実装 | 仕様未確定のまま実装された |
 | `TopicData` | B (ボード) + 断片 | 実装済み | 断片/トピック未分離 |
 | `SynthesisRecipe` | B (ボード) | 実装済み | レシピ定義 |
-| サブスレッドUI | C (分岐) に関連 | 未実装 | StorySpec に仕様あり |
-| 分岐スレッド（知識受け渡し） | C (分岐) | 未実装 | アイデア段階 |
+| サブスレッドUI | C (分岐) に関連 | Step 1-4 全実装済み | サイドバー+ThreadType+種別差異レンダリング+通知+条件付き潜在+Save/Load (`16_subthread_ui.md`) |
+| 分岐スレッド（知識受け渡し） | C (分岐) | Phase 1-4 全実装済み | BeginBranch/EndBranch/TransferFlags自動追跡/自動反映/知識転送選択UI/条件付き分岐トリガー |
 
 ---
 
