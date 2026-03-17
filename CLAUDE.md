@@ -8,19 +8,18 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
-現在の状況 (2026-03-16):
-  - サブスレッドUI系列 5a-5e + 5d 全完了:
-    - 5a: DeclareThread/AddThreadMessage + トグルボタン (b53cbac)
-    - 5b: ドロップダウン切替 + 未読バッジ (429bf69)
-    - 5b+: AddThreadChat コマンド (1086e4c)
-    - 5c: ThreadType system + ヘッダーバー + 通知バナー (e8e53cc, 761625d)
-    - 5d: サイドバー型スレッド一覧UI (ドロップダウン→左スライドインサイドバーに置換)
-    - 5e: 複数スレッド並走検証 ETK_ThreadParallel (aecbd62)
-  - Save/Loadスレッド履歴消失バグ修正 (3d0a0f6)
-  - ETK: ThreadType + ThreadParallel テストノード追加
-  - delegation-prompts Batch 2 (G-J) + Batch 3 (K-M) 切り出し済み
-  - 未着手: バブルP2-P6修正、矛盾Phase2手動テスト
-  - Serena: .NET 10.0 必須だが未導入（シンボリックツール使用不可）
+現在の状況 (2026-03-17):
+  - 2026-03-17 セッションで18コミット push済み (ad6fdd9)
+  - SP-016 Step 3 (3a+3b): 種別差異レンダリング + 出現通知
+  - SP-016 Step 4 (4a): DeclareThreadLatent/ManifestThread (潜在/顕在トリガー)
+  - SP-014 Branch Step 2+: BeginBranch/EndBranch/SetBranchReflection
+  - SP-008: スマホレスポンシブ基盤 + CanvasScaler MatchWidthOrHeight=1.0
+  - SP-006: HCバッジパルス + AddHalluciCoin (silent increment)
+  - SP-099: AutoSpeakerAfterChoice + 未解決質問4件に削減
+  - Docs: EN-001/002/006/009 全て100%、Batch 2全完了、ch_etk.asset
+  - Yarnコマンド数: 14→20 (+6種)
+  - 手動検証待ち: Step 3外観(一部確認済), レスポンシブ, HCバッジ, Branch, 潜在/顕在
+  - 未着手: 矛盾Phase2手動テスト, SP-006ゲート/しきい値, SP-016 CompleteThread/自動トリガー
 
 ## DECISION LOG
 
