@@ -377,6 +377,13 @@ namespace ProjectFoundPhone.Core
             // Yarn変数を更新: $has_topic_{topicID} = true
             string variableName = $"$has_topic_{topicID}";
             SetVariable<bool>(variableName, true);
+
+            // 分岐内でトピック解錠された場合、TransferFlags に自動登録
+            if (m_BranchThreadState != null && m_BranchThreadState.IsActive)
+            {
+                AddBranchTransferFlag(topicID);
+                Debug.Log($"ScenarioManager: Topic '{topicID}' auto-tracked in branch '{m_BranchThreadState.ActiveBranchId}'");
+            }
         }
 
         /// <summary>

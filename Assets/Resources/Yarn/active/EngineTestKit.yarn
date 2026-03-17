@@ -168,6 +168,30 @@ Glitch Level 2: より強いグリッチ。
 
 <<StartWait 0.3>>
 
+<<SystemMessage "--- AddHalluciCoin テスト ---">>
+<<AddHalluciCoin 5>>
+<<set $speaker to "pyramid">>
+HalluciCoin +5 を静かに加算しました。ダッシュボードに戻るとバッジがパルスするはずです。
+
+<<StartWait 0.5>>
+
+<<SystemMessage "--- AutoSpeakerAfterChoice テスト ---">>
+<<set $auto_speaker_after_choice to true>>
+<<set $speaker to "pyramid">>
+AutoSpeakerAfterChoice が ON です。選択肢を選ぶと $speaker が自動的に "player" になります。
+
+<<set $speaker to "player">>
+-> テスト選択肢A
+    <<StartWait 0.3>>
+    <<set $speaker to "pyramid">>
+    選択肢Aの後、次の行でspeakerがplayerに自動セットされました（確認用）。
+-> テスト選択肢B
+    <<StartWait 0.3>>
+    <<set $speaker to "pyramid">>
+    選択肢Bの後、次の行でspeakerがplayerに自動セットされました（確認用）。
+
+<<set $auto_speaker_after_choice to false>>
+
 <<set $speaker to "pyramid">>
 全コマンドのテスト完了。
 
