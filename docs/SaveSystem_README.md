@@ -215,9 +215,14 @@ public class SubthreadData
 {
     public string ThreadId;
     public string DisplayName;
-    public ThreadType Type;          // Annotation / Tracking / Scout / Branch
-    public List<SavedChatMessage> ChatHistory;
+    public ThreadType Type;           // Annotation / Tracking / Scout / Branch
+    public bool IsLatent;             // 潜在状態 (UIに非表示)
+    public string ManifestCondition;  // 顕在化条件 (Yarn変数式、null=手動)
+    public bool AutoBeginBranch;      // 顕在化時に自動BeginBranch (Branch型)
+    public bool IsCompleted;          // 完了状態 (サイドバーでグレーアウト)
+    public int AcquiredTopicCount;    // 分岐内で取得したトピック数
     public int UnreadCount;
+    public List<SavedChatMessage> ChatHistory;
 }
 ```
 
@@ -236,6 +241,31 @@ public class SubthreadData
 4. `ChatController.SetThreadHistories()` でスレッド別履歴を復元
 5. `ChatController.SetActiveThreadType(thread.Type)` で種別差異レンダリングを設定
 6. `ChatController.SwitchToThread(activeThreadId)` で表示スレッドを復元
+
+## 分岐スレッドのセーブ/ロード
+
+### 追加フィールド (SaveData)
+
+| フィールド | 型 | 説明 |
+|-----------|-----|------|
+| `BranchThread` | `BranchThreadState` | 分岐スレッドの実行状態 |
+
+### BranchThreadState の構造
+
+- `ActiveBranchId`: 実行中の分岐ID
+- `IsActive`: 分岐実行中か
+- `WasCompleted`: 分岐が完了したか
+- `TransferFlags`: 分岐内で取得したフラグ一覧
+- `TransferredFlags`: プレイヤーが持ち帰ると選択したフラグ (EndBranch "select" 時)
+- `HiddenFlags`: プレイヤーが持ち帰らないと選択したフラグ
+- `SelectionApplied`: 知識転送選択UIを通過したか
+- `ReflectionMessage`: EndBranch 時の反映メッセージ (SetBranchReflection で設定)
+
+### セーブ/ロードフロー
+
+- セーブ: `ScenarioManager.GetBranchThreadStateSnapshot()` → `SaveData.BranchThread`
+- ロード: `SaveData.BranchThread` → `ScenarioManager.ApplyBranchThreadState()`
+- 分岐中にセーブした場合、ロード後に分岐状態が正しく復元される
 
 ### 後方互換性
 

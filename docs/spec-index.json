@@ -204,7 +204,7 @@
     "pct": 100,
     "cat": "data",
     "file": "docs/SaveSystem_README.md",
-    "summary": "JSON保存・3スロット+AutoSave(slot=99)・チャット履歴・トピック・後方互換。復元時の名前重複防止(StripNamePrefix)実装済み。サブスレッド対応(Subthreads/ActiveThreadId/ThreadType保存・復元)"
+    "summary": "JSON保存・3スロット+AutoSave(slot=99)・チャット履歴・トピック・後方互換。復元時の名前重複防止(StripNamePrefix)実装済み。サブスレッド対応(Subthreads/ActiveThreadId/ThreadType保存・復元)。BranchThreadState保存(TransferFlags/TransferredFlags/HiddenFlags/SelectionApplied/ReflectionMessage)"
   },
   {
     "id": "EN-004",
