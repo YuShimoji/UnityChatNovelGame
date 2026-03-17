@@ -454,6 +454,56 @@ title: ETK_Branch
 <<set $speaker to "pyramid">>
 メインスレッドに戻りました。上に反映メッセージが表示されているはずです。
 
+<<SystemMessage "--- 次: 自動反映メッセージ テスト ---">>
+<<StartWait 2>>
+
+<<set $speaker to "pyramid">>
+次は分岐内トピック自動追跡のテストです。SetBranchReflection を使わずに、分岐内で UnlockTopic を呼びます。
+
+<<StartWait 1>>
+
+<<BeginBranch "etk_branch_auto" "自動反映テスト">>
+
+<<set $speaker to "pyramid">>
+この分岐では、トピックを解錠します。SetBranchReflection は呼びません。
+
+<<StartWait 0.5>>
+<<UnlockTopic "etk_topic_alpha">>
+<<SystemMessage "トピック etk_topic_alpha を解錠しました">>
+
+<<StartWait 0.5>>
+<<UnlockTopic "etk_topic_beta">>
+<<SystemMessage "トピック etk_topic_beta を解錠しました">>
+
+<<StartWait 0.5>>
+<<set $speaker to "pyramid">>
+2つのトピックを解錠しました。EndBranch で自動的に反映メッセージが生成されるはずです。
+
+<<StartWait 2>>
+
+<<EndBranch true>>
+
+<<StartWait 0.5>>
+<<set $speaker to "pyramid">>
+メインに戻りました。自動反映メッセージ「分岐で新情報を確認: ...」が表示されているはずです。
+
+<<SystemMessage "--- 確認項目 ---">>
+<<SystemMessage "5. SetBranchReflection 未使用でも、UnlockTopic で解錠したトピック名から反映メッセージが自動生成されること">>
+<<SystemMessage "6. 反映メッセージに [>] アイコンと紫色が付いていること">>
+
+<<StartWait 5>>
+
+<<SystemMessage "--- CompleteThread テスト ---">>
+<<set $speaker to "pyramid">>
+潜在スレッド「隠された覚書」を完了にします。
+
+<<CompleteThread "etk_latent_note">>
+
+<<StartWait 0.5>>
+サイドバーで「隠された覚書」がグレーアウト+チェックマークになっているはずです。
+
+<<SystemMessage "確認: サイドバーで完了スレッドがグレーアウト表示されていること">>
+
 <<StartWait 30>>
 
 <<set $speaker to "player">>

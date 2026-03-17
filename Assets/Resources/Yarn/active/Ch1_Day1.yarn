@@ -10,6 +10,10 @@ title: Ch1_Day1_Opening
 <<declare $d1_asked_terminal = false>>
 <<declare $d1_asked_marco = false>>
 <<declare $d1_asked_fragment = false>>
+<<declare $halluci_coin = 0>>
+
+// 潜在スレッド: 断片発見後に顕在化
+<<DeclareThreadLatent "ch1_note_facility" "A" "施設管理規約メモ">>
 
 <<SystemMessage "端末を起動しています...">>
 <<StartWait 2>>
@@ -256,6 +260,11 @@ title: Ch1_Day1_Fragment
 <<UnlockTopic "fragment_ch1_01">>
 <<SystemMessage "断片「施設管理規約（部分）」を記録しました">>
 
+// 潜在スレッドを顕在化 + 情報を追加
+<<ManifestThread "ch1_note_facility">>
+<<AddThreadMessage "ch1_note_facility" "施設管理規約（部分）: 第3次改定に基づき、本施設は■■■管理局の管轄下にある">>
+<<AddThreadMessage "ch1_note_facility" "参照先文書（付録C）は欠損。検索でも該当なし">>
+
 <<set $speaker to "marco">>
 <<StartWait 0.5>>
 
@@ -309,6 +318,9 @@ title: Ch1_Day1_Winding
 <<StartWait 1>>
 
 <<SystemMessage "Marco Gross が切断しました">>
+
+// Day1 セッション参加報酬 (silent)
+<<AddHalluciCoin 2>>
 
 <<StartWait 2>>
 

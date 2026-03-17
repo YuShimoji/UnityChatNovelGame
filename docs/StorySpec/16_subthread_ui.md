@@ -254,7 +254,7 @@ public List<ThreadData> Threads;  // 全スレッドの状態
 - [x] ManifestThread: 顕在化 (通知+サイドバー追加を発火)
 - [x] 潜在中もAddThreadMessageでメッセージ追加可能
 - [ ] 自動トリガー (トピック/断片/矛盾/HCイベント連携)
-- [ ] CompleteThread によるスレッド完了処理
+- [x] CompleteThread: スレッド完了状態管理 + サイドバーグレーアウト+チェックマーク (2026-03-17)
 
 ---
 

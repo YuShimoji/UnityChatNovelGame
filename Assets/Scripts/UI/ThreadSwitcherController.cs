@@ -104,6 +104,7 @@ namespace ProjectFoundPhone.UI
             {
                 m_ScenarioManager.OnThreadDeclared += OnThreadDeclared;
                 m_ScenarioManager.OnThreadMessageAdded += OnThreadMessageAdded;
+                m_ScenarioManager.OnThreadCompleted += OnThreadCompleted;
             }
 
             CreateUI();
@@ -116,6 +117,7 @@ namespace ProjectFoundPhone.UI
             {
                 m_ScenarioManager.OnThreadDeclared -= OnThreadDeclared;
                 m_ScenarioManager.OnThreadMessageAdded -= OnThreadMessageAdded;
+                m_ScenarioManager.OnThreadCompleted -= OnThreadCompleted;
             }
             m_SidebarTween?.Kill();
             m_NotificationTween?.Kill();
@@ -445,6 +447,36 @@ namespace ProjectFoundPhone.UI
                     if (threadId != activeId)
                     {
                         ShowNotificationBanner(entry);
+                    }
+                    break;
+                }
+            }
+        }
+
+        private void OnThreadCompleted(string threadId)
+        {
+            foreach (var entry in m_Threads)
+            {
+                if (entry.ThreadId == threadId)
+                {
+                    // グレーアウト + チェックマーク
+                    if (entry.NameLabel != null)
+                    {
+                        entry.NameLabel.color = new Color(0.5f, 0.5f, 0.5f, 0.6f);
+                        entry.NameLabel.text = $"\u2713 {entry.DisplayName}";
+                    }
+                    if (entry.TypeLabel != null)
+                    {
+                        entry.TypeLabel.color = new Color(0.5f, 0.5f, 0.5f, 0.4f);
+                    }
+                    if (entry.ItemBg != null)
+                    {
+                        entry.ItemBg.color = new Color(0.12f, 0.14f, 0.18f, 0.5f);
+                    }
+                    // 未読バッジをクリア
+                    if (entry.BadgeLabel != null)
+                    {
+                        entry.BadgeLabel.transform.parent.gameObject.SetActive(false);
                     }
                     break;
                 }

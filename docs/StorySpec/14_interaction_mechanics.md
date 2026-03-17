@@ -215,3 +215,31 @@
 ### Compatibility Notes
 - This step does not yet add UI entry points or automatic return effects.
 - Existing A/B contradiction mechanics are unaffected by this change scope.
+
+---
+
+## 2026-03-17 Branch Step2+ Phase 1: 分岐内トピック自動追跡 + 自動反映メッセージ (Implemented)
+
+### Scope
+- 分岐スレッド内で UnlockTopic が呼ばれた場合、TransferFlags に自動登録
+- EndBranch 時に SetBranchReflection 未設定の場合、TransferFlags から反映メッセージを自動生成
+
+### 反映メッセージ優先順位
+1. **Yarn指定** (SetBranchReflection): 作者が明示指定したテキストをそのまま使用
+2. **自動生成** (TransferFlags): 分岐内で解錠されたトピック名から「分岐で新情報を確認: {トピック名1}, {トピック名2}」を生成
+3. **なし**: TransferFlags も空の場合、反映メッセージなし
+
+### 実装詳細
+- `UnlockTopicCommand`: `m_BranchThreadState.IsActive` 時に `AddBranchTransferFlag(topicID)` を自動呼出
+- `ResolveReflectionMessage()`: 新規メソッド。上記優先順位で反映メッセージを決定
+- `EndBranchCommand`: `ResolveReflectionMessage()` を使用するよう変更
+- TopicData.Title を使用してユーザー可読な名前で反映メッセージを構成
+
+### テスト
+- ETK_Branch ノードに自動反映テスト追加 (etk_branch_auto)
+- ETK用 TopicData アセット追加: etk_topic_alpha ("Alpha Signal"), etk_topic_beta ("Beta Pattern")
+
+### 未実装 (Phase 2以降)
+- 条件付き分岐トリガー (ConditionalBranch コマンド)
+- 分岐収束の自動判定
+- ブランチ間知識受け渡しUI

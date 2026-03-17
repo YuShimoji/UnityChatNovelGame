@@ -171,6 +171,7 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.AddCommandHandler<string, string>("AddThreadMessage", AddThreadMessageCommand);
             m_DialogueRunner.AddCommandHandler<string, string, string>("AddThreadChat", AddThreadChatCommand);
             m_DialogueRunner.AddCommandHandler<int>("AddHalluciCoin", AddHalluciCoinCommand);
+            m_DialogueRunner.AddCommandHandler<string>("CompleteThread", CompleteThreadCommand);
             m_DialogueRunner.AddCommandHandler<string, string, string>("DeclareThreadLatent", DeclareThreadLatentCommand);
             m_DialogueRunner.AddCommandHandler<string>("ManifestThread", ManifestThreadCommand);
             m_DialogueRunner.AddCommandHandler<string, string>("BeginBranch", BeginBranchCommand);
@@ -206,6 +207,7 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.RemoveCommandHandler("AddThreadMessage");
             m_DialogueRunner.RemoveCommandHandler("AddThreadChat");
             m_DialogueRunner.RemoveCommandHandler("AddHalluciCoin");
+            m_DialogueRunner.RemoveCommandHandler("CompleteThread");
             m_DialogueRunner.RemoveCommandHandler("DeclareThreadLatent");
             m_DialogueRunner.RemoveCommandHandler("ManifestThread");
             m_DialogueRunner.RemoveCommandHandler("BeginBranch");
@@ -571,6 +573,35 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
+        /// Yarn: &lt;&lt;CompleteThread "threadId"&gt;&gt;
+        /// スレッドを完了状態にする。サイドバーでグレーアウト+チェックマーク表示。
+        /// </summary>
+        private void CompleteThreadCommand(string threadId)
+        {
+            if (!m_DeclaredThreads.TryGetValue(threadId, out var thread))
+            {
+                Debug.LogWarning($"ScenarioManager: Thread '{threadId}' not found.");
+                return;
+            }
+
+            thread.IsCompleted = true;
+
+            if (m_ChatController != null)
+            {
+                string icon = GetTypeIcon(thread.Type);
+                string colorHex = GetTypeColorHex(thread.Type);
+                m_ChatController.AddSystemMessage(
+                    $"<color=#{colorHex}>{icon}</color> スレッド「{thread.DisplayName}」が完了しました");
+            }
+
+            OnThreadCompleted?.Invoke(threadId);
+            Debug.Log($"ScenarioManager: Thread completed — id='{threadId}'");
+        }
+
+        /// <summary>スレッド完了イベント</summary>
+        public event Action<string> OnThreadCompleted;
+
+        /// <summary>
         /// Yarn: &lt;&lt;AddHalluciCoin amount&gt;&gt;
         /// HalluciCoin を静かに加算する。通知なし（ダッシュボード復帰時にバッジパルスで気づく）。
         /// </summary>
@@ -580,12 +611,19 @@ namespace ProjectFoundPhone.Core
             if (cm != null)
             {
                 cm.AddCoinSilent(amount);
-                Debug.Log($"ScenarioManager: AddHalluciCoin — +{amount} (silent)");
+                SyncHalluciCoinVariable(cm.HalluciCoin);
+                Debug.Log($"ScenarioManager: AddHalluciCoin — +{amount} (silent), total={cm.HalluciCoin}");
             }
             else
             {
                 Debug.LogWarning("ScenarioManager: ContradictionManager not found. Cannot add HalluciCoin.");
             }
+        }
+
+        /// <summary>HalluciCoin の値を Yarn 変数 $halluci_coin に同期する</summary>
+        private void SyncHalluciCoinVariable(int value)
+        {
+            SetVariable<float>("$halluci_coin", (float)value);
         }
 
         /// <summary>
@@ -933,8 +971,11 @@ namespace ProjectFoundPhone.Core
         {
             string branchId = m_BranchThreadState?.ActiveBranchId;
 
+            // 反映メッセージを決定: Yarn指定 > 自動生成 > なし
+            string reflectionMessage = ResolveReflectionMessage();
+
             // 反映メッセージをメインスレッドに投入
-            if (m_ChatController != null && !string.IsNullOrEmpty(m_BranchThreadState?.ReflectionMessage))
+            if (m_ChatController != null && !string.IsNullOrEmpty(reflectionMessage))
             {
                 // 一時的にメインスレッドに切替えてシステムメッセージを追加
                 string currentThread = m_ChatController.ActiveThreadId;
@@ -943,9 +984,7 @@ namespace ProjectFoundPhone.Core
 
                 string colorHex = GetTypeColorHex(ThreadType.Branch);
                 m_ChatController.AddSystemMessage(
-                    $"<color=#{colorHex}>[>]</color> {m_BranchThreadState.ReflectionMessage}");
-
-                // 状態をリセットしてからメインに留まる
+                    $"<color=#{colorHex}>[>]</color> {reflectionMessage}");
             }
             else if (m_ChatController != null)
             {
@@ -972,6 +1011,35 @@ namespace ProjectFoundPhone.Core
         {
             m_BranchThreadState ??= new BranchThreadState();
             m_BranchThreadState.ReflectionMessage = text;
+        }
+
+        /// <summary>
+        /// EndBranch 時の反映メッセージを決定する。
+        /// 優先順位: Yarn指定 (SetBranchReflection) > TransferFlags自動生成 > null
+        /// </summary>
+        private string ResolveReflectionMessage()
+        {
+            if (m_BranchThreadState == null) return null;
+
+            // Yarn作者が明示指定した場合はそのまま使用
+            if (!string.IsNullOrEmpty(m_BranchThreadState.ReflectionMessage))
+            {
+                return m_BranchThreadState.ReflectionMessage;
+            }
+
+            // TransferFlags (分岐内で解錠されたトピック) から自動生成
+            if (m_BranchThreadState.TransferFlags != null && m_BranchThreadState.TransferFlags.Count > 0)
+            {
+                var topicNames = new List<string>();
+                foreach (var topicId in m_BranchThreadState.TransferFlags)
+                {
+                    TopicData topicData = Resources.Load<TopicData>($"Topics/{topicId}");
+                    topicNames.Add(topicData != null ? topicData.Title : topicId);
+                }
+                return $"分岐で新情報を確認: {string.Join(", ", topicNames)}";
+            }
+
+            return null;
         }
 
         public bool IsInputLocked => m_IsInputLocked;

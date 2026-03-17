@@ -37,6 +37,9 @@ namespace ProjectFoundPhone.Data
         /// <summary>潜在状態 (UIに表示しない)</summary>
         public bool IsLatent;
 
+        /// <summary>完了状態 (サイドバーでグレーアウト表示)</summary>
+        public bool IsCompleted;
+
         /// <summary>未読メッセージ数</summary>
         public int UnreadCount;
 

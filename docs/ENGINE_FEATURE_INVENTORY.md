@@ -38,8 +38,8 @@
 | AddThreadMessage | `<<AddThreadMessage "threadId" "text">>` | サブスレッドにシステムメッセージを追加（メイン画面には非表示） |
 | AddThreadChat | `<<AddThreadChat "threadId" "charID" "text">>` | サブスレッドにキャラクター付きメッセージを追加（バブル表示） |
 | BeginBranch | `<<BeginBranch "branchId" "displayName">>` | 分岐スレッドを宣言し自動切替。以降のメッセージは分岐に流れる |
-| EndBranch | `<<EndBranch true\|false>>` | 分岐を終了しメインに自動復帰。ReflectionMessage があれば反映メッセージを投入 |
-| SetBranchReflection | `<<SetBranchReflection "text">>` | EndBranch 時にメインへ投入する反映メッセージを設定 |
+| EndBranch | `<<EndBranch true\|false>>` | 分岐を終了しメインに自動復帰。反映メッセージを投入 (優先順位: SetBranchReflection指定 > TransferFlags自動生成 > なし) |
+| SetBranchReflection | `<<SetBranchReflection "text">>` | EndBranch 時にメインへ投入する反映メッセージを設定。未設定時は分岐内UnlockTopicのトピック名から自動生成 |
 | AddHalluciCoin | `<<AddHalluciCoin amount>>` | HalluciCoin を静かに加算 (通知なし、ダッシュボードバッジパルスで検知) |
 | DeclareThreadLatent | `<<DeclareThreadLatent "id" "type" "name">>` | スレッドを潜在登録 (UIに出さない)。ManifestThread で顕在化 |
 | ManifestThread | `<<ManifestThread "id">>` | 潜在スレッドを顕在化。通知メッセージ+サイドバー追加 |

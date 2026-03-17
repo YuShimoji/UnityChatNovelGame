@@ -147,10 +147,10 @@
     "id": "SP-014",
     "title": "インタラクション・メカニクス",
     "status": "partial",
-    "pct": 60,
+    "pct": 65,
     "cat": "system",
     "file": "docs/StorySpec/14_interaction_mechanics.md",
-    "summary": "3メカニクス候補(指摘/ボード/分岐)の整理。矛盾Phase2完全実装。DeductionBoard凍結。Branch Step1+Step2実装済み(BeginBranch自動切替/EndBranch自動復帰/SetBranchReflection反映メッセージ/Save/Load)。未実装: deterministic reflected messageの自動生成、分岐条件エンジン"
+    "summary": "3メカニクス候補(指摘/ボード/分岐)の整理。矛盾Phase2完全実装。DeductionBoard凍結。Branch Step1+Step2+Phase1実装済み(BeginBranch自動切替/EndBranch自動復帰/SetBranchReflection/Save/Load/分岐内トピック自動追跡/TransferFlags→自動反映メッセージ生成)。未実装: 条件付き分岐トリガー、分岐収束自動判定、ブランチ間知識受け渡しUI"
   },
   {
     "id": "SP-015",
@@ -165,7 +165,7 @@
     "id": "SP-016",
     "title": "サブスレッドUI仕様",
     "status": "partial",
-    "pct": 90,
+    "pct": 95,
     "cat": "ui",
     "file": "docs/StorySpec/16_subthread_ui.md",
     "summary": "統合型スレッドモデル、2段階トリガー。Step1-3+Step4a実装済み。DeclareThreadLatent(潜在登録)+ManifestThread(顕在化)で2段階トリガー基盤完了。未実装: Step3残(Wikiリンク/成果物カード)、Step4残(自動トリガー/CompleteThread)"
@@ -186,7 +186,7 @@
     "pct": 100,
     "cat": "infra",
     "file": "docs/ENGINE_FEATURE_INVENTORY.md",
-    "summary": "Yarnコマンド20種・キャラ管理・セーブ(AutoSave+スレッド対応)・演出・バブル表示設定・矛盾(#line:タグ方式)・ダッシュボード(Day Resume+マルチDay)・インベントリUI・サブスレッドUI(Step1-3: サイドバー+ThreadType+種別差異レンダリング+出現通知+Save/Load)・ETK(ch_etk対応)。全機能反映済み"
+    "summary": "Yarnコマンド21種・キャラ管理・セーブ(AutoSave+スレッド対応)・演出・バブル表示設定・矛盾(#line:タグ方式)・ダッシュボード(Day Resume+マルチDay)・インベントリUI・サブスレッドUI(Step1-3: サイドバー+ThreadType+種別差異レンダリング+出現通知+Save/Load)・ETK(ch_etk対応)。全機能反映済み"
   },
   {
     "id": "EN-002",
