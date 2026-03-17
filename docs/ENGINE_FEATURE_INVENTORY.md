@@ -1,6 +1,6 @@
 # Engine Feature Inventory
 
-**最終更新**: 2026-03-16
+**最終更新**: 2026-03-17
 **エンジン**: Unity 6.3 LTS (6000.3.6f1) + Yarn Spinner 3.1.3
 
 このドキュメントは、シナリオ執筆者が「今のエンジンで何ができるか」を把握するためのリファレンスです。
@@ -445,9 +445,9 @@ TopicData の `TopicID` プレフィックスでインベントリの表示カ�
 
 ---
 
-## 10a. サブスレッドUI（最小スライス実装済み）
+## 10a. サブスレッドUI（Step 1-3 実装済み）
 
-メイン⇔複数サブスレッドの切替機能。Discord的マルチスレッドの基盤実装。
+メイン⇔複数サブスレッドの切替機能。種別差異レンダリング + 出現通知対応。
 
 ### アーキテクチャ
 
@@ -456,16 +456,29 @@ TopicData の `TopicID` プレフィックスでインベントリの表示カ�
 - **Yarnコマンド**: `DeclareThread` / `DeclareThreadTyped` / `AddThreadMessage` / `AddThreadChat` (ScenarioManager登録)
 - **切替方式**: ChatControllerのデータスワップ (ClearMessages + RestoreChatHistory)
 - **UI**: `ThreadSwitcherController.cs` — 左スライドインサイドバー (ハンバーガーボタン≡ + 未読合計バッジ、半透明オーバーレイ、ThreadTypeグループヘッダー、Main常時先頭、DOTweenスライドアニメ0.25s、ScrollRect内蔵)
-- **Save/Load**: SaveData.Subthreads + ActiveThreadId, SaveManager対応済み（ThreadType含む）
+- **Save/Load**: SaveData.Subthreads + ActiveThreadId, SaveManager対応済み（ThreadType含む、ロード時 `SetActiveThreadType` 呼出）
 - **スクロール位置**: スレッド別に保存・復元
 - **未読管理**: AddThreadMessage時にUnreadCountインクリメント、スレッド切替時にリセット
 - **通知バナー**: 非アクティブスレッドへのメッセージ追加時に画面上部にトースト通知。型色/アイコン付き、DOTweenフェード (0.25s in → 3.5s表示 → 0.4s out)、クリックでスレッド切替
 
+### 種別差異レンダリング（Step 3 Phase 3a）
+
+`ChatController.m_ActiveThreadType` に基づきバブル外観を差別化:
+
+- **A型 (注釈)**: 情報カード表示。中央配置 (`AnnotationRow`)、キャラアイコン/名前省略、型色ベースの暗い背景、型色テキスト
+- **B/C/分岐**: 通常バブル + 型色ティント (キャラ色に12%混合)
+- **SystemMessage**: サブスレッド内で型色10%ティント
+
+### 出現通知（Step 3 Phase 3b）
+
+- **システムメッセージ**: `DeclareThread` 時にメインチャットへ型アイコン+型色リッチテキスト付き通知 (例: `<color=#4A90D9>[A]</color> 新しいスレッド「覚書」が利用可能です`)
+- **ハンバーガーパルス**: 新スレッド宣言時にボタン背景が型色で2回パルス (DOTween)
+
 ### 制限事項（将来Step）
 
 - サブスレッド内でのYarnノード実行は未対応
-- 型別コンテンツレンダリング差異は未実装（A=カード / B=Wiki / C=成果物）
-- 2段階トリガー条件エンジンは未実装
+- B型Wikiリンク遷移 / C型成果物カードは未実装
+- 2段階トリガー条件エンジンは未実装 (Step 4)
 - サブスレッド内矛盾指摘は未対応
 
 ### 使用例
@@ -481,7 +494,9 @@ TopicData の `TopicID` プレフィックスでインベントリの表示カ�
 
 ### 検証モック
 
-`Assets/Resources/Yarn/active/SubthreadTest.yarn` — F12 Debug Hub から起動
+- `Assets/Resources/Yarn/active/SubthreadTest.yarn` — F12 Debug Hub から起動
+- `ETK_ThreadType` / `ETK_ThreadParallel` — EngineTestKit 内テストノード
+- `ch_etk.asset` — ダッシュボードから ETK_Menu を起動可能
 
 ---
 
@@ -495,7 +510,7 @@ TopicData の `TopicID` プレフィックスでインベントリの表示カ�
 
 | 機能 | 説明 | 実装難度 |
 | ---- | ---- | -------- |
-| サブスレッドUI | Discord 的なマルチスレッド表示 → **Step1+Step2実装済み (セクション10a)** | — |
+| サブスレッドUI | Discord 的なマルチスレッド表示 → **Step1-3実装済み (セクション10a)** | — |
 | 偵察システム | ロケーション探索・アイテム収集 | 高 |
 | 断片クロスリファレンス | 断片同士の照合・矛盾検出 | 中 |
 
