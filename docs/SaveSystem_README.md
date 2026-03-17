@@ -234,7 +234,8 @@ public class SubthreadData
 2. `ScenarioManager.ClearDeclaredThreads()` で既存スレッドをクリア
 3. `saveData.Subthreads` から `ScenarioManager.RegisterDeclaredThread()` で再登録
 4. `ChatController.SetThreadHistories()` でスレッド別履歴を復元
-5. `ChatController.SwitchToThread(activeThreadId)` で表示スレッドを復元
+5. `ChatController.SetActiveThreadType(thread.Type)` で種別差異レンダリングを設定
+6. `ChatController.SwitchToThread(activeThreadId)` で表示スレッドを復元
 
 ### 後方互換性
 

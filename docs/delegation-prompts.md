@@ -450,12 +450,11 @@ SaveManager の変更:
 | タスク | コミット | 状態 |
 |--------|----------|------|
 | Task G: ETK サブスレッドテスト | — | Task K に統合（ThreadType 対応版で実装済み） |
-| Task H: UI_IMPL_SPEC 追記 | — | 未実行 |
-| Task I: ETK ダッシュボード確認 | — | 未実行 |
-| Task J: SaveSystem_README 更新 | — | 未実行（サブスレッド+ThreadType の追記が必要） |
+| Task H: UI_IMPL_SPEC 追記 | `8ad85a8` | done (セクション5追加: サブスレッドUI + 種別差異レンダリング) |
+| Task I: ETK ダッシュボード確認 | — | done (ch_etk.asset 作成: ETK_Menu をダッシュボードから起動可能に) |
+| Task J: SaveSystem_README 更新 | — | done (既存セクション確認済み + SetActiveThreadType ロードフロー追記) |
 
 **注意**: Task G は Batch 3 の Task K (ETK_ThreadType) で代替実装済み。
-Task H, J は ThreadType + サイドバー(5d) の追加を反映する必要がある。
 
 ---
 

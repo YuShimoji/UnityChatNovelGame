@@ -268,7 +268,87 @@ FinalizeBubbleSize:
 
 ---
 
-## 5. 既知の制限事項
+## 5. サブスレッドUI
+
+**実装**: 2026-03-15〜2026-03-17 (5a-5f)
+
+### 5.1 ChatController サブスレッド対応
+
+**フィールド**:
+- `m_ActiveThreadId`: 現在表示中のスレッドID (`null` = メインスレッド)
+- `m_ActiveThreadType`: 現在表示中のスレッドの種別 (`null` = メインスレッド)
+- `m_ThreadHistories`: スレッド別の会話履歴 (メインスレッドは `__main__` キーで管理)
+- `m_ThreadScrollPositions`: スレッド別のスクロール位置
+
+**API**:
+- `SwitchToThread(threadId, history)`: スレッドを切り替える。現在の履歴とスクロール位置を保存し、対象の履歴を復元
+- `SetActiveThreadType(type)`: アクティブスレッドの種別を設定。バブル外観に影響
+- `GetAllThreadHistories()`: 全スレッドの履歴を返す (セーブ用)
+- `SetThreadHistories(histories)`: 全スレッドの履歴を設定 (ロード用)
+
+**データスワップ方式**: スレッド切替は `ClearMessages()` + `RestoreChatHistory()` で全バブルを再描画する。表示中のスレッド以外の履歴は `m_ThreadHistories` に保持。
+
+### 5.2 ThreadSwitcherController
+
+**ファイル**: `Assets/Scripts/UI/ThreadSwitcherController.cs`
+**責務**: サブスレッドの左サイドバーUI + ヘッダーバー + 通知バナーの管理。
+
+**プログラマティックUI構成**:
+- **ハンバーガーボタン** (`CreateHamburgerButton`): 左上 (≡)、未読合計バッジ付き
+- **オーバーレイ** (`CreateOverlay`): 半透明背景、タップで閉じる
+- **サイドバー** (`CreateSidebar`): 幅240px、左からスライドイン (DOTween 0.25s)、ScrollRect 内蔵
+- **ヘッダーバー** (`CreateThreadHeaderBar`): チャット上部、型色15%帯 + 型アイコン + 表示名
+- **通知バナー** (`CreateNotificationBanner`): 上部フェードイン/アウト (DOTween)
+
+**イベント購読**:
+- `ScenarioManager.OnThreadDeclared`: スレッド宣言時にサイドバーエントリ追加
+- `ScenarioManager.OnThreadMessageAdded`: 非アクティブスレッドへの新着時に通知バナー表示
+
+**サイドバー構造**:
+- `Main` エントリは常に先頭 (太字)
+- ThreadType 別グループヘッダー (型色70%ラベル)
+- 各エントリに型アイコン ([A]/[B]/[C]/[>]) + 型別色 + 未読バッジ
+
+### 5.3 種別差異レンダリング (Step 3 Phase 3a)
+
+`m_ActiveThreadType` に基づき、バブル外観をスレッド種別ごとに差別化する。
+
+**A型 (注釈)**: 情報カード表示
+- `CreateMessageBubble`: キャラクター名を省略、テキスト中央揃え
+- `ConfigureBubble`: `AnnotationRow` ラッパー、対称マージン (中央配置)、キャラアイコン省略
+- 背景: `Color.Lerp(暗色, 型色, 0.15f)` (暗い青みがかったカード)
+- テキスト色: 型色の明るいバリエーション (`typeColor + 0.3f` per channel)
+
+**B/C/分岐型**: 型色ティント
+- `ConfigureBubble`: 通常の左/右配置を維持
+- 背景: `Color.Lerp(themeColor, typeColor, 0.12f)` (キャラ色に型色を混合)
+
+**SystemMessage**: サブスレッド内で型色ティント
+- 背景: `Color.Lerp(systemMessageBgColor, typeColor, 0.10f)`
+
+**色定数** (ThreadSwitcherController と共通):
+
+| ThreadType | 色コード | RGB |
+|-----------|---------|-----|
+| Annotation | #4A90D9 | (0.29, 0.56, 0.85) |
+| Tracking | #4CAF50 | (0.30, 0.69, 0.31) |
+| Scout | #FF9800 | (1.0, 0.60, 0.0) |
+| Branch | #9C27B0 | (0.61, 0.15, 0.69) |
+
+### 5.4 バブル構造 (サブスレッド)
+
+```
+ScrollRect.content
++-- AnnotationRow (A型: HLG + 対称マージン + 中央揃え)
+|   +-- MessageBubble (型色カード背景、角丸、中央テキスト)
++-- NpcRow (B/C/分岐: 通常レイアウト + 型色ティント)
+|   +-- CharacterIcon
+|   +-- MessageBubble (キャラ色+型色12%ティント)
+```
+
+---
+
+## 6. 既知の制限事項
 
 | 制限 | 説明 |
 |------|------|
