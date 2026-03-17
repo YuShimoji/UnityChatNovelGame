@@ -18,5 +18,6 @@ MonoBehaviour:
   m_StartNodeName: Ch2_Opening
   m_ChapterNumber: 2
   m_RequiredCompletedChannelID: ch1
+  m_RequiredHalluciCoin: 2
   m_EnableHints: 1
   m_MaxHintDifficulty: 1

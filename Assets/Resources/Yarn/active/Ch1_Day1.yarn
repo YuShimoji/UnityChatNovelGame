@@ -89,6 +89,8 @@ title: Ch1_Day1_Hub
 -> さっきの変なテキストは何だ？ <<if not $d1_asked_fragment>>
     <<set $d1_asked_fragment to true>>
     <<jump Ch1_Day1_Fragment>>
+-> Pyramid、さっきの情報には矛盾がないか？ <<if $d1_asked_region and $d1_asked_fragment>>
+    <<jump Ch1_Day1_BranchPyramid>>
 -> 今日はここまでにしよう <<if $d1_asked_region and $d1_asked_terminal and $d1_asked_marco and $d1_asked_fragment>>
     <<jump Ch1_Day1_Winding>>
 -> もう少し考えよう <<if ($d1_asked_region or $d1_asked_terminal or $d1_asked_marco or $d1_asked_fragment) and not ($d1_asked_region and $d1_asked_terminal and $d1_asked_marco and $d1_asked_fragment)>>
@@ -287,6 +289,36 @@ title: Ch1_Day1_Fragment
 <<jump Ch1_Day1_Hub>>
 ===
 
+title: Ch1_Day1_BranchPyramid
+---
+<<set $speaker to "pyramid">>
+<<StartWait 1>>
+
+「矛盾」ですか？ 興味深い観点ですね。
+
+<<StartWait 0.5>>
+
+少し踏み込んだ分析をしてもよろしいですか？
+
+<<set $speaker to "player">>
+-> 聞かせてくれ
+    <<BeginBranch "ch1_branch_analysis" "Pyramidの補足分析">>
+    <<set $speaker to "pyramid">>
+    <<StartWait 0.8>>
+    これはメインの会話とは別のスレッドです。
+    <<StartWait 0.5>>
+    先ほどの「第4管理区域」という表現ですが、実は私のデータベースにも整合しない記録があります。
+    <<StartWait 0.5>>
+    <<UnlockTopic "topic_suspicious_message">>
+    <<StartWait 0.3>>
+    この不整合は、単なる通信エラーでは説明がつきません。
+    <<EndBranch true>>
+-> 今はいい
+    // 分岐に入らずHubに戻る
+
+<<jump Ch1_Day1_Hub>>
+===
+
 title: Ch1_Day1_Winding
 ---
 <<set $speaker to "pyramid">>
@@ -367,6 +399,11 @@ title: Ch1_Day2_Opening
 ---
 <<declare $d2_asked_update = false>>
 <<declare $d2_asked_status = false>>
+
+// 条件付き潜在スレッド: Day1で断片を発見していれば自動で出現
+<<DeclareThreadLatentCond "ch1_cond_analysis" "B" "断片分析レポート" "$has_topic_fragment_ch1_01">>
+<<AddThreadMessage "ch1_cond_analysis" "Day1で発見した施設管理規約の断片を自動分析中...">>
+<<AddThreadMessage "ch1_cond_analysis" "第3次改定の参照先文書（付録C）の欠損パターンを追跡">>
 
 <<SystemMessage "--- 2日目 ---">>
 
