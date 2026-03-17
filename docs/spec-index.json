@@ -147,10 +147,10 @@
     "id": "SP-014",
     "title": "インタラクション・メカニクス",
     "status": "partial",
-    "pct": 80,
+    "pct": 90,
     "cat": "system",
     "file": "docs/StorySpec/14_interaction_mechanics.md",
-    "summary": "3メカニクス候補(指摘/ボード/分岐)の整理。矛盾Phase2完全実装。DeductionBoard凍結。Branch Phase1-3全実装(BeginBranch/EndBranch/SetBranchReflection/Save/Load/TransferFlags自動追跡/自動反映メッセージ/DeclareThreadLatentCond条件付き潜在/リアクティブ評価/AutoBeginBranch/安全弁/サイドバートピックバッジ)。未実装: ブランチ間知識受け渡しUI、アルケミーボード"
+    "summary": "3メカニクス候補(指摘/ボード/分岐)の整理。矛盾Phase2完全実装。DeductionBoard凍結。Branch Phase1-4全実装(BeginBranch/EndBranch select/SetBranchReflection/Save/Load/TransferFlags自動追跡/自動反映メッセージ/DeclareThreadLatentCond条件付き潜在/リアクティブ評価/AutoBeginBranch/安全弁/サイドバートピックバッジ/知識転送選択UI)。未実装: ブランチ間クロスリファレンスUI、アルケミーボード"
   },
   {
     "id": "SP-015",

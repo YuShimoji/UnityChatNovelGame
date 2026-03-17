@@ -41,11 +41,13 @@ title: ETK_Menu
     <<jump ETK_Branch>>
 -> 条件付き分岐 テスト <<if not $etk_done_condbranch>>
     <<jump ETK_CondBranch>>
+-> 知識転送選択 テスト <<if not $etk_done_transferselect>>
+    <<jump ETK_BranchTransferSelect>>
 -> 自動検証 (Phase A Block D/E)
     <<jump ETK_AutoVerify>>
--> テスト完了 <<if $etk_done_richtext and $etk_done_contradiction and $etk_done_commands and $etk_done_choices and $etk_done_threadtype and $etk_done_branch and $etk_done_condbranch>>
+-> テスト完了 <<if $etk_done_richtext and $etk_done_contradiction and $etk_done_commands and $etk_done_choices and $etk_done_threadtype and $etk_done_branch and $etk_done_condbranch and $etk_done_transferselect>>
     <<jump ETK_End>>
--> もう一度メニューを見る <<if ($etk_done_richtext or $etk_done_contradiction or $etk_done_commands or $etk_done_choices or $etk_done_threadtype or $etk_done_branch or $etk_done_condbranch) and not ($etk_done_richtext and $etk_done_contradiction and $etk_done_commands and $etk_done_choices and $etk_done_threadtype and $etk_done_branch and $etk_done_condbranch)>>
+-> もう一度メニューを見る <<if ($etk_done_richtext or $etk_done_contradiction or $etk_done_commands or $etk_done_choices or $etk_done_threadtype or $etk_done_branch or $etk_done_condbranch or $etk_done_transferselect) and not ($etk_done_richtext and $etk_done_contradiction and $etk_done_commands and $etk_done_choices and $etk_done_threadtype and $etk_done_branch and $etk_done_condbranch and $etk_done_transferselect)>>
     <<jump ETK_Menu>>
 ===
 
@@ -694,4 +696,61 @@ EndDay 2 を実行します。これが最終Dayなので、チャンネルは C
 <<set $speaker to "player">>
 -> Day 2 を終了する (チャンネル完了)
     <<EndDay 2>>
+===
+
+/// --------------------------------------------------
+/// ETK_BranchTransferSelect: 知識転送選択UIテスト
+/// 確認: EndBranch "select" → 選択UI表示 → 選択結果が反映メッセージに反映
+/// --------------------------------------------------
+title: ETK_BranchTransferSelect
+---
+<<declare $etk_done_transferselect = false>>
+<<SystemMessage "--- 知識転送選択 テスト ---">>
+<<StartWait 0.3>>
+
+<<set $speaker to "pyramid">>
+分岐に入ります。3つの情報を取得し、持ち帰る情報を選択するテストです。
+
+<<StartWait 0.5>>
+
+<<set $speaker to "player">>
+-> 分岐に入る (選択UIテスト)
+    <<BeginBranch "etk_transfer_test" "知識転送テスト分岐">>
+    <<set $speaker to "pyramid">>
+    <<StartWait 0.3>>
+    分岐内で3つのトピックを解錠します。
+    <<UnlockTopic "etk_topic_alpha">>
+    <<StartWait 0.2>>
+    Alpha Signal を発見しました。
+    <<UnlockTopic "etk_topic_beta">>
+    <<StartWait 0.2>>
+    Beta Pattern を発見しました。
+    <<UnlockTopic "topic_suspicious_message">>
+    <<StartWait 0.2>>
+    不審なメッセージも発見しました。
+    <<StartWait 0.5>>
+    <<set $speaker to "player">>
+    -> 知識を選択して持ち帰る (選択UI)
+        <<EndBranch true "select">>
+-> 後方互換テスト (選択UIなし)
+    <<BeginBranch "etk_transfer_compat" "後方互換テスト分岐">>
+    <<set $speaker to "pyramid">>
+    <<StartWait 0.3>>
+    <<UnlockTopic "etk_topic_alpha">>
+    後方互換テスト: EndBranch true のみ (selectなし)
+    <<StartWait 0.3>>
+    <<set $speaker to "player">>
+    -> 全転送で戻る
+        <<EndBranch true>>
+
+<<StartWait 0.5>>
+
+<<set $speaker to "pyramid">>
+メインスレッドに戻りました。反映メッセージの内容を確認してください。
+
+<<StartWait 0.3>>
+
+<<set $etk_done_transferselect to true>>
+<<SystemMessage "知識転送選択テスト完了">>
+<<jump ETK_Menu>>
 ===

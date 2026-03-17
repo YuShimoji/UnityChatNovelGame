@@ -295,4 +295,40 @@
 
 ### 未実装
 
-- ブランチ間知識受け渡しUI (インベントリ連携/クロスリファレンス)
+- ブランチ間知識受け渡しUI: クロスリファレンス (将来: 別分岐の知識を参照・提示するUI)
+
+---
+
+## 2026-03-17 Branch Phase 4: 知識転送選択UI (Implemented)
+
+### Scope
+- EndBranch に "select" モードを追加
+- 分岐終了時に「どの知識をメインに持ち帰るか」をプレイヤーが選択するUI
+
+### コマンド拡張
+
+| コマンド | 構文 | 説明 |
+|---------|------|------|
+| EndBranch | `<<EndBranch true "select">>` | 知識転送選択UIを表示。選択後にメイン復帰+反映メッセージ |
+| EndBranch | `<<EndBranch true>>` | 従来通り全転送 (後方互換) |
+
+### データモデル拡張
+- BranchThreadState.TransferredFlags: プレイヤーが「持ち帰る」と選択したトピックID
+- BranchThreadState.HiddenFlags: プレイヤーが「持ち帰らない」と選択したトピックID
+- BranchThreadState.SelectionApplied: 選択UIを通過したかどうか
+
+### UI: TransferSelectionUI
+- Canvas直下にオーバーレイ動的生成
+- スクリム背景 + 中央ダークカード
+- トグル付きトピックリスト (デフォルト全件ON)
+- 「N/M 選択中」カウンター + 「決定」ボタン
+- DOTween フェードイン/アウト
+
+### 設計判断
+- $has_topic_X のYarn変数は選択に関わらずtrueのまま (プレイヤーは知っているが見せないだけ)
+- ResolveReflectionMessage は SelectionApplied 時に TransferredFlags のみ使用
+- AcquiredTopicCount (サイドバーバッジ) も TransferredFlags のカウントを使用
+
+### テスト
+- ETK_BranchTransferSelect: 3トピック解錠 → EndBranch "select" → 選択UI → 反映確認
+- 後方互換: EndBranch true (selectなし) → 従来通り全転送

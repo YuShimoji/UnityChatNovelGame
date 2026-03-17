@@ -146,6 +146,7 @@ ContentAuthoring シーンで以下を行う必要あり:
 - **HCゲート (SP-006)**: ChannelData.RequiredHalluciCoin + ダッシュボードLocked表示 (HC N/M形式)。ch2.asset に RequiredHalluciCoin=2 設定済み
 - **DeclareThreadLatentCond (SP-016 Step4)**: 条件付き潜在スレッド。Yarn変数変更時にリアクティブ評価し、trueで自動顕在化。Branch型はAutoBeginBranch。安全弁付き
 - **Ch1 BranchPyramid**: BeginBranch/EndBranch/UnlockTopicのエンジン検証モック。Day2にDeclareThreadLatentCondも組込済み
+- **知識転送選択UI (SP-014 Phase 4)**: EndBranch "select" モード追加。TransferSelectionUI (Canvas直下オーバーレイ, DOTweenフェードイン/アウト, トグル付きトピックリスト)。BranchThreadState に TransferredFlags/HiddenFlags/SelectionApplied 追加。Yarn変数は選択に関わらずtrue維持。ETK_BranchTransferSelect テストノード追加
 
 ### Claude への依頼パターン
 

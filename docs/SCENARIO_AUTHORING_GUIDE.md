@@ -119,6 +119,7 @@ Assets/Resources/Yarn/active/
 | AddHalluciCoin | `<<AddHalluciCoin amount>>` | HC を静かに加算 (通知なし、ダッシュボードバッジで検知) |
 | DeclareThreadLatent | `<<DeclareThreadLatent "id" "type" "name">>` | スレッドを潜在登録。ManifestThread で顕在化 |
 | DeclareThreadLatentCond | `<<DeclareThreadLatentCond "id" "type" "name" "$condition">>` | 条件付き潜在スレッド。条件が真になると自動顕在化 (リアクティブ評価) |
+| EndBranch (select) | `<<EndBranch true "select">>` | 分岐終了+知識転送選択UI。プレイヤーが持ち帰る情報を選ぶ。未選択の知識は反映メッセージに含まれない |
 | ManifestThread | `<<ManifestThread "id">>` | 潜在スレッドを顕在化 |
 | CompleteThread | `<<CompleteThread "id">>` | スレッドを完了状態にする (サイドバーグレーアウト) |
 

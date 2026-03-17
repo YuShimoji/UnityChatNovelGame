@@ -176,7 +176,7 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.AddCommandHandler<string, string, string, string>("DeclareThreadLatentCond", DeclareThreadLatentCondCommand);
             m_DialogueRunner.AddCommandHandler<string>("ManifestThread", ManifestThreadCommand);
             m_DialogueRunner.AddCommandHandler<string, string>("BeginBranch", BeginBranchCommand);
-            m_DialogueRunner.AddCommandHandler<bool>("EndBranch", EndBranchCommand);
+            m_DialogueRunner.AddCommandHandler<bool, string>("EndBranch", EndBranchCommand);
             m_DialogueRunner.AddCommandHandler<string>("SetBranchReflection", SetBranchReflectionCommand);
 #endif
         }
@@ -1075,13 +1075,39 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// Yarn: &lt;&lt;EndBranch true|false&gt;&gt;
+        /// Yarn: &lt;&lt;EndBranch true|false [mode]&gt;&gt;
         /// 分岐スレッドを終了し、メインスレッドに自動復帰する。
-        /// ReflectionMessage が設定されていればメインスレッドに反映メッセージを投入する。
+        /// mode="select" の場合、知識転送選択UIを表示してプレイヤーに選択させる。
         /// </summary>
-        private void EndBranchCommand(bool completed)
+        private async YarnTask EndBranchCommand(bool completed, string mode)
         {
             string branchId = m_BranchThreadState?.ActiveBranchId;
+            bool useSelectUI = string.Equals(mode, "select", StringComparison.OrdinalIgnoreCase);
+            int flagCount = m_BranchThreadState?.TransferFlags?.Count ?? 0;
+
+            // 知識転送選択UI: selectモード & TransferFlags >= 1
+            if (useSelectUI && flagCount > 0)
+            {
+                var candidates = BuildTransferCandidates();
+                var selectionUI = EnsureTransferSelectionUI();
+
+                bool selectionDone = false;
+                List<string> selectedIds = null;
+
+                selectionUI.Show(candidates, (selected) =>
+                {
+                    selectedIds = selected;
+                    selectionDone = true;
+                });
+
+                // 選択完了まで待機 (StartWaitCommand と同じパターン)
+                while (!selectionDone)
+                {
+                    await YarnTask.Yield();
+                }
+
+                ApplyTransferSelection(selectedIds);
+            }
 
             // 反映メッセージを決定: Yarn指定 > 自動生成 > なし
             string reflectionMessage = ResolveReflectionMessage();
@@ -1108,7 +1134,10 @@ namespace ProjectFoundPhone.Core
             // 分岐内で取得したトピック数をSubthreadDataに記録 (サイドバーバッジ用)
             if (branchId != null && m_DeclaredThreads.TryGetValue(branchId, out var branchThread))
             {
-                int topicCount = m_BranchThreadState?.TransferFlags?.Count ?? 0;
+                // SelectionApplied 時は TransferredFlags のカウント、それ以外は TransferFlags 全体
+                int topicCount = (m_BranchThreadState?.SelectionApplied == true)
+                    ? (m_BranchThreadState?.TransferredFlags?.Count ?? 0)
+                    : (m_BranchThreadState?.TransferFlags?.Count ?? 0);
                 branchThread.AcquiredTopicCount = topicCount;
             }
 
@@ -1135,6 +1164,7 @@ namespace ProjectFoundPhone.Core
         /// <summary>
         /// EndBranch 時の反映メッセージを決定する。
         /// 優先順位: Yarn指定 (SetBranchReflection) > TransferFlags自動生成 > null
+        /// SelectionApplied 時は TransferredFlags のみ使用。
         /// </summary>
         private string ResolveReflectionMessage()
         {
@@ -1146,11 +1176,15 @@ namespace ProjectFoundPhone.Core
                 return m_BranchThreadState.ReflectionMessage;
             }
 
-            // TransferFlags (分岐内で解錠されたトピック) から自動生成
-            if (m_BranchThreadState.TransferFlags != null && m_BranchThreadState.TransferFlags.Count > 0)
+            // SelectionApplied 時は選択されたもののみ、それ以外は全TransferFlags
+            var flagsToReport = m_BranchThreadState.SelectionApplied
+                ? m_BranchThreadState.TransferredFlags
+                : m_BranchThreadState.TransferFlags;
+
+            if (flagsToReport != null && flagsToReport.Count > 0)
             {
                 var topicNames = new List<string>();
-                foreach (var topicId in m_BranchThreadState.TransferFlags)
+                foreach (var topicId in flagsToReport)
                 {
                     TopicData topicData = Resources.Load<TopicData>($"Topics/{topicId}");
                     topicNames.Add(topicData != null ? topicData.Title : topicId);
@@ -1159,6 +1193,76 @@ namespace ProjectFoundPhone.Core
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// TransferFlags から選択UI用の候補リストを構築する。
+        /// </summary>
+        private List<TransferSelectionUI.TransferCandidate> BuildTransferCandidates()
+        {
+            var candidates = new List<TransferSelectionUI.TransferCandidate>();
+            if (m_BranchThreadState?.TransferFlags == null) return candidates;
+
+            foreach (var topicId in m_BranchThreadState.TransferFlags)
+            {
+                TopicData topicData = Resources.Load<TopicData>($"Topics/{topicId}");
+                candidates.Add(new TransferSelectionUI.TransferCandidate
+                {
+                    TopicId = topicId,
+                    Title = topicData != null ? topicData.Title : topicId,
+                    Description = topicData != null ? topicData.Description : ""
+                });
+            }
+            return candidates;
+        }
+
+        /// <summary>
+        /// 選択結果を BranchThreadState に反映する。
+        /// </summary>
+        private void ApplyTransferSelection(List<string> selectedIds)
+        {
+            if (m_BranchThreadState == null) return;
+
+            m_BranchThreadState.SelectionApplied = true;
+            m_BranchThreadState.TransferredFlags = selectedIds ?? new List<string>();
+            m_BranchThreadState.HiddenFlags = new List<string>();
+
+            foreach (var topicId in m_BranchThreadState.TransferFlags)
+            {
+                if (!m_BranchThreadState.TransferredFlags.Contains(topicId))
+                {
+                    m_BranchThreadState.HiddenFlags.Add(topicId);
+                }
+            }
+        }
+
+        /// <summary>
+        /// TransferSelectionUI をシーン内で検索、なければ動的生成する。
+        /// </summary>
+        private TransferSelectionUI EnsureTransferSelectionUI()
+        {
+            var existing = FindFirstObjectByType<TransferSelectionUI>();
+            if (existing != null) return existing;
+
+            // Canvas を検索して直下に生成
+            Canvas canvas = FindFirstObjectByType<Canvas>();
+            if (canvas == null)
+            {
+                Debug.LogError("ScenarioManager: Canvas not found for TransferSelectionUI.");
+                return null;
+            }
+
+            var uiObj = new GameObject("TransferSelectionUI",
+                typeof(RectTransform), typeof(TransferSelectionUI));
+            uiObj.transform.SetParent(canvas.transform, false);
+            var rt = uiObj.GetComponent<RectTransform>();
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+            uiObj.SetActive(false);
+
+            return uiObj.GetComponent<TransferSelectionUI>();
         }
 
         public bool IsInputLocked => m_IsInputLocked;
