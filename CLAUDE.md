@@ -17,6 +17,8 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
   - Yarnコマンド数: 22 (DeclareThreadLatentCond追加)
   - delegation-prompts: Batch 4定義済み (N:spec棚卸し/O:SP-099棚卸し/P:acceptance更新)
   - 手動検証待ち: Phase Aクロージング56項目 (矛盾Phase2/サブスレッド/Branch/CondBranch/Save-Load)
+  - Ch1+Ch2: 全新コマンド組込済み (DeclareThreadLatent/ManifestThread/AddHalluciCoin/リンクカード)
+  - Phase A checklist: ~60項目 + ETK_AutoVerify自動検証ノード
   - 未着手: SP-009(サウンド), Ch3シナリオ設計, SP-017(解放トリガー仕様)
 
 ## DECISION LOG
