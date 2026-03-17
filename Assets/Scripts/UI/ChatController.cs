@@ -176,6 +176,32 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
+        /// canvas 幅に応じたバブル最大幅パーセントを返す。
+        /// 狭い画面ではバブルを広くして折り返しを減らす。
+        /// </summary>
+        private float GetResponsiveBubblePercent()
+        {
+            float w = GetContainerWidth();
+            float basePercent = UIConfig.bubbleMaxWidthPercent;
+            if (w < 800f)
+                return Mathf.Max(basePercent, 0.85f);
+            if (w < 1000f)
+                return Mathf.Max(basePercent, Mathf.Lerp(0.85f, basePercent, (w - 800f) / 200f));
+            return basePercent;
+        }
+
+        /// <summary>
+        /// canvas 幅に応じたフォントサイズスケールを返す。
+        /// 狭い画面ではフォントを縮小して情報密度を調整する。
+        /// </summary>
+        private float GetResponsiveFontScale()
+        {
+            float w = GetContainerWidth();
+            if (w >= 900f) return 1f;
+            return Mathf.Clamp(w / 900f, 0.78f, 1f);
+        }
+
+        /// <summary>
         /// 必要なコンポーネントの初期化
         /// </summary>
         private void InitializeComponents()
@@ -427,7 +453,7 @@ namespace ProjectFoundPhone.UI
 
             int edgePad = UIConfig.wrapperEdgePadding;
             float containerWidth = GetContainerWidth();
-            float maxWidthFromPercent = containerWidth * UIConfig.bubbleMaxWidthPercent;
+            float maxWidthFromPercent = containerWidth * GetResponsiveBubblePercent();
             float maxWidth = Mathf.Min(maxWidthFromPercent, UIConfig.bubbleMaxWidthPx);
             int sideMargin = Mathf.Max(0, (int)(containerWidth - maxWidth - edgePad));
             int vPad = UIConfig.wrapperVerticalPadding;
@@ -696,8 +722,10 @@ namespace ProjectFoundPhone.UI
             }
 
             // フォント・書式プロパティを設定（プール再利用時のリセット兼用）
+            float fontScale = GetResponsiveFontScale();
+            float responsiveFontSize = UIConfig.messageFontSize * fontScale;
             textComponent.fontStyle = FontStyles.Normal;
-            textComponent.fontSize = UIConfig.messageFontSize;
+            textComponent.fontSize = responsiveFontSize;
             textComponent.alignment = TextAlignmentOptions.TopLeft;
             textComponent.enableWordWrapping = true;
             textComponent.enableAutoSizing = false;
@@ -748,7 +776,7 @@ namespace ProjectFoundPhone.UI
                     string displayName = profile?.DisplayName ?? charID;
                     // 名前行と本文行を改行で分離
                     // 名前は小さめフォント + ボールド、行高さを縮小して1行占有感を軽減
-                    float nameSize = UIConfig.messageFontSize * 0.75f;
+                    float nameSize = responsiveFontSize * 0.75f;
                     nameLineText = $"{displayName}";
                     // body の未閉リッチテキストタグを補完し、name への逆伝播を防止
                     string safeBody = CloseUnclosedRichTextTags(text);
@@ -762,7 +790,7 @@ namespace ProjectFoundPhone.UI
             float textPadH = 20f;
             // フォントメトリクス丸め誤差対策の安全マージン
             float safetyMargin = 4f;
-            float maxWidthFromPercent = GetContainerWidth() * UIConfig.bubbleMaxWidthPercent;
+            float maxWidthFromPercent = GetContainerWidth() * GetResponsiveBubblePercent();
             float maxBubbleWidth = Mathf.Min(maxWidthFromPercent, UIConfig.bubbleMaxWidthPx);
 
             // TMPの GetPreferredValues で折り返しなしのテキスト幅を取得
@@ -1797,7 +1825,7 @@ namespace ProjectFoundPhone.UI
             // プレイヤーバブル風の右寄せレイアウト（ConfigureBubble と同じ計算）
             int edgePadC = UIConfig.wrapperEdgePadding;
             float containerWidthC = GetContainerWidth();
-            float maxWidthFromPercent = containerWidthC * UIConfig.bubbleMaxWidthPercent;
+            float maxWidthFromPercent = containerWidthC * GetResponsiveBubblePercent();
             float maxWidthC = Mathf.Min(maxWidthFromPercent, UIConfig.bubbleMaxWidthPx);
             int choiceSideMargin = Mathf.Max(0, (int)(containerWidthC - maxWidthC - edgePadC));
             layoutGroup.spacing = cSpacing;

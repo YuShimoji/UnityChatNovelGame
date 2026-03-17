@@ -93,7 +93,7 @@
     "id": "SP-008",
     "title": "UI/UX",
     "status": "partial",
-    "pct": 75,
+    "pct": 80,
     "cat": "ui",
     "file": "docs/StorySpec/08_ui_ux.md",
     "summary": "ダッシュボード・スレッド・プレイヤーリソース表示域。ダッシュボードMVP+チャットバブル仕様+デバッグ機能(Section6)実装済み。インベントリUI実装済み(3サブタブ+オーバーレイ導線)。バブル表示修正完了。サブスレッドUI実装済み(左サイドバー+ThreadTypeグループ+通知バナー+Save/Load)。詳細はSP-016参照"

@@ -346,6 +346,34 @@ ScrollRect.content
 |   +-- MessageBubble (キャラ色+型色12%ティント)
 ```
 
+### 5.5 レスポンシブ対応
+
+canvas 幅に応じて UI パラメータを動的に調整する。`CanvasScaler(ScaleWithScreenSize, 1080x1920)` 環境下で、アスペクト比の異なるデバイスに対応。
+
+**バブル幅** (`GetResponsiveBubblePercent()`):
+
+| canvas 幅 | bubbleMaxWidthPercent | 効果 |
+|----------|----------------------|------|
+| < 800px | 0.85 | 狭い画面でバブルを広く、折り返し削減 |
+| 800-1000px | 0.85→基準値 補間 | 段階的に通常幅へ |
+| >= 1000px | UIConfig 値 (0.7) | 通常 |
+
+**フォントサイズ** (`GetResponsiveFontScale()`):
+
+| canvas 幅 | スケール | 28px 時の実効値 |
+|----------|---------|---------------|
+| < 540px | 0.78x | ~22px |
+| 540-900px | 補間 | 22-28px |
+| >= 900px | 1.0x | 28px |
+
+**サイドバー幅** (`GetSidebarWidth()`):
+- `min(240px, canvasWidth * 0.4)` — 画面の40%を超えない
+- 600px canvas → 240px (40%), 480px canvas → 192px
+
+**CanvasScaler 推奨設定**:
+- `MatchWidthOrHeight = 1.0` (高さ基準) にすると、横幅の狭いデバイスで canvas 幅が縮小し、レスポンシブ値が自動的に活性化する
+- 現在値 `0.5` では canvas 幅は常に ~1080px 付近のため、レスポンシブは主にアスペクト比差のある端末で発動
+
 ---
 
 ## 6. 既知の制限事項

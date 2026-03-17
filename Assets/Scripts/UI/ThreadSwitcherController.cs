@@ -69,8 +69,17 @@ namespace ProjectFoundPhone.UI
         private static readonly Color TypeColorScout = new Color(1f, 0.60f, 0f, 1f);             // #FF9800
         private static readonly Color TypeColorBranch = new Color(0.61f, 0.15f, 0.69f, 1f);      // #9C27B0
 
-        private const float SidebarWidth = 240f;
+        private const float SidebarWidthDefault = 240f;
         private const float SlideAnimDuration = 0.25f;
+
+        /// <summary>canvas 幅に応じたサイドバー幅を返す (最大40%占有)</summary>
+        private float GetSidebarWidth()
+        {
+            Canvas canvas = GetComponentInParent<Canvas>();
+            if (canvas == null) canvas = FindFirstObjectByType<Canvas>();
+            float canvasWidth = canvas != null ? ((RectTransform)canvas.transform).rect.width : 1080f;
+            return Mathf.Min(SidebarWidthDefault, canvasWidth * 0.4f);
+        }
 
         // 通知バナー
         private GameObject m_NotificationBanner;
@@ -225,8 +234,9 @@ namespace ProjectFoundPhone.UI
             m_SidebarRt.anchorMin = new Vector2(0f, 0f);
             m_SidebarRt.anchorMax = new Vector2(0f, 1f);
             m_SidebarRt.pivot = new Vector2(0f, 0.5f);
-            m_SidebarRt.anchoredPosition = new Vector2(-SidebarWidth, 0f); // 初期: 画面外
-            m_SidebarRt.sizeDelta = new Vector2(SidebarWidth, 0f);
+            float sidebarW = GetSidebarWidth();
+            m_SidebarRt.anchoredPosition = new Vector2(-sidebarW, 0f); // 初期: 画面外
+            m_SidebarRt.sizeDelta = new Vector2(sidebarW, 0f);
 
             var bg = m_SidebarPanel.AddComponent<Image>();
             bg.color = SidebarBgColor;
@@ -684,7 +694,7 @@ namespace ProjectFoundPhone.UI
             m_IsSidebarOpen = false;
 
             m_SidebarTween?.Kill();
-            m_SidebarTween = m_SidebarRt.DOAnchorPosX(-SidebarWidth, SlideAnimDuration)
+            m_SidebarTween = m_SidebarRt.DOAnchorPosX(-GetSidebarWidth(), SlideAnimDuration)
                 .SetEase(Ease.InCubic)
                 .OnComplete(() => m_Overlay.SetActive(false));
         }
