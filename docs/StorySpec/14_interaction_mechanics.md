@@ -269,4 +269,30 @@
 - 即時評価: DeclareThreadLatentCond 登録時に条件が既に満たされている場合も対応
 
 ### テスト
+
 - ETK_CondBranch ノード追加: $etk_cond_trigger をtrue→自動分岐開始を検証
+
+---
+
+## 2026-03-17 Branch Step2+ Phase 3: 安全弁 + サイドバーバッジ (Implemented)
+
+### Scope
+
+- 安全弁: StopScenario時に分岐状態を自動クリア
+- サイドバーバッジ: 完了分岐スレッドに取得トピック数バッジを表示
+
+### 安全弁
+
+- StopScenario() 内で m_BranchThreadState.IsActive なら EndBranchThread(false) を自動呼出
+- メインスレッドへの復帰 + ヘッダーバークリアも実行
+- ダッシュボード復帰 (ESC) / DebugHub操作時に分岐状態が残り続けるバグを防止
+
+### サイドバーバッジ
+
+- SubthreadData.AcquiredTopicCount: EndBranch時にTransferFlags.Countを記録
+- ThreadSwitcherController.OnThreadCompleted: トピック数>0なら緑色バッジ表示
+- トピック数=0の完了分岐はバッジなし (グレーアウト+チェックマークのみ)
+
+### 未実装
+
+- ブランチ間知識受け渡しUI (インベントリ連携/クロスリファレンス)

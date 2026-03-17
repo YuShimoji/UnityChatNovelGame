@@ -46,6 +46,9 @@ namespace ProjectFoundPhone.Data
         /// <summary>完了状態 (サイドバーでグレーアウト表示)</summary>
         public bool IsCompleted;
 
+        /// <summary>分岐内で取得したトピック数 (EndBranch時に記録)</summary>
+        public int AcquiredTopicCount;
+
         /// <summary>未読メッセージ数</summary>
         public int UnreadCount;
 

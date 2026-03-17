@@ -209,6 +209,16 @@ namespace ProjectFoundPhone.UI
                 }
             }
 
+            // HalluciCoin ゲート: 必要コイン数に満たない場合はLocked
+            if (channel.RequiredHalluciCoin > 0)
+            {
+                int currentCoins = ContradictionManager.Instance != null ? ContradictionManager.Instance.HalluciCoin : 0;
+                if (currentCoins < channel.RequiredHalluciCoin)
+                {
+                    return ChannelStatus.Locked;
+                }
+            }
+
             if (saveData != null)
             {
                 if (saveData.CompletedChannelIDs.Contains(channel.ChannelID))
@@ -601,12 +611,23 @@ namespace ProjectFoundPhone.UI
             statusRect.offsetMax = new Vector2(-12f, -12f);
 
             TextMeshProUGUI statusText = statusObj.AddComponent<TextMeshProUGUI>();
-            statusText.text = GetStatusLabel(status);
             statusText.fontSize = 14f;
-            statusText.color = GetStatusColor(status);
             statusText.alignment = TextAlignmentOptions.MidlineRight;
             statusText.raycastTarget = false;
             AssignDefaultFont(statusText);
+
+            // HC ゲート表示: Locked かつ RequiredHalluciCoin > 0 の場合、必要コイン数を表示
+            if (status == ChannelStatus.Locked && channel.RequiredHalluciCoin > 0)
+            {
+                int currentCoins = ContradictionManager.Instance != null ? ContradictionManager.Instance.HalluciCoin : 0;
+                statusText.text = $"HC {currentCoins}/{channel.RequiredHalluciCoin}";
+                statusText.color = new Color(0.9f, 0.7f, 0.2f); // ゴールド
+            }
+            else
+            {
+                statusText.text = GetStatusLabel(status);
+                statusText.color = GetStatusColor(status);
+            }
         }
 
         private void OnChannelClicked(ChannelData channel)

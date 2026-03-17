@@ -75,10 +75,11 @@
     "id": "SP-006",
     "title": "ハルシコイン",
     "status": "partial",
-    "pct": 95,
+    "pct": 100,
+    "status": "done",
     "cat": "system",
     "file": "docs/StorySpec/06_hallucicoin.md",
-    "summary": "コア報酬システム実装済み(矛盾発見→HalluciCoin付与、Dashboard表示、Save/Load永続化)。増加通知バッジ+AddHalluciCoinコマンド(silent increment)実装済み。未実装: ゲート/しきい値メカニクス"
+    "summary": "コア報酬システム全実装。矛盾発見→HalluciCoin付与+Dashboard表示+Save/Load永続化+増加通知バッジ+AddHalluciCoinコマンド+$halluci_coin Yarn変数同期+ダッシュボードHCゲート(ChannelData.RequiredHalluciCoin)+HC不足時Locked表示(HC N/M形式)"
   },
   {
     "id": "SP-007",
@@ -147,10 +148,10 @@
     "id": "SP-014",
     "title": "インタラクション・メカニクス",
     "status": "partial",
-    "pct": 75,
+    "pct": 80,
     "cat": "system",
     "file": "docs/StorySpec/14_interaction_mechanics.md",
-    "summary": "3メカニクス候補(指摘/ボード/分岐)の整理。矛盾Phase2完全実装。DeductionBoard凍結。Branch全Phase実装済み(BeginBranch/EndBranch/SetBranchReflection/Save/Load/TransferFlags自動追跡/自動反映メッセージ/DeclareThreadLatentCond条件付き潜在登録/リアクティブ条件評価/AutoBeginBranch)。未実装: 分岐収束自動判定、ブランチ間知識受け渡しUI"
+    "summary": "3メカニクス候補(指摘/ボード/分岐)の整理。矛盾Phase2完全実装。DeductionBoard凍結。Branch Phase1-3全実装(BeginBranch/EndBranch/SetBranchReflection/Save/Load/TransferFlags自動追跡/自動反映メッセージ/DeclareThreadLatentCond条件付き潜在/リアクティブ評価/AutoBeginBranch/安全弁/サイドバートピックバッジ)。未実装: ブランチ間知識受け渡しUI、アルケミーボード"
   },
   {
     "id": "SP-015",
@@ -164,11 +165,11 @@
   {
     "id": "SP-016",
     "title": "サブスレッドUI仕様",
-    "status": "partial",
-    "pct": 95,
+    "status": "done",
+    "pct": 100,
     "cat": "ui",
     "file": "docs/StorySpec/16_subthread_ui.md",
-    "summary": "統合型スレッドモデル、2段階トリガー。Step1-3+Step4a実装済み。DeclareThreadLatent(潜在登録)+ManifestThread(顕在化)で2段階トリガー基盤完了。未実装: Step3残(Wikiリンク/成果物カード)、Step4残(自動トリガー/CompleteThread)"
+    "summary": "統合型スレッドモデル全実装。Step1-4全完了。サイドバー+ThreadType+通知バナー+種別差異レンダリング+DeclareThreadLatent/ManifestThread/CompleteThread+DeclareThreadLatentCond(条件付き自動顕在化+AutoBeginBranch)+Save/Load。未実装コンテンツ系: Wikiリンク遷移(B型)、成果物カード(C型)"
   },
   {
     "id": "SP-099",

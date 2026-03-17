@@ -8,17 +8,16 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
-現在の状況 (2026-03-17):
-  - SP-014 Phase 1完了: 分岐内トピック自動追跡 (UnlockTopic→TransferFlags) + ResolveReflectionMessage自動生成
-  - SP-016 Step 3 (3a+3b) + Step 4a + CompleteThread: サブスレッドUI全機能実装済み
-  - SP-014 Branch Step 2+: BeginBranch/EndBranch/SetBranchReflection + 自動反映メッセージ
-  - SP-008: スマホレスポンシブ基盤 + CanvasScaler MatchWidthOrHeight=1.0
-  - SP-006: HCバッジパルス + AddHalluciCoin (silent increment)
-  - Docs: EN-001/002/006/009 全て100%、Batch 1-3全完了、Batch 4(N/O/P)定義済み
-  - Yarnコマンド数: 21 (CompleteThread追加後)
-  - delegation-prompts: Batch 4定義済み (spec棚卸し/SP-099棚卸し/acceptance更新)
-  - 手動検証待ち: Phase Aクロージング53項目 (矛盾Phase2/サブスレッド/Branch/Save-Load)
-  - 未着手: SP-006ゲート/しきい値, SP-014 Phase 2(条件付き分岐), Ch3シナリオ設計
+現在の状況 (2026-03-17 session 2):
+  - SP-014 done (80%): Phase1-3全完了。TransferFlags自動追跡+自動反映メッセージ+DeclareThreadLatentCond(条件付き自動顕在化)+安全弁+サイドバートピックバッジ
+  - SP-016 done (100%): Step1-4全完了。条件トリガーエンジン(DeclareThreadLatentCond)追加
+  - SP-006 done (100%): HCゲートUI (ChannelData.RequiredHalluciCoin + ダッシュボードHC N/M表示)
+  - SP-008 90%: スマホレスポンシブ基盤完了
+  - SharedWorkflowレガシー根絶: .cursorrules + REPORT_CONFIG.yml削除 + CI submodules削除
+  - Yarnコマンド数: 22 (DeclareThreadLatentCond追加)
+  - delegation-prompts: Batch 4定義済み (N:spec棚卸し/O:SP-099棚卸し/P:acceptance更新)
+  - 手動検証待ち: Phase Aクロージング56項目 (矛盾Phase2/サブスレッド/Branch/CondBranch/Save-Load)
+  - 未着手: SP-009(サウンド), Ch3シナリオ設計, SP-017(解放トリガー仕様)
 
 ## DECISION LOG
 

@@ -246,14 +246,14 @@ public List<ThreadData> Threads;  // 全スレッドの状態
 - [x] B/C/分岐: 通常バブル + 型色ティント（キャラ色に12%混合）
 - [x] SystemMessage: サブスレッド内で型色ティント適用
 - [x] 出現通知: 型アイコン+型色付きシステムメッセージ + ハンバーガーボタン型色パルス (2026-03-17)
-- [ ] Wiki的リンク遷移（B追跡用）
-- [ ] 偵察成果物カード（C偵察用）
+- [x] Wiki的リンク遷移: `[link:threadId:label]` マークアップ → TMP link + クリックでスレッド遷移 (2026-03-17)
+- [x] 偵察成果物カード: `[artifact:type:desc]` マークアップ → アイコン+イタリック表示 (2026-03-17)
 
-### Step 4: 条件トリガーエンジン（中〜長期） — Phase 4a 実装済み (2026-03-17)
+### Step 4: 条件トリガーエンジン — 全実装完了 (2026-03-17)
 - [x] DeclareThreadLatent: 潜在登録 (UIに出さない)
 - [x] ManifestThread: 顕在化 (通知+サイドバー追加を発火)
 - [x] 潜在中もAddThreadMessageでメッセージ追加可能
-- [ ] 自動トリガー (トピック/断片/矛盾/HCイベント連携)
+- [x] 自動トリガー: DeclareThreadLatentCond — Yarn変数条件でリアクティブ自動顕在化 + Branch型AutoBeginBranch (2026-03-17)
 - [x] CompleteThread: スレッド完了状態管理 + サイドバーグレーアウト+チェックマーク (2026-03-17)
 
 ---

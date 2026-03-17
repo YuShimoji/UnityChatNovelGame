@@ -297,6 +297,7 @@ title: ETK_ThreadType
 <<AddThreadChat "etk_track" "marco" "追跡型スレッドのメッセージ1: 対象の動向を記録">>
 <<AddThreadChat "etk_track" "marco" "追跡型スレッドのメッセージ2: 昨日との差分を照合">>
 <<AddThreadMessage "etk_track" "追跡型スレッドのメッセージ3: 次の観測ポイントを設定">>
+<<AddThreadMessage "etk_track" "関連: [link:etk_note:ETK覚書を参照] (クリックでスレッド遷移)">>
 
 <<StartWait 0.5>>
 
@@ -307,6 +308,9 @@ title: ETK_ThreadType
 <<AddThreadMessage "etk_scout" "偵察型スレッドのメッセージ1: 周辺情報を収集中">>
 <<AddThreadChat "etk_scout" "bernardo" "偵察型スレッドのメッセージ2: 異常なパターンを検知しました">>
 <<AddThreadMessage "etk_scout" "偵察型スレッドのメッセージ3: レポートは後ほど送付します">>
+<<AddThreadMessage "etk_scout" "成果物: [artifact:recording:周辺環境の録音データ (3分12秒)]">>
+<<AddThreadMessage "etk_scout" "成果物: [artifact:photo:異常パターンの撮影画像]">>
+<<AddThreadMessage "etk_scout" "成果物: [artifact:sample:土壌サンプル #47]">>
 
 <<StartWait 0.5>>
 
@@ -318,6 +322,8 @@ title: ETK_ThreadType
 <<SystemMessage "--- Step 3 種別差異レンダリング確認 ---">>
 <<SystemMessage "[A]注釈: バブルが中央配置の情報カード風(青みがかった暗い背景、アイコンなし、中央テキスト)になっていること">>
 <<SystemMessage "[B]追跡/[C]偵察: バブルの背景色にスレッド型色のティント(緑/オレンジ)がかかっていること">>
+<<SystemMessage "[B]追跡: 「ETK覚書を参照」リンクをクリックすると注釈スレッドに遷移すること">>
+<<SystemMessage "[C]偵察: 成果物マーカー (▶録音 / ▣写真 / ◆サンプル) がイタリック付きで表示されること">>
 <<SystemMessage "通知バナーが画面上部に表示されたことも確認してください（クリックでスレッド切替可能）">>
 
 <<StartWait 60>>

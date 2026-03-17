@@ -1105,6 +1105,13 @@ namespace ProjectFoundPhone.Core
                 m_ChatController.SwitchToThread(null);
             }
 
+            // 分岐内で取得したトピック数をSubthreadDataに記録 (サイドバーバッジ用)
+            if (branchId != null && m_DeclaredThreads.TryGetValue(branchId, out var branchThread))
+            {
+                int topicCount = m_BranchThreadState?.TransferFlags?.Count ?? 0;
+                branchThread.AcquiredTopicCount = topicCount;
+            }
+
             // ブランチ状態を終了
             EndBranchThread(completed);
 
@@ -1202,6 +1209,22 @@ namespace ProjectFoundPhone.Core
                 StartCoroutine(StopDialogueDeferred());
             }
 #endif
+
+            // 安全弁: シナリオ停止時に分岐状態をクリア
+            if (m_BranchThreadState != null && m_BranchThreadState.IsActive)
+            {
+                Debug.Log($"ScenarioManager: Safety valve — clearing active branch '{m_BranchThreadState.ActiveBranchId}' on StopScenario");
+                EndBranchThread(false);
+
+                // メインスレッドに復帰
+                if (m_ChatController != null)
+                {
+                    m_ChatController.SetActiveThreadType(null);
+                    m_ChatController.SwitchToThread(null);
+                }
+                var threadSwitcher = FindFirstObjectByType<ThreadSwitcherController>();
+                threadSwitcher?.ForceUpdateHeaderBar(null);
+            }
         }
 
 #if YARN_SPINNER

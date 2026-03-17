@@ -473,10 +473,33 @@ namespace ProjectFoundPhone.UI
                     {
                         entry.ItemBg.color = new Color(0.12f, 0.14f, 0.18f, 0.5f);
                     }
-                    // 未読バッジをクリア
+                    // 未読バッジ → トピック数バッジに変換 (分岐で取得したトピック)
+                    var scenarioManager = FindFirstObjectByType<ScenarioManager>();
+                    int topicCount = 0;
+                    if (scenarioManager != null)
+                    {
+                        var threadData = scenarioManager.GetDeclaredThread(threadId);
+                        topicCount = threadData?.AcquiredTopicCount ?? 0;
+                    }
+
                     if (entry.BadgeLabel != null)
                     {
-                        entry.BadgeLabel.transform.parent.gameObject.SetActive(false);
+                        if (topicCount > 0)
+                        {
+                            // トピック数バッジ (緑色)
+                            entry.BadgeLabel.text = $"{topicCount}";
+                            entry.BadgeLabel.color = new Color(1f, 1f, 1f, 1f);
+                            var badgeBg = entry.BadgeLabel.transform.parent.GetComponent<UnityEngine.UI.Image>();
+                            if (badgeBg != null)
+                            {
+                                badgeBg.color = new Color(0.3f, 0.7f, 0.3f, 0.9f);
+                            }
+                            entry.BadgeLabel.transform.parent.gameObject.SetActive(true);
+                        }
+                        else
+                        {
+                            entry.BadgeLabel.transform.parent.gameObject.SetActive(false);
+                        }
                     }
                     break;
                 }
@@ -847,6 +870,12 @@ namespace ProjectFoundPhone.UI
                         : new Color(0.85f, 0.85f, 0.9f, 1f);
                 }
             }
+        }
+
+        /// <summary>外部からスレッドを選択する (リンクカードクリック用)</summary>
+        public void ForceSelectThread(string threadId)
+        {
+            OnSelectThread(threadId);
         }
 
         /// <summary>外部からヘッダーバー表示を強制更新する (BeginBranch/EndBranch用)</summary>

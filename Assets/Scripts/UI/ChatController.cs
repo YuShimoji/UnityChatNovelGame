@@ -175,6 +175,79 @@ namespace ProjectFoundPhone.UI
             return Screen.width;
         }
 
+        // ---------- Thread Markup ----------
+
+        /// <summary>
+        /// テキスト内のスレッドマークアップを TMP リッチテキストに変換する。
+        /// [link:threadId:label] → クリック可能リンク
+        /// [artifact:type:description] → 成果物カード表示
+        /// </summary>
+        private static string ParseThreadMarkup(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return text;
+
+            // [link:threadId:label] → <link="thread:threadId"><color=#4A90D9><u>label</u></color></link>
+            text = System.Text.RegularExpressions.Regex.Replace(
+                text,
+                @"\[link:([^:]+):([^\]]+)\]",
+                "<link=\"thread:$1\"><color=#4A90D9><u>$2</u></color></link>");
+
+            // [artifact:type:description] → アイコン + 説明
+            text = System.Text.RegularExpressions.Regex.Replace(
+                text,
+                @"\[artifact:recording:([^\]]+)\]",
+                "<color=#FF9800>\u25B6</color> <i>$1</i>");
+            text = System.Text.RegularExpressions.Regex.Replace(
+                text,
+                @"\[artifact:photo:([^\]]+)\]",
+                "<color=#4CAF50>\u25A3</color> <i>$1</i>");
+            text = System.Text.RegularExpressions.Regex.Replace(
+                text,
+                @"\[artifact:sample:([^\]]+)\]",
+                "<color=#9C27B0>\u25C6</color> <i>$1</i>");
+
+            return text;
+        }
+
+        /// <summary>
+        /// TMP テキストにリンクのクリックハンドラを設定する。
+        /// "thread:threadId" リンクをクリックするとスレッドに切り替わる。
+        /// </summary>
+        private void SetupLinkClickHandler(TextMeshProUGUI textComponent)
+        {
+            // EventTrigger でポインタークリックを検出
+            var trigger = textComponent.gameObject.GetComponent<EventTrigger>();
+            if (trigger == null)
+            {
+                trigger = textComponent.gameObject.AddComponent<EventTrigger>();
+            }
+            textComponent.raycastTarget = true;
+
+            var entry = new EventTrigger.Entry { eventID = EventTriggerType.PointerClick };
+            entry.callback.AddListener((data) =>
+            {
+                var pointerData = (PointerEventData)data;
+                int linkIndex = TMP_TextUtilities.FindIntersectingLink(textComponent, pointerData.position, null);
+                if (linkIndex >= 0)
+                {
+                    string linkId = textComponent.textInfo.linkInfo[linkIndex].GetLinkID();
+                    if (linkId.StartsWith("thread:"))
+                    {
+                        string threadId = linkId.Substring("thread:".Length);
+                        Debug.Log($"ChatController: Thread link clicked — '{threadId}'");
+
+                        // ThreadSwitcherController 経由でスレッド切替
+                        var threadSwitcher = FindFirstObjectByType<ThreadSwitcherController>();
+                        if (threadSwitcher != null)
+                        {
+                            threadSwitcher.ForceSelectThread(threadId);
+                        }
+                    }
+                }
+            });
+            trigger.triggers.Add(entry);
+        }
+
         /// <summary>
         /// canvas 幅に応じたバブル最大幅パーセントを返す。
         /// 狭い画面ではバブルを広くして折り返しを減らす。
@@ -783,7 +856,21 @@ namespace ProjectFoundPhone.UI
                     finalText = $"<line-height=80%><size={nameSize:F0}><b>{displayName}</b></size>\n</line-height>{safeBody}";
                 }
             }
+            // サブスレッド内: マークアップ ([link:...], [artifact:...]) を TMP リッチテキストに変換
+            bool hasLinks = false;
+            if (m_ActiveThreadType.HasValue)
+            {
+                string before = finalText;
+                finalText = ParseThreadMarkup(finalText);
+                hasLinks = finalText != before && finalText.Contains("<link=");
+            }
             textComponent.text = finalText;
+
+            // リンクが含まれる場合、クリックハンドラを設定
+            if (hasLinks)
+            {
+                SetupLinkClickHandler(textComponent);
+            }
 
             // --- バブル幅フィット + 高さ計算 ---
             // テキスト領域の左右パディング合計 (offsetMin.x=10 + |offsetMax.x|=10 = 20)

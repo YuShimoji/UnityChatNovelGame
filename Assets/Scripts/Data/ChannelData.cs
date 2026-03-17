@@ -35,6 +35,9 @@ namespace ProjectFoundPhone.Data
         [Tooltip("Channel ID that must be completed to unlock this channel. Empty = always available.")]
         [SerializeField] private string m_RequiredCompletedChannelID;
 
+        [Tooltip("Required HalluciCoin to unlock this channel. 0 = no coin requirement.")]
+        [SerializeField] private int m_RequiredHalluciCoin;
+
         [Header("Chapter Structure")]
         [Tooltip("Total number of days in this chapter (default 1 for single-day chapters)")]
         [SerializeField] private int m_TotalDays = 1;
@@ -56,6 +59,7 @@ namespace ProjectFoundPhone.Data
         public string StartNodeName => m_StartNodeName;
         public int ChapterNumber => m_ChapterNumber;
         public string RequiredCompletedChannelID => m_RequiredCompletedChannelID;
+        public int RequiredHalluciCoin => m_RequiredHalluciCoin;
         public int TotalDays => m_TotalDays;
         public string[] DayStartNodeNames => m_DayStartNodeNames;
         public bool EnableHints => m_EnableHints;
