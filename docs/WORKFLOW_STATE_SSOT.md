@@ -109,7 +109,7 @@ ContentAuthoring シーンで以下を行う必要あり:
 | 5g | ~~出現通知 (Step 3 Phase 3b)~~ | A | #5b | **済** (2026-03-17: 型色リッチテキスト通知+ハンバーガーパルス) |
 | 6 | ~~スマホレスポンシブ基盤 (CRITICAL+HIGH)~~ | B | #4b,4c 完了後 | **済** (2026-03-17: バブル幅/フォント/サイドバー幅レスポンシブ) |
 | 7 | ~~SP-014 Phase 1: 分岐内トピック自動追跡~~ | A | #5a | **済** (2026-03-17: UnlockTopic→TransferFlags自動登録, ResolveReflectionMessage自動生成) |
-| 8 | SP-014 Phase 2: 条件付き分岐トリガー | A | #7 | 未着手 |
+| 8 | ~~SP-014 Phase 2: 条件付き分岐トリガー~~ | A | #7 | **済** (2026-03-17: DeclareThreadLatentCond+リアクティブ評価+AutoBeginBranch+安全弁+サイドバーバッジ) |
 | 9 | ~~SP-006 ゲートメカニクス~~ | A | — | **済** (2026-03-17: HCゲートUI+ChannelData.RequiredHalluciCoin+ダッシュボードHC N/M表示) |
 | 10 | Ch3 シナリオ設計 | A | #2,5 完了後 | 未着手 |
 
