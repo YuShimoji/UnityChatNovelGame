@@ -2,7 +2,7 @@
 
 このファイルは、決定待ち事項の唯一の参照（SSOT）として扱う。
 
-**最終更新**: 2026-03-16
+**最終更新**: 2026-03-17
 
 ---
 
@@ -60,12 +60,8 @@
 - [x] ~~断片(Fragment)とトピック(Topic)のデータモデル~~ → **概念的に別物**。断片=物理紙片、トピック=システム用語。データ型分離は将来検討（2026-03-07決定）
 - [x] ~~DeductionBoard の処遇~~ → **凍結・隔離**。アルケミー仕様確定まで触らない（2026-03-07決定）
 - [x] ~~矛盾発見→断片入手の紐づけ~~ → **外す**。矛盾報酬=HalluciCoinのみ。断片は別入手経路（2026-03-07決定）
-- [ ] 分岐スレッド（Ifストーリー）とサブスレッド(A/B/C)の関係整理
-  - **2026-03-16 分析**: 5a-5e でサブスレッドUI基盤が完成し、ThreadType に Branch を含む統合モデルが動作中。BranchThreadState (C分岐スパイク Step1) は TransferFlags + IsActive の最小ブリッジで、SubthreadData とは別系統。整理の選択肢:
-    - a) BranchThreadState を SubthreadData に統合 (Branch型スレッドとして一元化)
-    - b) 現行の二系統を維持し、UI 層だけ統合 (現状に近い)
-    - c) BranchThreadState を廃止し、Branch型スレッド + Yarn変数で代替
-  - **エンジン側推奨**: b → a への段階移行。まず UI 統合を確認してから、データモデル統合は Step2+ で
+- [x] ~~分岐スレッド（Ifストーリー）とサブスレッド(A/B/C)の関係整理~~
+  - **2026-03-17 解決**: Branch Step 2+ (582862b) で方針 b を採用し実装完了。UI層は ThreadType.Branch で統合、データ層は BranchThreadState + SubthreadData の二系統を維持。BeginBranch が DeclareThreadInternal(Branch型) を内部で呼び、UI統合とデータ分離を両立。将来的に a (データモデル統合) への移行は可能だが現状で機能している
 - [ ] 選択肢→後続メッセージの話者/色の自動紐づけ: 現状は Yarn 側で `$speaker` を逐次指定。選択肢選択時にコード側が自動で話者を切り替える仕組みの検討（2026-03-11 観察）
   - **2026-03-16 分析**: RunOptionsAsync がプレイヤーメッセージとして自動再表示済み。ResolveSpeaker は CharacterName → $speaker → "npc" の3段階。選択肢選択後に `$speaker = "player"` を自動セットすれば、選択直後のメッセージが自動的にプレイヤー色になる。ただし「選択肢の後に別NPCが即座に反応する」パターンではむしろ邪魔になるため、opt-in 方式が安全
   - **エンジン側推奨**: `<<AutoSpeakerAfterChoice true>>` のような Yarn コマンドで制御可能に

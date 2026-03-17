@@ -174,10 +174,10 @@
     "id": "SP-099",
     "title": "未決定事項 (Open Questions)",
     "status": "partial",
-    "pct": 85,
+    "pct": 90,
     "cat": "core",
     "file": "docs/StorySpec/99_open_questions.md",
-    "summary": "決定待ちの設計質問。解決済み36件、未決定6件(分岐/サブスレッド関係整理、選択肢→話者自動紐づけ)"
+    "summary": "決定待ちの設計質問。解決済み37件、未決定5件(主人公裏切りUI、コンテンツ量基準、解放トリガー、選択肢話者紐づけ)"
   },
   {
     "id": "EN-001",
