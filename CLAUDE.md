@@ -8,17 +8,16 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
-現在の状況 (2026-03-18 session 4 最終):
-  - 14コミット push済み。4レーン横断 (Runtime Core / Experience Slice / 設計判断 / Tooling)
-  - 新規基盤能力2件: SP-018進捗可視化(ProgressTracker+NudgeSystem+ProgressSummaryUI) + DiscoverFragment/AddFragmentNote(24コマンド)
-  - ランタイムバグ4件修正済み: $halluci_coin同期(CRITICAL)/TransferFlags(HIGH)/SelectionUI(HIGH)/矛盾AutoSave(MEDIUM)
-  - SP-099全4件確定: 裏切りUI=複合段階式 / 断片3ch / スレッド2-3ch / 解放=複合トリガー
-  - Ch3 Yarn実装完了 (495行): 断片3個+矛盾3ペア+サブスレッド3個。DiscoverFragment実運用
-  - Ch2サブスレッド全型組込: C型偵察+B型追跡充実+CompleteThread
-  - IDEA POOL整備(6件) + Phase Aチェックリスト拡充(10Step/80分)
-  - 次の作業: Unity Editor手動検証(70分) + Ch3 SO作成(TopicData3件+ContradictionPair3件+ch3.asset)
-  - 残存問題: UnreadCount復元(LOW) ※m_CurrentChannel未設定は修正済み
-  - 手動検証なしで進められる作業: Ch4-9ビート設計/SP-009仕様/オーサリングガイド/IDEA POOL再訪
+現在の状況 (2026-03-18 session 5 REFRESH):
+  - 16コミット push済み (session 4: 14 + session 5: 2)
+  - REFRESH実施: 体験逆算で3つの体験断面欠落を特定し仕様化
+  - m_CurrentChannel Load後復元修正 (SaveData.CurrentChannelID追加)
+  - docs同期: 22→24コマンド (AUTHORING_GUIDE/WORKFLOW_SSOT)
+  - 新規仕様3件: SP-019チャプター遷移体験(DRAFT) / SP-020オンボーディング(DRAFT) / Ch4-9エンジン要件先読み
+  - Ch4-9エンジン要件: 裏切りUI(HIGH)/画面演出(MEDIUM)/エンディングシステム(HIGH)/AI変調(MEDIUM) 等8件抽出
+  - 次の作業: Unity Editor手動検証(70分) + Ch3 SO作成 + SP-019/020のHUMAN_AUTHORITY承認
+  - 残存問題: UnreadCount復元(LOW)
+  - spec-index: 25エントリ (done 16 / partial 5 / draft 2 / todo 2)
 
 ## DECISION LOG
 
