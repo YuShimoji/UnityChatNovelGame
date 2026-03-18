@@ -8,18 +8,15 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
-現在の状況 (2026-03-17 session 3):
-  - SP-014 partial (90%): Phase1-4全完了。Phase4: 知識転送選択UI (EndBranch "select" + TransferSelectionUI)
-  - SP-016 done (100%): Step1-4全完了。仕様書ステータスDRAFT→done修正済み
-  - SP-006 done (100%): HCゲートUI完了。spec-index重複フィールド修正済み
-  - SP-008 90%: スマホレスポンシブ基盤完了
-  - Yarnコマンド数: 22 (全ドキュメント同期済み: EN-001/EN-009/SSOT/AUTHORING_GUIDE)
-  - SSOT整合修正: コマンド数22化+SP-006重複除去+SP-016 done化+SSOT 2026-03-17更新
-  - Ch1 BranchPyramid: EndBranch "select" モード適用済み (知識転送選択UI体験可能)
-  - Ch1 Day2: DeclareThreadLatentCond組込済み, Ch2: HCゲート値(RequiredHalluciCoin=2)設定済み
-  - ETK: ETK_BranchTransferSelect テストノード追加 (選択UI + 後方互換テスト)
-  - 手動検証待ち: Phase Aクロージング56項目 + SP-014 Phase 4選択UI動作確認
-  - 未着手: SP-009(サウンド), Ch3シナリオ設計, SP-017(解放トリガー仕様)
+現在の状況 (2026-03-18 session 4):
+  - Phase Aクロージング手動検証: 準備完了 (ETK_AutoVerify目視ガイド強化+最短実行フロー7ステップ/約60分)
+  - SP-014 partial (90%): Phase1-4全完了。手動検証で100%化
+  - SP-016 done (100%), SP-006 done (100%), SP-008 partial (90%)
+  - Yarnコマンド数: 22 (全ドキュメント同期済み)
+  - ETK: AutoVerify全[CHECK]メッセージ追加、BranchTransferSelect追加済み
+  - 次の作業: Unity Editor手動検証 → Phase A クロージング
+  - 未着手: SP-009(サウンド), Ch3シナリオ設計
+  - SP-017(解放トリガー): 仕様未策定・spec-index未登録 → 手動検証後に要否判断
 
 ## DECISION LOG
 
