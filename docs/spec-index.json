@@ -150,7 +150,7 @@
     "pct": 90,
     "cat": "system",
     "file": "docs/StorySpec/14_interaction_mechanics.md",
-    "summary": "3メカニクス候補(指摘/ボード/分岐)の整理。矛盾Phase2完全実装。DeductionBoard凍結。Branch Phase1-4全実装(BeginBranch/EndBranch select/SetBranchReflection/Save/Load/TransferFlags自動追跡/自動反映メッセージ/DeclareThreadLatentCond条件付き潜在/リアクティブ評価/AutoBeginBranch/安全弁/サイドバートピックバッジ/知識転送選択UI)。未実装: ブランチ間クロスリファレンスUI、アルケミーボード"
+    "summary": "3メカニクス候補(指摘/ボード/分岐)の整理。矛盾Phase2完全実装。DeductionBoard凍結。Branch Phase1-4全実装(BeginBranch/EndBranch select/SetBranchReflection/Save/Load/TransferFlags自動追跡/自動反映メッセージ/DeclareThreadLatentCond条件付き潜在/リアクティブ評価/AutoBeginBranch/安全弁/サイドバートピックバッジ/知識転送選択UI)。ランタイム既知問題・体験逆算ギャップ追記(2026-03-18)。未実装: ブランチ間クロスリファレンスUI、アルケミーボード"
   },
   {
     "id": "SP-015",
@@ -168,7 +168,7 @@
     "pct": 100,
     "cat": "ui",
     "file": "docs/StorySpec/16_subthread_ui.md",
-    "summary": "統合型スレッドモデル全実装。Step1-4全完了。サイドバー+ThreadType+通知バナー+種別差異レンダリング+DeclareThreadLatent/ManifestThread/CompleteThread+DeclareThreadLatentCond(条件付き自動顕在化+AutoBeginBranch)+Save/Load。未実装コンテンツ系: Wikiリンク遷移(B型)、成果物カード(C型)"
+    "summary": "統合型スレッドモデル全実装。Step1-4全完了。サイドバー+ThreadType+通知バナー+種別差異レンダリング+DeclareThreadLatent/ManifestThread/CompleteThread+DeclareThreadLatentCond(条件付き自動顕在化+AutoBeginBranch)+Save/Load。検証・モック不足セクション追加(2026-03-18): ETKカバレッジ状況/未作成モック6件/ランタイム制限事項5件。未実装コンテンツ系: Wikiリンク遷移(B型)、成果物カード(C型)"
   },
   {
     "id": "SP-099",
@@ -204,7 +204,7 @@
     "pct": 100,
     "cat": "data",
     "file": "docs/SaveSystem_README.md",
-    "summary": "JSON保存・3スロット+AutoSave(slot=99)・チャット履歴・トピック・後方互換。復元時の名前重複防止(StripNamePrefix)実装済み。サブスレッド対応(Subthreads/ActiveThreadId/ThreadType保存・復元)"
+    "summary": "JSON保存・3スロット+AutoSave(slot=99)・チャット履歴・トピック・後方互換。復元時の名前重複防止(StripNamePrefix)実装済み。サブスレッド対応(Subthreads/ActiveThreadId/ThreadType保存・復元)。既知問題セクション追加(2026-03-18): YarnVariables保存範囲制限/TransferFlagsクリア/矛盾AutoSave欠如/ロード後m_CurrentChannel未設定"
   },
   {
     "id": "EN-004",

@@ -68,9 +68,11 @@
   - 即時（前提条件と同時にフラグ注入 → ストーリー上で即出現させたい場合）
 
 ```yarn
-// 将来実装（条件トリガー、Step 4）:
-<<DeclareThread "annot_pyramid_theory" "A" "Pyramidの理論体系" "topic:pyramid_intro">>
-// → トピック "pyramid_intro" が解放されたときに顕在化
+// 部分実現済み（DeclareThreadLatentCond、Step 4 相当）:
+// Yarn変数条件による自動顕在化 + AutoBeginBranch を実装済み
+<<DeclareThreadLatentCond "annot_pyramid_theory" "branch" "Pyramidの理論体系" "$pyramid_intro_seen">>
+// → $pyramid_intro_seen が true になったときに自動顕在化 + 分岐開始
+// 未実装: トピック/断片/HC閾値による複合トリガー条件
 
 // 現在の実装では全て即時可視化:
 <<DeclareThreadTyped "branch_pyramid_solo" "branch" "Pyramidの独白">>
@@ -258,11 +260,49 @@ public List<ThreadData> Threads;  // 全スレッドの状態
 
 ---
 
-## 7. 未決定事項
+## 7. 検証・モック不足 (2026-03-18 監査)
+
+### 7.1 ETK カバレッジ状況
+
+| ETKノード | カバー範囲 | 未カバー |
+|-----------|-----------|---------|
+| ETK_ThreadType | A/B/C型宣言、メッセージ追加、基本切替 | 通知バナーのクリック切替 (目視のみ) |
+| ETK_ThreadParallel | 3スレッド並走、ノード遷移後維持 | 10スレッド以上の負荷テスト |
+| ETK_Branch | 潜在→顕在→分岐→自動反映→完了 | 分岐中セーブ→ロード→再開のフルパス |
+| ETK_CondBranch | 条件トリガー→自動顕在化→AutoBeginBranch | ロード後の条件再評価 |
+| ETK_AutoVerify | D-1〜D-9, E, F の目視ガイド | D-7 並走は ETK_ThreadType で別途カバー |
+| ETK_BranchTransferSelect | 選択UI + 後方互換 | 選択UI中のStopScenario割り込み |
+
+### 7.2 未作成のモック・テストシナリオ
+
+| モック | 目的 | 優先度 |
+|--------|------|--------|
+| **B型追跡スレッドの実用モック** | Tracking型スレッドでキャラの行動を追跡する体験。Wikiリンク遷移 (`[link:threadId:label]`) の実動作確認 | HIGH |
+| **C型偵察スレッドの実用モック** | Scout型スレッドで成果物カード (`[artifact:type:desc]`) の表示確認。録音/撮影/採取のUI検証 | HIGH |
+| **サブスレッドライフサイクル一気通貫モック** | 宣言→メッセージ蓄積→潜在→条件トリガー→顕在化→分岐開始→分岐内対話→知識転送選択→完了→Save/Load→復元 の全工程 | HIGH |
+| **10スレッド並走ストレステスト** | サイドバーのスクロール・パフォーマンス・未読バッジ累積の確認 | MEDIUM |
+| **分岐中セーブ→ロード→再開テスト** | TransferFlags クリア問題 (EN-003 既知問題参照) の検証 | HIGH |
+| **メインスレッド空状態からの復帰テスト** | 全スレッド完了後にメインに戻った際の表示 | LOW |
+
+### 7.3 ランタイム制限事項 (実装済み機能の制約)
+
+| 制限 | 詳細 | 影響 |
+|------|------|------|
+| **サブスレッド内でYarnノード実行不可** | AddThreadMessage/AddThreadChat のみ。Yarnダイアログ (選択肢・分岐) はメインスレッドでしか動かない | B型/C型スレッドの対話体験が制限される |
+| **サブスレッド内で矛盾指摘不可** | ContradictionManager はメインスレッドの ChatHistory のみを検索対象とする | サブスレッド内の矛盾ペアは検出できない |
+| **DeclareThreadLatentCond の条件はYarn変数のみ** | トピック取得/断片収集数/HC閾値などの複合条件はYarn変数を介して間接的に表現する必要がある | オーサリングの手間が増える |
+| **Yarn外からのVariableStorage直接操作で条件評価が走らない** | `ScenarioManager.SetVariable<T>` 経由でないと `EvaluateAllLatentConditions` が発火しない | 将来の拡張でサイレント不整合のリスク |
+| **ロード後の AutoBeginBranch 再発火** | IsLatent=true のまま保存されたスレッドは、ロード後の変数復元で条件成立時に自動顕在化+分岐開始が再発火する。意図通りの場合と意図外の場合がある | テストで挙動を確認する必要あり |
+
+---
+
+## 8. 未決定事項
 
 - [ ] スレッドの最大同時数制限の有無
-- [ ] スレッド内で矛盾指摘は可能か（メインスレッドのみ？）
+- [ ] スレッド内で矛盾指摘を許可するか（メインスレッドのみ？）
 - [ ] スレッド間のメッセージ参照（「メインスレッドのこの発言について」等）
 - [ ] キャラ状態表示の具体的なデータソースとUI
 - [ ] 探索先アイコン一覧の具体的な仕様
-- [ ] スレッド完了後の再閲覧可否
+- [ ] スレッド完了後の再閲覧可否（現実装: 完了後もサイドバーに表示、履歴閲覧可能）
+- [ ] B型Wikiリンク遷移の遷移先コンテンツ定義
+- [ ] C型成果物カードの種別一覧とアイコン仕様
