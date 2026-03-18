@@ -8,17 +8,17 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
-現在の状況 (2026-03-18 session 4):
-  - 体験逆算監査完了: 5仕様書にランタイムギャップ・検証不足を全反映
+現在の状況 (2026-03-18 session 4 最終):
+  - 14コミット push済み。4レーン横断 (Runtime Core / Experience Slice / 設計判断 / Tooling)
+  - 新規基盤能力2件: SP-018進捗可視化(ProgressTracker+NudgeSystem+ProgressSummaryUI) + DiscoverFragment/AddFragmentNote(24コマンド)
   - ランタイムバグ4件修正済み: $halluci_coin同期(CRITICAL)/TransferFlags(HIGH)/SelectionUI(HIGH)/矛盾AutoSave(MEDIUM)
-  - Ch2サブスレッド全型組込: C型偵察(成果物カード)+B型追跡充実(6msg)+CompleteThread
-  - ETK_SubthreadMock追加: B型/C型/ライフサイクル一気通貫モック (136行)
-  - Phase Aクロージング手動検証: 準備完了 (ETK_AutoVerify目視ガイド+最短実行フロー7ステップ/約60分)
-  - SP-014 partial (90%), SP-016 done (100%), SP-008 partial (90%)
-  - 次の作業: Unity Editor手動検証 (Phase A 56項目 + ETK_SubthreadMock + Ch2新スレッド)
+  - SP-099全4件確定: 裏切りUI=複合段階式 / 断片3ch / スレッド2-3ch / 解放=複合トリガー
+  - Ch3 Yarn実装完了 (495行): 断片3個+矛盾3ペア+サブスレッド3個。DiscoverFragment実運用
+  - Ch2サブスレッド全型組込: C型偵察+B型追跡充実+CompleteThread
+  - IDEA POOL整備(6件) + Phase Aチェックリスト拡充(10Step/80分)
+  - 次の作業: Unity Editor手動検証(70分) + Ch3 SO作成(TopicData3件+ContradictionPair3件+ch3.asset)
   - 残存問題: m_CurrentChannel未設定(MEDIUM), UnreadCount復元(LOW)
-  - 未着手: SP-009(サウンド), Ch3シナリオ設計
-  - SP-017(解放トリガー): SP-099内の未決定事項として管理
+  - 手動検証なしで進められる作業: Ch4-9ビート設計/SP-009仕様/オーサリングガイド/IDEA POOL再訪
 
 ## DECISION LOG
 
