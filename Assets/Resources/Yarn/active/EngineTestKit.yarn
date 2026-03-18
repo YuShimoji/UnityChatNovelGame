@@ -14,6 +14,7 @@ title: ETK_Menu
 <<declare $etk_done_threadtype = false>>
 <<declare $etk_done_branch = false>>
 <<declare $etk_done_condbranch = false>>
+<<declare $etk_done_transferselect = false>>
 <<declare $etk_cond_trigger = false>>
 <<declare $auto_speaker_after_choice = false>>
 
@@ -921,7 +922,6 @@ EndDay 2 を実行します。これが最終Dayなので、チャンネルは C
 /// --------------------------------------------------
 title: ETK_BranchTransferSelect
 ---
-<<declare $etk_done_transferselect = false>>
 <<SystemMessage "--- 知識転送選択 テスト ---">>
 <<StartWait 0.3>>
 
