@@ -8,16 +8,14 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
-現在の状況 (2026-03-18 session 5 REFRESH):
-  - 16コミット push済み (session 4: 14 + session 5: 2)
-  - REFRESH実施: 体験逆算で3つの体験断面欠落を特定し仕様化
-  - m_CurrentChannel Load後復元修正 (SaveData.CurrentChannelID追加)
-  - docs同期: 22→24コマンド (AUTHORING_GUIDE/WORKFLOW_SSOT)
-  - 新規仕様3件: SP-019チャプター遷移体験(DRAFT) / SP-020オンボーディング(DRAFT) / Ch4-9エンジン要件先読み
-  - Ch4-9エンジン要件: 裏切りUI(HIGH)/画面演出(MEDIUM)/エンディングシステム(HIGH)/AI変調(MEDIUM) 等8件抽出
-  - 次の作業: Unity Editor手動検証(70分) + Ch3 SO作成 + SP-019/020のHUMAN_AUTHORITY承認
-  - 残存問題: UnreadCount復元(LOW)
-  - spec-index: 25エントリ (done 16 / partial 5 / draft 2 / todo 2)
+現在の状況 (2026-03-18 session 6 NIGHTSHIFT):
+  - session 5 マージ統合完了 (コンフリクト5件解決)
+  - docs大規模同期: 既知問題3件を修正済みに更新(YarnVariables CRITICAL/AutoSave/m_CurrentChannel)
+  - SP-017解放トリガー仕様スタブ作成 + spec-indexエントリ追加 (26エントリ)
+  - ETK declare集約修正、TransferSelectionUI.meta追跡、SSOT項目数修正(56→65)
+  - spec-index: 26エントリ (done 16 / partial 5 / draft 3 / todo 2)
+  - 次の作業: Unity Editor手動検証(65項目/約80分) + SP-019/020のHUMAN_AUTHORITY承認
+  - 残存問題: UnreadCount復元(LOW), TransferFlagsクリア(HIGH), EndBranch CancellationToken(HIGH)
 
 ## DECISION LOG
 
