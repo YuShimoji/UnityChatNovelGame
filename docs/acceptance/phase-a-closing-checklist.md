@@ -255,7 +255,28 @@ F (Console確認) は全ステップで常時監視する。
 - ダッシュボード → Ch1 選択 → B-1a〜B-1c
 - Back → ダッシュボード → Ch2 選択 → B-2a〜B-3b
 
-### 合計見積: 約60分 (セットアップ含む)
+### Step 8: ETK_SubthreadMock → 全型体験+ライフサイクル (10分) [2026-03-18追加]
+- ETK_Menu → 「サブスレッド実用モック」
+- B型追跡: Wikiリンクマークアップ `[link:...]` の表示確認
+- C型偵察: 成果物カード `[artifact:...]` の表示確認
+- A型覚書: 情報カード表示 (青色)
+- ライフサイクル: 潜在→顕在化→分岐→EndBranch select/全転送→CompleteThread→Save/Load
+
+### Step 9: Ch2 新スレッド検証 (5分) [2026-03-18追加]
+- Ch2 をプレイ → Mason 合流時に C型偵察スレッド `ch2_scout_field` が顕在化するか
+- サイドバーに B型(緑) + C型(橙) が型別色で表示されるか
+- `[artifact:photo:...]`, `[artifact:document:...]` が成果物カード表示されるか
+- B型追跡 `ch2_track_location` に矛盾 #1〜#3 が蓄積されているか
+- Ch2 DayEnd で `ch2_scout_field` が CompleteThread でグレーアウト+チェックマーク表示されるか
+
+### Step 10: SP-018 進捗可視化 + DiscoverFragment (5分) [2026-03-18追加]
+- ダッシュボード表示 → プログレスバーとミニ数値 (Ch/Cont/Frag) が表示されるか
+- 初期状態: 0/N で表示されるか
+- Ch1 プレイ → 矛盾発見 → ダッシュボード復帰 → 数値更新確認
+- NudgeSystem のヒント文が状況に応じて変化するか
+- ETK_Commands → DiscoverFragment テスト: 断片解錠+通知+スレッド顕在化+メッセージ追加が一括動作するか
+
+### 合計見積: 約80分 (セットアップ含む、Step 8-10 追加)
 
 ---
 
