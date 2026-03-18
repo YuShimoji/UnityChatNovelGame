@@ -8,14 +8,17 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
-現在の状況 (2026-03-18 session 6 NIGHTSHIFT):
-  - session 5 マージ統合完了 (コンフリクト5件解決)
-  - docs大規模同期: 既知問題3件を修正済みに更新(YarnVariables CRITICAL/AutoSave/m_CurrentChannel)
-  - SP-017解放トリガー仕様スタブ作成 + spec-indexエントリ追加 (26エントリ)
-  - ETK declare集約修正、TransferSelectionUI.meta追跡、SSOT項目数修正(56→65)
+現在の状況 (2026-03-19 session 7):
+  - session 7: Yarnコンパイルエラー修正 + HIGH bug 2件解消 (d755b96)
+    - ETK [>] → [▸] (Yarn Spinnerレキサーが >] を不正トークンとして認識)
+    - EndBranch CancellationToken: while待機ループにキャンセルチェック追加
+    - TransferFlags: EndBranchThread で全一時状態を明示クリア
+    - TransferSelectionUI: ForceClose() 新設
+  - REFRESH実施: ドキュメント偏重ドリフト検出、Phase A検証を優先選択
   - spec-index: 26エントリ (done 16 / partial 5 / draft 3 / todo 2)
-  - 次の作業: Unity Editor手動検証(65項目/約80分) + SP-019/020のHUMAN_AUTHORITY承認
-  - 残存問題: UnreadCount復元(LOW), TransferFlagsクリア(HIGH), EndBranch CancellationToken(HIGH)
+  - Unity Editor再コンパイル未確認 (次回セッション最初に確認)
+  - 次の作業: Unity再コンパイル確認 → Phase A手動検証(65項目/約80分) → git push
+  - 残存問題: UnreadCount復元(LOW) ※HIGH 2件は修正済み
 
 ## DECISION LOG
 
