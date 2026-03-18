@@ -43,6 +43,7 @@ namespace ProjectFoundPhone.UI
         private InventoryTabController m_InventoryTab;
         private GameObject m_CloseOverlayButton;
         private bool m_IsInventoryOverlayMode;
+        private ProgressSummaryUI m_ProgressSummary;
         private bool m_RestoreBackButtonAfterOverlay;
         private DashboardTab m_TabBeforeOverlay = DashboardTab.Channels;
 
@@ -102,6 +103,7 @@ namespace ProjectFoundPhone.UI
 
             SetOverlayMode(false);
             RefreshCoinDisplay();
+            RefreshProgressSummary();
 
             if (m_CurrentTab == DashboardTab.Channels)
             {
@@ -325,6 +327,9 @@ namespace ProjectFoundPhone.UI
             m_CoinDisplay.raycastTarget = false;
             AssignDefaultFont(m_CoinDisplay);
 
+            // --- Progress Summary (between subtitle and tab bar) ---
+            BuildProgressSummary(m_DashboardPanel.transform);
+
             // --- Tab Bar (Channels | Inventory) ---
             BuildTabBar(m_DashboardPanel.transform);
 
@@ -348,7 +353,7 @@ namespace ProjectFoundPhone.UI
             scrollRect.anchorMin = new Vector2(0f, 0f);
             scrollRect.anchorMax = new Vector2(1f, 1f);
             scrollRect.offsetMin = new Vector2(20f, 20f);
-            scrollRect.offsetMax = new Vector2(-20f, -150f);
+            scrollRect.offsetMax = new Vector2(-20f, -200f);
 
             Image scrollBg = scrollObj.GetComponent<Image>();
             scrollBg.color = new Color(0.08f, 0.08f, 0.1f, 0.4f);
@@ -713,8 +718,8 @@ namespace ProjectFoundPhone.UI
             barRect.anchorMin = new Vector2(0f, 1f);
             barRect.anchorMax = new Vector2(1f, 1f);
             barRect.pivot = new Vector2(0.5f, 1f);
-            barRect.offsetMin = new Vector2(20f, -140f);
-            barRect.offsetMax = new Vector2(-20f, -100f);
+            barRect.offsetMin = new Vector2(20f, -190f);
+            barRect.offsetMax = new Vector2(-20f, -150f);
 
             Image barBg = m_TabBar.GetComponent<Image>();
             barBg.color = new Color(0.08f, 0.08f, 0.1f, 0.6f);
@@ -921,6 +926,28 @@ namespace ProjectFoundPhone.UI
                 ChannelStatus.Completed  => new Color(0.4f, 0.6f, 0.4f),
                 _ => Color.gray,
             };
+        }
+
+        private void BuildProgressSummary(Transform parent)
+        {
+            GameObject summaryObj = new GameObject("ProgressSummary", typeof(RectTransform));
+            AssignUILayer(summaryObj);
+            summaryObj.transform.SetParent(parent, false);
+
+            m_ProgressSummary = summaryObj.AddComponent<ProgressSummaryUI>();
+            m_ProgressSummary.Build(parent, AssignDefaultFont);
+        }
+
+        private void RefreshProgressSummary()
+        {
+            if (m_ProgressSummary == null) return;
+
+            var tracker = ProgressTracker.Instance;
+            if (tracker == null) return;
+
+            ProgressSnapshot snapshot = tracker.GetSnapshot();
+            string nudge = NudgeSystem.GetNudge(snapshot, m_Channels, SaveManager.Instance?.CurrentSaveData);
+            m_ProgressSummary.UpdateDisplay(snapshot, nudge);
         }
 
         private static void AssignDefaultFont(TextMeshProUGUI tmp)

@@ -259,5 +259,14 @@
     "cat": "infra",
     "file": "docs/SCENARIO_AUTHORING_GUIDE.md",
     "summary": "Yarnシナリオ執筆ハンズオン。5分クイックスタート、全22コマンドリファレンス(DeclareThreadLatentCond/BeginBranch/EndBranch/AddHalluciCoin含む)、キャラクターID一覧、コンテンツパターン集、キャラクターの声ガイド"
+  },
+  {
+    "id": "SP-018",
+    "title": "進捗可視化基盤",
+    "status": "partial",
+    "pct": 60,
+    "cat": "ui",
+    "file": "docs/StorySpec/18_progress_visibility.md",
+    "summary": "Phase 1 MVP実装: ProgressTracker(データ集約)+NudgeSystem(ヒント生成)+ProgressSummaryUI(ダッシュボード内バー+数値+誘導)。加重平均進捗率(Ch35%+Cont30%+Frag20%+Topic15%)。Phase 2: チャプター間接続可視化"
   }
 ]
