@@ -472,7 +472,7 @@ title: ETK_Branch
 <<StartWait 0.5>>
 <<SystemMessage "--- 確認項目 ---">>
 <<SystemMessage "1. BeginBranch で自動的にブランチスレッドに切替されたこと">>
-<<SystemMessage "2. ヘッダーバーに紫色の [>] Pyramidの独白 が表示されていること">>
+<<SystemMessage "2. ヘッダーバーに紫色の [▸] Pyramidの独白 が表示されていること">>
 <<SystemMessage "3. サイドバーでMainに自由に切替・復帰できること">>
 <<SystemMessage "4. EndBranch 後にメインに自動復帰し、反映メッセージが表示されること">>
 
@@ -522,7 +522,7 @@ title: ETK_Branch
 
 <<SystemMessage "--- 確認項目 ---">>
 <<SystemMessage "5. SetBranchReflection 未使用でも、UnlockTopic で解錠したトピック名から反映メッセージが自動生成されること">>
-<<SystemMessage "6. 反映メッセージに [>] アイコンと紫色が付いていること">>
+<<SystemMessage "6. 反映メッセージに [▸] アイコンと紫色が付いていること">>
 
 <<StartWait 5>>
 
@@ -707,7 +707,7 @@ title: ETK_CondBranch
 <<SystemMessage "--- 確認項目 ---">>
 <<SystemMessage "1. DeclareThreadLatentCond 登録時にはサイドバーに表示されなかったこと">>
 <<SystemMessage "2. $etk_cond_trigger を true にした瞬間に自動で分岐スレッドに切り替わったこと">>
-<<SystemMessage "3. ヘッダーバーに [>] 条件付き分岐 が表示されていること">>
+<<SystemMessage "3. ヘッダーバーに [▸] 条件付き分岐 が表示されていること">>
 
 <<StartWait 5>>
 

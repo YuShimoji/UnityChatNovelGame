@@ -272,6 +272,16 @@ namespace ProjectFoundPhone.UI
             m_CountLabel.text = $"{selected}/{m_Entries.Count} 選択中";
         }
 
+        /// <summary>
+        /// StopScenario 等からの強制クローズ。コールバックを発火せずUIを即時非表示にする。
+        /// </summary>
+        public void ForceClose()
+        {
+            DOTween.Kill(m_OverlayGroup);
+            m_OnConfirm = null;
+            gameObject.SetActive(false);
+        }
+
         private void OnConfirmClicked()
         {
             var selectedIds = new List<string>();

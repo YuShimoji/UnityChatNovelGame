@@ -1056,6 +1056,15 @@ namespace ProjectFoundPhone.Core
             m_BranchThreadState ??= new BranchThreadState();
             m_BranchThreadState.IsActive = false;
             m_BranchThreadState.WasCompleted = completed;
+
+            // 分岐関連の一時状態をクリア。
+            // 次の BeginBranch(別ID) でも TransferFlags.Clear() されるが、
+            // 同一ID再突入時に前回の残存データが混入するのを防止する。
+            m_BranchThreadState.TransferFlags.Clear();
+            m_BranchThreadState.TransferredFlags.Clear();
+            m_BranchThreadState.HiddenFlags.Clear();
+            m_BranchThreadState.SelectionApplied = false;
+            m_BranchThreadState.ReflectionMessage = null;
         }
 
         /// <summary>
@@ -1106,22 +1115,47 @@ namespace ProjectFoundPhone.Core
                 var candidates = BuildTransferCandidates();
                 var selectionUI = EnsureTransferSelectionUI();
 
-                bool selectionDone = false;
-                List<string> selectedIds = null;
-
-                selectionUI.Show(candidates, (selected) =>
+                if (selectionUI != null)
                 {
-                    selectedIds = selected;
-                    selectionDone = true;
-                });
+                    // CancelActiveWait で EndBranch 待機もキャンセルできるよう初期化
+                    m_WaitCancellation?.Dispose();
+                    m_WaitCancellation = new CancellationTokenSource();
 
-                // 選択完了まで待機 (StartWaitCommand と同じパターン)
-                while (!selectionDone)
-                {
-                    await YarnTask.Yield();
+                    bool selectionDone = false;
+                    List<string> selectedIds = null;
+
+                    selectionUI.Show(candidates, (selected) =>
+                    {
+                        selectedIds = selected;
+                        selectionDone = true;
+                    });
+
+                    // 選択完了まで待機 (CancelActiveWait でキャンセル可能)
+                    bool wasCancelled = false;
+                    while (!selectionDone)
+                    {
+                        // StopScenario → CancelActiveWait で脱出できるようにする
+                        if (m_WaitCancellation != null && m_WaitCancellation.IsCancellationRequested)
+                        {
+                            if (selectionUI.gameObject.activeSelf)
+                            {
+                                selectionUI.ForceClose();
+                            }
+                            wasCancelled = true;
+                            break;
+                        }
+                        await YarnTask.Yield();
+                    }
+
+                    if (!wasCancelled)
+                    {
+                        ApplyTransferSelection(selectedIds);
+                    }
                 }
-
-                ApplyTransferSelection(selectedIds);
+                else
+                {
+                    Debug.LogWarning("ScenarioManager: TransferSelectionUI not found. Skipping select mode.");
+                }
             }
 
             // 反映メッセージを決定: Yarn指定 > 自動生成 > なし
@@ -1389,11 +1423,11 @@ namespace ProjectFoundPhone.Core
                 threadSwitcher?.ForceUpdateHeaderBar(null);
             }
 
-            // TransferSelectionUI が表示中なら強制非表示
+            // TransferSelectionUI が表示中なら強制クローズ (コールバック無効化+DOTween停止)
             var transferUI = FindFirstObjectByType<TransferSelectionUI>();
             if (transferUI != null && transferUI.gameObject.activeSelf)
             {
-                transferUI.gameObject.SetActive(false);
+                transferUI.ForceClose();
             }
         }
 
