@@ -202,6 +202,22 @@ AutoSpeakerAfterChoice が ON です。選択肢を選ぶと $speaker が自動�
 
 <<set $auto_speaker_after_choice to false>>
 
+<<SystemMessage "--- DiscoverFragment テスト ---">>
+<<DeclareThreadLatent "etk_discover_test" "A" "発見テストメモ">>
+<<StartWait 0.3>>
+
+<<set $speaker to "pyramid">>
+DiscoverFragment コマンドをテストします。1コマンドで断片解錠+通知+スレッド顕在化+メッセージ追加が実行されます。
+
+<<StartWait 0.5>>
+
+<<DiscoverFragment "test_fragment_01" "etk_discover_test" "テスト断片の分析結果: システム化コマンドが正常動作">>
+<<AddFragmentNote "etk_discover_test" "補足: AddFragmentNote はセマンティックエイリアスとして動作">>
+
+<<StartWait 0.5>>
+<<SystemMessage "[CHECK] サイドバーに「発見テストメモ」が出現し、2件のメッセージが表示されるか確認">>
+<<StartWait 3>>
+
 <<set $speaker to "pyramid">>
 全コマンドのテスト完了。
 

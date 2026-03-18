@@ -122,6 +122,8 @@ Assets/Resources/Yarn/active/
 | EndBranch (select) | `<<EndBranch true "select">>` | 分岐終了+知識転送選択UI。プレイヤーが持ち帰る情報を選ぶ。未選択の知識は反映メッセージに含まれない |
 | ManifestThread | `<<ManifestThread "id">>` | 潜在スレッドを顕在化 |
 | CompleteThread | `<<CompleteThread "id">>` | スレッドを完了状態にする (サイドバーグレーアウト) |
+| DiscoverFragment | `<<DiscoverFragment "topicId" "threadId" "message">>` | 断片発見の一括実行: UnlockTopic + SystemMessage("断片「{title}」を記録") + ManifestThread + AddThreadMessage。Ch3以降推奨 |
+| AddFragmentNote | `<<AddFragmentNote "threadId" "message">>` | スレッドへの断片関連メモ追加。AddThreadMessage のセマンティックエイリアス |
 
 ### Yarn 標準機能
 
@@ -278,6 +280,26 @@ Glitch レベルの目安:
 - `<<UnlockTopic>>` の ID は `fragment_ch{章番号}_{連番}` 形式
 - SystemMessage で獲得を通知（プレイヤーへのフィードバック）
 - 断片の内容（本文テキスト）は会話中にキャラが読み上げる形で提示
+
+### パターン A': 断片の発見 + スレッド顕在化 (推奨: Ch3以降)
+
+```yarn
+// --- 事前準備: ノード冒頭で潜在スレッドを登録 ---
+<<DeclareThreadLatent "ch3_note_analysis" "A" "文書分析メモ">>
+
+// --- 断片発見シーン: DiscoverFragment で一括実行 ---
+<<set $speaker to "marco">>
+<<StartWait 0.8>>
+残ってる。こういうのは取っておく癖がついた。
+
+<<DiscoverFragment "fragment_ch3_01" "ch3_note_analysis" "第3次改定文書の欠損部分を分析中">>
+<<AddFragmentNote "ch3_note_analysis" "参照先文書（付録D）も同様に欠損">>
+```
+
+**ポイント**:
+- `<<DiscoverFragment>>` 1コマンドで UnlockTopic + SystemMessage + ManifestThread + AddThreadMessage を一括実行
+- `<<AddFragmentNote>>` で追加メモを蓄積 (AddThreadMessage のセマンティックエイリアス)
+- 事前に `<<DeclareThreadLatent>>` でスレッドを潜在登録しておくこと
 
 ### パターン B: キャラクターの合流
 

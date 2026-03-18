@@ -45,6 +45,8 @@
 | DeclareThreadLatentCond | `<<DeclareThreadLatentCond "id" "type" "name" "$condition">>` | 条件付き潜在登録。Yarn変数変更時に条件を自動評価し、trueで自動顕在化。Branch型は自動BeginBranch |
 | ManifestThread | `<<ManifestThread "id">>` | 潜在スレッドを顕在化。通知メッセージ+サイドバー追加 |
 | CompleteThread | `<<CompleteThread "id">>` | スレッドを完了状態にする。サイドバーでグレーアウト+チェックマーク |
+| DiscoverFragment | `<<DiscoverFragment "topicId" "threadId" "message">>` | 断片発見の一括実行: UnlockTopic + SystemMessage("断片「{title}」を記録") + ManifestThread + AddThreadMessage |
+| AddFragmentNote | `<<AddFragmentNote "threadId" "message">>` | スレッドへの断片関連メモ追加。AddThreadMessage のセマンティックエイリアス |
 
 ### Yarn 標準機能
 

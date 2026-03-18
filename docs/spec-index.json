@@ -195,7 +195,7 @@
     "pct": 100,
     "cat": "infra",
     "file": "docs/WORKFLOW_STATE_SSOT.md",
-    "summary": "現在の開発状態・セットアップ手順・次ステップ。全主要機能実装完了(22コマンド+HCゲート+Branch+レスポンシブ)。残: Phase Aクロージング手動検証(56項目)、Ch3設計"
+    "summary": "現在の開発状態・セットアップ手順・次ステップ。全主要機能実装完了(24コマンド+HCゲート+Branch+レスポンシブ)。残: Phase Aクロージング手動検証(56項目)、Ch3設計"
   },
   {
     "id": "EN-003",
@@ -258,7 +258,7 @@
     "pct": 100,
     "cat": "infra",
     "file": "docs/SCENARIO_AUTHORING_GUIDE.md",
-    "summary": "Yarnシナリオ執筆ハンズオン。5分クイックスタート、全22コマンドリファレンス(DeclareThreadLatentCond/BeginBranch/EndBranch/AddHalluciCoin含む)、キャラクターID一覧、コンテンツパターン集、キャラクターの声ガイド"
+    "summary": "Yarnシナリオ執筆ハンズオン。5分クイックスタート、全24コマンドリファレンス(DeclareThreadLatentCond/BeginBranch/EndBranch/AddHalluciCoin含む)、キャラクターID一覧、コンテンツパターン集、キャラクターの声ガイド"
   },
   {
     "id": "SP-018",
