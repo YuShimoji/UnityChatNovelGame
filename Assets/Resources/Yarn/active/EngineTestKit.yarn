@@ -43,6 +43,8 @@ title: ETK_Menu
     <<jump ETK_CondBranch>>
 -> 知識転送選択 テスト <<if not $etk_done_transferselect>>
     <<jump ETK_BranchTransferSelect>>
+-> サブスレッド実用モック (B型/C型/ライフサイクル)
+    <<jump ETK_SubthreadMock>>
 -> 自動検証 (Phase A Block D/E)
     <<jump ETK_AutoVerify>>
 -> テスト完了 <<if $etk_done_richtext and $etk_done_contradiction and $etk_done_commands and $etk_done_choices and $etk_done_threadtype and $etk_done_branch and $etk_done_condbranch and $etk_done_transferselect>>
@@ -704,6 +706,140 @@ title: ETK_CondBranch
 <<set $speaker to "player">>
 -> 確認した、メニューに戻る
     <<set $etk_done_condbranch to true>>
+    <<jump ETK_Menu>>
+===
+
+/// --------------------------------------------------
+/// ETK_SubthreadMock: サブスレッド実用モック (B型追跡/C型偵察/ライフサイクル一気通貫)
+/// 検証: 各型の体験差異、Wikiリンク/成果物カード、フルライフサイクル
+/// --------------------------------------------------
+title: ETK_SubthreadMock
+---
+<<SystemMessage "=== サブスレッド実用モック ===">>
+<<StartWait 0.3>>
+
+<<set $speaker to "pyramid">>
+3つのサブスレッドモックを順に実行します。
+
+<<StartWait 0.5>>
+
+// --- B型: 追跡スレッド (Tracking) ---
+<<SystemMessage "[B型] 追跡スレッド: Pyramidの行動追跡">>
+<<DeclareThreadTyped "mock_track_pyramid" "B" "Pyramid行動記録">>
+<<StartWait 0.3>>
+
+<<AddThreadChat "mock_track_pyramid" "pyramid" "第4管理区域への定期送信を確認。毎日 03:00 UTC。">>
+<<StartWait 0.2>>
+<<AddThreadChat "mock_track_pyramid" "pyramid" "送信先アドレスが先週から変更されている。[link:mock_note_analysis:分析メモを参照]">>
+<<StartWait 0.2>>
+<<AddThreadMessage "mock_track_pyramid" "送信パターン: 24時間周期 → 12時間周期に変化 (Day2以降)">>
+<<StartWait 0.3>>
+
+<<SystemMessage "[CHECK] サイドバーで「Pyramid行動記録」を開き、3件のメッセージを確認">>
+<<SystemMessage "[CHECK] 2件目のメッセージに [link:...] マークアップが表示されているか">>
+<<StartWait 5>>
+
+// --- C型: 偵察スレッド (Scout) ---
+<<SystemMessage "[C型] 偵察スレッド: 第4管理区域偵察">>
+<<DeclareThreadTyped "mock_scout_area4" "C" "第4管理区域偵察">>
+<<StartWait 0.3>>
+
+<<AddThreadChat "mock_scout_area4" "marco" "管理区域の入口を発見。セキュリティログを回収した。">>
+<<StartWait 0.2>>
+<<AddThreadMessage "mock_scout_area4" "[artifact:log:セキュリティログ断片 #4-A]">>
+<<StartWait 0.2>>
+<<AddThreadChat "mock_scout_area4" "marco" "奥の端末からデータを抽出。暗号化されている。">>
+<<StartWait 0.2>>
+<<AddThreadMessage "mock_scout_area4" "[artifact:data:暗号化データパケット #4-B]">>
+<<StartWait 0.3>>
+
+<<SystemMessage "[CHECK] サイドバーで「第4管理区域偵察」を開き、4件のメッセージを確認">>
+<<SystemMessage "[CHECK] [artifact:...] マークアップが成果物カード表示されているか">>
+<<SystemMessage "[CHECK] C型(オレンジ)のティントが適用されているか">>
+<<StartWait 5>>
+
+// --- A型: 分析覚書 (Annotation) ---
+<<SystemMessage "[A型] 分析覚書: Wikiリンク先">>
+<<DeclareThreadTyped "mock_note_analysis" "A" "分析メモ">>
+<<StartWait 0.3>>
+
+<<AddThreadMessage "mock_note_analysis" "Pyramidの送信パターン変化は、管理区域のセキュリティ更新と時期が一致する。">>
+<<StartWait 0.2>>
+<<AddThreadMessage "mock_note_analysis" "仮説: Pyramidは区域内部の変更を検知し、送信頻度を上げている可能性。">>
+<<StartWait 0.3>>
+
+<<SystemMessage "[CHECK] サイドバーで「分析メモ」を開き、A型(青)の情報カード表示を確認">>
+<<SystemMessage "[CHECK] B型の [link:mock_note_analysis:...] クリックでこのスレッドに遷移するか">>
+<<StartWait 5>>
+
+// --- ライフサイクル一気通貫テスト ---
+<<SystemMessage "--- ライフサイクル一気通貫テスト ---">>
+<<StartWait 0.3>>
+
+<<set $speaker to "pyramid">>
+ここから潜在→条件トリガー→顕在化→分岐→知識転送選択→完了→Save/Load の全工程をテストします。
+
+<<StartWait 0.5>>
+
+// Step 1: 潜在スレッド登録
+<<DeclareThreadLatent "mock_lifecycle" "A" "潜在分析結果">>
+<<AddThreadMessage "mock_lifecycle" "潜在中: この分析結果はまだプレイヤーに見えない">>
+<<SystemMessage "[CHECK] サイドバーに「潜在分析結果」が表示されていないこと">>
+<<StartWait 3>>
+
+// Step 2: 顕在化
+<<ManifestThread "mock_lifecycle">>
+<<SystemMessage "[CHECK] サイドバーに「潜在分析結果」が出現 + 通知表示">>
+<<StartWait 3>>
+
+// Step 3: 追加メッセージ
+<<AddThreadMessage "mock_lifecycle" "顕在化後の追加メッセージ: 分析の続き">>
+<<StartWait 0.5>>
+
+// Step 4: 分岐開始
+<<set $speaker to "pyramid">>
+分岐に入ります。トピックを取得し、選択UIで持ち帰る情報を選んでください。
+
+<<StartWait 0.5>>
+<<BeginBranch "mock_lifecycle_branch" "ライフサイクル分岐">>
+
+<<set $speaker to "pyramid">>
+分岐内でトピックを解錠します。
+
+<<UnlockTopic "etk_topic_alpha">>
+<<StartWait 0.2>>
+分析対象Alphaを発見しました。
+
+<<UnlockTopic "etk_topic_beta">>
+<<StartWait 0.2>>
+分析対象Betaも発見しました。
+
+<<StartWait 0.5>>
+
+<<set $speaker to "player">>
+-> 知識を選択して持ち帰る
+    <<EndBranch true "select">>
+-> 全て持ち帰る
+    <<EndBranch true>>
+
+<<StartWait 0.5>>
+
+<<set $speaker to "pyramid">>
+メインに戻りました。反映メッセージを確認してください。
+
+// Step 5: スレッド完了
+<<CompleteThread "mock_lifecycle">>
+<<SystemMessage "[CHECK] 「潜在分析結果」がグレーアウト+チェックマーク">>
+<<StartWait 3>>
+
+// Step 6: Save/Load テスト
+<<SystemMessage "[CHECK] ここでセーブ → シーン停止 → 再生 → ロード → 全スレッド復元を確認">>
+<<SystemMessage "復元確認項目: B型3件/C型4件/A型2件/潜在完了/分岐反映メッセージ">>
+
+<<StartWait 30>>
+
+<<set $speaker to "player">>
+-> 確認した、メニューに戻る
     <<jump ETK_Menu>>
 ===
 
