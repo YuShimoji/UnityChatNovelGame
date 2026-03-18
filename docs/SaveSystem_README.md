@@ -264,39 +264,29 @@ public class SubthreadData
 
 ## 既知の問題・制限事項 (2026-03-18 監査)
 
-### CRITICAL: YarnVariables の保存範囲
+### ~~CRITICAL: YarnVariables の保存範囲~~ — **修正済み** (6d87d3e)
 
-`SaveManager.GetYarnVariables()` は `$has_topic_*` プレフィックスの変数のみを保存する。以下の変数はセーブに含まれない:
+`SaveManager.GetYarnVariables()` は `$has_topic_*` プレフィックスの変数のみを保存する。`$halluci_coin` は `ApplySaveData` 内で `SetVariable<float>` を呼び出してYarn変数に同期するよう修正済み。
 
-- `$halluci_coin` — ContradictionManager.m_HalluciCoin から復元されるが、Yarn変数への同期 (`SyncHalluciCoinVariable`) が `ApplySaveData` に存在しない。ロード直後に `$halluci_coin` を参照するノードに入ると不正値になる可能性あり
-- `$speaker`, `$auto_speaker_after_choice` — ランタイム専用で保存不要
-- Yarnスクリプト内で `<<set>>` された任意のカスタム変数 — `$has_topic_*` 以外は保存されない
+残存制限: Yarnスクリプト内で `<<set>>` された `$has_topic_*` 以外のカスタム変数は保存されない。`$speaker`, `$auto_speaker_after_choice` はランタイム専用で保存不要。
 
-**対策案**: `ApplySaveData` 内で `SyncHalluciCoinVariable()` を呼ぶ / `GetYarnVariables` のフィルタを拡張
+### ~~HIGH: 分岐中セーブ→ロード時の TransferFlags クリア~~ — **修正済み** (6d87d3e)
 
-### HIGH: 分岐中セーブ→ロード時の TransferFlags クリア
+`BeginBranchThread()` で同一分岐が既にアクティブな場合は `TransferFlags.Clear()` をスキップするよう修正済み。
 
-`BeginBranchThread()` は常に `TransferFlags.Clear()` を実行する。ロード後に分岐中ノードから再生が開始されると、`BeginBranch` が再実行され TransferFlags がリセットされる。分岐途中で獲得済みのトピック情報が EndBranch 時の反映メッセージから欠落する。
+### ~~HIGH: EndBranch SelectionUI 中の StopScenario 割り込み~~ — **修正済み** (6d87d3e)
 
-**対策案**: `BeginBranchThread` で `IsActive==true` の場合は `Clear()` をスキップ / TransferFlags を SaveData に含める
-
-### HIGH: EndBranch SelectionUI 中の StopScenario 割り込み
-
-`EndBranch` の `async YarnTask` が SelectionUI の `while(!selectionDone)` で待機中に `StopScenario` が割り込むと、ループが抜けられない可能性がある。`CancelActiveWait` は Yarn の非同期継続を止めるが、C# の `while` ループとは同期されていない。
-
-**対策案**: `StopScenario` 時に `selectionDone=true` を強制セット / SelectionUI に CancellationToken を導入
+`StopScenario` で `TransferSelectionUI` が表示中なら強制非表示にするよう修正済み。Yarn側の非同期は `DialogueRunner.Stop()` で中断される。
 
 ### MEDIUM: ContradictionManager.m_CurrentChannel のロード後未設定
 
-`ApplySaveData` は `ContradictionManager.RestoreDiscovered` を呼ぶが、`SetCurrentChannel` を呼ばない。ロード直後は `m_CurrentChapter=1` (Inspector初期値) のままで、hint policy が正しくない。
+`ApplySaveData` は `ContradictionManager.RestoreDiscovered` を呼ぶが、`SetCurrentChannel` を呼ばない。現状のフローではダッシュボード画面を経由するため `SetCurrentChannel` が呼ばれるが、直接シナリオ再開パスでは hint policy がデフォルト値のまま。
 
 **対策案**: `ApplySaveData` で `SetCurrentChannel` を呼ぶ / ChannelIDを SaveData に含める
 
-### MEDIUM: 矛盾発見後の AutoSave 欠如
+### ~~MEDIUM: 矛盾発見後の AutoSave 欠如~~ — **修正済み** (6d87d3e)
 
-矛盾発見成功時 (`SelectSecond`) に AutoSave が呼ばれない。`EndDay` までに矛盾を発見してアプリを終了すると、発見データとコイン加算が失われる。
-
-**対策案**: `SelectSecond` 成功時に `SaveManager.Instance.AutoSave()` を呼ぶ
+矛盾発見成功時 (`SelectSecond`) に `SaveManager.Instance.AutoSave()` を呼び出すよう修正済み。
 
 ### LOW: UnreadCount のロード後復元
 
