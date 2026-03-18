@@ -9,14 +9,16 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
 現在の状況 (2026-03-18 session 4):
-  - Phase Aクロージング手動検証: 準備完了 (ETK_AutoVerify目視ガイド強化+最短実行フロー7ステップ/約60分)
-  - SP-014 partial (90%): Phase1-4全完了。手動検証で100%化
-  - SP-016 done (100%), SP-006 done (100%), SP-008 partial (90%)
-  - Yarnコマンド数: 22 (全ドキュメント同期済み)
-  - ETK: AutoVerify全[CHECK]メッセージ追加、BranchTransferSelect追加済み
-  - 次の作業: Unity Editor手動検証 → Phase A クロージング
+  - 体験逆算監査完了: 5仕様書にランタイムギャップ・検証不足を全反映
+  - ランタイムバグ4件修正済み: $halluci_coin同期(CRITICAL)/TransferFlags(HIGH)/SelectionUI(HIGH)/矛盾AutoSave(MEDIUM)
+  - Ch2サブスレッド全型組込: C型偵察(成果物カード)+B型追跡充実(6msg)+CompleteThread
+  - ETK_SubthreadMock追加: B型/C型/ライフサイクル一気通貫モック (136行)
+  - Phase Aクロージング手動検証: 準備完了 (ETK_AutoVerify目視ガイド+最短実行フロー7ステップ/約60分)
+  - SP-014 partial (90%), SP-016 done (100%), SP-008 partial (90%)
+  - 次の作業: Unity Editor手動検証 (Phase A 56項目 + ETK_SubthreadMock + Ch2新スレッド)
+  - 残存問題: m_CurrentChannel未設定(MEDIUM), UnreadCount復元(LOW)
   - 未着手: SP-009(サウンド), Ch3シナリオ設計
-  - SP-017(解放トリガー): 仕様未策定・spec-index未登録 → 手動検証後に要否判断
+  - SP-017(解放トリガー): SP-099内の未決定事項として管理
 
 ## DECISION LOG
 
@@ -41,6 +43,9 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 | 2026-03-17 | スマホレスポンシブ: CRITICAL+HIGH 3件一括 | CRITICAL+HIGH / CRITICALのみ / エンジン優先 / 両方並行 | バブル幅(canvas幅<800→0.85) + サイドバー幅(max 40%占有) + フォントサイズ(canvas幅<900→縮小)。CanvasScaler MatchWidthOrHeight=1.0推奨は別途 |
 | 2026-03-17 | SP-014 Branch Step2+: 全自動切替/自由切替/Yarn指定型反映 | 全自動/エントリ自動+復帰手動/両方手動, 自由切替/ロック, Yarn指定/自動生成/両方 | BeginBranch→自動切替、EndBranch→自動復帰。分岐中もサイドバーでMainに戻れる(自由切替)。反映メッセージはSetBranchReflectionでYarn作者が指定 |
 | 2026-03-17 | SP-014 Phase 4: 知識転送選択UIは能動選択型(B型)を採用 | 受動表示+活用選択 / 能動選択型 / 保留(現行維持) | EndBranch時にプレイヤーが「何を持ち帰るか」を選択。戦略性が最も高い。$has_topic変数はtrue維持(知っているが見せないだけ) |
+| 2026-03-18 | SP-017(解放トリガー)は独立仕様ではなくSP-099内の未決定事項として管理 | 独立仕様 / SP-099内管理 | 仕様ファイル・spec-index未登録のまま宙に浮いていた。Phase A検証後に独立化の要否を判断 |
+| 2026-03-18 | ランタイム既知問題4件を即時修正 (6d87d3e) | 即修正 / Phase A後 / 保留 | $halluci_coin同期(CRITICAL)は即修正が妥当。TransferFlags/SelectionUI/矛盾AutoSaveも修正コストが低く即対応 |
+| 2026-03-18 | Ch2にC型偵察スレッドを組み込み | C型追加 / ETKモックのみ / 保留 | Mason/Oliver の偵察設定と自然に接合。成果物カード+CompleteThreadの実チャプター検証が必要 |
 
 ## DEVELOPMENT PURPOSE
 
