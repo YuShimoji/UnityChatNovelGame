@@ -33,10 +33,12 @@ namespace ProjectFoundPhone.Editor
                 enableHints: true, maxHintDifficulty: 1);
 
             CreateChannel(folderPath, "ch3",
-                "Ch.3 -- (TBD)",
-                "(チャプター3 未定義)",
-                "Ch3_Opening", 3, "ch2",
-                enableHints: true, maxHintDifficulty: 2);
+                "Ch.3 -- Institutional Fragments",
+                "制度文書の発掘。不可索引物の予感。",
+                "Ch3_Day1_Opening", 3, "ch2",
+                enableHints: true, maxHintDifficulty: 2,
+                totalDays: 3,
+                dayStartNodeNames: new[] { "Ch3_Day1_Opening", "Ch3_Day2_Opening", "Ch3_Day3_Opening" });
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -45,7 +47,8 @@ namespace ProjectFoundPhone.Editor
 
         private static void CreateChannel(string folder, string id, string displayName,
             string description, string startNode, int chapterNum, string prerequisite,
-            bool enableHints = true, int maxHintDifficulty = 1)
+            bool enableHints = true, int maxHintDifficulty = 1,
+            int totalDays = 1, string[] dayStartNodeNames = null)
         {
             string path = $"{folder}/{id}.asset";
             if (AssetDatabase.LoadAssetAtPath<ChannelData>(path) != null)
@@ -64,6 +67,17 @@ namespace ProjectFoundPhone.Editor
             so.FindProperty("m_RequiredCompletedChannelID").stringValue = prerequisite;
             so.FindProperty("m_EnableHints").boolValue = enableHints;
             so.FindProperty("m_MaxHintDifficulty").intValue = maxHintDifficulty;
+            so.FindProperty("m_TotalDays").intValue = totalDays;
+            if (dayStartNodeNames != null)
+            {
+                var arr = so.FindProperty("m_DayStartNodeNames");
+                arr.ClearArray();
+                for (int i = 0; i < dayStartNodeNames.Length; i++)
+                {
+                    arr.InsertArrayElementAtIndex(i);
+                    arr.GetArrayElementAtIndex(i).stringValue = dayStartNodeNames[i];
+                }
+            }
             so.ApplyModifiedProperties();
 
             AssetDatabase.CreateAsset(data, path);

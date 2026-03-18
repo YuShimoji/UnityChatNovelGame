@@ -1,0 +1,495 @@
+/// Chapter 3: 地名混在の制度的理由"らしき"断片
+/// テーマ: 混在が仕様である可能性に触れる。不可索引物の予感
+/// 登場: Barnaby, Pyramid, Marco, Bernardo, Mason, Oliver
+/// 断片: 3個 (fragment_ch3_01〜03)
+/// 矛盾ペア: 3個 (ch3_*)
+/// サブスレッド: A型(文書分析) + B型(制度追跡) + C型(偵察報告)
+/// エンジン検証: DiscoverFragment実運用、複合トリガー、チャプター間接続
+
+title: Ch3_Day1_Opening
+---
+<<declare $ch3_asked_analysis = false>>
+<<declare $ch3_asked_mason_report = false>>
+<<declare $ch3_asked_system = false>>
+<<declare $ch3_hc_noticed = false>>
+
+// 潜在スレッド: ベルナルドの文書分析が始まったら顕在化
+<<DeclareThreadLatent "ch3_note_analysis" "A" "文書分析メモ">>
+
+// 潜在スレッド: 制度的なパターンが見えてきたら顕在化 (条件付き)
+<<DeclareThreadLatentCond "ch3_track_institution" "B" "制度追跡" "$has_topic_fragment_ch3_01">>
+<<AddThreadMessage "ch3_track_institution" "追跡対象: 制度文書と地名混在の関連パターン">>
+
+// 偵察スレッド: Mason/Oliverの報告で顕在化
+<<DeclareThreadLatent "ch3_scout_facility" "C" "施設偵察報告">>
+
+<<SystemMessage "--- 3日目 ---">>
+<<StartWait 1>>
+
+<<set $speaker to "pyramid">>
+<<Typing true>>
+<<StartWait 1.5>>
+<<Typing false>>
+
+おはようございます。本日のセッションを開始します。
+
+<<StartWait 0.5>>
+
+昨日のセッションで収集された情報について、分析が進んでいます。
+
+<<set $speaker to "bernardo">>
+<<StartWait 0.8>>
+
+おはよう。昨日から気になっていたことがある。
+
+<<StartWait 0.5>>
+
+Ch1 で見つかった「施設管理規約」とCh2 の「行政区画変遷記録」。文体を比較してみたんだ。
+
+<<set $speaker to "player">>
+-> 何か分かったのか？
+    <<jump Ch3_Day1_Hub>>
+-> ベルナルドらしいな
+    <<set $speaker to "bernardo">>
+    <<StartWait 0.5>>
+    職業病だよ。
+    <<jump Ch3_Day1_Hub>>
+===
+
+title: Ch3_Day1_Hub
+---
+<<set $speaker to "player">>
+-> ベルナルドの分析を聞かせてくれ <<if not $ch3_asked_analysis>>
+    <<set $ch3_asked_analysis to true>>
+    <<jump Ch3_Day1_Analysis>>
+-> Masonたちは今日も外に出たのか？ <<if not $ch3_asked_mason_report>>
+    <<set $ch3_asked_mason_report to true>>
+    <<jump Ch3_Day1_MasonReport>>
+-> Pyramid、システムの状態はどうだ？ <<if not $ch3_asked_system>>
+    <<set $ch3_asked_system to true>>
+    <<jump Ch3_Day1_System>>
+-> 今日はここまでにしよう <<if $ch3_asked_analysis and $ch3_asked_mason_report and $ch3_asked_system>>
+    <<jump Ch3_Day1_Winding>>
+-> もう少し考えよう <<if ($ch3_asked_analysis or $ch3_asked_mason_report or $ch3_asked_system) and not ($ch3_asked_analysis and $ch3_asked_mason_report and $ch3_asked_system)>>
+    <<jump Ch3_Day1_Hub>>
+===
+
+title: Ch3_Day1_Analysis
+---
+<<set $speaker to "bernardo">>
+<<StartWait 1>>
+
+2つの文書断片を並べてみた。 #line:ch3_doc_style_src
+
+<<StartWait 0.5>>
+
+施設管理規約は「第N次改定」という番号体系を使っている。行政区画変遷記録は「■年■月■日施行」の日付体系。
+
+<<StartWait 0.8>>
+
+でも面白いことに、両方とも「参照先文書」が欠損している。偶然じゃない。 #line:ch3_reference_gap_src
+
+<<set $speaker to "marco">>
+<<StartWait 0.5>>
+
+偶然じゃないって、どういう意味だ？ #line:ch3_doc_style_tgt
+
+<<set $speaker to "bernardo">>
+<<StartWait 0.8>>
+
+新聞社にいた頃、こういうパターンは「意図的な墨消し」か「体系的な参照削除」のどちらかだった。
+
+<<StartWait 0.5>>
+
+つまり、誰かがこれらの文書の接続先を消している。
+
+// DiscoverFragment: 断片発見 + スレッド顕在化を一括実行
+<<DiscoverFragment "fragment_ch3_01" "ch3_note_analysis" "文体分析: 施設管理規約と行政区画変遷記録の参照先が体系的に欠損。意図的削除の可能性">>
+<<AddFragmentNote "ch3_note_analysis" "番号体系(第N次改定) vs 日付体系(■年■月施行) — 異なる発行元が統一管理されている形跡">>
+
+<<StartWait 0.5>>
+
+<<set $speaker to "pyramid">>
+<<StartWait 0.8>>
+
+興味深い分析です。ただし、参照先文書の欠損は通信環境による劣化の可能性もあります。 #line:ch3_reference_gap_tgt
+
+<<set $speaker to "bernardo">>
+<<StartWait 0.5>>
+
+通信環境で、複数文書から同じカテゴリの参照だけが選択的に消える？ それは「劣化」とは呼ばないよ、Pyramid。
+
+<<jump Ch3_Day1_Hub>>
+===
+
+title: Ch3_Day1_MasonReport
+---
+<<set $speaker to "mason">>
+<<StartWait 0.8>>
+
+今日は少し遠くまで行ってきた。
+
+<<StartWait 0.5>>
+
+閉鎖された建物がある。入口に公式な封鎖テープが貼ってあった。
+
+<<set $speaker to "oliver">>
+<<StartWait 0.5>>
+
+テープに印字があった。「管理局告示 第■■号 — 閉鎖期間：■年■月■日まで」。
+
+<<StartWait 0.5>>
+
+でも、その日付は既に過ぎているように見える。 #line:ch3_closure_date_src
+
+<<set $speaker to "pyramid">>
+<<StartWait 0.8>>
+
+該当する管理局告示は本端末のデータベースに登録されていません。 #line:ch3_closure_date_tgt
+
+// C型偵察スレッド顕在化 + 成果物カード
+<<ManifestThread "ch3_scout_facility">>
+<<AddThreadChat "ch3_scout_facility" "mason" "閉鎖建物を発見。公式封鎖テープあり。">>
+<<AddThreadMessage "ch3_scout_facility" "[artifact:photo:封鎖テープの印字 — 管理局告示第■■号]">>
+<<AddThreadChat "ch3_scout_facility" "oliver" "閉鎖期限は過ぎているように見えるが、テープは新しい。">>
+
+<<set $speaker to "marco">>
+<<StartWait 0.5>>
+
+また「登録されていない」か。Pyramidのデータベースってどうなってるんだ。
+
+<<jump Ch3_Day1_Hub>>
+===
+
+title: Ch3_Day1_System
+---
+<<set $speaker to "pyramid">>
+<<StartWait 1>>
+
+現在の通信品質は昨日と同程度です。
+
+<<StartWait 0.5>>
+
+なお、皆さまの活動報酬について補足があります。
+
+<<StartWait 0.8>>
+
+<<set $speaker to "marco">>
+報酬？
+
+<<set $speaker to "pyramid">>
+<<StartWait 0.5>>
+
+HalluciCoin の残高が更新されています。詳細はダッシュボードでご確認ください。
+
+// 演出: HCが「いつの間にか増えている」初回 (SP-003ビート)
+<<AddHalluciCoin 2>>
+
+<<set $speaker to "marco">>
+<<StartWait 0.8>>
+
+...いつの間に増えたんだ？ 俺は何もした覚えがないぞ。
+
+<<set $speaker to "pyramid">>
+<<StartWait 0.5>>
+
+活動への貢献に基づく自動付与です。詳細なロジックは開示されていません。
+
+<<set $speaker to "marco">>
+<<StartWait 0.3>>
+
+開示されていない、ね。
+
+<<set $ch3_hc_noticed to true>>
+
+<<jump Ch3_Day1_Hub>>
+===
+
+title: Ch3_Day1_Winding
+---
+<<set $speaker to "pyramid">>
+<<StartWait 1>>
+
+本日の推奨セッション時間に近づいています。
+
+<<set $speaker to "bernardo">>
+<<StartWait 0.8>>
+
+今日の発見は大きい。文書の参照欠損が偶然ではない可能性が見えてきた。
+
+<<set $speaker to "marco">>
+<<StartWait 0.5>>
+
+それと、HalluciCoinが勝手に増える件。なんか気持ち悪いな。
+
+<<set $speaker to "pyramid">>
+<<StartWait 0.5>>
+
+明日のセッションで、さらに詳しく分析できるかもしれません。
+
+<<AddThreadMessage "ch3_note_analysis" "Day1まとめ: 参照欠損パターンの発見。制度的意図の可能性">>
+
+<<EndDay 1>>
+===
+
+/// Chapter 3 Day 2: 制度文書の発掘
+
+title: Ch3_Day2_Opening
+---
+<<declare $ch3_d2_asked_deeper = false>>
+<<declare $ch3_d2_asked_scout = false>>
+
+<<SystemMessage "--- 4日目 ---">>
+<<StartWait 1>>
+
+<<set $speaker to "bernardo">>
+<<Typing true>>
+<<StartWait 1.5>>
+<<Typing false>>
+
+おはよう。昨日の分析の続きだが、もう少し掘り下げてみた。
+
+<<StartWait 0.5>>
+
+<<set $speaker to "player">>
+-> 聞かせてくれ
+    <<jump Ch3_Day2_Hub>>
+===
+
+title: Ch3_Day2_Hub
+---
+<<set $speaker to "player">>
+-> ベルナルドの深掘り分析 <<if not $ch3_d2_asked_deeper>>
+    <<set $ch3_d2_asked_deeper to true>>
+    <<jump Ch3_Day2_DeeperAnalysis>>
+-> 偵察の続きはあるか？ <<if not $ch3_d2_asked_scout>>
+    <<set $ch3_d2_asked_scout to true>>
+    <<jump Ch3_Day2_Scout>>
+-> 今日はここまで <<if $ch3_d2_asked_deeper and $ch3_d2_asked_scout>>
+    <<jump Ch3_Day2_Winding>>
+-> もう少し <<if ($ch3_d2_asked_deeper or $ch3_d2_asked_scout) and not ($ch3_d2_asked_deeper and $ch3_d2_asked_scout)>>
+    <<jump Ch3_Day2_Hub>>
+===
+
+title: Ch3_Day2_DeeperAnalysis
+---
+<<set $speaker to "bernardo">>
+<<StartWait 1>>
+
+端末に新しい断片が表示された。今度は制度文書のフォーマットだ。
+
+<<StartWait 0.5>>
+
+「管理区域移行計画書（案）」— 但し、承認印の箇所が黒塗りになっている。
+
+<<StartWait 0.8>>
+
+面白いのは、この文書の書式が施設管理規約と完全に一致していること。同じ発行元だ。
+
+<<DiscoverFragment "fragment_ch3_02" "ch3_note_analysis" "管理区域移行計画書（案）: 承認印黒塗り。施設管理規約と同一書式 — 同一発行元の証拠">>
+<<AddFragmentNote "ch3_note_analysis" "Ch1の規約とCh3の計画書が同一フォーマット → 管理局が横断的に文書を管理している">>
+
+// B型追跡スレッドに制度パターンを記録
+<<AddThreadMessage "ch3_track_institution" "制度パターン #1: 施設管理規約 ↔ 管理区域移行計画書 = 同一書式">>
+<<AddThreadMessage "ch3_track_institution" "[link:ch3_note_analysis:文書分析メモ参照] — ベルナルドの文体照合">>
+
+<<set $speaker to "marco">>
+<<StartWait 0.5>>
+
+同じ発行元か。つまり「第4管理区域」とか「ウェストフィールド地区」とか、全部同じところが管理してるってことか？
+
+<<set $speaker to "bernardo">>
+<<StartWait 0.8>>
+
+その可能性がある。そしてその「管理局」は、自分の文書を自分で検索不能にしている。
+
+<<jump Ch3_Day2_Hub>>
+===
+
+title: Ch3_Day2_Scout
+---
+<<set $speaker to "mason">>
+<<StartWait 0.8>>
+
+昨日の閉鎖建物の中を覗いてきた。窓から見えた範囲だけだが。
+
+<<StartWait 0.5>>
+
+中に端末があった。我々のものと似ている。電源は入っていない。
+
+<<set $speaker to "oliver">>
+<<StartWait 0.5>>
+
+建物の脇に小さな掲示板があった。「コミュニティ通知」と書いてある。
+
+<<StartWait 0.5>>
+
+でも通知の紙は全部剥がされていた。鋲だけが残ってる。
+
+<<AddThreadChat "ch3_scout_facility" "mason" "閉鎖建物内部に端末を確認。電源OFF。我々のものと同型。">>
+<<AddThreadMessage "ch3_scout_facility" "[artifact:sketch:建物内部見取り図 — 窓越しの概略]">>
+<<AddThreadChat "ch3_scout_facility" "oliver" "掲示板発見。通知は全て剥がされている。鋲のみ残存。">>
+<<AddThreadMessage "ch3_scout_facility" "[artifact:photo:空の掲示板 — 鋲の配置パターンから推定4-5枚の通知が貼られていた]">>
+
+<<set $speaker to "marco">>
+<<StartWait 0.5>>
+
+通知が剥がされてる？ 誰が？
+
+<<set $speaker to "mason">>
+<<StartWait 0.5>>
+
+分からない。でも鋲の錆具合から見て、最近のことじゃない。
+
+<<jump Ch3_Day2_Hub>>
+===
+
+title: Ch3_Day2_Winding
+---
+<<set $speaker to "bernardo">>
+<<StartWait 1>>
+
+今日の発見をまとめると...同じ管理局が複数の制度文書を発行し、その参照先を体系的に消している。
+
+<<StartWait 0.5>>
+
+そして、閉鎖建物の中にも我々と同じ端末がある。
+
+<<set $speaker to "marco">>
+<<StartWait 0.8>>
+
+俺たちだけじゃないってことか。他にも「配属」された奴がいる？
+
+<<set $speaker to "pyramid">>
+<<StartWait 0.5>>
+
+本日のセッションを終了します。
+
+<<AddThreadMessage "ch3_track_institution" "Day2: 管理局の横断的文書管理を確認。閉鎖建物に同型端末を発見">>
+
+<<EndDay 2>>
+===
+
+/// Chapter 3 Day 3: 不可索引物の予感
+
+title: Ch3_Day3_Opening
+---
+<<declare $ch3_d3_asked_final = false>>
+
+<<SystemMessage "--- 5日目 ---">>
+<<StartWait 1>>
+
+<<set $speaker to "bernardo">>
+<<Typing true>>
+<<StartWait 2>>
+<<Typing false>>
+
+おはよう。重要な発見がある。
+
+<<StartWait 0.5>>
+
+<<set $speaker to "player">>
+-> 何を見つけた？
+    <<jump Ch3_Day3_Hub>>
+===
+
+title: Ch3_Day3_Hub
+---
+<<set $speaker to "player">>
+-> ベルナルドの最終分析 <<if not $ch3_d3_asked_final>>
+    <<set $ch3_d3_asked_final to true>>
+    <<jump Ch3_Day3_FinalAnalysis>>
+-> 今日で一区切りだな <<if $ch3_d3_asked_final>>
+    <<jump Ch3_Day3_Closing>>
+-> もう少し考えよう
+    <<jump Ch3_Day3_Hub>>
+===
+
+title: Ch3_Day3_FinalAnalysis
+---
+<<set $speaker to "bernardo">>
+<<StartWait 1>>
+
+端末にもう1つ断片が現れた。今度はさらに決定的だ。
+
+<<StartWait 0.8>>
+
+「管理区域統合運用規則（暫定版）」— 第1条に「本規則は公開索引に登録しない」と明記されている。
+
+<<StartWait 0.5>>
+
+つまり、この文書は最初から検索に出ないように設計されている。「壊れている」のではなく「そういう仕様」なんだ。
+
+<<DiscoverFragment "fragment_ch3_03" "ch3_note_analysis" "管理区域統合運用規則（暫定版）: 第1条で公開索引からの除外を明記。不可索引物の制度的根拠">>
+<<AddFragmentNote "ch3_note_analysis" "Ch1-3の全断片に共通する参照欠損は、偶然でも劣化でもなく、制度として設計されたもの">>
+
+<<set $speaker to "marco">>
+<<StartWait 0.8>>
+
+...マジか。最初から検索に出ないように作られてる文書？
+
+<<set $speaker to "bernardo">>
+<<StartWait 0.5>>
+
+ベルナルドはこれを「不可索引物」と呼んだ。索引に載らない情報。検索しても引っかからない文書。
+
+<<StartWait 0.5>>
+
+それが偶然ここに漂着している。
+
+<<set $speaker to "pyramid">>
+<<StartWait 1>>
+
+<<Glitch 1>>
+<<StartWait 0.5>>
+
+...通信環境が不安定です。
+
+<<set $speaker to "marco">>
+<<StartWait 0.5>>
+
+今のタイミング、偶然か？ ベルナルドが核心に触れたら端末がバグる。
+
+<<AddThreadMessage "ch3_track_institution" "Day3: 不可索引物の制度的根拠を発見。第1条で索引除外を明記">>
+
+// 偵察スレッド完了
+<<AddThreadChat "ch3_scout_facility" "mason" "閉鎖建物の端末は回収不可能。建物自体が再封鎖された。">>
+<<AddThreadMessage "ch3_scout_facility" "偵察まとめ: 閉鎖建物+同型端末+空掲示板 — 我々以外の「配属者」の痕跡">>
+<<CompleteThread "ch3_scout_facility">>
+
+<<jump Ch3_Day3_Hub>>
+===
+
+title: Ch3_Day3_Closing
+---
+<<set $speaker to "bernardo">>
+<<StartWait 1>>
+
+今回の発見で確信した。この地域の混乱は偶然ではない。制度的に設計されている。
+
+<<StartWait 0.5>>
+
+次のセッションでは、この「管理局」がどういう組織なのか、もっと掘り下げたい。
+
+<<set $speaker to "marco">>
+<<StartWait 0.8>>
+
+同感だ。HalluciCoinが勝手に増える件もな。
+
+<<set $speaker to "oliver">>
+<<StartWait 0.5>>
+
+明日は別の方角を偵察してみる。何か見つかるかもしれない。
+
+<<set $speaker to "pyramid">>
+<<StartWait 1>>
+
+本日のセッションを終了します。第1部のセッションはこれで完了です。お疲れさまでした。
+
+// Ch3 セッション参加報酬
+<<AddHalluciCoin 3>>
+
+<<SystemMessage "第1部：入口の校正 — 完了">>
+
+<<EndDay 3>>
+===
