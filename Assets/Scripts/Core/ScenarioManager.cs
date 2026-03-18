@@ -35,6 +35,9 @@ namespace ProjectFoundPhone.Core
         private BranchThreadState m_BranchThreadState = new BranchThreadState();
         private ChannelData m_CurrentChannel;
 
+        /// <summary>現在のチャンネルID (セーブ/ロード用)</summary>
+        public string CurrentChannelID => m_CurrentChannel != null ? m_CurrentChannel.ChannelID : null;
+
         /// <summary>宣言済みサブスレッド (threadId -> SubthreadData)</summary>
         private readonly Dictionary<string, SubthreadData> m_DeclaredThreads
             = new Dictionary<string, SubthreadData>();

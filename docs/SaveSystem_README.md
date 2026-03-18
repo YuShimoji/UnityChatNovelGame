@@ -278,11 +278,9 @@ public class SubthreadData
 
 `StopScenario` で `TransferSelectionUI` が表示中なら強制非表示にするよう修正済み。Yarn側の非同期は `DialogueRunner.Stop()` で中断される。
 
-### MEDIUM: ContradictionManager.m_CurrentChannel のロード後未設定
+### ~~MEDIUM: ContradictionManager.m_CurrentChannel のロード後未設定~~ — **修正済み**
 
-`ApplySaveData` は `ContradictionManager.RestoreDiscovered` を呼ぶが、`SetCurrentChannel` を呼ばない。現状のフローではダッシュボード画面を経由するため `SetCurrentChannel` が呼ばれるが、直接シナリオ再開パスでは hint policy がデフォルト値のまま。
-
-**対策案**: `ApplySaveData` で `SetCurrentChannel` を呼ぶ / ChannelIDを SaveData に含める
+`SaveData.CurrentChannelID` フィールドを追加。`ApplySaveData` で `ScenarioManager.SetCurrentChannel` と `ContradictionManager.SetCurrentChannel` の両方を復元するよう修正。EndDay のチャンネル進捗記録とヒントポリシーが Load 後も正しく動作する。
 
 ### ~~MEDIUM: 矛盾発見後の AutoSave 欠如~~ — **修正済み** (6d87d3e)
 

@@ -17,7 +17,7 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
   - Ch2サブスレッド全型組込: C型偵察+B型追跡充実+CompleteThread
   - IDEA POOL整備(6件) + Phase Aチェックリスト拡充(10Step/80分)
   - 次の作業: Unity Editor手動検証(70分) + Ch3 SO作成(TopicData3件+ContradictionPair3件+ch3.asset)
-  - 残存問題: m_CurrentChannel未設定(MEDIUM), UnreadCount復元(LOW)
+  - 残存問題: UnreadCount復元(LOW) ※m_CurrentChannel未設定は修正済み
   - 手動検証なしで進められる作業: Ch4-9ビート設計/SP-009仕様/オーサリングガイド/IDEA POOL再訪
 
 ## DECISION LOG

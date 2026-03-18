@@ -171,6 +171,7 @@ namespace ProjectFoundPhone.Core
                 saveData.CurrentNodeName = GetCurrentNodeName(scenarioManager);
                 saveData.YarnVariables = GetYarnVariables(scenarioManager);
                 saveData.BranchThread = scenarioManager.GetBranchThreadStateSnapshot();
+                saveData.CurrentChannelID = scenarioManager.CurrentChannelID;
             }
             else
             {
@@ -397,6 +398,16 @@ namespace ProjectFoundPhone.Core
                 contradictionManager.RestoreDiscovered(
                     saveData.DiscoveredContradictionIDs ?? new List<string>(),
                     saveData.HalluciCoin);
+
+                // ヒントポリシーを復元 (CurrentChannelのEnableHints/MaxHintDifficulty)
+                if (!string.IsNullOrEmpty(saveData.CurrentChannelID))
+                {
+                    ChannelData channelForHints = Resources.Load<ChannelData>($"Channels/{saveData.CurrentChannelID}");
+                    if (channelForHints != null)
+                    {
+                        contradictionManager.SetCurrentChannel(channelForHints);
+                    }
+                }
             }
 
             ScenarioManager scenarioManager = FindFirstObjectByType<ScenarioManager>();
@@ -444,6 +455,20 @@ namespace ProjectFoundPhone.Core
                 }
 
                 scenarioManager.ApplyBranchThreadState(saveData.BranchThread);
+
+                // m_CurrentChannel を復元 (EndDay が正しいチャンネルに進捗を記録するために必要)
+                if (!string.IsNullOrEmpty(saveData.CurrentChannelID))
+                {
+                    ChannelData channelData = Resources.Load<ChannelData>($"Channels/{saveData.CurrentChannelID}");
+                    if (channelData != null)
+                    {
+                        scenarioManager.SetCurrentChannel(channelData);
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"SaveManager: ChannelData '{saveData.CurrentChannelID}' not found in Resources.");
+                    }
+                }
 
                 if (!string.IsNullOrEmpty(saveData.CurrentNodeName))
                 {
