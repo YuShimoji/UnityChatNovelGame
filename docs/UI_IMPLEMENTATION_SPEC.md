@@ -383,7 +383,7 @@ canvas 幅に応じて UI パラメータを動的に調整する。`CanvasScale
 | SystemMessage ルーティング | 現在は全てチャットバブルとして表示。ステータスバー/トースト分岐は TODO (ChatController.cs:1056) |
 | ~~画面リサイズ~~ | **修正済み** (8b22b71): `GetContainerWidth()` で `RectTransform.rect.width` を使用。Canvas スケーリングに追従 |
 | ~~セーブ復元時の名前表示~~ | **修正済み** (147b36d): `StripNamePrefix()` で復元前に名前リッチテキストを除去 |
-| チャンネルレジューム | チャンネル選択は常に `StartNodeName` から再開始。途中復帰は未対応 |
+| ~~チャンネルレジューム~~ | **実装済み**: Day Resume (`EndDay` コマンド + `ChannelDayProgress` + Dashboard Day判定)。チャンネル選択時に最終Day+1のノードから再開 |
 | ~~文字化けコメント~~ | **修正済み** (2a34836): ScenarioManager / CoreLogicTests / SaveLoadUI / SaveSlotUI の全92行を UTF-8 日本語に復元 |
 
 ---

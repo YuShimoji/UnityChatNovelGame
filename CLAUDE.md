@@ -8,13 +8,16 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
-現在の状況 (2026-03-17 session 4):
-  - エンジン基盤: 全主要機能実装完了 (Yarnコマンド22種, サブスレッドStep1-4, Branch Phase1-4, HCゲート, レスポンシブ)
-  - SP-014 partial (90%): Phase1-4全完了。残: ブランチ間クロスリファレンスUI, アルケミーボード
-  - SP-016 done (100%), SP-006 done (100%), SP-008 90%
-  - 仕様ドキュメント乖離修正完了: 16_subthread_ui.md, 14_interaction_mechanics.md, ENGINE_FEATURE_INVENTORY.md
-  - 手動検証待ち: Phase Aクロージング73項目 (全未チェック)
-  - 未着手: SP-009(サウンド), Ch3シナリオ設計, SP-017(解放トリガー仕様)
+現在の状況 (2026-03-18 session 5 REFRESH):
+  - 16コミット push済み (session 4: 14 + session 5: 2)
+  - REFRESH実施: 体験逆算で3つの体験断面欠落を特定し仕様化
+  - m_CurrentChannel Load後復元修正 (SaveData.CurrentChannelID追加)
+  - docs同期: 22→24コマンド (AUTHORING_GUIDE/WORKFLOW_SSOT)
+  - 新規仕様3件: SP-019チャプター遷移体験(DRAFT) / SP-020オンボーディング(DRAFT) / Ch4-9エンジン要件先読み
+  - Ch4-9エンジン要件: 裏切りUI(HIGH)/画面演出(MEDIUM)/エンディングシステム(HIGH)/AI変調(MEDIUM) 等8件抽出
+  - 次の作業: Unity Editor手動検証(70分) + Ch3 SO作成 + SP-019/020のHUMAN_AUTHORITY承認
+  - 残存問題: UnreadCount復元(LOW)
+  - spec-index: 25エントリ (done 16 / partial 5 / draft 2 / todo 2)
 
 ## DECISION LOG
 
@@ -39,6 +42,23 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 | 2026-03-17 | スマホレスポンシブ: CRITICAL+HIGH 3件一括 | CRITICAL+HIGH / CRITICALのみ / エンジン優先 / 両方並行 | バブル幅(canvas幅<800→0.85) + サイドバー幅(max 40%占有) + フォントサイズ(canvas幅<900→縮小)。CanvasScaler MatchWidthOrHeight=1.0推奨は別途 |
 | 2026-03-17 | SP-014 Branch Step2+: 全自動切替/自由切替/Yarn指定型反映 | 全自動/エントリ自動+復帰手動/両方手動, 自由切替/ロック, Yarn指定/自動生成/両方 | BeginBranch→自動切替、EndBranch→自動復帰。分岐中もサイドバーでMainに戻れる(自由切替)。反映メッセージはSetBranchReflectionでYarn作者が指定 |
 | 2026-03-17 | SP-014 Phase 4: 知識転送選択UIは能動選択型(B型)を採用 | 受動表示+活用選択 / 能動選択型 / 保留(現行維持) | EndBranch時にプレイヤーが「何を持ち帰るか」を選択。戦略性が最も高い。$has_topic変数はtrue維持(知っているが見せないだけ) |
+| 2026-03-18 | SP-017(解放トリガー)は独立仕様ではなくSP-099内の未決定事項として管理 | 独立仕様 / SP-099内管理 | 仕様ファイル・spec-index未登録のまま宙に浮いていた。Phase A検証後に独立化の要否を判断 |
+| 2026-03-18 | ランタイム既知問題4件を即時修正 (6d87d3e) | 即修正 / Phase A後 / 保留 | $halluci_coin同期(CRITICAL)は即修正が妥当。TransferFlags/SelectionUI/矛盾AutoSaveも修正コストが低く即対応 |
+| 2026-03-18 | Ch2にC型偵察スレッドを組み込み | C型追加 / ETKモックのみ / 保留 | Mason/Oliver の偵察設定と自然に接合。成果物カード+CompleteThreadの実チャプター検証が必要 |
+| 2026-03-18 | 主人公裏切りUIはd)複合段階式を採用 | a色差異のみ / c時系列 / d複合 / 保留 | Ch6→a(色)、Ch7→c(タイムスタンプ)、Ch8→b(ログ改竄)の段階的不信感蓄積。MVP: Ch6でaのみ先行検証 |
+| 2026-03-18 | コンテンツ量: 断片3/ch + スレッド2-3/ch | 2/ch / 3/ch / 4+/ch | 9章x3=27断片、9章x2.5=22スレッド。Ch1-2実績と整合し管理可能な規模 |
+| 2026-03-18 | サブスレッド解放は複合トリガー方式 | HCのみ / ストーリーのみ / 複合 / 保留 | HC閾値+ストーリー進行+断片収集の3条件OR。既存エンジン機能(DeclareThreadLatentCond+ChannelData)で新規実装不要 |
+
+## IDEA POOL
+
+| ID | アイデア | 状態 | 関連領域 | 再訪トリガー |
+|----|----------|------|----------|--------------|
+| IP-001 | アルケミーボード (DeductionBoard) の再活性化 | hold | system/SP-014 | 矛盾メカニクスが3章以上で安定運用された時 |
+| IP-002 | B型Wikiリンク遷移の本格実装 | hold | ui/SP-016 | B型追跡スレッドのコンテンツが3章分揃った時 |
+| IP-003 | C型成果物カードのリッチ表示 (アイコン+インタラクション) | hold | ui/SP-016 | C型偵察スレッドのUnitiy手動検証完了後 |
+| IP-004 | ProgressTracker Phase 2: チャプター間接続の可視化 | hold | ui/SP-018 | Ch3設計でチャプター間接続パターンが明確になった時 |
+| IP-005 | オーサリングコマンド拡張: <<DeclareAndDiscover>> (宣言+発見一括) | hold | tooling | Ch3制作でDiscoverFragmentの使い勝手を評価した後 |
+| IP-006 | 主人公裏切りUI Phase 1: テキスト色差異 (a) の先行実装 | hold | system/SP-099 | Ch5-6のシナリオ設計に着手した時 |
 
 ## DEVELOPMENT PURPOSE
 

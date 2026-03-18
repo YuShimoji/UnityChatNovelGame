@@ -293,6 +293,36 @@ public class SubthreadData
 
 ---
 
+## 既知の問題・制限事項 (2026-03-18 監査)
+
+### ~~CRITICAL: YarnVariables の保存範囲~~ — **修正済み** (6d87d3e)
+
+`SaveManager.GetYarnVariables()` は `$has_topic_*` プレフィックスの変数のみを保存する。`$halluci_coin` は `ApplySaveData` 内で `SetVariable<float>` を呼び出してYarn変数に同期するよう修正済み。
+
+残存制限: Yarnスクリプト内で `<<set>>` された `$has_topic_*` 以外のカスタム変数は保存されない。`$speaker`, `$auto_speaker_after_choice` はランタイム専用で保存不要。
+
+### ~~HIGH: 分岐中セーブ→ロード時の TransferFlags クリア~~ — **修正済み** (6d87d3e)
+
+`BeginBranchThread()` で同一分岐が既にアクティブな場合は `TransferFlags.Clear()` をスキップするよう修正済み。
+
+### ~~HIGH: EndBranch SelectionUI 中の StopScenario 割り込み~~ — **修正済み** (6d87d3e)
+
+`StopScenario` で `TransferSelectionUI` が表示中なら強制非表示にするよう修正済み。Yarn側の非同期は `DialogueRunner.Stop()` で中断される。
+
+### ~~MEDIUM: ContradictionManager.m_CurrentChannel のロード後未設定~~ — **修正済み**
+
+`SaveData.CurrentChannelID` フィールドを追加。`ApplySaveData` で `ScenarioManager.SetCurrentChannel` と `ContradictionManager.SetCurrentChannel` の両方を復元するよう修正。EndDay のチャンネル進捗記録とヒントポリシーが Load 後も正しく動作する。
+
+### ~~MEDIUM: 矛盾発見後の AutoSave 欠如~~ — **修正済み** (6d87d3e)
+
+矛盾発見成功時 (`SelectSecond`) に `SaveManager.Instance.AutoSave()` を呼び出すよう修正済み。
+
+### LOW: UnreadCount のロード後復元
+
+`SubthreadData.UnreadCount` はシリアライズ対象だが、ロード後にバッジ表示との整合が未検証。セーブ時点の UnreadCount がそのまま復元されるため、ロード後にスレッドを開いていないのにバッジが 0 になるケース (またはその逆) が起こりうる。
+
+---
+
 ## 今後の拡張予定
 
 ### Phase 2

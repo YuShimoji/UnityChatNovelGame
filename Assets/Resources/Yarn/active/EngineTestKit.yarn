@@ -43,6 +43,8 @@ title: ETK_Menu
     <<jump ETK_CondBranch>>
 -> 知識転送選択 テスト <<if not $etk_done_transferselect>>
     <<jump ETK_BranchTransferSelect>>
+-> サブスレッド実用モック (B型/C型/ライフサイクル)
+    <<jump ETK_SubthreadMock>>
 -> 自動検証 (Phase A Block D/E)
     <<jump ETK_AutoVerify>>
 -> テスト完了 <<if $etk_done_richtext and $etk_done_contradiction and $etk_done_commands and $etk_done_choices and $etk_done_threadtype and $etk_done_branch and $etk_done_condbranch and $etk_done_transferselect>>
@@ -199,6 +201,22 @@ AutoSpeakerAfterChoice が ON です。選択肢を選ぶと $speaker が自動�
     選択肢Bの後、次の行でspeakerがplayerに自動セットされました（確認用）。
 
 <<set $auto_speaker_after_choice to false>>
+
+<<SystemMessage "--- DiscoverFragment テスト ---">>
+<<DeclareThreadLatent "etk_discover_test" "A" "発見テストメモ">>
+<<StartWait 0.3>>
+
+<<set $speaker to "pyramid">>
+DiscoverFragment コマンドをテストします。1コマンドで断片解錠+通知+スレッド顕在化+メッセージ追加が実行されます。
+
+<<StartWait 0.5>>
+
+<<DiscoverFragment "test_fragment_01" "etk_discover_test" "テスト断片の分析結果: システム化コマンドが正常動作">>
+<<AddFragmentNote "etk_discover_test" "補足: AddFragmentNote はセマンティックエイリアスとして動作">>
+
+<<StartWait 0.5>>
+<<SystemMessage "[CHECK] サイドバーに「発見テストメモ」が出現し、2件のメッセージが表示されるか確認">>
+<<StartWait 3>>
 
 <<set $speaker to "pyramid">>
 全コマンドのテスト完了。
@@ -527,60 +545,125 @@ title: ETK_Branch
 ===
 
 /// --------------------------------------------------
-/// ETK_AutoVerify: Phase A 自動検証 (Block D/E)
+/// ETK_AutoVerify: Phase A 自動検証 (Block D/E/F)
 /// スレッド宣言→切替→未読→潜在→顕在→完了→Save/Load の導線を自動実行
+/// 目視確認ポイントを SystemMessage で案内
 /// --------------------------------------------------
 title: ETK_AutoVerify
 ---
 <<SystemMessage "=== Phase A 自動検証開始 ===">>
-<<StartWait 0.3>>
+<<SystemMessage "各 [CHECK] メッセージで目視確認してください">>
+<<StartWait 0.5>>
 
-// --- Block D: スレッド基本操作 ---
+// --- Block D-1: スレッド宣言と基本表示 ---
 <<SystemMessage "[D-1] スレッド宣言テスト">>
 <<DeclareThreadTyped "av_note" "A" "検証用覚書">>
 <<DeclareThreadTyped "av_track" "B" "検証用追跡">>
 <<DeclareThreadTyped "av_scout" "C" "検証用偵察">>
-<<StartWait 0.3>>
+<<StartWait 0.5>>
+<<SystemMessage "[CHECK D-1a] 左上にハンバーガーボタン (≡) が出現したか">>
+<<SystemMessage "[CHECK D-1b] 宣言前は非表示だった (最初のDeclareThreadTyped後に出現)">>
+<<StartWait 3>>
 
-<<SystemMessage "[D-2] メッセージ追加テスト">>
+// --- Block D-2: 通知バナー ---
+<<SystemMessage "[D-2] メッセージ追加→通知バナーテスト">>
 <<AddThreadMessage "av_note" "覚書メッセージ1">>
+<<StartWait 0.5>>
+<<SystemMessage "[CHECK D-2a] 上部に通知バナーが表示されたか">>
+<<SystemMessage "[CHECK D-2b] バナーに [A] アイコンとスレッド名が含まれているか">>
+<<StartWait 3>>
 <<AddThreadMessage "av_note" "覚書メッセージ2">>
 <<AddThreadChat "av_track" "pyramid" "追跡メッセージ1">>
-<<AddThreadChat "av_scout" "marco" "偵察メッセージ1">>
-<<StartWait 0.3>>
-
-<<SystemMessage "[D-3] 通知バナー: 上記メッセージ追加で通知バナーが表示されたか確認">>
 <<StartWait 0.5>>
+<<SystemMessage "[CHECK D-2c] バナーが約3.5秒後にフェードアウトしたか">>
+<<AddThreadChat "av_scout" "marco" "偵察メッセージ1">>
+<<StartWait 0.5>>
+<<SystemMessage "[CHECK D-2d] バナークリックで該当スレッドに切替できるか (次の通知で試す)">>
+<<AddThreadMessage "av_note" "覚書メッセージ3 — このバナーをクリックして切替テスト">>
+<<StartWait 5>>
 
-<<SystemMessage "[D-4] 潜在スレッドテスト">>
+// --- Block D-3: サイドバー開閉 ---
+<<SystemMessage "[D-3] サイドバー開閉テスト">>
+<<SystemMessage "[CHECK D-3a] ≡ボタンタップ → サイドバーが左からスライドイン (0.25秒)">>
+<<SystemMessage "[CHECK D-3b] 半透明オーバーレイが背景に表示されるか">>
+<<SystemMessage "[CHECK D-3c] オーバーレイタップ → サイドバーが閉じるか">>
+<<SystemMessage "[CHECK D-3d] サイドバー先頭に Main エントリがあるか">>
+<<StartWait 8>>
+
+// --- Block D-4: ThreadType グループ分類 ---
+<<SystemMessage "[D-4] ThreadType グループ分類 — サイドバーを開いて確認">>
+<<SystemMessage "[CHECK D-4a] Annotation/Tracking/Scout のグループヘッダーが型ごとに区切り表示">>
+<<SystemMessage "[CHECK D-4b] 型アイコンの色: A=青(#4A90D9) B=緑(#4CAF50) C=橙(#FF9800)">>
+<<StartWait 5>>
+
+// --- Block D-5: スレッド切替とヘッダーバー ---
+<<SystemMessage "[D-5] スレッド切替テスト — サイドバーでスレッドを選択">>
+<<SystemMessage "[CHECK D-5a] スレッド選択 → チャット内容が切替されるか">>
+<<SystemMessage "[CHECK D-5b] ヘッダーバー (型色帯 + 型名 + スレッド名) が表示されるか">>
+<<SystemMessage "[CHECK D-5c] Main に戻るとヘッダーバーが非表示になるか">>
+<<SystemMessage "[CHECK D-5d] サイドバーでアクティブスレッドが強調表示されるか">>
+<<StartWait 8>>
+
+// --- Block D-6: 未読バッジ ---
+<<SystemMessage "[D-6] 未読バッジテスト">>
+<<SystemMessage "[CHECK D-6a] 未読ありスレッドの右端にバッジ (赤丸+数値)">>
+<<SystemMessage "[CHECK D-6b] ≡ボタン右上に未読合計バッジ">>
+<<SystemMessage "[CHECK D-6c] スレッドを開くと未読バッジクリア">>
+<<SystemMessage "[CHECK D-6d] 全スレッド未読ゼロで≡バッジ消滅">>
+<<StartWait 8>>
+
+// --- Block D-8: 潜在スレッド ---
+<<SystemMessage "[D-8] 潜在スレッド (DeclareThreadLatent)">>
 <<DeclareThreadLatent "av_hidden" "A" "潜在スレッド">>
 <<AddThreadMessage "av_hidden" "潜在中のメッセージ">>
-<<StartWait 0.3>>
-<<SystemMessage "[D-4] 潜在: サイドバーに「潜在スレッド」が表示されていないことを確認">>
 <<StartWait 0.5>>
+<<SystemMessage "[CHECK D-8a] サイドバーに「潜在スレッド」が表示されていないこと">>
+<<SystemMessage "[CHECK D-8b] 潜在中にメッセージが蓄積されている (顕在化後に確認)">>
+<<StartWait 5>>
 
 <<ManifestThread "av_hidden">>
-<<SystemMessage "[D-4] 顕在化: サイドバーに「潜在スレッド」が出現したことを確認">>
 <<StartWait 0.5>>
+<<SystemMessage "[CHECK D-8c] サイドバーに「潜在スレッド」が出現したこと">>
+<<SystemMessage "[CHECK D-8d] 出現通知 (型色付きシステムメッセージ + ≡パルス) が表示されたこと">>
+<<StartWait 5>>
 
-<<SystemMessage "[D-5] CompleteThread テスト">>
+// --- Block D-9: CompleteThread ---
+<<SystemMessage "[D-9] CompleteThread テスト">>
 <<CompleteThread "av_hidden">>
-<<SystemMessage "[D-5] 完了: サイドバーで「潜在スレッド」がグレーアウト+チェックマーク表示を確認">>
 <<StartWait 0.5>>
+<<SystemMessage "[CHECK D-9a] サイドバーで「潜在スレッド」がグレーアウト表示">>
+<<SystemMessage "[CHECK D-9b] スレッド名の前にチェックマーク (✓)">>
+<<SystemMessage "[CHECK D-9c] 完了スレッドの未読バッジが消えていること">>
+<<StartWait 5>>
 
-// --- Block E: Save/Load ---
-<<SystemMessage "[E] Save/Load テスト: セーブを実行します">>
+// --- Block E: Save/Load (サブスレッド表示中にセーブ) ---
+<<SystemMessage "[E] Save/Load テスト">>
+<<SystemMessage "!! 重要: サブスレッド表示中にセーブすること (過去バグ 3d0a0f6 再確認) !!">>
 <<StartWait 0.3>>
 
 <<set $speaker to "pyramid">>
 サイドバーを開いて、4つのスレッド (覚書/追跡/偵察/潜在) と各メッセージが見えることを確認してください。
 
-<<SystemMessage "確認後、手動でセーブ→シーン停止→再生→ロードして、スレッドが復元されることを確認してください">>
+<<StartWait 0.5>>
+<<SystemMessage "手順: サブスレッド表示中にセーブ → シーン停止 → 再生 → ロード">>
+<<SystemMessage "[CHECK E-1] セーブ実行成功">>
+<<SystemMessage "[CHECK E-2] ロード実行成功">>
+<<SystemMessage "[CHECK E-3] Main スレッドの履歴が保持">>
+<<SystemMessage "[CHECK E-4] サブスレッドの履歴が保持">>
+<<SystemMessage "[CHECK E-5] ≡ボタン再表示、サイドバーで全スレッド確認可能">>
+<<SystemMessage "[CHECK E-6] ロード後にスレッド切替が正常動作">>
 
 <<StartWait 30>>
 
-<<SystemMessage "=== Phase A 自動検証 Block D/E 完了 ===">>
-<<SystemMessage "Console に Exception/Error がないことを確認してください (Block F)">>
+// --- Block F: Console エラー確認 ---
+<<SystemMessage "[F] Console エラー確認">>
+<<SystemMessage "[CHECK F-1] Console に Exception / Error 出力がないこと">>
+<<SystemMessage "[CHECK F-2] DialogueException がないこと">>
+<<SystemMessage "[CHECK F-3] ContradictionFeedbackController の Warning がないこと">>
+<<SystemMessage "[CHECK F-4] ThreadSwitcherController の Warning がないこと">>
+
+<<StartWait 3>>
+<<SystemMessage "=== Phase A 自動検証 Block D/E/F 完了 ===">>
 
 <<set $speaker to "player">>
 -> メニューに戻る
@@ -639,6 +722,140 @@ title: ETK_CondBranch
 <<set $speaker to "player">>
 -> 確認した、メニューに戻る
     <<set $etk_done_condbranch to true>>
+    <<jump ETK_Menu>>
+===
+
+/// --------------------------------------------------
+/// ETK_SubthreadMock: サブスレッド実用モック (B型追跡/C型偵察/ライフサイクル一気通貫)
+/// 検証: 各型の体験差異、Wikiリンク/成果物カード、フルライフサイクル
+/// --------------------------------------------------
+title: ETK_SubthreadMock
+---
+<<SystemMessage "=== サブスレッド実用モック ===">>
+<<StartWait 0.3>>
+
+<<set $speaker to "pyramid">>
+3つのサブスレッドモックを順に実行します。
+
+<<StartWait 0.5>>
+
+// --- B型: 追跡スレッド (Tracking) ---
+<<SystemMessage "[B型] 追跡スレッド: Pyramidの行動追跡">>
+<<DeclareThreadTyped "mock_track_pyramid" "B" "Pyramid行動記録">>
+<<StartWait 0.3>>
+
+<<AddThreadChat "mock_track_pyramid" "pyramid" "第4管理区域への定期送信を確認。毎日 03:00 UTC。">>
+<<StartWait 0.2>>
+<<AddThreadChat "mock_track_pyramid" "pyramid" "送信先アドレスが先週から変更されている。[link:mock_note_analysis:分析メモを参照]">>
+<<StartWait 0.2>>
+<<AddThreadMessage "mock_track_pyramid" "送信パターン: 24時間周期 → 12時間周期に変化 (Day2以降)">>
+<<StartWait 0.3>>
+
+<<SystemMessage "[CHECK] サイドバーで「Pyramid行動記録」を開き、3件のメッセージを確認">>
+<<SystemMessage "[CHECK] 2件目のメッセージに [link:...] マークアップが表示されているか">>
+<<StartWait 5>>
+
+// --- C型: 偵察スレッド (Scout) ---
+<<SystemMessage "[C型] 偵察スレッド: 第4管理区域偵察">>
+<<DeclareThreadTyped "mock_scout_area4" "C" "第4管理区域偵察">>
+<<StartWait 0.3>>
+
+<<AddThreadChat "mock_scout_area4" "marco" "管理区域の入口を発見。セキュリティログを回収した。">>
+<<StartWait 0.2>>
+<<AddThreadMessage "mock_scout_area4" "[artifact:log:セキュリティログ断片 #4-A]">>
+<<StartWait 0.2>>
+<<AddThreadChat "mock_scout_area4" "marco" "奥の端末からデータを抽出。暗号化されている。">>
+<<StartWait 0.2>>
+<<AddThreadMessage "mock_scout_area4" "[artifact:data:暗号化データパケット #4-B]">>
+<<StartWait 0.3>>
+
+<<SystemMessage "[CHECK] サイドバーで「第4管理区域偵察」を開き、4件のメッセージを確認">>
+<<SystemMessage "[CHECK] [artifact:...] マークアップが成果物カード表示されているか">>
+<<SystemMessage "[CHECK] C型(オレンジ)のティントが適用されているか">>
+<<StartWait 5>>
+
+// --- A型: 分析覚書 (Annotation) ---
+<<SystemMessage "[A型] 分析覚書: Wikiリンク先">>
+<<DeclareThreadTyped "mock_note_analysis" "A" "分析メモ">>
+<<StartWait 0.3>>
+
+<<AddThreadMessage "mock_note_analysis" "Pyramidの送信パターン変化は、管理区域のセキュリティ更新と時期が一致する。">>
+<<StartWait 0.2>>
+<<AddThreadMessage "mock_note_analysis" "仮説: Pyramidは区域内部の変更を検知し、送信頻度を上げている可能性。">>
+<<StartWait 0.3>>
+
+<<SystemMessage "[CHECK] サイドバーで「分析メモ」を開き、A型(青)の情報カード表示を確認">>
+<<SystemMessage "[CHECK] B型の [link:mock_note_analysis:...] クリックでこのスレッドに遷移するか">>
+<<StartWait 5>>
+
+// --- ライフサイクル一気通貫テスト ---
+<<SystemMessage "--- ライフサイクル一気通貫テスト ---">>
+<<StartWait 0.3>>
+
+<<set $speaker to "pyramid">>
+ここから潜在→条件トリガー→顕在化→分岐→知識転送選択→完了→Save/Load の全工程をテストします。
+
+<<StartWait 0.5>>
+
+// Step 1: 潜在スレッド登録
+<<DeclareThreadLatent "mock_lifecycle" "A" "潜在分析結果">>
+<<AddThreadMessage "mock_lifecycle" "潜在中: この分析結果はまだプレイヤーに見えない">>
+<<SystemMessage "[CHECK] サイドバーに「潜在分析結果」が表示されていないこと">>
+<<StartWait 3>>
+
+// Step 2: 顕在化
+<<ManifestThread "mock_lifecycle">>
+<<SystemMessage "[CHECK] サイドバーに「潜在分析結果」が出現 + 通知表示">>
+<<StartWait 3>>
+
+// Step 3: 追加メッセージ
+<<AddThreadMessage "mock_lifecycle" "顕在化後の追加メッセージ: 分析の続き">>
+<<StartWait 0.5>>
+
+// Step 4: 分岐開始
+<<set $speaker to "pyramid">>
+分岐に入ります。トピックを取得し、選択UIで持ち帰る情報を選んでください。
+
+<<StartWait 0.5>>
+<<BeginBranch "mock_lifecycle_branch" "ライフサイクル分岐">>
+
+<<set $speaker to "pyramid">>
+分岐内でトピックを解錠します。
+
+<<UnlockTopic "etk_topic_alpha">>
+<<StartWait 0.2>>
+分析対象Alphaを発見しました。
+
+<<UnlockTopic "etk_topic_beta">>
+<<StartWait 0.2>>
+分析対象Betaも発見しました。
+
+<<StartWait 0.5>>
+
+<<set $speaker to "player">>
+-> 知識を選択して持ち帰る
+    <<EndBranch true "select">>
+-> 全て持ち帰る
+    <<EndBranch true>>
+
+<<StartWait 0.5>>
+
+<<set $speaker to "pyramid">>
+メインに戻りました。反映メッセージを確認してください。
+
+// Step 5: スレッド完了
+<<CompleteThread "mock_lifecycle">>
+<<SystemMessage "[CHECK] 「潜在分析結果」がグレーアウト+チェックマーク">>
+<<StartWait 3>>
+
+// Step 6: Save/Load テスト
+<<SystemMessage "[CHECK] ここでセーブ → シーン停止 → 再生 → ロード → 全スレッド復元を確認">>
+<<SystemMessage "復元確認項目: B型3件/C型4件/A型2件/潜在完了/分岐反映メッセージ">>
+
+<<StartWait 30>>
+
+<<set $speaker to "player">>
+-> 確認した、メニューに戻る
     <<jump ETK_Menu>>
 ===
 

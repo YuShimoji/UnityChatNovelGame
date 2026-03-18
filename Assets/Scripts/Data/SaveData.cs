@@ -91,6 +91,11 @@ namespace ProjectFoundPhone.Data
 
         #region Dashboard Progress
         /// <summary>
+        /// 現在再生中のチャンネルID (Load後にm_CurrentChannelを復元するため)
+        /// </summary>
+        public string CurrentChannelID;
+
+        /// <summary>
         /// 完了済みチャンネルIDリスト
         /// </summary>
         public List<string> CompletedChannelIDs = new List<string>();

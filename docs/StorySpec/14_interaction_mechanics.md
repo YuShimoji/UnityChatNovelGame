@@ -173,8 +173,8 @@
 | `DeductionBoard` | B (ボード) | 先行実装 | 仕様未確定のまま実装された |
 | `TopicData` | B (ボード) + 断片 | 実装済み | 断片/トピック未分離 |
 | `SynthesisRecipe` | B (ボード) | 実装済み | レシピ定義 |
-| サブスレッドUI | C (分岐) に関連 | Step 1-4 全実装済み | サイドバー+ThreadType+種別差異レンダリング+通知+条件付き潜在+Save/Load (`16_subthread_ui.md`) |
-| 分岐スレッド（知識受け渡し） | C (分岐) | Phase 1-4 全実装済み | BeginBranch/EndBranch/TransferFlags自動追跡/自動反映/知識転送選択UI/条件付き分岐トリガー |
+| サブスレッドUI | C (分岐) に関連 | **実装済み** (SP-016, 2026-03-17) | Step 1-4 全完了。サイドバー+ThreadType+通知+条件付き潜在 |
+| 分岐スレッド（知識受け渡し） | C (分岐) | **実装済み** (SP-014 Phase 1-4) | BeginBranch/EndBranch/TransferFlags/選択UI |
 
 ---
 
@@ -337,3 +337,40 @@
 ### テスト
 - ETK_BranchTransferSelect: 3トピック解錠 → EndBranch "select" → 選択UI → 反映確認
 - 後方互換: EndBranch true (selectなし) → 従来通り全転送
+
+---
+
+## ランタイム既知問題・未検証領域 (2026-03-18 監査)
+
+### 分岐 (Branch) 関連
+
+| 問題 | 深刻度 | 詳細 |
+| ---- | ------ | ---- |
+| 分岐中セーブ→ロードで TransferFlags がクリアされる | HIGH | `BeginBranchThread()` が常に `TransferFlags.Clear()` を実行。ロード後の再実行で分岐途中の獲得トピックが反映メッセージから欠落 |
+| EndBranch SelectionUI 中の StopScenario 割り込み | HIGH | `while(!selectionDone)` が抜けられない可能性。CancellationToken 未導入 |
+| SelectionUI 表示中のセーブ/ロード | 未テスト | TransferSelectionUI は SaveData に含まれない。表示中にロードした場合の後処理が未定義 |
+| ブランチ間クロスリファレンスUI | 未実装 | 別分岐の知識を参照・提示するUI。BranchThreadState.HiddenFlags は実装済み |
+| 分岐収束の自動判定 | 未実装 | Phase 3以降。EndBranch は手動前提 |
+
+### 矛盾 (Contradiction) 関連
+
+| 問題 | 深刻度 | 詳細 |
+| ---- | ------ | ---- |
+| 矛盾発見後の AutoSave 欠如 | MEDIUM | SelectSecond 成功時に AutoSave が呼ばれない。Day境界前のアプリ終了で発見データが失われる |
+| ロード後の ContradictionManager.m_CurrentChannel 未設定 | MEDIUM | ApplySaveData に SetCurrentChannel 呼び出しがない。hint policy がデフォルト値のまま |
+| サブスレッド内の矛盾指摘不可 | 制限事項 | ContradictionManager はメインスレッドの ChatHistory のみ検索。仕様判断待ち (SP-016 未決定事項) |
+
+### セーブ/ロード関連 (詳細: EN-003 既知問題セクション参照)
+
+| 問題 | 深刻度 | 詳細 |
+| ---- | ------ | ---- |
+| YarnVariables 保存が $has_topic_* のみ | CRITICAL | $halluci_coin がYarn変数に同期されない。ロード直後のHCゲート評価が不正値になる可能性 |
+| UnreadCount のロード後整合 | LOW | 保存されるが復元後のバッジ表示との整合が未検証 |
+
+### 体験逆算で発見した設計空白
+
+| 空白 | 影響範囲 | 対応方針 |
+| ---- | -------- | -------- |
+| 断片の入手経路が UnlockTopic のみ | コンテンツ設計 | 偵察システム未着手のため暫定運用。SP-099 未解決設計質問 No.2 |
+| MessageTagged コマンドの廃止時期未定 | エンジン保守 | 非推奨マークはあるが削除計画がない |
+| 2段階トリガー条件の残り種別 | オーサリング | DeclareThreadLatentCond はYarn変数のみ。トピック/断片/HC閾値はYarn変数を介して間接表現が必要 |

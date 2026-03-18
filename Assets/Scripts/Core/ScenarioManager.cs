@@ -35,6 +35,9 @@ namespace ProjectFoundPhone.Core
         private BranchThreadState m_BranchThreadState = new BranchThreadState();
         private ChannelData m_CurrentChannel;
 
+        /// <summary>現在のチャンネルID (セーブ/ロード用)</summary>
+        public string CurrentChannelID => m_CurrentChannel != null ? m_CurrentChannel.ChannelID : null;
+
         /// <summary>宣言済みサブスレッド (threadId -> SubthreadData)</summary>
         private readonly Dictionary<string, SubthreadData> m_DeclaredThreads
             = new Dictionary<string, SubthreadData>();
@@ -178,6 +181,8 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.AddCommandHandler<string, string>("BeginBranch", BeginBranchCommand);
             m_DialogueRunner.AddCommandHandler<bool, string>("EndBranch", EndBranchCommand);
             m_DialogueRunner.AddCommandHandler<string>("SetBranchReflection", SetBranchReflectionCommand);
+            m_DialogueRunner.AddCommandHandler<string, string, string>("DiscoverFragment", DiscoverFragmentCommand);
+            m_DialogueRunner.AddCommandHandler<string, string>("AddFragmentNote", AddFragmentNoteCommand);
 #endif
         }
 
@@ -1010,10 +1015,20 @@ namespace ProjectFoundPhone.Core
         public void BeginBranchThread(string branchId)
         {
             m_BranchThreadState ??= new BranchThreadState();
+
+            // ロード後の再実行で TransferFlags を失わないよう、
+            // 同一分岐が既にアクティブな場合は Clear しない
+            bool isSameBranchReentry = m_BranchThreadState.IsActive
+                && m_BranchThreadState.ActiveBranchId == branchId;
+
             m_BranchThreadState.ActiveBranchId = branchId;
             m_BranchThreadState.IsActive = true;
             m_BranchThreadState.WasCompleted = false;
-            m_BranchThreadState.TransferFlags.Clear();
+
+            if (!isSameBranchReentry)
+            {
+                m_BranchThreadState.TransferFlags.Clear();
+            }
         }
 
         /// <summary>
@@ -1159,6 +1174,50 @@ namespace ProjectFoundPhone.Core
         {
             m_BranchThreadState ??= new BranchThreadState();
             m_BranchThreadState.ReflectionMessage = text;
+        }
+
+        /// <summary>
+        /// Yarn: &lt;&lt;DiscoverFragment "topicId" "threadId" "message"&gt;&gt;
+        /// 断片発見の定型フローを一括実行:
+        /// UnlockTopic + SystemMessage("断片「{title}」を記録しました") + ManifestThread + AddThreadMessage
+        /// </summary>
+        private void DiscoverFragmentCommand(string topicId, string threadId, string message)
+        {
+            // 1. トピック解錠
+            UnlockTopicCommand(topicId);
+
+            // 2. SystemMessage (TopicData.Title を使用)
+            TopicData topicData = Resources.Load<TopicData>($"Topics/{topicId}");
+            string title = topicData != null ? topicData.Title : topicId;
+            SystemMessageCommand($"断片「{title}」を記録しました");
+
+            // 3. スレッド顕在化
+            var thread = GetDeclaredThread(threadId);
+            if (thread != null && thread.IsLatent)
+            {
+                ManifestThreadCommand(threadId);
+            }
+            else if (thread == null)
+            {
+                Debug.LogWarning($"ScenarioManager: DiscoverFragment — thread '{threadId}' not found. UnlockTopic executed but ManifestThread skipped.");
+            }
+
+            // 4. 初期メッセージ追加
+            if (thread != null && !string.IsNullOrEmpty(message))
+            {
+                AddThreadMessageCommand(threadId, message);
+            }
+
+            Debug.Log($"ScenarioManager: DiscoverFragment — topic='{topicId}', thread='{threadId}'");
+        }
+
+        /// <summary>
+        /// Yarn: &lt;&lt;AddFragmentNote "threadId" "message"&gt;&gt;
+        /// スレッドへの断片関連メモを追加。AddThreadMessage のセマンティックエイリアス。
+        /// </summary>
+        private void AddFragmentNoteCommand(string threadId, string message)
+        {
+            AddThreadMessageCommand(threadId, message);
         }
 
         /// <summary>
@@ -1328,6 +1387,13 @@ namespace ProjectFoundPhone.Core
                 }
                 var threadSwitcher = FindFirstObjectByType<ThreadSwitcherController>();
                 threadSwitcher?.ForceUpdateHeaderBar(null);
+            }
+
+            // TransferSelectionUI が表示中なら強制非表示
+            var transferUI = FindFirstObjectByType<TransferSelectionUI>();
+            if (transferUI != null && transferUI.gameObject.activeSelf)
+            {
+                transferUI.gameObject.SetActive(false);
             }
         }
 

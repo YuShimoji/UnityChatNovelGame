@@ -39,10 +39,10 @@
     "id": "SP-003",
     "title": "チャプタービート",
     "status": "partial",
-    "pct": 40,
+    "pct": 50,
     "cat": "core",
     "file": "docs/StorySpec/03_chapter_beats.md",
-    "summary": "27ブロック(9章)のビート表。章レベルの概要のみ、節の詳細は未設計。AI生成ドラフト注記あり"
+    "summary": "27ブロック(9章)のビート表。章レベル概要+Ch1節詳細(03a)+Ch3設計根拠(03b)+Ch4-9エンジン要件先読み(03c)。節詳細はCh1のみ"
   },
   {
     "id": "SP-003a",
@@ -150,7 +150,7 @@
     "pct": 90,
     "cat": "system",
     "file": "docs/StorySpec/14_interaction_mechanics.md",
-    "summary": "3メカニクス候補(指摘/ボード/分岐)の整理。矛盾Phase2完全実装。DeductionBoard凍結。Branch Phase1-4全実装(BeginBranch/EndBranch select/SetBranchReflection/Save/Load/TransferFlags自動追跡/自動反映メッセージ/DeclareThreadLatentCond条件付き潜在/リアクティブ評価/AutoBeginBranch/安全弁/サイドバートピックバッジ/知識転送選択UI)。未実装: ブランチ間クロスリファレンスUI、アルケミーボード"
+    "summary": "3メカニクス候補(指摘/ボード/分岐)の整理。矛盾Phase2完全実装。DeductionBoard凍結。Branch Phase1-4全実装(BeginBranch/EndBranch select/SetBranchReflection/Save/Load/TransferFlags自動追跡/自動反映メッセージ/DeclareThreadLatentCond条件付き潜在/リアクティブ評価/AutoBeginBranch/安全弁/サイドバートピックバッジ/知識転送選択UI)。ランタイム既知問題・体験逆算ギャップ追記(2026-03-18)。未実装: ブランチ間クロスリファレンスUI、アルケミーボード"
   },
   {
     "id": "SP-015",
@@ -168,16 +168,16 @@
     "pct": 100,
     "cat": "ui",
     "file": "docs/StorySpec/16_subthread_ui.md",
-    "summary": "統合型スレッドモデル全実装。Step1-4全完了。サイドバー+ThreadType+通知バナー+種別差異レンダリング+DeclareThreadLatent/ManifestThread/CompleteThread+DeclareThreadLatentCond(条件付き自動顕在化+AutoBeginBranch)+Save/Load。未実装コンテンツ系: Wikiリンク遷移(B型)、成果物カード(C型)"
+    "summary": "統合型スレッドモデル全実装。Step1-4全完了。サイドバー+ThreadType+通知バナー+種別差異レンダリング+DeclareThreadLatent/ManifestThread/CompleteThread+DeclareThreadLatentCond(条件付き自動顕在化+AutoBeginBranch)+Save/Load。検証・モック不足セクション追加(2026-03-18): ETKカバレッジ状況/未作成モック6件/ランタイム制限事項5件。未実装コンテンツ系: Wikiリンク遷移(B型)、成果物カード(C型)"
   },
   {
     "id": "SP-099",
     "title": "未決定事項 (Open Questions)",
-    "status": "partial",
-    "pct": 90,
+    "status": "done",
+    "pct": 100,
     "cat": "core",
     "file": "docs/StorySpec/99_open_questions.md",
-    "summary": "決定待ちの設計質問。解決済み38件、未決定4件(主人公裏切りUI、コンテンツ量基準、解放トリガー)"
+    "summary": "決定待ちの設計質問。解決済み41件、未決定0件。2026-03-18決定: 裏切りUI=複合段階式(Ch6→a/Ch7→c/Ch8→b)、断片3/ch(27個)、スレッド2-3/ch(22個)、解放トリガー=複合(HC+進行+断片)OR"
   },
   {
     "id": "EN-001",
@@ -195,7 +195,7 @@
     "pct": 100,
     "cat": "infra",
     "file": "docs/WORKFLOW_STATE_SSOT.md",
-    "summary": "現在の開発状態・セットアップ手順・次ステップ。全主要機能実装完了(22コマンド+HCゲート+Branch+レスポンシブ)。残: Phase Aクロージング手動検証(73項目)、Ch3設計"
+    "summary": "現在の開発状態・セットアップ手順・次ステップ。全主要機能実装完了(24コマンド+HCゲート+Branch+レスポンシブ)。残: Phase Aクロージング手動検証(56項目)、Ch3設計"
   },
   {
     "id": "EN-003",
@@ -204,7 +204,7 @@
     "pct": 100,
     "cat": "data",
     "file": "docs/SaveSystem_README.md",
-    "summary": "JSON保存・3スロット+AutoSave(slot=99)・チャット履歴・トピック・後方互換。復元時の名前重複防止(StripNamePrefix)実装済み。サブスレッド対応(Subthreads/ActiveThreadId/ThreadType保存・復元)。BranchThreadState保存(TransferFlags/TransferredFlags/HiddenFlags/SelectionApplied/ReflectionMessage)"
+    "summary": "JSON保存・3スロット+AutoSave(slot=99)・チャット履歴・トピック・後方互換。復元時の名前重複防止(StripNamePrefix)実装済み。サブスレッド対応(Subthreads/ActiveThreadId/ThreadType保存・復元)。CurrentChannelID保存・復元追加(EndDay+ヒントポリシー正常動作)。既知問題: YarnVariables保存範囲制限(LOW)/UnreadCount復元(LOW)"
   },
   {
     "id": "EN-004",
@@ -258,6 +258,33 @@
     "pct": 100,
     "cat": "infra",
     "file": "docs/SCENARIO_AUTHORING_GUIDE.md",
-    "summary": "Yarnシナリオ執筆ハンズオン。5分クイックスタート、全22コマンドリファレンス(DeclareThreadLatentCond/BeginBranch/EndBranch/AddHalluciCoin含む)、キャラクターID一覧、コンテンツパターン集、キャラクターの声ガイド"
+    "summary": "Yarnシナリオ執筆ハンズオン。5分クイックスタート、全24コマンドリファレンス(DeclareThreadLatentCond/BeginBranch/EndBranch/AddHalluciCoin含む)、キャラクターID一覧、コンテンツパターン集、キャラクターの声ガイド"
+  },
+  {
+    "id": "SP-018",
+    "title": "進捗可視化基盤",
+    "status": "partial",
+    "pct": 60,
+    "cat": "ui",
+    "file": "docs/StorySpec/18_progress_visibility.md",
+    "summary": "Phase 1 MVP実装: ProgressTracker(データ集約)+NudgeSystem(ヒント生成)+ProgressSummaryUI(ダッシュボード内バー+数値+誘導)。加重平均進捗率(Ch35%+Cont30%+Frag20%+Topic15%)。Phase 2: チャプター間接続可視化"
+  },
+  {
+    "id": "SP-019",
+    "title": "チャプター遷移体験",
+    "status": "draft",
+    "pct": 0,
+    "cat": "system",
+    "file": "docs/StorySpec/19_chapter_transition.md",
+    "summary": "Ch完了→次Ch解放の遷移体験基盤。Phase 1: 完了サマリー(断片/矛盾/HC)+NudgeSystem連携。Phase 2: 次Ch解放通知+ダッシュボード自動表示。Phase 3: チャプター間接続演出(SP-018 Phase 2統合)"
+  },
+  {
+    "id": "SP-020",
+    "title": "オンボーディング体験",
+    "status": "draft",
+    "pct": 0,
+    "cat": "system",
+    "file": "docs/StorySpec/20_onboarding.md",
+    "summary": "初回体験の文脈的ガイダンス。Phase 1: 初回検出フラグ(Yarn変数)+SystemMessage(断片/矛盾/ダッシュボード)。Phase 2: 矛盾操作チュートリアル。Phase 3: インタラクティブガイド"
   }
 ]

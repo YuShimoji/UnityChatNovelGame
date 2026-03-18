@@ -1,13 +1,14 @@
 # WORKFLOW STATE SSOT
 
-**Updated**: 2026-03-17
-**Phase**: エンジン検証 Phase A — 全主要機能実装完了、手動検証待ち
+**Updated**: 2026-03-18
+**Phase**: エンジン検証 Phase A — 全主要機能実装完了、手動検証準備完了
 **Branch**: main
 
 ## Mission
 
 ダッシュボード MVP + インベントリ UI + チャットバブル修正 + サブスレッドUI (5a-5e+5d) の動作確認を行い、安定ベースラインを確立する。
-残: Phase Aクロージング手動検証(73項目) → Ch3シナリオ設計。
+残: Phase Aクロージング手動検証(56項目、最短実行フロー7ステップ/約60分) → Ch3シナリオ設計。
+ETK_AutoVerify に全[CHECK]メッセージ追加済み (D-1〜D-9, E, F)。
 Ch1/Ch2 Yarn スクリプトはエンジン検証用モックであり、本番コンテンツではない。
 
 ## Done 条件（現フェーズ）
@@ -128,7 +129,7 @@ ContentAuthoring シーンで以下を行う必要あり:
 - **ThreadType 取得方法**: `OnThreadDeclared` イベントシグネチャは変更なし (`Action<string, string>`)。型情報は `ScenarioManager.GetDeclaredThread(threadId).Type` 経由で取得
 - **ヘッダーバー表示制御**: スレッド切替時にのみ表示・非表示を切替。Main スレッド選択時は非表示。型別色は 15% alpha の背景帯 + 90% alpha のラベルで構成
 - **型別アイコン/色**: Annotation=[A], Tracking=[B], Scout=[C], Branch=[>]。色は ThreadSwitcherController 定数 (TypeColorAnnotation 等) で一元管理
-- **Yarn コマンド数**: 全22コマンド (DeclareThreadLatentCond 追加後)
+- **Yarn コマンド数**: 全24コマンド (DiscoverFragment + AddFragmentNote 追加後)
 - **SubthreadTest.yarn**: DeclareThreadTyped 対応に更新済み。型指定の検証モックとして機能
 - **通知バナー**: OnThreadMessageAdded で非アクティブスレッドへのメッセージ検出 → DOTween Sequence (fadeIn 0.25s → 3.5s表示 → fadeOut 0.4s)。クリックで OnSelectThread 呼出。Reset/OnSelectThread で HideNotificationBanner
 - **スレッドのノード遷移維持**: m_DeclaredThreads はノード遷移(jump)で消えない。ClearDeclaredThreads は SaveManager.LoadGame のみで呼ばれる

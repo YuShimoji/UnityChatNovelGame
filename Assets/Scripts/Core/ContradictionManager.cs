@@ -44,6 +44,8 @@ namespace ProjectFoundPhone.Core
         public bool IsInPointingMode => m_SelectedLineTag != null;
         public bool IsOnCooldown => Time.time < m_CooldownEndTime;
         public int HalluciCoin => m_HalluciCoin;
+        public int DiscoveredCount => m_DiscoveredIDs.Count;
+        public int TotalPairCount => m_Database != null ? m_Database.Pairs.Count : 0;
 
         /// <summary>HalluciCoin を静かに加算する（通知なし）</summary>
         public void AddCoinSilent(int amount)
@@ -123,6 +125,10 @@ namespace ProjectFoundPhone.Core
                 Debug.Log($"ContradictionManager: Contradiction '{match.ContradictionID}' discovered! HalluciCoin: {m_HalluciCoin}");
                 m_SelectedLineTag = null;
                 m_CooldownEndTime = 0f;
+
+                // 矛盾発見データを即時永続化 (Day境界前のアプリ終了対策)
+                SaveManager.Instance?.AutoSave();
+
                 return true;
             }
             else if (match != null && m_DiscoveredIDs.Contains(match.ContradictionID))
