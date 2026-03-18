@@ -16,6 +16,9 @@ title: Ch2_Opening
 <<DeclareThreadLatent "ch2_track_location" "B" "地名矛盾追跡">>
 <<AddThreadMessage "ch2_track_location" "調査対象: 地名・所属の不一致パターン">>
 
+// 潜在スレッド: Mason/Oliver合流時に偵察結果として顕在化
+<<DeclareThreadLatent "ch2_scout_field" "C" "フィールド偵察報告">>
+
 <<SystemMessage "接続を確立しています...">>
 <<StartWait 1>>
 
@@ -170,6 +173,14 @@ Mason です。接続しました。Oliver もすぐ来ます。
 <<UnlockTopic "fragment_ch2_01">>
 <<SystemMessage "断片「地名二重表記（看板の断片）」を記録しました">>
 
+// C型偵察スレッド顕在化: Mason の偵察結果を記録開始
+<<ManifestThread "ch2_scout_field">>
+<<AddThreadChat "ch2_scout_field" "mason" "看板の断片を回収。写真は通信品質の影響で送れない。">>
+<<AddThreadMessage "ch2_scout_field" "[artifact:photo:二重表記看板の断片写真]">>
+
+// B型追跡スレッドに矛盾記録を追加
+<<AddThreadMessage "ch2_track_location" "矛盾 #1: 看板の二重表記「第4管理区域 / 旧ウェストフィールド地区」">>
+
 <<set $speaker to "player">>
 -> 2つの名前が並んでる？
 -> どちらが正式なんだ？
@@ -212,6 +223,10 @@ Mason と一緒に偵察していました。無人店舗でレシートを拾�
 
 でも、コミュニティハブの場所を知っている人はいますか？ #line:ch2_location_service_failure_tgt
 
+// C型偵察スレッドに成果物を追加
+<<AddThreadChat "ch2_scout_field" "oliver" "無人店舗で回収。レシートの裏に手書きの道順メモ。">>
+<<AddThreadMessage "ch2_scout_field" "[artifact:document:レシート裏メモ — 手書き道順]">>
+
 <<set $speaker to "marco">>
 <<StartWait 0.5>>
 いや、聞いたことない。
@@ -228,6 +243,10 @@ Mason と一緒に偵察していました。無人店舗でレシートを拾�
 
 <<UnlockTopic "fragment_ch2_03">>
 <<SystemMessage "断片「地図の矛盾（レシート裏のメモ）」を記録しました">>
+
+// B型追跡スレッドに矛盾記録を蓄積
+<<AddThreadMessage "ch2_track_location" "矛盾 #2: 位置情報サービス不在。Pyramid自身が座標を提供できない">>
+<<AddThreadMessage "ch2_track_location" "矛盾 #3: 「コミュニティハブ」— 誰も場所を知らない施設が登録されている">>
 
 <<set $speaker to "bernardo">>
 <<StartWait 1>>
@@ -331,9 +350,16 @@ title: Ch2_Closing
 <<set $speaker to "pyramid">>
 本日のセッションを終了します。お疲れさまでした。
 
-// Ch2 セッション参加報酬 (silent) + 追跡スレッドに最終更新
+// Ch2 セッション参加報酬 (silent)
 <<AddHalluciCoin 3>>
+
+// 追跡スレッドに最終更新
 <<AddThreadMessage "ch2_track_location" "Day2終了時点: 地名矛盾4件を記録。照合は継続">>
+
+// 偵察スレッドに最終まとめ + 完了
+<<AddThreadChat "ch2_scout_field" "mason" "今日の偵察はここまで。明日はもう少し広い範囲を回る。">>
+<<AddThreadMessage "ch2_scout_field" "Day2偵察まとめ: 成果物2件（看板写真 + レシートメモ）を回収">>
+<<CompleteThread "ch2_scout_field">>
 
 <<StartWait 1>>
 
