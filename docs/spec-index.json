@@ -39,10 +39,10 @@
     "id": "SP-003",
     "title": "チャプタービート",
     "status": "partial",
-    "pct": 40,
+    "pct": 50,
     "cat": "core",
     "file": "docs/StorySpec/03_chapter_beats.md",
-    "summary": "27ブロック(9章)のビート表。章レベルの概要のみ、節の詳細は未設計。AI生成ドラフト注記あり"
+    "summary": "27ブロック(9章)のビート表。章レベル概要+Ch1節詳細(03a)+Ch3設計根拠(03b)+Ch4-9エンジン要件先読み(03c)。節詳細はCh1のみ"
   },
   {
     "id": "SP-003a",
@@ -268,5 +268,23 @@
     "cat": "ui",
     "file": "docs/StorySpec/18_progress_visibility.md",
     "summary": "Phase 1 MVP実装: ProgressTracker(データ集約)+NudgeSystem(ヒント生成)+ProgressSummaryUI(ダッシュボード内バー+数値+誘導)。加重平均進捗率(Ch35%+Cont30%+Frag20%+Topic15%)。Phase 2: チャプター間接続可視化"
+  },
+  {
+    "id": "SP-019",
+    "title": "チャプター遷移体験",
+    "status": "draft",
+    "pct": 0,
+    "cat": "system",
+    "file": "docs/StorySpec/19_chapter_transition.md",
+    "summary": "Ch完了→次Ch解放の遷移体験基盤。Phase 1: 完了サマリー(断片/矛盾/HC)+NudgeSystem連携。Phase 2: 次Ch解放通知+ダッシュボード自動表示。Phase 3: チャプター間接続演出(SP-018 Phase 2統合)"
+  },
+  {
+    "id": "SP-020",
+    "title": "オンボーディング体験",
+    "status": "draft",
+    "pct": 0,
+    "cat": "system",
+    "file": "docs/StorySpec/20_onboarding.md",
+    "summary": "初回体験の文脈的ガイダンス。Phase 1: 初回検出フラグ(Yarn変数)+SystemMessage(断片/矛盾/ダッシュボード)。Phase 2: 矛盾操作チュートリアル。Phase 3: インタラクティブガイド"
   }
 ]
