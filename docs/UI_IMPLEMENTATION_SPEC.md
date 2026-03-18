@@ -380,7 +380,7 @@ canvas 幅に応じて UI パラメータを動的に調整する。`CanvasScale
 
 | 制限 | 説明 |
 |------|------|
-| SystemMessage ルーティング | 現在は全てチャットバブルとして表示。ステータスバー/トースト分岐は TODO (ChatController.cs:1056) |
+| SystemMessage ルーティング | 現在は全てチャットバブルとして表示。ステータスバー/トースト分岐は TODO (ChatController.AddSystemMessage 内) |
 | ~~画面リサイズ~~ | **修正済み** (8b22b71): `GetContainerWidth()` で `RectTransform.rect.width` を使用。Canvas スケーリングに追従 |
 | ~~セーブ復元時の名前表示~~ | **修正済み** (147b36d): `StripNamePrefix()` で復元前に名前リッチテキストを除去 |
 | ~~チャンネルレジューム~~ | **実装済み**: Day Resume (`EndDay` コマンド + `ChannelDayProgress` + Dashboard Day判定)。チャンネル選択時に最終Day+1のノードから再開 |

@@ -186,7 +186,7 @@
     "pct": 100,
     "cat": "infra",
     "file": "docs/ENGINE_FEATURE_INVENTORY.md",
-    "summary": "Yarnコマンド22種(DeclareThreadLatentCond含む)・キャラ管理・セーブ(AutoSave+スレッド対応)・演出・バブル表示設定・矛盾(#line:タグ方式)・ダッシュボード(Day Resume+マルチDay+HCゲート)・インベントリUI・サブスレッドUI(Step1-4全実装済み: サイドバー+ThreadType+種別差異レンダリング+出現通知+条件付き潜在+Save/Load)・Branch(Phase1-4: BeginBranch/EndBranch select/TransferFlags自動追跡/知識転送選択UI)・ETK(ch_etk対応)。全機能反映済み"
+    "summary": "Yarnコマンド24種(DiscoverFragment/AddFragmentNote追加)・キャラ管理・セーブ(AutoSave+スレッド対応)・演出・バブル表示設定・矛盾(#line:タグ方式)・ダッシュボード(Day Resume+マルチDay+HCゲート)・インベントリUI・サブスレッドUI(Step1-4全実装済み: サイドバー+ThreadType+種別差異レンダリング+出現通知+条件付き潜在+Save/Load)・Branch(Phase1-4: BeginBranch/EndBranch select/TransferFlags自動追跡/知識転送選択UI)・ETK(ch_etk対応)。全機能反映済み"
   },
   {
     "id": "EN-002",
@@ -286,5 +286,14 @@
     "cat": "system",
     "file": "docs/StorySpec/20_onboarding.md",
     "summary": "初回体験の文脈的ガイダンス。Phase 1: 初回検出フラグ(Yarn変数)+SystemMessage(断片/矛盾/ダッシュボード)。Phase 2: 矛盾操作チュートリアル。Phase 3: インタラクティブガイド"
+  },
+  {
+    "id": "SP-017",
+    "title": "サブスレッド解放トリガー",
+    "status": "draft",
+    "pct": 0,
+    "cat": "core",
+    "file": "docs/StorySpec/17_unlock_triggers.md",
+    "summary": "サブスレッド出現タイミング制御。複合トリガー方式(HC閾値+進行+断片 OR)決定済み。既存DeclareThreadLatentCond+ChannelData SOでカバー。詳細オーサリングパターンは未策定"
   }
 ]
