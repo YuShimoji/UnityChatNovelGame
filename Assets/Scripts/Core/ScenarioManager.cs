@@ -1010,10 +1010,20 @@ namespace ProjectFoundPhone.Core
         public void BeginBranchThread(string branchId)
         {
             m_BranchThreadState ??= new BranchThreadState();
+
+            // ロード後の再実行で TransferFlags を失わないよう、
+            // 同一分岐が既にアクティブな場合は Clear しない
+            bool isSameBranchReentry = m_BranchThreadState.IsActive
+                && m_BranchThreadState.ActiveBranchId == branchId;
+
             m_BranchThreadState.ActiveBranchId = branchId;
             m_BranchThreadState.IsActive = true;
             m_BranchThreadState.WasCompleted = false;
-            m_BranchThreadState.TransferFlags.Clear();
+
+            if (!isSameBranchReentry)
+            {
+                m_BranchThreadState.TransferFlags.Clear();
+            }
         }
 
         /// <summary>
@@ -1328,6 +1338,13 @@ namespace ProjectFoundPhone.Core
                 }
                 var threadSwitcher = FindFirstObjectByType<ThreadSwitcherController>();
                 threadSwitcher?.ForceUpdateHeaderBar(null);
+            }
+
+            // TransferSelectionUI が表示中なら強制非表示
+            var transferUI = FindFirstObjectByType<TransferSelectionUI>();
+            if (transferUI != null && transferUI.gameObject.activeSelf)
+            {
+                transferUI.gameObject.SetActive(false);
             }
         }
 

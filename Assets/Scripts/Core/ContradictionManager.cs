@@ -123,6 +123,10 @@ namespace ProjectFoundPhone.Core
                 Debug.Log($"ContradictionManager: Contradiction '{match.ContradictionID}' discovered! HalluciCoin: {m_HalluciCoin}");
                 m_SelectedLineTag = null;
                 m_CooldownEndTime = 0f;
+
+                // 矛盾発見データを即時永続化 (Day境界前のアプリ終了対策)
+                SaveManager.Instance?.AutoSave();
+
                 return true;
             }
             else if (match != null && m_DiscoveredIDs.Contains(match.ContradictionID))

@@ -400,6 +400,12 @@ namespace ProjectFoundPhone.Core
             }
 
             ScenarioManager scenarioManager = FindFirstObjectByType<ScenarioManager>();
+
+            // $halluci_coin を Yarn 変数に同期 (ロード直後のHCゲート評価に必要)
+            if (scenarioManager != null)
+            {
+                scenarioManager.SetVariable<float>("$halluci_coin", (float)saveData.HalluciCoin);
+            }
             if (scenarioManager != null)
             {
                 foreach (var kvp in saveData.YarnVariables)
