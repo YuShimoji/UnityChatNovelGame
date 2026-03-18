@@ -1,5 +1,8 @@
 # MVPテストガイド
 
+> **Note (2026-03-18)**: Phase A クロージング検証は [phase-a-closing-checklist.md](acceptance/phase-a-closing-checklist.md) が最新版。
+> 本ガイドの Step 1-4 (MVPTest.yarn 基本検証) は引き続き有効。Phase A セクション (Test A-F) は checklist に統合済み。
+
 ## 概要
 MVPTest.yarnシナリオを使用して、UnityChatNovelGameエンジンの基本機能を検証します。
 

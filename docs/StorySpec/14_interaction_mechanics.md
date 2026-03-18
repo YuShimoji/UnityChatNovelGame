@@ -364,7 +364,7 @@
 
 | 問題 | 深刻度 | 詳細 |
 | ---- | ------ | ---- |
-| YarnVariables 保存が $has_topic_* のみ | CRITICAL | $halluci_coin がYarn変数に同期されない。ロード直後のHCゲート評価が不正値になる可能性 |
+| ~~YarnVariables 保存が $has_topic_* のみ~~ | ~~CRITICAL~~ **修正済み** | cd596ca で GetAllVariables() 直接取得に変更。$halluci_coin (float) も保存対象。ロード時も SetVariable で明示復元 |
 | UnreadCount のロード後整合 | LOW | 保存されるが復元後のバッジ表示との整合が未検証 |
 
 ### 体験逆算で発見した設計空白

@@ -204,7 +204,7 @@
     "pct": 100,
     "cat": "data",
     "file": "docs/SaveSystem_README.md",
-    "summary": "JSON保存・3スロット+AutoSave(slot=99)・チャット履歴・トピック・後方互換。復元時の名前重複防止(StripNamePrefix)実装済み。サブスレッド対応(Subthreads/ActiveThreadId/ThreadType保存・復元)。CurrentChannelID保存・復元追加(EndDay+ヒントポリシー正常動作)。既知問題: YarnVariables保存範囲制限(LOW)/UnreadCount復元(LOW)"
+    "summary": "JSON保存・3スロット+AutoSave(slot=99)・チャット履歴・トピック・後方互換。復元時の名前重複防止(StripNamePrefix)実装済み。サブスレッド対応(Subthreads/ActiveThreadId/ThreadType保存・復元)。CurrentChannelID保存・復元追加(EndDay+ヒントポリシー正常動作)。GetAllVariables()で全Yarn変数保存(cd596ca修正済み)。残既知問題: UnreadCount復元(LOW)"
   },
   {
     "id": "EN-004",
