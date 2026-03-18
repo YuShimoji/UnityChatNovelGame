@@ -356,8 +356,8 @@
 
 | 問題 | 深刻度 | 詳細 |
 | ---- | ------ | ---- |
-| 矛盾発見後の AutoSave 欠如 | MEDIUM | SelectSecond 成功時に AutoSave が呼ばれない。Day境界前のアプリ終了で発見データが失われる |
-| ロード後の ContradictionManager.m_CurrentChannel 未設定 | MEDIUM | ApplySaveData に SetCurrentChannel 呼び出しがない。hint policy がデフォルト値のまま |
+| ~~矛盾発見後の AutoSave 欠如~~ | ~~MEDIUM~~ **修正済み** | SelectSecond 成功時に `SaveManager.Instance?.AutoSave()` を呼び出し済み (ContradictionManager.cs:130) |
+| ~~ロード後の ContradictionManager.m_CurrentChannel 未設定~~ | ~~MEDIUM~~ **修正済み** | 9cdb646 で SaveData.CurrentChannelID 追加 + ApplySaveData 内で SetCurrentChannel 呼び出し済み |
 | サブスレッド内の矛盾指摘不可 | 制限事項 | ContradictionManager はメインスレッドの ChatHistory のみ検索。仕様判断待ち (SP-016 未決定事項) |
 
 ### セーブ/ロード関連 (詳細: EN-003 既知問題セクション参照)
