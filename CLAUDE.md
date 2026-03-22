@@ -8,15 +8,12 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
-現在の状況 (2026-03-22 session 8 nightshift):
-  - session 8 (nightshift): ドキュメント同期 + コード品質検証
-    - ENGINE_FEATURE_INVENTORY: Branch(10b)/Progress(10c)セクション追加、番号修正
-    - UnreadCount復元: コードレビューで正常確認(RegisterDeclaredThread→UpdateBadge経路)
-    - SaveSystem_README/phase-a-checklist/spec-index: ステータス更新
-    - コード静的解析: ?? Unity型なし、未使用変数なし、例外握りつぶしなし
-  - spec-index: 26エントリ (done 16 / partial 5 / draft 3 / todo 2)
+現在の状況 (2026-03-22 session 8):
+  - nightshift: ドキュメント同期 + コード品質検証 + SaveManager StackTrace改善
+  - REFRESH後: SP-019 Phase 1 (チャプター完了サマリー) + SP-020 Phase 1 (オンボーディングヒント) 実装
+  - spec-index: 26エントリ (done 16 / partial 7 / draft 1 / todo 2)
   - Unity Editor再コンパイル未確認 (手動検証待ち)
-  - 次の作業: Unity再コンパイル確認 → Phase A手動検証(65項目/約80分) → git push
+  - 次の作業: Unity再コンパイル確認 → Phase A手動検証(65項目+SP-019/020) → git push
   - 残存問題: UnreadCount復元(LOW、コードレビュー正常・Unity検証待ち)
 
 ## DECISION LOG
