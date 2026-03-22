@@ -1,6 +1,6 @@
 # Engine Feature Inventory
 
-**最終更新**: 2026-03-17
+**最終更新**: 2026-03-22
 **エンジン**: Unity 6.3 LTS (6000.3.6f1) + Yarn Spinner 3.1.3
 
 このドキュメントは、シナリオ執筆者が「今のエンジンで何ができるか」を把握するためのリファレンスです。
@@ -509,19 +509,84 @@ TopicData の `TopicID` プレフィックスでインベントリの表示カ�
 
 ---
 
-## 10. 未実装機能（StorySpec で必要だが現在ない機能）
+## 10b. 分岐システム（Phase 1-4 全実装済み）
 
-### 優先度: 高（メインループに必要）
+ストーリー分岐スレッドの宣言・自動切替・知識転送の仕組み。
 
-（該当機能は全てセクション10に移動済み）
+### アーキテクチャ
+
+- **状態管理**: `BranchThreadState.cs` — IsInBranch, BranchThreadId, TransferFlags (分岐内UnlockTopic自動追跡), TransferredFlags, HiddenFlags, SelectionApplied, ReflectionMessage
+- **UI**: `TransferSelectionUI.cs` — EndBranch "select" 時の知識転送選択パネル。プレイヤーが「どの知識を持ち帰るか」を選択
+- **Yarnコマンド**: BeginBranch / EndBranch / EndBranch "select" / SetBranchReflection
+
+### 実装済み機能
+
+| 機能 | 説明 | ファイル |
+| ---- | ---- | -------- |
+| 分岐開始 | `BeginBranch` でBranch型スレッド宣言+自動切替。以降のメッセージは分岐に流れる | `ScenarioManager.cs` |
+| 分岐終了 | `EndBranch true/false` でメイン復帰。反映メッセージ投入 | 同上 |
+| 知識転送選択 | `EndBranch true "select"` で選択UI表示。プレイヤーが持ち帰る知識を選択 | `TransferSelectionUI.cs` |
+| TransferFlags自動追跡 | 分岐内の `UnlockTopic` を自動記録、EndBranch時に反映メッセージ生成 | `BranchThreadState.cs` |
+| 反映メッセージ | 優先順位: SetBranchReflection指定 > TransferFlags自動生成 > なし | `ScenarioManager.cs` |
+| 条件付き自動分岐 | `DeclareThreadLatentCond` + AutoBeginBranch で Yarn変数変化時に自動分岐開始 | 同上 |
+| Save/Load | BranchThreadState 全フィールド保存・復元対応 | `SaveManager.cs` |
+| 安全弁 | EndBranch 待機ループは CancellationToken でキャンセル可能 (StopScenario対応) | `ScenarioManager.cs` |
+| ForceClose | TransferSelectionUI の強制閉じ (StopScenario時) | `TransferSelectionUI.cs` |
+
+### 使用例
+
+```yarn
+<<BeginBranch "ch2_recon" "偵察分岐">>
+<<Message "mason" "この区域を調べよう。">>
+<<UnlockTopic "topic_area_4">>
+<<SetBranchReflection "区域4の情報を入手した。">>
+<<EndBranch true>>
+```
+
+### 知識転送選択モード
+
+```yarn
+<<BeginBranch "ch2_deep" "深層調査">>
+<<UnlockTopic "topic_a">>
+<<UnlockTopic "topic_b">>
+<<UnlockTopic "topic_c">>
+<<EndBranch true "select">>
+```
+
+プレイヤーに選択UIが表示され、持ち帰るトピックを選択。`$has_topic_*` 変数はtrue維持（知っているが見せないだけ）、HiddenFlags で非表示管理。
+
+---
+
+## 10c. 進捗可視化基盤（Phase 1 実装済み）
+
+チャプター進捗の集約表示 + 次アクション誘導。
+
+### アーキテクチャ
+
+- **データ集約**: `ProgressTracker.cs` — チャプター進捗・矛盾・断片・トピックの加重平均進捗率算出
+- **ヒント生成**: `NudgeSystem.cs` — 進捗状況に基づく次アクション誘導テキスト生成
+- **UI表示**: `ProgressSummaryUI.cs` — ダッシュボード内の進捗バー + 数値 + 誘導テキスト
+
+### 進捗率計算
+
+加重平均: チャプター進行 35% + 矛盾発見 30% + 断片収集 20% + トピック解放 15%
+
+### 制限事項
+
+- Phase 1 (MVP) のみ実装。Phase 2 (チャプター間接続可視化) は未着手
+- 詳細: `docs/StorySpec/18_progress_visibility.md`
+
+---
+
+## 11. 未実装機能（StorySpec で必要だが現在ない機能）
 
 ### 優先度: 中（サブコンテンツに必要）
 
 | 機能 | 説明 | 実装難度 |
 | ---- | ---- | -------- |
-| サブスレッドUI | Discord 的なマルチスレッド表示 → **Step1-4全実装済み (セクション10a)** | — |
 | 偵察システム | ロケーション探索・アイテム収集 | 高 |
 | 断片クロスリファレンス | 断片同士の照合・矛盾検出 | 中 |
+| ブランチ間クロスリファレンスUI | 分岐間の情報比較UI | 中 |
 
 ### 優先度: 低（後から追加可能）
 
@@ -531,10 +596,11 @@ TopicData の `TopicID` プレフィックスでインベントリの表示カ�
 | 広告/スタミナ | F2P マネタイズ基盤 | 中 |
 | コンタクトリスト | キャラクター管理UI | 低 |
 | チャット検索 | 過去ログのキーワード検索 | 低 |
+| サウンド (SP-009) | BGM + SE | 中 |
 
 ---
 
-## 11. ノード設計のベストプラクティス
+## 12. ノード設計のベストプラクティス
 
 ### ノード命名規則（推奨）
 

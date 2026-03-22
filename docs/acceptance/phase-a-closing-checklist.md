@@ -369,5 +369,5 @@ F (Console確認) は全ステップで常時監視する。
 ### Phase D: α リリース準備
 1. 全チャプター (Ch1-9) の Yarn 実装
 2. 全矛盾ペアの実装 + 難易度調整
-3. Save/Load の残存問題修正 (m_CurrentChannel / UnreadCount)
+3. Save/Load の残存問題修正 (~~m_CurrentChannel: 修正済み~~ / UnreadCount: コードレビュー正常、Unity手動確認待ち)
 4. ProgressTracker Phase 3 (フルUI)

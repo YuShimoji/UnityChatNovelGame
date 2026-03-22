@@ -317,9 +317,9 @@ public class SubthreadData
 
 矛盾発見成功時 (`SelectSecond`) に `SaveManager.Instance.AutoSave()` を呼び出すよう修正済み。
 
-### LOW: UnreadCount のロード後復元
+### LOW: UnreadCount のロード後復元 — **コードレビュー正常** (2026-03-22)
 
-`SubthreadData.UnreadCount` はシリアライズ対象だが、ロード後にバッジ表示との整合が未検証。セーブ時点の UnreadCount がそのまま復元されるため、ロード後にスレッドを開いていないのにバッジが 0 になるケース (またはその逆) が起こりうる。
+`SubthreadData.UnreadCount` は Newtonsoft.Json で正しくシリアライズ/デシリアライズされる (public int field)。ロード時の流れ: `RegisterDeclaredThread` → `OnThreadDeclared` → `AddThreadEntry` → `UpdateBadge` (L616) で `GetDeclaredThread(threadId).UnreadCount` を参照してバッジ表示を更新する。コード上の問題なし。Unity Editor での手動確認で最終検証すること。
 
 ---
 
