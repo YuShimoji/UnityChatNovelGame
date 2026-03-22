@@ -32,7 +32,7 @@
 | コマンド | 構文 | 説明 |
 | -------- | ---- | ---- |
 | UnlockTopic | `<<UnlockTopic "topicID">>` | トピックカードを推理ボードに追加 |
-| EndDay | `<<EndDay 日数>>` | Day 終了処理。「--- N日目 終了 ---」システムメッセージ表示 + Day進捗記録 + オートセーブ。マルチDayチャプターでは最終Day完了時のみチャンネルを完了にする |
+| EndDay | `<<EndDay 日数>>` | Day 終了処理。通常Day:「--- N日目 終了 ---」表示。最終Day: チャプター完了サマリー(チャプター名+断片/矛盾/HC数値+NudgeSystemヒント)を表示(SP-019)。Day進捗記録 + オートセーブ |
 | DeclareThread | `<<DeclareThread "threadId" "displayName">>` | サブスレッドを宣言（type=Annotation）。メインチャットに通知表示 + サイドバーにエントリ追加 |
 | DeclareThreadTyped | `<<DeclareThreadTyped "threadId" "type" "displayName">>` | 型指定でサブスレッドを宣言。type: "A"(注釈)/"B"(追跡)/"C"(偵察)/"branch"(分岐)。サイドバーに型グループ分類+アイコン・色表示 |
 | AddThreadMessage | `<<AddThreadMessage "threadId" "text">>` | サブスレッドにシステムメッセージを追加（メイン画面には非表示） |

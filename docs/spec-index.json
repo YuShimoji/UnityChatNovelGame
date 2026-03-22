@@ -272,20 +272,20 @@
   {
     "id": "SP-019",
     "title": "チャプター遷移体験",
-    "status": "draft",
-    "pct": 0,
+    "status": "partial",
+    "pct": 30,
     "cat": "system",
     "file": "docs/StorySpec/19_chapter_transition.md",
-    "summary": "Ch完了→次Ch解放の遷移体験基盤。Phase 1: 完了サマリー(断片/矛盾/HC)+NudgeSystem連携。Phase 2: 次Ch解放通知+ダッシュボード自動表示。Phase 3: チャプター間接続演出(SP-018 Phase 2統合)"
+    "summary": "Ch完了→次Ch解放の遷移体験基盤。Phase 1実装済み: EndDay最終Day時に完了サマリー(チャプター名+断片/矛盾/HC数値+NudgeSystemヒント)をSystemMessage群として表示。Phase 2: 次Ch解放通知+ダッシュボード自動表示。Phase 3: チャプター間接続演出(SP-018 Phase 2統合)"
   },
   {
     "id": "SP-020",
     "title": "オンボーディング体験",
-    "status": "draft",
-    "pct": 0,
+    "status": "partial",
+    "pct": 30,
     "cat": "system",
     "file": "docs/StorySpec/20_onboarding.md",
-    "summary": "初回体験の文脈的ガイダンス。Phase 1: 初回検出フラグ(Yarn変数)+SystemMessage(断片/矛盾/ダッシュボード)。Phase 2: 矛盾操作チュートリアル。Phase 3: インタラクティブガイド"
+    "summary": "初回体験の文脈的ガイダンス。Phase 1実装済み: $onboarding_seen_fragment(初回断片発見時ヒント)+$onboarding_seen_contradiction(初回矛盾発見時HCヒント)。ダッシュボード初回はNudgeSystemで既カバー。Phase 2: 矛盾操作チュートリアル。Phase 3: インタラクティブガイド"
   },
   {
     "id": "SP-017",

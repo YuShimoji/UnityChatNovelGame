@@ -1,6 +1,6 @@
 # SP-019: チャプター遷移体験
 
-Status: DRAFT
+Status: PARTIAL (Phase 1 実装済み: f8a536c)
 作成日: 2026-03-18
 カテゴリ: system/ui
 
