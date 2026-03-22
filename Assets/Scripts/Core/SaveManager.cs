@@ -152,7 +152,7 @@ namespace ProjectFoundPhone.Core
             }
             catch (Exception e)
             {
-                Debug.LogError($"SaveManager: Failed to save game - {e.Message}");
+                Debug.LogError($"SaveManager: Failed to save game - {e.Message}\n{e.StackTrace}");
                 return false;
             }
         }
@@ -328,7 +328,7 @@ namespace ProjectFoundPhone.Core
             }
             catch (Exception e)
             {
-                Debug.LogError($"SaveManager: Failed to load game - {e.Message}");
+                Debug.LogError($"SaveManager: Failed to load game - {e.Message}\n{e.StackTrace}");
                 return false;
             }
         }
@@ -525,7 +525,7 @@ namespace ProjectFoundPhone.Core
             }
             catch (Exception e)
             {
-                Debug.LogError($"SaveManager: Failed to delete save - {e.Message}");
+                Debug.LogError($"SaveManager: Failed to delete save - {e.Message}\n{e.StackTrace}");
                 return false;
             }
         }
@@ -573,7 +573,7 @@ namespace ProjectFoundPhone.Core
             }
             catch (Exception e)
             {
-                Debug.LogError($"SaveManager: Failed to read save info - {e.Message}");
+                Debug.LogError($"SaveManager: Failed to read save info - {e.Message}\n{e.StackTrace}");
                 return null;
             }
         }
