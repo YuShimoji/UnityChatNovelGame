@@ -90,6 +90,13 @@ namespace ProjectFoundPhone.Core
                 m_DialogueRunner.Stop();
             }
             CancelActiveWait();
+
+            // SP-020: イベント購読解除
+            var contradictionManager = FindFirstObjectByType<ContradictionManager>();
+            if (contradictionManager != null)
+            {
+                contradictionManager.OnContradictionDiscovered -= OnContradictionDiscoveredForOnboarding;
+            }
         }
         #endregion
 
@@ -143,6 +150,13 @@ namespace ProjectFoundPhone.Core
             if (m_ChatController == null)
             {
                 Debug.LogWarning("ScenarioManager: ChatController not found. Some features may not work.");
+            }
+
+            // SP-020: 矛盾発見時のオンボーディングヒント用イベント購読
+            var contradictionManager = FindFirstObjectByType<ContradictionManager>();
+            if (contradictionManager != null)
+            {
+                contradictionManager.OnContradictionDiscovered += OnContradictionDiscoveredForOnboarding;
             }
         }
 
@@ -461,7 +475,7 @@ namespace ProjectFoundPhone.Core
         /// </summary>
         private void EndDayCommand(int dayNumber)
         {
-            SystemMessageCommand($"--- {dayNumber}日目 終了 ---");
+            bool isChapterComplete = false;
 
             if (SaveManager.Instance != null && SaveManager.Instance.CurrentSaveData != null)
             {
@@ -478,6 +492,7 @@ namespace ProjectFoundPhone.Core
                     // 最終Dayならチャンネル完了
                     if (dayNumber >= m_CurrentChannel.TotalDays)
                     {
+                        isChapterComplete = true;
                         if (!saveData.CompletedChannelIDs.Contains(channelId))
                         {
                             saveData.CompletedChannelIDs.Add(channelId);
@@ -498,6 +513,61 @@ namespace ProjectFoundPhone.Core
 
                 // EndDay時にオートセーブ（重要イベントのためクールダウンを無視）
                 SaveManager.Instance.AutoSave(forceSave: true);
+            }
+
+            // チャプター完了サマリー (SP-019 Phase 1)
+            if (isChapterComplete)
+            {
+                ShowChapterCompleteSummary(dayNumber);
+            }
+            else
+            {
+                SystemMessageCommand($"--- {dayNumber}日目 終了 ---");
+            }
+        }
+
+        /// <summary>
+        /// チャプター完了時のサマリー表示 (SP-019 Phase 1)
+        /// </summary>
+        private void ShowChapterCompleteSummary(int dayNumber)
+        {
+            string chapterName = m_CurrentChannel != null
+                ? m_CurrentChannel.DisplayName
+                : $"Chapter {dayNumber}";
+
+            SystemMessageCommand($"=== {chapterName} 完了 ===");
+
+            // ProgressTracker からスナップショットを取得
+            var tracker = ProgressTracker.Instance;
+            if (tracker != null)
+            {
+                var snap = tracker.GetSnapshot();
+                string summary = $"断片 {snap.FragmentsCollected}/{snap.FragmentsTotal}"
+                    + $" | 矛盾 {snap.ContradictionsFound}/{snap.ContradictionsTotal}"
+                    + $" | HC {snap.HalluciCoin}";
+                SystemMessageCommand(summary);
+            }
+
+            // NudgeSystem からの次ステップヒント
+            var channels = Resources.LoadAll<ChannelData>("Channels");
+            var saveData = SaveManager.Instance?.CurrentSaveData;
+            var snapForNudge = tracker != null ? tracker.GetSnapshot() : default;
+            string nudge = NudgeSystem.GetNudge(snapForNudge, channels, saveData);
+            if (!string.IsNullOrEmpty(nudge))
+            {
+                SystemMessageCommand(nudge);
+            }
+        }
+
+        /// <summary>
+        /// SP-020: 矛盾発見時の初回オンボーディングヒント
+        /// </summary>
+        private void OnContradictionDiscoveredForOnboarding(ContradictionPair pair)
+        {
+            if (!GetVariable<bool>("$onboarding_seen_contradiction"))
+            {
+                SetVariable("$onboarding_seen_contradiction", true);
+                SystemMessageCommand("矛盾を見つけると HalluciCoin を獲得します。コインは新しいチャンネルの解放に使えます");
             }
         }
 
@@ -1224,6 +1294,13 @@ namespace ProjectFoundPhone.Core
             TopicData topicData = Resources.Load<TopicData>($"Topics/{topicId}");
             string title = topicData != null ? topicData.Title : topicId;
             SystemMessageCommand($"断片「{title}」を記録しました");
+
+            // SP-020: 初回断片発見時のオンボーディングヒント
+            if (!GetVariable<bool>("$onboarding_seen_fragment"))
+            {
+                SetVariable("$onboarding_seen_fragment", true);
+                SystemMessageCommand("断片はサブスレッドに記録され、いつでも見返せます");
+            }
 
             // 3. スレッド顕在化
             var thread = GetDeclaredThread(threadId);

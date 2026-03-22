@@ -17,6 +17,8 @@ title: ETK_Menu
 <<declare $etk_done_transferselect = false>>
 <<declare $etk_cond_trigger = false>>
 <<declare $auto_speaker_after_choice = false>>
+<<declare $onboarding_seen_fragment = false>>
+<<declare $onboarding_seen_contradiction = false>>
 
 <<SystemMessage "=== Engine Test Kit ===">>
 <<StartWait 0.5>>
@@ -46,6 +48,8 @@ title: ETK_Menu
     <<jump ETK_BranchTransferSelect>>
 -> サブスレッド実用モック (B型/C型/ライフサイクル)
     <<jump ETK_SubthreadMock>>
+-> チャプター遷移+オンボーディング テスト
+    <<jump ETK_TransitionOnboarding>>
 -> 自動検証 (Phase A Block D/E)
     <<jump ETK_AutoVerify>>
 -> テスト完了 <<if $etk_done_richtext and $etk_done_contradiction and $etk_done_commands and $etk_done_choices and $etk_done_threadtype and $etk_done_branch and $etk_done_condbranch and $etk_done_transferselect>>
@@ -970,4 +974,38 @@ title: ETK_BranchTransferSelect
 <<set $etk_done_transferselect to true>>
 <<SystemMessage "知識転送選択テスト完了">>
 <<jump ETK_Menu>>
+===
+
+/// --------------------------------------------------
+/// ETK_TransitionOnboarding: チャプター遷移サマリー + オンボーディング テスト
+/// 確認: EndDay最終Day → 完了サマリー / DiscoverFragment → 初回ヒント
+/// --------------------------------------------------
+title: ETK_TransitionOnboarding
+---
+<<SystemMessage "--- SP-019/020 テスト ---">>
+<<StartWait 0.3>>
+
+<<set $speaker to "pyramid">>
+チャプター遷移サマリー (SP-019) とオンボーディングヒント (SP-020) のテストです。
+
+<<StartWait 0.5>>
+
+<<set $speaker to "player">>
+-> SP-020: 断片発見オンボーディング
+    <<DeclareThreadLatent "etk_onboard_note" "A" "オンボーディングテスト覚書">>
+    <<set $onboarding_seen_fragment to false>>
+    <<DiscoverFragment "test_fragment_01" "etk_onboard_note" "テスト用断片発見 — 初回ヒントが表示されるか確認">>
+    <<StartWait 0.5>>
+    <<set $speaker to "pyramid">>
+    [CHECK] 「断片はサブスレッドに記録され、いつでも見返せます」が断片通知の直後に表示されましたか？
+    <<StartWait 0.3>>
+    <<jump ETK_TransitionOnboarding>>
+-> SP-019: チャプター完了サマリー (Day Resume テスト経由)
+    <<set $speaker to "pyramid">>
+    Day Resume テストの Day 2 完了で完了サマリーを確認できます。
+    <<StartWait 0.3>>
+    <<SystemMessage "ch_test ダッシュボードから Day Resume テストを実行し、Day 2 を完了してください">>
+    <<jump ETK_Menu>>
+-> メニューに戻る
+    <<jump ETK_Menu>>
 ===
