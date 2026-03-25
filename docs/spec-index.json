@@ -84,7 +84,7 @@
     "id": "SP-007",
     "title": "断片 (Fragments)",
     "status": "partial",
-    "pct": 50,
+    "pct": 65,
     "cat": "core",
     "file": "docs/StorySpec/07_fragments.md",
     "summary": "不可索引物の定義・設計パターン。コンテンツはCh1-2のみ"
@@ -186,7 +186,7 @@
     "pct": 100,
     "cat": "infra",
     "file": "docs/ENGINE_FEATURE_INVENTORY.md",
-    "summary": "Yarnコマンド24種(DiscoverFragment/AddFragmentNote追加)・キャラ管理・セーブ(AutoSave+スレッド対応)・演出・バブル表示設定・矛盾(#line:タグ方式)・ダッシュボード(Day Resume+マルチDay+HCゲート)・インベントリUI・サブスレッドUI(Step1-4全実装済み: サイドバー+ThreadType+種別差異レンダリング+出現通知+条件付き潜在+Save/Load)・Branch(Phase1-4: BeginBranch/EndBranch select/TransferFlags自動追跡/知識転送選択UI)・ETK(ch_etk対応)。全機能反映済み"
+    "summary": "Yarnコマンド24種+MessageTagged(非推奨)・キャラ管理・セーブ(AutoSave+スレッド対応)・演出・バブル表示設定・矛盾(#line:タグ方式)・ダッシュボード(Day Resume+マルチDay+HCゲート)・インベントリUI・サブスレッドUI(Step1-4全実装済み)・Branch(Phase1-4全実装)・ETK(ch_etk対応)・暗黙仕様セクション追加(話者解決優先順位/ThreadTypeフォールバック/SaveDataバージョン/選択肢自動表示/OnDestroyクリーンアップ)"
   },
   {
     "id": "EN-002",
@@ -264,7 +264,7 @@
     "id": "SP-018",
     "title": "進捗可視化基盤",
     "status": "partial",
-    "pct": 60,
+    "pct": 70,
     "cat": "ui",
     "file": "docs/StorySpec/18_progress_visibility.md",
     "summary": "Phase 1 MVP実装: ProgressTracker(データ集約)+NudgeSystem(ヒント生成)+ProgressSummaryUI(ダッシュボード内バー+数値+誘導)。加重平均進捗率(Ch35%+Cont30%+Frag20%+Topic15%)。Phase 2: チャプター間接続可視化"
@@ -273,7 +273,7 @@
     "id": "SP-019",
     "title": "チャプター遷移体験",
     "status": "partial",
-    "pct": 30,
+    "pct": 50,
     "cat": "system",
     "file": "docs/StorySpec/19_chapter_transition.md",
     "summary": "Ch完了→次Ch解放の遷移体験基盤。Phase 1実装済み: EndDay最終Day時に完了サマリー(チャプター名+断片/矛盾/HC数値+NudgeSystemヒント)をSystemMessage群として表示。Phase 2: 次Ch解放通知+ダッシュボード自動表示。Phase 3: チャプター間接続演出(SP-018 Phase 2統合)"
@@ -282,7 +282,7 @@
     "id": "SP-020",
     "title": "オンボーディング体験",
     "status": "partial",
-    "pct": 30,
+    "pct": 50,
     "cat": "system",
     "file": "docs/StorySpec/20_onboarding.md",
     "summary": "初回体験の文脈的ガイダンス。Phase 1実装済み: $onboarding_seen_fragment(初回断片発見時ヒント)+$onboarding_seen_contradiction(初回矛盾発見時HCヒント)。ダッシュボード初回はNudgeSystemで既カバー。Phase 2: 矛盾操作チュートリアル。Phase 3: インタラクティブガイド"
@@ -291,9 +291,18 @@
     "id": "SP-017",
     "title": "サブスレッド解放トリガー",
     "status": "draft",
-    "pct": 0,
+    "pct": 30,
     "cat": "core",
     "file": "docs/StorySpec/17_unlock_triggers.md",
-    "summary": "サブスレッド出現タイミング制御。複合トリガー方式(HC閾値+進行+断片 OR)決定済み。既存DeclareThreadLatentCond+ChannelData SOでカバー。詳細オーサリングパターンは未策定"
+    "summary": "サブスレッド出現タイミング制御。複合トリガー方式(HC閾値+進行+断片 OR)決定済み。既存DeclareThreadLatentCond+ChannelData SOでカバー。オーサリングパターン案4種(Yarn変数/章クリア/HC閾値/複合AND)記載済み。残: 複合条件記法集・Ch3以降の具体設定・解放通知演出(HUMAN_AUTHORITY)"
+  },
+  {
+    "id": "EN-010",
+    "title": "機能状態監査",
+    "status": "done",
+    "pct": 100,
+    "cat": "infra",
+    "file": "docs/FEATURE_STATUS_AUDIT.md",
+    "summary": "全機能の実装/未確認/未実装一覧、懸念点、レガシー削除記録。2026-03-26監査実施。実装26機能、未確認10件(Unity再生必須)、未実装15件、レガシー19件削除(~920行+シーン2+docs25ファイル)"
   }
 ]

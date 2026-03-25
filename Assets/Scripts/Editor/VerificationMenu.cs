@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using Assets.Scripts.Dev;
 
 namespace ProjectFoundPhone.EditorTools
 {
@@ -11,18 +10,6 @@ namespace ProjectFoundPhone.EditorTools
         public static void RunChatUIVerification()
         {
             SetupAndRun("DebugChatScene", "single_capture", true);
-        }
-
-        [MenuItem("Tools/Verification/Run Synthesis Verification")]
-        public static void RunSynthesisVerification()
-        {
-            SetupAndRun("VerificationScene", "single_capture", true);
-        }
-
-        [MenuItem("Tools/Verification/Run MVP Final Verification Pack")]
-        public static void RunMvpFinalVerificationPack()
-        {
-            SetupAndRun("MVPScene", "mvp_pack", true);
         }
 
         [MenuItem("Tools/Verification/Run Vertical Slice Full Playthrough")]
@@ -41,11 +28,6 @@ namespace ProjectFoundPhone.EditorTools
         public static void RunMissingScriptScan()
         {
             MissingScriptScanner.ScanDebugChatSceneMissingScripts();
-        }
-
-        public static void RunMvpFinalVerificationPackBatch()
-        {
-            SetupAndRun("MVPScene", "mvp_pack", false);
         }
 
         public static void RunVerticalSliceFullPlaythroughBatch()
@@ -74,17 +56,13 @@ namespace ProjectFoundPhone.EditorTools
 
             // Create a temporary scene for the runner
             var runnerScene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
-            
+
             // Create Automator
             GameObject go = new GameObject("VerificationRunner");
             var automator = go.AddComponent<VerificationAutomator>();
             automator.TargetScene = targetSceneName;
             automator.VerificationFlow = verificationFlow;
-            
-            // Ensure it survives load
-            // Note: DontDestroyOnLoad only works at runtime. 
-            // VerificationAutomator.Start() handles DontDestroyOnLoad when playing starts.
-            
+
             // Start Play Mode
             Debug.Log($"Starting Verification for {targetSceneName} ({verificationFlow})...");
             EditorApplication.isPlaying = true;

@@ -1,6 +1,6 @@
 # Engine Feature Inventory
 
-**最終更新**: 2026-03-22
+**最終更新**: 2026-03-23
 **エンジン**: Unity 6.3 LTS (6000.3.6f1) + Yarn Spinner 3.1.3
 
 このドキュメントは、シナリオ執筆者が「今のエンジンで何ができるか」を把握するためのリファレンスです。
@@ -17,6 +17,7 @@
 | (矛盾タグ) | `テキスト #line:タグ名` | Yarn 標準の `#line:` タグで矛盾指摘システムの識別子を付与。`ChatDialogueView` が `TextID` として自動取得し `AddMessage` の lineTag に渡す。例: `本プログラムの対象地域は... #line:ch1_region_identity_src` |
 | SystemMessage | `<<SystemMessage "テキスト">>` | 中央寄せのシステム通知を表示 |
 | Image | `<<Image "charID" "imageID">>` | 画像メッセージを表示（`Resources/Images/` 内） |
+| ~~MessageTagged~~ | `<<MessageTagged "charID" "テキスト" "lineTag">>` | **非推奨** (互換のため残存)。`#line:` タグ方式を使うこと |
 
 ### 演出系
 
@@ -632,3 +633,39 @@ title: Ch1_AfterLunch
 午後のセッションを始めましょう。
 ===
 ```
+
+---
+
+## 13. 暗黙の振る舞い (Implicit Behaviors)
+
+エンジン内部で明示的なコマンドや設定なしに適用される振る舞い。
+
+### 話者解決の優先順位
+
+`ChatDialogueView` がメッセージの話者を決定する際の優先順位:
+
+1. `CharacterName` (Yarn ノードヘッダー `character:` 指定)
+2. `$speaker` Yarn 変数
+3. `"npc"` (ハードコードされたフォールバック)
+
+`$speaker` 未設定のまま `<<Message>>` を使用すると、メッセージは `"npc"` として扱われる。
+
+### ThreadType のフォールバック
+
+`DeclareThreadTyped` に不明な型文字列が渡された場合、`ThreadType.Annotation` にフォールバックする。警告ログは出力されるが、エラーにはならない。
+
+### セーブデータバージョン
+
+`SaveData.Version` は現在 `1` 固定。マイグレーションロジックは未実装。将来セーブフォーマットを変更する場合は、バージョン判定による移行処理の追加が必要。
+
+### 選択肢のプレイヤーメッセージ自動表示
+
+`RunOptionsAsync` で選択肢を選んだ後、選択テキストがプレイヤーのメッセージバブルとして自動表示される。Yarn スクリプト側でエコー行を書く必要はない。`$auto_speaker_after_choice = true` の場合、選択後に `$speaker` が `"player"` に自動セットされる。
+
+### OnDestroy クリーンアップ
+
+`SaveManager.OnDestroy()` で以下を自動クリア:
+- `DeductionBoard.ClearAllTopics()`
+- `ScenarioManager.ClearDeclaredThreads()`
+
+これにより Play Mode 終了時にランタイム状態が残らない。

@@ -8,12 +8,13 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
-現在の状況 (2026-03-22 session 8):
-  - nightshift: ドキュメント同期 + コード品質検証 + SaveManager StackTrace改善
-  - REFRESH後: SP-019 Phase 1 (チャプター完了サマリー) + SP-020 Phase 1 (オンボーディングヒント) 実装
-  - spec-index: 26エントリ (done 16 / partial 7 / draft 1 / todo 2)
-  - Unity Editor再コンパイル未確認 (手動検証待ち)
-  - 次の作業: Unity再コンパイル確認 → Phase A手動検証(65項目+SP-019/020) → git push
+現在の状況 (2026-03-26 session 10 nightshift):
+  - session 10: 全コードベース監査 + レガシー根絶 (~920行+シーン2+docs25ファイル削除)
+  - 削除: FragmentListUI chain, DeductionBoard verification chain, Dev/, MVP/, VerificationCapture, MVPScene, VerificationScene
+  - docs/FEATURE_STATUS_AUDIT.md 作成: 実装26/未確認10/未実装15/懸念6
+  - spec-index: 34エントリ (done 22 / partial 9 / draft 1 / todo 2)
+  - Phase A手動検証 (65項目+SP-019/020) 未完了 — Unity Editor必須
+  - 次の作業: Pipeline設計(HUMAN_AUTHORITY) → Phase A手動検証
   - 残存問題: UnreadCount復元(LOW、コードレビュー正常・Unity検証待ち)
 
 ## DECISION LOG

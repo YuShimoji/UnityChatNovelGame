@@ -1,13 +1,14 @@
 # WORKFLOW STATE SSOT
 
-**Updated**: 2026-03-18
-**Phase**: エンジン検証 Phase A — 全主要機能実装完了、手動検証準備完了
+**Updated**: 2026-03-23
+**Phase**: エンジン検証 Phase A — 全主要機能実装完了、手動検証準備完了 + Pipeline設計待ち
 **Branch**: main
 
 ## Mission
 
 ダッシュボード MVP + インベントリ UI + チャットバブル修正 + サブスレッドUI (5a-5e+5d) の動作確認を行い、安定ベースラインを確立する。
-残: Phase Aクロージング手動検証(65項目、最短実行フロー10ステップ/約80分) → Ch3シナリオ設計。
+残: Phase Aクロージング手動検証(65項目+SP-019/020、最短実行フロー10ステップ/約80分) → Pipeline設計 → Ch3シナリオ設計。
+SP-019 Phase 1 (チャプター完了サマリー) + SP-020 Phase 1 (オンボーディングヒント) 実装済み (f8a536c)。
 ETK_AutoVerify に全[CHECK]メッセージ追加済み (D-1〜D-9, E, F)。
 Ch1/Ch2 Yarn スクリプトはエンジン検証用モックであり、本番コンテンツではない。
 
@@ -112,7 +113,11 @@ ContentAuthoring シーンで以下を行う必要あり:
 | 7 | ~~SP-014 Phase 1: 分岐内トピック自動追跡~~ | A | #5a | **済** (2026-03-17: UnlockTopic→TransferFlags自動登録, ResolveReflectionMessage自動生成) |
 | 8 | ~~SP-014 Phase 2: 条件付き分岐トリガー~~ | A | #7 | **済** (2026-03-17: DeclareThreadLatentCond+リアクティブ評価+AutoBeginBranch+安全弁+サイドバーバッジ) |
 | 9 | ~~SP-006 ゲートメカニクス~~ | A | — | **済** (2026-03-17: HCゲートUI+ChannelData.RequiredHalluciCoin+ダッシュボードHC N/M表示) |
-| 10 | Ch3 シナリオ設計 | A | #2,5 完了後 | 未着手 |
+| 10 | ~~SP-019 Phase 1: チャプター完了サマリー~~ | A | — | **済** (2026-03-22: f8a536c) |
+| 11 | ~~SP-020 Phase 1: オンボーディングヒント~~ | A | — | **済** (2026-03-22: f8a536c) |
+| 12 | Phase A クロージング手動検証 (65項目+SP-019/020) | A | Unity Editor | **待ち** |
+| 13 | Pipeline設計 (最終成果物像・手動/自動境界) | A | — | 未着手 |
+| 14 | Ch3 シナリオ設計 | A | #12,13 完了後 | 未着手 |
 
 ### 技術的知見
 
