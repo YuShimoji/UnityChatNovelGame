@@ -540,7 +540,3 @@ namespace ProjectFoundPhone.Tests
         #endregion
     }
 }
-
-
-
-

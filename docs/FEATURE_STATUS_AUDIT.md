@@ -10,14 +10,14 @@
 
 | 項目 | 数値 |
 |------|------|
-| 実装ファイル (.cs) | 79 (テスト含む) |
-| テストファイル | 10 (EditMode 7 + PlayMode 3) |
+| 実装ファイル (.cs) | 78 (テスト含む) |
+| テストファイル | 9 (EditMode 7 + PlayMode 2) |
 | Yarnファイル (active) | 9 |
 | Yarnファイル (archive) | 1 |
 | Yarnコマンド | 24 + MessageTagged(非推奨) |
-| 仕様エントリ (spec-index) | 33 (done 21 / partial 9 / draft 1 / todo 2) |
+| 仕様エントリ (spec-index) | 34 (done 22 / partial 9 / draft 1 / todo 2) |
 | TODO/FIXME/HACK | 1件 (ChatController.cs:1296) |
-| [Obsolete] マーク | 3件 (FragmentListUI, ContradictionPair x2) |
+| [Obsolete] マーク | 2件 (ContradictionPair.UnlockTopic x2) |
 | docs ファイル数 | ~25 (archive除く) |
 
 ---

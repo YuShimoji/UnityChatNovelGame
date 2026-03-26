@@ -2551,21 +2551,6 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// スレッド履歴をまとめて設定（ロード用）
-        /// </summary>
-        public void SetThreadHistories(Dictionary<string, List<SavedChatMessage>> histories)
-        {
-            m_ThreadHistories.Clear();
-            if (histories != null)
-            {
-                foreach (var kvp in histories)
-                {
-                    m_ThreadHistories[kvp.Key] = kvp.Value;
-                }
-            }
-        }
-
-        /// <summary>
         /// 現在のActiveThreadIdを設定（ロード復元用。SwitchToThreadと違いUI操作なし）
         /// </summary>
         public void SetActiveThreadId(string threadId)
