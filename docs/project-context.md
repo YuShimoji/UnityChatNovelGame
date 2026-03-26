@@ -7,7 +7,7 @@
 - ブランチ戦略: trunk-based (main のみ)
 - 現フェーズ: プロトタイプ → α移行中
 - 直近の状態 (2026-03-26 session 10 nightshift):
-  - エンジン基盤: 24 Yarnコマンド+MessageTagged(非推奨)、Save/Load、Branch Phase1-4、サブスレッドUI、レスポンシブ基盤 全実装済み
+  - エンジン基盤: 24 Yarnコマンド、Save/Load、Branch Phase1-4、サブスレッドUI、レスポンシブ基盤 全実装済み
   - session 10: 全コードベース監査 + レガシー根絶 (~920行+シーン2+docs25ファイル削除)
   - spec-index: 34エントリ (done 22 / partial 9 / draft 1 / todo 2) — EN-010(機能状態監査)追加
   - docs/FEATURE_STATUS_AUDIT.md: 実装26機能/未確認10件/未実装15件/懸念6件

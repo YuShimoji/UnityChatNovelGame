@@ -8,7 +8,10 @@ CLAUDE.md が共有されるため、コーディング規約・アーキテク�
 
 ---
 
-## Task A: MessageTagged 参照を #line: タグ方式に統一
+## Task A: MessageTagged 参照を #line: タグ方式に統一 【完了済み: session 11】
+
+> **完了済み (2026-03-26 session 11):** MessageTagged コマンドは ScenarioManager.cs から完全に削除。
+> ドキュメント全8ファイルの参照を「削除済み」に更新済み。このタスクは不要。
 
 ```
 UnityChatNovelGame (Unity 6.3 / Yarn Spinner 3.1.3) のドキュメントで

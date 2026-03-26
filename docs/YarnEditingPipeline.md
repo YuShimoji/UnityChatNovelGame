@@ -83,7 +83,7 @@ ScenarioManager に登録済みのコマンド:
 | `<<Glitch level>>` | グリッチ演出 (1-5) | `<<Glitch 2>>` |
 | `<<Typing true\|false>>` | タイピングインジケーター手動制御 | `<<Typing true>>` |
 | `テキスト #line:タグ名` | 矛盾タグ付きメッセージ（推奨） | `対象地域は... #line:ch1_region_identity_src` |
-| ~~`<<MessageTagged "charID" "text" "tag">>`~~ | 非推奨（互換のため残存）。上記 `#line:` タグ方式を使うこと | ~~`<<MessageTagged "pyramid" "..." "ch2_src">>`~~ |
+| ~~`<<MessageTagged "charID" "text" "tag">>`~~ | 削除済み。上記 `#line:` タグ方式を使うこと | ~~`<<MessageTagged "pyramid" "..." "ch2_src">>`~~ |
 | `<<EndDay N>>` | Day 終了 + Day進捗記録 + オートセーブ。最終Dayのみチャンネル完了 | `<<EndDay 1>>` |
 
 ---

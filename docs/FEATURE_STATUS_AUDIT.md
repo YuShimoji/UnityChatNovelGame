@@ -14,7 +14,7 @@
 | テストファイル | 9 (EditMode 7 + PlayMode 2) |
 | Yarnファイル (active) | 9 |
 | Yarnファイル (archive) | 1 |
-| Yarnコマンド | 24 + MessageTagged(非推奨) |
+| Yarnコマンド | 24 |
 | 仕様エントリ (spec-index) | 34 (done 22 / partial 9 / draft 1 / todo 2) |
 | TODO/FIXME/HACK | 1件 (ChatController.cs:1296) |
 | [Obsolete] マーク | 2件 (ContradictionPair.UnlockTopic x2) |
@@ -111,7 +111,7 @@
 | W-1 | Phase A手動検証65項目が未実施 | HIGH | ユーザーのUnity Editor操作が必須 |
 | W-2 | Pipeline設計(最終成果物像)が未定義 | HIGH | HUMAN_AUTHORITY: 設計判断が必要 |
 | W-3 | ContradictionFeedbackControllerのシーンセットアップ未完了 | MEDIUM | Phase A実施時にセットアップ |
-| W-4 | MessageTaggedコマンド (非推奨) がScenarioManagerに残存 | LOW | 後方互換。Yarnで使用なし。安全に削除可能 |
+| W-4 | MessageTaggedコマンド | — | 削除済み (session 11) |
 | W-5 | ContradictionPairの[Obsolete]フィールド (UnlockTopic) | LOW | SerializeFieldのため削除するとSO壊れる。放置 |
 | W-6 | ChatController.cs:1296 TODO (ステータスバールーティング) | LOW | 将来のUI拡張時に対応 |
 
@@ -150,7 +150,7 @@
 |------|------|
 | VerificationAutomator.cs (887行) | Phase A手動検証の自動化基盤として活用可能 |
 | VerificationMenu.cs | Editor検証メニュー。MVPScene/VerificationScene参照は除去 |
-| MessageTagged (ScenarioManager内) | 後方互換コマンドハンドラ。削除リスク > 残存コスト |
+| ~~MessageTagged (ScenarioManager内)~~ | 削除済み (session 11) |
 | ContradictionPair.UnlockTopic | [Obsolete]だがSerializeFieldで既存SOに影響。放置が安全 |
 | ChatScenarioData.cs (Data/) | ScenarioManager.PlayScenarioが使用。デバッグ機能として有効 |
 | MissingScriptScanner.cs | Editor検証ユーティリティ。VerificationMenuから参照 |

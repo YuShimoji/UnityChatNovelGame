@@ -180,7 +180,6 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.AddCommandHandler<string>("UnlockTopic", UnlockTopicCommand);
             m_DialogueRunner.AddCommandHandler<int>("Glitch", GlitchCommand);
             m_DialogueRunner.AddCommandHandler<string>("SystemMessage", SystemMessageCommand);
-            m_DialogueRunner.AddCommandHandler<string, string, string>("MessageTagged", MessageTaggedCommand);
             m_DialogueRunner.AddCommandHandler<string>("Typing", TypingCommand);
             m_DialogueRunner.AddCommandHandler<int>("EndDay", EndDayCommand);
             m_DialogueRunner.AddCommandHandler<string, string>("DeclareThread", DeclareThreadCommand);
@@ -219,7 +218,6 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.RemoveCommandHandler("UnlockTopic");
             m_DialogueRunner.RemoveCommandHandler("Glitch");
             m_DialogueRunner.RemoveCommandHandler("SystemMessage");
-            m_DialogueRunner.RemoveCommandHandler("MessageTagged");
             m_DialogueRunner.RemoveCommandHandler("Typing");
             m_DialogueRunner.RemoveCommandHandler("EndDay");
             m_DialogueRunner.RemoveCommandHandler("DeclareThread");
@@ -254,22 +252,6 @@ namespace ProjectFoundPhone.Core
             else
             {
                 Debug.LogWarning($"ScenarioManager: ChatController not available. Message from {charID}: {text}");
-            }
-        }
-
-        /// <summary>
-        /// LineTag 付きメッセージコマンド
-        /// Yarn: &lt;&lt;MessageTagged "CharID" "Text" "lineTag"&gt;&gt;
-        /// </summary>
-        private void MessageTaggedCommand(string charID, string text, string lineTag)
-        {
-            if (m_ChatController != null)
-            {
-                m_ChatController.AddMessage(charID, text, lineTag);
-            }
-            else
-            {
-                Debug.LogWarning($"ScenarioManager: ChatController not available. MessageTagged from {charID}: {text} [tag:{lineTag}]");
             }
         }
 

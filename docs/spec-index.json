@@ -186,7 +186,7 @@
     "pct": 100,
     "cat": "infra",
     "file": "docs/ENGINE_FEATURE_INVENTORY.md",
-    "summary": "Yarnコマンド24種+MessageTagged(非推奨)・キャラ管理・セーブ(AutoSave+スレッド対応)・演出・バブル表示設定・矛盾(#line:タグ方式)・ダッシュボード(Day Resume+マルチDay+HCゲート)・インベントリUI・サブスレッドUI(Step1-4全実装済み)・Branch(Phase1-4全実装)・ETK(ch_etk対応)・暗黙仕様セクション追加(話者解決優先順位/ThreadTypeフォールバック/SaveDataバージョン/選択肢自動表示/OnDestroyクリーンアップ)"
+    "summary": "Yarnコマンド24種・キャラ管理・セーブ(AutoSave+スレッド対応)・演出・バブル表示設定・矛盾(#line:タグ方式)・ダッシュボード(Day Resume+マルチDay+HCゲート)・インベントリUI・サブスレッドUI(Step1-4全実装済み)・Branch(Phase1-4全実装)・ETK(ch_etk対応)・暗黙仕様セクション追加(話者解決優先順位/ThreadTypeフォールバック/SaveDataバージョン/選択肢自動表示/OnDestroyクリーンアップ)"
   },
   {
     "id": "EN-002",
