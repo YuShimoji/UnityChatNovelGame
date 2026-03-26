@@ -96,9 +96,6 @@ namespace ProjectFoundPhone.UI
         private ChatUIConfig m_UIConfig;
         private ChatUIConfig UIConfig => m_UIConfig ??= ChatUIConfig.Instance;
 
-        /// <summary>ランタイム生成された角丸スプライト (キャッシュ)</summary>
-        private Sprite m_GeneratedRoundedSprite;
-
         /// <summary>ScrollRect の RectTransform キャッシュ（バブル幅計算用）</summary>
         private RectTransform m_ScrollRectTransform;
         #endregion
@@ -621,7 +618,7 @@ namespace ProjectFoundPhone.UI
 
             // 円形の背景Image（マスク用）
             Image maskImage = container.GetComponent<Image>();
-            maskImage.sprite = CreateCircleSprite(); // 実行時に円形Spriteを生成
+            maskImage.sprite = BubbleSpriteFactory.CreateCircleSprite(); // 実行時に円形Spriteを生成
             maskImage.color = Color.white;
 
             // Mask component
@@ -654,42 +651,6 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// 円形Spriteを実行時に生成する（アイコンマスク用）
-        /// </summary>
-        private Sprite CreateCircleSprite()
-        {
-            int size = 64; // テクスチャサイズ
-            Texture2D texture = new Texture2D(size, size, TextureFormat.RGBA32, false);
-            texture.filterMode = FilterMode.Bilinear;
-
-            float center = size / 2f;
-            float radius = center;
-
-            // 円を描画
-            for (int y = 0; y < size; y++)
-            {
-                for (int x = 0; x < size; x++)
-                {
-                    float dx = x - center;
-                    float dy = y - center;
-                    float distance = Mathf.Sqrt(dx * dx + dy * dy);
-
-                    if (distance <= radius)
-                    {
-                        texture.SetPixel(x, y, Color.white);
-                    }
-                    else
-                    {
-                        texture.SetPixel(x, y, Color.clear);
-                    }
-                }
-            }
-
-            texture.Apply();
-
-            return Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
-        }
-
         /// <summary>
         /// メッセージバブルのPrefabをインスタンス化（プール経由）
         /// </summary>
@@ -1615,7 +1576,7 @@ namespace ProjectFoundPhone.UI
                     buttonBg.color = UIConfig.choiceButtonColor;
                     // 角丸スプライト適用 (選択肢ボタンにも共通)
                     // NOTE: ?? は Unity "fake null" を透過するため明示判定
-                    Sprite choiceSprite = UIConfig.bubbleSprite != null ? UIConfig.bubbleSprite : GetOrCreateRoundedSprite();
+                    Sprite choiceSprite = UIConfig.bubbleSprite != null ? UIConfig.bubbleSprite : BubbleSpriteFactory.GetOrCreateRoundedSprite(UIConfig.bubbleCornerRadius);
                     if (choiceSprite != null)
                     {
                         buttonBg.sprite = choiceSprite;
@@ -2516,82 +2477,6 @@ namespace ProjectFoundPhone.UI
         #region Bubble Visual Helpers
 
         /// <summary>
-        /// 角丸矩形の 9-slice 用 Sprite をランタイム生成する。
-        /// 白色テクスチャを生成し、Image.color でテーマカラーを乗算する想定。
-        /// </summary>
-        private Sprite GetOrCreateRoundedSprite()
-        {
-            if (m_GeneratedRoundedSprite != null) return m_GeneratedRoundedSprite;
-
-            float radius = UIConfig.bubbleCornerRadius;
-            if (radius <= 0f)
-            {
-                radius = 16f;
-                Debug.LogWarning($"[ChatController] bubbleCornerRadius is {UIConfig.bubbleCornerRadius}. Using default 16f.");
-            }
-
-            // テクスチャサイズ: 角丸半径の2倍 + 中央2px (9-slice の伸縮領域)
-            int r = Mathf.CeilToInt(radius);
-            int size = r * 2 + 2;
-            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false);
-            tex.filterMode = FilterMode.Bilinear;
-            tex.wrapMode = TextureWrapMode.Clamp;
-
-            var pixels = new Color32[size * size];
-            var white = new Color32(255, 255, 255, 255);
-            var clear = new Color32(0, 0, 0, 0);
-
-            for (int y = 0; y < size; y++)
-            {
-                for (int x = 0; x < size; x++)
-                {
-                    // 四隅の角丸判定
-                    float dx = 0f, dy = 0f;
-                    if (x < r && y < r)           { dx = r - x - 0.5f; dy = r - y - 0.5f; }      // 左下
-                    else if (x >= size - r && y < r)    { dx = x - (size - r) + 0.5f; dy = r - y - 0.5f; }  // 右下
-                    else if (x < r && y >= size - r)    { dx = r - x - 0.5f; dy = y - (size - r) + 0.5f; }  // 左上
-                    else if (x >= size - r && y >= size - r) { dx = x - (size - r) + 0.5f; dy = y - (size - r) + 0.5f; } // 右上
-
-                    if (dx > 0f || dy > 0f)
-                    {
-                        float dist = Mathf.Sqrt(dx * dx + dy * dy);
-                        if (dist > r)
-                            pixels[y * size + x] = clear;
-                        else if (dist > r - 1f)
-                        {
-                            // アンチエイリアス: 境界付近のアルファを補間
-                            byte a = (byte)(255 * (r - dist));
-                            pixels[y * size + x] = new Color32(255, 255, 255, a);
-                        }
-                        else
-                            pixels[y * size + x] = white;
-                    }
-                    else
-                    {
-                        pixels[y * size + x] = white;
-                    }
-                }
-            }
-
-            tex.SetPixels32(pixels);
-            tex.Apply();
-
-            // 9-slice border: 角丸領域をボーダーに設定
-            var border = new Vector4(r, r, r, r);
-            m_GeneratedRoundedSprite = Sprite.Create(
-                tex,
-                new Rect(0, 0, size, size),
-                new Vector2(0.5f, 0.5f),
-                100f,
-                0,
-                SpriteMeshType.FullRect,
-                border
-            );
-            m_GeneratedRoundedSprite.name = "GeneratedRoundedBubble";
-            return m_GeneratedRoundedSprite;
-        }
-
-        /// <summary>
         /// ConfigureBubble でラッパーに配置した後、最終的なバブル幅に基づいてテキスト高さを計算し
         /// LayoutElement.preferredHeight を確定する。
         /// これにより「幅計算 → ラッパー配置 → 利用可能幅変化 → 高さ不整合」問題を解消する。
@@ -2632,7 +2517,7 @@ namespace ProjectFoundPhone.UI
             // 角丸スプライト
             // NOTE: ?? は C# 参照 null のみ判定し Unity の "fake null" (Inspector 未設定の
             //       SerializedField) を透過する。Unity overloaded != で明示判定する。
-            Sprite sprite = UIConfig.bubbleSprite != null ? UIConfig.bubbleSprite : GetOrCreateRoundedSprite();
+            Sprite sprite = UIConfig.bubbleSprite != null ? UIConfig.bubbleSprite : BubbleSpriteFactory.GetOrCreateRoundedSprite(UIConfig.bubbleCornerRadius);
             #if UNITY_EDITOR
             if (sprite == null)
             {
