@@ -6,11 +6,11 @@
 - 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 - ブランチ戦略: trunk-based (main のみ)
 - 現フェーズ: プロトタイプ → α移行中
-- 直近の状態 (2026-03-26 session 10 nightshift):
+- 直近の状態 (2026-03-26 session 11 nightshift):
   - エンジン基盤: 24 Yarnコマンド、Save/Load、Branch Phase1-4、サブスレッドUI、レスポンシブ基盤 全実装済み
-  - session 10: 全コードベース監査 + レガシー根絶 (~920行+シーン2+docs25ファイル削除)
-  - spec-index: 34エントリ (done 22 / partial 9 / draft 1 / todo 2) — EN-010(機能状態監査)追加
-  - docs/FEATURE_STATUS_AUDIT.md: 実装26機能/未確認10件/未実装15件/懸念6件
+  - session 11: デッドコード根絶 + ChatController リファクタリング (-204行) + YarnContentValidator 新規
+  - ChatTextParser / BubbleSpriteFactory 抽出、MessageTagged 完全除去
+  - spec-index: 34エントリ (done 22 / partial 9 / draft 1 / todo 2)
   - Phase A手動検証 (65項目+SP-019/020) 未完了 — Unity Editor必須
   - 最終成果物像・Pipeline設計が未定義（要設計、HUMAN_AUTHORITY）
 
@@ -88,9 +88,9 @@ CLAUDE.md の IDEA POOL を参照。ここには project-context.md 作成以降
 
 ## HANDOFF SNAPSHOT
 
-- 現在の主レーン: Excise (完了) → Advance (Pipeline設計待ち)
-- 現在のスライス: レガシー監査完了 → Pipeline設計 + Phase A クロージング
-- 今回変更した対象: レガシー19件削除、docs/FEATURE_STATUS_AUDIT.md新規、docs/runtime-state.md新規、spec-index.json(EN-010追加)、VerificationMenu.cs修正、EditorBuildSettings修正
-- 次回最初に確認すべきファイル: docs/FEATURE_STATUS_AUDIT.md, docs/runtime-state.md, docs/project-context.md
-- 未確定の設計論点: 最終成果物の出力形態、Pipeline全体像、自動化範囲
+- 現在の主レーン: Excise + Advance (安定版整備完了)
+- 現在のスライス: 安定版整備 → Pipeline設計 + Phase A クロージング
+- 今回変更した対象 (session 11): ChatTextParser.cs/BubbleSpriteFactory.cs新規、YarnContentValidator.cs新規、ChatController.cs (-204行)、ScenarioManager.cs (MessageTagged除去)、MVPScreenshotTests削除、docs8ファイル一括更新
+- 次回最初に確認すべきファイル: docs/FEATURE_STATUS_AUDIT.md, docs/runtime-state.md
+- 未確定の設計論点: 最終成果物の出力形態、Pipeline全体像、自動化範囲、WORKFLOW_STATE_SSOT.md廃止可否
 - 今は触らない範囲: Runtime Core新機能、Ch3シナリオ、マネタイズ

@@ -8,10 +8,12 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
-現在の状況 (2026-03-26 session 10 nightshift):
-  - session 10: 全コードベース監査 + レガシー根絶 (~920行+シーン2+docs25ファイル削除)
-  - 削除: FragmentListUI chain, DeductionBoard verification chain, Dev/, MVP/, VerificationCapture, MVPScene, VerificationScene
-  - docs/FEATURE_STATUS_AUDIT.md 作成: 実装26/未確認10/未実装15/懸念6
+現在の状況 (2026-03-26 session 11 nightshift):
+  - session 11: デッドコード根絶 + リファクタリング + オーサリングツール追加
+  - ChatController.cs: 2753→2549行 (-204行)。ChatTextParser + BubbleSpriteFactory 抽出
+  - MessageTagged コマンド完全除去 (コード + docs 8ファイル)
+  - MVPScreenshotEvidencePlayModeTests 削除 (死亡テスト)
+  - YarnContentValidator Editor ツール新規作成 (Tools > Yarn Content Validator)
   - spec-index: 34エントリ (done 22 / partial 9 / draft 1 / todo 2)
   - Phase A手動検証 (65項目+SP-019/020) 未完了 — Unity Editor必須
   - 次の作業: Pipeline設計(HUMAN_AUTHORITY) → Phase A手動検証
