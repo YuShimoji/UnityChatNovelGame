@@ -1,6 +1,6 @@
 # Engine Feature Inventory
 
-**最終更新**: 2026-03-23
+**最終更新**: 2026-03-27
 **エンジン**: Unity 6.3 LTS (6000.3.6f1) + Yarn Spinner 3.1.3
 
 このドキュメントは、シナリオ執筆者が「今のエンジンで何ができるか」を把握するためのリファレンスです。
@@ -14,9 +14,10 @@
 | コマンド | 構文 | 説明 |
 | -------- | ---- | ---- |
 | Message | `<<Message "charID" "テキスト">>` | 指定キャラのメッセージバブルを表示 |
-| (矛盾タグ) | `テキスト #line:タグ名` | Yarn 標準の `#line:` タグで矛盾指摘システムの識別子を付与。`ChatDialogueView` が `TextID` として自動取得し `AddMessage` の lineTag に渡す。例: `本プログラムの対象地域は... #line:ch1_region_identity_src` |
 | SystemMessage | `<<SystemMessage "テキスト">>` | 中央寄せのシステム通知を表示 |
 | Image | `<<Image "charID" "imageID">>` | 画像メッセージを表示（`Resources/Images/` 内） |
+
+**矛盾タグ（Yarn 標準 `#line:` タグ方式）**: `テキスト #line:タグ名` の形式で矛盾指摘システムの識別子を付与する。`ChatDialogueView` が `TextID` として自動取得し `AddMessage` の lineTag に渡す。例: `本プログラムの対象地域は... #line:ch1_region_identity_src`。旧 `MessageTagged` コマンドは Session 11 で除去済み。現在はこの `#line:` タグ方式に一本化されている。
 
 ### 演出系
 
@@ -243,6 +244,14 @@ title: NodeA
 
 > 詳細な実装仕様は `docs/UI_IMPLEMENTATION_SPEC.md` を参照。
 
+### モジュール構成
+
+| ファイル | 責務 |
+| -------- | ---- |
+| `ChatController.cs` | バブル生成・レイアウト・スクロール制御の統合 |
+| `ChatTextParser.cs` | テキスト解析・変換ユーティリティ（スレッドマークアップ `[link:...]` / `[artifact:...]` の TMP リッチテキスト変換）。Session 11 で ChatController から抽出 |
+| `BubbleSpriteFactory.cs` | 角丸 9-slice スプライトのランタイム生成ファクトリ。Session 11 で ChatController から抽出 |
+
 ### ChatUIConfig（ScriptableObject）
 
 `Resources/ChatUIConfig` で一元管理する主要パラメータ:
@@ -270,7 +279,7 @@ NPC バブルでは名前行と本文行を改行で分離して表示する:
 
 ### 角丸スプライト + 影（70fe16b）
 
-- `bubbleSprite` が null の場合、`GetOrCreateRoundedSprite()` で白色の角丸テクスチャをランタイム生成（アンチエイリアス付き、9-slice対応）
+- `bubbleSprite` が null の場合、`BubbleSpriteFactory.GetOrCreateRoundedSprite()` で白色の角丸テクスチャをランタイム生成（アンチエイリアス付き、9-slice対応）
 - `bubbleShadowEnabled = true` の場合、`Shadow` コンポーネントを動的追加（既存チェック済み）
 - 選択肢ボタンにも角丸スプライトを適用
 - SystemMessage には影を付けない

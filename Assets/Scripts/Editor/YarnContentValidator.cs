@@ -20,15 +20,15 @@ namespace ProjectFoundPhone.Editor
     {
         private const string ActiveYarnDir = "Assets/Resources/Yarn/active";
 
-        // 24 registered custom commands (ScenarioManager + ChatDialogueView)
+        // 26 registered custom commands (ScenarioManager + ChatDialogueView)
         private static readonly HashSet<string> KnownCommands = new HashSet<string>
         {
-            "StartWait", "SkipWait", "UnlockTopic", "Glitch", "SystemMessage",
-            "Typing", "EndDay", "DeclareThread", "DeclareThreadTyped",
-            "AddThreadMessage", "Chat", "DeclareThreadLatent", "ManifestThread",
-            "CompleteThread", "DeclareThreadLatentCond", "BeginBranch", "EndBranch",
-            "SetBranchReflection", "DiscoverFragment", "AddFragmentNote",
-            "AddHalluciCoin", "AutoBeginBranch", "Image", "set"
+            "Message", "StartWait", "SkipWait", "UnlockTopic", "Glitch",
+            "SystemMessage", "Typing", "EndDay", "DeclareThread", "DeclareThreadTyped",
+            "AddThreadMessage", "AddThreadChat", "Chat", "DeclareThreadLatent",
+            "ManifestThread", "CompleteThread", "DeclareThreadLatentCond",
+            "BeginBranch", "EndBranch", "SetBranchReflection", "DiscoverFragment",
+            "AddFragmentNote", "AddHalluciCoin", "AutoBeginBranch", "Image", "set"
         };
 
         // Yarn built-in commands

@@ -15,7 +15,7 @@ namespace ProjectFoundPhone.Tests
 {
     public class VerticalSliceSmokeGatePlayModeTests
     {
-        private const string EvidenceRelativePath = "docs/evidence/TASK_047";
+        private const string EvidenceRelativePath = "docs/verification";
         private const int SaveSlot = 0;
         private const float SceneLoadTimeoutSeconds = 10f;
         private const float ChatMessageTimeoutSeconds = 5f;
