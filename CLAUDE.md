@@ -8,15 +8,12 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
-現在の状況 (2026-03-26 session 11 nightshift):
-  - session 11: デッドコード根絶 + リファクタリング + オーサリングツール追加
-  - ChatController.cs: 2753→2549行 (-204行)。ChatTextParser + BubbleSpriteFactory 抽出
-  - MessageTagged コマンド完全除去 (コード + docs 8ファイル)
-  - MVPScreenshotEvidencePlayModeTests 削除 (死亡テスト)
-  - YarnContentValidator Editor ツール新規作成 (Tools > Yarn Content Validator)
+現在の状況 (2026-03-27 session 12):
+  - Pipeline設計確定: モバイルアプリ / F2P+広告 / SO自動生成+E2E自動検証 / サウンド後回し
+  - エンジン基盤: 24 Yarnコマンド、全主要機能実装済み
   - spec-index: 34エントリ (done 22 / partial 9 / draft 1 / todo 2)
   - Phase A手動検証 (65項目+SP-019/020) 未完了 — Unity Editor必須
-  - 次の作業: Pipeline設計(HUMAN_AUTHORITY) → Phase A手動検証
+  - 次の作業: SO自動生成ツール実装 or Phase A手動検証 or Ch3設計
   - 残存問題: UnreadCount復元(LOW、コードレビュー正常・Unity検証待ち)
 
 ## DECISION LOG
@@ -48,6 +45,10 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 | 2026-03-18 | 主人公裏切りUIはd)複合段階式を採用 | a色差異のみ / c時系列 / d複合 / 保留 | Ch6→a(色)、Ch7→c(タイムスタンプ)、Ch8→b(ログ改竄)の段階的不信感蓄積。MVP: Ch6でaのみ先行検証 |
 | 2026-03-18 | コンテンツ量: 断片3/ch + スレッド2-3/ch | 2/ch / 3/ch / 4+/ch | 9章x3=27断片、9章x2.5=22スレッド。Ch1-2実績と整合し管理可能な規模 |
 | 2026-03-18 | サブスレッド解放は複合トリガー方式 | HCのみ / ストーリーのみ / 複合 / 保留 | HC閾値+ストーリー進行+断片収集の3条件OR。既存エンジン機能(DeclareThreadLatentCond+ChannelData)で新規実装不要 |
+| 2026-03-27 | 最終出力形態: ゲームアプリ (モバイル優先 iOS/Android) | ゲームアプリ / 録画動画 / 両方 / 未定 | チャットUIがモバイル9:16で最も自然。既存レスポンシブ基盤と整合 |
+| 2026-03-27 | 自動化範囲: SO自動生成 + E2E自動検証 | 最小限 / SO自動生成 / E2E / 両方 | コンテンツ量産時の手動SO作成が最大摩擦。E2E検証で回帰防止 |
+| 2026-03-27 | サウンド: コンテンツ後回し (Ch3以降) | BGM+SE先行 / 後回し / なし | ゲームプレイの核を先に固める |
+| 2026-03-27 | マネタイズ: F2P + 広告 | 後回し / F2P+広告 / 買い切り / スコープ外 | モバイルアプリのスタンダード。広告動線設計は後日 |
 
 ## IDEA POOL
 

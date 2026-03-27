@@ -1,22 +1,22 @@
 # Runtime State
 
-**Updated**: 2026-03-26
+**Updated**: 2026-03-27
 
 ## Current Position
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
-- lane: Excise + Advance (リファクタリング + ツール追加)
-- slice: 安定版整備 (デッドコード根絶 + リファクタリング + オーサリングツール)
+- lane: Unlock (SO自動生成ツール実装)
+- slice: Pipelineツール実装 (SO自動生成)
 - active_artifact: FoundPhone エンジン基盤 (Unity 6.3 + Yarn Spinner 3.1.3)
-- artifact_surface: Unity Editor ContentAuthoring シーン再生
-- last_change_relation: direct (BubbleSpriteFactory抽出 + YarnContentValidator新規)
+- artifact_surface: Unity Editor > Tools > FoundPhone > Yarn SO Generator
+- last_change_relation: direct (YarnSOGenerator.cs 新規作成)
 
 ## Counters
 
-- blocks_since_user_visible_change: 0 (YarnContentValidator = 新ツール)
-- blocks_since_visual_audit: 1+
-- blocks_since_unlock: 0 (YarnContentValidator = Unlock)
+- blocks_since_user_visible_change: 0 (YarnSOGenerator = 新ツール)
+- blocks_since_visual_audit: 3+
+- blocks_since_unlock: 0 (YarnSOGenerator = Unlock)
 - consecutive_excise_blocks: 0
 
 ## Quantitative Metrics
@@ -39,6 +39,18 @@
 - blocks_since_visual_audit: 1+
 
 ## Session Log
+
+### 2026-03-27 session 12
+- Block 1 (Advance): Pipeline設計確定 — 出力形態/プラットフォーム/自動化/サウンド/マネタイズの5決定
+  - ゲームアプリ (モバイル優先 iOS/Android)
+  - SO自動生成 + E2E自動検証
+  - サウンド: コンテンツ後回し、マネタイズ: F2P+広告
+  - project-context.md / CLAUDE.md / runtime-state.md 更新
+- Block 2 (Unlock): YarnSOGenerator.cs 新規作成 (Editor ツール)
+  - Yarnファイル走査 → 不足 TopicData / CharacterProfile 自動検出・生成
+  - Tools > FoundPhone > Yarn SO Generator
+  - YarnContentValidator のパース技術を転用
+  - Unity コンパイル確認待ち
 
 ### 2026-03-26 session 11 nightshift
 - Block 1 (Excise): MVPScreenshotEvidencePlayModeTests.cs 削除 + SetThreadHistories() 削除 + FEATURE_STATUS_AUDIT.md 数値修正

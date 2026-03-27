@@ -6,13 +6,12 @@
 - 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 - ブランチ戦略: trunk-based (main のみ)
 - 現フェーズ: プロトタイプ → α移行中
-- 直近の状態 (2026-03-26 session 11 nightshift):
+- 直近の状態 (2026-03-27 session 12):
+  - Pipeline設計確定: モバイルアプリ / F2P+広告 / SO自動生成+E2E自動検証 / サウンド後回し
   - エンジン基盤: 24 Yarnコマンド、Save/Load、Branch Phase1-4、サブスレッドUI、レスポンシブ基盤 全実装済み
-  - session 11: デッドコード根絶 + ChatController リファクタリング (-204行) + YarnContentValidator 新規
-  - ChatTextParser / BubbleSpriteFactory 抽出、MessageTagged 完全除去
   - spec-index: 34エントリ (done 22 / partial 9 / draft 1 / todo 2)
   - Phase A手動検証 (65項目+SP-019/020) 未完了 — Unity Editor必須
-  - 最終成果物像・Pipeline設計が未定義（要設計、HUMAN_AUTHORITY）
+  - 次の作業: SO自動生成ツール or Phase A手動検証 or Ch3設計
 
 ### 運用メモ
 
@@ -25,46 +24,62 @@
 
 ## CURRENT DEVELOPMENT AXIS
 
-- 主軸: 基盤確定 + Pipeline設計
-- この軸を優先する理由: エンジン機能は概ね揃ったが、最終成果物像（動画制作者のワークフロー）が未定義。ここを固めないと次のツール開発・自動化・Ch3設計の方向が定まらない
-- 今ここで避けるべき脱線: 新機能実装、コンテンツ執筆、過度なリファクタ
+- 主軸: Pipeline実装 (SO自動生成 + E2E自動検証) + Phase A検証クロージング
+- この軸を優先する理由: Pipeline設計が確定したため、設計から抽出されたツール要求 (SO自動生成/E2E自動検証) の実装と、Unity手動検証による品質確定が次の前提
+- 今ここで避けるべき脱線: 過度なリファクタ、マネタイズ実装、サウンド統合
 
 ---
 
 ## CURRENT LANE
 
-- 主レーン: Authoring / Tooling（Pipeline設計フェーズ）
-- 副レーン: Acceptance（Phase A手動検証の完了）
-- 今このレーンを優先する理由: エンジン基盤の品質確定 + 最終ワークフロー定義が次の全作業の前提
-- いまは深入りしないレーン: Experience Slice（Ch3設計）、Runtime Core（新機能追加）
+- 主レーン: Unlock (SO自動生成ツール / E2E自動検証)
+- 副レーン: Audit (Phase A手動検証の完了)
+- 今このレーンを優先する理由: Pipeline確定によりツール要求が明確化。実装すればコンテンツ量産時の摩擦が大幅に減る
+- いまは深入りしないレーン: サウンド統合、マネタイズ実装、Ch3シナリオ執筆（SO自動生成ツール完成後）
 
 ---
 
 ## CURRENT SLICE
 
-- スライス名: Pipeline設計 + Phase A クロージング
-- ユーザー操作列: (Pipeline設計) 最終成果物像を定義 → 各工程の手動/自動を分類 → ツール要求を抽出
-- 成功状態: 「動画制作者がYarnを書き、Unityで再生し、動画として出力する」までの全工程が言語化されている
-- このスライスで必要な基盤能力: 既存エンジン機能で十分（新規実装不要）
-- このスライスから抽出されるツール要求: Pipeline設計の結果として判明する（現時点では未確定）
-- 今回はやらないこと: 新エンジン機能の実装、Ch3シナリオ執筆、マネタイズ設計
+- スライス名: Pipelineツール実装 (SO自動生成)
+- ユーザー操作列: Unity Editor > Tools > SO Generator → Yarnファイル選択 → Channel/Topic/Character SOが自動生成される
+- 成功状態: 新チャプターのYarnを書いた後、SOを手動作成せずにEditorツール1クリックで必要なSOが揃う
+- このスライスで必要な基盤能力: Yarnファイルパース (YarnContentValidatorの技術を転用)
+- このスライスから抽出されるツール要求: SO自動生成Editorツール
+- 今回はやらないこと: E2E自動検証 (次スライス)、サウンド統合、マネタイズ実装
 
 ---
 
 ## FINAL DELIVERABLE IMAGE
 
-- 最終成果物: チャット/ビジュアルノベル形式のストーリーゲーム（FoundPhone）+ そのコンテンツ制作Pipeline
-- 最終的なユーザーワークフロー: **未定義 — 要設計**
-  - 想定される工程（仮）: シナリオ設計 → Yarn執筆 → Unity再生確認 → 調整 → ビルド/動画出力
-  - 各工程の手動/自動の境界が未確定
-  - 動画制作者としてのPipelineが未言語化
-- 受け入れ時の使われ方: **未定義**
-- 現時点で未確定な要素:
-  - 最終出力形態（ゲームアプリ / 録画動画 / 両方）
-  - コンテンツ制作の自動化範囲
-  - 手動介入が必要なポイントの特定
-  - サウンド統合の方針
-  - マネタイズモデル
+- 最終成果物: モバイル向けチャット/ビジュアルノベルゲームアプリ（FoundPhone）
+- プラットフォーム: モバイル優先 (iOS/Android)
+- マネタイズ: F2P + 広告
+- サウンド: コンテンツ充実後に統合（Ch3以降）
+
+### コンテンツ制作Pipeline（確定）
+
+```
+シナリオ設計 → Yarn執筆 → YarnContentValidator → SO自動生成 → Unity再生確認 → E2E自動検証 → 調整 → ビルド → 配布
+  [手動]        [手動]      [自動/Editor]          [自動/Editor]   [手動]           [自動/PlayMode]   [手動]   [自動]   [手動]
+```
+
+| 工程 | 手動/自動 | ツール | 状態 |
+|------|-----------|--------|------|
+| シナリオ設計 | 手動 | SCENARIO_AUTHORING_GUIDE | done |
+| Yarn執筆 | 手動 | VSCode + Yarn Spinner Extension | done |
+| 静的バリデーション | 自動 | YarnContentValidator (Editor) | done |
+| SO自動生成 | 自動 | 未実装 — Channel/Topic/Character SOをYarnから生成 | **todo** |
+| Unity再生確認 | 手動 | ContentAuthoring シーン | done |
+| E2E自動検証 | 自動 | 未実装 — ETK拡張でPlayModeテスト | **todo** |
+| 調整 | 手動 | Unity Inspector + Yarn編集 | done |
+| ビルド | 自動 | Unity Build Pipeline (モバイル) | 未設定 |
+| 配布 | 手動 | App Store / Google Play | 未設定 |
+
+### 未実装ツール要求（Pipeline設計から抽出）
+
+1. **SO自動生成ツール (Editor)**: YarnファイルからChannel/Topic/Character SOを自動生成。手動SO作成の手間を削減
+2. **E2E自動検証 (PlayMode)**: 全チャプターを自動再生しブロッカーを検出。ETKの拡張として実装
 
 ---
 
@@ -74,6 +89,10 @@ CLAUDE.md の DECISION LOG を参照。ここには project-context.md 作成以
 
 | 日付 | 決定事項 | 選択肢 | 決定理由 |
 |------|----------|--------|----------|
+| 2026-03-27 | 最終出力形態: ゲームアプリ (モバイル優先) | ゲームアプリ / 録画動画 / 両方 / 未定 | チャットUIがモバイル9:16で最も自然。既存レスポンシブ基盤と整合 |
+| 2026-03-27 | 自動化範囲: SO自動生成 + E2E自動検証の両方 | 最小限 / SO自動生成 / E2E自動検証 / 両方 | コンテンツ量産時の手動SO作成が最大の摩擦。E2E検証で回帰防止 |
+| 2026-03-27 | サウンド統合: コンテンツ後回し (Ch3以降) | BGM+SE先行 / コンテンツ後回し / なし | ゲームプレイの核を先に固める。サウンドはコンテンツが揃ってから |
+| 2026-03-27 | マネタイズ: F2P + 広告 | 後回し / F2P+広告 / 買い切り / スコープ外 | モバイルアプリのスタンダードモデル。エンジンへの影響は広告動線設計時に検討 |
 
 ---
 
@@ -88,9 +107,9 @@ CLAUDE.md の IDEA POOL を参照。ここには project-context.md 作成以降
 
 ## HANDOFF SNAPSHOT
 
-- 現在の主レーン: Excise + Advance (安定版整備完了)
-- 現在のスライス: 安定版整備 → Pipeline設計 + Phase A クロージング
-- 今回変更した対象 (session 11): ChatTextParser.cs/BubbleSpriteFactory.cs新規、YarnContentValidator.cs新規、ChatController.cs (-204行)、ScenarioManager.cs (MessageTagged除去)、MVPScreenshotTests削除、docs8ファイル一括更新
-- 次回最初に確認すべきファイル: docs/FEATURE_STATUS_AUDIT.md, docs/runtime-state.md
-- 未確定の設計論点: 最終成果物の出力形態、Pipeline全体像、自動化範囲、WORKFLOW_STATE_SSOT.md廃止可否
-- 今は触らない範囲: Runtime Core新機能、Ch3シナリオ、マネタイズ
+- 現在の主レーン: Unlock (Pipelineツール実装)
+- 現在のスライス: SO自動生成ツール
+- 今回変更した対象 (session 12): project-context.md (Pipeline設計確定)、CLAUDE.md (DECISION LOG 4件追記)、runtime-state.md
+- 次回最初に確認すべきファイル: docs/project-context.md (FINAL DELIVERABLE IMAGE)、docs/runtime-state.md
+- 未確定の設計論点: 広告動線設計 (F2P)、WORKFLOW_STATE_SSOT.md廃止可否
+- 今は触らない範囲: サウンド統合、マネタイズ実装、Ch3シナリオ執筆
