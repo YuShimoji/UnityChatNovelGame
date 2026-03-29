@@ -1444,6 +1444,13 @@ namespace ProjectFoundPhone.Core
                 return;
             }
 
+            // 安全弁: 既にダイアログが実行中なら強制停止してから開始
+            if (m_DialogueRunner.IsDialogueRunning)
+            {
+                Debug.LogWarning($"ScenarioManager: Dialogue is still running. Force-stopping before starting '{targetNode}'.");
+                m_DialogueRunner.Stop();
+            }
+
             m_DialogueRunner.StartDialogue(targetNode);
 #else
             Debug.LogWarning("ScenarioManager: Yarn Spinner is not available. StartScenario is a no-op.");
@@ -1451,20 +1458,20 @@ namespace ProjectFoundPhone.Core
         }
 
         /// <summary>
-        /// シナリオを停止
+        /// シナリオを停止（同期実行）。
+        /// OnDestroy と同じ「先に Stop → 後に CancelActiveWait」パターン。
+        /// Stop() を先に呼ぶことで、CancelActiveWait の継続が
+        /// IsDialogueRunning==false を検出して早期リターンできる。
         /// </summary>
         public void StopScenario()
         {
-            // CancelActiveWait を先に呼び、非同期コマンドハンドラ（StartWaitCommand 等）の
-            // 継続を正常完了させる。Stop() は 1 フレーム遅延して呼ぶことで、
-            // Continue()/SetSelectedOption() が空 VM に対して発火する競合を防ぐ。
-            CancelActiveWait();
 #if YARN_SPINNER
             if (m_DialogueRunner != null && m_DialogueRunner.IsDialogueRunning)
             {
-                StartCoroutine(StopDialogueDeferred());
+                m_DialogueRunner.Stop();
             }
 #endif
+            CancelActiveWait();
 
             // 安全弁: シナリオ停止時に分岐状態をクリア
             if (m_BranchThreadState != null && m_BranchThreadState.IsActive)
@@ -1490,16 +1497,8 @@ namespace ProjectFoundPhone.Core
             }
         }
 
-#if YARN_SPINNER
-        private IEnumerator StopDialogueDeferred()
-        {
-            yield return null;
-            if (m_DialogueRunner != null && m_DialogueRunner.IsDialogueRunning)
-            {
-                m_DialogueRunner.Stop();
-            }
-        }
-#endif
+        // StopDialogueDeferred は廃止: 1フレーム遅延が StartScenario との競合を引き起こしていた。
+        // StopScenario() 内で同期的に Stop() を呼ぶ方式に統一。
 
         /// <summary>
         /// Yarn変数の値を取得

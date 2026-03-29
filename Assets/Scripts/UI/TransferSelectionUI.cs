@@ -313,7 +313,7 @@ namespace ProjectFoundPhone.UI
             tmp.fontSize = fontSize;
             tmp.color = color;
             tmp.alignment = TextAlignmentOptions.MidlineLeft;
-            tmp.enableWordWrapping = true;
+            tmp.textWrappingMode = TMPro.TextWrappingModes.Normal;
             return obj;
         }
 

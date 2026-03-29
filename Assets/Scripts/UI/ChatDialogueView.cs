@@ -205,7 +205,7 @@ namespace ProjectFoundPhone.UI
                 return selectedOption;
             }
 
-            Debug.LogWarning("ChatDialogueView: ChatController not found. Selecting default option.");
+            Debug.LogError("[ChatDialogueView] ChatController not found in scene. Cannot display choices. Returning first option as fallback.");
             return dialogueOptions.Length > 0 ? dialogueOptions[0] : null;
         }
 

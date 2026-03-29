@@ -573,7 +573,7 @@ namespace ProjectFoundPhone.UI
             nameLabel.alignment = TextAlignmentOptions.MidlineLeft;
             nameLabel.color = new Color(0.85f, 0.85f, 0.9f, 1f);
             nameLabel.text = displayName;
-            nameLabel.enableWordWrapping = false;
+            nameLabel.textWrappingMode = TMPro.TextWrappingModes.NoWrap;
             nameLabel.overflowMode = TextOverflowModes.Ellipsis;
             AssignDefaultFont(nameLabel);
             entry.NameLabel = nameLabel;

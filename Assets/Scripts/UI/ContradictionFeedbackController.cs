@@ -160,7 +160,7 @@ namespace ProjectFoundPhone.UI
             m_HintText.fontSize = 14f;
             m_HintText.color = Color.white;
             m_HintText.alignment = TextAlignmentOptions.Center;
-            m_HintText.enableWordWrapping = false;
+            m_HintText.textWrappingMode = TMPro.TextWrappingModes.NoWrap;
 
             m_HintBanner.SetActive(false);
         }

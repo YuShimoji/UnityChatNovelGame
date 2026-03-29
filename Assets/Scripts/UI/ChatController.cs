@@ -728,7 +728,7 @@ namespace ProjectFoundPhone.UI
             textComponent.fontStyle = FontStyles.Normal;
             textComponent.fontSize = responsiveFontSize;
             textComponent.alignment = TextAlignmentOptions.TopLeft;
-            textComponent.enableWordWrapping = true;
+            textComponent.textWrappingMode = TMPro.TextWrappingModes.Normal;
             textComponent.enableAutoSizing = false;
             if (m_JapaneseFontAsset != null)
             {
@@ -839,16 +839,20 @@ namespace ProjectFoundPhone.UI
 
             AnimateBubbleIn(messageBubble);
 
-            // タイプライター効果を適用
-            ApplyTypewriterEffect(textComponent);
-
-            // スクロール吸着を有効化（タイプライター効果中も追従）
-            if (!m_IsUserScrolling)
+            // 履歴復元中はタイプライター・遅延スクロールをスキップ（即時表示）
+            if (!m_IsRestoringHistory)
             {
-                m_PinnedToBottom = true;
-                // タイプライター効果後に最終的な位置調整
-                float typewriterDuration = m_EnableTypewriterEffect ? text.Length * m_TypewriterSpeed : 0f;
-                Invoke(nameof(DelayedAutoScroll), typewriterDuration + 0.1f);
+                // タイプライター効果を適用
+                ApplyTypewriterEffect(textComponent);
+
+                // スクロール吸着を有効化（タイプライター効果中も追従）
+                if (!m_IsUserScrolling)
+                {
+                    m_PinnedToBottom = true;
+                    // タイプライター効果後に最終的な位置調整
+                    float typewriterDuration = m_EnableTypewriterEffect ? text.Length * m_TypewriterSpeed : 0f;
+                    Invoke(nameof(DelayedAutoScroll), typewriterDuration + 0.1f);
+                }
             }
 
             return messageBubble;
@@ -906,6 +910,11 @@ namespace ProjectFoundPhone.UI
         private void AnimateBubbleIn(GameObject bubble)
         {
             if (bubble == null) return;
+            if (m_IsRestoringHistory)
+            {
+                bubble.transform.localScale = Vector3.one;
+                return;
+            }
             bubble.transform.localScale = Vector3.zero;
             bubble.transform.DOScale(1f, UIConfig.bubbleAnimationDuration).SetEase(Ease.OutBack).SetUpdate(true);
         }
@@ -1336,7 +1345,7 @@ namespace ProjectFoundPhone.UI
             textComponent.color = UIConfig.systemMessageTextColor;
             textComponent.alignment = TextAlignmentOptions.Center;
             textComponent.fontStyle = FontStyles.Italic;
-            textComponent.enableWordWrapping = true;
+            textComponent.textWrappingMode = TMPro.TextWrappingModes.Normal;
             textComponent.enableAutoSizing = false;
             if (m_JapaneseFontAsset != null)
             {
@@ -1618,6 +1627,7 @@ namespace ProjectFoundPhone.UI
         /// </summary>
         public void HideChoices()
         {
+            m_IsFadingChoices = false;
             if (m_ChoiceContainer != null)
             {
                 // DOTween のフェードアニメーションを完了させてから破棄
@@ -2160,6 +2170,16 @@ namespace ProjectFoundPhone.UI
 
             public void OnClick()
             {
+                // 全ボタンを即座に無効化（二重クリック防止）
+                if (m_Owner != null && m_Owner.m_ChoiceContainer != null)
+                {
+                    foreach (Transform child in m_Owner.m_ChoiceContainer)
+                    {
+                        var btn = child.GetComponent<Button>();
+                        if (btn != null) btn.interactable = false;
+                    }
+                }
+
                 // 選択を即時通知（Yarn ダイアログの続行のため）
                 m_OnSelected?.Invoke(m_Index);
 
@@ -2171,11 +2191,15 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// 選択済みボタンを即破棄、未選択をフェードアウト後にクリーンアップ
+        /// 選択済みボタンを即破棄、未選択をフェードアウト後にクリーンアップ。
+        /// 再入ガード付き（二重クリック時の二重実行を防止）。
         /// </summary>
+        private bool m_IsFadingChoices;
         internal void FadeAndHideChoices(int selectedIndex)
         {
             if (m_ChoiceContainer == null) return;
+            if (m_IsFadingChoices) return;
+            m_IsFadingChoices = true;
 
             float fadeTime = 0.25f;
 
@@ -2199,7 +2223,11 @@ namespace ProjectFoundPhone.UI
             }
 
             // フェードアウト完了後にクリーンアップ
-            DOVirtual.DelayedCall(fadeTime + 0.05f, () => HideChoices(), false).SetUpdate(true);
+            DOVirtual.DelayedCall(fadeTime + 0.05f, () =>
+            {
+                HideChoices();
+                m_IsFadingChoices = false;
+            }).SetUpdate(true);
         }
 
         public void OnSubmit()
