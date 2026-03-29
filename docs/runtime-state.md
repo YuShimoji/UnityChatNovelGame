@@ -28,16 +28,16 @@
 - yarn_active: 9
 - yarn_archive: 1
 - spec_entries: 35 (done 22 / partial 9 / draft 1 / todo 2 + 21_branch_thread_spec 新規)
-- todo_fixme_hack: 1 (ChatController.cs:1296)
+- todo_fixme_hack: 1 (ChatController.cs:1233 — 行番号ズレ修正、ステータスバールーティング)
 - obsolete_marks: 2 (ContradictionPair.UnlockTopic x2)
-- chatcontroller_lines: ~2570 (CompleteCurrentTypewriter + AnimateBubbleIn 修正で微増)
+- chatcontroller_lines: 2577 (session 13: 2549 → +28行 バグ修正追加)
 - wiki_pages: 12 (docs/wiki/ 内)
 
 ## Visual Evidence
 
-- visual_evidence_status: stale (1 block since audit)
-- last_visual_audit_path: docs/verification/2026-03-29/yarn_so_generator_scan.png
-- blocks_since_visual_audit: 1
+- visual_evidence_status: unknown (verification/ にファイル実体なし — task-scout 指摘)
+- last_visual_audit_path: (なし — ユーザー提供スクリーンショットは外部、ファイル未保存)
+- blocks_since_visual_audit: 2
 
 ## Session Log
 
