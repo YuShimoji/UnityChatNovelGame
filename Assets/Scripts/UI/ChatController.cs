@@ -236,7 +236,7 @@ namespace ProjectFoundPhone.UI
         {
             float w = GetContainerWidth();
             if (w >= 900f) return 1f;
-            return Mathf.Clamp(w / 900f, 0.78f, 1f);
+            return Mathf.Clamp(w / 900f, 0.85f, 1f);
         }
 
         /// <summary>
