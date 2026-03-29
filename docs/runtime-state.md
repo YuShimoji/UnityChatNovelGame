@@ -1,27 +1,27 @@
 # Runtime State
 
-**Updated**: 2026-03-29
+**Updated**: 2026-03-30
 
 ## Current Position
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
-- lane: Advance (メッセージ演出改善 + 分岐安定化 + 開発インフラ)
-- slice: 選択肢処理安定化 + メッセージ演出 + Authoring Wiki
+- lane: Unlock (UIフォント基盤統合)
+- slice: UIFontConfig 新設 + ハードコードフォントサイズ統合
 - active_artifact: FoundPhone エンジン基盤 (Unity 6.3 + Yarn Spinner 3.1.3)
 - artifact_surface: Unity Editor > ContentAuthoring シーン + docs/wiki/
-- last_change_relation: direct (メッセージ演出改善、分岐バグ修正、wiki作成)
+- last_change_relation: unlock (UIFontConfig新設、ハードコードフォントサイズ31箇所統合)
 
 ## Counters
 
-- blocks_since_user_visible_change: 0 (メッセージタイミング + タップスキップ + フォントサイズ修正)
-- blocks_since_visual_audit: 1 (session 13 Block 1 Audit)
-- blocks_since_unlock: 0 (Authoring Wiki = 開発インフラ unlock)
+- blocks_since_user_visible_change: 1 (前回: メッセージタイミング + タップスキップ。今回はインフラ変更のみ)
+- blocks_since_visual_audit: 3 (session 13 Block 1 Audit → session 14 x2 → session 15)
+- blocks_since_unlock: 0 (UIFontConfig = UI基盤 unlock)
 - consecutive_excise_blocks: 0
 
 ## Quantitative Metrics
 
-- impl_files: 64 (テスト除く .cs)
+- impl_files: 65 (テスト除く .cs、UIFontConfig.cs追加)
 - test_files: 5 (EditMode 4 + PlayMode 1)
 - playmode_test_files: 1
 - mock_files: 0
@@ -35,11 +35,18 @@
 
 ## Visual Evidence
 
-- visual_evidence_status: unknown (verification/ にファイル実体なし — task-scout 指摘)
-- last_visual_audit_path: (なし — ユーザー提供スクリーンショットは外部、ファイル未保存)
-- blocks_since_visual_audit: 2
+- visual_evidence_status: stale (ユーザーが session 15 開始時にスクリーンショット提供、ただし verification/ 未保存)
+- last_visual_audit_path: (なし)
+- blocks_since_visual_audit: 3
 
 ## Session Log
+
+### 2026-03-30 session 15
+- Block 1 (Unlock): UIFontConfig 新設 + ハードコードフォントサイズ統合
+  - nightshift (session 14) のフォントサイズ変更 (d584aaf, 8835623) を revert — 部分的でバランス崩れ
+  - UIFontConfig.cs 新設: 7段階フォント階層 (title/heading/subheading/body/caption/small/tiny) + レスポンシブスケール
+  - ハードコード値を UIFontConfig 参照に置換: DashboardController(10), InventoryTabController(7), TransferSelectionUI(5), ProgressSummaryUI(3), ChatController(3+GetResponsiveFontScale委譲), ContradictionFeedbackController(3)
+  - 未変更: ThreadSwitcherController (サイドバー密レイアウト、別途設計要), ChatDialogueView (debug), DebugHubController (debug)
 
 ### 2026-03-29 session 14 (nightshift)
 - Block 1 (Advance): session 13 修正コミット + メッセージ演出改善

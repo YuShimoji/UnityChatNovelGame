@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
+using ProjectFoundPhone.Data;
 
 namespace ProjectFoundPhone.UI
 {
@@ -104,7 +105,7 @@ namespace ProjectFoundPhone.UI
             panelLayout.childForceExpandHeight = false;
 
             // === Header ===
-            var headerObj = CreateTextObject(panelObj.transform, "Header", "持ち帰る情報を選択", 22f, HeaderColor);
+            var headerObj = CreateTextObject(panelObj.transform, "Header", "持ち帰る情報を選択", UIFontConfig.Instance.headingFontSize, HeaderColor);
             var headerLayout = headerObj.AddComponent<LayoutElement>();
             headerLayout.preferredHeight = 40f;
 
@@ -115,7 +116,7 @@ namespace ProjectFoundPhone.UI
             scrollLayout.minHeight = 80f;
 
             // === Count Label ===
-            var countObj = CreateTextObject(panelObj.transform, "CountLabel", "", 16f, CountColor);
+            var countObj = CreateTextObject(panelObj.transform, "CountLabel", "", UIFontConfig.Instance.captionFontSize, CountColor);
             var countLayout = countObj.AddComponent<LayoutElement>();
             countLayout.preferredHeight = 28f;
             m_CountLabel = countObj.GetComponent<TextMeshProUGUI>();
@@ -213,13 +214,13 @@ namespace ProjectFoundPhone.UI
             textLayoutElem.flexibleWidth = 1f;
 
             // Title
-            var titleObj = CreateTextObject(textContainer.transform, "Title", candidate.Title, 18f, TitleColor);
+            var titleObj = CreateTextObject(textContainer.transform, "Title", candidate.Title, UIFontConfig.Instance.bodyFontSize, TitleColor);
             titleObj.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Bold;
 
             // Description (あれば)
             if (!string.IsNullOrEmpty(candidate.Description))
             {
-                var descObj = CreateTextObject(textContainer.transform, "Desc", candidate.Description, 14f, DescColor);
+                var descObj = CreateTextObject(textContainer.transform, "Desc", candidate.Description, UIFontConfig.Instance.smallFontSize, DescColor);
                 var descTmp = descObj.GetComponent<TextMeshProUGUI>();
                 descTmp.maxVisibleLines = 2;
                 descTmp.overflowMode = TextOverflowModes.Ellipsis;
@@ -324,7 +325,7 @@ namespace ProjectFoundPhone.UI
             obj.GetComponent<Image>().color = ButtonBgColor;
             obj.GetComponent<Button>().onClick.AddListener(() => onClick());
 
-            var textObj = CreateTextObject(obj.transform, "Label", label, 20f, ButtonTextColor);
+            var textObj = CreateTextObject(obj.transform, "Label", label, UIFontConfig.Instance.subheadingFontSize, ButtonTextColor);
             textObj.GetComponent<TextMeshProUGUI>().alignment = TextAlignmentOptions.Center;
             var textRect = textObj.GetComponent<RectTransform>();
             StretchFull(textRect);

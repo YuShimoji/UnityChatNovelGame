@@ -279,7 +279,7 @@ namespace ProjectFoundPhone.UI
 
             TextMeshProUGUI titleText = titleObj.AddComponent<TextMeshProUGUI>();
             titleText.text = "HALLUCINATION SIMULATOR";
-            titleText.fontSize = 28f;
+            titleText.fontSize = UIFontConfig.Instance.titleFontSize;
             titleText.fontStyle = FontStyles.Bold;
             titleText.color = new Color(0.7f, 0.7f, 0.75f);
             titleText.alignment = TextAlignmentOptions.Center;
@@ -300,7 +300,7 @@ namespace ProjectFoundPhone.UI
 
             m_SubtitleText = subtitleObj.AddComponent<TextMeshProUGUI>();
             m_SubtitleText.text = "select channel_";
-            m_SubtitleText.fontSize = 16f;
+            m_SubtitleText.fontSize = UIFontConfig.Instance.captionFontSize;
             m_SubtitleText.fontStyle = FontStyles.Italic;
             m_SubtitleText.color = new Color(0.4f, 0.4f, 0.45f);
             m_SubtitleText.alignment = TextAlignmentOptions.Center;
@@ -321,7 +321,7 @@ namespace ProjectFoundPhone.UI
 
             m_CoinDisplay = coinObj.AddComponent<TextMeshProUGUI>();
             m_CoinDisplay.text = "HC: 0";
-            m_CoinDisplay.fontSize = 20f;
+            m_CoinDisplay.fontSize = UIFontConfig.Instance.subheadingFontSize;
             m_CoinDisplay.color = new Color(0.8f, 0.75f, 0.4f);
             m_CoinDisplay.alignment = TextAlignmentOptions.MidlineRight;
             m_CoinDisplay.raycastTarget = false;
@@ -445,7 +445,7 @@ namespace ProjectFoundPhone.UI
 
             TextMeshProUGUI backLabel = backTextObj.AddComponent<TextMeshProUGUI>();
             backLabel.text = "< dashboard";
-            backLabel.fontSize = 18f;
+            backLabel.fontSize = UIFontConfig.Instance.bodyFontSize;
             backLabel.color = new Color(0.6f, 0.6f, 0.65f);
             backLabel.alignment = TextAlignmentOptions.Center;
             backLabel.raycastTarget = false;
@@ -574,7 +574,7 @@ namespace ProjectFoundPhone.UI
 
             TextMeshProUGUI titleText = titleObj.AddComponent<TextMeshProUGUI>();
             titleText.text = channel.DisplayName;
-            titleText.fontSize = 22f;
+            titleText.fontSize = UIFontConfig.Instance.headingFontSize;
             titleText.fontStyle = FontStyles.Bold;
             titleText.color = status == ChannelStatus.Locked
                 ? new Color(0.45f, 0.45f, 0.5f)
@@ -596,7 +596,7 @@ namespace ProjectFoundPhone.UI
 
             TextMeshProUGUI descText = descObj.AddComponent<TextMeshProUGUI>();
             descText.text = channel.Description;
-            descText.fontSize = 15f;
+            descText.fontSize = UIFontConfig.Instance.captionFontSize;
             descText.color = status == ChannelStatus.Locked
                 ? new Color(0.38f, 0.38f, 0.42f)
                 : new Color(0.5f, 0.5f, 0.55f);
@@ -616,7 +616,7 @@ namespace ProjectFoundPhone.UI
             statusRect.offsetMax = new Vector2(-12f, -12f);
 
             TextMeshProUGUI statusText = statusObj.AddComponent<TextMeshProUGUI>();
-            statusText.fontSize = 14f;
+            statusText.fontSize = UIFontConfig.Instance.smallFontSize;
             statusText.alignment = TextAlignmentOptions.MidlineRight;
             statusText.raycastTarget = false;
             AssignDefaultFont(statusText);
@@ -701,7 +701,7 @@ namespace ProjectFoundPhone.UI
 
             TextMeshProUGUI label = labelObj.AddComponent<TextMeshProUGUI>();
             label.text = text;
-            label.fontSize = 18f;
+            label.fontSize = UIFontConfig.Instance.bodyFontSize;
             label.fontStyle = FontStyles.Italic;
             label.color = new Color(0.45f, 0.45f, 0.5f);
             label.alignment = TextAlignmentOptions.Center;
@@ -772,7 +772,7 @@ namespace ProjectFoundPhone.UI
 
             TextMeshProUGUI label = textObj.AddComponent<TextMeshProUGUI>();
             label.text = text;
-            label.fontSize = 18f;
+            label.fontSize = UIFontConfig.Instance.bodyFontSize;
             label.alignment = TextAlignmentOptions.Center;
             label.raycastTarget = false;
             AssignDefaultFont(label);
@@ -814,7 +814,7 @@ namespace ProjectFoundPhone.UI
 
             TextMeshProUGUI label = textObj.AddComponent<TextMeshProUGUI>();
             label.text = "< return";
-            label.fontSize = 18f;
+            label.fontSize = UIFontConfig.Instance.bodyFontSize;
             label.color = new Color(0.6f, 0.6f, 0.65f);
             label.alignment = TextAlignmentOptions.Center;
             label.raycastTarget = false;

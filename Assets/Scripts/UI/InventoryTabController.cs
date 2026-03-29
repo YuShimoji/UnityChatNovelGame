@@ -283,7 +283,7 @@ namespace ProjectFoundPhone.UI
 
                 TextMeshProUGUI label = textObj.AddComponent<TextMeshProUGUI>();
                 label.text = tabNames[i];
-                label.fontSize = 16f;
+                label.fontSize = UIFontConfig.Instance.captionFontSize;
                 label.alignment = TextAlignmentOptions.Center;
                 label.raycastTarget = false;
                 AssignDefaultFont(label);
@@ -391,7 +391,7 @@ namespace ProjectFoundPhone.UI
 
             TextMeshProUGUI label = labelObj.AddComponent<TextMeshProUGUI>();
             label.text = "Coming soon...";
-            label.fontSize = 22f;
+            label.fontSize = UIFontConfig.Instance.headingFontSize;
             label.fontStyle = FontStyles.Italic;
             label.color = PlaceholderColor;
             label.alignment = TextAlignmentOptions.Center;
@@ -413,7 +413,7 @@ namespace ProjectFoundPhone.UI
 
             TextMeshProUGUI label = labelObj.AddComponent<TextMeshProUGUI>();
             label.text = text;
-            label.fontSize = 20f;
+            label.fontSize = UIFontConfig.Instance.subheadingFontSize;
             label.fontStyle = FontStyles.Italic;
             label.color = PlaceholderColor;
             label.alignment = TextAlignmentOptions.Center;
@@ -457,9 +457,9 @@ namespace ProjectFoundPhone.UI
             string chapterBadge = ExtractChapter(topic.TopicID);
             string displayTitle = GetDisplayTitle(topic);
             titleText.text = chapterBadge != null
-                ? $"{displayTitle}  <size=14><color=#{ColorUtility.ToHtmlStringRGB(ChapterBadgeColor)}>{chapterBadge}</color></size>"
+                ? $"{displayTitle}  <size={UIFontConfig.Instance.smallFontSize:F0}><color=#{ColorUtility.ToHtmlStringRGB(ChapterBadgeColor)}>{chapterBadge}</color></size>"
                 : displayTitle;
-            titleText.fontSize = 22f;
+            titleText.fontSize = UIFontConfig.Instance.headingFontSize;
             titleText.fontStyle = FontStyles.Bold;
             titleText.color = TitleColor;
             titleText.alignment = TextAlignmentOptions.MidlineLeft;
@@ -477,7 +477,7 @@ namespace ProjectFoundPhone.UI
 
                 TextMeshProUGUI descText = descObj.AddComponent<TextMeshProUGUI>();
                 descText.text = topic.Description;
-                descText.fontSize = 16f;
+                descText.fontSize = UIFontConfig.Instance.captionFontSize;
                 descText.color = DescColor;
                 descText.alignment = TextAlignmentOptions.TopLeft;
                 descText.maxVisibleLines = 3;
@@ -516,7 +516,7 @@ namespace ProjectFoundPhone.UI
 
             TextMeshProUGUI label = textObj.AddComponent<TextMeshProUGUI>();
             label.text = GetDisplayTitle(topic);
-            label.fontSize = 20f;
+            label.fontSize = UIFontConfig.Instance.subheadingFontSize;
             label.color = TitleColor;
             label.alignment = TextAlignmentOptions.MidlineLeft;
             label.raycastTarget = false;

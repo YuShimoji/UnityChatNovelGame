@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306d4624f3fbc2445af62419ff228a52, type: 3}
+  m_Name: UIFontConfig
+  m_EditorClassIdentifier: ProjectFoundPhone::ProjectFoundPhone.Data.UIFontConfig
+  titleFontSize: 28
+  headingFontSize: 22
+  subheadingFontSize: 20
+  bodyFontSize: 18
+  captionFontSize: 16
+  smallFontSize: 14
+  tinyFontSize: 11
+  responsiveBreakpoint: 900
+  responsiveMinScale: 0.78

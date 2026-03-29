@@ -234,9 +234,7 @@ namespace ProjectFoundPhone.UI
         /// </summary>
         private float GetResponsiveFontScale()
         {
-            float w = GetContainerWidth();
-            if (w >= 900f) return 1f;
-            return Mathf.Clamp(w / 900f, 0.78f, 1f);
+            return UIFontConfig.Instance.GetResponsiveScale(GetContainerWidth());
         }
 
         /// <summary>
@@ -1825,7 +1823,7 @@ namespace ProjectFoundPhone.UI
             labelRect.offsetMax = Vector2.zero;
             label.alignment = TextAlignmentOptions.Center;
             label.enableAutoSizing = false;
-            label.fontSize = 16f;
+            label.fontSize = UIFontConfig.Instance.captionFontSize;
             label.text = "INV";
 
             m_InventoryShortcutButton = button;
@@ -2009,7 +2007,7 @@ namespace ProjectFoundPhone.UI
             label.textWrappingMode = TextWrappingModes.Normal;
             label.color = Color.white;
             label.enableAutoSizing = false;
-            label.fontSize = 28f;
+            label.fontSize = UIFontConfig.Instance.titleFontSize;
             label.alignment = TextAlignmentOptions.TopLeft;
             label.raycastTarget = false;
 
@@ -2142,12 +2140,12 @@ namespace ProjectFoundPhone.UI
 
             TextMeshProUGUI tmp = textObj.AddComponent<TextMeshProUGUI>();
             tmp.color = color;
-            tmp.fontSize = 30f;
+            tmp.fontSize = UIFontConfig.Instance.titleFontSize;
             tmp.fontStyle = fontStyle;
             tmp.text = string.Empty;
             tmp.enableAutoSizing = true;
-            tmp.fontSizeMin = 16f;
-            tmp.fontSizeMax = 48f;
+            tmp.fontSizeMin = UIFontConfig.Instance.captionFontSize;
+            tmp.fontSizeMax = UIFontConfig.Instance.titleFontSize * 1.7f;
             tmp.alignment = TextAlignmentOptions.MidlineLeft;
             tmp.raycastTarget = false;
 

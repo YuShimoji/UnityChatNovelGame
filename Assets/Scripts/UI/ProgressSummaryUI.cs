@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using ProjectFoundPhone.Core;
+using ProjectFoundPhone.Data;
 
 namespace ProjectFoundPhone.UI
 {
@@ -76,7 +77,7 @@ namespace ProjectFoundPhone.UI
 
             m_PercentText = pctObj.AddComponent<TextMeshProUGUI>();
             m_PercentText.text = "0%";
-            m_PercentText.fontSize = 14f;
+            m_PercentText.fontSize = UIFontConfig.Instance.smallFontSize;
             m_PercentText.color = new Color(0.8f, 0.75f, 0.4f);
             m_PercentText.alignment = TextAlignmentOptions.MidlineRight;
             m_PercentText.raycastTarget = false;
@@ -96,7 +97,7 @@ namespace ProjectFoundPhone.UI
 
             m_MiniStats = statsObj.AddComponent<TextMeshProUGUI>();
             m_MiniStats.text = "";
-            m_MiniStats.fontSize = 11f;
+            m_MiniStats.fontSize = UIFontConfig.Instance.tinyFontSize;
             m_MiniStats.color = new Color(0.45f, 0.45f, 0.5f);
             m_MiniStats.alignment = TextAlignmentOptions.Center;
             m_MiniStats.raycastTarget = false;
@@ -116,7 +117,7 @@ namespace ProjectFoundPhone.UI
 
             m_NudgeText = nudgeObj.AddComponent<TextMeshProUGUI>();
             m_NudgeText.text = "";
-            m_NudgeText.fontSize = 10f;
+            m_NudgeText.fontSize = UIFontConfig.Instance.tinyFontSize;
             m_NudgeText.fontStyle = FontStyles.Italic;
             m_NudgeText.color = new Color(0.35f, 0.35f, 0.4f);
             m_NudgeText.alignment = TextAlignmentOptions.Center;

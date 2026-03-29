@@ -157,7 +157,7 @@ namespace ProjectFoundPhone.UI
             textRT.offsetMax = new Vector2(-10f, 0f);
 
             m_HintText = textGO.GetComponent<TextMeshProUGUI>();
-            m_HintText.fontSize = 14f;
+            m_HintText.fontSize = UIFontConfig.Instance.smallFontSize;
             m_HintText.color = Color.white;
             m_HintText.alignment = TextAlignmentOptions.Center;
             m_HintText.textWrappingMode = TMPro.TextWrappingModes.NoWrap;
@@ -217,7 +217,7 @@ namespace ProjectFoundPhone.UI
             titleRT.offsetMax = new Vector2(-16f, -12f);
 
             m_NotificationTitle = titleGO.GetComponent<TextMeshProUGUI>();
-            m_NotificationTitle.fontSize = 20f;
+            m_NotificationTitle.fontSize = UIFontConfig.Instance.subheadingFontSize;
             m_NotificationTitle.color = Color.white;
             m_NotificationTitle.alignment = TextAlignmentOptions.Center;
 
@@ -231,7 +231,7 @@ namespace ProjectFoundPhone.UI
             rewardRT.offsetMax = new Vector2(-16f, -8f);
 
             m_NotificationReward = rewardGO.GetComponent<TextMeshProUGUI>();
-            m_NotificationReward.fontSize = 18f;
+            m_NotificationReward.fontSize = UIFontConfig.Instance.bodyFontSize;
             m_NotificationReward.color = RewardTextColor;
             m_NotificationReward.alignment = TextAlignmentOptions.Center;
 
