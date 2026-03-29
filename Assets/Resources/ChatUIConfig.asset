@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 406c33c20842d1e44ad92a33a67968de, type: 3}
   m_Name: ChatUIConfig
   m_EditorClassIdentifier: ProjectFoundPhone::ProjectFoundPhone.Data.ChatUIConfig
-  messageFontSize: 28
+  messageFontSize: 34
   bubbleMinHeight: 60
   bubbleTextPadding: 20
   bubbleInitialHeight: 72
@@ -32,7 +32,7 @@ MonoBehaviour:
   showCharacterIcon: 1
   characterIconSize: 40
   iconBubbleSpacing: 8
-  systemMessageFontSize: 16
+  systemMessageFontSize: 20
   systemMessageTextColor: {r: 0.75, g: 0.75, b: 0.8, a: 1}
   systemMessageBgColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.3}
   systemMessageMinHeight: 40
@@ -40,15 +40,15 @@ MonoBehaviour:
   choiceButtonHighlightColor: {r: 0.35, g: 0.65, b: 1, a: 1}
   choiceButtonPressedColor: {r: 0.15, g: 0.45, b: 0.9, a: 1}
   choiceTextColor: {r: 0.82, g: 0.85, b: 0.95, a: 1}
-  choiceFontSizeMin: 20
-  choiceFontSizeMax: 36
+  choiceFontSizeMin: 22
+  choiceFontSizeMax: 38
   choiceButtonMinHeight: 50
   choiceButtonPreferredHeight: 60
   choiceSpacing: 8
   choicePaddingHorizontal: 40
   typingIndicatorColor: {r: 0.3, g: 0.3, b: 0.35, a: 0.9}
   typingIndicatorTextColor: {r: 0.7, g: 0.7, b: 0.7, a: 1}
-  typingIndicatorFontSize: 18
+  typingIndicatorFontSize: 22
   autoScrollDelay: 0.1
   imageFadeInDuration: 0.6
   showInputField: 0
