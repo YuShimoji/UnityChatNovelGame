@@ -6,10 +6,10 @@
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
-- lane: Unlock (UIフォント基盤統合)
-- slice: UIFontConfig 新設 + ハードコードフォントサイズ統合
+- lane: Audit (UIFontConfig統合後の検証待ち) + Advance (タップスキップ一貫性修正)
+- slice: UIFontConfig統合完了 → フォントバランス調整 + タップスキップ一貫性修正
 - active_artifact: FoundPhone エンジン基盤 (Unity 6.3 + Yarn Spinner 3.1.3)
-- artifact_surface: Unity Editor > ContentAuthoring シーン + docs/wiki/
+- artifact_surface: Unity Editor > ContentAuthoring シーン
 - last_change_relation: unlock (UIFontConfig新設、ハードコードフォントサイズ31箇所統合)
 
 ## Counters
@@ -47,6 +47,11 @@
   - UIFontConfig.cs 新設: 7段階フォント階層 (title/heading/subheading/body/caption/small/tiny) + レスポンシブスケール
   - ハードコード値を UIFontConfig 参照に置換: DashboardController(10), InventoryTabController(7), TransferSelectionUI(5), ProgressSummaryUI(3), ChatController(3+GetResponsiveFontScale委譲), ContradictionFeedbackController(3)
   - 未変更: ThreadSwitcherController (サイドバー密レイアウト、別途設計要), ChatDialogueView (debug), DebugHubController (debug)
+  - **ユーザー報告 (HANDOFF 時)**:
+    1. revert後もメッセージが大きく見える (ディスク上は28に戻っているがUnityキャッシュ未反映の可能性)
+    2. タップスキップが複数クリック必要な場合がある (タイミング依存)
+    3. システムメッセージにタップスキップが効かない (一貫性の欠如)
+    → 次セッションで Audit + 修正が必要
 
 ### 2026-03-29 session 14 (nightshift)
 - Block 1 (Advance): session 13 修正コミット + メッセージ演出改善

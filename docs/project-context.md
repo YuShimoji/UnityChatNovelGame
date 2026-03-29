@@ -6,18 +6,18 @@
 - 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 - ブランチ戦略: trunk-based (main のみ)
 - 現フェーズ: プロトタイプ → α移行中
-- 直近の状態 (2026-03-30 session 14):
-  - Pipeline設計確定 + SO自動生成ツール (YarnSOGenerator) 実装済み
-  - エンジン基盤: 24 Yarnコマンド + タップスキップ + タイミング設定可能
-  - spec-index: 35エントリ (done 22 / partial 9 / draft 1 / todo 2 + 21_branch_thread_spec)
-  - Authoring Wiki: docs/wiki/ (Docsify 12ページ、ストーリー追加 Quick Start 含む)
-  - session 13-14: 選択肢バグ修正、分岐再入防止、メッセージ演出改善、フォントサイズ引き上げ
-  - 次の作業: Unity実機確認 → スレッド管理リファクタ設計 → ポートレート画像 → ストーリー追加実証
+- 直近の状態 (2026-03-30 session 15):
+  - UIFontConfig 新設: 7段階フォント階層でUI全体のフォントサイズを一元管理 (31箇所統合)
+  - session 14 のフォントサイズ変更は revert 済み (部分的でバランス崩れのため)
+  - 未解決: タップスキップの一貫性 (複数クリック必要な場合あり、システムメッセージ未対応)
+  - 未解決: revert 後も Unity が旧フォントサイズをキャッシュしている可能性 (再起動で確認要)
+  - 次の作業: Unity 再起動して Audit → タップスキップ一貫性修正 → UIFontConfig でフォントバランス調整
 
 ### 運用メモ
 
-- 現在の系列: メッセージ演出安定化 + コンテンツ制作インフラ整備 (wiki)
+- 現在の系列: UI基盤統合 (UIFontConfig) + メッセージ演出一貫性修正
 - ユーザーはデザイナー兼ライター。手動でのストーリー追加がまだ未実施 — wiki で解消予定
+- nightshift の変更品質が問題化。部分的・不完全な変更が検証負担を増大させるパターン。完成度優先へ
 - スレッド管理 (BeginBranch/EndBranch) がユーザーに複雑と指摘された — PLAN MODE でリファクタ設計要
 - task-scout 指摘: FEATURE_STATUS_AUDIT.md 未更新、YarnSOGenerator spec 未登録、verification/ 空
 
@@ -115,22 +115,31 @@ CLAUDE.md の IDEA POOL を参照。ここには project-context.md 作成以降
 
 ## HANDOFF SNAPSHOT
 
-- 現在の主レーン: Advance (UI安定化) + Audit (nightshift 変更の実機確認)
-- 現在のスライス: ゲームUI安定化 + ストーリー追加実証
-- 今回変更した対象 (session 13-14):
-  - ChatDialogueView.cs: タップスキップ + タイミング設定可能化
-  - ChatController.cs: CompleteCurrentTypewriter + AnimateBubbleIn 復元時スキップ + レスポンシブスケール下限修正
-  - ScenarioManager.cs: StopScenario同期化 + StartScenario安全弁 + BeginBranch再入時履歴クリア
-  - ChatUIConfig.asset: フォントサイズ引き上げ (28→34等)
-  - Ch1_Day1.yarn: 分岐再入防止フラグ + メタ発言削除
-  - docs/wiki/ (12ページ新規)
-  - docs/StorySpec/21_branch_thread_spec.md (新規)
-- 次回最初に確認すべきファイル: Unity ContentAuthoring シーン再生、docs/wiki/ ブラウザ確認
+- 現在の主レーン: Audit (UIFontConfig統合後の検証) + Advance (タップスキップ一貫性修正)
+- 現在のスライス: UIFontConfig統合完了 → フォントバランス調整 + タップスキップ一貫性修正
+- 今回変更した対象 (session 15):
+  - [新規] Assets/Scripts/Data/UIFontConfig.cs — 7段階フォント階層 + レスポンシブスケール
+  - Assets/Scripts/UI/DashboardController.cs — ハードコード→UIFontConfig参照 (10箇所)
+  - Assets/Scripts/UI/InventoryTabController.cs — (7箇所)
+  - Assets/Scripts/UI/TransferSelectionUI.cs — (5箇所)
+  - Assets/Scripts/UI/ProgressSummaryUI.cs — (3箇所)
+  - Assets/Scripts/UI/ChatController.cs — (3箇所 + GetResponsiveFontScale委譲)
+  - Assets/Scripts/UI/ContradictionFeedbackController.cs — (3箇所)
+  - session 14 フォントサイズ変更 (d584aaf, 8835623) を revert
+- 次回最初にやること:
+  1. Unity 再起動 → ChatUIConfig.asset のキャッシュリフレッシュ確認 (messageFontSize=28 がディスク上は正しい)
+  2. ContentAuthoring シーン再生 → フォントサイズが全要素で統一されているか確認
+  3. タップスキップの一貫性修正 (複数クリック問題 + システムメッセージ未対応)
+- ユーザー報告の未解決問題:
+  - フォントサイズ: revert後もメッセージが大きく見える (Unityキャッシュ疑い)
+  - タップスキップ: タイミング次第で複数クリック必要
+  - タップスキップ: システムメッセージに効かない (一貫性の欠如)
+  - 全般: nightshift の雑な変更パターン。完成度優先へ方針転換
 - 未確定の設計論点:
-  - フォントサイズ 34 の妥当性 (実機確認後に調整)
+  - UIFontConfig の値調整 (Inspector で全UI一括。現在はデフォルト=旧ハードコード値)
+  - ThreadSwitcherController のフォント統合 (サイドバー密レイアウト、別途設計要)
   - スレッド管理リファクタリングの方向性 (PLAN MODE)
   - ポートレート画像挿入の UI/UX 設計 (HUMAN_AUTHORITY)
-  - StartWait 中のタップスキップ対応 (現在は RunLineAsync 内のみ)
 - 今は触らない範囲: サウンド統合、マネタイズ実装、E2E自動検証
 - task-scout 指摘の未対応:
   - FEATURE_STATUS_AUDIT.md 未更新 (YarnSOGenerator 等)
