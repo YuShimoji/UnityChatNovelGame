@@ -1131,11 +1131,21 @@ namespace ProjectFoundPhone.Core
             {
                 DeclareThreadInternal(branchId, displayName, ThreadType.Branch);
             }
+            else
+            {
+                // 完了済み分岐への再入: 古い履歴をクリアして新鮮な状態で開始
+                var existingThread = GetDeclaredThread(branchId);
+                if (existingThread != null)
+                {
+                    existingThread.ChatHistory?.Clear();
+                    Debug.Log($"ScenarioManager: Branch '{branchId}' re-entered — cleared old history.");
+                }
+            }
 
             // ブランチ状態を開始
             BeginBranchThread(branchId);
 
-            // ChatController を分岐スレッドに自動切替
+            // ChatController を分岐スレッドに自動切替（再入時は空履歴で開始）
             if (m_ChatController != null)
             {
                 var thread = GetDeclaredThread(branchId);

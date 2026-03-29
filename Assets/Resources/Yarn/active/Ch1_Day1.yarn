@@ -10,6 +10,7 @@ title: Ch1_Day1_Opening
 <<declare $d1_asked_terminal = false>>
 <<declare $d1_asked_marco = false>>
 <<declare $d1_asked_fragment = false>>
+<<declare $d1_did_branch_pyramid = false>>
 <<declare $halluci_coin = 0>>
 
 // 潜在スレッド: 断片発見後に顕在化
@@ -89,7 +90,7 @@ title: Ch1_Day1_Hub
 -> さっきの変なテキストは何だ？ <<if not $d1_asked_fragment>>
     <<set $d1_asked_fragment to true>>
     <<jump Ch1_Day1_Fragment>>
--> Pyramid、さっきの情報には矛盾がないか？ <<if $d1_asked_region and $d1_asked_fragment>>
+-> Pyramid、さっきの情報には矛盾がないか？ <<if $d1_asked_region and $d1_asked_fragment and not $d1_did_branch_pyramid>>
     <<jump Ch1_Day1_BranchPyramid>>
 -> 今日はここまでにしよう <<if $d1_asked_region and $d1_asked_terminal and $d1_asked_marco and $d1_asked_fragment>>
     <<jump Ch1_Day1_Winding>>
@@ -302,11 +303,10 @@ title: Ch1_Day1_BranchPyramid
 
 <<set $speaker to "player">>
 -> 聞かせてくれ
+    <<set $d1_did_branch_pyramid to true>>
     <<BeginBranch "ch1_branch_analysis" "Pyramidの補足分析">>
     <<set $speaker to "pyramid">>
     <<StartWait 0.8>>
-    これはメインの会話とは別のスレッドです。
-    <<StartWait 0.5>>
     先ほどの「第4管理区域」という表現ですが、実は私のデータベースにも整合しない記録があります。
     <<StartWait 0.5>>
     <<UnlockTopic "topic_suspicious_message">>
