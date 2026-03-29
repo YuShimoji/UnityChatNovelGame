@@ -52,6 +52,7 @@ namespace ProjectFoundPhone.UI
         private bool m_IsAutoScrolling = false;
         private bool m_PinnedToBottom = true;
         private bool m_IsTypewriterActive = false;
+        private TextMeshProUGUI m_LastTypewriterTarget;
         private GameObject m_TopSpacer;
 
         private GameObject m_RuntimeChoiceButtonTemplate;
@@ -888,6 +889,7 @@ namespace ProjectFoundPhone.UI
             int totalCharacters = textComponent.text.Length;
             textComponent.maxVisibleCharacters = 0;
             m_IsTypewriterActive = true;
+            m_LastTypewriterTarget = textComponent;
 
             DOTween.To(
                 () => textComponent.maxVisibleCharacters,
@@ -901,6 +903,7 @@ namespace ProjectFoundPhone.UI
              {
                  textComponent.maxVisibleCharacters = totalCharacters;
                  m_IsTypewriterActive = false;
+                 m_LastTypewriterTarget = null;
              });
         }
 
@@ -1392,6 +1395,21 @@ namespace ProjectFoundPhone.UI
             if (m_SendButton != null)
             {
                 m_SendButton.interactable = enabled;
+            }
+        }
+
+        /// <summary>タイプライター効果が進行中かどうか</summary>
+        public bool IsTypewriterActive => m_IsTypewriterActive;
+
+        /// <summary>
+        /// 現在進行中のタイプライター効果を即座に完了させる。
+        /// タップスキップ用。
+        /// </summary>
+        public void CompleteCurrentTypewriter()
+        {
+            if (m_LastTypewriterTarget != null)
+            {
+                DOTween.Kill(m_LastTypewriterTarget, complete: true);
             }
         }
 

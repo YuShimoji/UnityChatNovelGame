@@ -1,8 +1,10 @@
 #if YARN_SPINNER
 #nullable enable
 using System.Collections.Generic;
+using System.Threading;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Yarn.Unity;
 using ProjectFoundPhone.Core;
@@ -15,7 +17,17 @@ namespace ProjectFoundPhone.UI
     /// </summary>
     public class ChatDialogueView : DialoguePresenterBase
     {
-        [SerializeField] private float m_LineDisplayDelay = 0.5f;
+        [Header("Message Timing")]
+        [Tooltip("NPC発話前のタイピングインジケーター表示時間（秒）")]
+        [SerializeField] private float m_TypingIndicatorDuration = 0.8f;
+        [Tooltip("メッセージ表示後の余韻時間（秒）。タイプライター完了後に追加される")]
+        [SerializeField] private float m_PostMessageDelay = 0.4f;
+
+        [Header("Tap Skip")]
+        [Tooltip("画面タップでメッセージ送り/アニメスキップを有効にする")]
+        [SerializeField] private bool m_EnableTapSkip = true;
+
+        [Header("Debug")]
         [SerializeField] private bool m_ShowDebugOverlay = false;
 
         private DialogueRunner? m_DialogueRunner;
@@ -30,6 +42,10 @@ namespace ProjectFoundPhone.UI
         private bool m_FastForwardEnabled = false;
         /// <summary>早送りモード（F11 トグル）。有効時はタイピング遅延とタイプライター待ちをスキップする。</summary>
         public bool FastForwardEnabled { get => m_FastForwardEnabled; set { m_FastForwardEnabled = value; RefreshDebugOverlay(); } }
+
+        // タップスキップ用の状態管理
+        private CancellationTokenSource? m_LineSkipCts;
+        private bool m_IsShowingLine = false;
 
         private void Awake()
         {
@@ -51,6 +67,43 @@ namespace ProjectFoundPhone.UI
             {
                 FastForwardEnabled = !FastForwardEnabled;
             }
+
+            // 画面タップでメッセージスキップ（VN風テキスト送り）
+            if (m_EnableTapSkip && m_IsShowingLine && Input.GetMouseButtonDown(0))
+            {
+                // UI ボタン上のクリックは無視（選択肢ボタン等）
+                if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+                {
+                    // ただしチャット領域（ScrollRect等）はスキップ対象
+                    // ボタン以外のUI要素上のクリックはスキップとして扱う
+                    var selected = EventSystem.current.currentSelectedGameObject;
+                    if (selected != null && selected.GetComponent<Button>() != null)
+                    {
+                        return;
+                    }
+                }
+
+                SkipCurrentLine();
+            }
+        }
+
+        /// <summary>
+        /// 現在表示中のメッセージのアニメーションをスキップし、即座に全文表示する。
+        /// タイピングインジケーター・タイプライター・待ち時間をすべてキャンセルする。
+        /// </summary>
+        private void SkipCurrentLine()
+        {
+            // タイプライター効果を即完了
+            m_ChatController?.CompleteCurrentTypewriter();
+
+            // タイピングインジケーターを非表示
+            m_ChatController?.ShowTypingIndicator(false);
+
+            // 現在の遅延をキャンセル
+            if (m_LineSkipCts != null && !m_LineSkipCts.IsCancellationRequested)
+            {
+                m_LineSkipCts.Cancel();
+            }
         }
 
         public override async YarnTask RunLineAsync(LocalizedLine dialogueLine, LineCancellationToken token)
@@ -66,6 +119,12 @@ namespace ProjectFoundPhone.UI
 
             if (m_ChatController != null)
             {
+                m_IsShowingLine = true;
+
+                // スキップ用トークンを初期化
+                m_LineSkipCts?.Dispose();
+                m_LineSkipCts = new CancellationTokenSource();
+
                 // 話者解決: CharacterName → $speaker 変数 → "npc" フォールバック
                 string charID = ResolveSpeaker(dialogueLine);
 
@@ -74,7 +133,11 @@ namespace ProjectFoundPhone.UI
                 if (!isPlayer && !m_FastForwardEnabled)
                 {
                     m_ChatController.ShowTypingIndicator(true);
-                    await YarnTask.Delay((int)(m_LineDisplayDelay * 0.6f * 1000), token.NextContentToken).SuppressCancellationThrow();
+
+                    // タイピングインジケーター表示時間（タップスキップ可能）
+                    int indicatorMs = (int)(m_TypingIndicatorDuration * 1000);
+                    await DelayWithSkip(indicatorMs, token.NextContentToken);
+
                     m_ChatController.ShowTypingIndicator(false);
                 }
 
@@ -87,18 +150,36 @@ namespace ProjectFoundPhone.UI
                 // タイプライター効果の完了を待つ（早送り時は最小遅延のみ）
                 if (!m_FastForwardEnabled)
                 {
+                    // タイプライター所要時間 + 余韻
                     float typewriterDuration = lineText.Length * 0.05f;
-                    await YarnTask.Delay((int)((typewriterDuration + 0.3f) * 1000), token.NextContentToken).SuppressCancellationThrow();
+                    int waitMs = (int)((typewriterDuration + m_PostMessageDelay) * 1000);
+                    await DelayWithSkip(waitMs, token.NextContentToken);
                 }
                 else
                 {
                     await YarnTask.Delay(30, token.NextContentToken).SuppressCancellationThrow();
                 }
+
+                m_IsShowingLine = false;
             }
             else
             {
                 Debug.LogWarning($"ChatDialogueView: ChatController not found. Line: {lineText}");
             }
+        }
+
+        /// <summary>
+        /// YarnTask.Delay のラッパー。タップスキップとYarnのNextContentToken両方でキャンセル可能。
+        /// </summary>
+        private async YarnTask DelayWithSkip(int milliseconds, CancellationToken yarnToken)
+        {
+            if (m_LineSkipCts == null || m_LineSkipCts.IsCancellationRequested)
+            {
+                return;
+            }
+
+            using var linked = CancellationTokenSource.CreateLinkedTokenSource(yarnToken, m_LineSkipCts.Token);
+            await YarnTask.Delay(milliseconds, linked.Token).SuppressCancellationThrow();
         }
 
         /// <summary>
@@ -247,6 +328,7 @@ namespace ProjectFoundPhone.UI
 
             m_CurrentLineId = "-";
             m_CurrentTags = "-";
+            m_IsShowingLine = false;
             RefreshDebugOverlay();
             return YarnTask.CompletedTask;
         }
@@ -267,6 +349,12 @@ namespace ProjectFoundPhone.UI
             {
                 SaveManager.Instance.AutoSave();
             }
+        }
+
+        private void OnDestroy()
+        {
+            m_LineSkipCts?.Dispose();
+            m_LineSkipCts = null;
         }
 
         private void UpdateDebugState(LocalizedLine? dialogueLine)
