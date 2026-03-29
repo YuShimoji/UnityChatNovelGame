@@ -8,13 +8,13 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
-現在の状況 (2026-03-27 session 12):
-  - Pipeline設計確定: モバイルアプリ / F2P+広告 / SO自動生成+E2E自動検証 / サウンド後回し
-  - エンジン基盤: 24 Yarnコマンド、全主要機能実装済み
-  - spec-index: 34エントリ (done 22 / partial 9 / draft 1 / todo 2)
-  - Phase A手動検証 (65項目+SP-019/020) 未完了 — Unity Editor必須
-  - 次の作業: SO自動生成ツール実装 or Phase A手動検証 or Ch3設計
-  - 残存問題: UnreadCount復元(LOW、コードレビュー正常・Unity検証待ち)
+現在の状況 (2026-03-30 session 14):
+  - Pipeline設計確定 + SO自動生成ツール実装済み (YarnSOGenerator)
+  - エンジン基盤: 24 Yarnコマンド + タップスキップ + タイミング設定可能
+  - spec-index: 35エントリ (done 22 / partial 9 / draft 1 / todo 2 + 21_branch_thread_spec)
+  - Authoring Wiki: docs/wiki/ に Docsify ベース 12ページ作成
+  - session 13-14 主な修正: 選択肢処理バグ (StopScenario同期化)、RestoreChatHistory即時表示、Ch1分岐再入防止、フォントサイズ引き上げ
+  - 次の作業: Unity実機確認 → スレッド管理リファクタリング設計 → ポートレート画像 → ストーリー追加テスト
 
 ## DECISION LOG
 
@@ -49,6 +49,9 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 | 2026-03-27 | 自動化範囲: SO自動生成 + E2E自動検証 | 最小限 / SO自動生成 / E2E / 両方 | コンテンツ量産時の手動SO作成が最大摩擦。E2E検証で回帰防止 |
 | 2026-03-27 | サウンド: コンテンツ後回し (Ch3以降) | BGM+SE先行 / 後回し / なし | ゲームプレイの核を先に固める |
 | 2026-03-27 | マネタイズ: F2P + 広告 | 後回し / F2P+広告 / 買い切り / スコープ外 | モバイルアプリのスタンダード。広告動線設計は後日 |
+| 2026-03-29 | メッセージ演出: タップスキップ + タイミング設定可能化 | タップスキップ / F11のみ / 自動送り | VN標準の操作感。TypingIndicatorDuration(0.8s), PostMessageDelay(0.4s) を Inspector で調整可能 |
+| 2026-03-29 | Branch Thread 再入防止: Yarn フラグ必須 + コード安全策 | フラグ必須 / コードのみ / 両方 | Yarn側フラグで1回限り。コード側はBeginBranch再入時に古い履歴クリア。仕様書 21_branch_thread_spec.md |
+| 2026-03-29 | フォントサイズ引き上げ: messageFontSize 28→34 | 28維持 / 32 / 34 / 36 | CanvasScaler MatchHeight=1.0 で狭Canvas時にレスポンシブ縮小(下限0.85)。34*0.85=28.9pxで旧28px以上を確保 |
 
 ## IDEA POOL
 
