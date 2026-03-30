@@ -6,12 +6,11 @@
 - 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 - ブランチ戦略: trunk-based (main のみ)
 - 現フェーズ: プロトタイプ → α移行中
-- 直近の状態 (2026-03-30 session 15):
-  - UIFontConfig 新設: 7段階フォント階層でUI全体のフォントサイズを一元管理 (31箇所統合)
-  - session 14 のフォントサイズ変更は revert 済み (部分的でバランス崩れのため)
-  - 未解決: タップスキップの一貫性 (複数クリック必要な場合あり、システムメッセージ未対応)
-  - 未解決: revert 後も Unity が旧フォントサイズをキャッシュしている可能性 (再起動で確認要)
-  - 次の作業: Unity 再起動して Audit → タップスキップ一貫性修正 → UIFontConfig でフォントバランス調整
+- 直近の状態 (2026-03-30 session 17):
+  - Session 17: 自動スキップ修正 + DialogueException修正 + フォントバランス調整 + ロードマップ策定 + canonical docs 初期化
+  - 制作パイプライン調査完了: Validator/SOGenerator/wiki は動作するが ChannelData 自動生成が未実装
+  - 方向転換: AI は Yarn 執筆ではなく制作ツール/パイプライン整備に注力すべき
+  - 次の作業: 人間が執筆するためのシステム周りの改善 (ChannelData 自動生成、制作フロー統合ウィザード等)
 
 ### 運用メモ
 
@@ -137,19 +136,23 @@ CLAUDE.md の IDEA POOL を参照。ここには project-context.md 作成以降
 
 ## HANDOFF SNAPSHOT (session 17)
 
-- 現在の主レーン: Advance (コンテンツ制作 — Ch1 完走)
-- 現在のスライス: Ch1 通しプレイ + 制作フロー実証
+- 現在の主レーン: Unlock (人間が執筆するための制作システム整備)
+- 現在のスライス: 制作パイプライン改善 — ChannelData 自動生成 / 統合ウィザード
 - session 17 で完了した作業:
   - 自動スキップバグ根絶 (NextContentToken リーク修正)
   - DialogueException 修正 (m_IsDestroying ガード)
   - DebugQuickTest.yarn 新規 (DQT_Start)
   - フォントサイズバランス修正 (.asset nightshift膨張値 + 全体底上げ)
   - 開発ロードマップ策定 (短期/中期/長期)
-  - docs/UI_ISSUES.md 新設 (UIバグ一括処理運用)
+  - canonical docs 4本初期化 (INVARIANTS/LEDGER/WORKFLOW/INTERACTION)
+  - 制作パイプライン調査: Validator/SOGenerator/wiki は動作確認済み
+- session 17 で判明した重要な認識修正:
+  - Yarn 執筆はユーザーの仕事。AI はシステム/ツール/パイプラインを整備する
+  - ChannelData が手動作成のみ — YarnSOGenerator に含まれていない
+  - 「前回の反動」で方向を決めない。本当に必要なものを特定する
 - 次回最初にやること:
-  1. Ch1 Day1 通しプレイ → 体験として成立するか確認
-  2. 発見した UI 問題は UI_ISSUES.md に記録 (即修正しない)
-  3. Ch1 Day2 の Yarn 執筆開始 (03a_ch1_section_beats.md の Day2 ビートに基づく)
+  1. 制作パイプラインの改善 (ChannelData 自動生成、統合フロー等)
+  2. ユーザーが何を改善してほしいか具体的に確認 (HUMAN_AUTHORITY)
 - フォント/色/タイミングの微調整: Inspector の ChatUIConfig / UIFontConfig で自律的に行う (コード変更不要)
   - タップスキップ: システムメッセージに効かない (一貫性の欠如)
   - 全般: nightshift の雑な変更パターン。完成度優先へ方針転換

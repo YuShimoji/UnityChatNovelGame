@@ -11,6 +11,7 @@
 | 2026-03-30 | デバッグはデバッグ用チャプターで即確認できるようにせよ | done | DebugQuickTest.yarn (DQT_Start) |
 | 2026-03-30 | 処理のアルゴリズムを明文化せよ | done | docs/DISPLAY_ALGORITHMS.md (EN-011) |
 | 2026-03-29 | デザイナーが容易にストーリー追加削除できるワークフロー確立 | partial | wiki 作成済み、実フロー未実証 |
+| 2026-03-30 | 最も欲しいのは人間が執筆するためのシステム周り | active | パイプラインツール整備が本質。Validator/SOGenerator は動作確認済みだが ChannelData は手動のみ |
 
 ## 未反映の是正要求
 
