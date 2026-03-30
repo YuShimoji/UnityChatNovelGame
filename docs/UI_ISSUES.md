@@ -10,7 +10,7 @@
 
 ## Open Issues
 
-(なし)
+- 2026-03-30: DebugChatScene.unity の CanvasScaler が 1920x1080 のまま。コード (MetaEffectController, DebugSceneBuilder) は 1080x1920 に修正済み。DebugSceneBuilder で再生成するか、Inspector で手動修正が必要。再現: DebugChatScene を開き CanvasScaler の referenceResolution を確認
 
 ## Fixed Issues
 

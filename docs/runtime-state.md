@@ -49,7 +49,14 @@
   - **未コミット Topic .asset 6件**: YarnSOGenerator 自動生成分をコミット
   - **PlayMode テスト改善**: WaitForChatMessages/WaitForCondition ヘルパー + Ch1 Save/Load テスト (session 18 未コミット分)
   - **runtime-state.md メトリクス修正**: impl 65→66, yarn_active 11→6, yarn_archive 1→5 (実測値に修正)
-- Block 2 (Audit -> Advance): task-scout + `CurrentChannel` Save/Load 検証の固定
+- Block 2 (Advance + docs): E2E スコープ + docs 同期 + UI_ISSUES 初記録
+  - **DQT_Start PlayMode テスト追加**: DebugQuickTest の起動→メッセージ表示を自動検証
+  - **EN-012 登録**: spec-index に E2E PlayMode 自動検証を partial 40% で追加
+  - **FEATURE_STATUS_AUDIT 定量サマリー更新**: 実測値に修正
+  - **CLAUDE.md 状態更新**: session 19 に同期
+  - **HANDOFF.md session 19 差分追記**
+  - **UI_ISSUES.md**: DebugChatScene.unity CanvasScaler 不整合を初記録
+- Block 2-prior (session 18 末尾): task-scout + `CurrentChannel` Save/Load 検証の固定
   - **task-scout 再確認**: 主ボトルネックは `Content Pipeline -> ContentAuthoring/DebugQuickTest/Ch1-Ch3 -> E2E PlayMode`
     の証跡不足。`visual_evidence_status: stale` と `docs/verification/` 空を確認。
   - **PlayMode テスト追加**: `VerticalSliceSmokeGatePlayModeTests` に
