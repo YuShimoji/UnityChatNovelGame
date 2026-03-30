@@ -119,6 +119,7 @@ CLAUDE.md の DECISION LOG を参照。ここには project-context.md 作成以
 | 2026-03-29 | Authoring Wiki: Docsify ベースで docs/wiki/ に作成 | Docsify / MkDocs / 単一HTML / なし | CDNのみでビルド不要。既存 .md を活かせる。npx docsify serve で即起動 |
 | 2026-03-30 | フォントサイズバランス: messageFontSize 28→22 + body 18→20 | 22 / 24 / UIFontConfig全体引き上げ | .asset nightshift膨張値が未revertだった根本原因を修正。Inspector微調整可能 |
 | 2026-03-30 | 開発ワークフロー再構造化 | 現状維持 / コンテンツ優先 / UI先行 | 5セッションのUI微修正ループを脱却。値調整はInspector、UIバグは一括処理、セッション成果はコンテンツか機能 |
+| 2026-03-30 | AI の役割: 制作システム整備。Yarn 執筆はユーザー | AI執筆 / AI支援+ユーザー執筆 / ユーザー単独 | ユーザーフィードバック。最も欲しいのは「人間が執筆するためのシステム周り」。機能検証はDebugQuickTestで行い本編を実験台にしない |
 
 ---
 
