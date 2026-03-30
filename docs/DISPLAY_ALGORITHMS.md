@@ -55,21 +55,25 @@ UIFontConfig (ScriptableObject) で一元管理。ハードコード禁止。
 | title | 画面タイトル (HALLUCINATION SIMULATOR) | 28 |
 | heading | セクション見出し、カードタイトル | 22 |
 | subheading | 強調本文、アクションボタン | 20 |
-| body | 本文、ボタンテキスト、ラベル | 18 |
-| caption | 説明文、サブタイトル | 16 |
+| body | 本文、ボタンテキスト、ラベル | 20 |
+| caption | 説明文、サブタイトル | 18 |
 | small | ステータス、バッジ | 14 |
 | tiny | ミニ統計、ヒント | 11 |
 
 レスポンシブスケール: Canvas幅 < 900 で縮小 (下限 0.78)。
 
 **ChatUIConfig (チャット固有)**:
-- messageFontSize: 28 — UIFontConfig.title と同じ値。他の UI 要素と比べて突出。
-- systemMessageFontSize: 16
+- messageFontSize: 22 — UIFontConfig.heading と同格。メッセージは画面の主要素だが title ではない。
+- systemMessageFontSize: 18 — body レベル。
 - typingIndicatorFontSize: 18
-- choiceFontSize: 18-26 (autoSize)
+- choiceFontSize: 18-24 (autoSize)
 
 ChatController の messageFontSize は ChatUIConfig で管理。UIFontConfig とは別系統だが、
 フォント階層全体のバランスを考慮して値を設定すること。
+
+**session 17 修正**: .asset ファイルに session 14 nightshift の膨張値 (choiceFontSizeMax=36 等) が
+残っていたのが「フォントが戻っていない」原因だった。.cs の revert だけでは不十分で、
+.asset (Unity が実際に使う値) も修正が必要。
 
 ---
 

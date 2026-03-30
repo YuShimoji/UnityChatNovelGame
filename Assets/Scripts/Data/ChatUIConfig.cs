@@ -11,7 +11,7 @@ namespace ProjectFoundPhone.Data
     {
         [Header("Message Bubble")]
         [Tooltip("通常メッセージのフォントサイズ")]
-        public float messageFontSize = 28f;
+        public float messageFontSize = 22f;
 
         [Tooltip("バブルの最小高さ")]
         public float bubbleMinHeight = 60f;
@@ -77,7 +77,7 @@ namespace ProjectFoundPhone.Data
 
         [Header("System Message")]
         [Tooltip("システムメッセージのフォントサイズ")]
-        public float systemMessageFontSize = 16f;
+        public float systemMessageFontSize = 18f;
 
         [Tooltip("システムメッセージのテキスト色")]
         public Color systemMessageTextColor = new Color(0.75f, 0.75f, 0.8f, 1f);

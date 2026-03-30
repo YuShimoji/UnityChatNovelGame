@@ -21,10 +21,10 @@ namespace ProjectFoundPhone.Data
         public float subheadingFontSize = 20f;
 
         [Tooltip("本文、ボタンテキスト、ラベル (例: タブボタン、戻るボタン)")]
-        public float bodyFontSize = 18f;
+        public float bodyFontSize = 20f;
 
         [Tooltip("説明文、サブタイトル (例: チャンネル説明、サブタブ)")]
-        public float captionFontSize = 16f;
+        public float captionFontSize = 18f;
 
         [Tooltip("ステータス、バッジ、パーセント表示")]
         public float smallFontSize = 14f;

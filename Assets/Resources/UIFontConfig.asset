@@ -15,8 +15,8 @@ MonoBehaviour:
   titleFontSize: 28
   headingFontSize: 22
   subheadingFontSize: 20
-  bodyFontSize: 18
-  captionFontSize: 16
+  bodyFontSize: 20
+  captionFontSize: 18
   smallFontSize: 14
   tinyFontSize: 11
   responsiveBreakpoint: 900
