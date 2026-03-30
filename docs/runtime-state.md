@@ -6,8 +6,8 @@
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
-- lane: Advance (スキップ一貫性修正 + DialogueException修正)
-- slice: 自動スキップバグ修正 + スキップ一貫性 + DialogueException解消 + デバッグチャプター
+- lane: Advance (コンテンツ制作 — Ch1 完走)
+- slice: Ch1 通しプレイ + 制作フロー実証 + Ch1 Day2/Day3 執筆
 - active_artifact: FoundPhone エンジン基盤 (Unity 6.3 + Yarn Spinner 3.1.3)
 - artifact_surface: Unity Editor > ContentAuthoring シーン
 - last_change_relation: direct (自動スキップ修正 + DialogueException修正 + DebugQuickTest.yarn)

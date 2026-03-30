@@ -25,29 +25,49 @@
 
 ## CURRENT DEVELOPMENT AXIS
 
-- 主軸: ゲームUI安定化 + コンテンツ制作ワークフロー実証 + 新機能 (ポートレート画像)
-- この軸を優先する理由: エンジン基盤は揃ったが、実際のストーリー追加を一度も手動で実施していない。wiki + ツールで制作フローを回し、摩擦を特定する段階
-- 今ここで避けるべき脱線: マネタイズ実装、サウンド統合、過度な仕様策定 (実動作の確認が先)
+- 主軸: コンテンツ制作フロー実証 + Ch1 完走
+- この軸を優先する理由: エンジン基盤は alpha として十分。Session 13-17 が UI 微修正に費やされ、コンテンツ進行が停止。制作フローを実際に回してコンテンツを前進させる
+- 今ここで避けるべき脱線: UI 微修正ループ、マネタイズ実装、サウンド統合、過度な仕様策定
+- **ワークフロー原則**: 値の調整 (フォント/色/タイミング) は Inspector で行い、コード変更しない。UI バグは docs/UI_ISSUES.md に溜めて一括修正。セッション成果物は「プレイアブルなコンテンツ」か「新機能」
 
 ---
 
 ## CURRENT LANE
 
-- 主レーン: Advance (ゲームUI安定化 + メッセージ演出) / Audit (Unity実機確認)
-- 副レーン: Unlock (ポートレート画像、スレッド管理リファクタ)
-- 今このレーンを優先する理由: nightshift で大量変更 (8コミット) があり、Unity実機確認が必要。その上でストーリー追加の実証テスト
-- いまは深入りしないレーン: サウンド統合、マネタイズ実装、E2E自動検証
+- 主レーン: Advance (コンテンツ制作 — Ch1 Day2/Day3 執筆)
+- 副レーン: Audit (Ch1 通しプレイ体験確認)
+- 今このレーンを優先する理由: 5セッション分の UI 修正が完了。次はコンテンツを実際に作り、制作フローの摩擦を特定する段階
+- いまは深入りしないレーン: UI微調整 (Inspector で自律調整)、サウンド、マネタイズ
 
 ---
 
 ## CURRENT SLICE
 
-- スライス名: ゲームUI安定化 + ストーリー追加実証
-- ユーザー操作列: wiki を読む → 新 Yarn ファイルを書く → Validator → SOGenerator → Unity 再生確認 → タップスキップで操作 → 問題なく完走
-- 成功状態: デザイナーが wiki だけ見て新チャプターを追加し、Unity で正常に再生できる
-- このスライスで必要な基盤能力: タップスキップ (実装済み)、タイミング設定 (実装済み)、wiki (作成済み)
-- このスライスから抽出されるツール要求: なし (既存ツールで十分)
-- 今回はやらないこと: E2E自動検証、サウンド統合、マネタイズ実装
+- スライス名: Ch1 完走 + 制作フロー実証
+- ユーザー操作列: Ch1 Day1 通しプレイ → Day2 ビート確認 → Yarn 執筆 → Validator → SOGenerator → Unity 再生 → Day3 同様 → Ch1 通しプレイ
+- 成功状態: Ch1 (Day1-3) を新規プレイヤーとして通しプレイできる。制作フローの摩擦が特定されリスト化されている
+- このスライスで必要な基盤能力: タップスキップ (済)、タイミング (済)、wiki (済)、Validator (済)、SOGenerator (済)
+- 今回はやらないこと: UI微修正 (UI_ISSUES.md に記録のみ)、サウンド、マネタイズ
+
+---
+
+## DEVELOPMENT ROADMAP (2026-03-30 策定)
+
+### 短期 (Session 18-20): Ch1 完走 + 制作フロー実証
+- S18: Ch1 Day1 通しプレイ + Day2 執筆開始 + ツール実証
+- S19: Ch1 Day2 完成 + Day1→Day2 遷移テスト
+- S20: Ch1 Day3 完成 + Ch1 通しプレイ + SP-019/020 Phase 1 検証
+
+### 中期 (Session 21-28): Alpha ビルド (Ch1-2 完走可能)
+- S21-22: Ch2 Day1-3 執筆
+- S23: BL-002 ポートレートアイコン
+- S24: Ch1-2 通しプレイ + UI バッチ修正
+- S25-26: Ch3 Day1-3 執筆
+- S27: SP-019 Phase 2 + SP-020 Phase 2
+- S28: Android 初回ビルド
+
+### 長期 (Session 29+): Beta → リリース
+- Ch4-6 (第2部) → Ch7-9 (第3部) → サウンド → Beta テスト → リリース
 
 ---
 
@@ -98,6 +118,8 @@ CLAUDE.md の DECISION LOG を参照。ここには project-context.md 作成以
 | 2026-03-29 | Branch Thread: Yarn 再入防止フラグ必須 + コード安全策 | フラグ必須 / コードのみ / 両方 | フラグで1回限り + BeginBranch再入時に古い履歴クリア。仕様書 21_branch_thread_spec.md 作成 |
 | 2026-03-29 | フォントサイズ: messageFontSize 28→34 + スケール下限 0.78→0.85 | 28維持 / 32 / 34 / 36 | CanvasScaler MatchHeight=1.0 で狭Canvas時のレスポンシブ縮小に耐える。34*0.85=28.9px |
 | 2026-03-29 | Authoring Wiki: Docsify ベースで docs/wiki/ に作成 | Docsify / MkDocs / 単一HTML / なし | CDNのみでビルド不要。既存 .md を活かせる。npx docsify serve で即起動 |
+| 2026-03-30 | フォントサイズバランス: messageFontSize 28→22 + body 18→20 | 22 / 24 / UIFontConfig全体引き上げ | .asset nightshift膨張値が未revertだった根本原因を修正。Inspector微調整可能 |
+| 2026-03-30 | 開発ワークフロー再構造化 | 現状維持 / コンテンツ優先 / UI先行 | 5セッションのUI微修正ループを脱却。値調整はInspector、UIバグは一括処理、セッション成果はコンテンツか機能 |
 
 ---
 
@@ -113,26 +135,22 @@ CLAUDE.md の IDEA POOL を参照。ここには project-context.md 作成以降
 
 ---
 
-## HANDOFF SNAPSHOT
+## HANDOFF SNAPSHOT (session 17)
 
-- 現在の主レーン: Audit (UIFontConfig統合後の検証) + Advance (タップスキップ一貫性修正)
-- 現在のスライス: UIFontConfig統合完了 → フォントバランス調整 + タップスキップ一貫性修正
-- 今回変更した対象 (session 15):
-  - [新規] Assets/Scripts/Data/UIFontConfig.cs — 7段階フォント階層 + レスポンシブスケール
-  - Assets/Scripts/UI/DashboardController.cs — ハードコード→UIFontConfig参照 (10箇所)
-  - Assets/Scripts/UI/InventoryTabController.cs — (7箇所)
-  - Assets/Scripts/UI/TransferSelectionUI.cs — (5箇所)
-  - Assets/Scripts/UI/ProgressSummaryUI.cs — (3箇所)
-  - Assets/Scripts/UI/ChatController.cs — (3箇所 + GetResponsiveFontScale委譲)
-  - Assets/Scripts/UI/ContradictionFeedbackController.cs — (3箇所)
-  - session 14 フォントサイズ変更 (d584aaf, 8835623) を revert
+- 現在の主レーン: Advance (コンテンツ制作 — Ch1 完走)
+- 現在のスライス: Ch1 通しプレイ + 制作フロー実証
+- session 17 で完了した作業:
+  - 自動スキップバグ根絶 (NextContentToken リーク修正)
+  - DialogueException 修正 (m_IsDestroying ガード)
+  - DebugQuickTest.yarn 新規 (DQT_Start)
+  - フォントサイズバランス修正 (.asset nightshift膨張値 + 全体底上げ)
+  - 開発ロードマップ策定 (短期/中期/長期)
+  - docs/UI_ISSUES.md 新設 (UIバグ一括処理運用)
 - 次回最初にやること:
-  1. Unity 再起動 → ChatUIConfig.asset のキャッシュリフレッシュ確認 (messageFontSize=28 がディスク上は正しい)
-  2. ContentAuthoring シーン再生 → フォントサイズが全要素で統一されているか確認
-  3. タップスキップの一貫性修正 (複数クリック問題 + システムメッセージ未対応)
-- ユーザー報告の未解決問題:
-  - フォントサイズ: revert後もメッセージが大きく見える (Unityキャッシュ疑い)
-  - タップスキップ: タイミング次第で複数クリック必要
+  1. Ch1 Day1 通しプレイ → 体験として成立するか確認
+  2. 発見した UI 問題は UI_ISSUES.md に記録 (即修正しない)
+  3. Ch1 Day2 の Yarn 執筆開始 (03a_ch1_section_beats.md の Day2 ビートに基づく)
+- フォント/色/タイミングの微調整: Inspector の ChatUIConfig / UIFontConfig で自律的に行う (コード変更不要)
   - タップスキップ: システムメッセージに効かない (一貫性の欠如)
   - 全般: nightshift の雑な変更パターン。完成度優先へ方針転換
 - 未確定の設計論点:
