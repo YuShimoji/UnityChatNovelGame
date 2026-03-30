@@ -1,45 +1,56 @@
 # Runtime State
 
-**Updated**: 2026-03-30
+**Updated**: 2026-03-30 session 16
 
 ## Current Position
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
-- lane: Audit (UIFontConfig統合後の検証待ち) + Advance (タップスキップ一貫性修正)
-- slice: UIFontConfig統合完了 → フォントバランス調整 + タップスキップ一貫性修正
+- lane: Advance (サブスレッド安定化 + アルゴリズム明文化)
+- slice: スレッド切替フラッシュ防止 + スムーズスクロール + アルゴリズム仕様文書化
 - active_artifact: FoundPhone エンジン基盤 (Unity 6.3 + Yarn Spinner 3.1.3)
 - artifact_surface: Unity Editor > ContentAuthoring シーン
-- last_change_relation: unlock (UIFontConfig新設、ハードコードフォントサイズ31箇所統合)
+- last_change_relation: direct (SwitchToThread フェードイン + PerformAutoScroll スムーズ化)
 
 ## Counters
 
-- blocks_since_user_visible_change: 1 (前回: メッセージタイミング + タップスキップ。今回はインフラ変更のみ)
-- blocks_since_visual_audit: 3 (session 13 Block 1 Audit → session 14 x2 → session 15)
-- blocks_since_unlock: 0 (UIFontConfig = UI基盤 unlock)
+- blocks_since_user_visible_change: 0 (スレッド切替フェードイン + スムーズスクロール)
+- blocks_since_visual_audit: 4 (session 13 Block 1 Audit → session 14 x2 → session 15 → session 16)
+- blocks_since_unlock: 1
 - consecutive_excise_blocks: 0
 
 ## Quantitative Metrics
 
-- impl_files: 65 (テスト除く .cs、UIFontConfig.cs追加)
+- impl_files: 65 (テスト除く .cs)
 - test_files: 5 (EditMode 4 + PlayMode 1)
 - playmode_test_files: 1
 - mock_files: 0
 - yarn_active: 9
 - yarn_archive: 1
-- spec_entries: 35 (done 22 / partial 9 / draft 1 / todo 2 + 21_branch_thread_spec 新規)
-- todo_fixme_hack: 1 (ChatController.cs:1233 — 行番号ズレ修正、ステータスバールーティング)
+- spec_entries: 39 (done 23 / partial 9 / draft 1 / todo 5 — EN-011追加, BL-001/002/003追加)
+- todo_fixme_hack: 1 (ChatController.cs — ステータスバールーティング)
 - obsolete_marks: 2 (ContradictionPair.UnlockTopic x2)
-- chatcontroller_lines: 2577 (session 13: 2549 → +28行 バグ修正追加)
+- chatcontroller_lines: ~2640 (SwitchToThread改修 + スムーズスクロール追加)
 - wiki_pages: 12 (docs/wiki/ 内)
 
 ## Visual Evidence
 
-- visual_evidence_status: stale (ユーザーが session 15 開始時にスクリーンショット提供、ただし verification/ 未保存)
+- visual_evidence_status: stale (Unity PlayMode 未実施。コード変更のみ)
 - last_visual_audit_path: (なし)
-- blocks_since_visual_audit: 3
+- blocks_since_visual_audit: 4
 
 ## Session Log
+
+### 2026-03-30 session 16
+- Block 1 (Advance): アルゴリズム明文化 + サブスレッド安定化実装
+  - docs/DISPLAY_ALGORITHMS.md 新規作成: メッセージ表示/スキップ/スクロール/スレッド切替の全フロー明文化
+  - Backlog 3件登録: BL-001(スクロールフェード), BL-002(ポートレートアイコン), BL-003(スレッドメタデータ)
+  - **SwitchToThread フラッシュ防止**: CanvasGroup alpha=0 → RestoreChatHistory → 2フレーム待機 → スクロール復元 → フェードイン(0.15秒)
+  - **PerformAutoScroll スムーズ化**: verticalNormalizedPosition 直接代入 → DOTween 0.2秒アニメーション (BL-001 部分対応)
+  - **2段階タップスキップ**: 第1タップ=テキスト全文表示(PostMessageDelay継続)、第2タップ=次メッセージへ進む
+    - ChatDialogueView: m_PostSkipCts 新設、DelayWithPostSkip 追加、RunLineAsync を Phase 1/Phase 2 に分離
+  - **OnDisable クリーンアップ強化**: ScrollTween/FadeInCoroutine/PostSkipCts の解放追加
+  - ユーザーフィードバック吸収: デザイン制御不足 / 明文化なき実装の禁止 / サブスレッド不具合4件の原因特定
 
 ### 2026-03-30 session 15
 - Block 1 (Unlock): UIFontConfig 新設 + ハードコードフォントサイズ統合

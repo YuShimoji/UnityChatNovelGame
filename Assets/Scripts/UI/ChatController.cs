@@ -73,6 +73,13 @@ namespace ProjectFoundPhone.UI
         private readonly List<SavedChatMessage> m_ChatHistory = new List<SavedChatMessage>();
         private bool m_IsRestoringHistory = false;
 
+        // スレッド切替時のフェードイン + スムーズスクロール用
+        private CanvasGroup m_ContentCanvasGroup;
+        private Tween m_ScrollTween;
+        private Coroutine m_FadeInCoroutine;
+        private const float ThreadSwitchFadeDuration = 0.15f;
+        private const float SmoothScrollDuration = 0.2f;
+
         /// <summary>現在表示中のスレッドID (null = メインスレッド)</summary>
         private string m_ActiveThreadId;
 
@@ -1704,14 +1711,39 @@ namespace ProjectFoundPhone.UI
             if (m_ScrollRect == null) return;
             if (m_IsUserScrolling && !m_PinnedToBottom) return;
 
-            // レイアウトを強制更新してから最下部へスクロール
+            // レイアウトを強制更新
             Canvas.ForceUpdateCanvases();
             LayoutRebuilder.ForceRebuildLayoutImmediate(m_ScrollRect.content);
 
+            // 既存のスクロールアニメーションをキャンセル
+            m_ScrollTween?.Kill();
+
+            // スムーズスクロールで最下部へ (BL-001: フェード付きスクロール吸着)
             m_IsAutoScrolling = true;
-            m_ScrollRect.verticalNormalizedPosition = 0f;
-            m_LastScrollPosition = 0f;
-            m_IsAutoScrolling = false;
+            float currentPos = m_ScrollRect.verticalNormalizedPosition;
+
+            // 既にほぼ最下部にいる場合は即時移動 (微小な差はアニメ不要)
+            if (currentPos < 0.02f)
+            {
+                m_ScrollRect.verticalNormalizedPosition = 0f;
+                m_LastScrollPosition = 0f;
+                m_IsAutoScrolling = false;
+                return;
+            }
+
+            m_ScrollTween = DOTween.To(
+                () => m_ScrollRect.verticalNormalizedPosition,
+                x => m_ScrollRect.verticalNormalizedPosition = x,
+                0f,
+                SmoothScrollDuration
+            )
+            .SetEase(Ease.OutCubic)
+            .OnComplete(() =>
+            {
+                m_LastScrollPosition = 0f;
+                m_IsAutoScrolling = false;
+                m_ScrollTween = null;
+            });
         }
 
         private void OnDisable()
@@ -1720,6 +1752,15 @@ namespace ProjectFoundPhone.UI
             {
                 CancelInvoke(nameof(PerformAutoScroll));
                 m_AutoScrollScheduled = false;
+            }
+
+            m_ScrollTween?.Kill();
+            m_ScrollTween = null;
+
+            if (m_FadeInCoroutine != null)
+            {
+                StopCoroutine(m_FadeInCoroutine);
+                m_FadeInCoroutine = null;
             }
 
             m_IsUserScrolling = false;
@@ -2477,23 +2518,81 @@ namespace ProjectFoundPhone.UI
                 targetHistory = new List<SavedChatMessage>();
             }
 
-            // 履歴を復元
+            // フラッシュ防止: コンテンツを非表示にしてから復元
+            var cg = GetOrAddContentCanvasGroup();
+            if (cg != null) cg.alpha = 0f;
+
+            // 前回のフェードインが実行中なら停止
+            if (m_FadeInCoroutine != null)
+            {
+                StopCoroutine(m_FadeInCoroutine);
+                m_FadeInCoroutine = null;
+            }
+
+            // 履歴を復元 (非表示のまま実行 — ユーザーにはフラッシュが見えない)
             RestoreChatHistory(targetHistory);
 
-            // スクロール位置を復元 (1フレーム後)
-            if (m_ThreadScrollPositions.TryGetValue(targetKey, out float scrollPos))
+            // RestoreChatHistory が予約した AutoScroll をキャンセル
+            // (スクロール位置は RestoreScrollAndFadeIn で明示的に設定する)
+            if (m_AutoScrollScheduled)
             {
-                StartCoroutine(RestoreScrollPositionNextFrame(scrollPos));
+                CancelInvoke(nameof(PerformAutoScroll));
+                m_AutoScrollScheduled = false;
             }
+
+            // レイアウト確定後にスクロール位置を復元し、フェードインで表示
+            m_FadeInCoroutine = StartCoroutine(RestoreScrollAndFadeIn(targetKey));
         }
 
-        private System.Collections.IEnumerator RestoreScrollPositionNextFrame(float position)
+        /// <summary>
+        /// スレッド切替後のレイアウト確定 → スクロール位置復元 → フェードイン。
+        /// ClearMessages→RestoreChatHistory 間の空白フレームをユーザーに見せない。
+        /// </summary>
+        private System.Collections.IEnumerator RestoreScrollAndFadeIn(string targetKey)
         {
+            // レイアウト確定を待つ (2フレーム: ネストLayoutGroup対応)
             yield return null;
+            Canvas.ForceUpdateCanvases();
+            yield return null;
+
+            // スクロール位置を復元 (即時 — スレッド切替時はアニメ不要)
             if (m_ScrollRect != null)
             {
-                m_ScrollRect.verticalNormalizedPosition = position;
+                m_IsAutoScrolling = true;
+                if (m_ThreadScrollPositions.TryGetValue(targetKey, out float scrollPos))
+                {
+                    m_ScrollRect.verticalNormalizedPosition = scrollPos;
+                }
+                else
+                {
+                    m_ScrollRect.verticalNormalizedPosition = 0f;
+                }
+                m_LastScrollPosition = m_ScrollRect.verticalNormalizedPosition;
+                m_IsAutoScrolling = false;
             }
+
+            // フェードインで表示
+            var cg = GetOrAddContentCanvasGroup();
+            if (cg != null)
+            {
+                cg.DOKill(); // 前回のフェードがあればキャンセル
+                cg.DOFade(1f, ThreadSwitchFadeDuration).SetEase(Ease.OutQuad);
+            }
+
+            m_FadeInCoroutine = null;
+        }
+
+        /// <summary>
+        /// ScrollRect content の CanvasGroup を取得または追加する (遅延初期化)
+        /// </summary>
+        private CanvasGroup GetOrAddContentCanvasGroup()
+        {
+            if (m_ContentCanvasGroup != null) return m_ContentCanvasGroup;
+            if (m_ScrollRect == null || m_ScrollRect.content == null) return null;
+            m_ContentCanvasGroup = m_ScrollRect.content.GetComponent<CanvasGroup>();
+            if (m_ContentCanvasGroup == null)
+                m_ContentCanvasGroup = m_ScrollRect.content.gameObject.AddComponent<CanvasGroup>();
+            return m_ContentCanvasGroup;
         }
 
         /// <summary>

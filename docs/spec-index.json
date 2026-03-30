@@ -304,5 +304,41 @@
     "cat": "infra",
     "file": "docs/FEATURE_STATUS_AUDIT.md",
     "summary": "全機能の実装/未確認/未実装一覧、懸念点、レガシー削除記録。2026-03-26監査実施。実装26機能、未確認10件(Unity再生必須)、未実装15件、レガシー19件削除(~920行+シーン2+docs25ファイル)"
+  },
+  {
+    "id": "EN-011",
+    "title": "表示アルゴリズム仕様",
+    "status": "done",
+    "pct": 100,
+    "cat": "infra",
+    "file": "docs/DISPLAY_ALGORITHMS.md",
+    "summary": "メッセージ表示・スキップ・スクロール・スレッド切替の処理フロー明文化。設計ポリシー(表示挙動の事前明文化ルール)含む"
+  },
+  {
+    "id": "BL-001",
+    "title": "スクロール吸着フェードイン",
+    "status": "todo",
+    "pct": 0,
+    "cat": "ui",
+    "file": null,
+    "summary": "スクロール吸着時に即座にジャンプするのではなく、フェードイン/スムーズスクロールで最下部に戻る。現在のverticalNormalizedPosition=0f直接代入をDOTweenアニメーションに置換"
+  },
+  {
+    "id": "BL-002",
+    "title": "スレッド/キャラクターポートレートアイコン画像",
+    "status": "todo",
+    "pct": 0,
+    "cat": "ui",
+    "file": null,
+    "summary": "スレッドとキャラクターポートレートにアイコン画像を設定可能にする。CharacterProfile SOにSpriteフィールド追加、サイドバースレッドエントリにもアイコン表示"
+  },
+  {
+    "id": "BL-003",
+    "title": "スレッド柔軟メタデータ (難易度星・入口情報)",
+    "status": "todo",
+    "pct": 0,
+    "cat": "ui",
+    "file": null,
+    "summary": "スレッドに難易度星、推奨レベル等の柔軟なメタデータを設定可能にする。DeclaredThread/ChannelData SOの拡張、サイドバーUIでの表示"
   }
 ]

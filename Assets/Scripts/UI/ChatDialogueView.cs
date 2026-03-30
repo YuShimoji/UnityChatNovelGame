@@ -43,8 +43,11 @@ namespace ProjectFoundPhone.UI
         /// <summary>早送りモード（F11 トグル）。有効時はタイピング遅延とタイプライター待ちをスキップする。</summary>
         public bool FastForwardEnabled { get => m_FastForwardEnabled; set { m_FastForwardEnabled = value; RefreshDebugOverlay(); } }
 
-        // タップスキップ用の状態管理
+        // タップスキップ用の状態管理 (2段階スキップ)
+        // Phase 1: タイピングインジケータ + タイプライター待ちをキャンセル (テキスト全文表示)
+        // Phase 2: ポストメッセージ遅延をキャンセル (次のメッセージへ進む)
         private CancellationTokenSource? m_LineSkipCts;
+        private CancellationTokenSource? m_PostSkipCts;
         private bool m_IsShowingLine = false;
 
         private void Awake()
@@ -88,21 +91,26 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// 現在表示中のメッセージのアニメーションをスキップし、即座に全文表示する。
-        /// タイピングインジケーター・タイプライター・待ち時間をすべてキャンセルする。
+        /// 2段階スキップ:
+        /// Phase 1 (初回タップ): タイプライターを即時完了し、テキスト全文を表示する。
+        ///   ポストメッセージ遅延はそのまま継続するため、ユーザーがテキストを読む時間がある。
+        /// Phase 2 (2回目タップ): ポストメッセージ遅延をキャンセルし、次のメッセージへ進む。
         /// </summary>
         private void SkipCurrentLine()
         {
-            // タイプライター効果を即完了
-            m_ChatController?.CompleteCurrentTypewriter();
-
-            // タイピングインジケーターを非表示
-            m_ChatController?.ShowTypingIndicator(false);
-
-            // 現在の遅延をキャンセル
+            // Phase 1: インジケータ/タイプライター待ちがまだキャンセルされていない場合
             if (m_LineSkipCts != null && !m_LineSkipCts.IsCancellationRequested)
             {
+                m_ChatController?.CompleteCurrentTypewriter();
+                m_ChatController?.ShowTypingIndicator(false);
                 m_LineSkipCts.Cancel();
+                return;
+            }
+
+            // Phase 2: Phase 1 完了済み → ポストメッセージ遅延をキャンセルして次へ
+            if (m_PostSkipCts != null && !m_PostSkipCts.IsCancellationRequested)
+            {
+                m_PostSkipCts.Cancel();
             }
         }
 
@@ -147,16 +155,26 @@ namespace ProjectFoundPhone.UI
                     : null;
                 m_ChatController.AddMessage(charID, lineText, lineTag);
 
-                // タイプライター効果の完了を待つ（早送り時は最小遅延のみ）
                 if (!m_FastForwardEnabled)
                 {
-                    // タイプライター所要時間 + 余韻
+                    // Phase 1: タイプライター完了を待つ (第1タップでスキップ可能)
                     float typewriterDuration = lineText.Length * 0.05f;
-                    int waitMs = (int)((typewriterDuration + m_PostMessageDelay) * 1000);
-                    await DelayWithSkip(waitMs, token.NextContentToken);
+                    int typewriterMs = (int)(typewriterDuration * 1000);
+                    await DelayWithSkip(typewriterMs, token.NextContentToken);
+
+                    // タイプライターを確実に完了 (スキップ時も通常完了時も全文表示を保証)
+                    m_ChatController.CompleteCurrentTypewriter();
+
+                    // Phase 2: ポストメッセージ遅延 (第2タップでスキップ可能)
+                    m_PostSkipCts?.Dispose();
+                    m_PostSkipCts = new CancellationTokenSource();
+                    int postMs = (int)(m_PostMessageDelay * 1000);
+                    await DelayWithPostSkip(postMs, token.NextContentToken);
                 }
                 else
                 {
+                    // 早送りモード: タイプライター即完了 + 最小遅延
+                    m_ChatController.CompleteCurrentTypewriter();
                     await YarnTask.Delay(30, token.NextContentToken).SuppressCancellationThrow();
                 }
 
@@ -169,7 +187,8 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
-        /// YarnTask.Delay のラッパー。タップスキップとYarnのNextContentToken両方でキャンセル可能。
+        /// Phase 1 用遅延。タイピングインジケータ/タイプライター待ちに使用。
+        /// 第1タップ (m_LineSkipCts) または Yarn キャンセルで中断される。
         /// </summary>
         private async YarnTask DelayWithSkip(int milliseconds, CancellationToken yarnToken)
         {
@@ -179,6 +198,21 @@ namespace ProjectFoundPhone.UI
             }
 
             using var linked = CancellationTokenSource.CreateLinkedTokenSource(yarnToken, m_LineSkipCts.Token);
+            await YarnTask.Delay(milliseconds, linked.Token).SuppressCancellationThrow();
+        }
+
+        /// <summary>
+        /// Phase 2 用遅延。ポストメッセージ遅延 (テキスト全文表示後の読み取り時間) に使用。
+        /// 第2タップ (m_PostSkipCts) または Yarn キャンセルで中断される。
+        /// </summary>
+        private async YarnTask DelayWithPostSkip(int milliseconds, CancellationToken yarnToken)
+        {
+            if (m_PostSkipCts == null || m_PostSkipCts.IsCancellationRequested)
+            {
+                return;
+            }
+
+            using var linked = CancellationTokenSource.CreateLinkedTokenSource(yarnToken, m_PostSkipCts.Token);
             await YarnTask.Delay(milliseconds, linked.Token).SuppressCancellationThrow();
         }
 
@@ -355,6 +389,8 @@ namespace ProjectFoundPhone.UI
         {
             m_LineSkipCts?.Dispose();
             m_LineSkipCts = null;
+            m_PostSkipCts?.Dispose();
+            m_PostSkipCts = null;
         }
 
         private void UpdateDebugState(LocalizedLine? dialogueLine)
