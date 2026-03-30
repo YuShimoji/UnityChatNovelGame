@@ -8,13 +8,13 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
-現在の状況 (2026-03-30 session 14):
-  - Pipeline設計確定 + SO自動生成ツール実装済み (YarnSOGenerator)
-  - エンジン基盤: 24 Yarnコマンド + タップスキップ + タイミング設定可能
-  - spec-index: 35エントリ (done 22 / partial 9 / draft 1 / todo 2 + 21_branch_thread_spec)
-  - Authoring Wiki: docs/wiki/ に Docsify ベース 12ページ作成
-  - session 13-14 主な修正: 選択肢処理バグ (StopScenario同期化)、RestoreChatHistory即時表示、Ch1分岐再入防止、フォントサイズ引き上げ
-  - 次の作業: Unity実機確認 → スレッド管理リファクタリング設計 → ポートレート画像 → ストーリー追加テスト
+現在の状況 (2026-03-30 session 19):
+  - Pipeline: YarnSOGenerator (Topic/Character/Channel同期) + Content Pipeline window 実装済み
+  - エンジン基盤: 24 Yarnコマンド + タップスキップ + タイミング設定可能 + CanvasScaler 9:16統一
+  - spec-index: 40エントリ (done 23 / partial 10 / draft 1 / todo 5 + BL x3)
+  - PlayMode テスト: 4ケース (SmokeGate / Ch1SaveLoad / DQTStart / ChoiceImageFallback)
+  - Yarn active: 6 (archive 5)
+  - 次の作業: Unity実機確認 (Content Pipeline + PlayMode テスト実行) → E2E拡張
 
 ## DECISION LOG
 

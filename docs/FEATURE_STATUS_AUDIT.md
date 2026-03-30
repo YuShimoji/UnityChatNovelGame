@@ -8,17 +8,18 @@
 
 ## 1. 定量サマリー
 
-| 項目 | 数値 |
-|------|------|
-| 実装ファイル (.cs) | 78 (テスト含む) |
-| テストファイル | 9 (EditMode 7 + PlayMode 2) |
-| Yarnファイル (active) | 9 |
-| Yarnファイル (archive) | 1 |
-| Yarnコマンド | 24 |
-| 仕様エントリ (spec-index) | 34 (done 22 / partial 9 / draft 1 / todo 2) |
-| TODO/FIXME/HACK | 1件 (ChatController.cs:1296) |
-| [Obsolete] マーク | 2件 (ContradictionPair.UnlockTopic x2) |
-| docs ファイル数 | ~25 (archive除く) |
+| 項目 | 数値 | 最終更新 |
+|------|------|----------|
+| 実装ファイル (.cs) | 66 (テスト除く) / 71 (テスト含む) | session 19 実測 |
+| テストファイル | 5 (EditMode 4 + PlayMode 1) | session 19 実測 |
+| PlayMode テストケース | 4 (SmokeGate / Ch1SaveLoad / DQTStart / ChoiceImageFallback) | session 19 |
+| Yarnファイル (active) | 6 | session 19 (4件 archive 移動後) |
+| Yarnファイル (archive) | 5 | session 19 |
+| Yarnコマンド | 24 | |
+| 仕様エントリ (spec-index) | 40 (done 23 / partial 10 / draft 1 / todo 5 + BL x3) | session 19 |
+| TODO/FIXME/HACK | 1件 (ChatController.cs:1241) | session 19 |
+| [Obsolete] マーク | 2件 (ContradictionPair.UnlockTopic x2) | |
+| docs ファイル数 | ~30 (archive除く) | |
 
 ---
 
