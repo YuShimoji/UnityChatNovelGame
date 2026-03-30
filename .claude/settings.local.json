@@ -1,4 +1,12 @@
 {
+  "permissions": {
+    "additionalDirectories": [
+      "c:\\Users\\thank\\.claude"
+    ],
+    "allow": [
+      "mcp__serena__list_dir"
+    ]
+  },
   "hooks": {
     "SessionStart": [
       {
