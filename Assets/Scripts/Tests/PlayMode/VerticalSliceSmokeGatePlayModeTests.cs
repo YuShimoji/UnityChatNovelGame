@@ -92,6 +92,26 @@ namespace ProjectFoundPhone.Tests
         }
 
         [UnityTest]
+        public IEnumerator DebugChatScene_DQTStart_EmitsMessages()
+        {
+            yield return LoadSceneWithTimeout("DebugChatScene", SceneLoadTimeoutSeconds);
+
+            ScenarioManager scenarioManager = UnityEngine.Object.FindFirstObjectByType<ScenarioManager>();
+            ChatController chatController = UnityEngine.Object.FindFirstObjectByType<ChatController>();
+
+            Assert.IsNotNull(scenarioManager, "DebugChatScene: ScenarioManager not found.");
+            Assert.IsNotNull(chatController, "DebugChatScene: ChatController not found.");
+
+            scenarioManager.StartScenario("DQT_Start");
+            yield return WaitForChatMessages(chatController, ChatMessageTimeoutSeconds,
+                "DQT_Start did not emit any chat messages within the expected time.");
+
+            ScrollRect scrollRect = chatController.GetComponent<ScrollRect>();
+            Assert.IsNotNull(scrollRect, "ScrollRect was not found on ChatController.");
+            Assert.Greater(scrollRect.content.childCount, 0, "DQT_Start produced no chat bubbles.");
+        }
+
+        [UnityTest]
         public IEnumerator DebugChatScene_ChoiceAndImageFallback_AreUsable()
         {
             yield return LoadSceneWithTimeout("DebugChatScene", SceneLoadTimeoutSeconds);

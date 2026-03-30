@@ -6,9 +6,10 @@
 - 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 - ブランチ戦略: trunk-based (main のみ)
 - 現フェーズ: プロトタイプ → α移行中
-- 直近の状態 (2026-03-30 session 18):
+- 直近の状態 (2026-03-30 session 19):
   - Session 17: 自動スキップ修正 + DialogueException修正 + フォントバランス調整 + ロードマップ策定 + canonical docs 初期化
   - Session 18: 制作パイプライン改善。YarnSOGenerator が ChannelData 同期まで対応、Content Pipeline window 追加、handoff docs 整備
+  - Session 19: PlayMode smoke を `CurrentChannel` Save/Load まで拡張。batchmode `-runTests` は 2 回とも XML 未生成で終了し、実行基盤の切り分けが新ボトルネック
   - 方向転換: AI は Yarn 執筆ではなく制作ツール/パイプライン整備に注力すべき
   - 次の作業: 人間が執筆するためのシステム周りの実機検証 (DebugQuickTest / Ch1-Ch3 / E2E)
 
@@ -19,6 +20,7 @@
 - nightshift の変更品質が問題化。部分的・不完全な変更が検証負担を増大させるパターン。完成度優先へ
 - スレッド管理 (BeginBranch/EndBranch) がユーザーに複雑と指摘された — PLAN MODE でリファクタ設計要
 - task-scout 指摘の残件: verification/ 空、E2E 自動検証未整備
+- 2026-03-30 session 19: `docs/verification/2026-03-30-playmode-batchmode-attempt.md` を追加。PlayMode test code は前進したが、Unity batchmode `-runTests` は XML を出さず終了
 
 ---
 
@@ -134,37 +136,26 @@ CLAUDE.md の IDEA POOL を参照。ここには project-context.md 作成以降
 
 ---
 
-## HANDOFF SNAPSHOT (session 18)
+## HANDOFF SNAPSHOT (session 19)
 
-- 現在の主レーン: Unlock (制作パイプラインの実運用確認)
-- 現在のスライス: Content Pipeline / ChannelData 自動同期 / handoff docs 整備
-- session 17-18 で完了した作業:
-  - 自動スキップバグ根絶 (NextContentToken リーク修正)
-  - DialogueException 修正 (m_IsDestroying ガード)
-  - DebugQuickTest.yarn 新規 (DQT_Start)
-  - フォントサイズバランス修正 (.asset nightshift膨張値 + 全体底上げ)
-  - 開発ロードマップ策定 (短期/中期/長期)
-  - canonical docs 4本初期化 (INVARIANTS/LEDGER/WORKFLOW/INTERACTION)
-  - YarnSOGenerator 拡張: ChannelData 同期まで対応
-  - Content Pipeline window 追加
-  - StartNode 推奨導線への統一
-  - handoff docs 整備: HANDOFF.md 追加
-- session 17-18 で判明した重要な認識修正:
-  - Yarn 執筆はユーザーの仕事。AI はシステム/ツール/パイプラインを整備する
-  - 「前回の反動」で方向を決めない。本当に必要なものを特定する
+- 現在の主レーン: Excise + Unlock (堆積物整理 + E2E検証スコープ設計)
+- 現在のスライス: Yarn クリーンアップ + CanvasScaler統一 + E2E検証スコープ
+- session 19 で完了した作業:
+  - Yarn active/ クリーンアップ: 参照なし4件を archive/ へ移動
+  - CanvasScaler 9:16統一: MetaEffectController + DebugSceneBuilder
+  - 未コミット Topic .asset 6件コミット
+  - DQT_Start PlayMode テスト追加 (計4テストケース)
+  - EN-012 として E2E PlayMode 自動検証を spec-index に登録
+  - runtime-state メトリクス実測修正
 - 次回最初にやること:
-  1. Content Pipeline の Unity 実機確認
-  2. DQT_Start / Ch1 / Ch2 / Ch3 再生確認
-  3. E2E PlayMode 検証のスコープ切り出し
-- フォント/色/タイミングの微調整: Inspector の ChatUIConfig / UIFontConfig で自律的に行う (コード変更不要)
-  - タップスキップ: システムメッセージに効かない (一貫性の欠如)
-  - 全般: nightshift の雑な変更パターン。完成度優先へ方針転換
+  1. Unity で Content Pipeline 実機確認 + PlayMode テスト4件実行
+  2. DebugChatScene を DebugSceneBuilder で再生成 (CanvasScaler反映)
+  3. DQT_Start / Ch1 / Ch2 / Ch3 再生確認
 - 未確定の設計論点:
-  - UIFontConfig の値調整 (Inspector で全UI一括。現在はデフォルト=旧ハードコード値)
-  - ThreadSwitcherController のフォント統合 (サイドバー密レイアウト、別途設計要)
+  - UIFontConfig の値調整 (Inspector で全UI一括)
+  - ThreadSwitcherController のフォント統合 (サイドバー密レイアウト)
   - スレッド管理リファクタリングの方向性 (PLAN MODE)
   - ポートレート画像挿入の UI/UX 設計 (HUMAN_AUTHORITY)
-- 今は触らない範囲: サウンド統合、マネタイズ実装、E2E自動検証
-- task-scout 指摘の未対応:
-  - active/ の Yarn 整理候補 (VerticalSlice.yarn, FirstSlice.yarn, MVPTest.yarn)
+  - E2E テスト対象ノード拡張 (Ch2/Ch3/ETK、HUMAN_AUTHORITY)
+- 今は触らない範囲: サウンド統合、マネタイズ実装
   - CanvasScaler 不整合 (DebugChatScene + MetaEffectController が 1920x1080)

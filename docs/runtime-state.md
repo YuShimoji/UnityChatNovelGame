@@ -1,45 +1,68 @@
 # Runtime State
 
-**Updated**: 2026-03-30 session 18
+**Updated**: 2026-03-30 session 19
 
 ## Current Position
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
-- lane: Unlock (人間が執筆するための制作システム整備)
-- slice: 制作パイプライン改善 — Content Pipeline / ChannelData 自動同期 / handoff docs 整備
+- lane: Excise + Unlock (堆積物整理 + E2E検証スコープ設計)
+- slice: Yarn active/ クリーンアップ + CanvasScaler統一 + E2E検証スコープ切り出し
 - active_artifact: FoundPhone エンジン基盤 (Unity 6.3 + Yarn Spinner 3.1.3)
 - artifact_surface: Unity Editor > ContentAuthoring シーン
-- last_change_relation: direct (制作パイプライン導線改善 + handoff docs 整備)
+- last_change_relation: direct (堆積物整理 + CanvasScaler修正)
 
 ## Counters
 
-- blocks_since_user_visible_change: 0 (自動スキップ修正 + DebugQuickTest)
-- blocks_since_visual_audit: 6 (session 13 Audit → 14 x2 → 15 → 16 → 17 → 18)
-- blocks_since_unlock: 0
-- consecutive_excise_blocks: 0
+- blocks_since_user_visible_change: 1 (session 18 Content Pipeline)
+- blocks_since_visual_audit: 7 (session 13 Audit → 14 x2 → 15 → 16 → 17 → 18 → 19)
+- blocks_since_unlock: 1
+- consecutive_excise_blocks: 1
 
 ## Quantitative Metrics
 
-- impl_files: 65 (テスト除く .cs)
+- impl_files: 66 (テスト除く .cs、実測)
 - test_files: 5 (EditMode 4 + PlayMode 1)
 - playmode_test_files: 1
+- playmode_test_cases: 4 (SmokeGate + Ch1SaveLoad + DQTStart + ChoiceImageFallback)
 - mock_files: 0
-- yarn_active: 11 (DebugQuickTest.yarn 追加)
-- yarn_archive: 1
-- spec_entries: 39 (done 23 / partial 9 / draft 1 / todo 5 + BL-001/002/003)
+- yarn_active: 6 (Ch1_Day1, Ch2_LocationConfusion, Ch3_InstitutionalFragments, DebugQuickTest, EngineTestKit, VerticalSlice)
+- yarn_archive: 5 (Ch1_Terminal, FirstSlice, MVPTest, DebugScript, SubthreadTest)
+- spec_entries: 40 (done 23 / partial 10 / draft 1 / todo 5 + EN-012 + BL-001/002/003)
 - todo_fixme_hack: 1 (ChatController.cs — ステータスバールーティング)
 - obsolete_marks: 2 (ContradictionPair.UnlockTopic x2)
-- chatcontroller_lines: 2325 (実測。前回記録 ~2640 は過大)
+- chatcontroller_lines: 2325
 - wiki_pages: 12 (docs/wiki/ 内)
 
 ## Visual Evidence
 
-- visual_evidence_status: stale (Unity PlayMode 未実施。blocks_since_visual_audit: 5)
+- visual_evidence_status: stale (Unity PlayMode 未実施。blocks_since_visual_audit: 7)
 - last_visual_audit_path: (なし)
-- blocks_since_visual_audit: 5
+- blocks_since_visual_audit: 7
 
 ## Session Log
+
+### 2026-03-30 session 19
+- Block 1 (Excise + Audit): 堆積物整理 + CanvasScaler統一
+  - **Yarn active/ クリーンアップ**: 参照なし4件を archive/ へ移動 (FirstSlice, MVPTest, DebugScript, SubthreadTest)
+  - **CanvasScaler 9:16統一**: MetaEffectController + DebugSceneBuilder を 1920x1080 → 1080x1920, matchHeight=1.0 に修正
+  - **未コミット Topic .asset 6件**: YarnSOGenerator 自動生成分をコミット
+  - **PlayMode テスト改善**: WaitForChatMessages/WaitForCondition ヘルパー + Ch1 Save/Load テスト (session 18 未コミット分)
+  - **runtime-state.md メトリクス修正**: impl 65→66, yarn_active 11→6, yarn_archive 1→5 (実測値に修正)
+- Block 2 (Audit -> Advance): task-scout + `CurrentChannel` Save/Load 検証の固定
+  - **task-scout 再確認**: 主ボトルネックは `Content Pipeline -> ContentAuthoring/DebugQuickTest/Ch1-Ch3 -> E2E PlayMode`
+    の証跡不足。`visual_evidence_status: stale` と `docs/verification/` 空を確認。
+  - **PlayMode テスト追加**: `VerticalSliceSmokeGatePlayModeTests` に
+    `DebugChatScene_Ch1Start_PreservesCurrentChannelAcrossSaveLoad` を追加。
+    `Ch1_Day1_Opening` で `CurrentChannelID == "ch1"` 自動割り当てと、
+    Save/Load 後の `CurrentChannel` 復元を確認する狙い。
+  - **batchmode 実行結果**: Unity 6000.3.6f1 で `-runTests -testPlatform PlayMode` を 2 回試行したが、
+    いずれも asset import / script compile 後に終了し、`Temp/playmode-test-results.xml` は未生成。
+    詳細は `docs/verification/2026-03-30-playmode-batchmode-attempt.md` に記録。
+  - 次タスク:
+    1. Unity Test Runner batchmode が XML 未生成で終了する原因切り分け
+    2. 追加した `CurrentChannel` PlayMode テストの実ラン確認
+    3. day progress / thread state まで PlayMode 検証を拡張
 
 ### 2026-03-30 session 18
 - Block 1 (Unlock): 制作パイプラインの欠落補完 + docs handoff 強化

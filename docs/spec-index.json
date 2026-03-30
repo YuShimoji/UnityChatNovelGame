@@ -315,6 +315,15 @@
     "summary": "メッセージ表示・スキップ・スクロール・スレッド切替の処理フロー明文化。設計ポリシー(表示挙動の事前明文化ルール)含む"
   },
   {
+    "id": "EN-012",
+    "title": "E2E PlayMode 自動検証",
+    "status": "partial",
+    "pct": 40,
+    "cat": "infra",
+    "file": null,
+    "summary": "PlayMode テスト: SmokeGate(VerticalSlice), Ch1 SaveLoad, DQT_Start, ChoiceImageFallback。4テストケース。残: Ch2/Ch3 起動テスト、ETK コマンド網羅テスト、テスト対象ノード選定(HUMAN_AUTHORITY)"
+  },
+  {
     "id": "BL-001",
     "title": "スクロール吸着フェードイン",
     "status": "todo",
