@@ -1,45 +1,64 @@
 # Runtime State
 
-**Updated**: 2026-03-30 session 16
+**Updated**: 2026-03-30 session 17
 
 ## Current Position
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
-- lane: Advance (サブスレッド安定化 + アルゴリズム明文化)
-- slice: スレッド切替フラッシュ防止 + スムーズスクロール + アルゴリズム仕様文書化
+- lane: Advance (スキップ一貫性修正 + DialogueException修正)
+- slice: 自動スキップバグ修正 + スキップ一貫性 + DialogueException解消 + デバッグチャプター
 - active_artifact: FoundPhone エンジン基盤 (Unity 6.3 + Yarn Spinner 3.1.3)
 - artifact_surface: Unity Editor > ContentAuthoring シーン
-- last_change_relation: direct (SwitchToThread フェードイン + PerformAutoScroll スムーズ化)
+- last_change_relation: direct (自動スキップ修正 + DialogueException修正 + DebugQuickTest.yarn)
 
 ## Counters
 
-- blocks_since_user_visible_change: 0 (スレッド切替フェードイン + スムーズスクロール)
-- blocks_since_visual_audit: 4 (session 13 Block 1 Audit → session 14 x2 → session 15 → session 16)
-- blocks_since_unlock: 1
+- blocks_since_user_visible_change: 0 (自動スキップ修正 + DebugQuickTest)
+- blocks_since_visual_audit: 5 (session 13 Audit → 14 x2 → 15 → 16 → 17 Block 1)
+- blocks_since_unlock: 2
 - consecutive_excise_blocks: 0
 
 ## Quantitative Metrics
 
-- impl_files: 65 (テスト除く .cs)
+- impl_files: 64 (テスト除く .cs)
 - test_files: 5 (EditMode 4 + PlayMode 1)
 - playmode_test_files: 1
 - mock_files: 0
-- yarn_active: 9
+- yarn_active: 11 (DebugQuickTest.yarn 追加)
 - yarn_archive: 1
-- spec_entries: 39 (done 23 / partial 9 / draft 1 / todo 5 — EN-011追加, BL-001/002/003追加)
+- spec_entries: 39 (done 23 / partial 9 / draft 1 / todo 5 + BL-001/002/003)
 - todo_fixme_hack: 1 (ChatController.cs — ステータスバールーティング)
 - obsolete_marks: 2 (ContradictionPair.UnlockTopic x2)
-- chatcontroller_lines: ~2640 (SwitchToThread改修 + スムーズスクロール追加)
+- chatcontroller_lines: 2325 (実測。前回記録 ~2640 は過大)
 - wiki_pages: 12 (docs/wiki/ 内)
 
 ## Visual Evidence
 
-- visual_evidence_status: stale (Unity PlayMode 未実施。コード変更のみ)
+- visual_evidence_status: stale (Unity PlayMode 未実施。blocks_since_visual_audit: 5)
 - last_visual_audit_path: (なし)
-- blocks_since_visual_audit: 4
+- blocks_since_visual_audit: 5
 
 ## Session Log
+
+### 2026-03-30 session 17
+- Block 1 (Advance): 自動スキップバグ修正 + DialogueException修正 + DebugQuickTest
+  - **自動スキップ根本修正**: DelayWithSkip/DelayWithPostSkip から token.NextContentToken を除去。
+    Yarn の NextContentToken がリークして後続行の全遅延が 0ms になっていた。
+    修正後は m_LineSkipCts/m_PostSkipCts のみで遅延制御。NextContentToken はポーリングチェックに変更。
+  - **DialogueException 修正**: m_IsDestroying フラグ追加。OnDestroy 中の CancelActiveWait →
+    StartWaitCommand 継続 → DialogueRunner.Continue() で node 未選択エラーを防止。
+  - **DebugQuickTest.yarn 新規**: DQT_Start ノード。インジケーター/タイプライター/スキップ/選択肢を
+    7テストで網羅。Inspector で StartNode を DQT_Start に設定して即実行。
+  - **DISPLAY_ALGORITHMS.md 更新**: スキップ制御フロー図 + フォント階層表を実コードに合わせて修正。
+  - ユーザーフィードバック吸収:
+    1. 自動スキップ (途中から何も押さずにスキップ) → NextContentToken リーク修正
+    2. インジケーターのスキップ一貫性 → 自前CTS制御で統一
+    3. フォントサイズ (メッセージ本文のみ浮く) → HUMAN_AUTHORITY: messageFontSize=28 vs UIFontConfig.body=18
+    4. デバッグ環境整備 → DebugQuickTest.yarn
+    5. DialogueException (StartWait + OnDestroy) → m_IsDestroying ガード
+  - 未コミット: 全4ファイル
+  - 未解決: フォントサイズバランス調整 (HUMAN_AUTHORITY)
 
 ### 2026-03-30 session 16
 - Block 1 (Advance): アルゴリズム明文化 + サブスレッド安定化実装

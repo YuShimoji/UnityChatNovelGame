@@ -32,6 +32,7 @@ namespace ProjectFoundPhone.Core
         private bool m_IsInputLocked = false;
         private CancellationTokenSource m_WaitCancellation;
         private bool m_IsWaiting = false;
+        private bool m_IsDestroying = false;
         private BranchThreadState m_BranchThreadState = new BranchThreadState();
         private ChannelData m_CurrentChannel;
 
@@ -81,10 +82,11 @@ namespace ProjectFoundPhone.Core
 
         private void OnDestroy()
         {
+            m_IsDestroying = true;
             UnregisterCustomCommands();
             // Play停止時: CancelActiveWait の Cancel() が Yarn の非同期継続を発火し、
             // 既に node が無い DialogueRunner.Continue() で DialogueException が出るのを防止。
-            // ダイアログを先に停止してから Wait をキャンセルする。
+            // m_IsDestroying フラグで StartWaitCommand の継続を即座にリターンさせる。
             if (m_DialogueRunner != null && m_DialogueRunner.IsDialogueRunning)
             {
                 m_DialogueRunner.Stop();
@@ -317,9 +319,10 @@ namespace ProjectFoundPhone.Core
 
             await YarnTask.Delay((int)(seconds * 1000), m_WaitCancellation.Token).SuppressCancellationThrow();
 
-            // ダイアログが停止された場合、CancelActiveWait が既にクリーンアップ済み。
-            // 最小限の片付けのみ行い return する。
-            if (m_DialogueRunner == null || !m_DialogueRunner.IsDialogueRunning)
+            // OnDestroy 中 / ダイアログ停止済みの場合は何もせず終了。
+            // CancelActiveWait が Cancel() → この継続が発火するが、
+            // m_IsDestroying ガードで DialogueRunner.Continue() への到達を防ぐ。
+            if (m_IsDestroying || m_DialogueRunner == null || !m_DialogueRunner.IsDialogueRunning)
             {
                 m_IsWaiting = false;
                 if (m_WaitCancellation != null)

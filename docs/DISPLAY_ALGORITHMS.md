@@ -50,18 +50,26 @@ AcquireBubble (プール or 新規生成)
 
 UIFontConfig (ScriptableObject) で一元管理。ハードコード禁止。
 
-| 階層 | 用途例 | デフォルト値 |
-|------|--------|------------|
-| title | ダッシュボードタイトル | 36 |
-| heading | セクション見出し | 28 |
-| subheading | サブ見出し | 22 |
-| body | メッセージ本文 | 18 |
-| caption | ラベル、説明 | 15 |
-| small | バッジ、補助 | 13 |
-| tiny | 最小テキスト | 11 |
+| 階層 | 用途例 | デフォルト値 (UIFontConfig) |
+|------|--------|--------------------------|
+| title | 画面タイトル (HALLUCINATION SIMULATOR) | 28 |
+| heading | セクション見出し、カードタイトル | 22 |
+| subheading | 強調本文、アクションボタン | 20 |
+| body | 本文、ボタンテキスト、ラベル | 18 |
+| caption | 説明文、サブタイトル | 16 |
+| small | ステータス、バッジ | 14 |
+| tiny | ミニ統計、ヒント | 11 |
 
-レスポンシブスケール: Canvas幅 < 900 で縮小 (下限 0.85)。
-ChatController の messageFontSize は ChatUIConfig 側で管理（UIFontConfig とは別系統）。
+レスポンシブスケール: Canvas幅 < 900 で縮小 (下限 0.78)。
+
+**ChatUIConfig (チャット固有)**:
+- messageFontSize: 28 — UIFontConfig.title と同じ値。他の UI 要素と比べて突出。
+- systemMessageFontSize: 16
+- typingIndicatorFontSize: 18
+- choiceFontSize: 18-26 (autoSize)
+
+ChatController の messageFontSize は ChatUIConfig で管理。UIFontConfig とは別系統だが、
+フォント階層全体のバランスを考慮して値を設定すること。
 
 ---
 
@@ -93,10 +101,30 @@ ChatController の messageFontSize は ChatUIConfig 側で管理（UIFontConfig 
 ### 2.3 DelayWithSkip の仕組み
 
 ```
-DelayWithSkip(milliseconds, yarnToken)
-  → LinkedTokenSource(yarnToken, m_LineSkipCts.Token) を生成
-  → YarnTask.Delay(milliseconds, linkedToken) で待機
-  → タップスキップ or Yarnキャンセル のどちらかで中断
+DelayWithSkip(milliseconds)
+  → m_LineSkipCts.Token のみで待機
+  → タップスキップ (第1タップ) のみで中断
+  → Yarn の NextContentToken は混入させない (自動スキップバグの防止)
+
+DelayWithPostSkip(milliseconds)
+  → m_PostSkipCts.Token のみで待機
+  → 第2タップのみで中断
+```
+
+**Yarn NextContentToken の扱い (session 17 修正)**:
+- NextContentToken を遅延の LinkedTokenSource に混入させると、前の行のキャンセル状態がリークし、
+  後続の行がインジケーター/タイプライターを全てスキップする自動スキップバグを引き起こす。
+- 修正: 遅延は自前の CTS のみで制御し、NextContentToken は各遅延後にポーリングチェック。
+- `token.IsNextContentRequested` が true なら即時完了して return。
+
+```
+RunLineAsync の制御フロー:
+  1. token.IsNextContentRequested? → Yes: 即時表示して return
+  2. インジケーター遅延 (m_LineSkipCts のみ)
+  3. token.IsNextContentRequested チェック
+  4. タイプライター遅延 (m_LineSkipCts のみ)
+  5. token.IsNextContentRequested チェック
+  6. ポストメッセージ遅延 (m_PostSkipCts のみ)
 ```
 
 ### 2.4 SystemMessage のスキップ

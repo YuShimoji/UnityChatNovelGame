@@ -127,6 +127,18 @@ namespace ProjectFoundPhone.UI
 
             if (m_ChatController != null)
             {
+                // Yarn 側が既にこの行のスキップを要求している場合:
+                // インジケーターもタイプライターも飛ばして即時表示する
+                if (token.IsNextContentRequested)
+                {
+                    string skipCharID = ResolveSpeaker(dialogueLine);
+                    string skipLineTag = dialogueLine != null && !string.IsNullOrEmpty(dialogueLine.TextID)
+                        ? dialogueLine.TextID : null;
+                    m_ChatController.AddMessage(skipCharID, lineText, skipLineTag);
+                    m_ChatController.CompleteCurrentTypewriter();
+                    return;
+                }
+
                 m_IsShowingLine = true;
 
                 // スキップ用トークンを初期化
@@ -142,11 +154,25 @@ namespace ProjectFoundPhone.UI
                 {
                     m_ChatController.ShowTypingIndicator(true);
 
-                    // タイピングインジケーター表示時間（タップスキップ可能）
+                    // タイピングインジケーター表示時間
+                    // m_LineSkipCts のみで制御し、Yarn の NextContentToken は混ぜない。
+                    // NextContentToken を混入させると、前の行のキャンセル状態がリークして
+                    // 自動スキップが発生する原因になる。
                     int indicatorMs = (int)(m_TypingIndicatorDuration * 1000);
-                    await DelayWithSkip(indicatorMs, token.NextContentToken);
+                    await DelayWithSkip(indicatorMs);
 
                     m_ChatController.ShowTypingIndicator(false);
+
+                    // 遅延中に Yarn 側からスキップが来た場合は早期完了
+                    if (token.IsNextContentRequested)
+                    {
+                        string earlyLineTag = dialogueLine != null && !string.IsNullOrEmpty(dialogueLine.TextID)
+                            ? dialogueLine.TextID : null;
+                        m_ChatController.AddMessage(charID, lineText, earlyLineTag);
+                        m_ChatController.CompleteCurrentTypewriter();
+                        m_IsShowingLine = false;
+                        return;
+                    }
                 }
 
                 // TextID は Yarn の #line: タグに対応 — 矛盾指摘システムの識別子として使用
@@ -160,22 +186,29 @@ namespace ProjectFoundPhone.UI
                     // Phase 1: タイプライター完了を待つ (第1タップでスキップ可能)
                     float typewriterDuration = lineText.Length * 0.05f;
                     int typewriterMs = (int)(typewriterDuration * 1000);
-                    await DelayWithSkip(typewriterMs, token.NextContentToken);
+                    await DelayWithSkip(typewriterMs);
 
                     // タイプライターを確実に完了 (スキップ時も通常完了時も全文表示を保証)
                     m_ChatController.CompleteCurrentTypewriter();
+
+                    // Yarn 側スキップチェック
+                    if (token.IsNextContentRequested)
+                    {
+                        m_IsShowingLine = false;
+                        return;
+                    }
 
                     // Phase 2: ポストメッセージ遅延 (第2タップでスキップ可能)
                     m_PostSkipCts?.Dispose();
                     m_PostSkipCts = new CancellationTokenSource();
                     int postMs = (int)(m_PostMessageDelay * 1000);
-                    await DelayWithPostSkip(postMs, token.NextContentToken);
+                    await DelayWithPostSkip(postMs);
                 }
                 else
                 {
                     // 早送りモード: タイプライター即完了 + 最小遅延
                     m_ChatController.CompleteCurrentTypewriter();
-                    await YarnTask.Delay(30, token.NextContentToken).SuppressCancellationThrow();
+                    await YarnTask.Delay(30).SuppressCancellationThrow();
                 }
 
                 m_IsShowingLine = false;
@@ -188,32 +221,32 @@ namespace ProjectFoundPhone.UI
 
         /// <summary>
         /// Phase 1 用遅延。タイピングインジケータ/タイプライター待ちに使用。
-        /// 第1タップ (m_LineSkipCts) または Yarn キャンセルで中断される。
+        /// m_LineSkipCts (第1タップ) のみで中断される。
+        /// Yarn の NextContentToken は混入させない — 前の行のキャンセル状態が
+        /// リークして自動スキップを引き起こすため。
         /// </summary>
-        private async YarnTask DelayWithSkip(int milliseconds, CancellationToken yarnToken)
+        private async YarnTask DelayWithSkip(int milliseconds)
         {
             if (m_LineSkipCts == null || m_LineSkipCts.IsCancellationRequested)
             {
                 return;
             }
 
-            using var linked = CancellationTokenSource.CreateLinkedTokenSource(yarnToken, m_LineSkipCts.Token);
-            await YarnTask.Delay(milliseconds, linked.Token).SuppressCancellationThrow();
+            await YarnTask.Delay(milliseconds, m_LineSkipCts.Token).SuppressCancellationThrow();
         }
 
         /// <summary>
         /// Phase 2 用遅延。ポストメッセージ遅延 (テキスト全文表示後の読み取り時間) に使用。
-        /// 第2タップ (m_PostSkipCts) または Yarn キャンセルで中断される。
+        /// m_PostSkipCts (第2タップ) のみで中断される。
         /// </summary>
-        private async YarnTask DelayWithPostSkip(int milliseconds, CancellationToken yarnToken)
+        private async YarnTask DelayWithPostSkip(int milliseconds)
         {
             if (m_PostSkipCts == null || m_PostSkipCts.IsCancellationRequested)
             {
                 return;
             }
 
-            using var linked = CancellationTokenSource.CreateLinkedTokenSource(yarnToken, m_PostSkipCts.Token);
-            await YarnTask.Delay(milliseconds, linked.Token).SuppressCancellationThrow();
+            await YarnTask.Delay(milliseconds, m_PostSkipCts.Token).SuppressCancellationThrow();
         }
 
         /// <summary>

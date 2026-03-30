@@ -1,0 +1,63 @@
+/// DebugQuickTest: スキップ/インジケーター/フォントの動作を素早く確認するデバッグ用チャプター
+/// 使い方: ScenarioManager の StartNode を "DQT_Start" に設定して再生
+/// 全テスト項目: インジケーター → タイプライター → タップスキップ → SystemMessage → StartWait → 選択肢
+
+title: DQT_Start
+---
+<<declare $dqt_choice_done = false>>
+
+<<SystemMessage "=== DebugQuickTest 開始 ===">>
+<<StartWait 0.5>>
+
+// Test 1: インジケーター + タイプライター (NPC発話)
+<<set $speaker to "pyramid">>
+テスト1: NPCメッセージです。タイピングインジケーターの後にタイプライターで表示されます。
+
+<<StartWait 1>>
+
+// Test 2: 長文タイプライター (スキップテスト用)
+テスト2: これは長いメッセージです。タップでテキストが即時表示され、もう一度タップで次に進みます。二段階スキップが正しく動作することを確認してください。
+
+<<StartWait 1>>
+
+// Test 3: プレイヤー発話 (インジケーターなし)
+<<set $speaker to "player">>
+テスト3: プレイヤーのメッセージ。インジケーターは表示されません。
+
+<<StartWait 0.8>>
+
+// Test 4: SystemMessage (タップスキップ対象外)
+<<SystemMessage "テスト4: システムメッセージ。即時表示・スキップ対象外。">>
+<<StartWait 0.8>>
+
+// Test 5: 連続NPC発話 (自動スキップバグの確認)
+<<set $speaker to "pyramid">>
+テスト5a: 連続メッセージ1。各メッセージにインジケーターが表示されること。
+
+<<StartWait 0.8>>
+
+テスト5b: 連続メッセージ2。自動スキップされずに正常なタイミングで表示されること。
+
+<<StartWait 0.8>>
+
+テスト5c: 連続メッセージ3。ここまで全て正常なら自動スキップバグは解消。
+
+<<StartWait 1>>
+
+// Test 6: 選択肢
+<<set $speaker to "pyramid">>
+テスト6: 選択肢テストです。
+
+<<set $speaker to "player">>
+-> 選択肢A (次のメッセージへ進む)
+    <<set $dqt_choice_done to true>>
+-> 選択肢B (同じく次のメッセージへ)
+    <<set $dqt_choice_done to true>>
+
+<<set $speaker to "pyramid">>
+選択肢の後のメッセージ。選択直後にスキップが誤発動していないことを確認。
+
+<<StartWait 1>>
+
+<<SystemMessage "=== DebugQuickTest 完了 ===">>
+===
