@@ -91,8 +91,8 @@ namespace ProjectFoundPhone.Effects
                 // CanvasScalerを追加して画面サイズに対応
                 UnityEngine.UI.CanvasScaler scaler = canvasObject.AddComponent<UnityEngine.UI.CanvasScaler>();
                 scaler.uiScaleMode = UnityEngine.UI.CanvasScaler.ScaleMode.ScaleWithScreenSize;
-                scaler.referenceResolution = new Vector2(1920, 1080);
-                scaler.matchWidthOrHeight = 0.5f;
+                scaler.referenceResolution = new Vector2(1080, 1920);
+                scaler.matchWidthOrHeight = 1.0f;
 
                 // GraphicRaycasterを追加（必要に応じて）
                 canvasObject.AddComponent<UnityEngine.UI.GraphicRaycaster>();

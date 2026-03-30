@@ -38,21 +38,8 @@ namespace ProjectFoundPhone.Tests
             Assert.IsNotNull(chatController, "DebugChatScene: ChatController not found.");
 
             scenarioManager.StartScenario("VerticalSlice_Start");
-
-            bool messagesAppeared = false;
-            float startTime = Time.realtimeSinceStartup;
-            while (Time.realtimeSinceStartup - startTime < ChatMessageTimeoutSeconds)
-            {
-                ScrollRect scrollRect = chatController.GetComponent<ScrollRect>();
-                if (scrollRect != null && scrollRect.content != null && scrollRect.content.childCount > 0)
-                {
-                    messagesAppeared = true;
-                    break;
-                }
-                yield return null;
-            }
-
-            Assert.IsTrue(messagesAppeared, "Scenario did not emit any chat messages within the expected time.");
+            yield return WaitForChatMessages(chatController, ChatMessageTimeoutSeconds,
+                "Scenario did not emit any chat messages within the expected time.");
 
             SaveManager saveManager = SaveManager.Instance;
             Assert.IsNotNull(saveManager, "SaveManager.Instance returned null.");
@@ -64,6 +51,44 @@ namespace ProjectFoundPhone.Tests
             Assert.IsTrue(loaded, "LoadGame failed.");
 
             CleanupSaveSlot(SaveSlot);
+        }
+
+        [UnityTest]
+        public IEnumerator DebugChatScene_Ch1Start_PreservesCurrentChannelAcrossSaveLoad()
+        {
+            yield return LoadSceneWithTimeout("DebugChatScene", SceneLoadTimeoutSeconds);
+
+            ScenarioManager scenarioManager = UnityEngine.Object.FindFirstObjectByType<ScenarioManager>();
+            ChatController chatController = UnityEngine.Object.FindFirstObjectByType<ChatController>();
+            SaveManager saveManager = SaveManager.Instance;
+
+            Assert.IsNotNull(scenarioManager, "DebugChatScene: ScenarioManager not found.");
+            Assert.IsNotNull(chatController, "DebugChatScene: ChatController not found.");
+            Assert.IsNotNull(saveManager, "SaveManager.Instance returned null.");
+
+            scenarioManager.StartScenario("Ch1_Day1_Opening");
+            yield return WaitForCondition(
+                () => scenarioManager.CurrentChannelID == "ch1",
+                ChatMessageTimeoutSeconds,
+                "ScenarioManager did not auto-assign channel 'ch1' from Ch1_Day1_Opening.");
+            yield return WaitForChatMessages(chatController, ChatMessageTimeoutSeconds,
+                "Ch1_Day1_Opening did not emit any chat messages within the expected time.");
+
+            bool saved = saveManager.SaveGame(SaveSlot);
+            Assert.IsTrue(saved, "SaveGame failed for Ch1 flow.");
+            Assert.IsNotNull(saveManager.CurrentSaveData, "CurrentSaveData was null after saving Ch1 flow.");
+            Assert.AreEqual("ch1", saveManager.CurrentSaveData.CurrentChannelID,
+                "Save data did not preserve the current channel for Ch1.");
+
+            bool loaded = saveManager.LoadGame(SaveSlot);
+            Assert.IsTrue(loaded, "LoadGame failed for Ch1 flow.");
+            yield return WaitForCondition(
+                () => scenarioManager.CurrentChannelID == "ch1",
+                ChatMessageTimeoutSeconds,
+                "ScenarioManager did not restore channel 'ch1' after LoadGame.");
+
+            Assert.AreEqual("ch1", scenarioManager.CurrentChannelID,
+                "ScenarioManager lost CurrentChannel after Save/Load.");
         }
 
         [UnityTest]
@@ -158,6 +183,34 @@ namespace ProjectFoundPhone.Tests
                 }
                 yield return null;
             }
+        }
+
+        private static IEnumerator WaitForChatMessages(ChatController chatController, float timeoutSeconds, string failureMessage)
+        {
+            yield return WaitForCondition(
+                () =>
+                {
+                    ScrollRect scrollRect = chatController != null ? chatController.GetComponent<ScrollRect>() : null;
+                    return scrollRect != null && scrollRect.content != null && scrollRect.content.childCount > 0;
+                },
+                timeoutSeconds,
+                failureMessage);
+        }
+
+        private static IEnumerator WaitForCondition(Func<bool> predicate, float timeoutSeconds, string failureMessage)
+        {
+            float startTime = Time.realtimeSinceStartup;
+            while (Time.realtimeSinceStartup - startTime < timeoutSeconds)
+            {
+                if (predicate())
+                {
+                    yield break;
+                }
+
+                yield return null;
+            }
+
+            Assert.Fail(failureMessage);
         }
 
         private static void CaptureEvidence(string label)
