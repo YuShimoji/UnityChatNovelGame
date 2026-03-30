@@ -42,6 +42,26 @@
 
 ## Session Log
 
+### 2026-03-31 session 20
+- Block 1 (Advance): PlayMode batch 実行経路の確立 + Save/Load 復帰バグの切り分け
+  - **優先度整理**:
+    1. PlayMode 自動検証の起動経路を持つ
+    2. `CurrentChannel` Save/Load テストを実ランで確認
+    3. 残る teardown 例外を解消
+  - **batch entry 追加**: `TestRunnerHelper.RunPlayModeTestsBatch()` を追加し、
+    `-executeMethod` + custom args で PlayMode テストを起動可能にした。
+  - **`Start` 復帰バグ修正**: `SaveManager.GetCurrentNodeName()` の `"Start"` 固定フォールバックを廃止。
+    `$current_node` 不在時は `CurrentChannel -> ChannelData.StartNodeName -> ScenarioManager.DefaultStartNode`
+    へフォールバックするよう修正。
+  - **実ラン結果**: `DebugChatScene_Ch1Start_PreservesCurrentChannelAcrossSaveLoad` は batch 実行で起動。
+    `missing_node:Start` は解消し、`SaveManager: Game loaded from slot 0` まで到達。
+    残失敗は teardown 周辺の
+    `DialogueException: Cannot continue running dialogue. No node has been selected.`
+  - **証跡**:
+    - `docs/verification/2026-03-31-playmode-batch-execute.md`
+    - `docs/verification/VerticalSliceSmokeGate_20260331_044945_DebugChatScene.txt`
+    - `Temp/playmode-batch-execute.log`
+
 ### 2026-03-30 session 19
 - Block 1 (Excise + Audit): 堆積物整理 + CanvasScaler統一
   - **Yarn active/ クリーンアップ**: 参照なし4件を archive/ へ移動 (FirstSlice, MVPTest, DebugScript, SubthreadTest)

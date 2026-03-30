@@ -38,6 +38,7 @@ namespace ProjectFoundPhone.Core
 
         /// <summary>現在のチャンネルID (セーブ/ロード用)</summary>
         public string CurrentChannelID => m_CurrentChannel != null ? m_CurrentChannel.ChannelID : null;
+        public string DefaultStartNode => m_StartNode;
 
         /// <summary>宣言済みサブスレッド (threadId -> SubthreadData)</summary>
         private readonly Dictionary<string, SubthreadData> m_DeclaredThreads

@@ -1,0 +1,4 @@
+Test Failed: DebugChatScene_Ch1Start_PreservesCurrentChannelAcrossSaveLoad
+Message: Unhandled log message: '[Error] ContentAuthoring: broken-yarn-file=Assets/Resources/Yarn/archive/DebugScript.yarn reason=missing_node:Start'. Use UnityEngine.TestTools.LogAssert.Expect
+Scene: DebugChatScene
+Time: 2026-03-31T04:49:45.4245610+09:00

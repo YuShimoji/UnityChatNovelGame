@@ -6,10 +6,11 @@
 - 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 - ブランチ戦略: trunk-based (main のみ)
 - 現フェーズ: プロトタイプ → α移行中
-- 直近の状態 (2026-03-30 session 19):
+- 直近の状態 (2026-03-31 session 20):
   - Session 17: 自動スキップ修正 + DialogueException修正 + フォントバランス調整 + ロードマップ策定 + canonical docs 初期化
   - Session 18: 制作パイプライン改善。YarnSOGenerator が ChannelData 同期まで対応、Content Pipeline window 追加、handoff docs 整備
   - Session 19: PlayMode smoke を `CurrentChannel` Save/Load まで拡張。batchmode `-runTests` は 2 回とも XML 未生成で終了し、実行基盤の切り分けが新ボトルネック
+  - Session 20: `-executeMethod` ベースの PlayMode batch 起動経路を追加。`missing_node:Start` は修正できたが、残件は teardown 時の `DialogueException`
   - 方向転換: AI は Yarn 執筆ではなく制作ツール/パイプライン整備に注力すべき
   - 次の作業: 人間が執筆するためのシステム周りの実機検証 (DebugQuickTest / Ch1-Ch3 / E2E)
 
@@ -21,6 +22,7 @@
 - スレッド管理 (BeginBranch/EndBranch) がユーザーに複雑と指摘された — PLAN MODE でリファクタ設計要
 - task-scout 指摘の残件: verification/ 空、E2E 自動検証未整備
 - 2026-03-30 session 19: `docs/verification/2026-03-30-playmode-batchmode-attempt.md` を追加。PlayMode test code は前進したが、Unity batchmode `-runTests` は XML を出さず終了
+- 2026-03-31 session 20: `docs/verification/2026-03-31-playmode-batch-execute.md` を追加。`-executeMethod` で PlayMode 実行自体は通る
 
 ---
 

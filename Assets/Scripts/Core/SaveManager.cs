@@ -248,7 +248,23 @@ namespace ProjectFoundPhone.Core
         /// </summary>
         private string GetCurrentNodeName(ScenarioManager scenarioManager)
         {
-            return scenarioManager.GetVariable<string>("$current_node") ?? "Start";
+            string currentNodeName = scenarioManager.GetVariable<string>("$current_node");
+            if (!string.IsNullOrWhiteSpace(currentNodeName))
+            {
+                return currentNodeName;
+            }
+
+            string currentChannelId = scenarioManager.CurrentChannelID;
+            if (!string.IsNullOrWhiteSpace(currentChannelId))
+            {
+                ChannelData channelData = Resources.Load<ChannelData>($"Channels/{currentChannelId}");
+                if (channelData != null && !string.IsNullOrWhiteSpace(channelData.StartNodeName))
+                {
+                    return channelData.StartNodeName;
+                }
+            }
+
+            return scenarioManager.DefaultStartNode;
         }
 
         /// <summary>
