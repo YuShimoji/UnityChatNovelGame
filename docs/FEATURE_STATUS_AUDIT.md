@@ -1,6 +1,6 @@
 # Feature Status Audit
 
-**監査日**: 2026-03-26
+**監査日**: 2026-03-30
 **監査対象**: FoundPhone (UnityChatNovelGame) 全コードベース
 **ブランチ**: main
 
@@ -52,6 +52,7 @@
 | 24 | チャプター完了サマリー (SP-019 Phase 1) | SP-019 | コードレビュー済 | Unity再生 |
 | 25 | オンボーディングヒント (SP-020 Phase 1) | SP-020 | コードレビュー済 | Unity再生 |
 | 26 | 進捗可視化 (ProgressTracker/NudgeSystem/ProgressSummaryUI) | SP-018 | コードレビュー済 | Unity再生 |
+| 27 | 制作パイプライン統合ツール (Content Pipeline + ChannelData同期) | EN-004 | コードレビュー済 | Unity Editor |
 
 ---
 
@@ -97,8 +98,8 @@
 | N-9 | B型Wikiリンク遷移 | SP-016/IP-002 | hold | B型コンテンツ3章分 |
 | N-10 | C型成果物カードリッチ表示 | SP-016/IP-003 | hold | C型Unity検証後 |
 | N-11 | アルケミーボード | SP-014/IP-001 | hold | 矛盾3章安定運用後 |
-| N-12 | Ch3シナリオ | SP-003 | 次 | Phase A + Pipeline設計後 |
-| N-13 | Pipeline設計 (最終成果物像) | project-context | 最優先 | HUMAN_AUTHORITY |
+| N-12 | Ch3シナリオ | SP-003 | 次 | Phase A + 実機検証後 |
+| N-13 | E2E自動検証 (PlayMode) | EN-004/project-context | 高 | ETK 拡張方針の確定 |
 | N-14 | SP-017 解放通知演出 | SP-017 | 低 | Ch3設計後 |
 | N-15 | 複合条件記法集 | SP-017 | 低 | Ch3設計後 |
 
@@ -109,7 +110,7 @@
 | # | 懸念 | 重大度 | 対処方針 |
 |---|------|--------|----------|
 | W-1 | Phase A手動検証65項目が未実施 | HIGH | ユーザーのUnity Editor操作が必須 |
-| W-2 | Pipeline設計(最終成果物像)が未定義 | HIGH | HUMAN_AUTHORITY: 設計判断が必要 |
+| W-2 | Content Pipeline は実装済みだが Unity 実機検証が未完 | HIGH | ContentAuthoring / DebugQuickTest / Ch1-Ch3 で再生確認 |
 | W-3 | ContradictionFeedbackControllerのシーンセットアップ未完了 | MEDIUM | Phase A実施時にセットアップ |
 | W-4 | MessageTaggedコマンド | — | 削除済み (session 11) |
 | W-5 | ContradictionPairの[Obsolete]フィールド (UnlockTopic) | LOW | SerializeFieldのため削除するとSO壊れる。放置 |

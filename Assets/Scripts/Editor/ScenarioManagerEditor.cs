@@ -13,7 +13,6 @@ namespace ProjectFoundPhone.Editor
     public sealed class ScenarioManagerEditor : UnityEditor.Editor
     {
         private const string ContentAuthoringScenePath = "Assets/Scenes/ContentAuthoring.unity";
-        private const string DefaultStartNode = "VerticalSlice_Start";
 
         private SerializedProperty m_DialogueRunnerProperty;
         private SerializedProperty m_ChatControllerProperty;
@@ -106,14 +105,27 @@ namespace ProjectFoundPhone.Editor
 
             using (new EditorGUILayout.HorizontalScope())
             {
-                if (GUILayout.Button("Use Default Node"))
+                if (GUILayout.Button("Use Recommended Node"))
                 {
-                    m_StartNodeProperty.stringValue = DefaultStartNode;
+                    m_StartNodeProperty.stringValue = YarnSOGenerator.GetRecommendedStartNode();
                 }
 
+                if (GUILayout.Button("Open Pipeline"))
+                {
+                    ContentPipelineWindow.ShowWindow();
+                }
+            }
+
+            using (new EditorGUILayout.HorizontalScope())
+            {
                 if (GUILayout.Button("Validate Runtime"))
                 {
                     ContentAuthoringBatchValidator.ValidateFromMenu();
+                }
+
+                if (GUILayout.Button("Sync Authoring Assets"))
+                {
+                    YarnSOGenerator.SyncAllAuthoringAssetsFromMenu();
                 }
             }
 

@@ -1457,6 +1457,8 @@ namespace ProjectFoundPhone.Core
                 return;
             }
 
+            TryAssignCurrentChannelFromNode(targetNode);
+
             // 安全弁: 既にダイアログが実行中なら強制停止してから開始
             if (m_DialogueRunner.IsDialogueRunning)
             {
@@ -1468,6 +1470,94 @@ namespace ProjectFoundPhone.Core
 #else
             Debug.LogWarning("ScenarioManager: Yarn Spinner is not available. StartScenario is a no-op.");
 #endif
+        }
+
+        private void TryAssignCurrentChannelFromNode(string nodeName)
+        {
+            if (string.IsNullOrWhiteSpace(nodeName))
+            {
+                return;
+            }
+
+            ChannelData resolvedChannel = ResolveChannelFromNode(nodeName);
+            if (resolvedChannel == null || resolvedChannel == m_CurrentChannel)
+            {
+                return;
+            }
+
+            m_CurrentChannel = resolvedChannel;
+
+            var contradictionManager = FindFirstObjectByType<ContradictionManager>();
+            if (contradictionManager != null)
+            {
+                contradictionManager.SetCurrentChannel(resolvedChannel);
+            }
+
+            Debug.Log($"ScenarioManager: Auto-assigned channel '{resolvedChannel.ChannelID}' from node '{nodeName}'.");
+        }
+
+        private static ChannelData ResolveChannelFromNode(string nodeName)
+        {
+            string contentChannelId = TryExtractContentChannelId(nodeName);
+            if (!string.IsNullOrEmpty(contentChannelId))
+            {
+                ChannelData directMatch = Resources.Load<ChannelData>($"Channels/{contentChannelId}");
+                if (directMatch != null)
+                {
+                    return directMatch;
+                }
+            }
+
+            ChannelData[] channels = Resources.LoadAll<ChannelData>("Channels");
+            foreach (ChannelData channel in channels)
+            {
+                if (channel == null)
+                {
+                    continue;
+                }
+
+                if (string.Equals(channel.StartNodeName, nodeName, StringComparison.Ordinal))
+                {
+                    return channel;
+                }
+
+                string[] dayStartNodes = channel.DayStartNodeNames;
+                if (dayStartNodes == null)
+                {
+                    continue;
+                }
+
+                foreach (string dayStartNode in dayStartNodes)
+                {
+                    if (string.Equals(dayStartNode, nodeName, StringComparison.Ordinal))
+                    {
+                        return channel;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        private static string TryExtractContentChannelId(string nodeName)
+        {
+            if (nodeName.Length < 3 || nodeName[0] != 'C' || nodeName[1] != 'h')
+            {
+                return null;
+            }
+
+            int index = 2;
+            while (index < nodeName.Length && char.IsDigit(nodeName[index]))
+            {
+                index++;
+            }
+
+            if (index == 2)
+            {
+                return null;
+            }
+
+            return $"ch{nodeName.Substring(2, index - 2)}";
         }
 
         /// <summary>

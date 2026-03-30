@@ -2,7 +2,7 @@
 
 Windsurf (VS Code) で Yarn ファイルを編集し、Unity で即座に動作確認するための手順書。
 
-**最終更新**: 2026-03-13
+**最終更新**: 2026-03-30
 
 ---
 
@@ -119,19 +119,19 @@ Assets/Resources/Yarn/active/Ch1_Day1.yarn
 
 - `Ch{N}_{シーン名}` （例: `Ch1_Opening`, `Ch1_MarcoIntro`）
 
-### Step 4: キャラクター ScriptableObject を作成
+### Step 4: SO を同期する
 
-新キャラが必要な場合:
+Unity 側で `Tools > FoundPhone > Content Pipeline` を開き、以下を実行:
 
-1. Unity メニュー `Create > Project FoundPhone > Character Profile`
-2. CharacterID / DisplayName / ThemeColor を設定
-3. `Assets/Resources/Characters/` に保存
+1. `Open Yarn Validator` で静的エラーを確認
+2. `Sync Authoring Assets` で TopicData / CharacterProfile / ChannelData を一括同期
+3. 必要なら Inspector で DisplayName / Description / EnableHints を調整
 
 ### Step 5: 動作確認
 
 1. Windsurf で .yarn ファイルを保存
 2. Unity に Alt+Tab で切り替え（自動インポート）
-3. **方法A**: Inspector「Play from Node」で特定ノードをテスト
+3. **方法A**: `Content Pipeline` または Inspector の「Play from Node」で特定ノードをテスト
 4. **方法B**: F12 で Debug Hub を開き、ノードを選択
 
 ### Step 6: イテレーション
@@ -264,6 +264,13 @@ title: Ch1_FindFragment
 4. **「Play from Node」** ボタンをクリック
 5. 自動で Play Mode に入り、選択ノードから再生開始
 
+### 方法A-2: Content Pipeline（推奨）
+
+1. `Tools > FoundPhone > Content Pipeline` を開く
+2. `Sync Authoring Assets` で Yarn 由来の SO を同期
+3. Start Node を選ぶ（既定は `DQT_Start` 優先）
+4. `Apply Node To Scene` または `Play ContentAuthoring` を実行
+
 ### 方法B: Debug Hub（ランタイム）
 
 1. ContentAuthoring シーンで Play Mode に入る
@@ -306,8 +313,8 @@ title: Ch1_FindFragment
 ## 9. チェックリスト: 新チャプター追加時
 
 - [ ] `.yarn` ファイルを `Assets/Resources/Yarn/active/` に作成
-- [ ] `Assets/Resources/Channels/` に対応する `ChannelData` を追加/更新（ID, StartNodeName, RequiredCompletedChannelID）
-- [ ] チャプターのヒント方針を `ChannelData` に反映（EnableHints, MaxHintDifficulty）
+- [ ] `Tools > FoundPhone > Content Pipeline` で `Sync Authoring Assets` を実行
+- [ ] 生成/同期された `ChannelData` の DisplayName / Description / ヒント方針を Inspector で確認
 - [ ] 全ノードに `title:` と `===` がある
 - [ ] 新キャラの CharacterProfile ScriptableObject を作成済み
 - [ ] 変数宣言 `<<declare>>` がプロジェクト内で重複していない

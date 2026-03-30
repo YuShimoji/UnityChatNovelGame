@@ -6,11 +6,11 @@
 - 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 - ブランチ戦略: trunk-based (main のみ)
 - 現フェーズ: プロトタイプ → α移行中
-- 直近の状態 (2026-03-30 session 17):
+- 直近の状態 (2026-03-30 session 18):
   - Session 17: 自動スキップ修正 + DialogueException修正 + フォントバランス調整 + ロードマップ策定 + canonical docs 初期化
-  - 制作パイプライン調査完了: Validator/SOGenerator/wiki は動作するが ChannelData 自動生成が未実装
+  - Session 18: 制作パイプライン改善。YarnSOGenerator が ChannelData 同期まで対応、Content Pipeline window 追加、handoff docs 整備
   - 方向転換: AI は Yarn 執筆ではなく制作ツール/パイプライン整備に注力すべき
-  - 次の作業: 人間が執筆するためのシステム周りの改善 (ChannelData 自動生成、制作フロー統合ウィザード等)
+  - 次の作業: 人間が執筆するためのシステム周りの実機検証 (DebugQuickTest / Ch1-Ch3 / E2E)
 
 ### 運用メモ
 
@@ -18,7 +18,7 @@
 - ユーザーはデザイナー兼ライター。手動でのストーリー追加がまだ未実施 — wiki で解消予定
 - nightshift の変更品質が問題化。部分的・不完全な変更が検証負担を増大させるパターン。完成度優先へ
 - スレッド管理 (BeginBranch/EndBranch) がユーザーに複雑と指摘された — PLAN MODE でリファクタ設計要
-- task-scout 指摘: FEATURE_STATUS_AUDIT.md 未更新、YarnSOGenerator spec 未登録、verification/ 空
+- task-scout 指摘の残件: verification/ 空、E2E 自動検証未整備
 
 ---
 
@@ -33,18 +33,18 @@
 
 ## CURRENT LANE
 
-- 主レーン: Advance (コンテンツ制作 — Ch1 Day2/Day3 執筆)
-- 副レーン: Audit (Ch1 通しプレイ体験確認)
-- 今このレーンを優先する理由: 5セッション分の UI 修正が完了。次はコンテンツを実際に作り、制作フローの摩擦を特定する段階
+- 主レーン: Unlock (制作パイプラインの実運用確認)
+- 副レーン: Audit (DebugQuickTest / Ch1-Ch3 再生確認)
+- 今このレーンを優先する理由: 制作ツール側の欠落は埋まったため、次は実際にその導線が摩擦なく回るか確認する段階
 - いまは深入りしないレーン: UI微調整 (Inspector で自律調整)、サウンド、マネタイズ
 
 ---
 
 ## CURRENT SLICE
 
-- スライス名: Ch1 完走 + 制作フロー実証
-- ユーザー操作列: Ch1 Day1 通しプレイ → Day2 ビート確認 → Yarn 執筆 → Validator → SOGenerator → Unity 再生 → Day3 同様 → Ch1 通しプレイ
-- 成功状態: Ch1 (Day1-3) を新規プレイヤーとして通しプレイできる。制作フローの摩擦が特定されリスト化されている
+- スライス名: 制作パイプライン運用実証 + docs handoff 完全化
+- ユーザー操作列: Yarn 編集 → Content Pipeline で同期 → DQT_Start 確認 → Ch1/Ch2/Ch3 再生 → 問題記録
+- 成功状態: 会話ログなしでも docs だけで現状把握でき、制作フローを Unity 上で再現できる
 - このスライスで必要な基盤能力: タップスキップ (済)、タイミング (済)、wiki (済)、Validator (済)、SOGenerator (済)
 - 今回はやらないこと: UI微修正 (UI_ISSUES.md に記録のみ)、サウンド、マネタイズ
 
@@ -89,7 +89,7 @@
 | シナリオ設計 | 手動 | SCENARIO_AUTHORING_GUIDE | done |
 | Yarn執筆 | 手動 | VSCode + Yarn Spinner Extension | done |
 | 静的バリデーション | 自動 | YarnContentValidator (Editor) | done |
-| SO自動生成 | 自動 | YarnSOGenerator (Editor: Tools > FoundPhone > Yarn SO Generator) | **done** (session 12) |
+| SO自動生成 | 自動 | YarnSOGenerator + Content Pipeline (Topic/Character/Channel 同期) | **done** |
 | Unity再生確認 | 手動 | ContentAuthoring シーン | done |
 | E2E自動検証 | 自動 | 未実装 — ETK拡張でPlayModeテスト | **todo** |
 | 調整 | 手動 | Unity Inspector + Yarn編集 | done |
@@ -98,8 +98,7 @@
 
 ### 未実装ツール要求（Pipeline設計から抽出）
 
-1. **SO自動生成ツール (Editor)**: YarnファイルからChannel/Topic/Character SOを自動生成。手動SO作成の手間を削減
-2. **E2E自動検証 (PlayMode)**: 全チャプターを自動再生しブロッカーを検出。ETKの拡張として実装
+1. **E2E自動検証 (PlayMode)**: 全チャプターを自動再生しブロッカーを検出。ETKの拡張として実装
 
 ---
 
@@ -135,25 +134,28 @@ CLAUDE.md の IDEA POOL を参照。ここには project-context.md 作成以降
 
 ---
 
-## HANDOFF SNAPSHOT (session 17)
+## HANDOFF SNAPSHOT (session 18)
 
-- 現在の主レーン: Unlock (人間が執筆するための制作システム整備)
-- 現在のスライス: 制作パイプライン改善 — ChannelData 自動生成 / 統合ウィザード
-- session 17 で完了した作業:
+- 現在の主レーン: Unlock (制作パイプラインの実運用確認)
+- 現在のスライス: Content Pipeline / ChannelData 自動同期 / handoff docs 整備
+- session 17-18 で完了した作業:
   - 自動スキップバグ根絶 (NextContentToken リーク修正)
   - DialogueException 修正 (m_IsDestroying ガード)
   - DebugQuickTest.yarn 新規 (DQT_Start)
   - フォントサイズバランス修正 (.asset nightshift膨張値 + 全体底上げ)
   - 開発ロードマップ策定 (短期/中期/長期)
   - canonical docs 4本初期化 (INVARIANTS/LEDGER/WORKFLOW/INTERACTION)
-  - 制作パイプライン調査: Validator/SOGenerator/wiki は動作確認済み
-- session 17 で判明した重要な認識修正:
+  - YarnSOGenerator 拡張: ChannelData 同期まで対応
+  - Content Pipeline window 追加
+  - StartNode 推奨導線への統一
+  - handoff docs 整備: HANDOFF.md 追加
+- session 17-18 で判明した重要な認識修正:
   - Yarn 執筆はユーザーの仕事。AI はシステム/ツール/パイプラインを整備する
-  - ChannelData が手動作成のみ — YarnSOGenerator に含まれていない
   - 「前回の反動」で方向を決めない。本当に必要なものを特定する
 - 次回最初にやること:
-  1. 制作パイプラインの改善 (ChannelData 自動生成、統合フロー等)
-  2. ユーザーが何を改善してほしいか具体的に確認 (HUMAN_AUTHORITY)
+  1. Content Pipeline の Unity 実機確認
+  2. DQT_Start / Ch1 / Ch2 / Ch3 再生確認
+  3. E2E PlayMode 検証のスコープ切り出し
 - フォント/色/タイミングの微調整: Inspector の ChatUIConfig / UIFontConfig で自律的に行う (コード変更不要)
   - タップスキップ: システムメッセージに効かない (一貫性の欠如)
   - 全般: nightshift の雑な変更パターン。完成度優先へ方針転換
@@ -164,7 +166,5 @@ CLAUDE.md の IDEA POOL を参照。ここには project-context.md 作成以降
   - ポートレート画像挿入の UI/UX 設計 (HUMAN_AUTHORITY)
 - 今は触らない範囲: サウンド統合、マネタイズ実装、E2E自動検証
 - task-scout 指摘の未対応:
-  - FEATURE_STATUS_AUDIT.md 未更新 (YarnSOGenerator 等)
-  - YarnSOGenerator の spec-index エントリ未登録
   - active/ の Yarn 整理候補 (VerticalSlice.yarn, FirstSlice.yarn, MVPTest.yarn)
   - CanvasScaler 不整合 (DebugChatScene + MetaEffectController が 1920x1080)

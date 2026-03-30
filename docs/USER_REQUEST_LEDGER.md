@@ -10,13 +10,15 @@
 | 2026-03-30 | 短期・中期・長期の開発想定を立て直せ | done | project-context.md DEVELOPMENT ROADMAP |
 | 2026-03-30 | デバッグはデバッグ用チャプターで即確認できるようにせよ | done | DebugQuickTest.yarn (DQT_Start) |
 | 2026-03-30 | 処理のアルゴリズムを明文化せよ | done | docs/DISPLAY_ALGORITHMS.md (EN-011) |
-| 2026-03-29 | デザイナーが容易にストーリー追加削除できるワークフロー確立 | partial | wiki 作成済み、実フロー未実証 |
-| 2026-03-30 | 最も欲しいのは人間が執筆するためのシステム周り | active | パイプラインツール整備が本質。Validator/SOGenerator は動作確認済みだが ChannelData は手動のみ |
+| 2026-03-29 | デザイナーが容易にストーリー追加削除できるワークフロー確立 | done | Content Pipeline window + YarnSOGenerator の ChannelData 同期 + 推奨 StartNode 導線 |
+| 2026-03-30 | 最も欲しいのは人間が執筆するためのシステム周り | active | パイプライン導線は実装済み。残りは Unity 実機検証と E2E 自動検証 |
+| 2026-03-30 | なるべくプロジェクト内 docs だけで引き継げる状態にせよ | done | HANDOFF.md 新設 + runtime-state / project-context / OPERATOR_WORKFLOW / prompt-resume.md |
 
 ## 未反映の是正要求
 
 - UIバグは即修正せず docs/UI_ISSUES.md に溜めて一括処理 (session 17 策定)
 - セッション成果物は「プレイアブルなコンテンツ」か「新機能」。UI修正だけのセッションは原則禁止
+- handoff 時は `git status` / docs 同期 / commit / push / handoff summary / 次セッション開始手順までを一括で確定する
 
 ## Backlog Delta (spec-index 登録済み)
 

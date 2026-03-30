@@ -213,7 +213,7 @@
     "pct": 100,
     "cat": "infra",
     "file": "docs/YarnEditingPipeline.md",
-    "summary": "Yarnファイルの編集・テスト・デプロイ手順。active/archive ディレクトリ分離対応"
+    "summary": "Yarnファイルの編集・テスト・デプロイ手順。active/archive ディレクトリ分離対応。Content Pipeline 導線と YarnSOGenerator の Topic/Character/Channel 同期を反映"
   },
   {
     "id": "EN-005",

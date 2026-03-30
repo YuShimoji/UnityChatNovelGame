@@ -1,27 +1,27 @@
 # Runtime State
 
-**Updated**: 2026-03-30 session 17
+**Updated**: 2026-03-30 session 18
 
 ## Current Position
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
 - lane: Unlock (人間が執筆するための制作システム整備)
-- slice: 制作パイプライン改善 — ChannelData 自動生成 / 統合ウィザード / ユーザー要望ヒアリング
+- slice: 制作パイプライン改善 — Content Pipeline / ChannelData 自動同期 / handoff docs 整備
 - active_artifact: FoundPhone エンジン基盤 (Unity 6.3 + Yarn Spinner 3.1.3)
 - artifact_surface: Unity Editor > ContentAuthoring シーン
-- last_change_relation: direct (自動スキップ修正 + DialogueException修正 + DebugQuickTest.yarn)
+- last_change_relation: direct (制作パイプライン導線改善 + handoff docs 整備)
 
 ## Counters
 
 - blocks_since_user_visible_change: 0 (自動スキップ修正 + DebugQuickTest)
-- blocks_since_visual_audit: 5 (session 13 Audit → 14 x2 → 15 → 16 → 17 Block 1)
-- blocks_since_unlock: 2
+- blocks_since_visual_audit: 6 (session 13 Audit → 14 x2 → 15 → 16 → 17 → 18)
+- blocks_since_unlock: 0
 - consecutive_excise_blocks: 0
 
 ## Quantitative Metrics
 
-- impl_files: 64 (テスト除く .cs)
+- impl_files: 65 (テスト除く .cs)
 - test_files: 5 (EditMode 4 + PlayMode 1)
 - playmode_test_files: 1
 - mock_files: 0
@@ -40,6 +40,23 @@
 - blocks_since_visual_audit: 5
 
 ## Session Log
+
+### 2026-03-30 session 18
+- Block 1 (Unlock): 制作パイプラインの欠落補完 + docs handoff 強化
+  - **YarnSOGenerator 拡張**: TopicData / CharacterProfile に加えて ChannelData を自動同期。
+    `Ch{N}` / `Ch{N}_Day{M}` ノード規約から StartNodeName / TotalDays / DayStartNodeNames を推定。
+  - **ContentPipelineWindow 新規**: Validator 起動 / SO同期 / 推奨 StartNode 選択 /
+    ContentAuthoring シーンへの適用 / 即再生を 1 ウィンドウに集約。
+  - **StartNode 導線修正**: ScenarioManagerEditor と VerticalSliceSceneSetup の
+    `VerticalSlice_Start` 固定を廃止し、`DQT_Start` 優先の推奨ノード方式に統一。
+  - **CurrentChannel 自動解決**: ScenarioManager.StartScenario がノード名から ChannelData を解決し、
+    EndDay / ヒントポリシー / ContentAuthoring 再生時の文脈ずれを防ぐ。
+  - **handoff docs 整備**: HANDOFF.md 新規。project-context / runtime-state /
+    OPERATOR_WORKFLOW / INVARIANTS を会話非依存で引ける状態へ更新。
+  - 残タスク:
+    1. Unity で Content Pipeline 実運用確認
+    2. DQT_Start / Ch1 / Ch2 / Ch3 の再生確認
+    3. E2E PlayMode 検証導線の追加
 
 ### 2026-03-30 session 17
 - Block 1 (Advance): 自動スキップバグ修正 + DialogueException修正 + DebugQuickTest

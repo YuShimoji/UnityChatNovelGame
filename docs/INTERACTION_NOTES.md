@@ -28,6 +28,8 @@
 
 - セッション成果を報告する際、「コンテンツまたは機能として何が前進したか」を先に示す
 - UI 値調整は Inspector 作業として扱い、セッション成果に含めない
+- handoff summary は Shared Focus / Non-Negotiables / Reused Canonical Context / New Fossils / Active Artifact / 現在地 / Expansion Risk / Next を明示する
+- handoff 前に `git status` と docs 反映確認を出す
 
 ## 運用ルール
 

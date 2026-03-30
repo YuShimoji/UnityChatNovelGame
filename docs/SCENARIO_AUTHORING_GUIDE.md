@@ -552,6 +552,13 @@ title: Ch1_Day2_BernardoAnalysis
 3. ScenarioManager Inspector の **Start Node** ドロップダウンでノード選択
 4. **Play from Node** ボタン → 自動で Play Mode に入り、選択ノードから再生
 
+### 方法 A-2: Content Pipeline（推奨）
+
+1. `Tools > FoundPhone > Content Pipeline` を開く
+2. `Sync Authoring Assets` を実行して Topic / Character / Channel を同期
+3. Start Node を選択
+4. `Play ContentAuthoring` を押す
+
 ### 方法 B: Debug Hub（F12）
 
 1. Play Mode 中に **F12** キーを押す
@@ -743,12 +750,11 @@ Ch2 (TotalDays=1):
 ## 付録: 新チャプター追加チェックリスト
 
 1. `.yarn` ファイルを `Assets/Resources/Yarn/active/` に作成
-2. `Assets/Resources/Channels/` に ChannelData アセットを追加/更新
-   - Unity メニュー: `Create > Project FoundPhone > Channel Data`
-   - ChannelID, DisplayName, StartNodeName, ChapterNumber を設定
-   - RequiredCompletedChannelID で前提チャンネルを指定
-3. 新キャラがいる場合: `Create > Project FoundPhone > Character Profile`
-4. 新断片がある場合: `Create > Project FoundPhone > Topic Data`
+2. `Tools > FoundPhone > Content Pipeline` → `Sync Authoring Assets` を実行
+   - TopicData / CharacterProfile / ChannelData が Yarn から同期される
+   - ChannelData の DisplayName / Description / EnableHints / MaxHintDifficulty は Inspector で確認
+3. 新キャラがいる場合でも、まずは `Sync Authoring Assets` で自動生成を試す
+4. 新断片がある場合でも、まずは `Sync Authoring Assets` で自動生成を試す
    - TopicID のプレフィックスで分類が決まる（`fragment_` / `topic_` / `record_`）
 5. Unity Console にエラーがないことを確認
 6. Play from Node + F11早送り で全分岐を通す
