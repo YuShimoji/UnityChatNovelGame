@@ -194,8 +194,8 @@
     "status": "done",
     "pct": 100,
     "cat": "infra",
-    "file": "docs/WORKFLOW_STATE_SSOT.md",
-    "summary": "現在の開発状態・セットアップ手順・次ステップ。全主要機能実装完了(24コマンド+HCゲート+Branch+レスポンシブ)。残: Phase Aクロージング手動検証(65項目)、Ch3設計"
+    "file": "docs/HANDOFF.md",
+    "summary": "開発状態の入口。runtime-state.md / project-context.md / OPERATOR_WORKFLOW へ接続。WORKFLOW_STATE_SSOT.md は session 21 で廃止"
   },
   {
     "id": "EN-003",

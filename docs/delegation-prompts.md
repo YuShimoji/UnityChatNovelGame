@@ -557,10 +557,10 @@ UnityChatNovelGame のメインチャット画面に、未読サブスレッド�
 
 ---
 
-## Task M: WORKFLOW_STATE_SSOT 更新
+## Task M: WORKFLOW_STATE_SSOT 更新 (廃止: session 21 で HANDOFF.md に一本化)
 
 ```
-UnityChatNovelGame の docs/WORKFLOW_STATE_SSOT.md を更新し、
+[廃止] UnityChatNovelGame の docs/WORKFLOW_STATE_SSOT.md を更新し、
 ThreadType 導入 + 型別レンダリング(ヘッダーバー) の完了を反映してください。
 
 ### 背景

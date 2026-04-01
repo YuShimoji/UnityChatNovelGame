@@ -215,7 +215,7 @@ Play mode 中の Console を通して確認:
 - Test D がパス → 矛盾指摘 Phase 2 動作確認完了
 - Test E〜F がパス → デバッグツール + エラーフリー確認完了
 
-全パスで WORKFLOW_STATE_SSOT.md の Phase A Done 条件を完了とする。
+全パスで Phase A Done 条件を完了とする。
 
 ---
 
@@ -228,4 +228,4 @@ Play mode 中の Console を通して確認:
 
 - [ENGINE_FEATURE_INVENTORY.md](ENGINE_FEATURE_INVENTORY.md) - エンジン機能リファレンス
 - [UI_IMPLEMENTATION_SPEC.md](UI_IMPLEMENTATION_SPEC.md) - UI実装仕様
-- [WORKFLOW_STATE_SSOT.md](WORKFLOW_STATE_SSOT.md) - ワークフロー状態管理
+- [HANDOFF.md](HANDOFF.md) - 開発状態の入口

@@ -355,4 +355,4 @@ public class SubthreadData
 
 ## 関連ドキュメント
 - ENGINE_FEATURE_INVENTORY.md: エンジン機能リファレンス
-- WORKFLOW_STATE_SSOT.md: 現在の開発状態
+- HANDOFF.md: 開発状態の入口
