@@ -173,6 +173,13 @@ namespace ProjectFoundPhone.Tests
                 CaptureEvidence("VerticalSliceSmokeGate");
             }
 
+            // teardown 前に実行中のダイアログを停止し、OnDestroy 時の DialogueException を防ぐ
+            ScenarioManager scenarioManager = UnityEngine.Object.FindFirstObjectByType<ScenarioManager>();
+            if (scenarioManager != null)
+            {
+                scenarioManager.StopScenario();
+            }
+
             CleanupSaveSlot(SaveSlot);
         }
 

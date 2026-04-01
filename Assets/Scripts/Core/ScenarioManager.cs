@@ -76,7 +76,14 @@ namespace ProjectFoundPhone.Core
             // Yarn シナリオの自動開始（Inspector で有効化）
             else if (m_AutoStartYarn && m_DialogueRunner != null)
             {
-                StartScenario(m_StartNode);
+                if (HasNode(m_StartNode))
+                {
+                    StartScenario(m_StartNode);
+                }
+                else
+                {
+                    Debug.LogWarning($"ScenarioManager: Auto-start skipped — node '{m_StartNode}' not found in YarnProject. Update m_StartNode in Inspector.");
+                }
             }
 #endif
         }
@@ -1710,6 +1717,19 @@ namespace ProjectFoundPhone.Core
         }
 
 #if YARN_SPINNER
+        /// <summary>YarnProject にノードが存在するかを LogError なしで確認する。</summary>
+        private bool HasNode(string nodeName)
+        {
+            if (string.IsNullOrEmpty(nodeName) || m_DialogueRunner == null) return false;
+            YarnProject yarnProject = m_DialogueRunner.YarnProject;
+            if (yarnProject == null || yarnProject.NodeNames == null) return false;
+            foreach (string n in yarnProject.NodeNames)
+            {
+                if (n == nodeName) return true;
+            }
+            return false;
+        }
+
         private bool ValidateDialogueStart(string targetNode)
         {
             if (m_DialogueRunner == null)
@@ -1763,6 +1783,10 @@ namespace ProjectFoundPhone.Core
             string[] yarnFiles = Directory.GetFiles(yarnDirectoryPath, "*.yarn", SearchOption.AllDirectories);
             foreach (string fullPath in yarnFiles)
             {
+                // archive/ 内のファイルは YarnProject に含まれないため除外
+                string normalizedPath = fullPath.Replace('\\', '/');
+                if (normalizedPath.Contains("/archive/")) continue;
+
                 try
                 {
                     string fileText = File.ReadAllText(fullPath);
