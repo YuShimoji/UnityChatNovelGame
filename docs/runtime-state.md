@@ -1,23 +1,23 @@
 # Runtime State
 
-**Updated**: 2026-03-30 session 19
+**Updated**: 2026-04-02 session 21
 
 ## Current Position
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
-- lane: Excise + Unlock (堆積物整理 + E2E検証スコープ設計)
-- slice: Yarn active/ クリーンアップ + CanvasScaler統一 + E2E検証スコープ切り出し
+- lane: Audit + Fix (PlayMode テスト失敗原因特定 + 修正)
+- slice: auto-start 安全化 + archive 除外 + TearDown StopScenario
 - active_artifact: FoundPhone エンジン基盤 (Unity 6.3 + Yarn Spinner 3.1.3)
-- artifact_surface: Unity Editor > ContentAuthoring シーン
-- last_change_relation: direct (堆積物整理 + CanvasScaler修正)
+- artifact_surface: Unity Editor > DebugChatScene
+- last_change_relation: direct (PlayMode テスト失敗の根本原因修正)
 
 ## Counters
 
-- blocks_since_user_visible_change: 1 (session 18 Content Pipeline)
-- blocks_since_visual_audit: 7 (session 13 Audit → 14 x2 → 15 → 16 → 17 → 18 → 19)
-- blocks_since_unlock: 1
-- consecutive_excise_blocks: 1
+- blocks_since_user_visible_change: 2 (session 18 Content Pipeline)
+- blocks_since_visual_audit: 8 (session 13 Audit → 14 x2 → 15 → 16 → 17 → 18 → 19 → 20 → 21)
+- blocks_since_unlock: 2
+- consecutive_excise_blocks: 0
 
 ## Quantitative Metrics
 
@@ -36,11 +36,24 @@
 
 ## Visual Evidence
 
-- visual_evidence_status: stale (Unity PlayMode 未実施。blocks_since_visual_audit: 7)
+- visual_evidence_status: stale (Unity PlayMode 未実施。blocks_since_visual_audit: 8)
 - last_visual_audit_path: (なし)
-- blocks_since_visual_audit: 7
+- blocks_since_visual_audit: 8
 
 ## Session Log
+
+### 2026-04-02 session 21
+- Block 1 (Audit + Fix): PlayMode テスト失敗の根本原因特定 + 修正
+  - **根本原因**: テスト失敗は teardown DialogueException ではなく、
+    DebugChatScene の auto-start が `m_StartNode="Start"` (archive 移動済み DebugScript.yarn のノード) を
+    参照し、`Debug.LogError` が NUnit に拾われていたのが原因
+  - **修正 1**: `ScenarioManager.Start()` で `HasNode()` による事前チェック追加。
+    ノード不在時は LogWarning でスキップ (テスト失敗にならない)
+  - **修正 2**: `ResolveLikelyBrokenYarnFile()` が archive/ ディレクトリを検索対象から除外
+  - **修正 3**: PlayMode TearDown で `StopScenario()` を明示呼出し、
+    OnDestroy 時の async 継続 → DialogueException を防止
+  - **残件**: DebugChatScene の Inspector で `m_StartNode` を `Start` → `DQT_Start` に手動変更が必要
+  - コミット: `a54752b`
 
 ### 2026-03-31 session 20
 - Block 1 (Advance): PlayMode batch 実行経路の確立 + Save/Load 復帰バグの切り分け
