@@ -359,13 +359,13 @@ namespace ProjectFoundPhone.Tests
         [Test]
         public void Manager_GetDiscoveredList_ReturnsCorrectList()
         {
-            var p1 = CreatePair("p1", "s1", "t1");
-            var p2 = CreatePair("p2", "s2", "t2");
-            var db = CreateDatabase(p1, p2);
+            // RestoreDiscovered 経由で発見済み状態を作る。
+            // SelectFirst/SelectSecond 経由だと SaveManager.Instance が
+            // DontDestroyOnLoad を呼び EditMode で例外になるため。
+            var db = CreateDatabase();
             (m_ManagerObj, m_Manager) = CreateManager(db);
 
-            m_Manager.SelectFirst("s1");
-            m_Manager.SelectSecond("t1");
+            m_Manager.RestoreDiscovered(new List<string> { "p1" }, 10);
 
             List<string> list = m_Manager.GetDiscoveredList();
             Assert.AreEqual(1, list.Count);
@@ -429,13 +429,20 @@ namespace ProjectFoundPhone.Tests
         }
 
         [Test]
-        public void Manager_ShouldShowHint_ReturnsFalseForChapter4Plus()
+        public void Manager_ShouldShowHint_ChannelPolicyControlsHint()
         {
+            // 現仕様: ヒント表示は ChannelData の EnableHints / MaxHintDifficulty で制御。
+            // チャプター番号による一律抑制は行わない。
+            // デフォルト (EnableHints=true, MaxHintDifficulty=1) では chapter=4 でもヒントは出る。
             var pair = CreatePair("p1", "src", "tgt", chapter: 1);
             var db = CreateDatabase(pair);
             (m_ManagerObj, m_Manager) = CreateManager(db, chapter: 4);
 
-            Assert.IsFalse(m_Manager.ShouldShowHint("src", 1));
+            // デフォルトポリシーではヒント有効
+            Assert.IsTrue(m_Manager.ShouldShowHint("src", 1));
+
+            // difficulty が MaxHintDifficulty を超えると非表示
+            Assert.IsFalse(m_Manager.ShouldShowHint("src", 2));
         }
 
         [Test]

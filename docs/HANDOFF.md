@@ -105,6 +105,5 @@
 
 ## Canonical Gaps
 
-- `docs/FEATURE_REGISTRY.md`: 不在
 - `docs/AUTOMATION_BOUNDARY.md`: 不在
 - 現時点で今回の制約・痛点は既存 canonical docs に書き戻し済み

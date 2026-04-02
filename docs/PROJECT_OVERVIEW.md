@@ -148,15 +148,12 @@
 
 ---
 
-## 既知のテスト問題 (2件)
+## 既知のテスト問題 — 修正済み (session 21)
 
-| テスト | エラー | 診断 |
-| ------ | ------ | ---- |
-| `Manager_GetDiscoveredList_ReturnsCorrectList` | `DontDestroyOnLoad can only be used in play mode` | EditMode テストから SaveManager.Instance (PlayMode 専用) を呼んでいる。テスト設計の問題 |
-| `Manager_ShouldShowHint_ReturnsFalseForChapter4Plus` | `Expected: False, But was: True` | テストは「Ch4+ でヒント非表示」を期待するが、実装は ChannelData ベースのポリシーに移行済み。チャプター番号によるヒント抑制は削除されている。テストの前提が古い |
-
-- 1件目: SaveManager の DontDestroyOnLoad が EditMode で呼べない制約。モック化ではなく、テストを PlayMode に移すか、SaveManager 経由を迂回する設計変更が選択肢
-- 2件目: 実装が正しくテストの期待値が古い。ChannelData で EnableHints=false に設定すればヒント非表示にできるが、チャプター番号での一律抑制は現仕様にない
+| テスト | 元のエラー | 対応 |
+| ------ | ---------- | ---- |
+| `Manager_GetDiscoveredList_ReturnsCorrectList` | `DontDestroyOnLoad can only be used in play mode` | SelectFirst/SelectSecond 経由ではなく RestoreDiscovered で発見済み状態を構築するよう変更。SaveManager への EditMode 依存を回避 |
+| `Manager_ShouldShowHint_ChannelPolicyControlsHint` (旧名: ReturnsFalseForChapter4Plus) | `Expected: False, But was: True` | テスト名と期待値を現仕様 (ChannelData ベースポリシー) に合わせて更新。デフォルトポリシーでの true + difficulty 超過での false の両方を検証 |
 
 ---
 
@@ -204,6 +201,31 @@
 
 ---
 
+## 仕様管理の構造
+
+### done は「完了」ではなく「初期仕様の実装完了」
+
+```
+spec-index.json                      FEATURE_REGISTRY.md
+  SP-006 HalluciCoin [done]    --->    ENH-012 HC獲得演出 [candidate]
+  EN-006 UI実装仕様 [done]     --->    ENH-001 タイプライター中間停止 [candidate]
+  SP-016 サブスレッドUI [done]  --->    ENH-011 切替トランジション [candidate]
+```
+
+- **spec-index**: 初期仕様のライフサイクル (done/partial/todo)
+- **FEATURE_REGISTRY**: done 済み仕様への改善候補 (ENH-xxx) を受け容れる
+- **UI_ISSUES.md**: バグや外観の不具合
+- **IDEA POOL** (project-context.md): 大きな方向性や新コンセプト
+
+### 改善候補が生まれる典型パターン
+
+1. **制御の粒度拡張**: on/off → グラデーション (例: タイプライター速度可変)
+2. **Yarn からの制御追加**: エンジンは動くがライターが細かく制御できない (例: 中間停止)
+3. **状態遷移のアニメーション化**: 瞬間的な切替 → 演出付き (例: スレッド切替)
+4. **フィードバックの深化**: 結果が分かりにくい → 視覚的な強調 (例: HC獲得)
+
+---
+
 ## ドキュメント構成
 
 | ドキュメント | 役割 |
@@ -215,5 +237,7 @@
 | USER_REQUEST_LEDGER.md | 継続要望/backlog/未反映要求 |
 | OPERATOR_WORKFLOW.md | 人間の実ワークフロー/痛点 |
 | INTERACTION_NOTES.md | 報告UI/手動確認/質問形式 |
-| spec-index.json | 仕様エントリ39件のインデックス |
+| spec-index.json | 仕様エントリ39件のインデックス (初期仕様) |
+| FEATURE_REGISTRY.md | done 済み仕様への改善候補 (ENH-xxx) |
 | FEATURE_STATUS_AUDIT.md | 全機能の実装状態監査 |
+| UI_ISSUES.md | UIバグ/外観不具合 |
