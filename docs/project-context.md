@@ -16,61 +16,89 @@
 
 ### 運用メモ
 
-- 現在の系列: UI基盤統合 (UIFontConfig) + メッセージ演出一貫性修正
-- ユーザーはデザイナー兼ライター。手動でのストーリー追加がまだ未実施 — wiki で解消予定
-- nightshift の変更品質が問題化。部分的・不完全な変更が検証負担を増大させるパターン。完成度優先へ
-- スレッド管理 (BeginBranch/EndBranch) がユーザーに複雑と指摘された — PLAN MODE でリファクタ設計要
-- task-scout 指摘の残件: verification/ 空、E2E 自動検証未整備
-- 2026-03-30 session 19: `docs/verification/2026-03-30-playmode-batchmode-attempt.md` を追加。PlayMode test code は前進したが、Unity batchmode `-runTests` は XML を出さず終了
-- 2026-03-31 session 20: `docs/verification/2026-03-31-playmode-batch-execute.md` を追加。`-executeMethod` で PlayMode 実行自体は通る
+- ユーザーはデザイナー兼ライター。AI は Yarn 執筆ではなく制作ツール/パイプライン整備に注力
+- 値調整 (フォント/色/タイミング) は Inspector で行い、コード変更しない
+- UI バグは docs/UI_ISSUES.md に溜めて一括修正
+- PlayMode テスト: 8件 (SmokeGate 4 + ScenarioFlow 4)。共通ヘルパー分離済み
+- batch 実行: `-executeMethod` 経路で NUnit XML (.xml) + plain text (.txt) 両出力対応
+- Unity batchmode CLI コンパイルチェック: return code 0 で通過確認済み (2026-04-02)
 
 ---
 
 ## CURRENT DEVELOPMENT AXIS
 
-- 主軸: コンテンツ制作フロー実証 + Ch1 完走
-- この軸を優先する理由: エンジン基盤は alpha として十分。Session 13-17 が UI 微修正に費やされ、コンテンツ進行が停止。制作フローを実際に回してコンテンツを前進させる
-- 今ここで避けるべき脱線: UI 微修正ループ、マネタイズ実装、サウンド統合、過度な仕様策定
-- **ワークフロー原則**: 値の調整 (フォント/色/タイミング) は Inspector で行い、コード変更しない。UI バグは docs/UI_ISSUES.md に溜めて一括修正。セッション成果物は「プレイアブルなコンテンツ」か「新機能」
+- 主軸: E2E テスト安定化 → パイプライン実機証明 → Phase A クロージング
+- この軸を優先する理由: エンジン基盤・テストコードは揃った。次は Unity 実機で動作を証明し、Alpha 宣言のゲートを通過する
+- 今ここで避けるべき脱線: UI 微修正ループ、新規大型機能、サウンド統合、マネタイズ実装
+- **ワークフロー原則**: 値の調整はInspector、UIバグは一括処理、セッション成果はコンテンツか機能
 
 ---
 
 ## CURRENT LANE
 
-- 主レーン: Unlock (制作パイプラインの実運用確認)
-- 副レーン: Audit (DebugQuickTest / Ch1-Ch3 再生確認)
-- 今このレーンを優先する理由: 制作ツール側の欠落は埋まったため、次は実際にその導線が摩擦なく回るか確認する段階
-- いまは深入りしないレーン: UI微調整 (Inspector で自律調整)、サウンド、マネタイズ
+- 主レーン: Advance (E2E テスト安定化 + 拡充)
+- 副レーン: Unlock (Content Pipeline 実機証明)
+- 今このレーンを優先する理由: テスト基盤が安定すれば CI 統合 → Phase A 手動検証消化 → Alpha 宣言の道筋が開ける
+- いまは深入りしないレーン: UI微調整、サウンド、マネタイズ
 
 ---
 
 ## CURRENT SLICE
 
-- スライス名: 制作パイプライン運用実証 + docs handoff 完全化
-- ユーザー操作列: Yarn 編集 → Content Pipeline で同期 → DQT_Start 確認 → Ch1/Ch2/Ch3 再生 → 問題記録
-- 成功状態: 会話ログなしでも docs だけで現状把握でき、制作フローを Unity 上で再現できる
-- このスライスで必要な基盤能力: タップスキップ (済)、タイミング (済)、wiki (済)、Validator (済)、SOGenerator (済)
-- 今回はやらないこと: UI微修正 (UI_ISSUES.md に記録のみ)、サウンド、マネタイズ
+- スライス名: PlayMode テスト8件実機確認 + Content Pipeline 実運用証明
+- ユーザー操作列: Inspector で m_StartNode=DQT_Start → テスト8件実行 → Content Pipeline Sync → DQT/Ch1/Ch2 再生
+- 成功状態: 8 passed / 0 failed + Content Pipeline の Sync が SO を正しく更新 + DQT/Ch1/Ch2 が Console エラーなしで再生
+- このスライスで必要な基盤能力: HasNode 事前チェック (済)、UnityTearDown (済)、batch XML (済)、共通ヘルパー (済)
+- 今回はやらないこと: UI微修正、サウンド、マネタイズ、新規テストケース追加
 
 ---
 
-## DEVELOPMENT ROADMAP (2026-03-30 策定)
+## DEVELOPMENT ROADMAP (2026-04-02 改訂)
 
-### 短期 (Session 18-20): Ch1 完走 + 制作フロー実証
-- S18: Ch1 Day1 通しプレイ + Day2 執筆開始 + ツール実証
-- S19: Ch1 Day2 完成 + Day1→Day2 遷移テスト
-- S20: Ch1 Day3 完成 + Ch1 通しプレイ + SP-019/020 Phase 1 検証
+### 短期 (Session 22-23): パイプライン証明
 
-### 中期 (Session 21-28): Alpha ビルド (Ch1-2 完走可能)
-- S21-22: Ch2 Day1-3 執筆
-- S23: BL-002 ポートレートアイコン
-- S24: Ch1-2 通しプレイ + UI バッチ修正
-- S25-26: Ch3 Day1-3 執筆
-- S27: SP-019 Phase 2 + SP-020 Phase 2
-- S28: Android 初回ビルド
+| タスク | Actor | 前提 | 完了条件 |
+|--------|-------|------|----------|
+| Inspector で m_StartNode を DQT_Start に変更 | user | なし | シーン保存済み |
+| Unity Test Runner で8件実行 | user | 上記完了 | 8 passed / 0 failed |
+| Content Pipeline 実機検証 | shared | テスト通過 | Sync → SO 更新確認 |
+| DQT / Ch1 / Ch2 通しプレイ | user | Pipeline 検証済み | Console エラーなし |
+| GitHub Actions CI 統合 | assistant | batch XML 動作確認 | PR ごとに自動テスト |
 
-### 長期 (Session 29+): Beta → リリース
-- Ch4-6 (第2部) → Ch7-9 (第3部) → サウンド → Beta テスト → リリース
+### 中期 (Session 24-28): 体験完成 + Phase A クロージング
+
+| タスク | Actor | 優先度 | 備考 |
+|--------|-------|--------|------|
+| Phase A 手動検証消化 (65項目) | shared | 高 | Alpha 宣言のゲート |
+| ETK 全24コマンド網羅テスト | assistant | 高 | EN-012 60% → 90% |
+| BGM/SE 基盤 (SP-009) | assistant | 中 | Yarn コマンド追加 |
+| Progress Visibility Phase 2 (SP-018) | assistant | 中 | 70% → 100% |
+| Chapter Transition 演出 (SP-019) | assistant | 中 | 50% → 100% |
+| Onboarding Phase 2 (SP-020) | assistant | 中 | 50% → 100% |
+
+### 長期 (Session 29+): 製品化
+
+| タスク | Actor | 備考 |
+|--------|-------|------|
+| Ch3 以降コンテンツ執筆 | user | 人間側作業。エンジン安定後に着手可能 |
+| マネタイズ設計 (SP-010) | shared | F2P + 広告 |
+| iOS / Android ビルドパイプライン | assistant | モバイル向け |
+| Ch4-6 (第2部) → Ch7-9 (第3部) | user | コンテンツ量産フェーズ |
+| サウンド統合 | assistant | コンテンツが揃ってから |
+| Beta テスト → リリース | shared | 最終段階 |
+
+### ボトルネック遷移の見通し
+
+```
+現在 (S21)              短期完了後 (S23)          中期完了後 (S28)
+テスト安定性             パイプライン証明          コンテンツ制作
+ (解消済み)              (次のゲート)              (人間側に移行)
+     |                       |                        |
+     v                       v                        v
+8件 PASS 確認 ──────> Phase A 65項目 ──────> Ch3 執筆開始
+                      CI 自動回帰               BGM/SE 統合
+                      ETK 全コマンド             Alpha 宣言
+```
 
 ---
 
@@ -95,7 +123,7 @@
 | 静的バリデーション | 自動 | YarnContentValidator (Editor) | done |
 | SO自動生成 | 自動 | YarnSOGenerator + Content Pipeline (Topic/Character/Channel 同期) | **done** |
 | Unity再生確認 | 手動 | ContentAuthoring シーン | done |
-| E2E自動検証 | 自動 | 未実装 — ETK拡張でPlayModeテスト | **todo** |
+| E2E自動検証 | 自動 | PlayMode 8件 + batch XML 出力。共通ヘルパー分離済み | **partial (60%)** |
 | 調整 | 手動 | Unity Inspector + Yarn編集 | done |
 | ビルド | 自動 | Unity Build Pipeline (モバイル) | 未設定 |
 | 配布 | 手動 | App Store / Google Play | 未設定 |
@@ -138,26 +166,26 @@ CLAUDE.md の IDEA POOL を参照。ここには project-context.md 作成以降
 
 ---
 
-## HANDOFF SNAPSHOT (session 19)
+## HANDOFF SNAPSHOT (session 21)
 
-- 現在の主レーン: Excise + Unlock (堆積物整理 + E2E検証スコープ設計)
-- 現在のスライス: Yarn クリーンアップ + CanvasScaler統一 + E2E検証スコープ
-- session 19 で完了した作業:
-  - Yarn active/ クリーンアップ: 参照なし4件を archive/ へ移動
-  - CanvasScaler 9:16統一: MetaEffectController + DebugSceneBuilder
-  - 未コミット Topic .asset 6件コミット
-  - DQT_Start PlayMode テスト追加 (計4テストケース)
-  - EN-012 として E2E PlayMode 自動検証を spec-index に登録
-  - runtime-state メトリクス実測修正
+- 現在の主レーン: Advance (E2E テスト安定化 + 拡充)
+- 現在のスライス: PlayMode テスト8件実機確認 + Content Pipeline 実運用証明
+- session 21 で完了した作業:
+  - PlayMode テスト失敗の根本原因特定: auto-start の missing_node:Start
+  - HasNode 事前チェック + archive 除外 + TearDown UnityTearDown 強化
+  - 共通ヘルパー PlayModeTestHelpers.cs 分離
+  - ScenarioFlowPlayModeTests.cs 新規 (4テストケース追加、計8件)
+  - batch XML 出力対応 (TNode.OuterXml)
+  - WORKFLOW_STATE_SSOT.md 廃止、HANDOFF.md に一本化
+  - ドキュメント整合性チェック + 修正 (spec_entries 40→39、Task M 圧縮)
+  - Unity batchmode コンパイル通過確認
 - 次回最初にやること:
-  1. Unity で Content Pipeline 実機確認 + PlayMode テスト4件実行
-  2. DebugChatScene を DebugSceneBuilder で再生成 (CanvasScaler反映)
-  3. DQT_Start / Ch1 / Ch2 / Ch3 再生確認
+  1. Inspector で m_StartNode を Start → DQT_Start に変更、シーン保存
+  2. Unity Test Runner で PlayMode テスト8件実行
+  3. Content Pipeline 実機検証 (Sync Authoring Assets)
+  4. DQT / Ch1 / Ch2 通しプレイ確認
 - 未確定の設計論点:
-  - UIFontConfig の値調整 (Inspector で全UI一括)
-  - ThreadSwitcherController のフォント統合 (サイドバー密レイアウト)
-  - スレッド管理リファクタリングの方向性 (PLAN MODE)
-  - ポートレート画像挿入の UI/UX 設計 (HUMAN_AUTHORITY)
-  - E2E テスト対象ノード拡張 (Ch2/Ch3/ETK、HUMAN_AUTHORITY)
-- 今は触らない範囲: サウンド統合、マネタイズ実装
-  - CanvasScaler 不整合 (DebugChatScene + MetaEffectController が 1920x1080)
+  - スレッド管理リファクタリングの方向性 (IP-PC-002、PLAN MODE)
+  - ポートレート画像挿入の UI/UX 設計 (IP-PC-001、HUMAN_AUTHORITY)
+  - E2E テスト対象ノード拡張 — ETK 全コマンド網羅 (HUMAN_AUTHORITY)
+- 今は触らない範囲: サウンド統合、マネタイズ実装、新規大型機能
