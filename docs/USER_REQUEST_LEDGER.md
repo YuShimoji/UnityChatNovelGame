@@ -19,6 +19,9 @@
 - UIバグは即修正せず docs/UI_ISSUES.md に溜めて一括処理 (session 17 策定)
 - セッション成果物は「プレイアブルなコンテンツ」か「新機能」。UI修正だけのセッションは原則禁止
 - handoff 時は `git status` / docs 同期 / commit / push / handoff summary / 次セッション開始手順までを一括で確定する
+- done 済み仕様にも改善余地がある。新 Task や ENH を受け容れる構造を維持する (session 21)
+- テストをパスさせるために実装を変えない。テストの前提が古いなら、テスト側を現仕様に合わせる (session 21)
+- 機能一覧を提示する際、done = 完了済みで終わらせず、仮実装後に欲しい機能 (ENH) の受け入れ余地を見せる
 
 ## Backlog Delta (spec-index 登録済み)
 

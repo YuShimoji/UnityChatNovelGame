@@ -159,7 +159,7 @@
 
 ## 開発ロードマップ
 
-### 短期 (S22-23): パイプライン証明
+### Phase 1 (S22-23): パイプライン証明
 
 | タスク | Actor | 完了条件 |
 | ------ | ----- | -------- |
@@ -169,26 +169,36 @@
 | DQT / Ch1 / Ch2 通しプレイ | user | Console エラーなし |
 | GitHub Actions CI 統合 | assistant | PR ごとに自動テスト |
 
-### 中期 (S24-28): 体験完成 + Phase A クロージング
+### Phase 2 (S24-26): Alpha ゲート + 体験基盤
 
-| タスク | Actor | 優先度 |
-| ------ | ----- | ------ |
-| Phase A 手動検証 (65項目) | shared | 高 |
-| ETK 全24コマンド網羅テスト | assistant | 高 |
-| BGM/SE 基盤 (SP-009) | assistant | 中 |
-| Progress Phase 2 (SP-018) | assistant | 中 |
-| Chapter Transition Phase 2 (SP-019) | assistant | 中 |
-| Onboarding Phase 2 (SP-020) | assistant | 中 |
+| タスク | 種別 | Actor | 優先度 |
+| ------ | ---- | ----- | ------ |
+| Phase A 手動検証 (65項目) | Audit | shared | 高 |
+| ETK 全24コマンド網羅テスト | Infra | assistant | 高 |
+| BGM/SE 基盤 (SP-009) | System | assistant | 中 |
+| Chapter Transition Phase 2 (SP-019) | System | assistant | 中 |
+| Onboarding Phase 2 (SP-020) | System | assistant | 中 |
 
-### 長期 (S29+): 製品化
+### Phase 3 (S27-29): 演出深化 + ENH 実装
 
-| タスク | Actor |
-| ------ | ----- |
-| Ch3 以降コンテンツ | user |
-| マネタイズ (SP-010) | shared |
-| iOS/Android ビルド | assistant |
-| サウンド統合 | assistant |
-| Beta テスト → リリース | shared |
+| タスク | 種別 | Actor | 備考 |
+| ------ | ---- | ----- | ---- |
+| approved ENH を集中実装 | ENH | assistant | FEATURE_REGISTRY.md から選定 |
+| タイプライター制御拡張 (ENH-001/002) | ENH | assistant | Yarn からのテンポ制御 |
+| メッセージ演出バリエーション (ENH-003) | ENH | assistant | 振動/フェードイン等 |
+| Progress Phase 2 (SP-018) | System | assistant | チャプター間接続 |
+| Chapter Transition Phase 3 (SP-019) | System | assistant | SP-018 統合演出 |
+
+### Phase 4 (S30+): コンテンツ量産 + 製品化
+
+| タスク | 種別 | Actor |
+| ------ | ---- | ----- |
+| Ch3 以降コンテンツ | Content | user |
+| 執筆中に見つかる ENH を随時登録 | ENH | shared |
+| サウンド統合 | System | assistant |
+| マネタイズ (SP-010) | System | shared |
+| iOS/Android ビルド | Infra | assistant |
+| Beta テスト → リリース | -- | shared |
 
 ---
 

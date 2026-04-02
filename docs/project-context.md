@@ -53,9 +53,9 @@
 
 ---
 
-## DEVELOPMENT ROADMAP (2026-04-02 改訂)
+## DEVELOPMENT ROADMAP (2026-04-02 改訂 v2)
 
-### 短期 (Session 22-23): パイプライン証明
+### Phase 1 (S22-23): パイプライン証明
 
 | タスク | Actor | 前提 | 完了条件 |
 |--------|-------|------|----------|
@@ -65,40 +65,59 @@
 | DQT / Ch1 / Ch2 通しプレイ | user | Pipeline 検証済み | Console エラーなし |
 | GitHub Actions CI 統合 | assistant | batch XML 動作確認 | PR ごとに自動テスト |
 
-### 中期 (Session 24-28): 体験完成 + Phase A クロージング
+### Phase 2 (S24-26): Alpha ゲート + 体験基盤
 
-| タスク | Actor | 優先度 | 備考 |
-|--------|-------|--------|------|
-| Phase A 手動検証消化 (65項目) | shared | 高 | Alpha 宣言のゲート |
-| ETK 全24コマンド網羅テスト | assistant | 高 | EN-012 60% → 90% |
-| BGM/SE 基盤 (SP-009) | assistant | 中 | Yarn コマンド追加 |
-| Progress Visibility Phase 2 (SP-018) | assistant | 中 | 70% → 100% |
-| Chapter Transition 演出 (SP-019) | assistant | 中 | 50% → 100% |
-| Onboarding Phase 2 (SP-020) | assistant | 中 | 50% → 100% |
+| タスク | 種別 | Actor | 優先度 | 備考 |
+|--------|------|-------|--------|------|
+| Phase A 手動検証消化 (65項目) | Audit | shared | 高 | Alpha 宣言のゲート |
+| ETK 全24コマンド網羅テスト | Infra | assistant | 高 | EN-012 60% → 90% |
+| BGM/SE 基盤 (SP-009) | System | assistant | 中 | Yarn コマンド <<PlayBGM>> 等 |
+| Chapter Transition Phase 2 (SP-019) | System | assistant | 中 | 次Ch解放通知 + ダッシュボード自動表示 |
+| Onboarding Phase 2 (SP-020) | System | assistant | 中 | 矛盾操作チュートリアル |
 
-### 長期 (Session 29+): 製品化
+### Phase 3 (S27-29): 演出深化 + ENH 実装
 
-| タスク | Actor | 備考 |
-|--------|-------|------|
-| Ch3 以降コンテンツ執筆 | user | 人間側作業。エンジン安定後に着手可能 |
-| マネタイズ設計 (SP-010) | shared | F2P + 広告 |
-| iOS / Android ビルドパイプライン | assistant | モバイル向け |
-| Ch4-6 (第2部) → Ch7-9 (第3部) | user | コンテンツ量産フェーズ |
-| サウンド統合 | assistant | コンテンツが揃ってから |
-| Beta テスト → リリース | shared | 最終段階 |
+| タスク | 種別 | Actor | 優先度 | 備考 |
+|--------|------|-------|--------|------|
+| ENH 候補のうち approved を実装 | ENH | assistant | -- | FEATURE_REGISTRY.md から選定 |
+| タイプライター制御拡張 (ENH-001/002) | ENH | assistant | -- | Yarn からのテンポ制御 |
+| メッセージ演出バリエーション (ENH-003) | ENH | assistant | -- | 振動/フェードイン等 |
+| HalluciCoin 獲得演出 (ENH-012) | ENH | assistant | -- | パーティクル/カウントアップ |
+| Progress Phase 2 (SP-018) | System | assistant | 中 | チャプター間接続可視化 |
+| Chapter Transition Phase 3 (SP-019) | System | assistant | 中 | SP-018 統合演出 |
 
-### ボトルネック遷移の見通し
+### Phase 4 (S30+): コンテンツ量産 + 製品化
+
+| タスク | 種別 | Actor | 備考 |
+|--------|------|-------|------|
+| Ch3 以降コンテンツ執筆 | Content | user | 人間側作業 |
+| 執筆中に見つかる ENH を随時登録 | ENH | shared | Yarn オーサリング拡張等 |
+| サウンド統合 | System | assistant | コンテンツが揃ってから |
+| マネタイズ設計 (SP-010) | System | shared | F2P + 広告 |
+| iOS / Android ビルドパイプライン | Infra | assistant | モバイル向け |
+| Beta テスト → リリース | -- | shared | 最終段階 |
+
+### ボトルネック遷移
 
 ```
-現在 (S21)              短期完了後 (S23)          中期完了後 (S28)
-テスト安定性             パイプライン証明          コンテンツ制作
- (解消済み)              (次のゲート)              (人間側に移行)
-     |                       |                        |
-     v                       v                        v
-8件 PASS 確認 ──────> Phase A 65項目 ──────> Ch3 執筆開始
-                      CI 自動回帰               BGM/SE 統合
-                      ETK 全コマンド             Alpha 宣言
+Phase 1              Phase 2               Phase 3              Phase 4
+パイプライン証明      Alpha ゲート          演出深化             コンテンツ量産
+     |                    |                     |                    |
+     v                    v                     v                    v
+8件 PASS 確認 ───> Phase A 65項目 ───> ENH approved ───> Ch3+ 執筆
+                   CI 自動回帰          実装              BGM/SE 統合
+                   ETK 全コマンド       タイプライター     ビルド
+                   BGM/SE 基盤         演出拡張           リリース
 ```
+
+### ENH の受け容れ構造
+
+Phase 3 は ENH 実装のための専用フェーズだが、ENH の候補登録は全フェーズで随時行う:
+- Phase 1-2: パイプライン証明・テスト中に気づいた改善点を candidate 登録
+- Phase 3: approved された ENH を集中実装
+- Phase 4: 執筆中に見つかる Yarn オーサリング系 ENH を随時登録・実装
+
+ENH の詳細は `docs/FEATURE_REGISTRY.md` を参照。
 
 ---
 
