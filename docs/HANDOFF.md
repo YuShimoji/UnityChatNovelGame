@@ -31,42 +31,32 @@
 
 ## Recent Session Delta
 
+### session 21 (2026-04-02)
+
+- PlayMode テスト失敗の根本原因特定: teardown の DialogueException ではなく、auto-start の missing_node:Start が原因
+- 修正 3件: HasNode 事前チェック / ResolveLikelyBrokenYarnFile archive 除外 / TearDown StopScenario
+- WORKFLOW_STATE_SSOT.md 廃止 (HANDOFF.md に一本化)。参照元 5ファイル更新
+- Assets/_Recovery/ (クラッシュリカバリ残骸) 削除
+- **残件**: DebugChatScene Inspector で m_StartNode を Start → DQT_Start に手動変更が必要
+
+### session 20
+
+- PlayMode batch 起動経路追加 (`-executeMethod`)
+- SaveManager `GetCurrentNodeName()` の "Start" 固定フォールバック廃止
+
 ### session 19
 
-- 堆積物整理
-  - Yarn active/ から参照なし4件を archive/ へ移動 (FirstSlice, MVPTest, DebugScript, SubthreadTest)
-  - CanvasScaler を MetaEffectController + DebugSceneBuilder で 1080x1920 / matchHeight=1.0 に統一
-  - 未コミット Topic .asset 6件をコミット
-- E2E 検証スコープ
-  - DQT_Start 起動テスト追加
-  - EN-012 として spec-index に E2E PlayMode 自動検証を登録 (partial 40%)
-- メトリクス修正: impl 66, yarn_active 6, yarn_archive 5, playmode_test_cases 4
-
-### session 18
-
-- 制作フローの手動穴埋め
-  - ChannelData 手動作成依存を解消
-  - Content Pipeline window を追加
-  - 推奨 StartNode 導線を統一
-  - StartScenario 時の CurrentChannel 自動同期を追加
-
-### session 17
-
-- 自動スキップバグ修正
-- DialogueException 修正
-- DebugQuickTest 追加
-- フォントバランス調整
-- canonical docs 初期化
+- Yarn active/ クリーンアップ (4件 archive 移動)、CanvasScaler 9:16 統一
+- DQT_Start PlayMode テスト追加、EN-012 登録
 
 ## Safe Next Steps
 
-1. Unity で `Tools > FoundPhone > Content Pipeline` を開く
-2. `Sync Authoring Assets` を実行
-3. `DQT_Start` を起点に再生して制作フロー導線を確認
-4. `Ch1_Day1_Opening` / `Ch2_Opening` / `Ch3_Day1_Opening` を順に再生
-5. Unity Test Runner で PlayMode テスト4件を実行 (Window > General > Test Runner)
+1. DebugChatScene を開き、ScenarioManager の `m_StartNode` を `Start` → `DQT_Start` に変更し、シーン保存
+2. Unity Test Runner で PlayMode テスト 4件を実行 (Window > General > Test Runner)
+3. テスト結果を確認。auto-start 修正で 4件 PASS が期待される
+4. `Tools > FoundPhone > Content Pipeline` で `Sync Authoring Assets` → 制作フロー確認
+5. `DQT_Start` / `Ch1_Day1_Opening` を再生して通し確認
 6. 問題が出たら UI 値調整は Inspector、構造バグはコードへ戻す
-7. 実機確認後に E2E 自動検証の拡張へ進む
 
 ## Do Not Do Next
 
@@ -86,7 +76,7 @@
   - ChannelData 自動同期の Unity 実機結果
   - CurrentChannel 自動解決が Save/Load / EndDay と競合しないこと
   - Content Pipeline window の実運用手順
-  - PlayMode テスト4件の Unity 上での実行結果
+  - PlayMode テスト4件の Unity 上での実行結果 (session 21 で auto-start 修正済み、実行はまだ)
 - dangerous / rollback candidate
   - なし
 
