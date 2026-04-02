@@ -10,9 +10,9 @@
   - Session 18: 制作パイプライン改善。YarnSOGenerator + Content Pipeline window + handoff docs 整備
   - Session 19: PlayMode smoke を Save/Load まで拡張。batchmode 実行基盤の切り分け
   - Session 20: `-executeMethod` ベースの PlayMode batch 起動経路追加。`missing_node:Start` 修正
-  - Session 21: PlayMode テスト失敗の根本原因特定 (auto-start missing_node:Start)。HasNode 事前チェック + archive 除外 + TearDown StopScenario で修正。WORKFLOW_STATE_SSOT.md 廃止
+  - Session 21: 根本原因特定 (auto-start missing_node:Start) + HasNode 事前チェック + archive 除外 + TearDown UnityTearDown 強化 + batch XML 出力 + テスト 4→8件拡充 + 共通ヘルパー分離 + WORKFLOW_STATE_SSOT.md 廃止
   - 方向転換: AI は Yarn 執筆ではなく制作ツール/パイプライン整備に注力すべき
-  - 次の作業: Unity Editor で m_StartNode=DQT_Start に変更 → PlayMode テスト 4件実行確認
+  - 次の作業: Inspector で m_StartNode=DQT_Start に変更 → PlayMode テスト8件実行確認
 
 ### 運用メモ
 

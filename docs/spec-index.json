@@ -318,10 +318,10 @@
     "id": "EN-012",
     "title": "E2E PlayMode 自動検証",
     "status": "partial",
-    "pct": 40,
+    "pct": 60,
     "cat": "infra",
     "file": null,
-    "summary": "PlayMode テスト: SmokeGate(VerticalSlice), Ch1 SaveLoad, DQT_Start, ChoiceImageFallback。4テストケース。残: Ch2/Ch3 起動テスト、ETK コマンド網羅テスト、テスト対象ノード選定(HUMAN_AUTHORITY)"
+    "summary": "PlayMode テスト: SmokeGate 4件 + ScenarioFlow 4件 = 計8テストケース。共通ヘルパー分離済み。teardown DialogueException 対策済み (UnityTearDown + StopScenario)。batch XML 出力対応済み。残: Ch3 起動テスト、ETK 全コマンド網羅、Phase A 検証項目の自動化(HUMAN_AUTHORITY)"
   },
   {
     "id": "BL-001",

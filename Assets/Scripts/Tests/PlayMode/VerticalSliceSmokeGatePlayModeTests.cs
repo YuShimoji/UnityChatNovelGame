@@ -1,13 +1,9 @@
-﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using NUnit.Framework;
-using NUnit.Framework.Interfaces;
 using ProjectFoundPhone.Core;
 using ProjectFoundPhone.UI;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 using UnityEngine.UI;
 
@@ -15,30 +11,27 @@ namespace ProjectFoundPhone.Tests
 {
     public class VerticalSliceSmokeGatePlayModeTests
     {
-        private const string EvidenceRelativePath = "docs/verification";
         private const int SaveSlot = 0;
-        private const float SceneLoadTimeoutSeconds = 10f;
-        private const float ChatMessageTimeoutSeconds = 5f;
 
         [UnityTest]
         public IEnumerator VerticalSlice_SmokeFlow_TitleToChat_SaveLoad()
         {
-            yield return LoadSceneWithTimeout("TitleScene", SceneLoadTimeoutSeconds);
+            yield return PlayModeTestHelpers.LoadSceneWithTimeout("TitleScene", PlayModeTestHelpers.SceneLoadTimeoutSeconds);
 
-            TitleScreenManager titleManager = UnityEngine.Object.FindFirstObjectByType<TitleScreenManager>();
+            TitleScreenManager titleManager = Object.FindFirstObjectByType<TitleScreenManager>();
             Assert.IsNotNull(titleManager, "TitleScene: TitleScreenManager not found.");
 
             titleManager.StartNewGame();
 
-            yield return WaitForScene("DebugChatScene", SceneLoadTimeoutSeconds);
+            yield return PlayModeTestHelpers.WaitForScene("DebugChatScene", PlayModeTestHelpers.SceneLoadTimeoutSeconds);
 
-            ScenarioManager scenarioManager = UnityEngine.Object.FindFirstObjectByType<ScenarioManager>();
-            ChatController chatController = UnityEngine.Object.FindFirstObjectByType<ChatController>();
+            ScenarioManager scenarioManager = Object.FindFirstObjectByType<ScenarioManager>();
+            ChatController chatController = Object.FindFirstObjectByType<ChatController>();
             Assert.IsNotNull(scenarioManager, "DebugChatScene: ScenarioManager not found.");
             Assert.IsNotNull(chatController, "DebugChatScene: ChatController not found.");
 
             scenarioManager.StartScenario("VerticalSlice_Start");
-            yield return WaitForChatMessages(chatController, ChatMessageTimeoutSeconds,
+            yield return PlayModeTestHelpers.WaitForChatMessages(chatController, PlayModeTestHelpers.ChatMessageTimeoutSeconds,
                 "Scenario did not emit any chat messages within the expected time.");
 
             SaveManager saveManager = SaveManager.Instance;
@@ -49,17 +42,15 @@ namespace ProjectFoundPhone.Tests
 
             bool loaded = saveManager.LoadGame(SaveSlot);
             Assert.IsTrue(loaded, "LoadGame failed.");
-
-            CleanupSaveSlot(SaveSlot);
         }
 
         [UnityTest]
         public IEnumerator DebugChatScene_Ch1Start_PreservesCurrentChannelAcrossSaveLoad()
         {
-            yield return LoadSceneWithTimeout("DebugChatScene", SceneLoadTimeoutSeconds);
+            yield return PlayModeTestHelpers.LoadSceneWithTimeout("DebugChatScene", PlayModeTestHelpers.SceneLoadTimeoutSeconds);
 
-            ScenarioManager scenarioManager = UnityEngine.Object.FindFirstObjectByType<ScenarioManager>();
-            ChatController chatController = UnityEngine.Object.FindFirstObjectByType<ChatController>();
+            ScenarioManager scenarioManager = Object.FindFirstObjectByType<ScenarioManager>();
+            ChatController chatController = Object.FindFirstObjectByType<ChatController>();
             SaveManager saveManager = SaveManager.Instance;
 
             Assert.IsNotNull(scenarioManager, "DebugChatScene: ScenarioManager not found.");
@@ -67,11 +58,11 @@ namespace ProjectFoundPhone.Tests
             Assert.IsNotNull(saveManager, "SaveManager.Instance returned null.");
 
             scenarioManager.StartScenario("Ch1_Day1_Opening");
-            yield return WaitForCondition(
+            yield return PlayModeTestHelpers.WaitForCondition(
                 () => scenarioManager.CurrentChannelID == "ch1",
-                ChatMessageTimeoutSeconds,
+                PlayModeTestHelpers.ChatMessageTimeoutSeconds,
                 "ScenarioManager did not auto-assign channel 'ch1' from Ch1_Day1_Opening.");
-            yield return WaitForChatMessages(chatController, ChatMessageTimeoutSeconds,
+            yield return PlayModeTestHelpers.WaitForChatMessages(chatController, PlayModeTestHelpers.ChatMessageTimeoutSeconds,
                 "Ch1_Day1_Opening did not emit any chat messages within the expected time.");
 
             bool saved = saveManager.SaveGame(SaveSlot);
@@ -82,9 +73,9 @@ namespace ProjectFoundPhone.Tests
 
             bool loaded = saveManager.LoadGame(SaveSlot);
             Assert.IsTrue(loaded, "LoadGame failed for Ch1 flow.");
-            yield return WaitForCondition(
+            yield return PlayModeTestHelpers.WaitForCondition(
                 () => scenarioManager.CurrentChannelID == "ch1",
-                ChatMessageTimeoutSeconds,
+                PlayModeTestHelpers.ChatMessageTimeoutSeconds,
                 "ScenarioManager did not restore channel 'ch1' after LoadGame.");
 
             Assert.AreEqual("ch1", scenarioManager.CurrentChannelID,
@@ -94,16 +85,16 @@ namespace ProjectFoundPhone.Tests
         [UnityTest]
         public IEnumerator DebugChatScene_DQTStart_EmitsMessages()
         {
-            yield return LoadSceneWithTimeout("DebugChatScene", SceneLoadTimeoutSeconds);
+            yield return PlayModeTestHelpers.LoadSceneWithTimeout("DebugChatScene", PlayModeTestHelpers.SceneLoadTimeoutSeconds);
 
-            ScenarioManager scenarioManager = UnityEngine.Object.FindFirstObjectByType<ScenarioManager>();
-            ChatController chatController = UnityEngine.Object.FindFirstObjectByType<ChatController>();
+            ScenarioManager scenarioManager = Object.FindFirstObjectByType<ScenarioManager>();
+            ChatController chatController = Object.FindFirstObjectByType<ChatController>();
 
             Assert.IsNotNull(scenarioManager, "DebugChatScene: ScenarioManager not found.");
             Assert.IsNotNull(chatController, "DebugChatScene: ChatController not found.");
 
             scenarioManager.StartScenario("DQT_Start");
-            yield return WaitForChatMessages(chatController, ChatMessageTimeoutSeconds,
+            yield return PlayModeTestHelpers.WaitForChatMessages(chatController, PlayModeTestHelpers.ChatMessageTimeoutSeconds,
                 "DQT_Start did not emit any chat messages within the expected time.");
 
             ScrollRect scrollRect = chatController.GetComponent<ScrollRect>();
@@ -114,9 +105,9 @@ namespace ProjectFoundPhone.Tests
         [UnityTest]
         public IEnumerator DebugChatScene_ChoiceAndImageFallback_AreUsable()
         {
-            yield return LoadSceneWithTimeout("DebugChatScene", SceneLoadTimeoutSeconds);
+            yield return PlayModeTestHelpers.LoadSceneWithTimeout("DebugChatScene", PlayModeTestHelpers.SceneLoadTimeoutSeconds);
 
-            ChatController chatController = UnityEngine.Object.FindFirstObjectByType<ChatController>();
+            ChatController chatController = Object.FindFirstObjectByType<ChatController>();
             Assert.IsNotNull(chatController, "DebugChatScene: ChatController not found.");
 
             chatController.ShowChoices(new List<string> { "A", "B" }, _ => { });
@@ -160,123 +151,14 @@ namespace ProjectFoundPhone.Tests
             Assert.IsTrue(hasImage || hasFallbackText, "Image message did not render as image or fallback text.");
 
             chatController.HideChoices();
-            UnityEngine.Object.Destroy(testSprite);
-            UnityEngine.Object.Destroy(tempTexture);
+            Object.Destroy(testSprite);
+            Object.Destroy(tempTexture);
         }
 
-        [TearDown]
-        public void CaptureEvidenceOnFailure()
+        [UnityTearDown]
+        public IEnumerator CaptureEvidenceOnFailure()
         {
-            TestStatus status = TestContext.CurrentContext.Result.Outcome.Status;
-            if (status == TestStatus.Failed)
-            {
-                CaptureEvidence("VerticalSliceSmokeGate");
-            }
-
-            // teardown 前に実行中のダイアログを停止し、OnDestroy 時の DialogueException を防ぐ
-            ScenarioManager scenarioManager = UnityEngine.Object.FindFirstObjectByType<ScenarioManager>();
-            if (scenarioManager != null)
-            {
-                scenarioManager.StopScenario();
-            }
-
-            CleanupSaveSlot(SaveSlot);
-        }
-
-        private static IEnumerator LoadSceneWithTimeout(string sceneName, float timeoutSeconds)
-        {
-            SceneManager.LoadScene(sceneName);
-            yield return null; // Wait for the scene to properly activate
-            
-            float startTime = Time.realtimeSinceStartup;
-            while (SceneManager.GetActiveScene().name != sceneName)
-            {
-                if (Time.realtimeSinceStartup - startTime > timeoutSeconds)
-                {
-                    Assert.Fail($"Timeout loading scene '{sceneName}' after {timeoutSeconds} seconds.");
-                }
-                yield return null;
-            }
-        }
-
-        private static IEnumerator WaitForScene(string sceneName, float timeoutSeconds)
-        {
-            float startTime = Time.realtimeSinceStartup;
-            while (SceneManager.GetActiveScene().name != sceneName)
-            {
-                if (Time.realtimeSinceStartup - startTime > timeoutSeconds)
-                {
-                    Assert.Fail($"Timeout waiting for scene '{sceneName}' after {timeoutSeconds} seconds.");
-                }
-                yield return null;
-            }
-        }
-
-        private static IEnumerator WaitForChatMessages(ChatController chatController, float timeoutSeconds, string failureMessage)
-        {
-            yield return WaitForCondition(
-                () =>
-                {
-                    ScrollRect scrollRect = chatController != null ? chatController.GetComponent<ScrollRect>() : null;
-                    return scrollRect != null && scrollRect.content != null && scrollRect.content.childCount > 0;
-                },
-                timeoutSeconds,
-                failureMessage);
-        }
-
-        private static IEnumerator WaitForCondition(Func<bool> predicate, float timeoutSeconds, string failureMessage)
-        {
-            float startTime = Time.realtimeSinceStartup;
-            while (Time.realtimeSinceStartup - startTime < timeoutSeconds)
-            {
-                if (predicate())
-                {
-                    yield break;
-                }
-
-                yield return null;
-            }
-
-            Assert.Fail(failureMessage);
-        }
-
-        private static void CaptureEvidence(string label)
-        {
-            string projectRoot = Directory.GetParent(Application.dataPath).FullName;
-            string evidenceDir = Path.Combine(projectRoot, EvidenceRelativePath);
-            Directory.CreateDirectory(evidenceDir);
-
-            string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-            string sceneName = SceneManager.GetActiveScene().name;
-            string baseName = $"{label}_{timestamp}_{sceneName}";
-
-            string screenshotPath = Path.Combine(evidenceDir, $"{baseName}.png");
-            if (!Application.isBatchMode)
-            {
-                ScreenCapture.CaptureScreenshot(screenshotPath);
-            }
-            else
-            {
-                Debug.LogWarning("Skipping ScreenCapture.CaptureScreenshot in batch mode to prevent hangs.");
-            }
-
-            string logPath = Path.Combine(evidenceDir, $"{baseName}.txt");
-            string message = $"Test Failed: {TestContext.CurrentContext.Test.Name}\n" +
-                             $"Message: {TestContext.CurrentContext.Result.Message}\n" +
-                             $"Scene: {sceneName}\n" +
-                             $"Time: {DateTime.Now:O}\n";
-            File.WriteAllText(logPath, message);
-
-            Debug.Log($"VerticalSliceSmokeGate: Evidence saved to {evidenceDir}");
-        }
-
-        private static void CleanupSaveSlot(int slotNumber)
-        {
-            string filePath = Path.Combine(Application.persistentDataPath, $"SaveData_{slotNumber}.json");
-            if (File.Exists(filePath))
-            {
-                File.Delete(filePath);
-            }
+            yield return PlayModeTestHelpers.SafeTeardown("VerticalSliceSmokeGate", SaveSlot);
         }
 
         private static bool TryFindFallbackImageText(GameObject bubble, out string textValue)

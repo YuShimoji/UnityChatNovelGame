@@ -24,9 +24,12 @@
 
 - `YarnSOGenerator` は Topic / Character / Channel の同期まで対応済み
 - `Content Pipeline` ウィンドウ追加済み
-- `ScenarioManager` は StartNode から CurrentChannel を自動解決する
+- `ScenarioManager` は StartNode から CurrentChannel を自動解決する。HasNode 事前チェック追加済み
 - `Use Default Node` 固定は廃止し、推奨ノード選択へ変更済み
-- PlayMode テスト: 4ケース (SmokeGate / Ch1SaveLoad / DQTStart / ChoiceImageFallback)
+- PlayMode テスト: 8ケース (SmokeGate 4件 + ScenarioFlow 4件)
+- 共通ヘルパー `PlayModeTestHelpers.cs` に分離済み
+- teardown DialogueException 対策: `[UnityTearDown]` + `StopScenario()` + 1フレーム待機
+- batch 実行時 NUnit XML 出力対応済み
 - まだ未実施: Unity PlayMode での通し検証、E2E テストの Unity 上での実行確認
 
 ## Recent Session Delta
@@ -34,9 +37,14 @@
 ### session 21 (2026-04-02)
 
 - PlayMode テスト失敗の根本原因特定: teardown の DialogueException ではなく、auto-start の missing_node:Start が原因
-- 修正 3件: HasNode 事前チェック / ResolveLikelyBrokenYarnFile archive 除外 / TearDown StopScenario
-- WORKFLOW_STATE_SSOT.md 廃止 (HANDOFF.md に一本化)。参照元 5ファイル更新
+- 修正: HasNode 事前チェック / ResolveLikelyBrokenYarnFile archive 除外 / TearDown StopScenario
+- teardown 強化: `[TearDown]` → `[UnityTearDown]` (IEnumerator) + `StopScenario()` + 1フレーム待機
+- 共通ヘルパー `PlayModeTestHelpers.cs` 分離 (シーンロード、条件待ち、エビデンス、teardown)
+- batch XML 出力対応: `ITestResultAdaptor.ToXml()` → `.txt` + `.xml` 両ファイル生成
+- PlayMode テストケース追加 (4件 → 8件): ScenarioFlowPlayModeTests.cs 新規 (ETK_Commands, ETK_RichText, Ch2_Opening, SaveLoad 3連サイクル)
+- WORKFLOW_STATE_SSOT.md 廃止 (HANDOFF.md に一本化)
 - Assets/_Recovery/ (クラッシュリカバリ残骸) 削除
+- spec-index 更新: EN-012 pct 40% → 60%
 - **残件**: DebugChatScene Inspector で m_StartNode を Start → DQT_Start に手動変更が必要
 
 ### session 20
@@ -52,11 +60,10 @@
 ## Safe Next Steps
 
 1. DebugChatScene を開き、ScenarioManager の `m_StartNode` を `Start` → `DQT_Start` に変更し、シーン保存
-2. Unity Test Runner で PlayMode テスト 4件を実行 (Window > General > Test Runner)
-3. テスト結果を確認。auto-start 修正で 4件 PASS が期待される
-4. `Tools > FoundPhone > Content Pipeline` で `Sync Authoring Assets` → 制作フロー確認
-5. `DQT_Start` / `Ch1_Day1_Opening` を再生して通し確認
-6. 問題が出たら UI 値調整は Inspector、構造バグはコードへ戻す
+2. `Tools > FoundPhone > Content Pipeline` で `Sync Authoring Assets` → 制作フロー確認
+3. `DQT_Start` / `Ch1_Day1_Opening` / `Ch2_Opening` を再生して通し確認
+4. Unity Test Runner で PlayMode テスト8件を実行 (Window > General > Test Runner)
+5. 問題が出たら UI 値調整は Inspector、構造バグはコードへ戻す
 
 ## Do Not Do Next
 
@@ -72,11 +79,12 @@
   - YarnSOGenerator の Topic / Character / Channel 同期
   - StartNode 推奨導線
   - CanvasScaler 9:16 統一 (コード上。DebugChatScene.unity は未再生成)
+  - HasNode 事前チェック (auto-start 安全化)
 - needs re-check
   - ChannelData 自動同期の Unity 実機結果
   - CurrentChannel 自動解決が Save/Load / EndDay と競合しないこと
   - Content Pipeline window の実運用手順
-  - PlayMode テスト4件の Unity 上での実行結果 (session 21 で auto-start 修正済み、実行はまだ)
+  - PlayMode テスト8件の Unity 上での実行結果 (auto-start + teardown 修正済み、実行はまだ)
 - dangerous / rollback candidate
   - なし
 

@@ -6,25 +6,25 @@
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
-- lane: Audit + Fix (PlayMode テスト失敗原因特定 + 修正)
-- slice: auto-start 安全化 + archive 除外 + TearDown StopScenario
+- lane: Advance (E2E テスト安定化 + 拡充)
+- slice: auto-start 安全化 + teardown 強化 + batch XML 出力 + テスト 4→8件拡充
 - active_artifact: FoundPhone エンジン基盤 (Unity 6.3 + Yarn Spinner 3.1.3)
-- artifact_surface: Unity Editor > DebugChatScene
-- last_change_relation: direct (PlayMode テスト失敗の根本原因修正)
+- artifact_surface: PlayMode テストスイート
+- last_change_relation: direct (根本原因修正 + テスト拡充)
 
 ## Counters
 
 - blocks_since_user_visible_change: 2 (session 18 Content Pipeline)
-- blocks_since_visual_audit: 8 (session 13 Audit → 14 x2 → 15 → 16 → 17 → 18 → 19 → 20 → 21)
-- blocks_since_unlock: 2
+- blocks_since_visual_audit: 9
+- blocks_since_unlock: 3
 - consecutive_excise_blocks: 0
 
 ## Quantitative Metrics
 
 - impl_files: 66 (テスト除く .cs、実測)
-- test_files: 5 (EditMode 4 + PlayMode 1)
-- playmode_test_files: 1
-- playmode_test_cases: 4 (SmokeGate + Ch1SaveLoad + DQTStart + ChoiceImageFallback)
+- test_files: 7 (EditMode 4 + PlayMode 3)
+- playmode_test_files: 3 (SmokeGate + ScenarioFlow + Helpers)
+- playmode_test_cases: 8 (SmokeGate 4 + ScenarioFlow 4)
 - mock_files: 0
 - yarn_active: 6 (Ch1_Day1, Ch2_LocationConfusion, Ch3_InstitutionalFragments, DebugQuickTest, EngineTestKit, VerticalSlice)
 - yarn_archive: 5 (Ch1_Terminal, FirstSlice, MVPTest, DebugScript, SubthreadTest)
@@ -47,13 +47,19 @@
   - **根本原因**: テスト失敗は teardown DialogueException ではなく、
     DebugChatScene の auto-start が `m_StartNode="Start"` (archive 移動済み DebugScript.yarn のノード) を
     参照し、`Debug.LogError` が NUnit に拾われていたのが原因
-  - **修正 1**: `ScenarioManager.Start()` で `HasNode()` による事前チェック追加。
-    ノード不在時は LogWarning でスキップ (テスト失敗にならない)
+  - **修正 1**: `ScenarioManager.Start()` で `HasNode()` による事前チェック追加 (コミット: `a54752b`)
   - **修正 2**: `ResolveLikelyBrokenYarnFile()` が archive/ ディレクトリを検索対象から除外
-  - **修正 3**: PlayMode TearDown で `StopScenario()` を明示呼出し、
-    OnDestroy 時の async 継続 → DialogueException を防止
-  - **残件**: DebugChatScene の Inspector で `m_StartNode` を `Start` → `DQT_Start` に手動変更が必要
-  - コミット: `a54752b`
+  - **修正 3**: PlayMode TearDown を `[UnityTearDown]` (IEnumerator) に強化。`StopScenario()` + 1フレーム待機
+  - **残件**: DebugChatScene Inspector で `m_StartNode` を `Start` → `DQT_Start` に手動変更が必要
+- Block 2 (Advance): テスト拡充 + batch XML 出力
+  - **batch XML 出力対応**: `TestRunnerHelper` に `ITestResultAdaptor.ToXml()` → `.txt` + `.xml` 両ファイル生成
+  - **テストケース追加** (4件 → 8件):
+    - `ScenarioFlowPlayModeTests.cs` 新規: ETK_Commands, ETK_RichText, Ch2_Opening, SaveLoad 3連サイクル
+    - `PlayModeTestHelpers.cs` 新規: 共通ヘルパー (シーンロード、条件待ち、エビデンス、teardown)
+    - `VerticalSliceSmokeGatePlayModeTests.cs` を共通ヘルパー使用にリファクタリング
+  - **spec-index 更新**: EN-012 pct 40% → 60%
+  - **WORKFLOW_STATE_SSOT.md 廃止**: HANDOFF.md に一本化。参照元 5ファイル更新
+  - **Assets/_Recovery/ 削除**: クラッシュリカバリ残骸
 
 ### 2026-03-31 session 20
 - Block 1 (Advance): PlayMode batch 実行経路の確立 + Save/Load 復帰バグの切り分け

@@ -124,6 +124,7 @@ namespace ProjectFoundPhone.Editor
                     Directory.CreateDirectory(directory);
                 }
 
+                // plain text サマリ
                 string output =
                     $"ResultState: {result.ResultState}{Environment.NewLine}" +
                     $"Passed: {result.PassCount}{Environment.NewLine}" +
@@ -133,6 +134,21 @@ namespace ProjectFoundPhone.Editor
 
                 File.WriteAllText(m_ResultFilePath, output);
                 Debug.Log($"TestRunnerHelper(batch): Result written to {m_ResultFilePath}");
+
+                // NUnit XML 出力 (.txt -> .xml に拡張子変更)
+                try
+                {
+                    string xmlPath = Path.ChangeExtension(m_ResultFilePath, ".xml");
+                    // ITestResultAdaptor.ToXml() は NUnit.Framework.Interfaces.TNode を返す
+                    var tNode = result.ToXml();
+                    File.WriteAllText(xmlPath, tNode.OuterXml);
+                    Debug.Log($"TestRunnerHelper(batch): XML result written to {xmlPath}");
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogWarning($"TestRunnerHelper(batch): Failed to write XML result: {ex.Message}");
+                }
+
                 EditorApplication.Exit(result.FailCount == 0 ? 0 : 1);
             }
 
