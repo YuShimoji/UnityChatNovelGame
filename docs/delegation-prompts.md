@@ -557,33 +557,9 @@ UnityChatNovelGame のメインチャット画面に、未読サブスレッド�
 
 ---
 
-## Task M: WORKFLOW_STATE_SSOT 更新 (廃止: session 21 で HANDOFF.md に一本化)
+## Task M: 廃止 (session 21)
 
-```
-[廃止] UnityChatNovelGame の docs/WORKFLOW_STATE_SSOT.md を更新し、
-ThreadType 導入 + 型別レンダリング(ヘッダーバー) の完了を反映してください。
-
-### 背景
-サブスレッドUI に以下が追加された (e8e53cc):
-- ThreadType enum (Annotation/Tracking/Scout/Branch)
-- DeclareThreadTyped コマンド (3引数、型指定)
-- ドロップダウンに型アイコン [A]/[B]/[C]/[>] + 型別色
-- スレッド切替時のヘッダーバー（型色帯）
-- SubthreadTest.yarn を DeclareThreadTyped に更新
-
-### 作業内容
-1. 「サブスレッドUI」関連の完了ステータスを更新
-2. ThreadType を Done 条件に追加
-3. 次ステップ（通知バナー、サイドバー等）を future に記載
-4. 技術的インサイトに DeclareThreadTyped の設計判断を追記
-
-### 関連ファイル
-- docs/WORKFLOW_STATE_SSOT.md (更新対象)
-- docs/ENGINE_FEATURE_INVENTORY.md (参照: セクション10a)
-
-### 制約
-- コード変更不要（ドキュメントのみ）
-```
+> WORKFLOW_STATE_SSOT.md は廃止済み。開発状態は HANDOFF.md に一本化。
 
 ---
 

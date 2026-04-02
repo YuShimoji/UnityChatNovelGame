@@ -28,7 +28,7 @@
 - mock_files: 0
 - yarn_active: 6 (Ch1_Day1, Ch2_LocationConfusion, Ch3_InstitutionalFragments, DebugQuickTest, EngineTestKit, VerticalSlice)
 - yarn_archive: 5 (Ch1_Terminal, FirstSlice, MVPTest, DebugScript, SubthreadTest)
-- spec_entries: 40 (done 23 / partial 10 / draft 1 / todo 5 + EN-012 + BL-001/002/003)
+- spec_entries: 39 (done 23 / partial 10 / draft 1 / todo 5 + BL-001/002/003 含む)
 - todo_fixme_hack: 1 (ChatController.cs — ステータスバールーティング)
 - obsolete_marks: 2 (ContradictionPair.UnlockTopic x2)
 - chatcontroller_lines: 2325
