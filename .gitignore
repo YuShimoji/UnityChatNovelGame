@@ -98,3 +98,7 @@ docs/evidence/**/UnityChatNovelGame_Data/
 
 # Scene backups
 *.unity.backup
+
+# Unity Test Runner results
+Assets/Tests/TestResults_*.xml
+Assets/Tests/TestResults_*.xml.meta

@@ -6,11 +6,11 @@
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
-- lane: Advance (E2E テスト安定化 + 拡充)
-- slice: auto-start 安全化 + teardown 強化 + batch XML 出力 + テスト 4→8件拡充
-- active_artifact: FoundPhone エンジン基盤 (Unity 6.3 + Yarn Spinner 3.1.3)
-- artifact_surface: PlayMode テストスイート
-- last_change_relation: direct (根本原因修正 + テスト拡充)
+- lane: Advance (テスト安定化 + ドキュメント構造整備)
+- slice: テスト修正 + FEATURE_REGISTRY 導入 + ロードマップ 4フェーズ化 + canonical docs 全同期
+- active_artifact: FoundPhone エンジン基盤 + 開発構造 (docs)
+- artifact_surface: PlayMode テストスイート + docs/FEATURE_REGISTRY.md + docs/PROJECT_OVERVIEW.md
+- last_change_relation: direct (テスト修正 + 開発構造の構造整備)
 
 ## Counters
 

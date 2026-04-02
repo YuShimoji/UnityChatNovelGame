@@ -8,13 +8,13 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 ブランチ戦略: trunk-based (main のみ)
 フェーズ: プロトタイプ → α移行中
-現在の状況 (2026-03-30 session 19):
-  - Pipeline: YarnSOGenerator (Topic/Character/Channel同期) + Content Pipeline window 実装済み
-  - エンジン基盤: 24 Yarnコマンド + タップスキップ + タイミング設定可能 + CanvasScaler 9:16統一
-  - spec-index: 40エントリ (done 23 / partial 10 / draft 1 / todo 5 + BL x3)
-  - PlayMode テスト: 4ケース (SmokeGate / Ch1SaveLoad / DQTStart / ChoiceImageFallback)
-  - Yarn active: 6 (archive 5)
-  - 次の作業: Unity実機確認 (Content Pipeline + PlayMode テスト実行) → E2E拡張
+現在の状況 (2026-04-02 session 21):
+  - Pipeline: YarnSOGenerator + Content Pipeline + HasNode事前チェック + batch XML出力
+  - テスト: EditMode 75件 (75 passed) + PlayMode 8件 (実機未確認)。共通ヘルパー分離済み
+  - spec-index: 39エントリ (done 23 / partial 10 / draft 1 / todo 5)
+  - FEATURE_REGISTRY: ENH-001〜032 (12件 candidate)。done済み仕様の改善受け入れ構造
+  - ロードマップ: 4フェーズ (パイプライン証明 / Alpha / 演出深化+ENH / 製品化)
+  - 次の作業: Inspector m_StartNode=DQT_Start → PlayMode 8件実行 → Content Pipeline実機検証
 
 ## DECISION LOG
 
@@ -52,6 +52,9 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 | 2026-03-29 | メッセージ演出: タップスキップ + タイミング設定可能化 | タップスキップ / F11のみ / 自動送り | VN標準の操作感。TypingIndicatorDuration(0.8s), PostMessageDelay(0.4s) を Inspector で調整可能 |
 | 2026-03-29 | Branch Thread 再入防止: Yarn フラグ必須 + コード安全策 | フラグ必須 / コードのみ / 両方 | Yarn側フラグで1回限り。コード側はBeginBranch再入時に古い履歴クリア。仕様書 21_branch_thread_spec.md |
 | 2026-03-29 | フォントサイズ引き上げ: messageFontSize 28→34 | 28維持 / 32 / 34 / 36 | CanvasScaler MatchHeight=1.0 で狭Canvas時にレスポンシブ縮小(下限0.85)。34*0.85=28.9pxで旧28px以上を確保 |
+| 2026-04-02 | FEATURE_REGISTRY 導入: done済み仕様への改善候補 (ENH) を受け容れる構造 | FEATURE_REGISTRY / spec-index拡張 / IDEA POOL拡張 | spec-index の done は「初期仕様完了」。改善は ENH として別管理。candidate→specified→approved→実装 |
+| 2026-04-02 | ロードマップ4フェーズ化: Phase 3 に ENH 実装フェーズを新設 | 3フェーズ / 4フェーズ / ENH混在 | done済み仕様の改善候補が構造的に入る余地がなかった。Phase 3 で集中実装 |
+| 2026-04-02 | テスト修正方針: テストパスのために実装を変えない。テストの前提が古いならテスト側を修正 | テスト修正 / 実装修正 / モック追加 | ShouldShowHint テストが旧仕様基準。実装 (ChannelData ベース) が正しい |
 
 ## IDEA POOL
 
