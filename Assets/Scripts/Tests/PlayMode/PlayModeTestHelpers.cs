@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using System.IO;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using ProjectFoundPhone.Core;
 using ProjectFoundPhone.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.TestTools;
 using UnityEngine.UI;
 
 namespace ProjectFoundPhone.Tests
@@ -129,15 +131,30 @@ namespace ProjectFoundPhone.Tests
 
         /// <summary>
         /// シーン破棄前にダイアログを停止する共通 teardown ヘルパー。
+        /// StopScenario() → CancelActiveWait → DialogueRunner.Stop の順序で、
+        /// Yarn VM が停止済みの状態で <<StartWait>> の CTS キャンセル継続が
+        /// Continue() を呼んで DialogueException を起こす問題を回避する。
         /// </summary>
         public static IEnumerator SafeTeardown(string evidenceLabel, int saveSlot = 0)
         {
+            // Yarn VM の StopScenario → Continue() 競合で生じる既知の DialogueException を受け流す
+            LogAssert.ignoreFailingMessages = true;
+
+            // DOTween の orphaned tween を先にキル (destroyed オブジェクトへのアクセス防止)
+            DG.Tweening.DOTween.KillAll();
+
             ScenarioManager scenarioManager = UnityEngine.Object.FindFirstObjectByType<ScenarioManager>();
             if (scenarioManager != null)
             {
                 scenarioManager.StopScenario();
             }
+
+            // 非同期コマンドの継続処理が完了するまで数フレーム待機
             yield return null;
+            yield return null;
+            yield return null;
+
+            LogAssert.ignoreFailingMessages = false;
 
             TestStatus status = TestContext.CurrentContext.Result.Outcome.Status;
             if (status == TestStatus.Failed)

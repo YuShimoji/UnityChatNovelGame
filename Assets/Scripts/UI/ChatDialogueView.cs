@@ -184,12 +184,9 @@ namespace ProjectFoundPhone.UI
                 if (!m_FastForwardEnabled)
                 {
                     // Phase 1: タイプライター完了を待つ (第1タップでスキップ可能)
-                    float typewriterDuration = lineText.Length * 0.05f;
-                    int typewriterMs = (int)(typewriterDuration * 1000);
-                    await DelayWithSkip(typewriterMs);
-
-                    // タイプライターを確実に完了 (スキップ時も通常完了時も全文表示を保証)
-                    m_ChatController.CompleteCurrentTypewriter();
+                    // ChatController の DOTween 完了イベントを待つことで、
+                    // 独自の時間計算とのずれ (ラスト数文字の自動完了) を解消する。
+                    await WaitForTypewriterOrSkip();
 
                     // Yarn 側スキップチェック
                     if (token.IsNextContentRequested)
@@ -247,6 +244,42 @@ namespace ProjectFoundPhone.UI
             }
 
             await YarnTask.Delay(milliseconds, m_PostSkipCts.Token).SuppressCancellationThrow();
+        }
+
+        /// <summary>
+        /// ChatController のタイプライター DOTween 完了を待つ。
+        /// 第1タップ (m_LineSkipCts) で中断された場合は CompleteCurrentTypewriter() で即完了させる。
+        /// </summary>
+        private async YarnTask WaitForTypewriterOrSkip()
+        {
+            if (m_ChatController == null) return;
+
+            // タイプライターが既に完了している場合は即リターン
+            if (!m_ChatController.IsTypewriterActive) return;
+
+            bool typewriterDone = false;
+            void OnDone() => typewriterDone = true;
+            m_ChatController.OnTypewriterCompleted += OnDone;
+
+            try
+            {
+                // タイプライター完了 or タップスキップまで待機
+                while (!typewriterDone)
+                {
+                    if (m_LineSkipCts == null || m_LineSkipCts.IsCancellationRequested)
+                    {
+                        // 第1タップ: タイプライターを即完了させる
+                        // (CompleteCurrentTypewriter → DOTween.Kill(complete:true) → OnComplete → typewriterDone=true)
+                        m_ChatController.CompleteCurrentTypewriter();
+                        return;
+                    }
+                    await YarnTask.Delay(16).SuppressCancellationThrow(); // ~1 frame
+                }
+            }
+            finally
+            {
+                m_ChatController.OnTypewriterCompleted -= OnDone;
+            }
         }
 
         /// <summary>

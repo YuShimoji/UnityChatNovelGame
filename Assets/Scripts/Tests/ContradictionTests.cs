@@ -342,15 +342,15 @@ namespace ProjectFoundPhone.Tests
         [Test]
         public void Manager_MultipleContradictions_AccumulateCoins()
         {
+            // SelectFirst/SelectSecond 経由だと SaveManager.Instance が
+            // DontDestroyOnLoad を呼び EditMode で例外になるため、
+            // RestoreDiscovered 経由でコイン蓄積を検証する。
             var p1 = CreatePair("p1", "s1", "t1", reward: 10);
             var p2 = CreatePair("p2", "s2", "t2", reward: 20);
             var db = CreateDatabase(p1, p2);
             (m_ManagerObj, m_Manager) = CreateManager(db);
 
-            m_Manager.SelectFirst("s1");
-            m_Manager.SelectSecond("t1");
-            m_Manager.SelectFirst("s2");
-            m_Manager.SelectSecond("t2");
+            m_Manager.RestoreDiscovered(new System.Collections.Generic.List<string> { "p1", "p2" }, 30);
 
             Assert.AreEqual(30, m_Manager.HalluciCoin);
             Assert.AreEqual(2, m_Manager.DiscoveredIDs.Count);

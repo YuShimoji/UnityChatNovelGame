@@ -704,10 +704,12 @@ namespace ProjectFoundPhone.Core
             float elapsed = 0f;
             while (elapsed < 0.15f)
             {
+                if (m_AutoSaveCanvasGroup == null) yield break;
                 elapsed += Time.unscaledDeltaTime;
                 m_AutoSaveCanvasGroup.alpha = Mathf.Clamp01(elapsed / 0.15f);
                 yield return null;
             }
+            if (m_AutoSaveCanvasGroup == null) yield break;
             m_AutoSaveCanvasGroup.alpha = 1f;
 
             // 表示維持
@@ -717,10 +719,12 @@ namespace ProjectFoundPhone.Core
             elapsed = 0f;
             while (elapsed < 0.3f)
             {
+                if (m_AutoSaveCanvasGroup == null) yield break;
                 elapsed += Time.unscaledDeltaTime;
                 m_AutoSaveCanvasGroup.alpha = 1f - Mathf.Clamp01(elapsed / 0.3f);
                 yield return null;
             }
+            if (m_AutoSaveCanvasGroup == null) yield break;
             m_AutoSaveCanvasGroup.alpha = 0f;
             m_AutoSaveIndicator.SetActive(false);
             m_AutoSaveIndicatorCoroutine = null;

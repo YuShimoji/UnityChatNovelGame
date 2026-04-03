@@ -349,7 +349,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 610c541718d694070a21327d1ae62e75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: YarnSpinner.Unity::Yarn.Unity.InMemoryVariableStorage
-  showDebug: 0
+  showDebug: 1
   debugTextView: {fileID: 0}
 --- !u!114 &799380007
 MonoBehaviour:
@@ -402,7 +402,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFoundPhone.Core.ScenarioManager
   m_DialogueRunner: {fileID: 799380007}
   m_ChatController: {fileID: 1245452348}
-  m_StartNode: VerticalSlice_Start
+  m_StartNode: DQT_Start
+  m_AutoStartYarn: 1
+  m_DebugScenarioID: 
 --- !u!4 &799380009
 Transform:
   m_ObjectHideFlags: 0
@@ -521,6 +523,7 @@ GameObject:
   - component: {fileID: 1245452349}
   - component: {fileID: 1245452350}
   - component: {fileID: 1245452348}
+  - component: {fileID: 1245452351}
   m_Layer: 0
   m_Name: ChatRoot
   m_TagString: Untagged
@@ -544,7 +547,18 @@ MonoBehaviour:
   m_LayoutGroup: {fileID: 1678649891}
   m_MessageBubblePrefab: {fileID: 11400000, guid: 26b7b210afd94b68a720bb0a31a0b517, type: 3}
   m_TypingIndicator: {fileID: 1703506601}
+  m_InputField: {fileID: 0}
+  m_SendButton: {fileID: 0}
   m_AutoScrollThreshold: 0.1
+  m_MessageBubblePool: {fileID: 0}
+  m_ImageBubblePrefab: {fileID: 0}
+  m_ImageMaxWidth: 300
+  m_ImageMaxHeight: 200
+  m_ChoiceButtonPrefab: {fileID: 0}
+  m_ChoiceContainer: {fileID: 0}
+  m_JapaneseFontAsset: {fileID: 0}
+  m_EnableTypewriterEffect: 1
+  m_TypewriterSpeed: 0.05
 --- !u!224 &1245452349
 RectTransform:
   m_ObjectHideFlags: 0
@@ -595,6 +609,22 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1245452351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1245452347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87d6bd7558d526244aa3a381d01931ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ProjectFoundPhone::ProjectFoundPhone.UI.ChatDialogueView
+  m_TypingIndicatorDuration: 0.8
+  m_PostMessageDelay: 0.4
+  m_EnableTapSkip: 1
+  m_ShowDebugOverlay: 0
 --- !u!1 &1678649888
 GameObject:
   m_ObjectHideFlags: 0

@@ -53,6 +53,8 @@ namespace ProjectFoundPhone.UI
         private bool m_PinnedToBottom = true;
         private bool m_IsTypewriterActive = false;
         private TextMeshProUGUI m_LastTypewriterTarget;
+        /// <summary>タイプライター完了時に発火するイベント。ChatDialogueView が待機に使用する。</summary>
+        public event Action OnTypewriterCompleted;
         private GameObject m_TopSpacer;
 
         private GameObject m_RuntimeChoiceButtonTemplate;
@@ -909,6 +911,7 @@ namespace ProjectFoundPhone.UI
                  textComponent.maxVisibleCharacters = totalCharacters;
                  m_IsTypewriterActive = false;
                  m_LastTypewriterTarget = null;
+                 OnTypewriterCompleted?.Invoke();
              });
         }
 

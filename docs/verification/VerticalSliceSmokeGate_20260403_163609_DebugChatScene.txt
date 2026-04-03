@@ -1,0 +1,7 @@
+Test Failed: DebugChatScene_ChoiceAndImageFallback_AreUsable
+Message:   Image message did not render as image or fallback text.
+  Expected: True
+  But was:  False
+
+Scene: DebugChatScene
+Time: 2026-04-03T16:36:09.8210684+09:00

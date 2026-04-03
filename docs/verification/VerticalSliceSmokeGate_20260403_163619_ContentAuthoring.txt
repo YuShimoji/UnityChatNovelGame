@@ -1,0 +1,5 @@
+Test Failed: VerticalSlice_SmokeFlow_TitleToChat_SaveLoad
+Message: Unhandled log message: '[Exception] MissingReferenceException: The object of type 'UnityEngine.CanvasGroup' has been destroyed but you are still trying to access it.
+Your script should either check if it is null or you should not destroy the object.'. Use UnityEngine.TestTools.LogAssert.Expect
+Scene: ContentAuthoring
+Time: 2026-04-03T16:36:19.9773179+09:00

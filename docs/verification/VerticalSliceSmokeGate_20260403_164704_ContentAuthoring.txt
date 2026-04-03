@@ -1,0 +1,4 @@
+Test Failed: VerticalSlice_SmokeFlow_TitleToChat_SaveLoad
+Message: Timeout waiting for scene 'DebugChatScene' after 10 seconds.
+Scene: ContentAuthoring
+Time: 2026-04-03T16:47:04.7005442+09:00
