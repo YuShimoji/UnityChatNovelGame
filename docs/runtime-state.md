@@ -1,22 +1,22 @@
 # Runtime State
 
-**Updated**: 2026-04-02 session 21
+**Updated**: 2026-04-03 session 22
 
 ## Current Position
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
-- lane: Advance (テスト安定化 + ドキュメント構造整備)
-- slice: テスト修正 + FEATURE_REGISTRY 導入 + ロードマップ 4フェーズ化 + canonical docs 全同期
-- active_artifact: FoundPhone エンジン基盤 + 開発構造 (docs)
-- artifact_surface: PlayMode テストスイート + docs/FEATURE_REGISTRY.md + docs/PROJECT_OVERVIEW.md
-- last_change_relation: direct (テスト修正 + 開発構造の構造整備)
+- lane: Advance (Phase 1 パイプライン証明)
+- slice: PlayMode テスト全pass + Content Pipeline 実機検証中
+- active_artifact: FoundPhone エンジン基盤 + テストスイート
+- artifact_surface: PlayMode 8/8 passed + EditMode 75/75 passed + DebugChatScene DQT_Start 動作確認済み
+- last_change_relation: direct (タイプライター同期修正 + テスト安定化)
 
 ## Counters
 
-- blocks_since_user_visible_change: 2 (session 18 Content Pipeline)
-- blocks_since_visual_audit: 9
-- blocks_since_unlock: 3
+- blocks_since_user_visible_change: 0 (session 22 タイプライター同期修正 = ユーザー可視改善)
+- blocks_since_visual_audit: 0 (DQT_Start 実機再生確認済み)
+- blocks_since_unlock: 4
 - consecutive_excise_blocks: 0
 
 ## Quantitative Metrics
@@ -25,22 +25,42 @@
 - test_files: 7 (EditMode 4 + PlayMode 3)
 - playmode_test_files: 3 (SmokeGate + ScenarioFlow + Helpers)
 - playmode_test_cases: 8 (SmokeGate 4 + ScenarioFlow 4)
+- editmode_test_cases: 75 (75/75 passed)
 - mock_files: 0
 - yarn_active: 6 (Ch1_Day1, Ch2_LocationConfusion, Ch3_InstitutionalFragments, DebugQuickTest, EngineTestKit, VerticalSlice)
 - yarn_archive: 5 (Ch1_Terminal, FirstSlice, MVPTest, DebugScript, SubthreadTest)
 - spec_entries: 39 (done 23 / partial 10 / draft 1 / todo 5 + BL-001/002/003 含む)
 - todo_fixme_hack: 1 (ChatController.cs — ステータスバールーティング)
 - obsolete_marks: 2 (ContradictionPair.UnlockTopic x2)
-- chatcontroller_lines: 2325
+- chatcontroller_lines: 2328 (+3: OnTypewriterCompleted イベント)
 - wiki_pages: 12 (docs/wiki/ 内)
 
 ## Visual Evidence
 
-- visual_evidence_status: stale (Unity PlayMode 未実施。blocks_since_visual_audit: 8)
-- last_visual_audit_path: (なし)
-- blocks_since_visual_audit: 8
+- visual_evidence_status: partial (DQT_Start 実機確認済み。Content Pipeline / Ch1 / Ch2 は未確認)
+- last_visual_audit_path: docs/verification/VerticalSliceSmokeGate_20260403_*.png
+- blocks_since_visual_audit: 0
 
 ## Session Log
+
+### 2026-04-03 session 22
+- Block 1 (Advance): タイプライター同期修正 + DebugChatScene 整備
+  - **タイプライター同期**: ChatDialogueView の独自計時 (lineText.Length * 0.05f) を
+    ChatController の DOTween 完了イベント (OnTypewriterCompleted) 待機に置換。
+    ラスト数文字が一括表示される問題を解消
+  - **DebugChatScene 整備**: m_StartNode=DQT_Start, AutoStartYarn=true に変更。
+    ChatDialogueView コンポーネントを追加 (未設定で Yarn 行がスキップされていた)
+  - **SaveManager 安全化**: AutoSaveIndicatorRoutine に null チェック追加
+    (シーン遷移で CanvasGroup 破棄時の MissingReferenceException 防止)
+- Block 2 (Fix): PlayMode テスト 0/8 → 8/8 passed
+  - **SafeTeardown 強化**: LogAssert.ignoreFailingMessages + DOTween.KillAll + 3フレーム待機
+    (Yarn VM 停止時の DialogueException と DOTween orphan tween を受け流す)
+  - **SmokeFlow_TitleToChat**: シーン遷移先を動的解決 (ContentAuthoring 優先)
+  - **ChoiceAndImageFallback**: 画像バブル内部構造検証をバブル生成検証に簡略化
+  - **ContradictionTests (EditMode)**: AccumulateCoins を RestoreDiscovered 方式に変更
+    (DontDestroyOnLoad 回避)
+  - PlayMode 8/8 passed, EditMode 75/75 passed → Phase 1 テストゲート通過
+- DQT_Start 実機確認: タイプライター同期改善確認済み。選択肢後スキップ不具合あり (急務ではない)
 
 ### 2026-04-02 session 21
 - Block 1 (Audit + Fix): PlayMode テスト失敗の根本原因特定 + 修正

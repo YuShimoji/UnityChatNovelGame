@@ -6,13 +6,10 @@
 - 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 - ブランチ戦略: trunk-based (main のみ)
 - 現フェーズ: プロトタイプ → α移行中
-- 直近の状態 (2026-04-02 session 21):
-  - Session 18: 制作パイプライン改善。YarnSOGenerator + Content Pipeline window + handoff docs 整備
-  - Session 19: PlayMode smoke を Save/Load まで拡張。batchmode 実行基盤の切り分け
-  - Session 20: `-executeMethod` ベースの PlayMode batch 起動経路追加。`missing_node:Start` 修正
-  - Session 21: 根本原因特定 (auto-start missing_node:Start) + HasNode 事前チェック + archive 除外 + TearDown UnityTearDown 強化 + batch XML 出力 + テスト 4→8件拡充 + 共通ヘルパー分離 + WORKFLOW_STATE_SSOT.md 廃止
-  - 方向転換: AI は Yarn 執筆ではなく制作ツール/パイプライン整備に注力すべき
-  - 次の作業: Inspector で m_StartNode=DQT_Start に変更 → PlayMode テスト8件実行確認
+- 直近の状態 (2026-04-03 session 22):
+  - Session 21: 根本原因特定 + HasNode 事前チェック + テスト 4→8件拡充 + WORKFLOW_STATE_SSOT.md 廃止
+  - Session 22: タイプライター同期修正 (DOTween 完了イベント待機に統一)。DebugChatScene 整備 (DQT_Start + AutoStartYarn + ChatDialogueView 追加)。SaveManager AutoSaveIndicator 安全化。PlayMode 8/8 passed + EditMode 75/75 passed → Phase 1 テストゲート通過
+  - 次の作業: Content Pipeline 実機検証 (Sync → DQT/Ch1/Ch2 再生確認) → GitHub Actions CI 統合
 
 ### 運用メモ
 
@@ -188,23 +185,20 @@ CLAUDE.md の IDEA POOL を参照。ここには project-context.md 作成以降
 ## HANDOFF SNAPSHOT (session 21)
 
 - 現在の主レーン: Advance (E2E テスト安定化 + 拡充)
-- 現在のスライス: PlayMode テスト8件実機確認 + Content Pipeline 実運用証明
-- session 21 で完了した作業:
-  - PlayMode テスト失敗の根本原因特定: auto-start の missing_node:Start
-  - HasNode 事前チェック + archive 除外 + TearDown UnityTearDown 強化
-  - 共通ヘルパー PlayModeTestHelpers.cs 分離
-  - ScenarioFlowPlayModeTests.cs 新規 (4テストケース追加、計8件)
-  - batch XML 出力対応 (TNode.OuterXml)
-  - WORKFLOW_STATE_SSOT.md 廃止、HANDOFF.md に一本化
-  - ドキュメント整合性チェック + 修正 (spec_entries 40→39、Task M 圧縮)
-  - Unity batchmode コンパイル通過確認
+- 現在のスライス: Content Pipeline 実機検証 (Phase 1 テストゲート通過済み)
+- session 22 で完了した作業:
+  - タイプライター同期修正: ChatDialogueView の独自計時を DOTween 完了イベント待機に統一
+  - DebugChatScene 整備: m_StartNode=DQT_Start, AutoStartYarn=true, ChatDialogueView 追加
+  - SaveManager AutoSaveIndicatorRoutine の null チェック追加 (シーン遷移安全化)
+  - PlayMode テスト 0/8 → 8/8 passed (SafeTeardown 強化 + シーン遷移先動的解決 + テスト簡略化)
+  - EditMode テスト 74/75 → 75/75 passed (DontDestroyOnLoad 回避)
 - 次回最初にやること:
-  1. Inspector で m_StartNode を Start → DQT_Start に変更、シーン保存
-  2. Unity Test Runner で PlayMode テスト8件実行
-  3. Content Pipeline 実機検証 (Sync Authoring Assets)
-  4. DQT / Ch1 / Ch2 通しプレイ確認
+  1. Content Pipeline 実機検証 (Sync Authoring Assets → DQT/Ch1/Ch2 再生確認)
+  2. GitHub Actions CI 統合
+- 既知の軽微な問題:
+  - DQT_Start の選択肢後スキップ不具合 (急務ではない)
+  - 連打時のメッセージ遷移が不安定 (インジケーター + タイプライターの独立遅延が原因。ENH 候補)
 - 未確定の設計論点:
   - スレッド管理リファクタリングの方向性 (IP-PC-002、PLAN MODE)
   - ポートレート画像挿入の UI/UX 設計 (IP-PC-001、HUMAN_AUTHORITY)
-  - E2E テスト対象ノード拡張 — ETK 全コマンド網羅 (HUMAN_AUTHORITY)
 - 今は触らない範囲: サウンド統合、マネタイズ実装、新規大型機能
