@@ -1,16 +1,19 @@
 # Runtime State
 
-**Updated**: 2026-04-02 session 21
+**Updated**: 2026-04-10
 
 ## Current Position
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
-- lane: Audit + Fix (PlayMode テスト失敗原因特定 + 修正)
-- slice: auto-start 安全化 + archive 除外 + TearDown StopScenario
-- active_artifact: FoundPhone エンジン基盤 (Unity 6.3 + Yarn Spinner 3.1.3)
-- artifact_surface: Unity Editor > DebugChatScene
-- last_change_relation: direct (PlayMode テスト失敗の根本原因修正)
+- lane: **Content**（Ch1 前進）+ 副 **Unlock**（Pipeline 実運用）
+- slice: **Ch1 コンテンツ前進 + 制作パイプライン実運用**（UI_ISSUES 個別修正はバッチまで保留）
+- next_recommended_slice: **SP-022** サブクエスト探索（設計チャーター + Ch1 パイロット 1〜3 本。既存 Yarn のみ）
+- subsequent_recommended_slice: **Ch1 統合プレイ検証 + ギャップ P0/P1/P2**（SP-022 達成後。HANDOFF 手動ハンズオン → SP-017 Ch1 例 → 好機 EN-012 → Ch2 執筆へ）
+- later_recommended_slice: **Ch2 本編＋サブ前進 + P0 のみ例外スライス**（SUBSEQUENT 完了後。project-context LATER + 意思決定解説、HANDOFF チェックリスト）
+- active_artifact: Ch1 Yarn + ContentAuthoring 再生フロー
+- artifact_surface: Unity Editor > ContentAuthoring（本編）/ DebugChatScene（デバッグ用途）
+- last_change_relation: docs sync（LATER スライス・意思決定解説・チェックリスト。コード変更なし）
 
 ## Counters
 
@@ -28,7 +31,7 @@
 - mock_files: 0
 - yarn_active: 6 (Ch1_Day1, Ch2_LocationConfusion, Ch3_InstitutionalFragments, DebugQuickTest, EngineTestKit, VerticalSlice)
 - yarn_archive: 5 (Ch1_Terminal, FirstSlice, MVPTest, DebugScript, SubthreadTest)
-- spec_entries: 40 (done 23 / partial 10 / draft 1 / todo 5 + EN-012 + BL-001/002/003)
+- spec_entries: 41 (done 23 / partial 10 / draft 2 / todo 5 + EN-012 + BL-001/002/003 + SP-022)
 - todo_fixme_hack: 1 (ChatController.cs — ステータスバールーティング)
 - obsolete_marks: 2 (ContradictionPair.UnlockTopic x2)
 - chatcontroller_lines: 2325
@@ -42,6 +45,35 @@
 
 ## Session Log
 
+### 2026-04-10 (LATER + 意思決定解説)
+
+- **project-context.md**: `LATER RECOMMENDED SLICE`、`推奨プランの読み方と手動意思決定（解説）`、中期ロードマップ補足（2026-04-10）、DECISION LOG、HANDOFF SNAPSHOT（2026-04-10）
+- **HANDOFF.md**: LATER の Current Focus、**手動意思決定チェックリスト**、Safe Next 11、Recent Session Delta
+- **runtime-state.md**: `later_recommended_slice`、本エントリ
+- コード・Yarn 変更なし
+
+### 2026-04-09 (SUBSEQUENT + 手動ハンズオン)
+
+- **project-context.md**: `SUBSEQUENT RECOMMENDED SLICE`、中期ロードマップ接続行、DECISION LOG（2026-04-09）、HANDOFF SNAPSHOT 更新
+- **HANDOFF.md**: `手動確認ハンズオン（Ch1 + サブスレッド）`、Safe Next Steps 9–10、Current Focus / Recent Session Delta
+- **runtime-state.md**: `subsequent_recommended_slice`、本エントリ
+- コード・Yarn 変更なし
+
+### 2026-04-08 (SP-022 サブクエスト探索軸)
+
+- **SP-022** 新規: `docs/StorySpec/22_subquest_exploration_content.md`（サブクエスト定義・C/A/B 優先・章あたり仮レンジ・Yarn 対応表・エンジンギャップ §6）
+- **spec-index.json** に SP-022 追加、StorySpec README 索引更新
+- **project-context.md**: NEXT RECOMMENDED SLICE、DEVELOPMENT ROADMAP 補足行、DECISION LOG（2026-04-08）、HANDOFF SNAPSHOT 更新
+- **HANDOFF.md** / **runtime-state.md**: 次フェーズ・`next_recommended_slice`・Session Log 同期
+- コード・Yarn 本文の変更なし（ドキュメントのみ）
+
+### 2026-04-07 (plan sync + Ch1 確認)
+
+- **レーン確定**: Content 主軸 — Ch1 を Day 単位で前進。副に Pipeline 実運用確認
+- **Ch1**: プレイ確認。既知 UI 3 件（Pyramid 選択肢ループ、インジケーター／アナウンスのタップスキップ、スレッド遷移時の色の一貫性）を **docs/UI_ISSUES.md** に記録。**本スライスではコード修正なし**
+- **ドキュメント**: `project-context.md`（直近状態・CURRENT LANE/SLICE・DECISION LOG・HANDOFF SNAPSHOT）、`HANDOFF.md`、`runtime-state.md` を同期
+- **副次（未実施）**: PlayMode 4 件の実ランは好機に（EN-012）
+
 ### 2026-04-02 session 21
 - Block 1 (Audit + Fix): PlayMode テスト失敗の根本原因特定 + 修正
   - **根本原因**: テスト失敗は teardown DialogueException ではなく、
@@ -52,7 +84,7 @@
   - **修正 2**: `ResolveLikelyBrokenYarnFile()` が archive/ ディレクトリを検索対象から除外
   - **修正 3**: PlayMode TearDown で `StopScenario()` を明示呼出し、
     OnDestroy 時の async 継続 → DialogueException を防止
-  - **残件**: DebugChatScene の Inspector で `m_StartNode` を `Start` → `DQT_Start` に手動変更が必要
+  - **補足 (2026-04-07)**: `m_StartNode` はシーン用途により異なる。欠落ノードを指さないよう、再生目的に合わせて Inspector で確認（`DQT_Start` / `VerticalSlice_Start` / 本編入口ノード等）
   - コミット: `a54752b`
 
 ### 2026-03-31 session 20
