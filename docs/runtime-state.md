@@ -1,16 +1,19 @@
 # Runtime State
 
-**Updated**: 2026-04-03 session 22
+**Updated**: 2026-04-10（リモート docs 同期 + session 22 技術状態を統合）
 
 ## Current Position
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
-- lane: Advance (Phase 1 パイプライン証明)
-- slice: PlayMode テスト全pass + Content Pipeline 実機検証中
-- active_artifact: FoundPhone エンジン基盤 + テストスイート
-- artifact_surface: PlayMode 8/8 passed + EditMode 75/75 passed + DebugChatScene DQT_Start 動作確認済み
-- last_change_relation: direct (タイプライター同期修正 + テスト安定化)
+- lane: **Content**（Ch1 前進）+ 副 **Unlock**（Pipeline 実運用）
+- slice: **Ch1 コンテンツ前進 + 制作パイプライン実運用**（UI_ISSUES 個別修正はバッチまで保留）
+- next_recommended_slice: **SP-022** サブクエスト探索（設計チャーター + Ch1 パイロット 1〜3 本。既存 Yarn のみ）
+- subsequent_recommended_slice: **Ch1 統合プレイ検証 + ギャップ P0/P1/P2**（SP-022 達成後。HANDOFF 手動ハンズオン → SP-017 Ch1 例 → 好機 EN-012 → Ch2 執筆へ）
+- later_recommended_slice: **Ch2 本編＋サブ前進 + P0 のみ例外スライス**（SUBSEQUENT 完了後。project-context LATER + 意思決定解説、HANDOFF チェックリスト）
+- active_artifact: Ch1 Yarn + ContentAuthoring 再生フロー（併せてエンジン・PlayMode 8 件スイートは session 22 で安定化済み）
+- artifact_surface: ContentAuthoring（本編）/ DebugChatScene（デバッグ）。PlayMode 8/8・EditMode 75/75 はローカル通過済み（再実行は好機に）
+- last_change_relation: merge（origin workspace sync + session 22 コード／テスト + docs 統合）
 
 ## Counters
 
@@ -29,7 +32,7 @@
 - mock_files: 0
 - yarn_active: 6 (Ch1_Day1, Ch2_LocationConfusion, Ch3_InstitutionalFragments, DebugQuickTest, EngineTestKit, VerticalSlice)
 - yarn_archive: 5 (Ch1_Terminal, FirstSlice, MVPTest, DebugScript, SubthreadTest)
-- spec_entries: 39 (done 23 / partial 10 / draft 1 / todo 5 + BL-001/002/003 含む)
+- spec_entries: 41 (done 23 / partial 10 / draft 2 / todo 5 + EN-012 + BL-001/002/003 + SP-022)
 - todo_fixme_hack: 1 (ChatController.cs — ステータスバールーティング)
 - obsolete_marks: 2 (ContradictionPair.UnlockTopic x2)
 - chatcontroller_lines: 2328 (+3: OnTypewriterCompleted イベント)
@@ -43,24 +46,32 @@
 
 ## Session Log
 
-### 2026-04-03 session 22
-- Block 1 (Advance): タイプライター同期修正 + DebugChatScene 整備
-  - **タイプライター同期**: ChatDialogueView の独自計時 (lineText.Length * 0.05f) を
-    ChatController の DOTween 完了イベント (OnTypewriterCompleted) 待機に置換。
-    ラスト数文字が一括表示される問題を解消
-  - **DebugChatScene 整備**: m_StartNode=DQT_Start, AutoStartYarn=true に変更。
-    ChatDialogueView コンポーネントを追加 (未設定で Yarn 行がスキップされていた)
-  - **SaveManager 安全化**: AutoSaveIndicatorRoutine に null チェック追加
-    (シーン遷移で CanvasGroup 破棄時の MissingReferenceException 防止)
-- Block 2 (Fix): PlayMode テスト 0/8 → 8/8 passed
-  - **SafeTeardown 強化**: LogAssert.ignoreFailingMessages + DOTween.KillAll + 3フレーム待機
-    (Yarn VM 停止時の DialogueException と DOTween orphan tween を受け流す)
-  - **SmokeFlow_TitleToChat**: シーン遷移先を動的解決 (ContentAuthoring 優先)
-  - **ChoiceAndImageFallback**: 画像バブル内部構造検証をバブル生成検証に簡略化
-  - **ContradictionTests (EditMode)**: AccumulateCoins を RestoreDiscovered 方式に変更
-    (DontDestroyOnLoad 回避)
-  - PlayMode 8/8 passed, EditMode 75/75 passed → Phase 1 テストゲート通過
-- DQT_Start 実機確認: タイプライター同期改善確認済み。選択肢後スキップ不具合あり (急務ではない)
+### 2026-04-03 session 22（コード・テスト）
+- Block 1: タイプライター同期修正 + DebugChatScene 整備
+  - **タイプライター同期**: ChatDialogueView の独自計時を ChatController の DOTween 完了イベント (`OnTypewriterCompleted`) 待機に置換
+  - **DebugChatScene 整備**: 用途に応じた `m_StartNode`（例: `DQT_Start`）、AutoStartYarn、ChatDialogueView 追加
+  - **SaveManager 安全化**: AutoSaveIndicatorRoutine の null チェック（CanvasGroup 破棄時の MissingReferenceException 防止）
+- Block 2: PlayMode 0/8 → 8/8、EditMode 75/75
+  - SafeTeardown 強化、シーン遷移先動的解決、テスト簡略化、ContradictionTests の DontDestroyOnLoad 回避 等
+- DQT 実機: タイプライター改善確認済み。選択肢後スキップは軽微
+
+### 2026-04-10 (LATER + 意思決定解説)
+
+- **project-context.md** / **HANDOFF.md** / **runtime-state.md**: LATER スライス、意思決定解説、チェックリスト、SNAPSHOT
+- コード・Yarn 変更なし（当該コミット）
+
+### 2026-04-09 (SUBSEQUENT + 手動ハンズオン)
+
+- SUBSEQUENT スライス、HANDOFF 手動ハンズオン追記 等（ドキュメントのみ）
+
+### 2026-04-08 (SP-022)
+
+- SP-022 新規、spec-index 更新 等（ドキュメントのみ）
+
+### 2026-04-07 (plan sync + Ch1 確認)
+
+- Content レーン確定、Ch1 UI 3 件を **UI_ISSUES.md** へ（コード修正なし）
+- **副次（未実施）**: PlayMode **8** 件の実ラン記録は好機に（EN-012）
 
 ### 2026-04-02 session 21
 - Block 1 (Audit + Fix): PlayMode テスト失敗の根本原因特定 + 修正
@@ -69,17 +80,14 @@
     参照し、`Debug.LogError` が NUnit に拾われていたのが原因
   - **修正 1**: `ScenarioManager.Start()` で `HasNode()` による事前チェック追加 (コミット: `a54752b`)
   - **修正 2**: `ResolveLikelyBrokenYarnFile()` が archive/ ディレクトリを検索対象から除外
-  - **修正 3**: PlayMode TearDown を `[UnityTearDown]` (IEnumerator) に強化。`StopScenario()` + 1フレーム待機
-  - **残件**: DebugChatScene Inspector で `m_StartNode` を `Start` → `DQT_Start` に手動変更が必要
+  - **修正 3**: PlayMode TearDown を `[UnityTearDown]` (IEnumerator) に強化し `StopScenario()` + 待機。OnDestroy 時の async 継続 → DialogueException を防止
+  - **補足**: `m_StartNode` はシーン用途により異なる。欠落ノードを指さないよう Inspector で確認（`DQT_Start` / `VerticalSlice_Start` / 本編入口等）
+  - コミット: `a54752b`
 - Block 2 (Advance): テスト拡充 + batch XML 出力
-  - **batch XML 出力対応**: `TestRunnerHelper` に `ITestResultAdaptor.ToXml()` → `.txt` + `.xml` 両ファイル生成
-  - **テストケース追加** (4件 → 8件):
-    - `ScenarioFlowPlayModeTests.cs` 新規: ETK_Commands, ETK_RichText, Ch2_Opening, SaveLoad 3連サイクル
-    - `PlayModeTestHelpers.cs` 新規: 共通ヘルパー (シーンロード、条件待ち、エビデンス、teardown)
-    - `VerticalSliceSmokeGatePlayModeTests.cs` を共通ヘルパー使用にリファクタリング
-  - **spec-index 更新**: EN-012 pct 40% → 60%
-  - **WORKFLOW_STATE_SSOT.md 廃止**: HANDOFF.md に一本化。参照元 5ファイル更新
-  - **Assets/_Recovery/ 削除**: クラッシュリカバリ残骸
+  - **batch XML**: `TestRunnerHelper` に `ITestResultAdaptor.ToXml()` → `.txt` + `.xml`
+  - **テスト 4→8 件**: `ScenarioFlowPlayModeTests.cs`、`PlayModeTestHelpers.cs` 新規、SmokeGate を共通ヘルパー化
+  - **spec-index**: EN-012 pct 40% → 60%
+  - **WORKFLOW_STATE_SSOT.md 廃止**、**Assets/_Recovery/** 削除
 
 ### 2026-03-31 session 20
 - Block 1 (Advance): PlayMode batch 実行経路の確立 + Save/Load 復帰バグの切り分け

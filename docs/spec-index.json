@@ -297,6 +297,15 @@
     "summary": "サブスレッド出現タイミング制御。複合トリガー方式(HC閾値+進行+断片 OR)決定済み。既存DeclareThreadLatentCond+ChannelData SOでカバー。オーサリングパターン案4種(Yarn変数/章クリア/HC閾値/複合AND)記載済み。残: 複合条件記法集・Ch3以降の具体設定・解放通知演出(HUMAN_AUTHORITY)"
   },
   {
+    "id": "SP-022",
+    "title": "サブクエスト探索コンテンツ設計",
+    "status": "draft",
+    "pct": 10,
+    "cat": "core",
+    "file": "docs/StorySpec/22_subquest_exploration_content.md",
+    "summary": "サブスレッド(C/A/B)による探索パートのボリューム方針・章あたり仮レンジ・Yarnコマンド対応・エンジンギャップ(B型Wiki/C型カード等)。Ch1パイロット1〜3本→ギャップ列挙。仕様先行、初期はエンジン改修しない"
+  },
+  {
     "id": "EN-010",
     "title": "機能状態監査",
     "status": "done",
