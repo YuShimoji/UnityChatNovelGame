@@ -3,6 +3,8 @@
 ## 概要
 FoundPhone のチャットUIシステムの実装仕様。ENGINE_FEATURE_INVENTORY.md のセクション6/9と対になる詳細リファレンス。
 
+> 運用メモ: 旧 `docs/wiki/ui-config.md` の要点は本書 3.3（`ChatUIConfig`）に統合済み。
+
 **最終更新**: 2026-03-13
 **対象コミット**: be96e86 (SystemMessage角丸除外), 8b22b71 (バブル幅RectTransform), 147b36d (StripNamePrefix)
 

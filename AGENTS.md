@@ -6,6 +6,7 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 
 - Source: `Assets/Scripts/`
 - Docs: `docs/`
+- アシスタント向け読書順の正典: `docs/ai/READ_ORDER.md`
 
 ## Rules
 

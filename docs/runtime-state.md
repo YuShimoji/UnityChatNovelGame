@@ -1,6 +1,6 @@
 # Runtime State
 
-**Updated**: 2026-04-10（リモート docs 同期 + session 22 技術状態を統合）
+**Updated**: 2026-04-10（docs 統廃合の継続反映）
 
 ## Current Position
 
@@ -36,7 +36,7 @@
 - todo_fixme_hack: 1 (ChatController.cs — ステータスバールーティング)
 - obsolete_marks: 2 (ContradictionPair.UnlockTopic x2)
 - chatcontroller_lines: 2328 (+3: OnTypewriterCompleted イベント)
-- wiki_pages: 12 (docs/wiki/ 内)
+- wiki_pages: 3 (README / _sidebar / save-system)
 
 ## Visual Evidence
 
@@ -45,6 +45,14 @@
 - blocks_since_visual_audit: 0
 
 ## Session Log
+
+### 2026-04-10 (docs cleanup phase 2-4)
+
+- レガシー文書整理を継続し、重複 wiki ページを正典へ移植後に削除
+- `docs/EVIDENCE_REUSE.md` を新設し、archive 側 Evidence Reuse 文書を統合
+- `docs/archive/ROADMAP_TO_PRODUCTION.md` を要約移植後に削除
+- docs/wiki 第4弾で `characters` / `branch` / `chapter-patterns` / `ui-config` / `troubleshooting` を削除し、wiki をポータル最小構成へ縮約
+- `FEATURE_STATUS_AUDIT.md` の旧 archive 参照を「整理済み（履歴参照）」へ更新
 
 ### 2026-04-03 session 22（コード・テスト）
 - Block 1: タイプライター同期修正 + DebugChatScene 整備
@@ -57,7 +65,7 @@
 
 ### 2026-04-10 (LATER + 意思決定解説)
 
-- **project-context.md** / **HANDOFF.md** / **runtime-state.md**: LATER スライス、意思決定解説、チェックリスト、SNAPSHOT
+- **project-context.md** / **HANDOFF.md** / **runtime-state.md**: LATER スライス、意思決定解説、チェックリスト
 - コード・Yarn 変更なし（当該コミット）
 
 ### 2026-04-09 (SUBSEQUENT + 手動ハンズオン)

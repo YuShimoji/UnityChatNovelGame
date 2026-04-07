@@ -1,17 +1,14 @@
 # FoundPhone Authoring Wiki
 
-FoundPhone のシナリオ執筆・コンテンツ制作のための統合リファレンスです。
+本Wikiはポータルのみを保持する。内容ページは `docs/` 正典へ統合済み。
 
-## このWikiでできること
+## 主要入口
 
-- 新しいチャプター/ストーリーの追加手順を学ぶ
-- 全 Yarn コマンドのリファレンスを参照する
-- キャラクター、スレッド、分岐の設計パターンを知る
-- エディタツールの使い方を理解する
-
-## すぐに始める
-
-> **[Quick Start: ストーリーを追加する](quick-start.md)** -- 5分で最初のシーンを動かす
+- 執筆ガイド: `../SCENARIO_AUTHORING_GUIDE.md`
+- 編集パイプライン: `../YarnEditingPipeline.md`
+- オペレーター手順: `../OPERATOR_WORKFLOW.md`
+- セーブ仕様: `../SaveSystem_README.md`
+- UI 実装仕様: `../UI_IMPLEMENTATION_SPEC.md`
 
 ## 起動方法
 

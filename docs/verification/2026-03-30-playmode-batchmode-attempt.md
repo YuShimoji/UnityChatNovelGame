@@ -15,6 +15,8 @@
 
 ## Command
 
+> 注記: 以下の `C:\Users\thank\...` は当時の実行環境パスであり、現行環境とは一致しない可能性がある。
+
 ```powershell
 & 'C:\Program Files\Unity\Hub\Editor\6000.3.6f1\Editor\Unity.exe' `
   -batchmode -nographics `

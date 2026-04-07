@@ -139,9 +139,9 @@
 | D-14 | VerificationScene.unity | DeductionBoard検証シーン。凍結機能 | - |
 | D-15 | docs/evidence/TASK_047/ | 旧ビルドログ (5ファイル) | - |
 | D-16 | docs/evidence/TASK_049/ | 旧エラー証跡 (3ファイル) | - |
-| D-17 | docs/archive/inbox/ | 旧セッション管理 (3ファイル) | - |
-| D-18 | docs/archive/reports/ | 旧レポート (9ファイル) | - |
-| D-19 | docs/archive/tasks/ | 旧タスク管理 (5ファイル) | - |
+| D-17 | （旧）docs/archive/inbox/ | 整理済み（履歴参照） | - |
+| D-18 | （旧）docs/archive/reports/ | 整理済み（履歴参照） | - |
+| D-19 | （旧）docs/archive/tasks/ | 整理済み（履歴参照） | - |
 | **合計** | | | **~920行 + シーン2つ + ドキュメント25ファイル** |
 
 ---
@@ -157,6 +157,6 @@
 | ChatScenarioData.cs (Data/) | ScenarioManager.PlayScenarioが使用。デバッグ機能として有効 |
 | MissingScriptScanner.cs | Editor検証ユーティリティ。VerificationMenuから参照 |
 | ContentAuthoringBatchValidator.cs | Editor検証ツール。ScenarioManagerEditorから参照 |
-| docs/archive/ROADMAP_TO_PRODUCTION.md | 長期計画の参照資料として残す |
-| docs/archive/EVIDENCE_REUSE_*.md | 検証方法論の参照資料 |
-| docs/archive/BUBBLE_REFACTOR_TEST_PLAN.md | 完了済みだが設計判断の記録として有用 |
+| docs/project-context.md | 長期計画の参照資料（archive から移設） |
+| docs/EVIDENCE_REUSE.md | 検証方法論の現行要約 |
+| （旧 BUBBLE_REFACTOR_TEST_PLAN） | 整理済み。必要時は git 履歴参照 |

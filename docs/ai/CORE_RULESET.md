@@ -9,6 +9,7 @@ Adapters such as `.claude/CLAUDE.md` and `AGENTS.md` must stay thin and defer he
 
 ## Source-of-truth policy
 - The canonical rules live in `docs/ai/*.md`.
+- The single ordered reading list for assistants is `docs/ai/READ_ORDER.md` (adapters must not define a competing numbered list).
 - Adapters, prompts, hooks, and helper agents are subordinate.
 - Project-local canonical docs (`INVARIANTS`, `USER_REQUEST_LEDGER`, `OPERATOR_WORKFLOW`, `INTERACTION_NOTES`) are factual project memory, not optional decoration.
 - If a rule conflicts with project-local canonical docs, first verify whether the docs reflect newer explicit user instruction.
