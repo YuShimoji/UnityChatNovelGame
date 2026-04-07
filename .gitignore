@@ -74,6 +74,9 @@ crashlytics-build.properties
 # Verification Results
 /VerificationResults/
 
+# Unity Editor から吐いたパフォーマンス基準の生ログ（日時付き・マシン依存。リポジトリには載せない）
+docs/PerformanceBaseline_RAW*.md
+
 # Local logs
 compile_test.log
 
