@@ -1,4 +1,4 @@
-name: Unity EditMode Tests
+name: Unity PlayMode Tests
 
 on:
   workflow_dispatch:
@@ -13,20 +13,20 @@ on:
       - "Assets/**"
       - "Packages/**"
       - "ProjectSettings/**"
-      - ".github/workflows/unity-editmode-tests.yml"
+      - ".github/workflows/unity-playmode-tests.yml"
   pull_request:
     paths:
       - "Assets/**"
       - "Packages/**"
       - "ProjectSettings/**"
-      - ".github/workflows/unity-editmode-tests.yml"
+      - ".github/workflows/unity-playmode-tests.yml"
 
 permissions:
   contents: read
   checks: write
 
 concurrency:
-  group: unity-editmode-${{ github.ref }}
+  group: unity-playmode-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -63,19 +63,17 @@ jobs:
         shell: bash
         run: |
           {
-            echo "## Unity EditMode readiness"
+            echo "## Unity PlayMode readiness"
             echo ""
             echo "- can_run: ${{ steps.detect.outputs.can_run }}"
             echo "- license_mode: ${{ steps.detect.outputs.license_mode }}"
-            echo "- supported secrets:"
-            echo "  - UNITY_LICENSE + UNITY_EMAIL + UNITY_PASSWORD"
-            echo "  - UNITY_SERIAL + UNITY_EMAIL + UNITY_PASSWORD"
           } >> "$GITHUB_STEP_SUMMARY"
 
-  editmode-tests:
+  playmode-tests:
     needs: readiness
     if: needs.readiness.outputs.can_run == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 45
 
     steps:
       - name: Checkout
@@ -87,11 +85,11 @@ jobs:
         uses: actions/cache@v4
         with:
           path: Library
-          key: Library-${{ runner.os }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          key: Library-playmode-${{ runner.os }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
           restore-keys: |
-            Library-${{ runner.os }}-
+            Library-playmode-${{ runner.os }}-
 
-      - name: Run EditMode tests
+      - name: Run PlayMode tests
         id: run-tests
         uses: game-ci/unity-test-runner@v4
         env:
@@ -102,20 +100,20 @@ jobs:
         with:
           projectPath: .
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-          testMode: editmode
+          testMode: playmode
           unityVersion: 6000.3.6f1
-          artifactsPath: artifacts/editmode
-          checkName: Unity EditMode Tests
+          artifactsPath: artifacts/playmode
+          checkName: Unity PlayMode Tests
 
-      - name: Upload EditMode artifacts
+      - name: Upload PlayMode artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: unity-editmode-artifacts
-          path: artifacts/editmode
+          name: unity-playmode-artifacts
+          path: artifacts/playmode
           if-no-files-found: warn
 
-  editmode-tests-skipped:
+  playmode-tests-skipped:
     needs: readiness
     if: needs.readiness.outputs.can_run != 'true'
     runs-on: ubuntu-latest
@@ -125,10 +123,7 @@ jobs:
         shell: bash
         run: |
           {
-            echo "## Unity EditMode tests skipped"
+            echo "## Unity PlayMode tests skipped"
             echo ""
-            echo "Unity credentials are not configured for this repository yet."
-            echo "Configure one of the following secret sets to enable TASK_058 Layer B:"
-            echo "- UNITY_LICENSE + UNITY_EMAIL + UNITY_PASSWORD"
-            echo "- UNITY_SERIAL + UNITY_EMAIL + UNITY_PASSWORD"
+            echo "Unity credentials are not configured. Configure secrets to enable PlayMode CI (same as EditMode workflow)."
           } >> "$GITHUB_STEP_SUMMARY"

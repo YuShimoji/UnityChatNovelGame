@@ -16,7 +16,7 @@
 ### 第1章で「まだ」持たせないもの
 - 矛盾指摘メカニクス（Ch2で導入。Ch1では矛盾を「感じる」だけ）
 - ハルシコイン（指摘メカニクスと連動。Ch1では存在を匂わせない）
-- サブスレッド/分岐スレッド（シンプルなメインチャットで体験を固める）
+- ~~サブスレッド（初期モックではメインログのみ）~~ → **SP-022 により任意サブスレッド（A/B/C）のパイロットを Ch1 に追加**（下表）。メイン Hub の必須トピック列は従来どおり
 - 「陰謀」「制度」という確信（Ch1の認識は「ノイズ」止まり）
 
 ### インタラクションモデル: ハブ&スポーク
@@ -243,7 +243,7 @@ title: Ch1_Day1_Hub
 
 ## Yarn ノード一覧（実装用）
 
-### Day 1（9ノード）
+### Day 1（11ノード・SP-022 パイロット含む）
 | ノード | 種別 | 遷移先 |
 |--------|------|--------|
 | `Ch1_Day1_Opening` | Opening (線形) | → Hub |
@@ -251,11 +251,25 @@ title: Ch1_Day1_Hub
 | `Ch1_Day1_Region` | スポーク | → Hub |
 | `Ch1_Day1_Terminal` | スポーク | → Hub |
 | `Ch1_Day1_AskMarco` | スポーク | → Hub |
+| `Ch1_Day1_ScoutNetwork` | スポーク（任意・C） | → Hub |
+| `Ch1_Day1_AnnotGlossary` | スポーク（任意・A） | → Hub |
 | `Ch1_Day1_Fragment` | スポーク | → Hub |
+| `Ch1_Day1_BranchPyramid` | 分岐（任意） | → Hub |
 | `Ch1_Day1_Winding` | Winding (線形) | → End |
 | `Ch1_Day1_End` | Pyramid補足 (線形) | → EndDay |
 
-### Day 2（9ノード）
+### Day 2（6ノード・`Ch1_Day1.yarn` 内モック Hub + SP-022 パイロット）
+| ノード | 種別 | 遷移先 |
+|--------|------|--------|
+| `Ch1_Day2_Opening` | Opening (線形) | → Hub |
+| `Ch1_Day2_Hub` | Hub (選択) | → 各スポーク / Winding |
+| `Ch1_Day2_Update` | スポーク | → Hub |
+| `Ch1_Day2_Status` | スポーク | → Hub |
+| `Ch1_Day2_ScoutPing` | スポーク（任意・C） | → Hub |
+| `Ch1_Day2_Winding` | Winding (線形) | → EndDay |
+
+### Day 2（設計ビート・上文 Day 2 節。本番尺は未だ別ファイル未作成）
+
 | ノード | 種別 | 遷移先 |
 |--------|------|--------|
 | `Ch1_Day2_Opening` | Opening (線形) | → Hub |
@@ -279,7 +293,24 @@ title: Ch1_Day1_Hub
 | `Ch1_Day3_Winding` | Winding (線形) | → End |
 | `Ch1_Day3_End` | Pyramid補足 (線形) | → EndDay |
 
-合計: **27ノード**（3 Day x 9-10ノード）
+**現リポ実装（`Ch1_Day1.yarn`）**: Day1 11 ノード + Day2 モック 6 ノード + Day3 本番尺（設計表の 10 ノードに相当するブロックが同一ファイル内に存在）。**設計上の Ch1 全 Day**: 27 ノード目安
+
+---
+
+## SP-022 サブクエスト対応（Ch1 パイロット）
+
+[22_subquest_exploration_content.md](22_subquest_exploration_content.md) の節↔ID 対応。**既存 Yarn コマンドのみ**。
+
+| サブクエスト ID | 型 | Day | 挿入位置 | 必須 | Yarn ノード |
+|-----------------|-----|-----|----------|------|-------------|
+| ch1_note_facility | A | 1 | 断片共有後（Manifest） | 任意（自動） | `Ch1_Day1_Fragment` |
+| ch1_cond_analysis | B | 1→2 | 断片取得済みで Day2 から | 任意（自動） | `Ch1_Day2_Opening`（LatentCond） |
+| scout_ch1_network | C | 1 | Hub（任意選択） | 任意 | `Ch1_Day1_ScoutNetwork` |
+| annot_ch1_glossary | A | 1 | Hub（断片閲覧後・任意） | 任意 | `Ch1_Day1_AnnotGlossary` |
+| scout_ch1_day2_ping | C | 2 | Day2 Hub（任意選択） | 任意 | `Ch1_Day2_ScoutPing` |
+| scout_ch1_d3_route | C | 3 | Mason 報告（Manifest） | 任意（Hub 必須トピック内） | `Ch1_Day3_MasonReport` |
+| scout_ch1_d3_board | C | 3 | 断片 #3 取得時（Manifest） | 任意（Hub 必須トピック内） | `Ch1_Day3_Fragment3` |
+| annot_ch1_d3_compare | A | 3 | 3 断片比較（Manifest） | 任意（Hub 必須トピック内） | `Ch1_Day3_Compare` |
 
 ---
 
@@ -323,9 +354,8 @@ Ch1では矛盾指摘メカニクスは発火しない。line tags はYarnスク
 | `<<Typing bool>>` | 実装済み | Pyramid の長考演出 |
 
 ### Yarnスクリプト構成
-- `Ch1_Day1.yarn` --- Day 1 全ノード（9ノード）
-- `Ch1_Day2.yarn` --- Day 2 全ノード（9ノード）
-- `Ch1_Day3.yarn` --- Day 3 全ノード（10ノード）
+- `Assets/Resources/Yarn/active/Ch1_Day1.yarn` --- **Day 1〜3** 全ノード + SP-022 パイロット（単一ファイル）
+- 設計ビートの本番尺に分割する場合のみ `Ch1_Day2.yarn` / `Ch1_Day3.yarn` へ切り出しを検討
 
 ### ダッシュボード連携（要決定）
 - EndDay が `ch{N}` を完了登録する現在の実装では、Day1で `ch1` が完了になる

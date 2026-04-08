@@ -18,9 +18,10 @@ MonoBehaviour:
   m_StartNodeName: Ch1_Day1_Opening
   m_ChapterNumber: 1
   m_RequiredCompletedChannelID: 
-  m_TotalDays: 2
+  m_TotalDays: 3
   m_DayStartNodeNames:
   - Ch1_Day1_Opening
   - Ch1_Day2_Opening
+  - Ch1_Day3_Opening
   m_EnableHints: 0
   m_MaxHintDifficulty: 1

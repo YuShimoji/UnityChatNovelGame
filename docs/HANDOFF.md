@@ -26,12 +26,32 @@
 
 ## Safe Next Steps
 
-1. Ch1 Yarn を前進
+1. Ch1 Yarn を前進（現行: Day1〜3 を `Ch1_Day1.yarn` / `ch1` チャンネル 3 日）
 2. Content Pipeline で `Sync Authoring Assets`
 3. ContentAuthoring で StartNode を確認して再生
 4. 好機に PlayMode 8件の実ラン記録を `docs/verification/` に追加
 5. UI 気づきは `docs/UI_ISSUES.md`、仕様ギャップは SP-022 に記録
 6. docs 拡張時は `docs/ai/READ_ORDER.md` の正典導線を崩さず、重複ページを増やさない
+
+### 手動確認ハンズオン（Ch1 + サブスレッド・SUBSEQUENT 用）
+
+`project-context.md` の SUBSEQUENT で通し確認する際の最短手順。
+
+1. Content Pipeline で **Sync Authoring Assets** 済みであること
+2. ContentAuthoring を開き、**StartNode** が Ch1 入口（例: `Ch1_Day1_Opening`）であることを確認
+3. Day1 Hub を進行し、**必須 4 トピック**を消化できること
+4. 任意: Hub の **電波ログ／用語メモ**で C/A パイロットがサイドバーに現れ、`CompleteThread` 後に期待どおり閉じること
+5. Day2 モックに入り、**待受ポート**の C パイロットを 1 回通す（任意）
+6. 断片取得済みセーブで `ch1_cond_analysis`（B・LatentCond）が期待どおり出ること
+7. 問題は `docs/UI_ISSUES.md`、エンジン／仕様の不足は `docs/StorySpec/22_subquest_exploration_content.md` §6 と `docs/verification/2026-04-08-ch1-subquest-gap-template.md` の P0/P1/P2 表に追記
+
+### Ch2 着手時（LATER のチェックリスト要約）
+
+`project-context.md` の LATER に対応。SUBSEQUENT で P0/P1/P2 が付いた状態から。
+
+1. Ch2 本編 Yarn を前進（例: `Ch2_LocationConfusion.yarn`）。サブは SP-022 と同パターンで積む
+2. **P1/P2 は実装しない**。**P0** が進行不能・セーブ／スレッド破綻のときだけ短い仕様＋実装スライスを挟む
+3. **BL-002（ポートレート）**は Ch2 の視認性がボトルネックと判断した時点で着手可否を決める
 
 ## Source Of Truth
 

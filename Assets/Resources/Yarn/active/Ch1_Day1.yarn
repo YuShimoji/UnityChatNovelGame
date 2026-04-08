@@ -3,6 +3,7 @@
 /// 登場: Barnaby(player), Pyramid(AI), Marco(人間)
 /// 断片: fragment_ch1_01 (施設管理規約)
 /// 矛盾メカニクス: なし (line tags のみ付与)
+/// SP-022 パイロット: Day1 Hub（scout_ch1_network, annot_ch1_glossary）+ Day2（scout_ch1_day2_ping）+ Day3（scout_ch1_d3_* , annot_ch1_d3_compare）
 
 title: Ch1_Day1_Opening
 ---
@@ -11,6 +12,8 @@ title: Ch1_Day1_Opening
 <<declare $d1_asked_marco = false>>
 <<declare $d1_asked_fragment = false>>
 <<declare $d1_did_branch_pyramid = false>>
+<<declare $d1_done_scout_network = false>>
+<<declare $d1_done_annot_glossary = false>>
 <<declare $halluci_coin = 0>>
 
 // 潜在スレッド: 断片発見後に顕在化
@@ -90,6 +93,10 @@ title: Ch1_Day1_Hub
 -> さっきの変なテキストは何だ？ <<if not $d1_asked_fragment>>
     <<set $d1_asked_fragment to true>>
     <<jump Ch1_Day1_Fragment>>
+-> 端末の電波ログをざっと確認する <<if not $d1_done_scout_network>>
+    <<jump Ch1_Day1_ScoutNetwork>>
+-> 用語メモを開く（不可索引物） <<if $d1_asked_fragment and not $d1_done_annot_glossary>>
+    <<jump Ch1_Day1_AnnotGlossary>>
 -> Pyramid、さっきの情報には矛盾がないか？ <<if $d1_asked_region and $d1_asked_fragment and not $d1_did_branch_pyramid>>
     <<jump Ch1_Day1_BranchPyramid>>
 -> 今日はここまでにしよう <<if $d1_asked_region and $d1_asked_terminal and $d1_asked_marco and $d1_asked_fragment>>
@@ -222,6 +229,32 @@ title: Ch1_Day1_AskMarco
 
 「確認できません」。便利な言葉だな。
 
+<<jump Ch1_Day1_Hub>>
+===
+
+title: Ch1_Day1_ScoutNetwork
+---
+<<DeclareThreadTyped "scout_ch1_network" "C" "周辺電波スキャン">>
+<<SystemMessage "簡易スキャンを実行しています...">>
+<<StartWait 0.6>>
+<<AddThreadMessage "scout_ch1_network" "帯域: 低〜中で不安定。瞬断が3回記録された。">>
+<<AddThreadMessage "scout_ch1_network" "Marcoの言う通り、法則は読み取れない。">>
+<<set $speaker to "player">>
+端末の数字だけ見ても、原因はわからないな。
+<<CompleteThread "scout_ch1_network">>
+<<set $d1_done_scout_network to true>>
+<<jump Ch1_Day1_Hub>>
+===
+
+title: Ch1_Day1_AnnotGlossary
+---
+<<DeclareThreadTyped "annot_ch1_glossary" "A" "用語メモ（不可索引物）">>
+<<AddThreadMessage "annot_ch1_glossary" "不可索引物: 検索インデックスに載らない文書の欠片。現場では断片と呼ばれる。">>
+<<AddThreadMessage "annot_ch1_glossary" "出典: Marco談（Day1 Hub）。正式用語ではない。">>
+<<set $speaker to "player">>
+ベルナルドが来たら、もう少し整理してもらおう。
+<<CompleteThread "annot_ch1_glossary">>
+<<set $d1_done_annot_glossary to true>>
 <<jump Ch1_Day1_Hub>>
 ===
 
@@ -399,6 +432,7 @@ title: Ch1_Day2_Opening
 ---
 <<declare $d2_asked_update = false>>
 <<declare $d2_asked_status = false>>
+<<declare $d2_done_scout_ping = false>>
 
 // 条件付き潜在スレッド: Day1で断片を発見していれば自動で出現
 <<DeclareThreadLatentCond "ch1_cond_analysis" "B" "断片分析レポート" "$has_topic_fragment_ch1_01">>
@@ -433,6 +467,8 @@ title: Ch1_Day2_Hub
 -> システムの状態は？ <<if not $d2_asked_status>>
     <<set $d2_asked_status to true>>
     <<jump Ch1_Day2_Status>>
+-> 待受ポートを一瞬だけ覗く <<if not $d2_done_scout_ping>>
+    <<jump Ch1_Day2_ScoutPing>>
 -> 今日はここまでにしよう <<if $d2_asked_update and $d2_asked_status>>
     <<jump Ch1_Day2_Winding>>
 -> もう少し考えよう <<if ($d2_asked_update or $d2_asked_status) and not ($d2_asked_update and $d2_asked_status)>>
@@ -467,13 +503,223 @@ title: Ch1_Day2_Status
 <<jump Ch1_Day2_Hub>>
 ===
 
+title: Ch1_Day2_ScoutPing
+---
+<<DeclareThreadTyped "scout_ch1_day2_ping" "C" "待受スキャン（パイロット）">>
+<<AddThreadMessage "scout_ch1_day2_ping" "外部ノード: 応答あり。往復レイテンシは高い。">>
+<<AddThreadMessage "scout_ch1_day2_ping" "Pyramidの言う「接続不安定」と整合。">>
+<<set $speaker to "pyramid">>
+<<StartWait 0.5>>
+ログは捕捉できませんが、接続は維持されています。
+<<CompleteThread "scout_ch1_day2_ping">>
+<<set $d2_done_scout_ping to true>>
+<<jump Ch1_Day2_Hub>>
+===
+
 title: Ch1_Day2_Winding
 ---
 <<set $speaker to "pyramid">>
 <<StartWait 1>>
 本日のセッションは以上です。お疲れさまでした。
 
+<<StartWait 0.5>>
+
+<<set $speaker to "marco">>
+<<StartWait 0.5>>
+あ、そうだ。端末の受信箱に、また変な断片が落ちてた。教育まわりの紙切れだ。
+
+<<UnlockTopic "fragment_ch1_02">>
+<<SystemMessage "断片「教育課程概要（部分）」を記録しました">>
+
 <<SystemMessage "...">>
 
 <<EndDay 2>>
+===
+
+/// Chapter 1 Day 3: 外の世界（03a ベースの最小プレイアブル + SP-022 パイロット）
+/// Hub: Mason報告 / 断片#3 / 比較 / 今後の方針 → Winding → EndDay 3
+
+title: Ch1_Day3_Opening
+---
+<<declare $d3_asked_mason_report = false>>
+<<declare $d3_asked_fragment3 = false>>
+<<declare $d3_asked_compare = false>>
+<<declare $d3_asked_plan = false>>
+
+// SP-022 パイロット用: Day3 で顕在化させる潜在スレッド（C×2 + A×1）
+<<DeclareThreadLatent "scout_ch1_d3_route" "C" "周辺ルート偵察（Day3）">>
+<<DeclareThreadLatent "scout_ch1_d3_board" "C" "掲示板・紙面の記録（Day3）">>
+<<DeclareThreadLatent "annot_ch1_d3_compare" "A" "断片比較メモ（Day3）">>
+
+<<SystemMessage "--- 3日目 ---">>
+
+<<StartWait 1>>
+
+<<set $speaker to "marco">>
+今日はメイスンが顔を出す。外の様子を一言でいいから聞け。
+
+<<StartWait 0.8>>
+
+<<set $speaker to "bernardo">>
+接続は安定している。資料の整理は進めておいた。
+
+<<StartWait 0.5>>
+
+<<set $speaker to "pyramid">>
+<<StartWait 0.5>>
+Barnabyさん、本日のセッションを開始します。
+
+<<set $speaker to "player">>
+-> 続きを聞く
+    <<jump Ch1_Day3_Hub>>
+===
+
+title: Ch1_Day3_Hub
+---
+<<set $speaker to "pyramid">>
+<<StartWait 0.5>>
+確認したいトピックを選んでください。
+
+<<set $speaker to "player">>
+-> メイスンの報告を聞く <<if not $d3_asked_mason_report>>
+    <<set $d3_asked_mason_report to true>>
+    <<jump Ch1_Day3_MasonReport>>
+-> 掲示板の紙を見る <<if not $d3_asked_fragment3>>
+    <<set $d3_asked_fragment3 to true>>
+    <<jump Ch1_Day3_Fragment3>>
+-> 3つの断片を比較 <<if $d3_asked_fragment3 and not $d3_asked_compare>>
+    <<set $d3_asked_compare to true>>
+    <<jump Ch1_Day3_Compare>>
+-> これからどうする <<if $d3_asked_compare and not $d3_asked_plan>>
+    <<set $d3_asked_plan to true>>
+    <<jump Ch1_Day3_Plan>>
+-> 今日はここまでにしよう <<if $d3_asked_mason_report and $d3_asked_fragment3 and $d3_asked_compare and $d3_asked_plan>>
+    <<jump Ch1_Day3_Winding>>
+-> もう少し考えよう <<if ($d3_asked_mason_report or $d3_asked_fragment3 or $d3_asked_compare or $d3_asked_plan) and not ($d3_asked_mason_report and $d3_asked_fragment3 and $d3_asked_compare and $d3_asked_plan)>>
+    <<jump Ch1_Day3_Hub>>
+===
+
+title: Ch1_Day3_MasonReport
+---
+<<ManifestThread "scout_ch1_d3_route">>
+<<AddThreadChat "scout_ch1_d3_route" "mason" "無人売店の看板が二重表記。施設ステータスは端末から取れなかった。">>
+<<AddThreadMessage "scout_ch1_d3_route" "現地: 閉鎖表示の建物が地図上は稼働中。 #line:ch1_facility_status_src">>
+
+<<set $speaker to "mason">>
+<<StartWait 0.8>>
+現地はこうだ。端末の一覧と食い違う。
+
+<<set $speaker to "pyramid">>
+<<StartWait 0.5>>
+該当施設のステータスは取得できませんでした。 #line:ch1_facility_status_tgt
+
+<<set $speaker to "marco">>
+<<StartWait 0.3>>
+ほらな。
+
+<<jump Ch1_Day3_Hub>>
+===
+
+title: Ch1_Day3_Fragment3
+---
+<<set $speaker to "mason">>
+<<StartWait 0.8>>
+掲示板に貼ってあった紙を撮影した。施設利用案内の一部だ。
+
+<<ManifestThread "scout_ch1_d3_board">>
+<<AddThreadMessage "scout_ch1_d3_board" "写真: 掲示板の紙（適用地名が途中で切れている）">>
+
+<<UnlockTopic "fragment_ch1_03">>
+<<SystemMessage "断片「施設利用案内（部分）」を記録しました">>
+
+<<set $speaker to "pyramid">>
+<<StartWait 0.5>>
+公的データベースとの照合は保留です。
+
+<<jump Ch1_Day3_Hub>>
+===
+
+title: Ch1_Day3_Compare
+---
+<<ManifestThread "annot_ch1_d3_compare">>
+<<AddThreadMessage "annot_ch1_d3_compare" "断片1: 行政（施設規約） / 断片2: 教育 / 断片3: 施設案内。参照先が欠ける共通点。">>
+
+<<set $speaker to "bernardo">>
+<<StartWait 0.8>>
+並べると書き手は違う。でも全部、参照先が消えている。
+
+<<set $speaker to "marco">>
+<<StartWait 0.5>>
+わざと消してるのか？
+
+<<set $speaker to "bernardo">>
+<<StartWait 0.5>>
+両方ありうる。断定はしない。
+
+<<jump Ch1_Day3_Hub>>
+===
+
+title: Ch1_Day3_Plan
+---
+<<AddThreadMessage "annot_ch1_d3_compare" "次アクション: 材料不足。端末外の観測を継続。">>
+
+<<set $speaker to "marco">>
+<<StartWait 0.8>>
+情報環境そのものがこうなってる可能性がある。
+
+<<set $speaker to "mason">>
+<<StartWait 0.5>>
+明日はもう少し遠くまで行く。
+
+<<set $speaker to "bernardo">>
+<<StartWait 0.5>>
+材料が足りない。慎重に積み上げよう。
+
+<<jump Ch1_Day3_Hub>>
+===
+
+title: Ch1_Day3_Winding
+---
+<<set $speaker to "pyramid">>
+<<StartWait 1>>
+本日のセッションは終了です。
+
+<<set $speaker to "marco">>
+<<StartWait 0.5>>
+またな、Barnaby。
+
+<<set $speaker to "bernardo">>
+<<StartWait 0.3>>
+ログは共有しておく。
+
+<<set $speaker to "mason">>
+<<StartWait 0.3>>
+了解。
+
+<<CompleteThread "scout_ch1_d3_route">>
+<<CompleteThread "scout_ch1_d3_board">>
+<<CompleteThread "annot_ch1_d3_compare">>
+
+<<jump Ch1_Day3_End>>
+===
+
+title: Ch1_Day3_End
+---
+<<set $speaker to "pyramid">>
+<<StartWait 1>>
+補足です。断片3件は端末内に保存しました。
+
+<<StartWait 0.5>>
+
+一致する公的記録は見つかりませんでした。
+
+<<StartWait 0.8>>
+
+...公的記録が存在しない、というわけではありません。照合範囲が限定されている可能性があります。
+
+<<StartWait 1.5>>
+
+<<SystemMessage "...">>
+
+<<EndDay 3>>
 ===

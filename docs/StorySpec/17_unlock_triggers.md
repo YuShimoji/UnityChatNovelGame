@@ -76,4 +76,19 @@ SP-099 sec G で「複合トリガー方式」が決定済み。本文書はそ�
 
 ---
 
+## 6. Ch1 具体例（SP-022 副次）
+
+`Ch1_Day1.yarn` で実際に使っているパターン。複合条件の本格運用前の参照用。
+
+| 目的 | 実装 |
+|------|------|
+| 断片トピック取得後に B 型スレッドを自動顕在化 | `<<DeclareThreadLatentCond "ch1_cond_analysis" "B" "断片分析レポート" "$has_topic_fragment_ch1_01">>`（Day2 Opening） |
+| 断片共有のタイミングで A 型を Manifest + メッセージ注入 | `<<ManifestThread "ch1_note_facility">>` + `<<AddThreadMessage ...>>`（Day1 Fragment） |
+| 任意サブクエスト（C/A）の開始〜完了 | `<<DeclareThreadTyped "…" "C" "表示名">>` または型 A 同様 → `<<AddThreadMessage …>>` → `<<CompleteThread "…">>`（SP-022 パイロット） |
+| Day3 で本線トピックに埋め込む C/A（Latent→Manifest） | Day3 Opening で `DeclareThreadLatent`、各スポークで `ManifestThread` + `AddThreadChat` / `AddThreadMessage`、Winding で `CompleteThread`（`scout_ch1_d3_*` / `annot_ch1_d3_compare`） |
+
+HC 閾値・前章クリアのみの解放は ChannelData 側（パターン B/C）で足りる場合、Yarn に条件行を書かない。
+
+---
+
 *本文書は SP-099 sec G の決定を独立仕様として分離したもの。詳細設計はユーザー承認後に拡充する。*

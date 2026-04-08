@@ -1,6 +1,6 @@
 # Runtime State
 
-**Updated**: 2026-04-10（docs 統廃合の継続反映）
+**Updated**: 2026-04-10（Ch1 Day3 実装 + SUBSEQUENT チェックリスト + PlayMode CI）
 
 ## Current Position
 
@@ -13,7 +13,7 @@
 - later_recommended_slice: **Ch2 本編＋サブ前進 + P0 のみ例外スライス**（SUBSEQUENT 完了後。project-context LATER + 意思決定解説、HANDOFF チェックリスト）
 - active_artifact: Ch1 Yarn + ContentAuthoring 再生フロー（併せてエンジン・PlayMode 8 件スイートは session 22 で安定化済み）
 - artifact_surface: ContentAuthoring（本編）/ DebugChatScene（デバッグ）。PlayMode 8/8・EditMode 75/75 はローカル通過済み（再実行は好機に）
-- last_change_relation: merge（origin workspace sync + session 22 コード／テスト + docs 統合）
+- last_change_relation: direct（Ch1 Day3 Yarn + ch1 3 日 + docs/CI 導線）
 
 ## Counters
 
@@ -45,6 +45,21 @@
 - blocks_since_visual_audit: 0
 
 ## Session Log
+
+### 2026-04-08（推奨開発プラン実装スライス）
+
+- **Ch1**: `Ch1_Day1.yarn` に SP-022 パイロット（Day1 Hub: C+A、Day2: C 等）を配置。節↔ID は `03a_ch1_section_beats.md`
+- **ドキュメント**: `OPERATOR_WORKFLOW` / `HANDOFF` / `17` §6 / `22` §6.3 などを同期
+- **検証**: `docs/verification/2026-04-08-ch1-subquest-gap-template.md`（ギャップ P0/P1/P2 用）
+
+### 2026-04-10 (Content レーン — Ch1 Day3 + 検証・CI 導線)
+
+- **Ch1**: `Ch1_Day1.yarn` に Day3（`Ch1_Day3_*`）を追加。`ch1.asset` の `m_TotalDays: 3` と Day 開始ノードを更新
+- **Day2 Winding**: `fragment_ch1_02` の `UnlockTopic`（03a の断片 #2 導線）
+- **SP-022**: Day3 パイロット（`scout_ch1_d3_route` / `scout_ch1_d3_board` / `annot_ch1_d3_compare`）。`03a` / `22` / `17` を同期
+- **SUBSEQUENT**: `docs/verification/SUBSEQUENT_playthrough_and_tests.md` チェックリスト新設
+- **LATER**: `docs/StorySpec/LATER_CH2_PLAYBOOK.md` オペレーション短冊
+- **CI**: `.github/workflows/unity-playmode-tests.yml` 新設。EditMode ワークフローの Unity 版を `6000.3.6f1` に合わせる
 
 ### 2026-04-10 (docs cleanup phase 2-4)
 
