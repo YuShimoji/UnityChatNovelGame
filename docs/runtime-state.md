@@ -1,6 +1,6 @@
 # Runtime State
 
-**Updated**: 2026-04-10（SUBSEQUENT 完了プラン: 手順正本 + 分岐ルール）
+**Updated**: 2026-04-09（handoff 同期: リモート整合 + debug ログ除外）
 
 ## Current Position
 
@@ -13,7 +13,7 @@
 - later_recommended_slice: **Ch2 本編＋サブ前進 + P0 のみ例外スライス**（SUBSEQUENT 完了後。project-context LATER + 意思決定解説、HANDOFF チェックリスト）
 - active_artifact: Ch1 Yarn + ContentAuthoring 再生フロー（併せてエンジン・PlayMode 8 件スイートは session 22 で安定化済み）
 - artifact_surface: ContentAuthoring（本編）/ DebugChatScene（デバッグ）。PlayMode 8/8・EditMode 75/75 はローカル通過済み（再実行は好機に）
-- last_change_relation: direct（プラン v2: Ch1 プレフライト検証 doc、SP-022 §4.1、SUBSEQUENT/HANDOFF 拡充、Ch2 整合メモ、Unity CI 運用 doc、spec-index EN-013）
+- last_change_relation: direct（2026-04-09 handoff: `.gitignore` debug ログ、HANDOFF snapshot / project-context / runtime-state / DECISION_LOG 同期）
 
 ## Counters
 
@@ -45,6 +45,12 @@
 - blocks_since_visual_audit: 0
 
 ## Session Log
+
+### 2026-04-09（セッション引き継ぎ・リモート同期）
+
+- **Git**: `main` と `origin/main` を fetch で突き合わせ。追跡ファイルの未プッシュ差分はなし。ルートの計測 NDJSON を `debug-*.log` として `.gitignore`
+- **ドキュメント**: `HANDOFF.md`（Handoff snapshot）、`project-context.md`（直近の状態 1 行）、本ファイルの Updated / Session Log
+- **コード・Yarn**: 変更なし
 
 ### 2026-04-08（推奨開発プラン実装スライス）
 

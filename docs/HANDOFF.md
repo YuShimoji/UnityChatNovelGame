@@ -10,6 +10,14 @@
 4. `docs/INVARIANTS.md`
 5. `docs/USER_REQUEST_LEDGER.md`
 
+## Handoff snapshot (2026-04-09)
+
+- **完了**: `main` と `origin/main` の突き合わせ（本コミットまで追い越しなし）。ルートの計測用 NDJSON（`debug-*.log`）を `.gitignore` に追加し、リモートへノイズを載せない状態にした。
+- **残作業**: 下記「Current Focus」および `docs/project-context.md` の CURRENT SLICE（変更なし）。
+- **意図的に触れていないもの**: アプリコード・Yarn・シーン・Prefab（本ブロックは同期と運用整備のみ）。
+- **次セッション最初に見るファイル**: `docs/HANDOFF.md` → `docs/project-context.md` → `docs/runtime-state.md`
+- **未解決の設計判断（新規）**: なし。SP-022 の HUMAN_AUTHORITY 領域は従来どおりユーザー判断待ち。
+
 ## Current Focus
 
 - 主目的: Ch1 コンテンツ前進 + 制作パイプライン実走

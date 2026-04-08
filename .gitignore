@@ -79,6 +79,8 @@ docs/PerformanceBaseline_RAW*.md
 
 # Local logs
 compile_test.log
+# エディタ／計測セッションがルートに吐く NDJSON（リポジトリに載せない）
+debug-*.log
 
 # Special files
 **/nul
