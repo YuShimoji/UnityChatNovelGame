@@ -330,7 +330,16 @@
     "pct": 60,
     "cat": "infra",
     "file": null,
-    "summary": "PlayMode テスト: SmokeGate 4件 + ScenarioFlow 4件 = 計8テストケース。共通ヘルパー分離済み。teardown DialogueException 対策済み (UnityTearDown + StopScenario)。batch XML 出力対応済み。残: Ch3 起動テスト、ETK 全コマンド網羅、Phase A 検証項目の自動化(HUMAN_AUTHORITY)"
+    "summary": "PlayMode テスト: SmokeGate 4件 + ScenarioFlow 4件 = 計8テストケース。共通ヘルパー分離済み。teardown DialogueException 対策済み (UnityTearDown + StopScenario)。batch XML 出力対応済み。実行記録テンプレ: docs/verification/2026-04-10-playmode-8-results-TEMPLATE.md。残: Ch3 起動テスト、ETK 全コマンド網羅、Phase A 検証項目の自動化(HUMAN_AUTHORITY)"
+  },
+  {
+    "id": "EN-013",
+    "title": "検証運用・Unity GitHub CI",
+    "status": "done",
+    "pct": 50,
+    "cat": "infra",
+    "file": "docs/verification/UNITY_GITHUB_CI.md",
+    "summary": "Actions で EditMode/PlayMode を回すためのシークレット一覧と確認手順。関連: Ch1 Day1-3 プレフライト(2026-04-10)、SUBSEQUENT_playthrough_and_tests、PlayMode 8 結果テンプレ"
   },
   {
     "id": "BL-001",

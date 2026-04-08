@@ -50,7 +50,7 @@
 ## CURRENT SLICE
 
 - スライス名: **Ch1 コンテンツ前進 + 制作パイプライン実運用**（UI バッチは触らない）
-- ユーザー操作列: Yarn 編集 → Content Pipeline で **Sync Authoring Assets** → ContentAuthoring（または既定の再生シーン）で **Ch1 通し／Day 跨ぎ**を確認 → 新規気づきは **UI は UI_ISSUES.md**、**進行不能のみ**ブロッカーとして別メモ
+- ユーザー操作列: Yarn 編集 → Content Pipeline で **Sync Authoring Assets** → ContentAuthoring（または既定の再生シーン）で **Ch1 通し／Day 跨ぎ**を確認 → 新規気づきは **UI は UI_ISSUES.md**、**進行不能のみ**ブロッカーとして別メモ。静的整合の記録は [docs/verification/2026-04-10-ch1-day1-3-preflight.md](docs/verification/2026-04-10-ch1-day1-3-preflight.md)
 - 成功状態: Ch1 の **次の Day／節**が執筆またはノード構成として繋がり、セッションごとに **「コンテンツが増えた」**状態が残る。既知 Ch1 UI 件はバッチ対象としてリストのみ増やす
 - このスライスで必要な基盤能力: タップスキップ (済)、タイミング (済)、wiki (済)、Validator (済)、SOGenerator (済)、Content Pipeline (済)
 - 今回はやらないこと: [横断保留](#横断保留) を参照

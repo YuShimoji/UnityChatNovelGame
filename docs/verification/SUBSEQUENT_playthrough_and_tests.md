@@ -9,6 +9,7 @@
 - [ ] `Tools > FoundPhone > Content Pipeline` → **Sync Authoring Assets**（エラーなし）
 - [ ] Play で Ch1 Day1 → Day2 → Day3 まで通し（`EndDay` まで）
 - [ ] サイドバーで SP-022 系スレッド（`scout_*` / `annot_*` / `ch1_cond_analysis` 等）を開き、メッセージが期待どおりか目視
+- [ ] Day3: `scout_ch1_d3_route` / `scout_ch1_d3_board` / `annot_ch1_d3_compare` が Hub 必須トピック経由で現れ、`CompleteThread` 後の状態が破綻しないか
 - [ ] Save → Load（任意）でスレッド状態が破綻しないか
 - [ ] 新規 UI 気づき → `docs/UI_ISSUES.md`（コード修正はバッチまで）
 
@@ -33,3 +34,13 @@ Unity Test Runner → PlayMode 全実行、または batch（`TestRunnerHelper` 
 - Unity:
 - ブランチ / コミット:
 - 結果サマリ:
+
+詳細テンプレ: [`2026-04-10-playmode-8-results-TEMPLATE.md`](2026-04-10-playmode-8-results-TEMPLATE.md)
+
+## 4. ギャップ転記の例（コピー用）
+
+| ID / 説明 | 優先 | メモ |
+|-----------|------|------|
+| （例）Day3 Hub 通過後にサブが再 Manifest され進行不能 | P0 | 再現手順 3 行 |
+| （例）B 型がクリック不能で誤解を招く | P1 | UI_ISSUES へリンク可 |
+| （例）Wiki 本格遷移が欲しい | P2 | SP-022 §6.2・IDEA POOL |

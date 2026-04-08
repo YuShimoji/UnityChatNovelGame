@@ -13,7 +13,7 @@
 - later_recommended_slice: **Ch2 本編＋サブ前進 + P0 のみ例外スライス**（SUBSEQUENT 完了後。project-context LATER + 意思決定解説、HANDOFF チェックリスト）
 - active_artifact: Ch1 Yarn + ContentAuthoring 再生フロー（併せてエンジン・PlayMode 8 件スイートは session 22 で安定化済み）
 - artifact_surface: ContentAuthoring（本編）/ DebugChatScene（デバッグ）。PlayMode 8/8・EditMode 75/75 はローカル通過済み（再実行は好機に）
-- last_change_relation: direct（Ch1 Day3 Yarn + ch1 3 日 + docs/CI 導線）
+- last_change_relation: direct（プラン v2: Ch1 プレフライト検証 doc、SP-022 §4.1、SUBSEQUENT/HANDOFF 拡充、Ch2 整合メモ、Unity CI 運用 doc、spec-index EN-013）
 
 ## Counters
 
@@ -32,7 +32,7 @@
 - mock_files: 0
 - yarn_active: 6 (Ch1_Day1, Ch2_LocationConfusion, Ch3_InstitutionalFragments, DebugQuickTest, EngineTestKit, VerticalSlice)
 - yarn_archive: 5 (Ch1_Terminal, FirstSlice, MVPTest, DebugScript, SubthreadTest)
-- spec_entries: 41 (done 23 / partial 10 / draft 2 / todo 5 + EN-012 + BL-001/002/003 + SP-022)
+- spec_entries: 42 (done 24 / partial 10 / draft 2 / todo 5 + EN-012 + EN-013 + BL-001/002/003 + SP-022)
 - todo_fixme_hack: 1 (ChatController.cs — ステータスバールーティング)
 - obsolete_marks: 2 (ContradictionPair.UnlockTopic x2)
 - chatcontroller_lines: 2328 (+3: OnTypewriterCompleted イベント)

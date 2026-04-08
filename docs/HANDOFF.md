@@ -26,6 +26,7 @@
 
 ## Safe Next Steps
 
+0. （任意）リポジトリ静的整合: `docs/verification/2026-04-10-ch1-day1-3-preflight.md`（Editor 通しは同ファイル B 節）
 1. Ch1 Yarn を前進（現行: Day1〜3 を `Ch1_Day1.yarn` / `ch1` チャンネル 3 日）
 2. Content Pipeline で `Sync Authoring Assets`
 3. ContentAuthoring で StartNode を確認して再生
@@ -43,7 +44,8 @@
 4. 任意: Hub の **電波ログ／用語メモ**で C/A パイロットがサイドバーに現れ、`CompleteThread` 後に期待どおり閉じること
 5. Day2 モックに入り、**待受ポート**の C パイロットを 1 回通す（任意）
 6. 断片取得済みセーブで `ch1_cond_analysis`（B・LatentCond）が期待どおり出ること
-7. 問題は `docs/UI_ISSUES.md`、エンジン／仕様の不足は `docs/StorySpec/22_subquest_exploration_content.md` §6 と `docs/verification/2026-04-08-ch1-subquest-gap-template.md` の P0/P1/P2 表に追記
+7. Day3: Hub **必須トピック**（Mason 報告・掲示板・比較）を進行し、Latent から `scout_ch1_d3_route` / `scout_ch1_d3_board` / `annot_ch1_d3_compare` が Manifest されること
+8. 問題は `docs/UI_ISSUES.md`、エンジン／仕様の不足は `docs/StorySpec/22_subquest_exploration_content.md` §6 と `docs/verification/2026-04-08-ch1-subquest-gap-template.md` の P0/P1/P2 表に追記
 
 ### Ch2 着手時（LATER のチェックリスト要約）
 

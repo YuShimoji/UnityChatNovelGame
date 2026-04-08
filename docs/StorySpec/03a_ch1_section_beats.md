@@ -311,6 +311,7 @@ title: Ch1_Day1_Hub
 | scout_ch1_d3_route | C | 3 | Mason 報告（Manifest） | 任意（Hub 必須トピック内） | `Ch1_Day3_MasonReport` |
 | scout_ch1_d3_board | C | 3 | 断片 #3 取得時（Manifest） | 任意（Hub 必須トピック内） | `Ch1_Day3_Fragment3` |
 | annot_ch1_d3_compare | A | 3 | 3 断片比較（Manifest） | 任意（Hub 必須トピック内） | `Ch1_Day3_Compare` |
+| ch1_branch_analysis | 分岐 | 1 | Winding（Pyramid 補足分析） | メイン進行に沿う | `Ch1_Day1_BranchPyramid`（`BeginBranch`） |
 
 ---
 

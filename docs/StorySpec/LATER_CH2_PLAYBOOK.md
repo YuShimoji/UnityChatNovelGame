@@ -6,6 +6,7 @@
 
 - Ch1 SUBSEQUENT 済み: ギャップに **P0/P1/P2** が付いている。
 - 方針: **Ch2 をメイン＋サブで前進**をデフォルト。**P0 だけ**短い仕様／実装スライスを挟む。**P1/P2 は繰り上げない**。
+- 執筆前に [ch2_later_consistency_note.md](ch2_later_consistency_note.md) で **ChannelData の Day 数と Yarn `EndDay` の整合**を確認（現状は要レビュー）。
 
 ## 手順
 

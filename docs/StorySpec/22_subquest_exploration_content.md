@@ -56,6 +56,19 @@
 
 **Ch1 実装メモ（2026-04-08 以降）**: 現行 `Ch1_Day1.yarn` では **合計 6 スレッド手**（Day1: C+A 任意×2 + 潜在A、Day2: B 条件付き + C 任意、Day3: C×2+A を Hub 必須トピック内で Manifest）。いずれも **既存コマンドのみ**。本数はパイロット過剰なので、§4 の仮レンジは **実測後に Ch1 向けに圧縮**してよい。
 
+### 4.1 Ch1 リポジトリ実測（2026-04-10）
+
+Yarn / 03a 対応表に基づく**機械集計**（Editor 通しの可否とは別）。§4 仮レンジとの整合・圧縮方針は **HUMAN_AUTHORITY**。
+
+| 種別 | 本数（Ch1 全 Day 合算） | ID（参照） |
+|------|-------------------------|------------|
+| C | 4 | `scout_ch1_network`, `scout_ch1_day2_ping`, `scout_ch1_d3_route`, `scout_ch1_d3_board` |
+| A | 3 | `ch1_note_facility`, `annot_ch1_glossary`, `annot_ch1_d3_compare` |
+| B | 1 | `ch1_cond_analysis` |
+| 分岐 | 1 | `ch1_branch_analysis`（Day1 Winding・[21_branch_thread_spec.md](21_branch_thread_spec.md)） |
+
+**レビュー観点**: C/A は §4 のレンジ内。B は 0〜2 の下限付近。分岐はサブクエスト定義の「軽い枝」として別枠でもよい。Day3 で C が 2 本あるため、**テンポ優先なら統合・遅延**を検討（§6.1 の必須 Hub との関係とセット）。
+
 ---
 
 ## 5. 既存 Yarn コマンドとの対応（執筆時）
@@ -106,6 +119,7 @@ spec-index（SP-016）と整合。**初期スライスでは実装しない**。
 | annot_ch1_d3_compare | A | Day3 比較。Latent → `ManifestThread` |
 | （既存）ch1_note_facility | A | Latent → Manifest（断片フロー） |
 | （既存）ch1_cond_analysis | B | `DeclareThreadLatentCond`（断片トピック保持時） |
+| ch1_branch_analysis | 分岐 | Day1 Hub から `Ch1_Day1_BranchPyramid` 経由。`BeginBranch` / `EndBranch` |
 
 プレイ検証で見つかった不足は本節 §6.1 / §6.2 に追記し、SUBSEQUENT で P0/P1/P2 付けする。
 
@@ -115,13 +129,14 @@ spec-index（SP-016）と整合。**初期スライスでは実装しない**。
 
 1. 本書の **§4 仮レンジ**と **§3 優先**をレビューし、Ch1 に合う数値に更新する。
 2. `03a_ch1_section_beats.md` または Ch1 Yarn 冒頭コメントに、**どの Day／節にどのサブクエスト ID を置くか**の対応表を追加する。
-3. Ch1 に **パイロット 1〜3 本**を Yarn のみで追加し、Content Pipeline 同期後に再生確認する。
+3. ~~Ch1 に **パイロット 1〜3 本**を Yarn のみで追加し、Content Pipeline 同期後に再生確認する。~~ → **実施済み**（§4.1・§6.3）。残りは Editor 通しと数値の HUMAN_AUTHORITY 確定。
 4. プレイ中に見つかった **ギャップ**を §6 に追記し、別スライス化する。
 
 ---
 
 ## 8. 更新履歴
 
+- **2026-04-10**: §4.1 Ch1 実測表（機械集計）を追加。プラン v2 Phase B 向けに §3・§4 のレビュー材料を明示。
 - **2026-04-10**: Day3 パイロット（C×2+A）と `ch1` 3 日目。§6.1 に必須 Hub とサブ定義の整理メモ。
 - **2026-04-08**: Ch1 パイロット（Yarn）追加、§3/§4 プロジェクト採用注記、§6.3 実装サマリ
 - **2026-04-08**: 初版（DRAFT）。プロジェクト次期プランに合わせて新設。
