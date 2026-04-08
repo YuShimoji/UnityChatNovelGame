@@ -1,4 +1,5 @@
 #if YARN_SPINNER
+using System.Collections;
 using System.Linq;
 using DG.Tweening;
 using TMPro;
@@ -6,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using ProjectFoundPhone.Core;
 using ProjectFoundPhone.Data;
+using ProjectFoundPhone.AgentSessionLog;
 
 namespace ProjectFoundPhone.UI
 {
@@ -87,7 +89,7 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
-            ReturnToDashboard();
+            ReturnToDashboard("escape");
         }
         #endregion
 
@@ -122,6 +124,7 @@ namespace ProjectFoundPhone.UI
             }
 
             m_IsShowing = true;
+            StartCoroutine(CoBringDashboardUiFrontNextFrame());
         }
 
         public void Hide()
@@ -138,6 +141,12 @@ namespace ProjectFoundPhone.UI
 
             m_IsInventoryOverlayMode = false;
             m_IsShowing = false;
+
+            ThreadSwitcherController threadUi = FindFirstObjectByType<ThreadSwitcherController>();
+            if (threadUi != null)
+            {
+                threadUi.AfterDashboardClosed();
+            }
         }
 
         public bool IsShowing => m_IsShowing;
@@ -171,8 +180,15 @@ namespace ProjectFoundPhone.UI
             SwitchTab(DashboardTab.Inventory);
         }
 
-        public void ReturnToDashboard()
+        public void ReturnToDashboard(string debugSource = "unknown")
         {
+            // #region agent log
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            string hypothesisId = debugSource == "escape" ? "H5" : (debugSource == "back_button" ? "H4" : "H2");
+            AgentDebugSessionLog.Write(hypothesisId, "DashboardController.ReturnToDashboard", "entry",
+                $"{{\"source\":\"{debugSource}\",\"isShowing\":{m_IsShowing.ToString().ToLowerInvariant()}}}");
+#endif
+            // #endregion
             if (m_ScenarioManager != null)
             {
                 m_ScenarioManager.StopScenario();
@@ -186,6 +202,31 @@ namespace ProjectFoundPhone.UI
             ShowChannels();
         }
         #endregion
+
+        /// <summary>
+        /// ThreadSwitcher が Canvas 最後尾へ持ち上げた後でも、全画面ダッシュボードを最前面にする。
+        /// </summary>
+        private IEnumerator CoBringDashboardUiFrontNextFrame()
+        {
+            yield return null;
+            BringDashboardUiToFront();
+        }
+
+        /// <summary>
+        /// ダッシュボード本体と（表示中なら）チャットに戻るボタンを Canvas の兄弟順で最後尾へ。
+        /// </summary>
+        private void BringDashboardUiToFront()
+        {
+            if (m_DashboardPanel != null && m_DashboardPanel.activeSelf)
+            {
+                m_DashboardPanel.transform.SetAsLastSibling();
+            }
+
+            if (m_BackButton != null && m_BackButton.activeSelf)
+            {
+                m_BackButton.transform.SetAsLastSibling();
+            }
+        }
 
         #region Data
         private ChannelData[] LoadChannelData()
@@ -412,17 +453,21 @@ namespace ProjectFoundPhone.UI
             m_CloseOverlayButton = CreateOverlayCloseButton(m_DashboardPanel.transform);
             m_CloseOverlayButton.SetActive(false);
 
-            // --- Back to Dashboard button (floating, top-left, hidden initially) ---
+            // --- Back to Dashboard（ChatController の INV ショートカットと同一座標にしない。INV は右上 -12,-12 / 幅60）---
+            const float c_InvShortcutWidth = 60f;
+            const float c_TopBarGap = 8f;
             m_BackButton = new GameObject("BackToDashboard", typeof(RectTransform), typeof(Image), typeof(Button));
             AssignUILayer(m_BackButton);
             m_BackButton.transform.SetParent(canvas.transform, false);
 
             RectTransform backRect = m_BackButton.GetComponent<RectTransform>();
-            backRect.anchorMin = new Vector2(0f, 1f);
-            backRect.anchorMax = new Vector2(0f, 1f);
-            backRect.pivot = new Vector2(0f, 1f);
-            backRect.anchoredPosition = new Vector2(12f, -12f);
+            backRect.anchorMin = new Vector2(1f, 1f);
+            backRect.anchorMax = new Vector2(1f, 1f);
+            backRect.pivot = new Vector2(1f, 1f);
             backRect.sizeDelta = new Vector2(160f, 40f);
+            // pivot=右上: X は「右端からのオフセット」。INV の左端より左に退避（重なり防止）
+            float backRightInset = 12f + c_InvShortcutWidth + c_TopBarGap;
+            backRect.anchoredPosition = new Vector2(-backRightInset, -12f);
 
             Image backBg = m_BackButton.GetComponent<Image>();
             backBg.color = new Color(0.15f, 0.15f, 0.2f, 0.85f);
@@ -431,7 +476,7 @@ namespace ProjectFoundPhone.UI
             Button backBtn = m_BackButton.GetComponent<Button>();
             backBtn.transition = Selectable.Transition.ColorTint;
             backBtn.targetGraphic = backBg;
-            backBtn.onClick.AddListener(ReturnToDashboard);
+            backBtn.onClick.AddListener(() => ReturnToDashboard("back_button"));
 
             GameObject backTextObj = new GameObject("Text", typeof(RectTransform));
             AssignUILayer(backTextObj);
@@ -637,12 +682,21 @@ namespace ProjectFoundPhone.UI
 
         private void OnChannelClicked(ChannelData channel)
         {
+            // #region agent log
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            string chId = channel != null ? (string.IsNullOrEmpty(channel.ChannelID) ? channel.name : channel.ChannelID) : "null";
+            AgentDebugSessionLog.Write("H6", "DashboardController.OnChannelClicked", "channel_select",
+                $"{{\"channelId\":\"{AgentDebugSessionLog.EscapeJson(chId)}\"}}");
+#endif
+            // #endregion
             Hide();
 
             if (m_BackButton != null)
             {
                 m_BackButton.SetActive(true);
             }
+
+            StartCoroutine(CoBringDashboardUiFrontNextFrame());
 
             // StopScenario を ClearMessages より先に実行
             // （実行中ダイアログの非同期タスクが ClearMessages 後にバブルを追加するのを防止）

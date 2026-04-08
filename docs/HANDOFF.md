@@ -34,6 +34,11 @@
 5. UI 気づきは `docs/UI_ISSUES.md`、仕様ギャップは SP-022 に記録
 6. docs 拡張時は `docs/ai/READ_ORDER.md` の正典導線を崩さず、重複ページを増やさない
 
+補足:
+- PlayMode 8件の回帰ベースライン記録: `docs/verification/2026-04-09-playmode-8-results.md`
+- SUBSEQUENT 判定基準（P0/P1/P2）: `docs/StorySpec/22_subquest_exploration_content.md` §6.4
+- SUBSEQUENT 手順・静的整合・分岐ルールの正本: `docs/verification/2026-04-10-subsequent-completion-report.md`
+
 ### 手動確認ハンズオン（Ch1 + サブスレッド・SUBSEQUENT 用）
 
 `project-context.md` の SUBSEQUENT で通し確認する際の最短手順。

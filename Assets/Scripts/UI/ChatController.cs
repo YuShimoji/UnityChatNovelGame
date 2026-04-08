@@ -4,6 +4,7 @@ using TMPro;
 using DG.Tweening;
 using System;
 using System.Collections.Generic;
+using ProjectFoundPhone.Core;
 using ProjectFoundPhone.Data;
 using Unity.Profiling;
 using System.Linq;
@@ -2400,9 +2401,14 @@ namespace ProjectFoundPhone.UI
         /// </summary>
         public void RestoreChatHistory(List<SavedChatMessage> history)
         {
-            if (history == null || history.Count == 0) return;
-
+            // 常に一旦クリアする（空履歴のときも。さもないと別スレッドのバブルが残り、
+            // DialogueRunner 状態と表示だけが不整合になる）
             ClearMessages();
+
+            if (history == null || history.Count == 0)
+            {
+                return;
+            }
 
             m_IsRestoringHistory = true;
             try
@@ -2497,6 +2503,7 @@ namespace ProjectFoundPhone.UI
             // 現在のスレッドの履歴とスクロール位置を保存
             string currentKey = m_ActiveThreadId ?? "__main__";
             m_ThreadHistories[currentKey] = m_ChatHistory.ToList();
+            SyncDeclaredThreadChatHistoryFromCache(currentKey);
             if (m_ScrollRect != null)
             {
                 m_ThreadScrollPositions[currentKey] = m_ScrollRect.verticalNormalizedPosition;
@@ -2507,18 +2514,29 @@ namespace ProjectFoundPhone.UI
             string targetKey = threadId ?? "__main__";
 
             // 対象スレッドの履歴を取得
+            // 空のキャッシュだけが残っていると TryGetValue が true になり、
+            // ScenarioManager 側の thread.ChatHistory（中身あり）が無視されて履歴が消える。
+            m_ThreadHistories.TryGetValue(targetKey, out var cachedList);
+            bool cacheHasMessages = cachedList != null && cachedList.Count > 0;
+            bool paramHasMessages = history != null && history.Count > 0;
+
             List<SavedChatMessage> targetHistory;
-            if (m_ThreadHistories.TryGetValue(targetKey, out var saved))
+            if (cacheHasMessages)
             {
-                targetHistory = saved;
+                targetHistory = new List<SavedChatMessage>(cachedList);
             }
-            else if (history != null)
+            else if (paramHasMessages)
             {
-                targetHistory = history;
+                targetHistory = new List<SavedChatMessage>(history);
             }
             else
             {
                 targetHistory = new List<SavedChatMessage>();
+            }
+
+            if (!cacheHasMessages && cachedList != null && cachedList.Count == 0)
+            {
+                m_ThreadHistories.Remove(targetKey);
             }
 
             // フラッシュ防止: コンテンツを非表示にしてから復元
@@ -2607,7 +2625,39 @@ namespace ProjectFoundPhone.UI
             // 現在のスレッドの履歴を更新
             string currentKey = m_ActiveThreadId ?? "__main__";
             m_ThreadHistories[currentKey] = m_ChatHistory.ToList();
+            SyncDeclaredThreadChatHistoryFromCache(currentKey);
             return new Dictionary<string, List<SavedChatMessage>>(m_ThreadHistories);
+        }
+
+        /// <summary>
+        /// 表示中のチャット履歴を SubthreadData.ChatHistory に反映する（セーブ・再切替の整合用）。
+        /// </summary>
+        private void SyncDeclaredThreadChatHistoryFromCache(string threadKey)
+        {
+            if (threadKey == "__main__")
+            {
+                return;
+            }
+
+            if (!m_ThreadHistories.TryGetValue(threadKey, out var list) || list == null)
+            {
+                return;
+            }
+
+            var scenario = FindFirstObjectByType<ScenarioManager>();
+            if (scenario == null)
+            {
+                return;
+            }
+
+            SubthreadData td = scenario.GetDeclaredThread(threadKey);
+            if (td == null)
+            {
+                return;
+            }
+
+            td.ChatHistory.Clear();
+            td.ChatHistory.AddRange(list);
         }
 
         /// <summary>

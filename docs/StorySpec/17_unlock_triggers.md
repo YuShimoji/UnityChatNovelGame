@@ -78,7 +78,7 @@ SP-099 sec G で「複合トリガー方式」が決定済み。本文書はそ�
 
 ## 6. Ch1 具体例（SP-022 副次）
 
-`Ch1_Day1.yarn` で実際に使っているパターン。複合条件の本格運用前の参照用。
+`Ch1_Day1.yarn` で実際に使っているパターン。複合条件の本格運用前の参照用。実機での解放タイミング差分は [docs/verification/2026-04-10-subsequent-completion-report.md](../verification/2026-04-10-subsequent-completion-report.md) 実行後に追記する。
 
 | 目的 | 実装 |
 |------|------|

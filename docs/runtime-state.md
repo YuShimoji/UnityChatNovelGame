@@ -1,6 +1,6 @@
 # Runtime State
 
-**Updated**: 2026-04-10（Ch1 Day3 実装 + SUBSEQUENT チェックリスト + PlayMode CI）
+**Updated**: 2026-04-10（SUBSEQUENT 完了プラン: 手順正本 + 分岐ルール）
 
 ## Current Position
 
@@ -51,6 +51,22 @@
 - **Ch1**: `Ch1_Day1.yarn` に SP-022 パイロット（Day1 Hub: C+A、Day2: C 等）を配置。節↔ID は `03a_ch1_section_beats.md`
 - **ドキュメント**: `OPERATOR_WORKFLOW` / `HANDOFF` / `17` §6 / `22` §6.3 などを同期
 - **検証**: `docs/verification/2026-04-08-ch1-subquest-gap-template.md`（ギャップ P0/P1/P2 用）
+
+### 2026-04-09（次回推奨プラン実行）
+
+- **再開ゲート**: `HANDOFF` / `project-context` / `runtime-state` を起点に次回実行順を固定
+- **verification**:
+  - `SUBSEQUENT_playthrough_and_tests.md` に PlayMode 回帰ベースライン参照を追記
+  - `2026-04-09-playmode-8-results.md` を新規作成（8/8 pass の基準記録）
+- **SP-022/03a**:
+  - SP-022 §6.4 に P0/P1/P2 の初期優先度を追加
+  - 03a に SUBSEQUENT→LATER の移行判定メモを追加
+
+### 2026-04-10（SUBSEQUENT 完了 → Ch2 分岐プラン）
+
+- **正本**: `docs/verification/2026-04-10-subsequent-completion-report.md`（Ch1 再現手順、静的整合、Editor/PlayMode 未実施理由、分岐表）
+- **更新**: `SUBSEQUENT_playthrough_and_tests.md` / `2026-04-10-ch1-day1-3-preflight.md` 節 C / `2026-04-09-playmode-8-results.md`（再実行欄）/ SP-022 §6.4.1 / `03a` / `2026-04-08-ch1-subquest-gap-template.md` / `HANDOFF.md` / `17_unlock_triggers.md` §6 先頭
+- **判定**: Editor 実測まで P0 有無は未確定。実測 P0 なし → LATER（Ch2）。P0 あり → 短い P0 のみ
 
 ### 2026-04-10 (Content レーン — Ch1 Day3 + 検証・CI 導線)
 

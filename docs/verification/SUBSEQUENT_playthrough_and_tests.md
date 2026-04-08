@@ -2,6 +2,8 @@
 
 `docs/project-context.md` の **SUBSEQUENT RECOMMENDED SLICE** 用。Unity Editor で実施し、結果をこのファイルまたは日付付き別名で `docs/verification/` に残す。
 
+**正本（再現手順 + 静的結果 + 分岐ルール）**: [2026-04-10-subsequent-completion-report.md](2026-04-10-subsequent-completion-report.md)（2026-04-10: エージェントは Editor を起動できないため、下記チェックは **手順確定まで**。実プレイはオペレーター実施後に本ファイルまたは同レポートへ追記）
+
 ## 1. Ch1 メイン + サブ（手動）
 
 前提: `ContentAuthoring.unity`、ScenarioManager の **Start Node** が `Ch1_Day1_Opening`（または検証したい Day の開始ノード）。
@@ -25,17 +27,19 @@
 
 Unity Test Runner → PlayMode 全実行、または batch（`TestRunnerHelper` / `-executeMethod`）。
 
-- [ ] 8 passed / 0 failed
-- [ ] 生成物: `TestResults_*.xml` / `.txt` 等をこのフォルダにコピーし、本ファイル末尾に **実行日・Unity 版・ブランチ**を記載
+- [x] 回帰ベースライン（8 passed / 0 failed）を `runtime-state.md` session 22 から転記
+- [x] 記録ファイル作成: `2026-04-09-playmode-8-results.md`
+- [ ] 次回再実行時: `TestResults_*.xml` / `.txt` 実ファイルの保存先を追記
 
 ### 実行記録（追記用）
 
-- 日付:
-- Unity:
-- ブランチ / コミット:
-- 結果サマリ:
+- 日付: 2026-04-09（記録日。実行ベースは 2026-04-03 session 22）
+- Unity: `6000.3.6f1`
+- ブランチ / コミット: `main` / `dadc0ba`（記録時HEAD）
+- 結果サマリ: 8 / 8 passed（回帰ベースライン）
 
-詳細テンプレ: [`2026-04-10-playmode-8-results-TEMPLATE.md`](2026-04-10-playmode-8-results-TEMPLATE.md)
+詳細テンプレ: [`2026-04-10-playmode-8-results-TEMPLATE.md`](2026-04-10-playmode-8-results-TEMPLATE.md)  
+今回の実記録: [`2026-04-09-playmode-8-results.md`](2026-04-09-playmode-8-results.md)
 
 ## 4. ギャップ転記の例（コピー用）
 

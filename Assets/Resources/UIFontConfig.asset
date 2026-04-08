@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 306d4624f3fbc2445af62419ff228a52, type: 3}
   m_Name: UIFontConfig
   m_EditorClassIdentifier: ProjectFoundPhone::ProjectFoundPhone.Data.UIFontConfig
-  titleFontSize: 28
-  headingFontSize: 22
-  subheadingFontSize: 20
-  bodyFontSize: 20
-  captionFontSize: 18
-  smallFontSize: 14
-  tinyFontSize: 11
+  titleFontSize: 34
+  headingFontSize: 28
+  subheadingFontSize: 24
+  bodyFontSize: 26
+  captionFontSize: 22
+  smallFontSize: 17
+  tinyFontSize: 13
   responsiveBreakpoint: 900
-  responsiveMinScale: 0.78
+  responsiveMinScale: 0.9

@@ -25,3 +25,5 @@
 - 実施日:
 - Unity 版:
 - 結果: OK / NG（要約）:
+
+**2026-04-10（エージェント）**: 節 A の静的整合を再確認済み。Editor 通しは [2026-04-10-subsequent-completion-report.md](2026-04-10-subsequent-completion-report.md) に手順と「未実施」理由を記録。オペレーターが Play で通したら、本欄に **実測日・結果** を追記する。

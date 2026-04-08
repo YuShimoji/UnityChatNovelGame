@@ -5,9 +5,11 @@
 
 ## 検証環境
 
-- Unity 版:
-- ブランチ / コミット:
-- StartNode（ContentAuthoring）:
+- Unity 版: （Editor 実施時に記入）期待: `6000.3.6f1`
+- ブランチ / コミット: `main` / `dadc0ba`（2026-04-10 記録時）
+- StartNode（ContentAuthoring）: `Ch1_Day1_Opening`（[ch1.asset](../../Assets/Resources/Channels/ch1.asset) と一致）
+
+**メモ（2026-04-10）**: 手順・静的結果の正本は [2026-04-10-subsequent-completion-report.md](2026-04-10-subsequent-completion-report.md)。下記チェックリストは **オペレーター実測後**に埋める。
 
 ## 手動プレイ結果（Ch1 + サブ）
 

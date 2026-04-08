@@ -5,6 +5,7 @@ using TMPro;
 using DG.Tweening;
 using ProjectFoundPhone.Core;
 using ProjectFoundPhone.Data;
+using ProjectFoundPhone.AgentSessionLog;
 
 namespace ProjectFoundPhone.UI
 {
@@ -109,6 +110,13 @@ namespace ProjectFoundPhone.UI
 
             CreateUI();
             m_HamburgerButton.SetActive(false);
+            // 生成直後も可能な限り前面に（以降は OpenSidebar で再実行）
+            BringThreadUiToFront();
+            // #region agent log
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            LogLayoutDiagnosticsOnce();
+#endif
+            // #endregion
         }
 
         private void OnDestroy()
@@ -724,14 +732,36 @@ namespace ProjectFoundPhone.UI
 
         private void ToggleSidebar()
         {
+            // #region agent log
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            AgentDebugSessionLog.Write("H1", "ThreadSwitcherController.ToggleSidebar", "toggle",
+                $"{{\"isOpen\":{m_IsSidebarOpen.ToString().ToLowerInvariant()}}}");
+#endif
+            // #endregion
             if (m_IsSidebarOpen)
                 CloseSidebar();
             else
                 OpenSidebar();
         }
 
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        private void LogLayoutDiagnosticsOnce()
+        {
+            Canvas canvas = FindFirstObjectByType<Canvas>();
+            var scaler = canvas != null ? canvas.GetComponent<UnityEngine.UI.CanvasScaler>() : null;
+            RectTransform hamRt = m_HamburgerButton != null ? m_HamburgerButton.GetComponent<RectTransform>() : null;
+            string data =
+                $"{{\"rootScaleFactor\":{(canvas != null ? canvas.scaleFactor : -1f)},\"refX\":{(scaler != null ? scaler.referenceResolution.x : 0f)},\"refY\":{(scaler != null ? scaler.referenceResolution.y : 0f)},\"pixelW\":{(canvas != null ? canvas.pixelRect.width : 0f)},\"pixelH\":{(canvas != null ? canvas.pixelRect.height : 0f)},\"hamAPx\":{(hamRt != null ? hamRt.anchoredPosition.x : 0f)},\"hamAPy\":{(hamRt != null ? hamRt.anchoredPosition.y : 0f)},\"hamW\":{(hamRt != null ? hamRt.sizeDelta.x : 0f)},\"hamH\":{(hamRt != null ? hamRt.sizeDelta.y : 0f)}}}";
+            AgentDebugSessionLog.Write("H3", "ThreadSwitcherController.Start", "canvas_hamburger_layout", data);
+        }
+#endif
+
         private void OpenSidebar()
         {
+            // ダッシュボード等が後から生成されると Canvas 兄弟順で背面に回り、
+            // サイドバー／Main のボタンにレイキャストが届かない。開く直前に最前面へ。
+            BringThreadUiToFront();
+
             EnsureMainEntry();
             UpdateAllHighlights();
             UpdateAllBadges();
@@ -742,6 +772,55 @@ namespace ProjectFoundPhone.UI
             m_SidebarTween?.Kill();
             m_SidebarTween = m_SidebarRt.DOAnchorPosX(0f, SlideAnimDuration)
                 .SetEase(Ease.OutCubic);
+        }
+
+        /// <summary>
+        /// ダッシュボードを閉じたあと、スレッド UI を再びチャットより手前へ戻す。
+        /// </summary>
+        public void AfterDashboardClosed()
+        {
+            BringThreadUiToFront();
+        }
+
+        /// <summary>
+        /// スレッド切替 UI（オーバーレイ・サイドバー・ハンバーガー等）を Canvas 最前面に移す。
+        /// DashboardPanel 等の全画面 UI より後に兄弟が追加されると、背面に隠れて操作不能になる。
+        /// 全画面ダッシュボード表示中は最前面に上げない（閉じるボタン等が隠れるのを防ぐ）。
+        /// </summary>
+        private void BringThreadUiToFront()
+        {
+            DashboardController dashboard = FindFirstObjectByType<DashboardController>();
+            if (dashboard != null && dashboard.IsShowing)
+            {
+                return;
+            }
+
+            Canvas canvas = GetComponentInParent<Canvas>();
+            if (canvas == null)
+            {
+                canvas = FindFirstObjectByType<Canvas>();
+            }
+
+            if (canvas == null)
+            {
+                return;
+            }
+
+            Transform root = canvas.transform;
+            // SetParent は Rect を壊すため、兄弟順のみ変更（全画面 UI より手前に描画・ヒット）
+            void LastIfOnCanvas(Transform t)
+            {
+                if (t != null && t.parent == root)
+                {
+                    t.SetAsLastSibling();
+                }
+            }
+
+            LastIfOnCanvas(m_Overlay != null ? m_Overlay.transform : null);
+            LastIfOnCanvas(m_SidebarPanel != null ? m_SidebarPanel.transform : null);
+            LastIfOnCanvas(m_ThreadHeaderBar != null ? m_ThreadHeaderBar.transform : null);
+            LastIfOnCanvas(m_NotificationBanner != null ? m_NotificationBanner.transform : null);
+            LastIfOnCanvas(m_HamburgerButton != null ? m_HamburgerButton.transform : null);
         }
 
         private void CloseSidebar()
@@ -761,6 +840,13 @@ namespace ProjectFoundPhone.UI
         private void OnSelectThread(string threadId)
         {
             if (m_ChatController == null) return;
+
+            // ダッシュボード表示中にスレッドを選んでもチャットが見えないため、常に閉じてから切替える
+            var dashboard = FindFirstObjectByType<DashboardController>();
+            if (dashboard != null && dashboard.IsShowing)
+            {
+                dashboard.Hide();
+            }
 
             if (threadId == null)
             {

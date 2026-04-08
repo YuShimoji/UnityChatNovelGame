@@ -313,6 +313,22 @@ title: Ch1_Day1_Hub
 | annot_ch1_d3_compare | A | 3 | 3 断片比較（Manifest） | 任意（Hub 必須トピック内） | `Ch1_Day3_Compare` |
 | ch1_branch_analysis | 分岐 | 1 | Winding（Pyramid 補足分析） | メイン進行に沿う | `Ch1_Day1_BranchPyramid`（`BeginBranch`） |
 
+### SUBSEQUENT 移行判定メモ（2026-04-09）
+
+- **LATER 接続 OK 条件**:
+  - Day1〜Day3 の必須Hubを通過し、`EndDay 3` まで進行不能がない
+  - Day3 の `scout_ch1_d3_route` / `scout_ch1_d3_board` / `annot_ch1_d3_compare` の Manifest 後に破綻がない
+  - Save/Load でサブスレッド状態が再現可能
+- **P0（先に止める）**:
+  - 上記 3 条件のいずれかが破綻
+- **P1（Ch2 着手と並行で仕様調整）**:
+  - Day3 の C2 本がテンポを崩す場合（統合 / 遅延 / 維持の判断）
+  - `ch1_cond_analysis` の表現が B 型期待との差で誤読を招く場合
+- **P2（後続スライス）**:
+  - Wiki 遷移・成果物カードなど新規UI実装を伴う拡張
+
+**2026-04-10（ドキュメント）**: [docs/verification/2026-04-10-subsequent-completion-report.md](../verification/2026-04-10-subsequent-completion-report.md) で再現手順と静的整合を固定。**Editor 実測前**は上記 OK 条件の最終判定を保留。実測で P0 なし → Ch2（LATER）。P0 あり → P0 のみ短いスライス → 再検証。
+
 ---
 
 ## 断片一覧（Ch1）
