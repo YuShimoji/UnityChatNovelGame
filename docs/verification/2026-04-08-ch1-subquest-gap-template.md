@@ -6,10 +6,12 @@
 ## 検証環境
 
 - Unity 版: （Editor 実施時に記入）期待: `6000.3.6f1`
-- ブランチ / コミット: `main` / `dadc0ba`（2026-04-10 記録時）
+- ブランチ / コミット: `main` / `bc2bb9d`（2026-04-09 Bレーン記録時の HEAD）
 - StartNode（ContentAuthoring）: `Ch1_Day1_Opening`（[ch1.asset](../../Assets/Resources/Channels/ch1.asset) と一致）
 
 **メモ（2026-04-10）**: 手順・静的結果の正本は [2026-04-10-subsequent-completion-report.md](2026-04-10-subsequent-completion-report.md)。下記チェックリストは **オペレーター実測後**に埋める。
+
+**メモ（2026-04-09・Bレーン）**: [2026-04-09-blane-sp022-subsequent.md](2026-04-09-blane-sp022-subsequent.md) を参照。リポジトリ静的整合は再確認済み。**Editor 手動チェックと PlayMode batch は未実施**（同一プロジェクトを別 Unity が開いており batch が拒否されたため）。チェックリストの `[ ]` はそのまま。
 
 ## 手動プレイ結果（Ch1 + サブ）
 
@@ -26,6 +28,8 @@
 |----|------|----------------|-------------------------|
 | G-001 | （例）解放通知が分かりにくい | | 要仕様 |
 | G-002 | | | |
+| G-ENV-20260409 | PlayMode batch / Editor 通しが **未実施**（プロジェクト排他ロック）。再現手順・ログは [2026-04-09-blane-sp022-subsequent.md](2026-04-09-blane-sp022-subsequent.md) §3 | （環境・優先度なし） | 運用メモ |
+| G-OBS-20260409 | Yarn 上、`ch1_note_facility` / `ch1_cond_analysis` に `CompleteThread` が無い。意図的か・Save/Load で問題が出ないかは **実測待ち** | **未判定**（実測後 P0〜P2） | 要確認 |
 
 **定義の目安**
 
