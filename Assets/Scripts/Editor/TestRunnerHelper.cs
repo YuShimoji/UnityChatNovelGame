@@ -25,7 +25,41 @@ namespace ProjectFoundPhone.Editor
             testRunnerApi.Execute(new ExecutionSettings(filter));
         }
 
+        [MenuItem("Tools/Run EditMode Tests Manual")]
+        public static void RunEditModeTests()
+        {
+            Debug.Log("TestRunnerHelper: Starting EditMode tests...");
+            var testRunnerApi = ScriptableObject.CreateInstance<TestRunnerApi>();
+            var filter = new Filter
+            {
+                testMode = TestMode.EditMode
+            };
+
+            testRunnerApi.RegisterCallbacks(new TestCallbacks());
+            testRunnerApi.Execute(new ExecutionSettings(filter));
+        }
+
+        /// <summary>
+        /// batchmode 用: EditMode 全件（または -ProjectFoundPhoneTestFilter= で 1 本指定）。
+        /// 結果は -ProjectFoundPhoneResultFile= または docs/verification/editmode-batch-result.txt。
+        /// </summary>
+        public static void RunEditModeTestsBatch()
+        {
+            EnqueueBatchTestRun(
+                TestMode.EditMode,
+                "editmode-batch-result.txt",
+                "EditMode");
+        }
+
         public static void RunPlayModeTestsBatch()
+        {
+            EnqueueBatchTestRun(
+                TestMode.PlayMode,
+                "playmode-batch-result.txt",
+                "PlayMode");
+        }
+
+        private static void EnqueueBatchTestRun(TestMode testMode, string defaultResultFileName, string labelForLog)
         {
             string filterName = ReadCommandLineValue(FilterArgPrefix);
             string resultFile = ReadCommandLineValue(ResultFileArgPrefix);
@@ -33,15 +67,15 @@ namespace ProjectFoundPhone.Editor
             if (string.IsNullOrWhiteSpace(resultFile))
             {
                 string projectRoot = Directory.GetParent(Application.dataPath).FullName;
-                resultFile = Path.Combine(projectRoot, "docs", "verification", "playmode-batch-result.txt");
+                resultFile = Path.Combine(projectRoot, "docs", "verification", defaultResultFileName);
             }
 
-            Debug.Log($"TestRunnerHelper: Starting batch PlayMode tests. Filter='{filterName ?? "(none)"}' ResultFile='{resultFile}'");
+            Debug.Log($"TestRunnerHelper: Starting batch {labelForLog} tests. Filter='{filterName ?? "(none)"}' ResultFile='{resultFile}'");
 
             var testRunnerApi = ScriptableObject.CreateInstance<TestRunnerApi>();
             var filter = new Filter
             {
-                testMode = TestMode.PlayMode,
+                testMode = testMode,
                 testNames = string.IsNullOrWhiteSpace(filterName) ? null : new[] { filterName }
             };
 

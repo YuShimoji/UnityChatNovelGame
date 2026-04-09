@@ -37,7 +37,11 @@ namespace ProjectFoundPhone.Core
                     {
                         GameObject go = new GameObject("SaveManager");
                         s_Instance = go.AddComponent<SaveManager>();
-                        DontDestroyOnLoad(go);
+                        // EditMode / batch では DontDestroyOnLoad が例外になる（INVARIANTS: EditMode 境界）
+                        if (Application.isPlaying)
+                        {
+                            DontDestroyOnLoad(go);
+                        }
                     }
                 }
                 return s_Instance;

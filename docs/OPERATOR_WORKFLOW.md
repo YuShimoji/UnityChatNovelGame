@@ -21,6 +21,7 @@
 ### S-4 / SO 同期
 - 旧痛点だった ChannelData 手動作成依存は解消
 - ただし DisplayName / Description / EnableHints など人間判断の値は Inspector 確認が必要
+- 手動の代わりに batchmode から同期する場合は `docs/YarnEditingPipeline.md` の Step 4b（`ContentPipelineBatch` の `-executeMethod`）を参照。プロジェクトを別 Unity が開いていると batch はロックで失敗する
 
 ### S-5 / Unity 再生確認
 - 微修正→手動検証ループが5セッション分の時間を消費した (session 13-17)

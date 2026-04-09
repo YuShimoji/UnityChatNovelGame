@@ -52,11 +52,48 @@ namespace ProjectFoundPhone.Editor
         private int m_InfoCount;
         private bool m_HasRun;
 
-        [MenuItem("Tools/Yarn Content Validator")]
+        [MenuItem("Tools/FoundPhone/Yarn Content Validator", false, 20)]
+        [MenuItem("Tools/Yarn Content Validator", false, 21)]
         public static void ShowWindow()
         {
             var window = GetWindow<YarnContentValidator>("Yarn Validator");
             window.minSize = new Vector2(500, 400);
+        }
+
+        /// <summary>
+        /// batchmode / -executeMethod 用。Console に出力し、エラー件数を返す（0 なら OK）。
+        /// </summary>
+        public static int ValidateAllYarnFilesLogToConsole()
+        {
+            List<ValidationResult> results = BuildValidationResults(
+                out int errorCount,
+                out int warningCount,
+                out int infoCount);
+
+            Debug.Log(
+                $"YarnContentValidator (batch): errors={errorCount}, warnings={warningCount}, info={infoCount}.");
+
+            foreach (ValidationResult result in results)
+            {
+                string prefix = string.IsNullOrEmpty(result.File) || result.Line <= 0
+                    ? ""
+                    : $"[{result.File}:{result.Line}] ";
+
+                switch (result.Level)
+                {
+                    case ResultLevel.Error:
+                        Debug.LogError($"{prefix}{result.Message}");
+                        break;
+                    case ResultLevel.Warning:
+                        Debug.LogWarning($"{prefix}{result.Message}");
+                        break;
+                    default:
+                        Debug.Log($"{prefix}{result.Message}");
+                        break;
+                }
+            }
+
+            return errorCount;
         }
 
         private void OnGUI()
@@ -70,7 +107,7 @@ namespace ProjectFoundPhone.Editor
             EditorGUILayout.Space(4);
             if (GUILayout.Button("Validate All Yarn Files", GUILayout.Height(30)))
             {
-                RunValidation();
+                RunValidationGui();
             }
 
             if (!m_HasRun) return;
@@ -97,41 +134,59 @@ namespace ProjectFoundPhone.Editor
             EditorGUILayout.EndScrollView();
         }
 
-        private void RunValidation()
+        private void RunValidationGui()
         {
-            m_Results.Clear();
-            m_ErrorCount = 0;
-            m_WarningCount = 0;
-            m_InfoCount = 0;
+            m_Results = BuildValidationResults(out m_ErrorCount, out m_WarningCount, out m_InfoCount);
+            m_HasRun = true;
+            Repaint();
+        }
+
+        private static List<ValidationResult> BuildValidationResults(
+            out int errorCount,
+            out int warningCount,
+            out int infoCount)
+        {
+            var results = new List<ValidationResult>();
+            // ローカルに集計（ローカル関数から out パラメータを直接触ると CS1628 になる）
+            int errCount = 0;
+            int warnCount = 0;
+            int infoC = 0;
+
+            void AddResult(ResultLevel level, string file, int line, string message)
+            {
+                results.Add(new ValidationResult { Level = level, File = file, Line = line, Message = message });
+                switch (level)
+                {
+                    case ResultLevel.Error:
+                        errCount++;
+                        break;
+                    case ResultLevel.Warning:
+                        warnCount++;
+                        break;
+                    case ResultLevel.Info:
+                        infoC++;
+                        break;
+                }
+            }
 
             string fullDir = Path.GetFullPath(ActiveYarnDir);
             if (!Directory.Exists(fullDir))
             {
-                m_Results.Add(new ValidationResult
-                {
-                    Level = ResultLevel.Error,
-                    File = "",
-                    Line = 0,
-                    Message = $"Directory not found: {ActiveYarnDir}"
-                });
-                m_ErrorCount++;
-                m_HasRun = true;
-                return;
+                AddResult(ResultLevel.Error, "", 0, $"Directory not found: {ActiveYarnDir}");
+                errorCount = errCount;
+                warningCount = warnCount;
+                infoCount = infoC;
+                return results;
             }
 
             string[] yarnFiles = Directory.GetFiles(fullDir, "*.yarn");
             if (yarnFiles.Length == 0)
             {
-                m_Results.Add(new ValidationResult
-                {
-                    Level = ResultLevel.Warning,
-                    File = "",
-                    Line = 0,
-                    Message = "No .yarn files found in active directory"
-                });
-                m_WarningCount++;
-                m_HasRun = true;
-                return;
+                AddResult(ResultLevel.Warning, "", 0, "No .yarn files found in active directory");
+                errorCount = errCount;
+                warningCount = warnCount;
+                infoCount = infoC;
+                return results;
             }
 
             // Phase 1: Collect all node names and #line: tags
@@ -147,7 +202,6 @@ namespace ProjectFoundPhone.Editor
             {
                 string relativePath = Path.GetFileName(filePath);
                 string[] lines = File.ReadAllLines(filePath);
-                string currentNode = null;
 
                 for (int i = 0; i < lines.Length; i++)
                 {
@@ -157,7 +211,7 @@ namespace ProjectFoundPhone.Editor
                     // Node title
                     if (trimmed.StartsWith("title:"))
                     {
-                        currentNode = trimmed.Substring(6).Trim();
+                        string currentNode = trimmed.Substring(6).Trim();
                         allNodes.Add(currentNode);
                     }
 
@@ -167,7 +221,10 @@ namespace ProjectFoundPhone.Editor
                     {
                         string tag = lineTagMatch.Groups[1].Value;
                         if (!allLineTags.ContainsKey(tag))
+                        {
                             allLineTags[tag] = new List<(string, int)>();
+                        }
+
                         allLineTags[tag].Add((relativePath, lineNum));
                     }
 
@@ -237,7 +294,7 @@ namespace ProjectFoundPhone.Editor
             }
 
             // Check unknown commands
-            foreach (var (file, line, command, fullLine) in allCommands)
+            foreach (var (file, line, command, _) in allCommands)
             {
                 if (!KnownCommands.Contains(command) && !BuiltInCommands.Contains(command))
                 {
@@ -263,7 +320,11 @@ namespace ProjectFoundPhone.Editor
                 if (!allVariableDeclarations.Contains(variable) && !undeclaredVars.Contains(variable))
                 {
                     // $speaker is set dynamically, not declared
-                    if (variable == "$speaker" || variable == "$current_node") continue;
+                    if (variable == "$speaker" || variable == "$current_node")
+                    {
+                        continue;
+                    }
+
                     undeclaredVars.Add(variable);
                     AddResult(ResultLevel.Info, file, line,
                         $"Variable '{variable}' used without <<declare>> in active Yarn files (may be declared in Yarn Project settings)");
@@ -274,19 +335,10 @@ namespace ProjectFoundPhone.Editor
             AddResult(ResultLevel.Info, "", 0,
                 $"Scanned {yarnFiles.Length} files, {allNodes.Count} nodes, {allLineTags.Count} #line: tags, {allVariableDeclarations.Count} declared variables");
 
-            m_HasRun = true;
-            Repaint();
-        }
-
-        private void AddResult(ResultLevel level, string file, int line, string message)
-        {
-            m_Results.Add(new ValidationResult { Level = level, File = file, Line = line, Message = message });
-            switch (level)
-            {
-                case ResultLevel.Error: m_ErrorCount++; break;
-                case ResultLevel.Warning: m_WarningCount++; break;
-                case ResultLevel.Info: m_InfoCount++; break;
-            }
+            errorCount = errCount;
+            warningCount = warnCount;
+            infoCount = infoC;
+            return results;
         }
 
         private static void DrawCountLabel(string label, int count, Color color)

@@ -10,13 +10,14 @@
 
 | 項目 | 数値 | 最終更新 |
 |------|------|----------|
-| 実装ファイル (.cs) | 66 (テスト除く) / 71 (テスト含む) | session 19 実測 |
-| テストファイル | 5 (EditMode 4 + PlayMode 1) | session 19 実測 |
-| PlayMode テストケース | 4 (SmokeGate / Ch1SaveLoad / DQTStart / ChoiceImageFallback) | session 19 |
+| 実装ファイル (.cs) | 66 (テスト除く) / 71 (テスト含む) | session 19 実測（要再スキャン時は `runtime-state` 参照） |
+| テストファイル | **7**（EditMode **4** + PlayMode テスト **2** + `PlayModeTestHelpers` **1**） | **2026-04-09 Dレーン再突合** |
+| PlayMode テストケース | **8**（`VerticalSliceSmokeGatePlayModeTests` 4 + `ScenarioFlowPlayModeTests` 4） | **2026-04-09 Dレーン再突合** |
+| EditMode テストケース | **75**（`CoreLogic` 33 + `Contradiction` 30 + `SaveSystem` 8 + `InventoryTab` 4） | **2026-04-09 Dレーン再突合** |
 | Yarnファイル (active) | 6 | session 19 (4件 archive 移動後) |
 | Yarnファイル (archive) | 5 | session 19 |
 | Yarnコマンド | 24 | |
-| 仕様エントリ (spec-index) | 40 (done 23 / partial 10 / draft 1 / todo 5 + BL x3) | session 19 |
+| 仕様エントリ (spec-index) | **41**（done 24 / partial 10 / draft 2 / todo 5、`docs/spec-index.json` 配列長） | **2026-04-09 F レーン実測** |
 | TODO/FIXME/HACK | 1件 (ChatController.cs:1241) | session 19 |
 | [Obsolete] マーク | 2件 (ContradictionPair.UnlockTopic x2) | |
 | docs ファイル数 | ~30 (archive除く) | |

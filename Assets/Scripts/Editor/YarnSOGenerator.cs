@@ -55,7 +55,9 @@ namespace ProjectFoundPhone.Editor
             int changedCount = SyncAllAuthoringAssets();
             EditorUtility.DisplayDialog(
                 "Yarn Authoring Assets",
-                $"同期完了: {changedCount} 件のアセットを生成/更新しました。",
+                changedCount == 0
+                    ? "同期対象はありませんでした。"
+                    : $"同期完了: {changedCount} 件のアセットを生成/更新しました。",
                 "OK");
         }
 

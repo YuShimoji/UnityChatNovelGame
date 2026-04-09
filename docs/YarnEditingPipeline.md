@@ -2,7 +2,7 @@
 
 Windsurf (VS Code) で Yarn ファイルを編集し、Unity で即座に動作確認するための手順書。
 
-**最終更新**: 2026-03-30
+**最終更新**: 2026-04-09
 
 ---
 
@@ -123,9 +123,22 @@ Assets/Resources/Yarn/active/Ch1_Day1.yarn
 
 Unity 側で `Tools > FoundPhone > Content Pipeline` を開き、以下を実行:
 
-1. `Open Yarn Validator` で静的エラーを確認
-2. `Sync Authoring Assets` で TopicData / CharacterProfile / ChannelData を一括同期
+1. `Open Yarn Validator` で静的エラーを確認（単体メニュー: `Tools > FoundPhone > Yarn Content Validator`。従来の `Tools > Yarn Content Validator` も同一ウィンドウ）
+2. `Sync Authoring Assets` で TopicData / CharacterProfile / ChannelData を一括同期（メニュー `Tools > FoundPhone > Sync Yarn Authoring Assets` でも可。変更 0 件のときは「同期対象はありませんでした」と表示）
 3. 必要なら Inspector で DisplayName / Description / EnableHints を調整
+
+#### Step 4b: batchmode（Editor を閉じた状態 / CI）
+
+同一プロジェクトを **別の Unity プロセスが開いていると batch は失敗**する（ロック）。`-batchmode -quit` と併用し、ログは `-logFile` で任意パスへ。
+
+```text
+Unity.exe -batchmode -quit -projectPath "<リポジトリルート>" -logFile "<ログパス>" ^
+  -executeMethod ProjectFoundPhone.Editor.ContentPipelineBatch.RunValidateThenSyncBatch
+```
+
+- 検証のみ: `RunYarnValidatorBatch`（終了コード 1 = Yarn 静的エラーあり）
+- 同期のみ: `RunSyncAuthoringAssetsBatch`
+- 検証後に同期: `RunValidateThenSyncBatch`（エラー時は Sync しない）
 
 ### Step 5: 動作確認
 

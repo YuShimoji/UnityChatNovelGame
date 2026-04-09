@@ -15,7 +15,7 @@
 
 ## B. オペレーター手順（Editor）
 
-1. `Tools > FoundPhone > Content Pipeline` → **Sync Authoring Assets**（エラー解消まで）
+1. `Tools > FoundPhone > Content Pipeline` → **Open Yarn Validator** → **Sync Authoring Assets**（エラー解消まで）。または batchmode: [2026-04-09-content-pipeline-batch.md](2026-04-09-content-pipeline-batch.md)（**同一プロジェクトを Editor で開いたままでは不可**）
 2. `ContentAuthoring.unity` を開く。ScenarioManager の **Start Node** = `Ch1_Day1_Opening`
 3. Play で Day1 → `EndDay 1` → ダッシュボードまたは再入で Day2 → Day3 まで通し
 4. 気づき → `docs/UI_ISSUES.md`。進行不能・仕様不足 → `docs/StorySpec/22_subquest_exploration_content.md` §6

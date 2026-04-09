@@ -10,16 +10,14 @@
 
 ## Open Issues
 
-- 2026-04-09: ダッシュボード「Channels | Inventory」タブ直下のレイアウト。**コード修正**: `InventoryTabController` のトップインセットをチャンネル一覧 ScrollView と同じ **200px** に統一（TabBar と InventoryRoot の縦重なり解消）。パレットはダッシュボード／インベントリ／サイドバー／進捗バーをミニマル寄りに微調整。**要手動確認**: ContentAuthoring でダッシュボードを開き、Channels ↔ Inventory を切替え、サブタブとリストがタブバーと重ならないこと。
+- 2026-04-07: Ch1 / Pyramid — 「矛盾があるか聞く」系の選択肢でウィンドウを開き、未選択のまま進行 → 同じ選択肢を再度開き、今度はチェックを入れて実行 → 「聞かせてくれ」の直後に、再び同じ選択肢が出る（二重に出る／ループに見える）。**レーン振り分け: D（Engine / 挙動・Yarn 状態）。E レーン（レイアウト一括）の対象外。** 再現: 上記の通り（1回目はウィンドウのみ閉じて進行、2回目はチェック実行）
 
-- 2026-03-30: DebugChatScene.unity の CanvasScaler が 1920x1080 のまま。コード (MetaEffectController, DebugSceneBuilder) は 1080x1920 に修正済み。DebugSceneBuilder で再生成するか、Inspector で手動修正が必要。再現: DebugChatScene を開き CanvasScaler の referenceResolution を確認
+- 2026-04-07: Ch1 — タイピングインジケーターのアニメーションおよびアナウンス表示中に、クリック（タップ）でスキップできない。**レーン振り分け: 仕様 HUMAN_AUTHORITY（タップをスキップ対象に含めるか）確定後、実装は D（Engine）。E 外。** 再現: インジケーター／アナウンス表示中に画面タップ
 
-- 2026-04-07: Ch1 / Pyramid — 「矛盾があるか聞く」系の選択肢でウィンドウを開き、未選択のまま進行 → 同じ選択肢を再度開き、今度はチェックを入れて実行 → 「聞かせてくれ」の直後に、再び同じ選択肢が出る（二重に出る／ループに見える）。再現: 上記の通り（1回目はウィンドウのみ閉じて進行、2回目はチェック実行）
-
-- 2026-04-07: Ch1 — タイピングインジケーターのアニメーションおよびアナウンス表示中に、クリック（タップ）でスキップできない。仕様要確認: タップスキップ対象に含めるか、別キーのみか。再現: インジケーター／アナウンス表示中に画面タップ
-
-- 2026-04-07: Ch1 — 「聞かせてくれ」の直後、別スレッドへ入る演出付近で、メッセージの色付けが一貫しない。ケースによって「全メッセージの色が変わる」「選択肢後のメッセージだけ色が変わる」など。正しい見た目の定義（スレッド切替時の再着色範囲）が未確定。再現: 同セリフ後のサブスレッド遷移をプレイし、履歴バブルの色変化を目視比較
+- 2026-04-07: Ch1 — 「聞かせてくれ」の直後、別スレッドへ入る演出付近で、メッセージの色付けが一貫しない。ケースによって「全メッセージの色が変わる」「選択肢後のメッセージだけ色が変わる」など。**レーン振り分け: 見た目定義が未確定のため仕様 HUMAN_AUTHORITY。確定後に E（配色一括）または D を選択。現時点では E のみでの一括修正はしない。** 再現: 同セリフ後のサブスレッド遷移をプレイし、履歴バブルの色変化を目視比較
 
 ## Fixed Issues
 
-(なし)
+- [FIXED] 2026-04-09: ダッシュボード「Channels | Inventory」タブ直下のレイアウト。`DashboardController` のチャンネル ScrollView `offsetMax.y = -200f` と `InventoryTabController.c_InventoryTopInsetFromDashboardTop = 200f` が一致していることを E レーンで静的確認。TabBar 直下インセット統一済み。**オペレーター目視**: [docs/verification/2026-04-09-e-lane-ui-batch.md](verification/2026-04-09-e-lane-ui-batch.md) のチェックリスト 1 行。
+
+- [FIXED] 2026-03-30: DebugChatScene.unity の CanvasScaler `referenceResolution` を **1080×1920** に変更し、[DebugSceneBuilder.cs](../Assets/Scripts/Debug/Editor/DebugSceneBuilder.cs) と一致。**オペレーター目視**: 同チェックリスト 1 行。
