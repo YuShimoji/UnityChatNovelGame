@@ -22,6 +22,7 @@
 - 制作フロー: `docs/YarnEditingPipeline.md`, `docs/SCENARIO_AUTHORING_GUIDE.md`
 - UI/挙動: `docs/DISPLAY_ALGORITHMS.md`, `docs/UI_ISSUES.md`
 - 実装/監査: `docs/FEATURE_STATUS_AUDIT.md`, `docs/spec-index.json`
+- Ch1 サブクエスト検証を別スレッドに渡す: `docs/ai/TASK_PROMPT_ch1_sidequest_verification.md`
 
 ## 人間向けの最短経路
 

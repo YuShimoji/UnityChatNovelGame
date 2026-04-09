@@ -10,6 +10,8 @@
 
 ## Open Issues
 
+- 2026-04-09: ダッシュボード「Channels | Inventory」タブ直下のレイアウト。**コード修正**: `InventoryTabController` のトップインセットをチャンネル一覧 ScrollView と同じ **200px** に統一（TabBar と InventoryRoot の縦重なり解消）。パレットはダッシュボード／インベントリ／サイドバー／進捗バーをミニマル寄りに微調整。**要手動確認**: ContentAuthoring でダッシュボードを開き、Channels ↔ Inventory を切替え、サブタブとリストがタブバーと重ならないこと。
+
 - 2026-03-30: DebugChatScene.unity の CanvasScaler が 1920x1080 のまま。コード (MetaEffectController, DebugSceneBuilder) は 1080x1920 に修正済み。DebugSceneBuilder で再生成するか、Inspector で手動修正が必要。再現: DebugChatScene を開き CanvasScaler の referenceResolution を確認
 
 - 2026-04-07: Ch1 / Pyramid — 「矛盾があるか聞く」系の選択肢でウィンドウを開き、未選択のまま進行 → 同じ選択肢を再度開き、今度はチェックを入れて実行 → 「聞かせてくれ」の直後に、再び同じ選択肢が出る（二重に出る／ループに見える）。再現: 上記の通り（1回目はウィンドウのみ閉じて進行、2回目はチェック実行）

@@ -42,7 +42,7 @@ namespace ProjectFoundPhone.UI
             barBgRect.offsetMax = new Vector2(0f, 0f);
 
             Image barBgImg = barBg.GetComponent<Image>();
-            barBgImg.color = new Color(0.15f, 0.15f, 0.18f, 0.8f);
+            barBgImg.color = new Color(0.12f, 0.125f, 0.14f, 0.55f);
             barBgImg.raycastTarget = false;
 
             // --- プログレスバー前景 (fill) ---
@@ -57,7 +57,7 @@ namespace ProjectFoundPhone.UI
             fillRect.offsetMax = Vector2.zero;
 
             m_BarFill = barFill.GetComponent<Image>();
-            m_BarFill.color = new Color(0.8f, 0.75f, 0.4f, 0.9f);
+            m_BarFill.color = new Color(0.72f, 0.68f, 0.42f, 0.88f);
             m_BarFill.type = Image.Type.Filled;
             m_BarFill.fillMethod = Image.FillMethod.Horizontal;
             m_BarFill.fillAmount = 0f;
@@ -78,7 +78,7 @@ namespace ProjectFoundPhone.UI
             m_PercentText = pctObj.AddComponent<TextMeshProUGUI>();
             m_PercentText.text = "0%";
             m_PercentText.fontSize = UIFontConfig.Instance.smallFontSize;
-            m_PercentText.color = new Color(0.8f, 0.75f, 0.4f);
+            m_PercentText.color = new Color(0.76f, 0.72f, 0.45f);
             m_PercentText.alignment = TextAlignmentOptions.MidlineRight;
             m_PercentText.raycastTarget = false;
             assignFont?.Invoke(m_PercentText);
@@ -98,7 +98,7 @@ namespace ProjectFoundPhone.UI
             m_MiniStats = statsObj.AddComponent<TextMeshProUGUI>();
             m_MiniStats.text = "";
             m_MiniStats.fontSize = UIFontConfig.Instance.tinyFontSize;
-            m_MiniStats.color = new Color(0.45f, 0.45f, 0.5f);
+            m_MiniStats.color = new Color(0.5f, 0.52f, 0.58f);
             m_MiniStats.alignment = TextAlignmentOptions.Center;
             m_MiniStats.raycastTarget = false;
             assignFont?.Invoke(m_MiniStats);

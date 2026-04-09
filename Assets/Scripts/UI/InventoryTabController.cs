@@ -32,13 +32,16 @@ namespace ProjectFoundPhone.UI
         private bool m_IsBuilt;
         private bool m_IsShowing;
 
-        private static readonly Color ActiveTabColor = new Color(0.85f, 0.85f, 0.9f);
-        private static readonly Color InactiveTabColor = new Color(0.4f, 0.4f, 0.45f);
-        private static readonly Color CardBgColor = new Color(0.12f, 0.12f, 0.16f, 0.9f);
-        private static readonly Color TitleColor = new Color(0.85f, 0.87f, 0.95f);
-        private static readonly Color DescColor = new Color(0.55f, 0.55f, 0.6f);
-        private static readonly Color ChapterBadgeColor = new Color(0.5f, 0.6f, 0.8f);
-        private static readonly Color PlaceholderColor = new Color(0.45f, 0.45f, 0.5f);
+        /// <summary>ダッシュボードのチャンネル ScrollView と同じ上端インセット（TabBar 直下に揃える）</summary>
+        private const float c_InventoryTopInsetFromDashboardTop = 200f;
+
+        private static readonly Color ActiveTabColor = new Color(0.88f, 0.9f, 0.94f);
+        private static readonly Color InactiveTabColor = new Color(0.48f, 0.5f, 0.56f);
+        private static readonly Color CardBgColor = new Color(0.1f, 0.104f, 0.13f, 0.88f);
+        private static readonly Color TitleColor = new Color(0.9f, 0.91f, 0.95f);
+        private static readonly Color DescColor = new Color(0.58f, 0.6f, 0.66f);
+        private static readonly Color ChapterBadgeColor = new Color(0.52f, 0.62f, 0.86f);
+        private static readonly Color PlaceholderColor = new Color(0.5f, 0.52f, 0.58f);
 
         private static readonly Regex ChapterRegex = new Regex(@"fragment_ch(\d+)_", RegexOptions.Compiled);
 
@@ -62,8 +65,8 @@ namespace ProjectFoundPhone.UI
             RectTransform rootRect = m_RootPanel.GetComponent<RectTransform>();
             rootRect.anchorMin = Vector2.zero;
             rootRect.anchorMax = Vector2.one;
-            rootRect.offsetMin = new Vector2(20f, 20f);
-            rootRect.offsetMax = new Vector2(-20f, -150f);
+            rootRect.offsetMin = new Vector2(24f, 24f);
+            rootRect.offsetMax = new Vector2(-24f, -c_InventoryTopInsetFromDashboardTop);
 
             // Sub-tab bar
             BuildSubTabBar(m_RootPanel.transform);
@@ -232,15 +235,15 @@ namespace ProjectFoundPhone.UI
             barRect.anchorMin = new Vector2(0f, 1f);
             barRect.anchorMax = new Vector2(1f, 1f);
             barRect.pivot = new Vector2(0.5f, 1f);
-            barRect.offsetMin = new Vector2(0f, -40f);
+            barRect.offsetMin = new Vector2(0f, -44f);
             barRect.offsetMax = Vector2.zero;
 
             Image barBg = barObj.GetComponent<Image>();
-            barBg.color = new Color(0.08f, 0.08f, 0.1f, 0.6f);
+            barBg.color = new Color(0.1f, 0.105f, 0.12f, 0.45f);
 
             HorizontalLayoutGroup hlg = barObj.GetComponent<HorizontalLayoutGroup>();
-            hlg.spacing = 4f;
-            hlg.padding = new RectOffset(8, 8, 4, 4);
+            hlg.spacing = 6f;
+            hlg.padding = new RectOffset(10, 10, 6, 6);
             hlg.childForceExpandWidth = true;
             hlg.childForceExpandHeight = true;
             hlg.childControlWidth = true;
@@ -257,7 +260,7 @@ namespace ProjectFoundPhone.UI
                 tabBtn.transform.SetParent(barObj.transform, false);
 
                 Image tabBg = tabBtn.GetComponent<Image>();
-                tabBg.color = new Color(0.1f, 0.1f, 0.13f, 0.8f);
+                tabBg.color = new Color(0.11f, 0.115f, 0.14f, 0.65f);
                 tabBg.raycastTarget = true;
 
                 Button btn = tabBtn.GetComponent<Button>();
@@ -303,7 +306,7 @@ namespace ProjectFoundPhone.UI
             containerRect.anchorMin = Vector2.zero;
             containerRect.anchorMax = Vector2.one;
             containerRect.offsetMin = Vector2.zero;
-            containerRect.offsetMax = new Vector2(0f, -44f); // below sub-tab bar
+            containerRect.offsetMax = new Vector2(0f, -48f); // below sub-tab bar
 
             // ScrollView
             GameObject scrollObj = new GameObject("ScrollView", typeof(RectTransform), typeof(ScrollRect), typeof(Image));
@@ -317,7 +320,7 @@ namespace ProjectFoundPhone.UI
             scrollRect.offsetMax = Vector2.zero;
 
             Image scrollBg = scrollObj.GetComponent<Image>();
-            scrollBg.color = new Color(0.06f, 0.06f, 0.09f, 0.5f);
+            scrollBg.color = new Color(0.07f, 0.072f, 0.085f, 0.35f);
 
             // Viewport
             GameObject viewportObj = new GameObject("Viewport", typeof(RectTransform), typeof(RectMask2D));
@@ -377,7 +380,7 @@ namespace ProjectFoundPhone.UI
             containerRect.anchorMin = Vector2.zero;
             containerRect.anchorMax = Vector2.one;
             containerRect.offsetMin = Vector2.zero;
-            containerRect.offsetMax = new Vector2(0f, -44f);
+            containerRect.offsetMax = new Vector2(0f, -48f);
 
             GameObject labelObj = new GameObject("PlaceholderText", typeof(RectTransform));
             AssignUILayer(labelObj);

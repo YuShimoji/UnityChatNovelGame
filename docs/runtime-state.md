@@ -1,6 +1,6 @@
 # Runtime State
 
-**Updated**: 2026-04-09（handoff 同期: リモート整合 + debug ログ除外）
+**Updated**: 2026-04-09（handoff 同期 + 2026-04-09 UI: インベントリ重なり修正・ダッシュボード系パレット微調整）
 
 ## Current Position
 
@@ -45,6 +45,12 @@
 - blocks_since_visual_audit: 0
 
 ## Session Log
+
+### 2026-04-09（UI: ダッシュボード／インベントリレイアウト + ミニマル配色）
+
+- **レイアウト**: `InventoryTabController` の親パネル上端を **200px** インセットに変更（`DashboardController` チャンネル ScrollView の `-200` と整合）。TabBar（-150〜-190）と InventoryRoot の縦重なりを解消。
+- **見た目**: `DashboardController` / `InventoryTabController` / `ThreadSwitcherController` / `ProgressSummaryUI` の背景・カード色を低コントラスト寄りに統一（実行時負荷の増加なし）。
+- **検証**: Unity でダッシュボード Channels|Inventory の目視確認は **ユーザー側未実施**（`docs/UI_ISSUES.md` に記録）。
 
 ### 2026-04-09（セッション引き継ぎ・リモート同期）
 

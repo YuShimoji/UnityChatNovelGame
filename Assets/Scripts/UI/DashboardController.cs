@@ -303,7 +303,7 @@ namespace ProjectFoundPhone.UI
             panelRect.offsetMax = Vector2.zero;
 
             Image panelBg = m_DashboardPanel.GetComponent<Image>();
-            panelBg.color = new Color(0.06f, 0.06f, 0.09f, 0.98f);
+            panelBg.color = new Color(0.065f, 0.068f, 0.078f, 0.97f);
             panelBg.raycastTarget = true;
 
             // --- Title ---
@@ -322,7 +322,7 @@ namespace ProjectFoundPhone.UI
             titleText.text = "HALLUCINATION SIMULATOR";
             titleText.fontSize = UIFontConfig.Instance.titleFontSize;
             titleText.fontStyle = FontStyles.Bold;
-            titleText.color = new Color(0.7f, 0.7f, 0.75f);
+            titleText.color = new Color(0.78f, 0.8f, 0.86f);
             titleText.alignment = TextAlignmentOptions.Center;
             titleText.raycastTarget = false;
             AssignDefaultFont(titleText);
@@ -343,7 +343,7 @@ namespace ProjectFoundPhone.UI
             m_SubtitleText.text = "select channel_";
             m_SubtitleText.fontSize = UIFontConfig.Instance.captionFontSize;
             m_SubtitleText.fontStyle = FontStyles.Italic;
-            m_SubtitleText.color = new Color(0.4f, 0.4f, 0.45f);
+            m_SubtitleText.color = new Color(0.48f, 0.5f, 0.56f);
             m_SubtitleText.alignment = TextAlignmentOptions.Center;
             m_SubtitleText.raycastTarget = false;
             AssignDefaultFont(m_SubtitleText);
@@ -393,11 +393,12 @@ namespace ProjectFoundPhone.UI
             RectTransform scrollRect = scrollObj.GetComponent<RectTransform>();
             scrollRect.anchorMin = new Vector2(0f, 0f);
             scrollRect.anchorMax = new Vector2(1f, 1f);
-            scrollRect.offsetMin = new Vector2(20f, 20f);
-            scrollRect.offsetMax = new Vector2(-20f, -200f);
+            scrollRect.offsetMin = new Vector2(24f, 24f);
+            // 上端は TabBar 下端と一致させること（InventoryTabController のトップインセットと同値）
+            scrollRect.offsetMax = new Vector2(-24f, -200f);
 
             Image scrollBg = scrollObj.GetComponent<Image>();
-            scrollBg.color = new Color(0.08f, 0.08f, 0.1f, 0.4f);
+            scrollBg.color = new Color(0.08f, 0.085f, 0.1f, 0.28f);
 
             // --- Viewport ---
             GameObject viewportObj = new GameObject("Viewport", typeof(RectTransform), typeof(RectMask2D));
@@ -423,8 +424,8 @@ namespace ProjectFoundPhone.UI
             contentRect.offsetMax = Vector2.zero;
 
             VerticalLayoutGroup vlg = contentObj.GetComponent<VerticalLayoutGroup>();
-            vlg.spacing = 12f;
-            vlg.padding = new RectOffset(16, 16, 12, 12);
+            vlg.spacing = 14f;
+            vlg.padding = new RectOffset(18, 18, 14, 14);
             vlg.childForceExpandWidth = true;
             vlg.childForceExpandHeight = false;
             vlg.childControlWidth = true;
@@ -772,15 +773,15 @@ namespace ProjectFoundPhone.UI
             barRect.anchorMin = new Vector2(0f, 1f);
             barRect.anchorMax = new Vector2(1f, 1f);
             barRect.pivot = new Vector2(0.5f, 1f);
-            barRect.offsetMin = new Vector2(20f, -190f);
-            barRect.offsetMax = new Vector2(-20f, -150f);
+            barRect.offsetMin = new Vector2(24f, -190f);
+            barRect.offsetMax = new Vector2(-24f, -150f);
 
             Image barBg = m_TabBar.GetComponent<Image>();
-            barBg.color = new Color(0.08f, 0.08f, 0.1f, 0.6f);
+            barBg.color = new Color(0.1f, 0.105f, 0.12f, 0.45f);
 
             HorizontalLayoutGroup hlg = m_TabBar.GetComponent<HorizontalLayoutGroup>();
-            hlg.spacing = 4f;
-            hlg.padding = new RectOffset(8, 8, 4, 4);
+            hlg.spacing = 6f;
+            hlg.padding = new RectOffset(10, 10, 6, 6);
             hlg.childForceExpandWidth = true;
             hlg.childForceExpandHeight = true;
             hlg.childControlWidth = true;
@@ -800,7 +801,7 @@ namespace ProjectFoundPhone.UI
             btnObj.transform.SetParent(parent, false);
 
             Image btnBg = btnObj.GetComponent<Image>();
-            btnBg.color = new Color(0.1f, 0.1f, 0.13f, 0.8f);
+            btnBg.color = new Color(0.11f, 0.115f, 0.14f, 0.65f);
             btnBg.raycastTarget = true;
 
             Button btn = btnObj.GetComponent<Button>();
@@ -950,11 +951,11 @@ namespace ProjectFoundPhone.UI
         {
             return status switch
             {
-                ChannelStatus.Locked     => new Color(0.12f, 0.12f, 0.15f, 0.6f),
-                ChannelStatus.Available  => new Color(0.15f, 0.15f, 0.2f, 0.9f),
-                ChannelStatus.InProgress => new Color(0.15f, 0.2f, 0.3f, 0.9f),
-                ChannelStatus.Completed  => new Color(0.12f, 0.18f, 0.12f, 0.9f),
-                _ => new Color(0.15f, 0.15f, 0.2f, 0.9f),
+                ChannelStatus.Locked     => new Color(0.1f, 0.102f, 0.12f, 0.55f),
+                ChannelStatus.Available  => new Color(0.12f, 0.125f, 0.16f, 0.88f),
+                ChannelStatus.InProgress => new Color(0.12f, 0.16f, 0.22f, 0.88f),
+                ChannelStatus.Completed  => new Color(0.11f, 0.15f, 0.13f, 0.88f),
+                _ => new Color(0.12f, 0.125f, 0.16f, 0.88f),
             };
         }
 

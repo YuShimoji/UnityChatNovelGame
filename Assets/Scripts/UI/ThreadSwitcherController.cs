@@ -56,13 +56,13 @@ namespace ProjectFoundPhone.UI
             = new Dictionary<ThreadType, GameObject>();
 
         // 色定数
-        private static readonly Color SidebarBgColor = new Color(0.10f, 0.12f, 0.18f, 0.98f);
-        private static readonly Color OverlayColor = new Color(0f, 0f, 0f, 0.5f);
-        private static readonly Color ItemColor = new Color(0.14f, 0.16f, 0.24f, 1f);
-        private static readonly Color ActiveItemColor = new Color(0.22f, 0.26f, 0.38f, 1f);
-        private static readonly Color BadgeColor = new Color(0.9f, 0.3f, 0.3f, 1f);
-        private static readonly Color MainEntryColor = new Color(0.18f, 0.20f, 0.30f, 1f);
-        private static readonly Color GroupHeaderColor = new Color(0.12f, 0.14f, 0.20f, 1f);
+        private static readonly Color SidebarBgColor = new Color(0.085f, 0.09f, 0.11f, 0.96f);
+        private static readonly Color OverlayColor = new Color(0f, 0f, 0f, 0.42f);
+        private static readonly Color ItemColor = new Color(0.12f, 0.125f, 0.15f, 1f);
+        private static readonly Color ActiveItemColor = new Color(0.18f, 0.2f, 0.26f, 1f);
+        private static readonly Color BadgeColor = new Color(0.82f, 0.36f, 0.36f, 1f);
+        private static readonly Color MainEntryColor = new Color(0.14f, 0.155f, 0.2f, 1f);
+        private static readonly Color GroupHeaderColor = new Color(0.1f, 0.105f, 0.13f, 1f);
 
         // ThreadType 別色
         private static readonly Color TypeColorAnnotation = new Color(0.29f, 0.56f, 0.85f, 1f); // #4A90D9
@@ -90,7 +90,7 @@ namespace ProjectFoundPhone.UI
         private string m_NotificationThreadId;
         private Tween m_NotificationTween;
         private const float NotificationDuration = 3.5f;
-        private static readonly Color NotificationBgColor = new Color(0.12f, 0.14f, 0.22f, 0.95f);
+        private static readonly Color NotificationBgColor = new Color(0.11f, 0.12f, 0.16f, 0.92f);
         private Tween m_HamburgerPulseTween;
 
         private void Start()
@@ -163,7 +163,7 @@ namespace ProjectFoundPhone.UI
             rt.sizeDelta = new Vector2(40f, 36f);
 
             var bg = m_HamburgerButton.AddComponent<Image>();
-            bg.color = new Color(0.18f, 0.22f, 0.32f, 0.9f);
+            bg.color = new Color(0.14f, 0.16f, 0.22f, 0.82f);
 
             var btn = m_HamburgerButton.AddComponent<Button>();
             btn.onClick.AddListener(ToggleSidebar);
