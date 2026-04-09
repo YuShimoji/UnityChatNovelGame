@@ -1,6 +1,6 @@
 # Runtime State
 
-**Updated**: 2026-04-09（handoff 同期 + UI 修正 + 並行レーン用 `PARALLEL_LANE_PROMPTS.md`）
+**Updated**: 2026-04-09（B レーン SP-022 記録完了・本開発復帰：Content 主軸 + 副 Unlock）
 
 ## Current Position
 
@@ -8,12 +8,12 @@
 - branch: main
 - lane: **Content**（Ch1 前進）+ 副 **Unlock**（Pipeline 実運用）
 - slice: **Ch1 コンテンツ前進 + 制作パイプライン実運用**（UI_ISSUES 個別修正はバッチまで保留）
-- next_recommended_slice: **SP-022** サブクエスト探索（設計チャーター + Ch1 パイロット 1〜3 本。既存 Yarn のみ）
-- subsequent_recommended_slice: **Ch1 統合プレイ検証 + ギャップ P0/P1/P2**（SP-022 達成後。HANDOFF 手動ハンズオン → SP-017 Ch1 例 → 好機 EN-012 → Ch2 執筆へ）
+- next_recommended_slice: **Ch1 コンテンツ前進**（主軸。SP-022 パイロット Yarn は既存。好機で SUBSEQUENT ランタイム実測）
+- subsequent_recommended_slice: **Ch1 統合プレイ検証 + ギャップ P0/P1/P2**（HANDOFF 手動ハンズオン・Save/Load・PlayMode 8 件。記録先は `docs/verification/2026-04-09-blane-sp022-subsequent.md` ほか）
 - later_recommended_slice: **Ch2 本編＋サブ前進 + P0 のみ例外スライス**（SUBSEQUENT 完了後。project-context LATER + 意思決定解説、HANDOFF チェックリスト）
 - active_artifact: Ch1 Yarn + ContentAuthoring 再生フロー（併せてエンジン・PlayMode 8 件スイートは session 22 で安定化済み）
 - artifact_surface: ContentAuthoring（本編）/ DebugChatScene（デバッグ）。PlayMode 8/8・EditMode 75/75 はローカル通過済み（再実行は好機に）
-- last_change_relation: direct（2026-04-09 handoff + `docs/ai/PARALLEL_LANE_PROMPTS.md` 並行レーン起票テンプレ）
+- last_change_relation: direct（2026-04-09：B レーン SUBSEQUENT 静的記録・ギャップテンプレ追記まで完了。ランタイムはオペレーター好機。証跡 `docs/verification/2026-04-09-blane-sp022-subsequent.md`。併せて F レーン索引は `docs/verification/2026-04-09-f-lane-audit-evidence-index.md`）
 
 ## Counters
 
@@ -32,7 +32,7 @@
 - mock_files: 0
 - yarn_active: 6 (Ch1_Day1, Ch2_LocationConfusion, Ch3_InstitutionalFragments, DebugQuickTest, EngineTestKit, VerticalSlice)
 - yarn_archive: 5 (Ch1_Terminal, FirstSlice, MVPTest, DebugScript, SubthreadTest)
-- spec_entries: 42 (done 24 / partial 10 / draft 2 / todo 5 + EN-012 + EN-013 + BL-001/002/003 + SP-022)
+- spec_entries: 41（`docs/spec-index.json` 配列長。done 24 / partial 10 / draft 2 / todo 5。2026-04-09 F レーン実測）
 - todo_fixme_hack: 1 (ChatController.cs — ステータスバールーティング)
 - obsolete_marks: 2 (ContradictionPair.UnlockTopic x2)
 - chatcontroller_lines: 2328 (+3: OnTypewriterCompleted イベント)
@@ -45,6 +45,17 @@
 - blocks_since_visual_audit: 0
 
 ## Session Log
+
+### 2026-04-09（F レーン完了 → 本開発復帰）
+
+- **並行 F レーン**: クローズ。以降の実行計画は `docs/project-context.md` の **CURRENT LANE / CURRENT SLICE**（Content 主、Unlock 副）を正とする
+- **参照固定**: 検証・CI の索引は [2026-04-09-f-lane-audit-evidence-index.md](verification/2026-04-09-f-lane-audit-evidence-index.md)
+
+### 2026-04-09（F レーン — Audit / Evidence）
+
+- **verification**: [docs/verification/2026-04-09-f-lane-audit-evidence-index.md](verification/2026-04-09-f-lane-audit-evidence-index.md) を新設（PlayMode / CI / Ch1・SUBSEQUENT 証跡の索引、再開読書順）
+- **整合**: `spec-index.json` は **41** エントリ（Python 実測）。`spec_entries: 42` を **41** に修正
+- **コード・Yarn・シーン**: 変更なし（読み取り監査のみ）
 
 ### 2026-04-09（UI: ダッシュボード／インベントリレイアウト + ミニマル配色）
 
