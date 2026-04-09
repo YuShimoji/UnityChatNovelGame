@@ -1,6 +1,6 @@
 # Runtime State
 
-**Updated**: 2026-04-09（handoff 同期 + 2026-04-09 UI: インベントリ重なり修正・ダッシュボード系パレット微調整）
+**Updated**: 2026-04-09（handoff 同期 + UI 修正 + 並行レーン用 `PARALLEL_LANE_PROMPTS.md`）
 
 ## Current Position
 
@@ -13,7 +13,7 @@
 - later_recommended_slice: **Ch2 本編＋サブ前進 + P0 のみ例外スライス**（SUBSEQUENT 完了後。project-context LATER + 意思決定解説、HANDOFF チェックリスト）
 - active_artifact: Ch1 Yarn + ContentAuthoring 再生フロー（併せてエンジン・PlayMode 8 件スイートは session 22 で安定化済み）
 - artifact_surface: ContentAuthoring（本編）/ DebugChatScene（デバッグ）。PlayMode 8/8・EditMode 75/75 はローカル通過済み（再実行は好機に）
-- last_change_relation: direct（2026-04-09 handoff: `.gitignore` debug ログ、HANDOFF snapshot / project-context / runtime-state / DECISION_LOG 同期）
+- last_change_relation: direct（2026-04-09 handoff + `docs/ai/PARALLEL_LANE_PROMPTS.md` 並行レーン起票テンプレ）
 
 ## Counters
 
