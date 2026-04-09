@@ -719,6 +719,14 @@ title: Ch1_Day3_End
 
 <<StartWait 1.5>>
 
+端末内の記録だけでは、参照欠損の理由を特定できません。
+
+<<StartWait 0.7>>
+
+現地での追加観測が次の材料になります。偵察範囲が広がれば、照合の解像度も上がる見込みです。
+
+<<StartWait 1>>
+
 <<SystemMessage "...">>
 
 <<EndDay 3>>

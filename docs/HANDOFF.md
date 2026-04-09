@@ -13,7 +13,8 @@
 ## Handoff snapshot (2026-04-09)
 
 - **完了**: `main` と `origin/main` の突き合わせ（本コミットまで追い越しなし）。ルートの計測用 NDJSON（`debug-*.log`）を `.gitignore` に追加し、リモートへノイズを載せない状態にした。
-- **並行 F レーン（Audit / Evidence）**: **完了**。証跡索引は `docs/verification/2026-04-09-f-lane-audit-evidence-index.md`。spec 件数（41）の正典同期済み。**本開発は主軸へ復帰** — `docs/project-context.md` の CURRENT LANE（Content + 副 Unlock）および下記 Current Focus に従う。
+- **並行 F レーン（Audit / Evidence）**: **完了**。証跡索引は `docs/verification/2026-04-09-f-lane-audit-evidence-index.md`。spec 件数（41）の正典同期済み。
+- **並行 C レーン（Unlock / Content Pipeline）**: **完了**。`ContentPipelineBatch`（`-executeMethod`）・`YarnContentValidator` バッチログ・メニュー統一・`YarnSOGenerator` 0 件時ダイアログ修正。手順の正本は `docs/verification/2026-04-09-content-pipeline-batch.md` と `docs/YarnEditingPipeline.md` Step 4b。**本開発は主軸へ復帰** — `docs/project-context.md` の CURRENT LANE（Content 主・副は好機にパイプライン）および下記 Current Focus に従う。
 - **残作業**: 下記「Current Focus」および `docs/project-context.md` の CURRENT SLICE（変更なし）。
 - **意図的に触れていないもの**: アプリコード・Yarn・シーン・Prefab（本ブロックは同期と運用整備のみ）。
 - **次セッション最初に見るファイル**: `docs/HANDOFF.md` → `docs/project-context.md` → `docs/runtime-state.md`
@@ -27,6 +28,7 @@
 
 ## Recent Doc Delta
 
+- **C レーン（2026-04-09・完了）**: Unlock ツール整備（上記スナップショット）。`docs/OPERATOR_WORKFLOW.md` S-4 に batch 参照を追加
 - **F レーン（2026-04-09・完了）**: `docs/verification/2026-04-09-f-lane-audit-evidence-index.md`（検証・CI 証跡索引）。`spec-index.json` 実測 **41** 件で `runtime-state.md` / `FEATURE_STATUS_AUDIT.md` §1 / `CLAUDE.md` を同期。レーンクローズ後は本開発（Content 軸）優先
 - docs 整理を継続実施し、`docs/wiki` の重複ページを段階的に統廃合
 - `docs/wiki` はポータル最小構成（`README.md` / `_sidebar.md` / `save-system.md`）へ縮約
@@ -38,6 +40,7 @@
 
 0. （任意）リポジトリ静的整合: `docs/verification/2026-04-10-ch1-day1-3-preflight.md`（Editor 通しは同ファイル B 節）。Bレーン（SP-022）記録: `docs/verification/2026-04-09-blane-sp022-subsequent.md`
 1. Ch1 Yarn を前進（現行: Day1〜3 を `Ch1_Day1.yarn` / `ch1` チャンネル 3 日）
+1b. **A レーン（2026-04-09）**: `Ch1_Day3_End` に第2章への牽引力（Pyramid 独白）を追加済み。**オペレーター確認**: `Tools > FoundPhone > Yarn Content Validator` → Content Pipeline **Sync Authoring Assets** → ContentAuthoring で Day3 終端〜`EndDay 3`〜チャプター完了サマリーまで再生
 2. Content Pipeline で `Sync Authoring Assets`
 3. ContentAuthoring で StartNode を確認して再生
 4. 好機に PlayMode 8件の実ラン記録を `docs/verification/` に追加

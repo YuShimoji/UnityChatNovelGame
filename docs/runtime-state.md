@@ -1,6 +1,6 @@
 # Runtime State
 
-**Updated**: 2026-04-09（B レーン SP-022 記録完了・本開発復帰：Content 主軸 + 副 Unlock）
+**Updated**: 2026-04-09（A レーン Ch1_Day3_End 終端強化 + HANDOFF 1b 検証手順）
 
 ## Current Position
 
@@ -13,7 +13,7 @@
 - later_recommended_slice: **Ch2 本編＋サブ前進 + P0 のみ例外スライス**（SUBSEQUENT 完了後。project-context LATER + 意思決定解説、HANDOFF チェックリスト）
 - active_artifact: Ch1 Yarn + ContentAuthoring 再生フロー（併せてエンジン・PlayMode 8 件スイートは session 22 で安定化済み）
 - artifact_surface: ContentAuthoring（本編）/ DebugChatScene（デバッグ）。PlayMode 8/8・EditMode 75/75 はローカル通過済み（再実行は好機に）
-- last_change_relation: direct（2026-04-09：B レーン SUBSEQUENT 静的記録・ギャップテンプレ追記まで完了。ランタイムはオペレーター好機。証跡 `docs/verification/2026-04-09-blane-sp022-subsequent.md`。併せて F レーン索引は `docs/verification/2026-04-09-f-lane-audit-evidence-index.md`）
+- last_change_relation: direct（2026-04-09：A レーン Ch1_Day3_End 終端強化 + 03a 同期。Unity 検証はオペレーター／HANDOFF 1b）
 
 ## Counters
 
@@ -45,6 +45,12 @@
 - blocks_since_visual_audit: 0
 
 ## Session Log
+
+### 2026-04-09（A レーン — Ch1 終端強化）
+
+- **Yarn**: `Assets/Resources/Yarn/active/Ch1_Day1.yarn` の `Ch1_Day3_End` に、Pyramid 独白で「端末外観測が次の材料」「偵察拡大で照合解像度」の短文を追加（`<<EndDay 3>>` 前・新トピックなし）。
+- **仕様**: [`docs/StorySpec/03a_ch1_section_beats.md`](StorySpec/03a_ch1_section_beats.md) Day3 Winding 節を実装と整合。
+- **検証（ユーザー）**: Validator → Sync → ContentAuthoring で Day3 通し。手順は `HANDOFF.md` Safe Next Steps **1b**。
 
 ### 2026-04-09（F レーン完了 → 本開発復帰）
 
