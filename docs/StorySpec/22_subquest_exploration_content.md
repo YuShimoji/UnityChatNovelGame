@@ -98,7 +98,7 @@ spec-index（SP-016）と整合。**初期スライスでは実装しない**。
 - サブクエスト **解放通知**の統一演出（SP-017 未決）
 - 章ごとの **必須／任意**比率と、メイン Day との**推奨挿入位置**（`03a_ch1_section_beats.md` との対応表）
 - **Ch1 Day3**: メイン Hub の必須トピック内に C/A を埋め込んだ場合、「任意サブクエスト」の定義を **プレイヤーがスキップ可能か**で再整理する（現状は Day 進行に必要な Hub 通過がサブ完了と結びつく）
-- **静的レビュー観察（2026-04-09・Bレーン）**: `ch1_note_facility`（A）および `ch1_cond_analysis`（B）の Yarn には **`CompleteThread` が無い**。エンジン上問題ない設計か、Save/Load でスレッド状態が残り続けるかは **実測で確認**（未判定のまま [docs/verification/2026-04-08-ch1-subquest-gap-template.md](../verification/2026-04-08-ch1-subquest-gap-template.md) の G-OBS-20260409 を参照）。
+- **静的レビュー観察（2026-04-09・Bレーン）**: `ch1_note_facility`（A）および `ch1_cond_analysis`（B）の Yarn には **`CompleteThread` が無い**。エンジン上問題ない設計か、Save/Load でスレッド状態が残り続けるかは **実測で確認**（未判定のまま [docs/verification/templates/2026-04-08-ch1-subquest-gap-template.md](../verification/templates/2026-04-08-ch1-subquest-gap-template.md) の G-OBS-20260409 を参照）。
 
 ### 6.2 要実装（仕様確定後）
 
@@ -126,7 +126,7 @@ spec-index（SP-016）と整合。**初期スライスでは実装しない**。
 
 ### 6.4 SUBSEQUENT 判定用の優先度（2026-04-09 仮固定）
 
-`docs/verification/SUBSEQUENT_playthrough_and_tests.md` と合わせて運用する。以下は「次回通し実測で更新する前提の初期優先度」。
+`docs/verification/templates/SUBSEQUENT_playthrough_and_tests.md` と合わせて運用する。以下は「次回通し実測で更新する前提の初期優先度」。
 
 | ID / 説明 | 優先 | 判定理由 |
 |-----------|------|----------|

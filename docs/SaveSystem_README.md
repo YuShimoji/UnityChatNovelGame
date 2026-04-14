@@ -168,7 +168,7 @@ saveLoadUI.Hide();
 
 ## テスト手順
 
-Test Runner で `SaveSystemTests` を実行。手動確認は `docs/acceptance/phase-a-closing-checklist.md` のセーブ節を参照。
+Test Runner で `SaveSystemTests` を実行（回帰確認のみ、好機に）。
 
 ### チャット履歴復元時の名前重複防止
 

@@ -39,7 +39,7 @@ Unity Test Runner → PlayMode 全実行、または batch（`TestRunnerHelper` 
 - 結果サマリ: 8 / 8 passed（回帰ベースライン）
 
 詳細テンプレ: [`2026-04-10-playmode-8-results-TEMPLATE.md`](2026-04-10-playmode-8-results-TEMPLATE.md)  
-今回の実記録: [`2026-04-09-playmode-8-results.md`](2026-04-09-playmode-8-results.md)
+今回の実記録: [`../2026-04-09-playmode-8-results.md`](../2026-04-09-playmode-8-results.md)
 
 ## 4. ギャップ転記の例（コピー用）
 

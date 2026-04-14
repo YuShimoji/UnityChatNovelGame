@@ -64,8 +64,8 @@
   - Ch2 入口の表示チェック
   - PlayMode 8 件
 - 結果記録:
-  - `docs/verification/SUBSEQUENT_playthrough_and_tests.md`
-  - `docs/verification/2026-04-10-playmode-8-results-TEMPLATE.md`
+  - `docs/verification/templates/SUBSEQUENT_playthrough_and_tests.md`
+  - `docs/verification/templates/2026-04-10-playmode-8-results-TEMPLATE.md`
 
 ## D. 次の数回で見込まれる変化
 

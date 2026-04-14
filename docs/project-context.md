@@ -15,7 +15,7 @@
   - **技術 (session 21–22)**: PlayMode 失敗の根本原因は auto-start の missing_node:Start。HasNode 事前チェック + archive 除外 + TearDown（`UnityTearDown` + `StopScenario` + 待機）で修正。WORKFLOW_STATE_SSOT.md 廃止。Session 22: タイプライター同期（DOTween 完了待機）、DebugChatScene 整備、SaveManager AutoSaveIndicator 安全化、PlayMode **8**/8・EditMode 75/75 をローカルで通過（batch XML・共通ヘルパー分離済み）
   - **コンテンツ軸 (2026-04-07〜10)**: 主軸を **Ch1 コンテンツ前進**に固定。既知 UI は **docs/UI_ISSUES.md**、局所コード修正はバッチまで保留。**SP-022** / SUBSEQUENT / LATER のスライスと意思決定ドキュメントを反映
   - AI の役割: Yarn 執筆ではなく制作ツール・パイプライン・検証導線の整備（USER_REQUEST_LEDGER と整合）
-  - 次の作業: Ch1 を Day 単位で Yarn 上で前進 → Content Pipeline **Sync Authoring Assets** → ContentAuthoring で通し確認。**StartNode** は再生目的に合わせて Inspector で確認。PlayMode 8 件・Pipeline 実機・**GitHub Actions CI** は好機に（EN-012 / インフラ）
+  - 次の作業: Ch1 を Day 単位で Yarn 上で前進 → Content Pipeline **Sync Authoring Assets**（Yarn→SO 整合のみ）。**通し確認は SUBSEQUENT 発動時のみ**。PlayMode 8 件・Pipeline 実機・**GitHub Actions CI** は好機に（EN-012 / インフラ）
 
 ### 運用メモ
 
@@ -51,7 +51,7 @@
 ## CURRENT SLICE
 
 - スライス名: **Ch1 コンテンツ前進 + 制作パイプライン実運用**（UI バッチは触らない）
-- ユーザー操作列: Yarn 編集 → Content Pipeline で **Sync Authoring Assets** → ContentAuthoring（または既定の再生シーン）で **Ch1 通し／Day 跨ぎ**を確認 → 新規気づきは **UI は UI_ISSUES.md**、**進行不能のみ**ブロッカーとして別メモ。静的整合の記録は [docs/verification/2026-04-10-ch1-day1-3-preflight.md](docs/verification/2026-04-10-ch1-day1-3-preflight.md)
+- ユーザー操作列: Yarn 編集 → Content Pipeline で **Sync Authoring Assets**（静的整合のみ）→ 新規気づきは **UI は UI_ISSUES.md**、**進行不能のみ**ブロッカーとして別メモ。**通し再生確認は SUBSEQUENT 発動時のみ**（通常スライスでは省略）。静的整合の記録は [docs/verification/2026-04-10-ch1-day1-3-preflight.md](docs/verification/2026-04-10-ch1-day1-3-preflight.md)
 - 成功状態: Ch1 の **次の Day／節**が執筆またはノード構成として繋がり、セッションごとに **「コンテンツが増えた」**状態が残る。既知 Ch1 UI 件はバッチ対象としてリストのみ増やす
 - このスライスで必要な基盤能力: タップスキップ (済)、タイミング (済)、wiki (済)、Validator (済)、SOGenerator (済)、Content Pipeline (済)
 - 今回はやらないこと: [横断保留](#横断保留) を参照
@@ -62,7 +62,7 @@
 
 - スライス名: **サブクエスト探索：設計チャーター（SP-022）+ Ch1 パイロット 1〜3 本**
 - 目的: サブスレッド（主に **C 型偵察・短い A 型注釈**）で探索パートを積み、ボリューム方針を文章で確定したうえで、Ch1 で**既存コマンドのみ**プロトタイプする
-- ユーザー操作列: **SP-022 をレビュー・追記**（§3〜§4 の仮数・優先）→ `03a_ch1_section_beats.md` または Ch1 Yarn に **節↔サブクエスト ID の対応** → `DeclareThread*` / `CompleteThread` 等で実装 → Content Pipeline 同期 → 再生確認
+- ユーザー操作列: **SP-022 をレビュー・追記**（§3〜§4 の仮数・優先）→ `03a_ch1_section_beats.md` または Ch1 Yarn に **節↔サブクエスト ID の対応** → `DeclareThread*` / `CompleteThread` 等で実装 → Content Pipeline 同期（静的整合確認のみ。**通し再生は SUBSEQUENT へ繰越**）
 - 成功状態: (1) SP-022 が執筆時に迷わない粒度、(2) Ch1 に再現手順付きサブクエスト **1〜3 本**、(3) **エンジンギャップ**が §6 に列挙されている
 - 今回はやらないこと: [横断保留](#横断保留) を参照（特に B 型 Wiki 未承認実装・アルケミーボード）
 - 副次: [docs/StorySpec/17_unlock_triggers.md](docs/StorySpec/17_unlock_triggers.md) に Ch1 用具体例を **1 ページ分**追記できる状態にする

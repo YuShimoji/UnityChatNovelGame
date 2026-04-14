@@ -33,7 +33,7 @@
 2. `docs/project-context.md`
 3. `docs/runtime-state.md`
 4. `docs/StorySpec/22_subquest_exploration_content.md`
-5. `docs/verification/SUBSEQUENT_playthrough_and_tests.md`
+5. `docs/verification/templates/SUBSEQUENT_playthrough_and_tests.md`
 6. `docs/StorySpec/LATER_CH2_PLAYBOOK.md`
 7. `docs/StorySpec/ch2_later_consistency_note.md`
 

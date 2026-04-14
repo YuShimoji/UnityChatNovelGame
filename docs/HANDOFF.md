@@ -40,7 +40,7 @@
 
 0. （任意）リポジトリ静的整合: `docs/verification/2026-04-10-ch1-day1-3-preflight.md`（Editor 通しは同ファイル B 節）。Bレーン（SP-022）記録: `docs/verification/2026-04-09-blane-sp022-subsequent.md`
 1. Ch1 Yarn を前進（現行: Day1〜3 を `Ch1_Day1.yarn` / `ch1` チャンネル 3 日）
-1b. **A レーン（2026-04-09）**: `Ch1_Day3_End` に第2章への牽引力（Pyramid 独白）を追加済み。**オペレーター確認**: `Tools > FoundPhone > Yarn Content Validator` → Content Pipeline **Sync Authoring Assets** → ContentAuthoring で Day3 終端〜`EndDay 3`〜チャプター完了サマリーまで再生
+1b. **A レーン（2026-04-09）**: `Ch1_Day3_End` に第2章への牽引力（Pyramid 独白）を追加済み。**任意（SUBSEQUENT 発動時のみ）**: Validator → Sync Authoring Assets → ContentAuthoring で Day3 終端通し再生。通常スライスでは省略
 2. Content Pipeline で `Sync Authoring Assets`
 3. ContentAuthoring で StartNode を確認して再生
 4. 好機に PlayMode 8件の実ラン記録を `docs/verification/` に追加
@@ -52,9 +52,9 @@
 - SUBSEQUENT 判定基準（P0/P1/P2）: `docs/StorySpec/22_subquest_exploration_content.md` §6.4
 - SUBSEQUENT 手順・静的整合・分岐ルールの正本: `docs/verification/2026-04-10-subsequent-completion-report.md`
 
-### 手動確認ハンズオン（Ch1 + サブスレッド・SUBSEQUENT 用）
+### 手動確認ハンズオン（SUBSEQUENT 発動時のみ）
 
-`project-context.md` の SUBSEQUENT で通し確認する際の最短手順。
+**通常スライス / 微修正では参照禁止**。SUBSEQUENT スライスが明示的に発動したときだけ、以下を最短手順として使う。`project-context.md` の SUBSEQUENT に該当する手順。
 
 1. Content Pipeline で **Sync Authoring Assets** 済みであること
 2. ContentAuthoring を開き、**StartNode** が Ch1 入口（例: `Ch1_Day1_Opening`）であることを確認
@@ -63,7 +63,7 @@
 5. Day2 モックに入り、**待受ポート**の C パイロットを 1 回通す（任意）
 6. 断片取得済みセーブで `ch1_cond_analysis`（B・LatentCond）が期待どおり出ること
 7. Day3: Hub **必須トピック**（Mason 報告・掲示板・比較）を進行し、Latent から `scout_ch1_d3_route` / `scout_ch1_d3_board` / `annot_ch1_d3_compare` が Manifest されること
-8. 問題は `docs/UI_ISSUES.md`、エンジン／仕様の不足は `docs/StorySpec/22_subquest_exploration_content.md` §6 と `docs/verification/2026-04-08-ch1-subquest-gap-template.md` の P0/P1/P2 表に追記
+8. 問題は `docs/UI_ISSUES.md`、エンジン／仕様の不足は `docs/StorySpec/22_subquest_exploration_content.md` §6 と `docs/verification/templates/2026-04-08-ch1-subquest-gap-template.md` の P0/P1/P2 表に追記
 
 ### Ch2 着手時（LATER のチェックリスト要約）
 

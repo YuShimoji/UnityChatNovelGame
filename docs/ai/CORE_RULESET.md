@@ -45,6 +45,14 @@ REFRESH, REANCHOR, SCAN, AUDIT, and similar phases are read-only by default. The
 ### Write failure hard stop
 If a write fails, a readback mismatch occurs, or the result is uncertain, do not commit, push, or claim completion in that block. Repair or clearly stop.
 
+### Verification cost principle
+Manual verification and test execution are not proofs of progress. They are costs paid against a specific change. Apply in this order:
+- If the change has **no visible/behavioral effect** (docs, internal Yarn nodes, refactors, internal string edits), do **not** request manual verification or test runs.
+- If the change has localized behavioral effect, request verification **only for the affected surface**, not a full playthrough.
+- Full manual playthroughs and full test suite runs belong to **SUBSEQUENT slices only**, not to every implementation slice.
+- Unchecked-box checklists, "未実施" counters, and verification log directories must not become implicit todo lists that demand execution on every session.
+- If multiple micro-edits accumulate in a block, propose one batched verification at the block's terminus — never per edit.
+
 ## Canonical doc roles
 - `INVARIANTS.md`: non-negotiables, UX/algorithm invariants, role boundaries, prohibited shortcuts
 - `USER_REQUEST_LEDGER.md`: durable requests, backlog deltas, unresolved user corrections

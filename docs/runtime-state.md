@@ -18,9 +18,9 @@
 ## Counters
 
 - blocks_since_user_visible_change: 0 (session 22 タイプライター同期修正 = ユーザー可視改善)
-- blocks_since_visual_audit: 0 (DQT_Start 実機再生確認済み)
 - blocks_since_unlock: 4
 - consecutive_excise_blocks: 0
+- (visual audit カウンターは廃止: 確認コスト原則 / CORE_RULESET に従い、"未実施" 指標が再実行圧力となるのを回避)
 
 ## Quantitative Metrics
 
@@ -37,9 +37,7 @@
 
 ## Visual Evidence
 
-- visual_evidence_status: partial (DQT_Start 実機確認済み。Content Pipeline / Ch1 / Ch2 は未確認)
-- last_visual_audit_path: docs/verification/VerticalSliceSmokeGate_20260403_*.png
-- blocks_since_visual_audit: 0
+- last_visual_audit_path: docs/verification/VerticalSliceSmokeGate_20260403_*.png (参考。パスのみ保持、追跡は廃止)
 
 ## Session Log
 
@@ -76,7 +74,7 @@
 
 - **Ch1**: `Ch1_Day1.yarn` に SP-022 パイロット（Day1 Hub: C+A、Day2: C 等）を配置。節↔ID は `03a_ch1_section_beats.md`
 - **ドキュメント**: `OPERATOR_WORKFLOW` / `HANDOFF` / `17` §6 / `22` §6.3 などを同期
-- **検証**: `docs/verification/2026-04-08-ch1-subquest-gap-template.md`（ギャップ P0/P1/P2 用）
+- **検証**: `docs/verification/templates/2026-04-08-ch1-subquest-gap-template.md`（ギャップ P0/P1/P2 用）
 
 ### 2026-04-09（次回推奨プラン実行）
 
@@ -99,7 +97,7 @@
 - **Ch1**: `Ch1_Day1.yarn` に Day3（`Ch1_Day3_*`）を追加。`ch1.asset` の `m_TotalDays: 3` と Day 開始ノードを更新
 - **Day2 Winding**: `fragment_ch1_02` の `UnlockTopic`（03a の断片 #2 導線）
 - **SP-022**: Day3 パイロット（`scout_ch1_d3_route` / `scout_ch1_d3_board` / `annot_ch1_d3_compare`）。`03a` / `22` / `17` を同期
-- **SUBSEQUENT**: `docs/verification/SUBSEQUENT_playthrough_and_tests.md` チェックリスト新設
+- **SUBSEQUENT**: `docs/verification/templates/SUBSEQUENT_playthrough_and_tests.md` チェックリスト新設
 - **LATER**: `docs/StorySpec/LATER_CH2_PLAYBOOK.md` オペレーション短冊
 - **CI**: `.github/workflows/unity-playmode-tests.yml` 新設。EditMode ワークフローの Unity 版を `6000.3.6f1` に合わせる
 
