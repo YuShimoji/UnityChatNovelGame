@@ -17,7 +17,7 @@
 | Yarnファイル (active) | 6 | session 19 (4件 archive 移動後) |
 | Yarnファイル (archive) | 5 | session 19 |
 | Yarnコマンド | 24 | |
-| 仕様エントリ (spec-index) | **41**（done 24 / partial 10 / draft 2 / todo 5、`docs/spec-index.json` 配列長） | **2026-04-09 F レーン実測** |
+| 仕様エントリ (spec-index) | **40** (done 23 / partial 10 / draft 2 / todo 5、`docs/spec-index.json` 配列長) | 2026-04-15 実測 (EN-008 削除反映) |
 | TODO/FIXME/HACK | 1件 (ChatController.cs:1241) | session 19 |
 | [Obsolete] マーク | 2件 (ContradictionPair.UnlockTopic x2) | |
 | docs ファイル数 | ~30 (archive除く) | |

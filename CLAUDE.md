@@ -9,7 +9,7 @@ Unity (C#) チャット/ビジュアルノベルゲーム。MVPアーキテク�
 - プロジェクト名: FoundPhone (UnityChatNovelGame)
 - 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
 - ブランチ戦略: trunk-based (main のみ) / フェーズ: プロトタイプ → α移行中
-- 技術サマリ（2026-04-10 時点・検証は正典へ）: YarnSOGenerator + Content Pipeline + HasNode 事前チェック + batch XML 出力。EditMode 75/75、PlayMode 8 件（実機・CI は好機に）。spec-index 41 エントリ（`docs/spec-index.json` 配列長）。FEATURE_REGISTRY で ENH 系を管理
+- 技術サマリ (2026-04-15 時点・検証は正典へ): YarnSOGenerator + Content Pipeline + HasNode 事前チェック + batch XML 出力。EditMode 75/75、PlayMode 8 件 (実機・CI は SUBSEQUENT 発動時)。spec-index 40 エントリ (`docs/spec-index.json` 配列長)。FEATURE_REGISTRY で ENH 系を管理
 
 ## IDEA POOL
 

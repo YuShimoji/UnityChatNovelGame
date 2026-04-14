@@ -24,7 +24,7 @@
 
 - 主目的: Ch1 コンテンツ前進 + 制作パイプライン実走
 - 次: SP-022 でサブクエスト設計を確定し、Ch1 に 1〜3 本のパイロット追加
-- その次: 通し手動検証 → ギャップ P0/P1/P2 付け → Ch2 執筆
+- **SUBSEQUENT（条件付き・通過ゲートではない）**: 発動条件は [`docs/project-context.md`](project-context.md) の `SUBSEQUENT RECOMMENDED SLICE` を参照。発動したときだけ Ch1 手動通し + ギャップ P0/P1/P2 + PlayMode 8 件。未発動のまま **LATER（Ch2 本編＋サブ前進）** に進んでよい。手順の正本は [`docs/verification/2026-04-10-subsequent-completion-report.md`](verification/2026-04-10-subsequent-completion-report.md)
 
 ## Recent Doc Delta
 

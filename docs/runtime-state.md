@@ -1,6 +1,6 @@
 # Runtime State
 
-**Updated**: 2026-04-09（A レーン Ch1_Day3_End 終端強化 + HANDOFF 1b 検証手順）
+**Updated**: 2026-04-15（HANDOFF / EN-012 要約 / 本ファイルの検証文言を SUBSEQUENT 条件付きに整合）
 
 ## Current Position
 
@@ -13,6 +13,7 @@
 - later_recommended_slice: **Ch2 本編＋サブ前進 + P0 のみ例外スライス**（SUBSEQUENT 完了後。project-context LATER + 意思決定解説、HANDOFF チェックリスト）
 - active_artifact: Ch1 Yarn + ContentAuthoring 再生フロー（併せてエンジン・PlayMode 8 件スイートは session 22 で安定化済み）
 - artifact_surface: ContentAuthoring (本編) / DebugChatScene (デバッグ)。PlayMode 8/8・EditMode 75/75 は session 22 ローカル通過済み (ベースライン保持、再実行は SUBSEQUENT 発動時のみ)
+- editor_long_playthrough: **デフォルト最優先ではない**。Ch1 Day1〜3 や本編の長尺通しは `project-context.md` の SUBSEQUENT 発動条件を満たしたとき、または当該 Yarn 変更の**局所**一次確認として実施。手順は `HANDOFF.md` Safe Next Steps と `docs/verification/2026-04-10-subsequent-completion-report.md`
 - last_change_relation: direct（2026-04-09：A レーン Ch1_Day3_End 終端強化 + 03a 同期。Unity 検証はオペレーター／HANDOFF 1b）
 
 ## Counters
@@ -38,7 +39,7 @@
 
 - **Yarn**: `Assets/Resources/Yarn/active/Ch1_Day1.yarn` の `Ch1_Day3_End` に、Pyramid 独白で「端末外観測が次の材料」「偵察拡大で照合解像度」の短文を追加（`<<EndDay 3>>` 前・新トピックなし）。
 - **仕様**: [`docs/StorySpec/03a_ch1_section_beats.md`](StorySpec/03a_ch1_section_beats.md) Day3 Winding 節を実装と整合。
-- **検証（ユーザー）**: Validator → Sync → ContentAuthoring で Day3 通し。手順は `HANDOFF.md` Safe Next Steps **1b**。
+- **検証（ユーザー・当該コミットの一次確認）**: A レーン変更の確認として Validator → Sync → ContentAuthoring で Day3 終端まで再生。**セッションごとの常時義務ではない**（通常は静的整合・局所再生で足りる場合が多い。長尺通しは SUBSEQUENT 発動時または `HANDOFF.md` Safe Next Steps **1b** の任意条件に従う）。
 
 ### 2026-04-09（F レーン完了 → 本開発復帰）
 
