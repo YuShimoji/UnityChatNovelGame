@@ -243,15 +243,6 @@
     "summary": "各機能の設計判断と選択肢の記録"
   },
   {
-    "id": "EN-008",
-    "title": "MVPテストガイド",
-    "status": "done",
-    "pct": 100,
-    "cat": "infra",
-    "file": "docs/MVP_TEST_GUIDE.md",
-    "summary": "MVP動作確認の手順書・チェックリスト"
-  },
-  {
     "id": "EN-009",
     "title": "シナリオオーサリングガイド",
     "status": "done",

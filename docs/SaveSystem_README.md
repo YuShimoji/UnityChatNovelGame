@@ -168,18 +168,7 @@ saveLoadUI.Hide();
 
 ## テスト手順
 
-### 1. エディタでのテスト
-1. Play Modeに入る
-2. `Project FoundPhone/Debug/Save System Debugger`を開く
-3. スロットを選択して「Save Game」をクリック
-4. 「Load Game」をクリックして復元を確認
-5. 「Delete Save」で削除を確認
-
-### 2. ユニットテストの実行
-1. Test Runnerウィンドウを開く（`Window > General > Test Runner`）
-2. PlayModeタブを選択
-3. `SaveSystemTests`を実行
-4. 全テストが通過することを確認
+Test Runner で `SaveSystemTests` を実行。手動確認は `docs/acceptance/phase-a-closing-checklist.md` のセーブ節を参照。
 
 ### チャット履歴復元時の名前重複防止
 
@@ -192,13 +181,6 @@ saveLoadUI.Hide();
 
 `ScenarioManager.EndDayCommand()` は Day 進捗記録後に `SaveManager.Instance.AutoSave(forceSave: true)` を呼ぶ。
 以前の `SaveGame(slotNumber)` による通常スロットへの保存ではなく、オートセーブスロット (99) に強制保存する。
-
-### 3. 実機テスト
-1. トピックを複数獲得
-2. セーブを実行
-3. ゲームを再起動
-4. ロードを実行
-5. トピックが復元されていることを確認
 
 ## サブスレッドのセーブ/ロード
 

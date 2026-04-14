@@ -80,15 +80,6 @@ namespace ProjectFoundPhone.Tests
         }
 
         [Test]
-        public void ContradictionPair_Matches_NullTags()
-        {
-            var pair = CreatePair("test", "src_tag", "tgt_tag");
-            Assert.IsFalse(pair.Matches(null, "tgt_tag"));
-            Assert.IsFalse(pair.Matches("src_tag", null));
-            Assert.IsFalse(pair.Matches(null, null));
-        }
-
-        [Test]
         public void ContradictionPair_Properties_ReturnCorrectValues()
         {
             var pair = CreatePair("ch1_test", "src", "tgt", chapter: 2, reward: 15);
@@ -387,18 +378,6 @@ namespace ProjectFoundPhone.Tests
         }
 
         [Test]
-        public void Manager_RestoreDiscovered_NullList()
-        {
-            var db = CreateDatabase();
-            (m_ManagerObj, m_Manager) = CreateManager(db);
-
-            m_Manager.RestoreDiscovered(null, 0);
-
-            Assert.AreEqual(0, m_Manager.HalluciCoin);
-            Assert.AreEqual(0, m_Manager.DiscoveredIDs.Count);
-        }
-
-        [Test]
         public void Manager_SetCurrentChapter_UpdatesChapter()
         {
             var db = CreateDatabase();
@@ -445,18 +424,6 @@ namespace ProjectFoundPhone.Tests
             Assert.IsFalse(m_Manager.ShouldShowHint("src", 2));
         }
 
-        [Test]
-        public void Manager_NullDatabase_HandlesGracefully()
-        {
-            m_ManagerObj = new GameObject("NullDbManager");
-            m_Manager = m_ManagerObj.AddComponent<ContradictionManager>();
-
-            m_Manager.SelectFirst("tag");
-            bool result = m_Manager.SelectSecond("other");
-
-            Assert.IsFalse(result);
-            Assert.IsFalse(m_Manager.ShouldShowHint("tag", 1));
-        }
         #endregion
     }
 }

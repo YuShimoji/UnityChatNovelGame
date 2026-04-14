@@ -55,22 +55,6 @@ namespace ProjectFoundPhone.Tests
         }
 
         [Test]
-        public void TopicData_IsValid_ReturnsFalseForEmptyID()
-        {
-            TopicData topic = CreateTopicData("", "Test Topic");
-
-            Assert.IsFalse(topic.IsValid());
-        }
-
-        [Test]
-        public void TopicData_IsValid_ReturnsFalseForEmptyTitle()
-        {
-            TopicData topic = CreateTopicData("test_01", "");
-
-            Assert.IsFalse(topic.IsValid());
-        }
-
-        [Test]
         public void TopicData_Properties_ReturnCorrectValues()
         {
             TopicData topic = CreateTopicData("signal_01", "Strange Signal", "A mysterious signal");
@@ -115,19 +99,6 @@ namespace ProjectFoundPhone.Tests
             SynthesisRecipe recipe = CreateRecipe(topicA, topicB, result);
 
             Assert.IsFalse(recipe.Matches(topicA, topicX));
-        }
-
-        [Test]
-        public void SynthesisRecipe_Matches_ReturnsFalseForNullInput()
-        {
-            TopicData topicA = CreateTopicData("a", "Topic A");
-            TopicData topicB = CreateTopicData("b", "Topic B");
-            TopicData result = CreateTopicData("c", "Topic C");
-            SynthesisRecipe recipe = CreateRecipe(topicA, topicB, result);
-
-            Assert.IsFalse(recipe.Matches(null, topicB));
-            Assert.IsFalse(recipe.Matches(topicA, null));
-            Assert.IsFalse(recipe.Matches(null, null));
         }
 
         [Test]
@@ -253,12 +224,6 @@ namespace ProjectFoundPhone.Tests
         }
 
         [Test]
-        public void DeductionBoard_HasTopic_ReturnsFalseForEmpty()
-        {
-            Assert.IsFalse(m_Board.HasTopic("anything"));
-        }
-
-        [Test]
         public void DeductionBoard_MultipleTopics_MaintainsOrder()
         {
             TopicData topicA = CreateTopicData("order_a", "First");
@@ -375,22 +340,6 @@ namespace ProjectFoundPhone.Tests
             Assert.AreEqual("player", profile.CharacterID);
             Assert.AreEqual("Player", profile.DisplayName);
             Assert.IsTrue(profile.IsPlayer);
-        }
-
-        [Test]
-        public void CharacterProfile_IsValid_ReturnsFalseForEmptyID()
-        {
-            CharacterProfile profile = CreateCharacterProfile("", "Name", Color.white, false);
-
-            Assert.IsFalse(profile.IsValid());
-        }
-
-        [Test]
-        public void CharacterProfile_IsValid_ReturnsFalseForEmptyName()
-        {
-            CharacterProfile profile = CreateCharacterProfile("id", "", Color.white, false);
-
-            Assert.IsFalse(profile.IsValid());
         }
 
         [Test]

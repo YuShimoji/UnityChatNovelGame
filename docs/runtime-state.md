@@ -25,14 +25,11 @@
 ## Quantitative Metrics
 
 - impl_files: 66 (テスト除く .cs、実測)
-- test_files: 7 (EditMode 4 + PlayMode 3)
-- playmode_test_files: 3 (SmokeGate + ScenarioFlow + Helpers)
-- playmode_test_cases: 8 (SmokeGate 4 + ScenarioFlow 4)
-- editmode_test_cases: 75 (75/75 passed)
+- tests_last_run: 2026-04-09 (EditMode pass / PlayMode pass) — 件数追跡は廃止 (増殖圧力源)
 - mock_files: 0
 - yarn_active: 6 (Ch1_Day1, Ch2_LocationConfusion, Ch3_InstitutionalFragments, DebugQuickTest, EngineTestKit, VerticalSlice)
 - yarn_archive: 5 (Ch1_Terminal, FirstSlice, MVPTest, DebugScript, SubthreadTest)
-- spec_entries: 41（`docs/spec-index.json` 配列長。done 24 / partial 10 / draft 2 / todo 5。2026-04-09 F レーン実測）
+- spec_entries: 40（`docs/spec-index.json` 配列長。EN-008 MVP_TEST_GUIDE 削除反映。2026-04-14 実測）
 - todo_fixme_hack: 1 (ChatController.cs — ステータスバールーティング)
 - obsolete_marks: 2 (ContradictionPair.UnlockTopic x2)
 - chatcontroller_lines: 2328 (+3: OnTypewriterCompleted イベント)
