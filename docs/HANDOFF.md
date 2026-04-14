@@ -10,9 +10,25 @@
 4. `docs/INVARIANTS.md`
 5. `docs/USER_REQUEST_LEDGER.md`
 
-## Handoff snapshot (2026-04-09)
+## Handoff snapshot (2026-04-15)
 
-- **完了**: `main` と `origin/main` の突き合わせ（本コミットまで追い越しなし）。ルートの計測用 NDJSON（`debug-*.log`）を `.gitignore` に追加し、リモートへノイズを載せない状態にした。
+**本セッションで 5 コミット + handoff 整備コミットをリモートへ反映 (docs のみ、コード/Yarn/シーン変更なし)。**
+
+構造的クリーンアップ 5 コミット (新しい順):
+- `7f17b83` SUBSEQUENT 条件付き運用への最終整合 + spec-index 件数 40 統一
+- `8038b1d` Ch1 通し最優先化の構造的誘因と永続未実施マーカー除去 (「好機に」等曖昧語撤去、SUBSEQUENT 発動条件明文化、上から順ルール廃止)
+- `1a03bd9` 周辺クリーンアップ A+B (未参照バイナリ削除、VerticalSlice スクショ archive、runtime-state カウンター簡素化、完了レーン証跡 archive 移動)
+- `2f0d19a` テスト/手動確認過多の構造的誘因を除去 (CORE_RULESET に Verification cost principle、INTERACTION_NOTES に手動確認発動条件、phase-a/ch1-playthrough checklist archive 化)
+- `c7f06e2` テスト過剰整理 (過剰防御テスト 8 件削除、MVP_TEST_GUIDE 削除、件数カウンター廃止)
+
+**次回任意のクリーンアップ候補 (忘却防止)**:
+- SaveSystem_README / 03b_ch3 / 16_subthread_ui の空欄チェックボックス計 21 項目 (実質 open todo list 化)
+- project-context.md:45「好機のみ」1件残存 → SUBSEQUENT 発動時に
+- 2026-04-08-spec-gap-radar.md「検証待ち」表現
+- runtime-state.md `todo_fixme_hack: 1` カウンター (前回件数廃止方針と整合するなら除去)
+- ChatController ステータスバールーティング TODO の docs 4 箇所重複記録を 1 箇所に統合
+
+前セッション分 (維持):
 - **並行 F レーン（Audit / Evidence）**: **完了**。証跡索引は `docs/archive/verification-lanes-2026-04/2026-04-09-f-lane-audit-evidence-index.md`。spec 件数（41）の正典同期済み。
 - **並行 C レーン（Unlock / Content Pipeline）**: **完了**。`ContentPipelineBatch`（`-executeMethod`）・`YarnContentValidator` バッチログ・メニュー統一・`YarnSOGenerator` 0 件時ダイアログ修正。手順の正本は `docs/archive/verification-lanes-2026-04/2026-04-09-content-pipeline-batch.md` と `docs/YarnEditingPipeline.md` Step 4b。**本開発は主軸へ復帰** — `docs/project-context.md` の CURRENT LANE（Content 主・副は好機にパイプライン）および下記 Current Focus に従う。
 - **残作業**: 下記「Current Focus」および `docs/project-context.md` の CURRENT SLICE（変更なし）。
