@@ -168,7 +168,7 @@ saveLoadUI.Hide();
 
 ## テスト手順
 
-Test Runner で `SaveSystemTests` を実行（回帰確認のみ、好機に）。
+Test Runner で `SaveSystemTests` を実行。SaveSystem 関連バグの再現・回帰確認に使う。
 
 ### チャット履歴復元時の名前重複防止
 

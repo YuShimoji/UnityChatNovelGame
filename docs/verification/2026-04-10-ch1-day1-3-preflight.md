@@ -11,7 +11,7 @@
 | [Ch1_Day1.yarn](../../Assets/Resources/Yarn/active/Ch1_Day1.yarn) `title:` | Day1〜3 の Hub / スポーク / Winding / End が存在 |
 | `<<EndDay 1>>` / `<<EndDay 2>>` / `<<EndDay 3>>` | 各 Day の終端に存在 |
 
-**未実施（要 Unity）**: Content Pipeline **Sync Authoring Assets**、実機再生、Console エラーなし、UI 目視。
+**Unity 実行を要するチェック**: Content Pipeline Sync Authoring Assets / 実機再生 / Console エラー確認 / UI 目視 (SUBSEQUENT 発動時に実施)。
 
 ## B. オペレーター手順（Editor）
 
@@ -20,10 +20,6 @@
 3. Play で Day1 → `EndDay 1` → ダッシュボードまたは再入で Day2 → Day3 まで通し
 4. 気づき → `docs/UI_ISSUES.md`。進行不能・仕様不足 → `docs/StorySpec/22_subquest_exploration_content.md` §6
 
-## C. 実施後の追記欄
+## C. 備考
 
-- 実施日:
-- Unity 版:
-- 結果: OK / NG（要約）:
-
-**2026-04-10（エージェント）**: 節 A の静的整合を再確認済み。Editor 通しは [2026-04-10-subsequent-completion-report.md](2026-04-10-subsequent-completion-report.md) に手順と「未実施」理由を記録。オペレーターが Play で通したら、本欄に **実測日・結果** を追記する。
+節 A の静的整合は 2026-04-10 時点で再確認済み。Editor 通しは SUBSEQUENT 発動時にオペレーターが実施 (本ファイルに追記欄は置かない — 空欄待ちが実行圧力になるため)。

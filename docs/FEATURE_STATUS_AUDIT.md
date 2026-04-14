@@ -58,30 +58,17 @@
 
 ---
 
-## 3. 未確認機能 (検証手段別)
+## 3. 未確認機能
 
-### Unity Editor再生が必要 (Phase A手動検証: 65項目+SP-019/020)
+Unity Editor 再生を要する個別確認項目 (旧 U-1〜U-10 / C-1〜C-3 計13件) は、**SUBSEQUENT 発動時にまとめて確認**する。個別 U-/C- 表は「永続未実施リスト」となり再実行圧力源になるため廃止 (2026-04-15)。
 
-| # | 確認対象 | 確認内容 | リスク |
-|---|---------|---------|-------|
-| U-1 | 矛盾Phase 2 | 長押しハイライト+接続線+通知パネル | タグ突合済だが手動操作が必要 |
-| U-2 | Ch1後半 | プレイヤーセリフ一部欠落の可能性 | 未確認 |
-| U-3 | Ch2 | タイピングインジケーター位置修正の確認 | 修正済だが目視未確認 |
-| U-4 | Ch2 | 選択肢タイミング修正の確認 | 修正済だが目視未確認 |
-| U-5 | ContentAuthoringシーン | 最終再生確認 | ダッシュボード→Ch1→Ch2フルフロー |
-| U-6 | SP-019 | チャプター完了サマリー表示 | 最終Dayまで到達が必要 |
-| U-7 | SP-020 | オンボーディングヒント表示 | 初回断片/矛盾発見が必要 |
-| U-8 | C型偵察スレッド | CompleteThread/成果物カード | ETK_ThreadParallelでテスト可能 |
-| U-9 | UnreadCount復元 | Save/Load後のバッジ表示 | コードレビュー正常、Unity検証待ち |
-| U-10 | 知識転送選択UI | EndBranch "select"の操作確認 | ETK_BranchTransferSelectでテスト可能 |
+主要な未確認領域:
+- Ch1 後半〜Ch2 の視覚系 (タイピングインジケーター / 選択肢タイミング / プレイヤーセリフ)
+- SP-019/SP-020 Phase 1 のオンボーディング/チャプター完了演出
+- C型偵察スレッド / Save/Load 後の UnreadCount / EndBranch 知識転送選択
+- ContradictionFeedbackController のシーンセットアップ
 
-### コードレビューのみ (自動テストなし)
-
-| # | 確認対象 | 状態 | 備考 |
-|---|---------|------|------|
-| C-1 | ContradictionFeedbackController | セットアップ未完了 | シーンへのアサインが必要 |
-| C-2 | TransferSelectionUI | コード実装済 | Phase Aで操作確認必要 |
-| C-3 | ProgressSummaryUI | コード実装済 | ダッシュボード内バー表示確認必要 |
+これらは Ch1 主要変更時 or Ch2 着手前の検収 (SUBSEQUENT 発動条件) でまとめて確認する。
 
 ---
 
@@ -100,7 +87,7 @@
 | N-9 | B型Wikiリンク遷移 | SP-016/IP-002 | hold | B型コンテンツ3章分 |
 | N-10 | C型成果物カードリッチ表示 | SP-016/IP-003 | hold | C型Unity検証後 |
 | N-11 | アルケミーボード | SP-014/IP-001 | hold | 矛盾3章安定運用後 |
-| N-12 | Ch3シナリオ | SP-003 | 次 | Phase A + 実機検証後 |
+| N-12 | Ch3シナリオ | SP-003 | 次 | Ch2 前進後 (SUBSEQUENT 発動判定を経て) |
 | N-13 | E2E自動検証 (PlayMode) | EN-004/project-context | 高 | ETK 拡張方針の確定 |
 | N-14 | SP-017 解放通知演出 | SP-017 | 低 | Ch3設計後 |
 | N-15 | 複合条件記法集 | SP-017 | 低 | Ch3設計後 |
@@ -111,9 +98,9 @@
 
 | # | 懸念 | 重大度 | 対処方針 |
 |---|------|--------|----------|
-| W-1 | Phase A手動検証65項目が未実施 | HIGH | ユーザーのUnity Editor操作が必須 |
-| W-2 | Content Pipeline は実装済みだが Unity 実機検証が未完 | HIGH | ContentAuthoring / DebugQuickTest / Ch1-Ch3 で再生確認 |
-| W-3 | ContradictionFeedbackControllerのシーンセットアップ未完了 | MEDIUM | Phase A実施時にセットアップ |
+| W-1 | ~~Phase A手動検証65項目が未実施~~ | — | **廃止** (2026-04-15): チェックリストを `docs/archive/acceptance/` へ archive 済み。SUBSEQUENT 発動時に必要な範囲を都度選定 |
+| W-2 | Content Pipeline は実装済みだが実機検証は SUBSEQUENT 待ち | INFO | HIGH から INFO に緩和。SUBSEQUENT 発動時に確認 |
+| W-3 | ContradictionFeedbackController のシーンセットアップ | INFO | SUBSEQUENT 発動時にセットアップ |
 | W-4 | MessageTaggedコマンド | — | 削除済み (session 11) |
 | W-5 | ContradictionPairの[Obsolete]フィールド (UnlockTopic) | LOW | SerializeFieldのため削除するとSO壊れる。放置 |
 | W-6 | ChatController.cs:1296 TODO (ステータスバールーティング) | LOW | 将来のUI拡張時に対応 |

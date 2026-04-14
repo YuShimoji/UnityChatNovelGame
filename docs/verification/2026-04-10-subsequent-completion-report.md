@@ -52,16 +52,11 @@
 ### 手動通し結果（Editor）
 
 
-| 項目       | 結果                                                   |
-| -------- | ---------------------------------------------------- |
-| 実施       | **本セッションでは未実施**（エージェント実行環境に Unity Editor が存在しない）     |
-| オペレーター向け | 上記手順を実施後、本表の下に **実施日・Console 重大エラー有無・P0 有無** を追記すること |
-
-| 項目（追記 2026-04-09・Bレーン） | 結果 |
-|--------------------------------|------|
-| 静的整合の再確認 | **実施**（[2026-04-09-blane-sp022-subsequent.md](../archive/verification-lanes-2026-04/2026-04-09-blane-sp022-subsequent.md) §2） |
-| Editor 手動通し | **未実施**（オペレーターが実施） |
-| PlayMode batch 全体 | **未実施** — 同一プロジェクトを別 Unity が開いており batch が拒否（同ファイル §3） |
+| 項目         | 対応 |
+| ---------- | ---- |
+| 静的整合の再確認 | 実施済み ([2026-04-09-blane-sp022-subsequent.md](../archive/verification-lanes-2026-04/2026-04-09-blane-sp022-subsequent.md) §2) |
+| Editor 手動通し | SUBSEQUENT 発動時にオペレーターが実施 (実施時に別ファイルで記録) |
+| PlayMode batch 全体 | SUBSEQUENT 発動時に実施 (プロジェクト排他ロックに注意) |
 
 
 ---
@@ -69,16 +64,13 @@
 ## 4. PlayMode 8 件（再実行）
 
 
-| 項目                 | 結果                                                                                                                                                     |
+| 項目                 | 情報                                                                                                                                                     |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 本セッションでの再実行        | **未実施**（同上）                                                                                                                                            |
-| 2026-04-09 Bレーン試行        | **未完了** — プロジェクト排他で Unity batch 中止。詳細は [2026-04-09-blane-sp022-subsequent.md](../archive/verification-lanes-2026-04/2026-04-09-blane-sp022-subsequent.md) §3                                                                                                            |
-| 既定の batch 出力先（コード） | `TestRunnerHelper.RunPlayModeTestsBatch` → `-ProjectFoundPhoneResultFile=` で指定。未指定時は `docs/verification/playmode-batch-result.txt`（同一ベース名に `.xml` も生成） |
-| 実行コマンド例            | [2026-03-31-playmode-batch-execute.md](2026-03-31-playmode-batch-execute.md) の **Command**（フィルタを外せば全 PlayMode を対象にできる）                                 |
-| 回帰ベースライン           | [2026-04-09-playmode-8-results.md](2026-04-09-playmode-8-results.md)（session 22 由来 8/8）                                                                |
+| 既定の batch 出力先 | `TestRunnerHelper.RunPlayModeTestsBatch` → `-ProjectFoundPhoneResultFile=` で指定。未指定時は `docs/verification/playmode-batch-result.txt` (同一ベース名に `.xml` も生成) |
+| 実行コマンド例            | [2026-03-31-playmode-batch-execute.md](2026-03-31-playmode-batch-execute.md) の Command (フィルタを外せば全 PlayMode を対象にできる) |
+| 回帰ベースライン           | [2026-04-09-playmode-8-results.md](2026-04-09-playmode-8-results.md) (session 22 由来 8/8) |
 
-
-**オペレーター向け**: 再実行後、`playmode-batch-result.txt` / `.xml` の**実パス**を [2026-04-09-playmode-8-results.md](2026-04-09-playmode-8-results.md) に追記するか、日付付きファイルを新設する。
+SUBSEQUENT 発動時に再実行した場合は日付付き別ファイル (例: `YYYY-MM-DD-playmode-results.md`) で記録する。
 
 ---
 
@@ -87,10 +79,9 @@
 転記先:
 
 - [22_subquest_exploration_content.md](../StorySpec/22_subquest_exploration_content.md) §6.4（更新済みの優先度表）
-- [2026-04-08-ch1-subquest-gap-template.md](2026-04-08-ch1-subquest-gap-template.md)
+- [2026-04-08-ch1-subquest-gap-template.md](templates/2026-04-08-ch1-subquest-gap-template.md)
 
-**2026-04-09（Bレーン）**: 静的整合の再確認と [2026-04-08-ch1-subquest-gap-template.md](2026-04-08-ch1-subquest-gap-template.md) へ **G-ENV-20260409** / **G-OBS-20260409** を追記（実測は未完了）。  
-**2026-04-10 以前のエージェントセッション**: Editor 未実施のため実測ベースの G-ID はなし（静的整合のみ）。
+**2026-04-09 (Bレーン)**: 静的整合の再確認と [2026-04-08-ch1-subquest-gap-template.md](templates/2026-04-08-ch1-subquest-gap-template.md) へ G-ENV-20260409 / G-OBS-20260409 を追記。実測ベースの P0 判定は SUBSEQUENT 発動時に行う。
 
 ---
 
@@ -105,7 +96,7 @@
 | **P0 あり**                                   | **短いスライス**: 仕様確定＋必要なら最小実装のみ。終了後に再度 SUBSEQUENT 判定                      |
 
 
-**本セッション時点の判定**: Editor 未実施のため **「未確定（実機で上表を適用）」**。静的検証のみでは **P0 の有無は断定しない**。
+**判定方式**: 静的検証のみでは P0 の有無は断定しない。SUBSEQUENT 発動時に上表を適用する。
 
 ---
 

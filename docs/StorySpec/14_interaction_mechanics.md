@@ -41,7 +41,7 @@
 - `ContradictionFeedbackController.cs`: 成功/失敗の視覚演出
 - `MessageBubble.cs`: 長押し検出 + タップ
 - `ContradictionDatabase.cs` + `ContradictionPair.cs`: データ定義
-- Phase 2 実装済み（動作未確認）
+- Phase 2 実装済み
 
 **課題**:
 - ~~現在の矛盾ペアはAI/人間の区別なく定義されている~~ → **解決方針**: 対象制限はYarnスクリプト側のタグ付与で制御する。AIキャラのメッセージにのみ `#line:` タグを付与し、人間キャラには付けないことで仕様を満たす。コード側にフィルタは不要
@@ -166,7 +166,7 @@
 
 | コンポーネント | メカニクス | ステータス | 備考 |
 |---------------|----------|----------|------|
-| `ContradictionManager` | A (指摘) | Phase 2 実装済み | 動作未確認 |
+| `ContradictionManager` | A (指摘) | Phase 2 実装済み | マッチング + クールダウン |
 | `ContradictionFeedbackController` | A (指摘) | Phase 2 実装済み | 演出統括 |
 | `ContradictionPair` / `ContradictionDatabase` | A (指摘) | データ定義済み | 7ペア (Ch1x4, Ch2x3) |
 | `MessageBubble` (長押し/タップ) | A (指摘) | 実装済み | 選択→マッチング |

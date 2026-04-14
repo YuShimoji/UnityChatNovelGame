@@ -26,10 +26,8 @@ EN-012 / SUBSEQUENT 用の実行記録。`runtime-state.md` の session 22 実�
 
 ---
 
-## 再実行（2026-04-10 セッション）
+## 再実行について
 
-| 項目 | 内容 |
-|------|------|
-| 再実行 | **未実施**（エージェント環境に Unity Editor がないため） |
-| オペレーター向け | `TestRunnerHelper.RunPlayModeTestsBatch` または Test Runner 全件。生成 `.txt` / `.xml` のパスを本ファイルに追記。[2026-03-31-playmode-batch-execute.md](2026-03-31-playmode-batch-execute.md) 参照 |
-| 関連 | [2026-04-10-subsequent-completion-report.md](2026-04-10-subsequent-completion-report.md) 節 4 |
+本ファイルは 2026-04-03 session 22 時点の 8/8 通過ベースラインを保持する。SUBSEQUENT 発動で再実行した場合は、日付付き別ファイル (例: `YYYY-MM-DD-playmode-results.md`) を作成し、本ファイルは触らない。
+
+実行方法は [2026-03-31-playmode-batch-execute.md](2026-03-31-playmode-batch-execute.md) / [2026-04-10-subsequent-completion-report.md](2026-04-10-subsequent-completion-report.md) 節 4 を参照。

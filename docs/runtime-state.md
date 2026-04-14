@@ -8,11 +8,11 @@
 - branch: main
 - lane: **Content**（Ch1 前進）+ 副 **Unlock**（Pipeline 実運用）
 - slice: **Ch1 コンテンツ前進 + 制作パイプライン実運用**（UI_ISSUES 個別修正はバッチまで保留）
-- next_recommended_slice: **Ch1 コンテンツ前進**（主軸。SP-022 パイロット Yarn は既存。好機で SUBSEQUENT ランタイム実測）
+- next_recommended_slice: **Ch1 コンテンツ前進** (主軸。SP-022 パイロット Yarn は既存。SUBSEQUENT ランタイム実測は発動条件満たした時点でのみ)
 - subsequent_recommended_slice: **Ch1 統合プレイ検証 + ギャップ P0/P1/P2**（HANDOFF 手動ハンズオン・Save/Load・PlayMode 8 件。記録先は `docs/archive/verification-lanes-2026-04/2026-04-09-blane-sp022-subsequent.md` ほか）
 - later_recommended_slice: **Ch2 本編＋サブ前進 + P0 のみ例外スライス**（SUBSEQUENT 完了後。project-context LATER + 意思決定解説、HANDOFF チェックリスト）
 - active_artifact: Ch1 Yarn + ContentAuthoring 再生フロー（併せてエンジン・PlayMode 8 件スイートは session 22 で安定化済み）
-- artifact_surface: ContentAuthoring（本編）/ DebugChatScene（デバッグ）。PlayMode 8/8・EditMode 75/75 はローカル通過済み（再実行は好機に）
+- artifact_surface: ContentAuthoring (本編) / DebugChatScene (デバッグ)。PlayMode 8/8・EditMode 75/75 は session 22 ローカル通過済み (ベースライン保持、再実行は SUBSEQUENT 発動時のみ)
 - last_change_relation: direct（2026-04-09：A レーン Ch1_Day3_End 終端強化 + 03a 同期。Unity 検証はオペレーター／HANDOFF 1b）
 
 ## Counters
@@ -55,7 +55,7 @@
 
 - **レイアウト**: `InventoryTabController` の親パネル上端を **200px** インセットに変更（`DashboardController` チャンネル ScrollView の `-200` と整合）。TabBar（-150〜-190）と InventoryRoot の縦重なりを解消。
 - **見た目**: `DashboardController` / `InventoryTabController` / `ThreadSwitcherController` / `ProgressSummaryUI` の背景・カード色を低コントラスト寄りに統一（実行時負荷の増加なし）。
-- **検証**: Unity でダッシュボード Channels|Inventory の目視確認は **ユーザー側未実施**（`docs/UI_ISSUES.md` に記録）。
+- **検証**: Unity 目視確認は SUBSEQUENT 発動時 (`docs/UI_ISSUES.md` に記録)。
 
 ### 2026-04-09（セッション引き継ぎ・リモート同期）
 
@@ -75,7 +75,7 @@
 
 ### 2026-04-10（SUBSEQUENT 完了 → Ch2 分岐プラン）
 
-- **正本**: `docs/verification/2026-04-10-subsequent-completion-report.md`（Ch1 再現手順、静的整合、Editor/PlayMode 未実施理由、分岐表）
+- **正本**: `docs/verification/2026-04-10-subsequent-completion-report.md` (Ch1 再現手順、静的整合、分岐表)
 - **更新**: `SUBSEQUENT_playthrough_and_tests.md` / `2026-04-10-ch1-day1-3-preflight.md` 節 C / `2026-04-09-playmode-8-results.md`（再実行欄）/ SP-022 §6.4.1 / `03a` / `2026-04-08-ch1-subquest-gap-template.md` / `HANDOFF.md` / `17_unlock_triggers.md` §6 先頭
 - **判定**: Editor 実測まで P0 有無は未確定。実測 P0 なし → LATER（Ch2）。P0 あり → 短い P0 のみ
 

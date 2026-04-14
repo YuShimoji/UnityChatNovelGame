@@ -43,7 +43,7 @@
 1b. **A レーン（2026-04-09）**: `Ch1_Day3_End` に第2章への牽引力（Pyramid 独白）を追加済み。**任意（SUBSEQUENT 発動時のみ）**: Validator → Sync Authoring Assets → ContentAuthoring で Day3 終端通し再生。通常スライスでは省略
 2. Content Pipeline で `Sync Authoring Assets`
 3. ContentAuthoring で StartNode を確認して再生
-4. 好機に PlayMode 8件の実ラン記録を `docs/verification/` に追加
+4. PlayMode 8件の再実行は **SUBSEQUENT 発動時のみ** (通常スライスでは不要、ベースラインは保持済み)
 5. UI 気づきは `docs/UI_ISSUES.md`、仕様ギャップは SP-022 に記録
 6. docs 拡張時は `docs/ai/READ_ORDER.md` の正典導線を崩さず、重複ページを増やさない
 

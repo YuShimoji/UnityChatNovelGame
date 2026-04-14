@@ -130,7 +130,7 @@ spec-index（SP-016）と整合。**初期スライスでは実装しない**。
 
 | ID / 説明 | 優先 | 判定理由 |
 |-----------|------|----------|
-| Day3 Hub 必須トピック内で Manifest した C/A が進行不能を起こす | P0 | Ch1 完走不能に直結。LATER へ進む前に最優先で短い修正スライス対象 |
+| Day3 Hub 必須トピック内で Manifest した C/A が進行不能を起こす | P0 | Ch1 進行不能に直結。LATER へ進む前に短い修正スライス対象 |
 | Save/Load 後に `scout_*` / `annot_*` / `ch1_cond_analysis` の状態が破綻する | P0 | 再現性のあるプレイ継続障害。データ整合性の問題 |
 | B 型（`ch1_cond_analysis`）の体験が「リンク遷移前提」に見え、現UIで誤読を招く | P1 | 進行不能ではないが、探索体験の品質低下が大きい |
 | Day3 の C 2本（`scout_ch1_d3_route` / `scout_ch1_d3_board`）がテンポを阻害 | P1 | コンテンツ設計上の圧縮判断。仕様調整で回避可能 |
@@ -139,14 +139,14 @@ spec-index（SP-016）と整合。**初期スライスでは実装しない**。
 #### 6.4.1 実施状況（2026-04-10）
 
 - **静的整合**（`ch1.asset` / `Ch1_Day1.yarn` / `EndDay`）: [docs/verification/2026-04-10-subsequent-completion-report.md](../verification/2026-04-10-subsequent-completion-report.md) で確認済み。テキスト上の P0 兆候はなし。
-- **Editor 手動通し・Save/Load・PlayMode 8 件再実行**: 本セッションの実行環境では **未実施**。上表の P0 行は **ランタイム実測が前提**のまま残す。
+- **Editor 手動通し・Save/Load・PlayMode 8 件再実行**: SUBSEQUENT 発動時に実施 (上表の P0 行はその時点で判定)。
 - **分岐**: 実機で P0 **なし** → [LATER_CH2_PLAYBOOK.md](LATER_CH2_PLAYBOOK.md) に従い Ch2 前進。P0 **あり** → 短い P0 スライスのみ（`project-context` LATER 節）。
 
 #### 6.4.2 実施状況（2026-04-09・Bレーン）
 
 - **静的整合の再確認**: [docs/archive/verification-lanes-2026-04/2026-04-09-blane-sp022-subsequent.md](../archive/verification-lanes-2026-04/2026-04-09-blane-sp022-subsequent.md) §2。C 型パイロットの `Declare*` / `CompleteThread` 対は取れる。
-- **PlayMode batch / Editor 通し**: **未実施** — 同一プロジェクトを別 Unity インスタンスが開いており batch が拒否（同ファイル §3）。ギャップテンプレに **G-ENV-20260409** を記録。
-- **P0 の断定**: 変更なし（ランタイム実測まで保留）。
+- **PlayMode batch / Editor 通し**: SUBSEQUENT 発動時に実施 (プロジェクト排他ロックに注意、G-ENV-20260409 のメモ参照)。
+- **P0 判定**: SUBSEQUENT 発動時の実測で確定。
 
 ---
 
@@ -169,7 +169,7 @@ spec-index（SP-016）と整合。**初期スライスでは実装しない**。
 
 ## 8. 更新履歴
 
-- **2026-04-10**: §6.4.1 に静的整合完了と Editor 未実施の区別、分岐ルールへの参照を追記。
+- **2026-04-10**: §6.4.1 に静的整合完了と分岐ルールへの参照を追記。
 - **2026-04-09**: §6.4 に SUBSEQUENT 判定用の P0/P1/P2 初期優先度を追加。LATER 接続の判定基準を明文化。
 - **2026-04-09**: Bレーン成果 — §6.1 静的レビュー観察、§6.4.2（実施状況）、§7.1（要 HUMAN_AUTHORITY の提案ドラフト）。
 - **2026-04-10**: §4.1 Ch1 実測表（機械集計）を追加。プラン v2 Phase B 向けに §3・§4 のレビュー材料を明示。

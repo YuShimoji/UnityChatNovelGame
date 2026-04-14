@@ -15,7 +15,7 @@
   - **技術 (session 21–22)**: PlayMode 失敗の根本原因は auto-start の missing_node:Start。HasNode 事前チェック + archive 除外 + TearDown（`UnityTearDown` + `StopScenario` + 待機）で修正。WORKFLOW_STATE_SSOT.md 廃止。Session 22: タイプライター同期（DOTween 完了待機）、DebugChatScene 整備、SaveManager AutoSaveIndicator 安全化、PlayMode **8**/8・EditMode 75/75 をローカルで通過（batch XML・共通ヘルパー分離済み）
   - **コンテンツ軸 (2026-04-07〜10)**: 主軸を **Ch1 コンテンツ前進**に固定。既知 UI は **docs/UI_ISSUES.md**、局所コード修正はバッチまで保留。**SP-022** / SUBSEQUENT / LATER のスライスと意思決定ドキュメントを反映
   - AI の役割: Yarn 執筆ではなく制作ツール・パイプライン・検証導線の整備（USER_REQUEST_LEDGER と整合）
-  - 次の作業: Ch1 を Day 単位で Yarn 上で前進 → Content Pipeline **Sync Authoring Assets**（Yarn→SO 整合のみ）。**通し確認は SUBSEQUENT 発動時のみ**。PlayMode 8 件・Pipeline 実機・**GitHub Actions CI** は好機に（EN-012 / インフラ）
+  - 次の作業: Ch1 を Day 単位で Yarn 上で前進 → Content Pipeline **Sync Authoring Assets** (Yarn→SO 整合のみ)。**通し確認・PlayMode 8件・Pipeline 実機・CI 実行はすべて SUBSEQUENT 発動時のみ** (通常スライスでは不要、ベースライン保持済み)
 
 ### 運用メモ
 
@@ -32,7 +32,7 @@
 
 ## CURRENT DEVELOPMENT AXIS
 
-- 主軸: **コンテンツ制作フロー実証 + Ch1 完走**（並行してテスト・パイプラインは好機に実ラン）
+- 主軸: **コンテンツ制作フロー実証 + Ch1 コンテンツ前進** (完走ゲートではなく連続的な前進を成果とする。テスト・パイプライン実ランはユーザー明示依頼時のみ)
 - この軸を優先する理由: エンジン基盤は alpha として十分。ボトルネックは **コンテンツの前進**と **制作フローの実走**。Session 13–17 型の UI 微修正ループを避ける
 - 今ここで避けるべき脱線: UI_ISSUES 載せ項目の個別コード修正ループ、過度な仕様策定のみ、サウンド／マネタイズの先取り
 - **ワークフロー原則**: 値の調整は Inspector、UI バグは UI_ISSUES.md に一括、セッション成果は「プレイアブルなコンテンツ」か「新機能」
@@ -69,12 +69,17 @@
 
 ---
 
-## SUBSEQUENT RECOMMENDED SLICE（SP-022 達成後）
+## SUBSEQUENT RECOMMENDED SLICE (発動条件付き)
 
 - スライス名: **Ch1 統合プレイ検証 + サブクエストギャップの優先度付け**
-- 目的: メイン Ch1 とパイロット済みサブクエストを **一連の手動プレイ**で通し、[docs/StorySpec/22_subquest_exploration_content.md](docs/StorySpec/22_subquest_exploration_content.md) §6 の **エンジン／仕様ギャップを P0/P1/P2 で優先度付け**。仕様未承認のまま B 型 Wiki 実装に入らない
-- 作業: (1) [docs/HANDOFF.md](docs/HANDOFF.md) の **手動確認ハンズオン（Ch1 + サブスレッド）**で通し確認 (2) ギャップを SP-022 §6 または別表に **P0/P1/P2** で追記 (3) [docs/StorySpec/17_unlock_triggers.md](docs/StorySpec/17_unlock_triggers.md) に **Ch1 用具体例 1 ページ**（NEXT の副次を完了）(4) 好機に PlayMode **8** 件の実ラン結果を [docs/verification/](docs/verification/) に 1 ファイルで残す（EN-012）
-- 成功状態: 「Ch1 + サブ」が **再現手順付き**で説明可能に通る。ギャップ一覧があり、次に **仕様のみ**か **実装スライス**か選べる
+- **発動条件 (いずれかが真のときのみ)**:
+  - (a) Ch1 に主要な構造変更が入り、通し再生での影響確認が必要
+  - (b) Ch2 着手直前の最終検収
+  - (c) ユーザーが明示的に SUBSEQUENT を要求した
+  - → **上記が偽の間は発動せず、LATER または新たな CURRENT に直接進んでよい** (SUBSEQUENT を通過ゲートとして扱わない)
+- 目的: メイン Ch1 とパイロット済みサブクエストを通し、[docs/StorySpec/22_subquest_exploration_content.md](docs/StorySpec/22_subquest_exploration_content.md) §6 の **エンジン/仕様ギャップを P0/P1/P2 で優先度付け**
+- 作業 (発動時のみ): (1) 手動確認ハンズオンで通し再生 (2) ギャップを SP-022 §6 に P0/P1/P2 追記 (3) SP-017 Ch1 用具体例追記 (4) PlayMode 8件の再実行結果を日付付き新ファイルで記録
+- 成功状態: ギャップ一覧があり、次に仕様のみか実装スライスか選べる
 - 今回はやらないこと: [横断保留](#横断保留) を参照
 
 ---
@@ -107,11 +112,11 @@
 ## 推奨プランの読み方と手動意思決定（解説）
 
 - **四段スライスの意味**
-  - **CURRENT**: いま優先している塊（Ch1 メイン前進 + パイプライン）。
-  - **NEXT**: その直後。**SP-022** でサブクエスト方針を確定し Ch1 にパイロット 1〜3 本。
-  - **SUBSEQUENT**: Ch1 メイン＋サブの **通し手動検証**と、ギャップの **P0/P1/P2** 付け。副次で SP-017 Ch1 例・EN-012 ログ。
-  - **LATER**: SUBSEQUENT 完了後、**Ch2 執筆**へ進みつつ **P0 だけ**例外スライスしうる段階。  
-  上から順に「完了」を積むのが安全。**検証なしで次章だけ厚くする**と、ギャップと仕様負債が見えにくくなる。
+  - **CURRENT**: いま優先している塊 (Ch1 メイン前進 + パイプライン)
+  - **NEXT**: その直後。SP-022 でサブクエスト方針を確定し Ch1 にパイロット 1〜3 本
+  - **SUBSEQUENT**: **条件付き発動 (通過ゲートではない)**。Ch1 統合プレイ検証 + ギャップ P0/P1/P2 付け。発動条件は SUBSEQUENT 節参照
+  - **LATER**: Ch2 執筆 + P0 例外スライス
+- **進行順序**: CURRENT と NEXT は順番必須。**SUBSEQUENT と LATER は独立軸で並行可**。SUBSEQUENT が未発動のまま LATER (Ch2 執筆) に進んでよい。「上から順に完了を積む」規則は廃止 — Ch1 の通し検証を Ch2 着手のブロッカーにしない
 
 - **HUMAN_AUTHORITY（人間が先に決める領域）**
   - SP-022 の **§3・§4**（スレッド種別の優先、章あたり本数の仮レンジ）。
@@ -133,14 +138,14 @@
 
 ## DEVELOPMENT ROADMAP (2026-03-30 策定、2026-04-10 技術注記)
 
-- **技術メモ（session 22 時点）**: PlayMode **8** 件・EditMode 75 件・batch XML はコード上整備済み。CI 統合・全シナリオ実機はこの表の「好機」欄と HANDOFF で追う。
+- **技術メモ (session 22 時点)**: PlayMode 8 件・EditMode 75 件・batch XML はコード上整備済み。CI 統合・全シナリオ実機は SUBSEQUENT 発動時に実施。
 
-### 短期 (Session 18-20): Ch1 完走 + 制作フロー実証
+### 短期 (Session 18-20): Ch1 コンテンツ前進 + 制作フロー実証
 
-- **補足 (2026-04-08)**: 「Ch1 完走」と並行して、**短期〜中期の境界**で **サブクエスト探索（SP-022）**を明示的に挟む。Session 番号は固定せず、**メイン Day 執筆が一段落したタイミング**で NEXT RECOMMENDED SLICE に移行する
-- S18: Ch1 Day1 通しプレイ + Day2 執筆開始 + ツール実証
-- S19: Ch1 Day2 完成 + Day1→Day2 遷移テスト
-- S20: Ch1 Day3 完成 + Ch1 通しプレイ + SP-019/020 Phase 1 検証
+- **補足 (2026-04-08)**: Ch1 前進と並行して、短期〜中期の境界で **サブクエスト探索 (SP-022)** を明示的に挟む。Session 番号は固定せず、メイン Day 執筆が一段落したタイミングで NEXT RECOMMENDED SLICE に移行する
+- S18: Ch1 Day1 前進 + Day2 執筆開始 + ツール実証
+- S19: Ch1 Day2 前進 + Day1→Day2 遷移の静的整合確認
+- S20: Ch1 Day3 前進 + SP-019/020 Phase 1 整備 (通し再生は SUBSEQUENT 発動時)
 
 ### 中期 (Session 21-28): Alpha ビルド (Ch1-2 完走可能)
 
@@ -148,7 +153,7 @@
 - **補足 (2026-04-10)**: Ch2 執筆中の分岐・優先は **LATER RECOMMENDED SLICE** と本文書「推奨プランの読み方と手動意思決定」を参照（P0 のみ例外スライス、S23 は視認性が詰まったら）
 - S21-22: Ch2 Day1-3 執筆
 - S23: BL-002 ポートレートアイコン
-- S24: Ch1-2 通しプレイ + UI バッチ修正
+- S24: Ch1-2 検収通しプレイ (SUBSEQUENT 発動) + UI バッチ修正
 - S25-26: Ch3 Day1-3 執筆
 - S27: SP-019 Phase 2 + SP-020 Phase 2
 - S28: Android 初回ビルド

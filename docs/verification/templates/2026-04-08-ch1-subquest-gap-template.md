@@ -1,7 +1,7 @@
 # Ch1 サブクエスト通し検証 — ギャップ記録テンプレ（SUBSEQUENT）
 
 **目的**: `docs/HANDOFF.md` の手動ハンズオン後、`docs/StorySpec/22_subquest_exploration_content.md` §6 のギャップに **P0 / P1 / P2** を付ける。  
-**PlayMode**: 好機に 8 件スイート実ラン結果を本ファイル末尾に追記（EN-012）。
+**PlayMode**: SUBSEQUENT 発動時に 8 件スイート再実行、日付付き別ファイル (`YYYY-MM-DD-playmode-results.md`) で記録 (EN-012)。
 
 ## 検証環境
 
@@ -29,7 +29,7 @@
 | G-001 | （例）解放通知が分かりにくい | | 要仕様 |
 | G-002 | | | |
 | G-ENV-20260409 | PlayMode batch / Editor 通しが **未実施**（プロジェクト排他ロック）。再現手順・ログは [2026-04-09-blane-sp022-subsequent.md](../../archive/verification-lanes-2026-04/2026-04-09-blane-sp022-subsequent.md) §3 | （環境・優先度なし） | 運用メモ |
-| G-OBS-20260409 | Yarn 上、`ch1_note_facility` / `ch1_cond_analysis` に `CompleteThread` が無い。意図的か・Save/Load で問題が出ないかは **実測待ち** | **未判定**（実測後 P0〜P2） | 要確認 |
+| G-OBS-20260409 | Yarn 上、`ch1_note_facility` / `ch1_cond_analysis` に `CompleteThread` が無い。意図的か・Save/Load で問題が出ないかは SUBSEQUENT 発動時に実測 | 未判定 (実測で P0〜P2 決定) | 実測事項 |
 
 **定義の目安**
 
