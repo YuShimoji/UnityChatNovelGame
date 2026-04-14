@@ -44,7 +44,7 @@
 - 現在の残失敗:
   - teardown 周辺で `DialogueException: Cannot continue running dialogue. No node has been selected.`
   - evidence:
-    - `docs/verification/VerticalSliceSmokeGate_20260331_044945_DebugChatScene.txt`
+    - `docs/archive/verification-evidence/VerticalSliceSmokeGate_20260331_044945_DebugChatScene.txt`
     - `Temp/playmode-batch-execute.log`
 
 ## Current Interpretation

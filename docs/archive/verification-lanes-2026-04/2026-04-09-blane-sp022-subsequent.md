@@ -13,7 +13,7 @@
 |------|------|
 | リポジトリ静的整合（ch1 / Yarn / EndDay） | **実施・問題なし**（下記 §2） |
 | PlayMode 8 件（batch） | **未実施** — 同一プロジェクトを別 Unity インスタンスが開いており batch 起動が拒否された |
-| Editor 手動通し（HANDOFF ハンズオン） | **未実施** — 上記と同じくオペレーター環境で実施要。手順の正本は [2026-04-10-subsequent-completion-report.md](2026-04-10-subsequent-completion-report.md) §3 |
+| Editor 手動通し（HANDOFF ハンズオン） | **未実施** — 上記と同じくオペレーター環境で実施要。手順の正本は [2026-04-10-subsequent-completion-report.md](../../verification/2026-04-10-subsequent-completion-report.md) §3 |
 
 **解釈**: [22_subquest_exploration_content.md](../StorySpec/22_subquest_exploration_content.md) §6.4.1 の区分どおり、**P0 の有無はランタイム実測まで断定しない**。本記録は静的側の追認と、自動検証がブロックされた**環境理由**の証跡。
 
@@ -43,12 +43,12 @@
 1. **初回**: `-quit` 併用によりコンパイル途中で終了し結果ファイル未生成。
 2. **再試行**: `Another Unity instance is running with this project open` により **fatal error で中止**。
 
-**オペレーター向け**: 他 Editor を閉じたうえで [2026-03-31-playmode-batch-execute.md](2026-03-31-playmode-batch-execute.md) の形式で `RunPlayModeTestsBatch` を再実行し、`.txt` / `.xml` のパスを [2026-04-09-playmode-8-results.md](2026-04-09-playmode-8-results.md) または日付付きファイルに追記する。
+**オペレーター向け**: 他 Editor を閉じたうえで [2026-03-31-playmode-batch-execute.md](../../verification/2026-03-31-playmode-batch-execute.md) の形式で `RunPlayModeTestsBatch` を再実行し、`.txt` / `.xml` のパスを [2026-04-09-playmode-8-results.md](../../verification/2026-04-09-playmode-8-results.md) または日付付きファイルに追記する。
 
 ---
 
 ## 4. 転記先
 
-- ギャップ表テンプレ: [2026-04-08-ch1-subquest-gap-template.md](2026-04-08-ch1-subquest-gap-template.md)
-- SUBSEQUENT 正本: [2026-04-10-subsequent-completion-report.md](2026-04-10-subsequent-completion-report.md)
+- ギャップ表テンプレ: [2026-04-08-ch1-subquest-gap-template.md](../../verification/templates/2026-04-08-ch1-subquest-gap-template.md)
+- SUBSEQUENT 正本: [2026-04-10-subsequent-completion-report.md](../../verification/2026-04-10-subsequent-completion-report.md)
 - SP-022: [22_subquest_exploration_content.md](../StorySpec/22_subquest_exploration_content.md) §6.1 / §6.4.1

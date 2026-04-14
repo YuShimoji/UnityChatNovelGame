@@ -144,7 +144,7 @@ spec-index（SP-016）と整合。**初期スライスでは実装しない**。
 
 #### 6.4.2 実施状況（2026-04-09・Bレーン）
 
-- **静的整合の再確認**: [docs/verification/2026-04-09-blane-sp022-subsequent.md](../verification/2026-04-09-blane-sp022-subsequent.md) §2。C 型パイロットの `Declare*` / `CompleteThread` 対は取れる。
+- **静的整合の再確認**: [docs/archive/verification-lanes-2026-04/2026-04-09-blane-sp022-subsequent.md](../archive/verification-lanes-2026-04/2026-04-09-blane-sp022-subsequent.md) §2。C 型パイロットの `Declare*` / `CompleteThread` 対は取れる。
 - **PlayMode batch / Editor 通し**: **未実施** — 同一プロジェクトを別 Unity インスタンスが開いており batch が拒否（同ファイル §3）。ギャップテンプレに **G-ENV-20260409** を記録。
 - **P0 の断定**: 変更なし（ランタイム実測まで保留）。
 

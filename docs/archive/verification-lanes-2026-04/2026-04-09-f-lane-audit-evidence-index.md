@@ -16,9 +16,9 @@
 
 | 文書 | 内容 |
 |------|------|
-| [2026-04-09-playmode-8-results.md](2026-04-09-playmode-8-results.md) | session 22 時点 **8/8 passed** の回帰ベースライン、再実行手順・未実施メモ |
-| [2026-03-31-playmode-batch-execute.md](2026-03-31-playmode-batch-execute.md) | `-executeMethod` 経路での batch 実行メモ |
-| [2026-03-30-playmode-batchmode-attempt.md](2026-03-30-playmode-batchmode-attempt.md) | `-runTests` で XML 未生成となった事例（環境差の参照用） |
+| [2026-04-09-playmode-8-results.md](../../verification/2026-04-09-playmode-8-results.md) | session 22 時点 **8/8 passed** の回帰ベースライン、再実行手順・未実施メモ |
+| [2026-03-31-playmode-batch-execute.md](../../verification/2026-03-31-playmode-batch-execute.md) | `-executeMethod` 経路での batch 実行メモ |
+| [2026-03-30-playmode-batchmode-attempt.md](../../verification/2026-03-30-playmode-batchmode-attempt.md) | `-runTests` で XML 未生成となった事例（環境差の参照用） |
 
 実装側の入口: `Assets/Scripts/Editor/TestRunnerHelper.cs`（batch XML / `.txt` 出力）。
 
@@ -26,16 +26,16 @@
 
 | 文書 | 内容 |
 |------|------|
-| [UNITY_GITHUB_CI.md](UNITY_GITHUB_CI.md) | ワークフロー路径、シークレット前提、`unityVersion` と `ProjectVersion.txt` の整合 |
+| [UNITY_GITHUB_CI.md](../../verification/UNITY_GITHUB_CI.md) | ワークフロー路径、シークレット前提、`unityVersion` と `ProjectVersion.txt` の整合 |
 
 ## Ch1 / SUBSEQUENT / ギャップ
 
 | 文書 | 内容 |
 |------|------|
-| [2026-04-10-ch1-day1-3-preflight.md](2026-04-10-ch1-day1-3-preflight.md) | Day1〜3 静的整合・Editor 通しメモ |
-| [SUBSEQUENT_playthrough_and_tests.md](SUBSEQUENT_playthrough_and_tests.md) | 通し手動確認とテストのチェックリスト |
-| [2026-04-10-subsequent-completion-report.md](2026-04-10-subsequent-completion-report.md) | SUBSEQUENT 正本（再現手順・分岐表） |
-| [2026-04-08-ch1-subquest-gap-template.md](2026-04-08-ch1-subquest-gap-template.md) | サブクエストギャップ P0/P1/P2 用 |
+| [2026-04-10-ch1-day1-3-preflight.md](../../verification/2026-04-10-ch1-day1-3-preflight.md) | Day1〜3 静的整合・Editor 通しメモ |
+| [SUBSEQUENT_playthrough_and_tests.md](../../verification/templates/SUBSEQUENT_playthrough_and_tests.md) | 通し手動確認とテストのチェックリスト |
+| [2026-04-10-subsequent-completion-report.md](../../verification/2026-04-10-subsequent-completion-report.md) | SUBSEQUENT 正本（再現手順・分岐表） |
+| [2026-04-08-ch1-subquest-gap-template.md](../../verification/templates/2026-04-08-ch1-subquest-gap-template.md) | サブクエストギャップ P0/P1/P2 用 |
 
 ## 再開時の読書順（F レーン推奨）
 

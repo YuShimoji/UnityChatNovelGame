@@ -18,6 +18,6 @@
 
 ## Fixed Issues
 
-- [FIXED] 2026-04-09: ダッシュボード「Channels | Inventory」タブ直下のレイアウト。`DashboardController` のチャンネル ScrollView `offsetMax.y = -200f` と `InventoryTabController.c_InventoryTopInsetFromDashboardTop = 200f` が一致していることを E レーンで静的確認。TabBar 直下インセット統一済み。**オペレーター目視**: [docs/verification/2026-04-09-e-lane-ui-batch.md](verification/2026-04-09-e-lane-ui-batch.md) のチェックリスト 1 行。
+- [FIXED] 2026-04-09: ダッシュボード「Channels | Inventory」タブ直下のレイアウト。`DashboardController` のチャンネル ScrollView `offsetMax.y = -200f` と `InventoryTabController.c_InventoryTopInsetFromDashboardTop = 200f` が一致していることを E レーンで静的確認。TabBar 直下インセット統一済み。
 
-- [FIXED] 2026-03-30: DebugChatScene.unity の CanvasScaler `referenceResolution` を **1080×1920** に変更し、[DebugSceneBuilder.cs](../Assets/Scripts/Debug/Editor/DebugSceneBuilder.cs) と一致。**オペレーター目視**: 同チェックリスト 1 行。
+- [FIXED] 2026-03-30: DebugChatScene.unity の CanvasScaler `referenceResolution` を **1080×1920** に変更し、[DebugSceneBuilder.cs](../Assets/Scripts/Debug/Editor/DebugSceneBuilder.cs) と一致。

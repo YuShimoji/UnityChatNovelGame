@@ -59,7 +59,7 @@
 
 | 項目（追記 2026-04-09・Bレーン） | 結果 |
 |--------------------------------|------|
-| 静的整合の再確認 | **実施**（[2026-04-09-blane-sp022-subsequent.md](2026-04-09-blane-sp022-subsequent.md) §2） |
+| 静的整合の再確認 | **実施**（[2026-04-09-blane-sp022-subsequent.md](../archive/verification-lanes-2026-04/2026-04-09-blane-sp022-subsequent.md) §2） |
 | Editor 手動通し | **未実施**（オペレーターが実施） |
 | PlayMode batch 全体 | **未実施** — 同一プロジェクトを別 Unity が開いており batch が拒否（同ファイル §3） |
 
@@ -72,7 +72,7 @@
 | 項目                 | 結果                                                                                                                                                     |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | 本セッションでの再実行        | **未実施**（同上）                                                                                                                                            |
-| 2026-04-09 Bレーン試行        | **未完了** — プロジェクト排他で Unity batch 中止。詳細は [2026-04-09-blane-sp022-subsequent.md](2026-04-09-blane-sp022-subsequent.md) §3                                                                                                            |
+| 2026-04-09 Bレーン試行        | **未完了** — プロジェクト排他で Unity batch 中止。詳細は [2026-04-09-blane-sp022-subsequent.md](../archive/verification-lanes-2026-04/2026-04-09-blane-sp022-subsequent.md) §3                                                                                                            |
 | 既定の batch 出力先（コード） | `TestRunnerHelper.RunPlayModeTestsBatch` → `-ProjectFoundPhoneResultFile=` で指定。未指定時は `docs/verification/playmode-batch-result.txt`（同一ベース名に `.xml` も生成） |
 | 実行コマンド例            | [2026-03-31-playmode-batch-execute.md](2026-03-31-playmode-batch-execute.md) の **Command**（フィルタを外せば全 PlayMode を対象にできる）                                 |
 | 回帰ベースライン           | [2026-04-09-playmode-8-results.md](2026-04-09-playmode-8-results.md)（session 22 由来 8/8）                                                                |
