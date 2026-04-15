@@ -12,6 +12,7 @@
 | 2026-03-30 | 処理のアルゴリズムを明文化せよ | done | docs/DISPLAY_ALGORITHMS.md (EN-011) |
 | 2026-03-29 | デザイナーが容易にストーリー追加削除できるワークフロー確立 | done | Content Pipeline window + YarnSOGenerator の ChannelData 同期 + 推奨 StartNode 導線 |
 | 2026-03-30 | 最も欲しいのは人間が執筆するためのシステム周り | active | パイプライン導線は実装済み。残りは Unity 実機検証と E2E 自動検証 |
+| 2026-04-15 | Ch積み上げでゲーム完成方向へのドリフト防止。エンジン能力マイルストーン中心の進行に切替 | active | CLAUDE.md ガードレール再権限化、project-context.md AXIS/LANE/SLICE/ROADMAP 改訂、INVARIANTS.md ドリフト検知 |
 | 2026-03-30 | なるべくプロジェクト内 docs だけで引き継げる状態にせよ | done | HANDOFF.md 新設 + runtime-state / project-context / OPERATOR_WORKFLOW / prompt-resume.md |
 
 ## 未反映の是正要求
@@ -22,13 +23,16 @@
 - done 済み仕様にも改善余地がある。新 Task や ENH を受け容れる構造を維持する (session 21)
 - テストをパスさせるために実装を変えない。テストの前提が古いなら、テスト側を現仕様に合わせる (session 21)
 - 機能一覧を提示する際、done = 完了済みで終わらせず、仮実装後に欲しい機能 (ENH) の受け入れ余地を見せる
+- ガードレール（CLAUDE.md DEVELOPMENT PURPOSE）は実行計画（project-context.md CURRENT AXIS）より上位 (2026-04-15 策定)
+- セッション成果の第一指標は「エンジン/ツール能力の前進」。コンテンツのみ 2 セッション連続はドリフト警告 (2026-04-15 策定)
+- SUBSEQUENT はスキップ不可の通過ゲート。エンジン能力確認なしにフルコンテンツ執筆に進まない (2026-04-15 策定)
 
 ## Backlog Delta (spec-index 登録済み)
 
 | ID | 内容 | 優先度 | 予定 |
 |----|------|--------|------|
 | BL-001 | スクロール吸着フェードイン (LateUpdate ピンニング部分) | 低 | UIバッチ修正時 |
-| BL-002 | スレッド/キャラクターポートレートアイコン画像 | 中 | 中期 S23 |
+| BL-002 | スレッド/キャラクターポートレートアイコン画像 | 中 | M7 (製品化) |
 | BL-003 | スレッド柔軟メタデータ (難易度星等) | 低 | 中期以降 |
 
 ## 運用ルール

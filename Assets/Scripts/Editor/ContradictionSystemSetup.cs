@@ -8,7 +8,7 @@ namespace ProjectFoundPhone.EditorTools
 {
     public static class ContradictionSystemSetup
     {
-        [MenuItem("Project FoundPhone/Setup/Contradiction System")]
+        [MenuItem("Tools/FoundPhone/Setup/Contradiction System")]
         public static void Setup()
         {
             bool managerReady = EnsureContradictionManager();
@@ -22,7 +22,7 @@ namespace ProjectFoundPhone.EditorTools
             }
         }
 
-        [MenuItem("Project FoundPhone/Validate/Contradiction System Wiring")]
+        [MenuItem("Tools/FoundPhone/Verification/Contradiction System Wiring")]
         public static void Validate()
         {
             var manager = Object.FindFirstObjectByType<ContradictionManager>();

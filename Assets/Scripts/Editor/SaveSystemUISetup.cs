@@ -12,7 +12,7 @@ namespace ProjectFoundPhone.Editor
     /// </summary>
     public class SaveSystemUISetup : EditorWindow
     {
-        [MenuItem("Project FoundPhone/Setup/Save System UI")]
+        [MenuItem("Tools/FoundPhone/Setup/Save System UI")]
         public static void ShowWindow()
         {
             GetWindow<SaveSystemUISetup>("Save UI Setup");

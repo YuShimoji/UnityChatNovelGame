@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Yarn.Unity;
 using ProjectFoundPhone.Core;
+using ProjectFoundPhone.Data;
 
 namespace ProjectFoundPhone.UI
 {
@@ -17,18 +18,11 @@ namespace ProjectFoundPhone.UI
     /// </summary>
     public class ChatDialogueView : DialoguePresenterBase
     {
-        [Header("Message Timing")]
-        [Tooltip("NPC発話前のタイピングインジケーター表示時間（秒）")]
-        [SerializeField] private float m_TypingIndicatorDuration = 0.8f;
-        [Tooltip("メッセージ表示後の余韻時間（秒）。タイプライター完了後に追加される")]
-        [SerializeField] private float m_PostMessageDelay = 0.4f;
-
-        [Header("Tap Skip")]
-        [Tooltip("画面タップでメッセージ送り/アニメスキップを有効にする")]
-        [SerializeField] private bool m_EnableTapSkip = true;
-
         [Header("Debug")]
         [SerializeField] private bool m_ShowDebugOverlay = false;
+
+        private ChatUIConfig? m_UIConfig;
+        private ChatUIConfig UIConfig => m_UIConfig ??= ChatUIConfig.Instance;
 
         private DialogueRunner? m_DialogueRunner;
         private ChatController? m_ChatController;
@@ -72,7 +66,7 @@ namespace ProjectFoundPhone.UI
             }
 
             // 画面タップでメッセージスキップ（VN風テキスト送り）
-            if (m_EnableTapSkip && m_IsShowingLine && Input.GetMouseButtonDown(0))
+            if (UIConfig.enableTapSkip && m_IsShowingLine && Input.GetMouseButtonDown(0))
             {
                 // UI ボタン上のクリックは無視（選択肢ボタン等）
                 if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
@@ -158,7 +152,7 @@ namespace ProjectFoundPhone.UI
                     // m_LineSkipCts のみで制御し、Yarn の NextContentToken は混ぜない。
                     // NextContentToken を混入させると、前の行のキャンセル状態がリークして
                     // 自動スキップが発生する原因になる。
-                    int indicatorMs = (int)(m_TypingIndicatorDuration * 1000);
+                    int indicatorMs = (int)(UIConfig.typingIndicatorDuration * 1000);
                     await DelayWithSkip(indicatorMs);
 
                     m_ChatController.ShowTypingIndicator(false);
@@ -198,7 +192,7 @@ namespace ProjectFoundPhone.UI
                     // Phase 2: ポストメッセージ遅延 (第2タップでスキップ可能)
                     m_PostSkipCts?.Dispose();
                     m_PostSkipCts = new CancellationTokenSource();
-                    int postMs = (int)(m_PostMessageDelay * 1000);
+                    int postMs = (int)(UIConfig.postMessageDelay * 1000);
                     await DelayWithPostSkip(postMs);
                 }
                 else

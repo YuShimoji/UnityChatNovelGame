@@ -12,7 +12,7 @@ namespace ProjectFoundPhone.Editor
     {
         private int m_SelectedSlot = 0;
 
-        [MenuItem("Project FoundPhone/Debug/Save System Debugger")]
+        [MenuItem("Tools/FoundPhone/Debug/Save System Debugger")]
         public static void ShowWindow()
         {
             GetWindow<SaveSystemDebugger>("Save System Debugger");

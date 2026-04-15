@@ -10,13 +10,13 @@ namespace ProjectFoundPhone.EditorTools
     {
         private const string DebugChatScenePath = "Assets/Scenes/DebugChatScene.unity";
 
-        [MenuItem("Tools/Verification/Scan DebugChatScene Missing Scripts")]
+        [MenuItem("Tools/FoundPhone/Verification/Scan DebugChatScene Missing Scripts")]
         public static void ScanDebugChatSceneMissingScripts()
         {
             ScanSceneForMissingScripts(DebugChatScenePath, removeMissingScripts: false);
         }
 
-        [MenuItem("Tools/Verification/Scan DebugChatScene Prefab Dependencies")]
+        [MenuItem("Tools/FoundPhone/Verification/Scan DebugChatScene Prefab Dependencies")]
         public static void ScanDebugChatScenePrefabDependencies()
         {
             ScanPrefabDependencies(DebugChatScenePath, removeMissingScripts: false);

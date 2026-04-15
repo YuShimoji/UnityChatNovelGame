@@ -8,7 +8,7 @@ namespace ProjectFoundPhone.EditorTools
 {
     public class DeductionBoardSetup : EditorWindow
     {
-        [MenuItem("Project FoundPhone/Setup Deduction Board")]
+        [MenuItem("Tools/FoundPhone/Setup/Deduction Board")]
         public static void Setup()
         {
             CreateTopicCardPrefab();

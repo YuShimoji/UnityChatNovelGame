@@ -53,7 +53,6 @@ namespace ProjectFoundPhone.Editor
         private bool m_HasRun;
 
         [MenuItem("Tools/FoundPhone/Yarn Content Validator", false, 20)]
-        [MenuItem("Tools/Yarn Content Validator", false, 21)]
         public static void ShowWindow()
         {
             var window = GetWindow<YarnContentValidator>("Yarn Validator");

@@ -8,7 +8,7 @@ namespace ProjectFoundPhone.Editor
 {
     public static class DashboardSceneSetup
     {
-        [MenuItem("Tools/FoundPhone/Add Dashboard to Scene")]
+        [MenuItem("Tools/FoundPhone/Scene Setup/Add Dashboard to Scene")]
         public static void AddDashboardToScene()
         {
             GameObject dashboardObj = GameObject.Find("DashboardManager");

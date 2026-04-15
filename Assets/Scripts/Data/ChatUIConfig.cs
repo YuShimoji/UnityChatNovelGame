@@ -137,6 +137,25 @@ namespace ProjectFoundPhone.Data
         [Tooltip("画像フェードイン時間 (秒)")]
         public float imageFadeInDuration = 0.6f;
 
+        [Header("Typewriter")]
+        [Tooltip("タイプライター効果を有効にする（1文字ずつ表示）")]
+        public bool enableTypewriterEffect = true;
+
+        [Tooltip("1文字あたりの表示時間（秒）")]
+        [Range(0.01f, 0.2f)]
+        public float typewriterSpeed = 0.05f;
+
+        [Header("Message Timing")]
+        [Tooltip("NPC 発話前のタイピングインジケーター表示時間（秒）")]
+        public float typingIndicatorDuration = 0.8f;
+
+        [Tooltip("メッセージ表示後の余韻時間（秒）")]
+        public float postMessageDelay = 0.4f;
+
+        [Header("Tap Skip")]
+        [Tooltip("画面タップでメッセージ送り / スキップを有効にする")]
+        public bool enableTapSkip = true;
+
         [Header("Input Field")]
         [Tooltip("入力欄を表示するか (false=非表示、選択肢のみで操作)")]
         public bool showInputField = false;

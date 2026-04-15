@@ -33,15 +33,15 @@ Ch3 も同様に「コンテンツ制作」ではなく「エンジン基盤の�
 - 演出: ハルシコインが「いつの間にか増えている」初回
 - 位置づけ: 第1部の末章。情報密度のピーク。第2部への引き
 
-## Ch3 で検証すべきエンジン能力のチェックリスト
+## Ch3 で検証するエンジン能力 (リファレンス。アクティブ TODO ではない)
 
-- [ ] DiscoverFragment コマンドの実運用 (最低2回使用)
-- [ ] 複合トリガー (DeclareThreadLatentCond で $has_topic 条件)
-- [ ] B型追跡スレッドの充実 (3件以上のメッセージ蓄積)
-- [ ] ProgressTracker の数値変化 (Ch1+Ch2+Ch3 で OverallPercent が意味ある変化を示す)
-- [ ] チャプター間接続: Ch1/Ch2 の断片が Ch3 の Yarn 分岐条件 ($has_topic_fragment_*) に影響
-- [ ] CompleteThread の自然な使用 (Ch3 Day3 終了時)
-- [ ] NudgeSystem のヒント文遷移 (Ch2完了→Ch3開始→Ch3途中→Ch3完了)
+- DiscoverFragment コマンドの実運用 (最低2回使用)
+- 複合トリガー (DeclareThreadLatentCond で $has_topic 条件)
+- B型追跡スレッドの充実 (3件以上のメッセージ蓄積)
+- ProgressTracker の数値変化 (Ch1+Ch2+Ch3 で OverallPercent が意味ある変化を示す)
+- チャプター間接続: Ch1/Ch2 の断片が Ch3 の Yarn 分岐条件 ($has_topic_fragment_*) に影響
+- CompleteThread の自然な使用 (Ch3 Day3 終了時)
+- NudgeSystem のヒント文遷移 (Ch2完了→Ch3開始→Ch3途中→Ch3完了)
 
 ## Ch3 の制約
 

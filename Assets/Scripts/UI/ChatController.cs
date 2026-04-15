@@ -41,10 +41,6 @@ namespace ProjectFoundPhone.UI
         [Header("Font Settings")]
         [SerializeField] private TMP_FontAsset m_JapaneseFontAsset;
 
-        [Header("Typewriter Effect Settings")]
-        [SerializeField] private bool m_EnableTypewriterEffect = true;
-        [SerializeField] private float m_TypewriterSpeed = 0.05f; // 1文字あたりの表示時間（秒）
-
         private bool m_IsUserScrolling = false;
         private bool m_IsUserDragging = false;
         private float m_LastScrollPosition = 1.0f;
@@ -859,7 +855,7 @@ namespace ProjectFoundPhone.UI
                 {
                     m_PinnedToBottom = true;
                     // タイプライター効果後に最終的な位置調整
-                    float typewriterDuration = m_EnableTypewriterEffect ? text.Length * m_TypewriterSpeed : 0f;
+                    float typewriterDuration = UIConfig.enableTypewriterEffect ? text.Length * UIConfig.typewriterSpeed : 0f;
                     Invoke(nameof(DelayedAutoScroll), typewriterDuration + 0.1f);
                 }
             }
@@ -883,7 +879,7 @@ namespace ProjectFoundPhone.UI
         /// </summary>
         private void ApplyTypewriterEffect(TextMeshProUGUI textComponent)
         {
-            if (!m_EnableTypewriterEffect || textComponent == null || string.IsNullOrEmpty(textComponent.text))
+            if (!UIConfig.enableTypewriterEffect || textComponent == null || string.IsNullOrEmpty(textComponent.text))
             {
                 // タイプライター無効時は全文字を即座に表示
                 if (textComponent != null)
@@ -903,7 +899,7 @@ namespace ProjectFoundPhone.UI
                 () => textComponent.maxVisibleCharacters,
                 x => textComponent.maxVisibleCharacters = x,
                 totalCharacters,
-                totalCharacters * m_TypewriterSpeed
+                totalCharacters * UIConfig.typewriterSpeed
             ).SetEase(Ease.Linear)
              .SetUpdate(true)
              .SetTarget(textComponent)
@@ -1185,7 +1181,7 @@ namespace ProjectFoundPhone.UI
 
                 // 画像のフェードイン演出
                 imageContent.color = new Color(1, 1, 1, 0);
-                imageContent.DOFade(1f, 0.6f).SetUpdate(true);
+                imageContent.DOFade(1f, UIConfig.imageFadeInDuration).SetUpdate(true);
             }
             else
             {

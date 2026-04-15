@@ -1,20 +1,19 @@
 # Runtime State
 
-**Updated**: 2026-04-15（HANDOFF / EN-012 要約 / 本ファイルの検証文言を SUBSEQUENT 条件付きに整合）
+**Updated**: 2026-04-15（方向性ドリフト修正: エンジン能力マイルストーンベースに切替。ガードレール再権限化）
 
 ## Current Position
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
-- lane: **Content**（Ch1 前進）+ 副 **Unlock**（Pipeline 実運用）
-- slice: **Ch1 コンテンツ前進 + 制作パイプライン実運用**（UI_ISSUES 個別修正はバッチまで保留）
-- next_recommended_slice: **Ch1 コンテンツ前進** (主軸。SP-022 パイロット Yarn は既存。SUBSEQUENT ランタイム実測は発動条件満たした時点でのみ)
-- subsequent_recommended_slice: **Ch1 統合プレイ検証 + ギャップ P0/P1/P2**（HANDOFF 手動ハンズオン・Save/Load・PlayMode 8 件。記録先は `docs/archive/verification-lanes-2026-04/2026-04-09-blane-sp022-subsequent.md` ほか）
-- later_recommended_slice: **Ch2 本編＋サブ前進 + P0 のみ例外スライス**（SUBSEQUENT 完了後。project-context LATER + 意思決定解説、HANDOFF チェックリスト）
-- active_artifact: Ch1 Yarn + ContentAuthoring 再生フロー（併せてエンジン・PlayMode 8 件スイートは session 22 で安定化済み）
-- artifact_surface: ContentAuthoring (本編) / DebugChatScene (デバッグ)。PlayMode 8/8・EditMode 75/75 は session 22 ローカル通過済み (ベースライン保持、再実行は SUBSEQUENT 発動時のみ)
-- editor_long_playthrough: **デフォルト最優先ではない**。Ch1 Day1〜3 や本編の長尺通しは `project-context.md` の SUBSEQUENT 発動条件を満たしたとき、または当該 Yarn 変更の**局所**一次確認として実施。手順は `HANDOFF.md` Safe Next Steps と `docs/verification/2026-04-10-subsequent-completion-report.md`
-- last_change_relation: direct（2026-04-09：A レーン Ch1_Day3_End 終端強化 + 03a 同期。Unity 検証はオペレーター／HANDOFF 1b）
+- lane: **Engine**（エンジン能力検証）+ 副 **Content**（検証用モック）+ 副 **Unlock**（Pipeline 実運用）
+- slice: **エンジン能力マイルストーン 1: サブスレッド全型の実機検証**
+- next_recommended_slice: **M2: セーブ/ロード完全性 + 章遷移堅牢化**
+- subsequent_recommended_slice: **エンジン能力レビュー + Ch1 フルコンテンツ執筆の解放判定**（M1+M2 完了が発動条件。通過ゲート・スキップ不可）
+- later_recommended_slice: **Ch1 フルコンテンツ前進 + P1 段階実装**（SUBSEQUENT 通過後）
+- active_artifact: エンジン能力検証（サブスレッド全型 → セーブ/ロード → 章遷移）。PlayMode 8/8・EditMode 75/75 は session 22 ローカル通過済み
+- artifact_surface: DebugQuickTest (検証主体) / ContentAuthoring (既存コンテンツ再利用)
+- last_change_relation: direct（2026-04-15: 方向性ドリフト修正。エンジン能力マイルストーンベースに切替）
 
 ## Counters
 
@@ -26,8 +25,8 @@
 - tests_last_run: 2026-04-09 (EditMode pass / PlayMode pass)
 - mock_files: 0
 - spec_entries: 40 (`docs/spec-index.json` 配列長、検証用)
-- todo_fixme_hack: 1 (ChatController.cs — ステータスバールーティング)
-- obsolete_marks: 2 (ContradictionPair.UnlockTopic x2)
+- todo_fixme_hack: ChatController.cs:1296 に 1 件残存 (FEATURE_STATUS_AUDIT W-6 参照)
+- obsolete_marks: ContradictionPair.UnlockTopic x2
 
 ## Visual Evidence
 

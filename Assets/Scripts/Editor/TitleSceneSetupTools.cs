@@ -10,14 +10,14 @@ namespace ProjectFoundPhone.Editor
         private const string TitleScenePath = "Assets/Scenes/TitleScene.unity";
         private const string DefaultNewGameScene = "DebugChatScene";
 
-        [MenuItem("Tools/FoundPhone/Re-Setup/TitleScene Manager")]
+        [MenuItem("Tools/FoundPhone/Scene Setup/TitleScene Manager")]
         public static void ReSetupTitleSceneManager()
         {
             SceneSetupResult result = EnsureTitleSceneManager();
             Debug.Log($"TitleScene setup completed. Created={result.Created}, MissingScriptRemoved={result.RemovedMissingScripts}");
         }
 
-        [MenuItem("Tools/FoundPhone/Re-Setup/Vertical Slice Essentials")]
+        [MenuItem("Tools/FoundPhone/Scene Setup/Vertical Slice Essentials")]
         public static void ReSetupVerticalSliceEssentials()
         {
             BuildSettingsHelper.EnsureDebugChatSceneInBuildSettings();
@@ -29,7 +29,7 @@ namespace ProjectFoundPhone.Editor
             );
         }
 
-        [MenuItem("Tools/FoundPhone/Validate/TitleScene Manager Wiring")]
+        [MenuItem("Tools/FoundPhone/Verification/TitleScene Manager Wiring")]
         public static void ValidateTitleSceneManagerWiring()
         {
             var scene = EditorSceneManager.OpenScene(TitleScenePath, OpenSceneMode.Single);

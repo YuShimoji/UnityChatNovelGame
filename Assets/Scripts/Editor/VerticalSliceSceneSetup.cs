@@ -18,13 +18,13 @@ namespace ProjectFoundPhone.Editor
         private const string ContentAuthoringScenePath = "Assets/Scenes/ContentAuthoring.unity";
         private const string YarnProjectPath = "Assets/Resources/Yarn/Project.yarnproject";
 
-        [MenuItem("Tools/Setup Vertical Slice Scene")]
+        [MenuItem("Tools/FoundPhone/Scene Setup/Setup Vertical Slice Scene")]
         public static void SetupScene()
         {
             SetupSceneInternal(DebugChatScenePath, GetDefaultStartNode(), "VerticalSliceSetup");
         }
 
-        [MenuItem("Tools/Setup Content Authoring Scene")]
+        [MenuItem("Tools/FoundPhone/Scene Setup/Setup Content Authoring Scene")]
         public static void SetupContentAuthoringScene()
         {
             SetupSceneInternal(ContentAuthoringScenePath, GetDefaultStartNode(), "ContentAuthoringSetup");

@@ -32,7 +32,7 @@
 ### A-3. コード準備（挙動変更なし）
 
 - フラグ/設定点の追加だけ先行し、既定値は現状維持（回帰リスク低減）。
-- `ChatController` の TODO（ステータスバールーティング）周辺は設計メモ化まで。
+- ChatController ステータスバールーティング TODO (FEATURE_STATUS_AUDIT W-6 参照)。
 - 既存テスト（EditMode/PlayMode）を壊さない範囲で補助テストを追加。
 
 ## B. 意思決定側（HUMAN_AUTHORITY）

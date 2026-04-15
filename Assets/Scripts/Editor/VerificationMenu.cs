@@ -7,25 +7,25 @@ namespace ProjectFoundPhone.EditorTools
 {
     public static class VerificationMenu
     {
-        [MenuItem("Tools/Verification/Run Chat UI Verification")]
+        [MenuItem("Tools/FoundPhone/Verification/Run Chat UI Verification")]
         public static void RunChatUIVerification()
         {
             SetupAndRun("DebugChatScene", "single_capture", true);
         }
 
-        [MenuItem("Tools/Verification/Run Vertical Slice Full Playthrough")]
+        [MenuItem("Tools/FoundPhone/Verification/Run Vertical Slice Full Playthrough")]
         public static void RunVerticalSliceFullPlaythrough()
         {
             SetupAndRun("DebugChatScene", "vertical_slice_full", true);
         }
 
-        [MenuItem("Tools/Verification/Run Performance Measurement")]
+        [MenuItem("Tools/FoundPhone/Verification/Run Performance Measurement")]
         public static void RunPerformanceMeasurement()
         {
             SetupAndRun("DebugChatScene", "performance_measurement", true);
         }
 
-        [MenuItem("Tools/Verification/Utilities/Scan DebugChatScene Missing Scripts")]
+        [MenuItem("Tools/FoundPhone/Verification/Scan DebugChatScene Missing Scripts")]
         public static void RunMissingScriptScan()
         {
             MissingScriptScanner.ScanDebugChatSceneMissingScripts();

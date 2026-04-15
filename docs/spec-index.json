@@ -358,5 +358,14 @@
     "cat": "ui",
     "file": null,
     "summary": "スレッドに難易度星、推奨レベル等の柔軟なメタデータを設定可能にする。DeclaredThread/ChannelData SOの拡張、サイドバーUIでの表示"
+  },
+  {
+    "id": "SP-023",
+    "title": "テキスト表現仕様 (バブル位置・リッチテキスト)",
+    "status": "draft",
+    "pct": 10,
+    "cat": "ui",
+    "file": "docs/StorySpec/23_text_presentation.md",
+    "summary": "テキスト表現の統合仕様。(1)BubbleMargin: 上下左右%指定で次メッセージの占有範囲を制御、(2)BubbleStylePreset SO: バブルタイプ追加(default/narration/thought/shout/whisper/system/announcement)で色・形状・影・フォントを切替、(3)narrationプリセット: 背景なし地の文パターン、(4)IconSide: キャラ単位でアイコン左右を明示指定、(5)フリックスレッド切替: 左右スワイプでスレッド順送り、(6)サブクエストスレッド統合: SP-016/017/022/BL-003の散在仕様を集約+メタデータ拡張(難易度星・説明・報酬ヒント)+Ch1サンプル9本+解放トリガー5パターン"
   }
 ]

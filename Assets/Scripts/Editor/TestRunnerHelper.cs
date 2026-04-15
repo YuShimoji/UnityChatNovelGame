@@ -11,7 +11,11 @@ namespace ProjectFoundPhone.Editor
         private const string FilterArgPrefix = "-ProjectFoundPhoneTestFilter=";
         private const string ResultFileArgPrefix = "-ProjectFoundPhoneResultFile=";
 
-        [MenuItem("Tools/Run PlayMode Tests Manual")]
+        // --- Legacy interactive menu items (superseded by MCP batch tools) ---
+        // Kept for manual fallback in Unity Editor.
+        // Primary execution path: RunEditModeTestsBatch / RunPlayModeTestsBatch (batchmode).
+
+        [MenuItem("Tools/FoundPhone/Tests/Run PlayMode Tests")]
         public static void RunPlayModeTests()
         {
             Debug.Log("TestRunnerHelper: Starting PlayMode tests...");
@@ -25,7 +29,7 @@ namespace ProjectFoundPhone.Editor
             testRunnerApi.Execute(new ExecutionSettings(filter));
         }
 
-        [MenuItem("Tools/Run EditMode Tests Manual")]
+        [MenuItem("Tools/FoundPhone/Tests/Run EditMode Tests")]
         public static void RunEditModeTests()
         {
             Debug.Log("TestRunnerHelper: Starting EditMode tests...");

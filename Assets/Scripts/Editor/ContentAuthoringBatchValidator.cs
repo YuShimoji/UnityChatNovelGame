@@ -33,7 +33,7 @@ namespace ProjectFoundPhone.Editor
             EditorApplication.update += TickValidation;
         }
 
-        [MenuItem("Tools/Validate Content Authoring Scene")]
+        [MenuItem("Tools/FoundPhone/Verification/Validate Content Authoring Scene")]
         public static void ValidateFromMenu()
         {
             StartValidation(false);
