@@ -366,6 +366,15 @@
     "pct": 10,
     "cat": "ui",
     "file": "docs/StorySpec/23_text_presentation.md",
-    "summary": "テキスト表現の統合仕様。(1)BubbleMargin: 上下左右%指定で次メッセージの占有範囲を制御、(2)BubbleStylePreset SO: バブルタイプ追加(default/narration/thought/shout/whisper/system/announcement)で色・形状・影・フォントを切替、(3)narrationプリセット: 背景なし地の文パターン、(4)IconSide: キャラ単位でアイコン左右を明示指定、(5)フリックスレッド切替: 左右スワイプでスレッド順送り、(6)サブクエストスレッド統合: SP-016/017/022/BL-003の散在仕様を集約+メタデータ拡張(難易度星・説明・報酬ヒント)+Ch1サンプル9本+解放トリガー5パターン"
+    "summary": "テキスト表現の統合仕様。(1)BubbleMargin: 上下左右%指定で次メッセージの占有範囲を制御、(2)BubbleStylePreset SO: バブルタイプ追加(default/narration/thought/shout/whisper/system/announcement)で色・形状・影・フォントを切替、(3)narrationプリセット: 背景なし地の文パターン、(4)IconSide: キャラ単位でアイコン左右を明示指定、(5)フリックスレッド切替: 左右スワイプでスレッド順送り、(6)サブクエストスレッド統合: SP-016/017/022/BL-003の散在仕様を集約+メタデータ拡張(難易度星・説明・報酬ヒント)+Ch1サンプル9本+解放トリガー5パターン。S10-12: キャラクター表現(B)/バブル挙動(C)/レイアウト拡張(D)の保留領域を確認時期付きで記録"
+  },
+  {
+    "id": "SP-024",
+    "title": "チャット没入仕様",
+    "status": "draft",
+    "pct": 0,
+    "cat": "ui",
+    "file": "docs/StorySpec/24_chat_immersion.md",
+    "summary": "スマホチャットアプリのリアリティ補強。全機能ChatUIConfigでオン/オフ切替(既定オフ=従来互換)。S1:タイムスタンプ(SetTimeコマンド+Day区切りバー)、S2:既読/配信マーク(DeliveryStatus enum+MarkRead/MarkDelivered)、S3:タイピングパターン(CharacterProfile.typingSpeed+TypingSpeed enum 7段階+SetTypingSpeedコマンド)、S4:オンライン状態(OnlineStatus enum+ドット表示+SetOnlineStatusコマンド)、S5:メッセージ削除痕(DeleteLastMessage/DeleteMessage+isDeletedフラグ)。新規Yarnコマンド7個、SavedChatMessage拡張3フィールド、CharacterProfile拡張3フィールド、ChatUIConfig拡張9フィールド"
   }
 ]

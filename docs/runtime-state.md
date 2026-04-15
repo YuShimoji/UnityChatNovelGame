@@ -1,19 +1,19 @@
 # Runtime State
 
-**Updated**: 2026-04-15（方向性ドリフト修正: エンジン能力マイルストーンベースに切替。ガードレール再権限化）
+**Updated**: 2026-04-15 session 2（Editor 整備 + ChatUIConfig 集約 + SP-023/SP-024 仕様策定 + Worker 実装進行中）
 
 ## Current Position
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
-- lane: **Engine**（エンジン能力検証）+ 副 **Content**（検証用モック）+ 副 **Unlock**（Pipeline 実運用）
-- slice: **エンジン能力マイルストーン 1: サブスレッド全型の実機検証**
-- next_recommended_slice: **M2: セーブ/ロード完全性 + 章遷移堅牢化**
-- subsequent_recommended_slice: **エンジン能力レビュー + Ch1 フルコンテンツ執筆の解放判定**（M1+M2 完了が発動条件。通過ゲート・スキップ不可）
-- later_recommended_slice: **Ch1 フルコンテンツ前進 + P1 段階実装**（SUBSEQUENT 通過後）
-- active_artifact: エンジン能力検証（サブスレッド全型 → セーブ/ロード → 章遷移）。PlayMode 8/8・EditMode 75/75 は session 22 ローカル通過済み
-- artifact_surface: DebugQuickTest (検証主体) / ContentAuthoring (既存コンテンツ再利用)
-- last_change_relation: direct（2026-04-15: 方向性ドリフト修正。エンジン能力マイルストーンベースに切替）
+- lane: **UI/Engine**（テキスト表現・チャット没入仕様の実装）+ 副 **Engine**（M1/M2 並行）
+- slice: **SP-023 テキスト表現仕様の実装 (Worker 検収中)** + **SP-024 仕様策定完了**
+- next_recommended_slice: **SP-023 Worker 検収 → SP-024 S3 (キャラ別タイピングパターン) 実装**
+- subsequent_recommended_slice: **SP-024 残 (S1 タイムスタンプ / S2 既読マーク / S4 オンライン / S5 削除痕)**
+- later_recommended_slice: **SP-023 S10-12 (B/C/D 保留領域) の確認時期到達分を順次判断 + Ch1 コンテンツ前進**
+- active_artifact: SP-023 Worker 実装 (BubbleStylePreset / IconSide / フリック切替) + SP-024 仕様書
+- artifact_surface: ChatController / ChatDialogueView / ChatUIConfig / CharacterProfile / ScenarioManager
+- last_change_relation: direct（2026-04-15 session 2: Editor メニュー統一、ChatUIConfig タイミング集約、SP-023/SP-024 仕様策定）
 
 ## Counters
 
@@ -24,7 +24,7 @@
 
 - tests_last_run: 2026-04-09 (EditMode pass / PlayMode pass)
 - mock_files: 0
-- spec_entries: 40 (`docs/spec-index.json` 配列長、検証用)
+- spec_entries: 42 (`docs/spec-index.json` 配列長、検証用。SP-023/SP-024 追加)
 - todo_fixme_hack: ChatController.cs:1296 に 1 件残存 (FEATURE_STATUS_AUDIT W-6 参照)
 - obsolete_marks: ContradictionPair.UnlockTopic x2
 
@@ -33,6 +33,15 @@
 - last_visual_audit_path: docs/archive/verification-evidence/VerticalSliceSmokeGate_20260403_*.png (参考。パスのみ保持、追跡は廃止)
 
 ## Session Log
+
+### 2026-04-15 session 2（Editor 整備 + テキスト表現仕様）
+
+- **Editor メニュー統一**: 全 29 MenuItem を `Tools/FoundPhone/` 配下に統一 (12 ファイル変更)。サブメニュー: Scene Setup / Setup / Verification / Tests / Debug。Yarn Content Validator 重複削除
+- **ChatUIConfig タイミング集約**: typewriterSpeed / typingIndicatorDuration / postMessageDelay / enableTypewriterEffect / enableTapSkip を SO に移行 (3 ファイル)。画像フェードイン 0.6f ハードコード修正
+- **SP-023 テキスト表現仕様** (新設 `23_text_presentation.md`): BubbleMargin (% 指定)、BubbleStylePreset (7 プリセット)、narration (地の文)、IconSide (アイコン向き)、フリックスレッド切替、サブクエスト統合 (SP-016/017/022/BL-003)、B/C/D 保留領域 (S10-12)
+- **SP-024 チャット没入仕様** (新設 `24_chat_immersion.md`): タイムスタンプ、既読/配信マーク (DeliveryStatus)、キャラ別タイピングパターン (TypingSpeed 7 段階)、オンライン状態 (OnlineStatus)、メッセージ削除痕。新規 Yarn コマンド 7 個。全機能 ChatUIConfig オン/オフ切替 (既定オフ)
+- **SP-023 Worker 実装**: BubbleStylePreset SO / IconSide / フリック切替の .cs が未コミットで存在。検収後にコミット予定
+- **spec-index**: SP-023 + SP-024 追加 (計 42 エントリ)
 
 ### 2026-04-09（A レーン — Ch1 終端強化）
 
