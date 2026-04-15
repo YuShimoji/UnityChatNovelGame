@@ -106,6 +106,9 @@ namespace ProjectFoundPhone.UI
         /// <summary>次の 1 メッセージに適用するバブルスタイルプリセット ID (SP-023 §3.4)。消費後に null リセット。</summary>
         private string m_PendingBubbleStylePresetId;
 
+        /// <summary>次の 1 メッセージのラッパーマージン (%)。x=left, y=right, z=top, w=bottom。null = 未指定 (SP-023 §2.2)。</summary>
+        private Vector4? m_PendingBubbleMarginPercent;
+
         /// <summary>ScrollRect の RectTransform キャッシュ（バブル幅計算用）</summary>
         private RectTransform m_ScrollRectTransform;
         #endregion
@@ -518,6 +521,19 @@ namespace ProjectFoundPhone.UI
                 hlg.padding = isPlayer
                     ? new RectOffset(sideMargin, edgePad, topPad, bottomPad)
                     : new RectOffset(edgePad, sideMargin, topPad, bottomPad);
+            }
+
+            // SP-023 §2.2: <<BubbleMargin>> による % 指定が pending なら上書き
+            if (m_PendingBubbleMarginPercent.HasValue)
+            {
+                Vector4 mp = m_PendingBubbleMarginPercent.Value;
+                m_PendingBubbleMarginPercent = null;
+
+                int leftPx = Mathf.RoundToInt(containerWidth * mp.x / 100f);
+                int rightPx = Mathf.RoundToInt(containerWidth * mp.y / 100f);
+                int topPx = Mathf.RoundToInt(containerWidth * mp.z / 100f);
+                int bottomPx = Mathf.RoundToInt(containerWidth * mp.w / 100f);
+                hlg.padding = new RectOffset(leftPx, rightPx, topPx, bottomPx);
             }
 
             LayoutElement wrapperLayout = wrapper.GetComponent<LayoutElement>();
@@ -1070,6 +1086,20 @@ namespace ProjectFoundPhone.UI
         }
 
         /// <summary>
+        /// 次に生成する 1 メッセージにラッパーマージン (%) を適用する (SP-023 §2.2)。
+        /// 値はコンテナ幅に対するパーセント (0-100)。負値は 0 に丸める。
+        /// 適用は 1 メッセージのみで自動リセット。
+        /// </summary>
+        public void SetNextBubbleMargin(float leftPercent, float rightPercent, float topPercent, float bottomPercent)
+        {
+            m_PendingBubbleMarginPercent = new Vector4(
+                Mathf.Max(0f, leftPercent),
+                Mathf.Max(0f, rightPercent),
+                Mathf.Max(0f, topPercent),
+                Mathf.Max(0f, bottomPercent));
+        }
+
+        /// <summary>
         /// LineTag 付きメッセージをチャットに追加（矛盾指摘システム対応）
         /// </summary>
         /// <param name="charID">キャラクターID</param>
@@ -1408,6 +1438,17 @@ namespace ProjectFoundPhone.UI
             {
                 float textHeight = textComponent.preferredHeight;
                 layoutElement.preferredHeight = Mathf.Max(sysMinH, textHeight + UIConfig.bubbleTextPadding);
+            }
+
+            // SP-023 §3.5: <<Narration>> / pending BubbleStylePreset があれば適用
+            if (!string.IsNullOrEmpty(m_PendingBubbleStylePresetId))
+            {
+                var preset = BubbleStyleDatabase.Get(m_PendingBubbleStylePresetId);
+                m_PendingBubbleStylePresetId = null;
+                if (preset != null)
+                {
+                    ApplyBubbleStylePreset(systemBubble, textComponent, preset);
+                }
             }
 
             // レイアウトを即座に更新

@@ -207,6 +207,8 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.AddCommandHandler<string, string, string>("DiscoverFragment", DiscoverFragmentCommand);
             m_DialogueRunner.AddCommandHandler<string, string>("AddFragmentNote", AddFragmentNoteCommand);
             m_DialogueRunner.AddCommandHandler<string>("BubbleStyle", BubbleStyleCommand);
+            m_DialogueRunner.AddCommandHandler<string>("Narration", NarrationCommand);
+            m_DialogueRunner.AddCommandHandler<float, float, float, float>("BubbleMargin", BubbleMarginCommand);
 #endif
         }
 
@@ -244,6 +246,8 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.RemoveCommandHandler("EndBranch");
             m_DialogueRunner.RemoveCommandHandler("SetBranchReflection");
             m_DialogueRunner.RemoveCommandHandler("BubbleStyle");
+            m_DialogueRunner.RemoveCommandHandler("Narration");
+            m_DialogueRunner.RemoveCommandHandler("BubbleMargin");
 #endif
         }
         #endregion
@@ -962,6 +966,37 @@ namespace ProjectFoundPhone.Core
                 return;
             }
             m_ChatController.SetNextBubbleStyle(presetId);
+        }
+
+        /// <summary>
+        /// Narrationコマンドのハンドラ (SP-023 §3.4)
+        /// &lt;&lt;Narration "text"&gt;&gt; は &lt;&lt;BubbleStyle "narration"&gt;&gt; + SystemMessage の糖衣。
+        /// 背景透明 + 地の文スタイルで text を表示する。
+        /// </summary>
+        private void NarrationCommand(string text)
+        {
+            if (m_ChatController == null)
+            {
+                Debug.LogWarning("[NarrationCommand] ChatController が null です。スキップします。");
+                return;
+            }
+            m_ChatController.SetNextBubbleStyle("narration");
+            m_ChatController.AddSystemMessage(text);
+        }
+
+        /// <summary>
+        /// BubbleMarginコマンドのハンドラ (SP-023 §2.2)
+        /// &lt;&lt;BubbleMargin left right top bottom&gt;&gt; で次の 1 メッセージのマージンを % 指定する。
+        /// 値はコンテナ幅に対するパーセント (0-100)。
+        /// </summary>
+        private void BubbleMarginCommand(float left, float right, float top, float bottom)
+        {
+            if (m_ChatController == null)
+            {
+                Debug.LogWarning("[BubbleMarginCommand] ChatController が null です。スキップします。");
+                return;
+            }
+            m_ChatController.SetNextBubbleMargin(left, right, top, bottom);
         }
         #endregion
 

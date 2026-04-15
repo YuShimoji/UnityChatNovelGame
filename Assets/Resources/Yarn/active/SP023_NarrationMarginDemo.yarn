@@ -1,0 +1,41 @@
+/// SP-023 S2 (Narration) + S3 (BubbleMargin) の動作確認デモ
+/// 使い方: ScenarioManager の StartNode を "SP023_NarrationMargin_Start" に設定して再生
+///
+/// Block 2 検収ポイント:
+///   1. Narration 2 回: 背景透明 + グレーイタリック中央揃え (SystemMessage より薄い)
+///   2. BubbleMargin 20/20/0/0: 通常バブルが左右 20% ずつ内側に寄る (細長くなる)
+///   3. BubbleMargin 0/0/5/5: 上下に余白が付与される
+///   4. BubbleMargin 未指定メッセージが通常に戻る (1 メッセージ適用で自動リセット)
+
+title: SP023_NarrationMargin_Start
+---
+<<SystemMessage "=== SP-023 Block 2: Narration + BubbleMargin 検証 ===">>
+<<StartWait 0.5>>
+
+<<Narration "1/6: これは地の文です。背景は透明、テキストはグレーのイタリック中央揃えで表示されます。">>
+<<StartWait 0.8>>
+
+<<Narration "2/6: 2 回目の地の文。シーンの切れ目や情景描写に使用します。">>
+<<StartWait 0.8>>
+
+<<set $speaker to "pyramid">>
+3/6: マージン未指定の通常メッセージ。従来のバブル表示です。
+<<StartWait 0.8>>
+
+<<BubbleMargin 20 20 0 0>>
+<<set $speaker to "pyramid">>
+4/6: BubbleMargin 20/20/0/0 適用。左右 20% ずつ内側に寄るため細長いバブルになります。
+<<StartWait 0.8>>
+
+<<BubbleMargin 0 0 5 5>>
+<<set $speaker to "pyramid">>
+5/6: BubbleMargin 0/0/5/5 適用。上下に余白が付与されます。左右は既定復帰。
+<<StartWait 0.8>>
+
+<<set $speaker to "pyramid">>
+6/6: マージン指定なし。自動リセットで通常バブルに戻ります (4・5 の影響を受けない)。
+<<StartWait 0.5>>
+
+<<SystemMessage "=== 検証完了 ===">>
+
+===
