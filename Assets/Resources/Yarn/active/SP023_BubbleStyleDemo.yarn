@@ -1,0 +1,36 @@
+/// SP-023 S1 BubbleStylePreset 基盤の動作確認デモ
+/// 使い方: ScenarioManager の StartNode を "SP023_BubbleStyle_Start" に設定して再生
+///
+/// 期待動作:
+///   - 既定バブル → default プリセット適用 (見た目は変わらない) → 既定バブル
+///   - 未知の presetId ("missing") で警告ログが出るが再生は継続
+///
+/// Block 1 検収ポイント:
+///   1. 全 3 メッセージが表示される (エラーで中断しない)
+///   2. default プリセット適用前後で見た目が変わらない (pass-through)
+///   3. missing プリセット指定で Console に BubbleStylePreset 'missing' が見つかりません 警告
+
+title: SP023_BubbleStyle_Start
+---
+<<SystemMessage "=== SP-023 Block 1: BubbleStylePreset 検証 ===">>
+<<StartWait 0.5>>
+
+<<set $speaker to "pyramid">>
+1/3: 既定バブル (プリセット未適用)。通常の見た目で表示されます。
+
+<<StartWait 0.8>>
+
+<<BubbleStyle "default">>
+<<set $speaker to "pyramid">>
+2/3: default プリセット適用。pass-through なので見た目は変わりません。
+
+<<StartWait 0.8>>
+
+<<BubbleStyle "missing">>
+<<set $speaker to "pyramid">>
+3/3: missing プリセット指定。Console に警告ログが出るはずです (メッセージは通常表示)。
+
+<<StartWait 0.5>>
+<<SystemMessage "=== 検証完了 ===">>
+
+===

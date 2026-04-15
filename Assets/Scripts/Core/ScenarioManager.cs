@@ -206,6 +206,7 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.AddCommandHandler<string>("SetBranchReflection", SetBranchReflectionCommand);
             m_DialogueRunner.AddCommandHandler<string, string, string>("DiscoverFragment", DiscoverFragmentCommand);
             m_DialogueRunner.AddCommandHandler<string, string>("AddFragmentNote", AddFragmentNoteCommand);
+            m_DialogueRunner.AddCommandHandler<string>("BubbleStyle", BubbleStyleCommand);
 #endif
         }
 
@@ -242,6 +243,7 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.RemoveCommandHandler("BeginBranch");
             m_DialogueRunner.RemoveCommandHandler("EndBranch");
             m_DialogueRunner.RemoveCommandHandler("SetBranchReflection");
+            m_DialogueRunner.RemoveCommandHandler("BubbleStyle");
 #endif
         }
         #endregion
@@ -945,6 +947,21 @@ namespace ProjectFoundPhone.Core
         public void ClearDeclaredThreads()
         {
             m_DeclaredThreads.Clear();
+        }
+
+        /// <summary>
+        /// BubbleStyleコマンドのハンドラ (SP-023 §3.4)
+        /// &lt;&lt;BubbleStyle "presetId"&gt;&gt; で次の 1 メッセージにプリセットを適用する。
+        /// 未知の presetId は ChatController 側で警告ログを出して無視される。
+        /// </summary>
+        private void BubbleStyleCommand(string presetId)
+        {
+            if (m_ChatController == null)
+            {
+                Debug.LogWarning("[BubbleStyleCommand] ChatController が null です。スキップします。");
+                return;
+            }
+            m_ChatController.SetNextBubbleStyle(presetId);
         }
         #endregion
 

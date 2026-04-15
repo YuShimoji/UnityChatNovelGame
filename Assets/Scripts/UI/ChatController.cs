@@ -103,6 +103,9 @@ namespace ProjectFoundPhone.UI
         private ChatUIConfig m_UIConfig;
         private ChatUIConfig UIConfig => m_UIConfig ??= ChatUIConfig.Instance;
 
+        /// <summary>次の 1 メッセージに適用するバブルスタイルプリセット ID (SP-023 §3.4)。消費後に null リセット。</summary>
+        private string m_PendingBubbleStylePresetId;
+
         /// <summary>ScrollRect の RectTransform キャッシュ（バブル幅計算用）</summary>
         private RectTransform m_ScrollRectTransform;
         #endregion
@@ -839,6 +842,18 @@ namespace ProjectFoundPhone.UI
             // バブルの最終処理（ラッパー生成 + 配置）
             ConfigureBubble(messageBubble, charID, isConsecutive);
 
+            // BubbleStylePreset: ConfigureBubble の後に適用 (背景・影・テキストを上書き)
+            BubbleStylePreset pendingPreset = null;
+            if (!string.IsNullOrEmpty(m_PendingBubbleStylePresetId))
+            {
+                pendingPreset = BubbleStyleDatabase.Get(m_PendingBubbleStylePresetId);
+                m_PendingBubbleStylePresetId = null;
+            }
+            if (pendingPreset != null)
+            {
+                ApplyBubbleStylePreset(messageBubble, textComponent, pendingPreset);
+            }
+
             // ラッパー内での最終幅に基づいて高さを再計算
             FinalizeBubbleSize(messageBubble, minH);
 
@@ -1029,6 +1044,29 @@ namespace ProjectFoundPhone.UI
         public void AddMessage(string charID, string text)
         {
             AddMessage(charID, text, null);
+        }
+
+        /// <summary>
+        /// 次に生成する 1 メッセージに BubbleStylePreset を適用する (SP-023 §3.4)。
+        /// 未知の presetId は無視され警告ログを出す。適用は 1 メッセージのみで自動リセット。
+        /// </summary>
+        public void SetNextBubbleStyle(string presetId)
+        {
+            if (string.IsNullOrEmpty(presetId))
+            {
+                m_PendingBubbleStylePresetId = null;
+                return;
+            }
+
+            var preset = BubbleStyleDatabase.Get(presetId);
+            if (preset == null)
+            {
+                Debug.LogWarning($"[ChatController] BubbleStylePreset '{presetId}' が見つかりません。Resources/BubbleStyles を確認してください。");
+                m_PendingBubbleStylePresetId = null;
+                return;
+            }
+
+            m_PendingBubbleStylePresetId = presetId;
         }
 
         /// <summary>
@@ -2696,6 +2734,102 @@ namespace ProjectFoundPhone.UI
 
             // 最終レイアウト更新
             Canvas.ForceUpdateCanvases();
+        }
+
+        /// <summary>
+        /// BubbleStylePreset をバブルに適用 (SP-023 §3.2)。
+        /// 各フィールドは上書きフラグ or 負値 / null で "既定維持" を判定する。
+        /// ConfigureBubble の後に呼ぶことで、ラッパー生成後の色・影・テキストを更新する。
+        /// </summary>
+        private void ApplyBubbleStylePreset(GameObject bubble, TextMeshProUGUI textComponent, BubbleStylePreset preset)
+        {
+            if (bubble == null || preset == null) return;
+
+            // --- 背景色・透明度 ---
+            Image bubbleImage = bubble.GetComponent<Image>();
+            if (bubbleImage != null)
+            {
+                if (preset.overrideBackgroundColor)
+                {
+                    Color c = preset.backgroundColor;
+                    c.a = preset.backgroundAlpha;
+                    bubbleImage.color = c;
+                }
+                else if (preset.backgroundAlpha < 1f)
+                {
+                    // 色は既定、透明度だけ変える (narration = 完全透明などのユースケース)
+                    Color c = bubbleImage.color;
+                    c.a = preset.backgroundAlpha;
+                    bubbleImage.color = c;
+                }
+
+                // スプライト / 角丸の上書き
+                if (preset.bubbleSprite != null)
+                {
+                    bubbleImage.sprite = preset.bubbleSprite;
+                    bubbleImage.type = Image.Type.Sliced;
+                    bubbleImage.pixelsPerUnitMultiplier = 1f;
+                }
+                else if (preset.cornerRadius >= 0f)
+                {
+                    var sprite = BubbleSpriteFactory.GetOrCreateRoundedSprite(preset.cornerRadius);
+                    if (sprite != null)
+                    {
+                        bubbleImage.sprite = sprite;
+                        bubbleImage.type = Image.Type.Sliced;
+                        bubbleImage.pixelsPerUnitMultiplier = 1f;
+                    }
+                }
+            }
+
+            // --- 影 ---
+            if (preset.overrideShadow)
+            {
+                Shadow shadow = bubble.GetComponent<Shadow>();
+                if (preset.shadowEnabled)
+                {
+                    if (shadow == null) shadow = bubble.AddComponent<Shadow>();
+                    shadow.effectColor = preset.shadowColor;
+                    shadow.effectDistance = preset.shadowDistance;
+                    shadow.enabled = true;
+                }
+                else if (shadow != null)
+                {
+                    shadow.enabled = false;
+                }
+            }
+
+            // --- テキスト ---
+            if (textComponent != null)
+            {
+                if (preset.overrideTextColor)
+                {
+                    textComponent.color = preset.textColor;
+                }
+                if (preset.fontSize > 0f)
+                {
+                    textComponent.fontSize = preset.fontSize * GetResponsiveFontScale();
+                }
+                if (preset.fontStyle != FontStyles.Normal)
+                {
+                    textComponent.fontStyle = preset.fontStyle;
+                }
+                textComponent.alignment = preset.textAlignment != TextAlignmentOptions.TopLeft
+                    ? preset.textAlignment
+                    : textComponent.alignment;
+
+                // パディング (text RectTransform の offsetMin / offsetMax)
+                RectTransform textRect = textComponent.GetComponent<RectTransform>();
+                if (textRect != null)
+                {
+                    float left = preset.paddingLeft >= 0 ? preset.paddingLeft : textRect.offsetMin.x;
+                    float bottom = preset.paddingBottom >= 0 ? preset.paddingBottom : textRect.offsetMin.y;
+                    float right = preset.paddingRight >= 0 ? -preset.paddingRight : textRect.offsetMax.x;
+                    float top = preset.paddingTop >= 0 ? -preset.paddingTop : textRect.offsetMax.y;
+                    textRect.offsetMin = new Vector2(left, bottom);
+                    textRect.offsetMax = new Vector2(right, top);
+                }
+            }
         }
 
         /// <summary>
