@@ -10,33 +10,60 @@
 4. `docs/INVARIANTS.md`
 5. `docs/USER_REQUEST_LEDGER.md`
 
-## Handoff snapshot (2026-04-15 session 2)
+## Handoff snapshot (2026-04-16 session 3)
 
 **本セッションの実施内容**:
 
-### Editor 整備 + ChatUIConfig 集約 (コミット済み `570cdb3`)
-- **Editor メニュー統一**: 全 29 の MenuItem を `Tools/FoundPhone/` 配下に統一。旧 `Tools/` 直下、`Tools/Verification/`、`Project FoundPhone/` を統合。Yarn Content Validator の重複登録削除
-- **ChatUIConfig タイミング集約**: typewriterSpeed / typingIndicatorDuration / postMessageDelay / enableTypewriterEffect / enableTapSkip を ChatController/ChatDialogueView の SerializeField から ChatUIConfig SO に移行。画像フェードインのハードコード 0.6f を ChatUIConfig.imageFadeInDuration に修正
-- **クリーンアップ**: Dev/ 空アセンブリ削除、ChatController TODO docs 重複統合、チェックボックス 21 項目リファレンス化
+### SP-023 Block 1 完了・検収済み (コミット `ee184cf`)
+- `BubbleStylePreset` SO + `BubbleStyleDatabase` + `<<BubbleStyle "presetId">>` コマンド
+- `ChatController.SetNextBubbleStyle()` + `ApplyBubbleStylePreset()` (次 1 メッセージ適用・自動リセット)
+- `default.asset` (pass-through) + `SP023_BubbleStyleDemo.yarn`
+- **ユーザー検収済み**: DebugChatScene / StartNode=`SP023_BubbleStyle_Start` で 3 メッセージ全表示・見た目同一・missing 警告ログ確認
 
-### 新規仕様書 (未コミット)
-- **SP-023 テキスト表現仕様** (`docs/StorySpec/23_text_presentation.md`): バブル位置 (% マージン)、BubbleStylePreset (7 プリセット)、地の文 (narration)、IconSide、フリックスレッド切替、サブクエスト統合 (SP-016/017/022/BL-003)、B/C/D 保留領域 (S10-12)
-- **SP-024 チャット没入仕様** (`docs/StorySpec/24_chat_immersion.md`): タイムスタンプ、既読/配信マーク、キャラ別タイピングパターン、オンライン状態、メッセージ削除痕。全機能 ChatUIConfig でオン/オフ切替 (既定オフ = 従来互換)
-- **SP-023 実装 (Worker 進行中)**: BubbleStylePreset SO、IconSide、フリックスレッド切替の .cs 実装が未コミットで存在。検収後にコミット予定
+### SP-023 Block 2 実装完了・画面未検証 (コミット `5da8f9a`)
+- `<<Narration "text">>` コマンド (narration preset + AddSystemMessage 糖衣)
+- `<<BubbleMargin l r t b>>` コマンド (次 1 メッセージに % 指定 padding を上書き)
+- `narration.asset` (alpha=0 + italic + center + グレー + suppressWrapper)
+- `SP023_NarrationMarginDemo.yarn` (6 メッセージ: Narration×2 / normal / margin×2 / reset)
 
-### 未コミットファイル一覧
-- 新規: `Assets/Scripts/Data/BubbleStylePreset.cs`, `Assets/Scripts/Data/BubbleStyleDatabase.cs`, `docs/StorySpec/24_chat_immersion.md`
-- 変更: `Assets/Scripts/Core/ScenarioManager.cs`, `Assets/Scripts/Data/CharacterDatabase.cs`, `Assets/Scripts/Data/CharacterProfile.cs`, `Assets/Scripts/Data/SubthreadData.cs`, `Assets/Scripts/UI/ChatController.cs`, `Assets/Scripts/UI/ThreadSwitcherController.cs`, `docs/StorySpec/23_text_presentation.md`, `docs/spec-index.json`
+### 実行プラン
+- `C:\Users\thank\.claude\plans\hazy-tumbling-feigenbaum.md` に 9 Block 分割の完全計画あり
+- Cadence: **Block 毎に user 実機検収 → OK でコミット → 次 Block**
+- SP-024 既定フラグ方針: 全機能既定オフ (仕様書通り)
 
-- **次セッション最初に見るファイル**: `docs/HANDOFF.md` → `docs/project-context.md` → `docs/runtime-state.md`
-- **未解決の設計判断**: SP-023 S10-12 (B/C/D 領域) は保留 (HUMAN_AUTHORITY)、各項目に確認時期を記載済み。SP-024 は全機能 draft
+## Safe Next Steps (次セッション最初のアクション)
+
+1. **Block 2 画面検収**
+   - DebugChatScene を開き、ScenarioManager の `Start Node` を `SP023_NarrationMargin_Start` に変更 → Play
+   - 6 メッセージの確認:
+     - 1/6, 2/6 (Narration): 背景透明・グレーイタリック中央揃え
+     - 3/6: 通常バブル (基準)
+     - 4/6: 左右 20% ずつ内側 (細長いバブル)
+     - 5/6: 上下に余白
+     - 6/6: 自動リセット確認 (通常バブルに戻る)
+   - 再生後は Start Node を元の値 (`DQT_Start`) に戻してシーン保存
+2. **OK なら Block 3 着手** (SP-023 S4 IconSide)
+   - `CharacterProfile` に `IconSide enum` フィールド追加 (Auto/Left/Right)
+   - `ChatController.ConfigureBubble` の isPlayer 単独判定を IconSide 優先に変更
+   - 既存データは Auto = 従来挙動
+3. **NG なら原因調査 + 修正** (Block 2 コミット差分を参照)
+
+## 未解決の判断ポイント (HUMAN_AUTHORITY)
+
+- **SP-023 S10** (CharacterProfile.defaultBubbleStylePreset): Block 2 検収後に採否判断
+- **フリック閾値 15%** (Block 4): 実機体感で調整要否判断
+- **SP-023 S11 (表情アイコン切替)** / **S12 (AI 劣化ビジュアル)** / **SP-024 typewriterSpeedOverride**: 当該 Block 到達時に再評価
+
+## 副次観察
+
+- SP023_BubbleStyleDemo でタイピングインジケーターが全メッセージで非表示。SP-023 変更とは無関係 (ChatDialogueView pre-message delay 挙動)。Block 7 (SP-024 S3 タイピング速度) 実装時に挙動を見直す
 
 ## Current Focus
 
-- 主目的: **テキスト表現・チャット没入の仕様実装** (SP-023 / SP-024)
-- 並行: エンジン能力マイルストーン (M1: サブスレッド全型実機検証、M2: セーブ/ロード + 章遷移)
-- SP-023 実装スライスは Worker に委任進行中。検収後に実装困難な箇所のみ先送り
-- SP-024 は仕様策定完了、実装は SP-023 完了後に着手
+- 主目的: **テキスト表現・チャット没入の仕様実装** (SP-023 / SP-024 を 9 Block で実行中)
+- SP-023 Block 2/9 実装完了 (9 Block 中 2 Block)
+- SP-024 は仕様策定完了、実装は Block 7 (S3 タイピング速度) から開始予定
+- 並行: エンジン能力マイルストーン (M1/M2) は現在スタック外
 
 ## Recent Doc Delta
 

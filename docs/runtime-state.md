@@ -1,19 +1,20 @@
 # Runtime State
 
-**Updated**: 2026-04-15 session 2（Editor 整備 + ChatUIConfig 集約 + SP-023/SP-024 仕様策定 + Worker 実装進行中）
+**Updated**: 2026-04-16 session 3（SP-023 Block 1 検収済み + Block 2 実装 / 未検証）
 
 ## Current Position
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
-- lane: **UI/Engine**（テキスト表現・チャット没入仕様の実装）+ 副 **Engine**（M1/M2 並行）
-- slice: **SP-023 テキスト表現仕様の実装 (Worker 検収中)** + **SP-024 仕様策定完了**
-- next_recommended_slice: **SP-023 Worker 検収 → SP-024 S3 (キャラ別タイピングパターン) 実装**
-- subsequent_recommended_slice: **SP-024 残 (S1 タイムスタンプ / S2 既読マーク / S4 オンライン / S5 削除痕)**
-- later_recommended_slice: **SP-023 S10-12 (B/C/D 保留領域) の確認時期到達分を順次判断 + Ch1 コンテンツ前進**
-- active_artifact: SP-023 Worker 実装 (BubbleStylePreset / IconSide / フリック切替) + SP-024 仕様書
-- artifact_surface: ChatController / ChatDialogueView / ChatUIConfig / CharacterProfile / ScenarioManager
-- last_change_relation: direct（2026-04-15 session 2: Editor メニュー統一、ChatUIConfig タイミング集約、SP-023/SP-024 仕様策定）
+- lane: **UI/Engine**（SP-023 / SP-024 の 9 Block 実装・Block 毎検収方式）
+- slice: **SP-023 Block 2 (S2 Narration + S3 BubbleMargin) 実装完了・ユーザー画面検証待ち**
+- next_recommended_slice: **Block 2 画面検収 → OK なら Block 3 (SP-023 S4 IconSide) 着手**
+- subsequent_recommended_slice: **Block 3 (IconSide) → Block 4 (フリックスレッド切替) → Block 5 (SubthreadData メタ+サイドバー)**
+- later_recommended_slice: **Block 6 (プリセット 4 種) → Block 7 SP-024 S3 タイピング速度 → Block 8 S1+S2 → Block 9 S4+S5**
+- active_artifact: ChatController / ScenarioManager / BubbleStylePreset SO / narration・default preset asset
+- artifact_surface: ChatController / ChatDialogueView / ChatUIConfig / ScenarioManager / BubbleStyleDatabase
+- last_change_relation: direct（2026-04-16 session 3: Block 1 検収済みコミット + Block 2 実装コミット）
+- plan_file: `C:\Users\thank\.claude\plans\hazy-tumbling-feigenbaum.md` （9 Block 分割の実行プラン）
 
 ## Counters
 
@@ -33,6 +34,31 @@
 - last_visual_audit_path: docs/archive/verification-evidence/VerticalSliceSmokeGate_20260403_*.png (参考。パスのみ保持、追跡は廃止)
 
 ## Session Log
+
+### 2026-04-16 session 3（SP-023 Block 1 検収 + Block 2 実装）
+
+- **Block 1 (SP-023 S1 BubbleStylePreset 基盤) 完了・検収済み** コミット `ee184cf`:
+  - `BubbleStylePreset.cs` SO (13 フィールド + 上書きフラグ方式)
+  - `BubbleStyleDatabase.cs` 静的レジストリ (`Resources/BubbleStyles` 自動収集)
+  - `<<BubbleStyle "presetId">>` Yarn コマンド登録
+  - `ChatController.SetNextBubbleStyle()` + `ApplyBubbleStylePreset()` (次 1 メッセージに適用・自動リセット)
+  - `default.asset` (pass-through プリセット)
+  - `SP023_BubbleStyleDemo.yarn`: 3 メッセージ検証
+  - **検収結果**: DebugChatScene + StartNode=SP023_BubbleStyle_Start で 3 メッセージ全表示・見た目同一・missing 警告ログ確認済み
+- **Block 2 (SP-023 S2 Narration + S3 BubbleMargin) 実装完了・画面未検証** コミット `5da8f9a`:
+  - `<<Narration "text">>` コマンド (narration preset + AddSystemMessage 糖衣)
+  - `<<BubbleMargin l r t b>>` コマンド (次 1 メッセージのラッパー padding を % 指定で上書き)
+  - `ChatController`: `m_PendingBubbleMarginPercent` + `SetNextBubbleMargin()` + `ConfigureBubble` で margin 上書き + `AddSystemMessage` で preset 消費
+  - `narration.asset`: alpha=0 + italic + center + グレーテキスト + suppressWrapper
+  - `SP023_NarrationMarginDemo.yarn`: 6 メッセージ (Narration×2, normal, margin×2, reset)
+- **次セッション再開導線**:
+  1. Block 2 画面検証: DebugChatScene → StartNode=`SP023_NarrationMargin_Start` → Play
+  2. 6 メッセージの見た目確認 (narration 透明背景/細長いバブル/上下余白/自動リセット)
+  3. OK なら Block 3 (SP-023 S4 IconSide) 着手
+- **判断ポイント (保留)**:
+  - SP-023 S10 (CharacterProfile.defaultBubbleStylePreset 採用): Block 2 検収後に判断
+  - フリック閾値 15%: Block 4 実装後に実機体感で判断
+- **副次観察**: SP023_BubbleStyleDemo でタイピングインジケーターが非表示 (SP-023 変更とは無関係)。Block 7 (SP-024 S3 タイピング速度実装) で挙動を見直す
 
 ### 2026-04-15 session 2（Editor 整備 + テキスト表現仕様）
 
