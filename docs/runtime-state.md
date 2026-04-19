@@ -1,6 +1,6 @@
 # Runtime State
 
-**Updated**: 2026-04-16 session 3（SP-023 Block 1 検収済み + Block 2 実装 / 未検証）
+**Updated**: 2026-04-20（表示系デモ計画ドキュメント同期。Block 2 実装状態は変更なし）
 
 ## Current Position
 
@@ -13,8 +13,8 @@
 - later_recommended_slice: **Block 6 (プリセット 4 種) → Block 7 SP-024 S3 タイピング速度 → Block 8 S1+S2 → Block 9 S4+S5**
 - active_artifact: ChatController / ScenarioManager / BubbleStylePreset SO / narration・default preset asset
 - artifact_surface: ChatController / ChatDialogueView / ChatUIConfig / ScenarioManager / BubbleStyleDatabase
-- last_change_relation: direct（2026-04-16 session 3: Block 1 検収済みコミット + Block 2 実装コミット）
-- plan_file: `C:\Users\thank\.claude\plans\hazy-tumbling-feigenbaum.md` （9 Block 分割の実行プラン）
+- last_change_relation: docs（2026-04-20: 表示デモ計画の再監査結果を `docs/plans/display-batch-showcase.md` に反映）
+- plan_file: `C:\Users\thank\.claude\plans\hazy-tumbling-feigenbaum.md` （9 Block 分割の実行プラン） / `docs/plans/display-batch-showcase.md`（表示系デモ・修正版・リポジトリ正本）
 
 ## Counters
 
@@ -34,6 +34,13 @@
 - last_visual_audit_path: docs/archive/verification-evidence/VerticalSliceSmokeGate_20260403_*.png (参考。パスのみ保持、追跡は廃止)
 
 ## Session Log
+
+### 2026-04-20（表示系デモ計画の再監査・ドキュメント同期）
+
+- **目的**: 「表示系一括 + SP-024 統合」旧プランと実装の齟齬を解消し、再開用にリポジトリへ正本を置く。
+- **追加**: `docs/plans/display-batch-showcase.md`（SP-024 は統合デモから外す、`ChatUIConfig`/`UIFontConfig` の checked-in 実値に基づく監査、統合デモは SP-023 のみ・15–18 メッセージ目安）。
+- **更新**: `docs/HANDOFF.md`（2026-04-20 スナップショット）、`docs/ai/READ_ORDER.md`（タスク別 1 行）。
+- **コード変更なし**（計画・引き継ぎのみ）。
 
 ### 2026-04-16 session 3（SP-023 Block 1 検収 + Block 2 実装）
 

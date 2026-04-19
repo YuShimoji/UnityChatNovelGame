@@ -24,6 +24,7 @@
 - 実装/監査: `docs/FEATURE_STATUS_AUDIT.md`, `docs/spec-index.json`
 - Ch1 サブクエスト検証を別スレッドに渡す: `docs/ai/TASK_PROMPT_ch1_sidequest_verification.md`
 - 並行レーン用プロンプト（プラン直前準備）: `docs/ai/PARALLEL_LANE_PROMPTS.md`
+- SP-023/024 表示系デモ計画（修正版）: `docs/plans/display-batch-showcase.md`
 
 ## 人間向けの最短経路
 

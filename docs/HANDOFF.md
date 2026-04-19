@@ -10,6 +10,21 @@
 4. `docs/INVARIANTS.md`
 5. `docs/USER_REQUEST_LEDGER.md`
 
+## Handoff snapshot (2026-04-20)
+
+**本セッションの実施内容**:
+
+- SP-023 / SP-024 の表示系デモ計画を **checked-in 根拠で再監査**し、旧案（SP-024 を統合デモへ一括込め、UIFontConfig を 0.78 起点で調整する前提等）を **撤回**。修正版を `docs/plans/display-batch-showcase.md` に置き、リモートと共有できる形にした。
+- Block 2 の `SP023_NarrationMarginDemo.yarn`（6 メッセージ）は **局所検収として継続で妥当**。SP-024 系 Yarn コマンドは **未登録**のため統合デモから外す方針を正とする。
+
+**Safe Next Steps（次セッション最初）**:
+
+1. 未実施なら **Block 2 画面検収**: `Assets/Scenes/DebugChatScene.unity` → ScenarioManager の Start Node を `SP023_NarrationMargin_Start` → Play → 6 メッセージ確認 → 再生後 Start Node を元（例: `DQT_Start`）に戻してシーン保存。
+2. **OK なら Block 3（IconSide）** → Block 6（BubbleStyle プリセット 4 種）→ 統合 Yarn `SP023_DisplayShowcaseDemo.yarn`（**BubbleStyle / Narration / BubbleMargin のみ**。計画細部は `docs/plans/display-batch-showcase.md`）。
+3. SP-024（S1/S2/S4/S5）は **実装・コマンド登録後**に別検収。現時点では統合デモに含めない。
+
+---
+
 ## Handoff snapshot (2026-04-16 session 3)
 
 **本セッションの実施内容**:
@@ -95,3 +110,4 @@
 - 作業状態: `docs/runtime-state.md`
 - 決定履歴: `docs/DECISION_LOG.md`
 - 制作フロー: `docs/OPERATOR_WORKFLOW.md`
+- SP-023 / SP-024 表示系デモ計画（修正版・監査済み）: `docs/plans/display-batch-showcase.md`
