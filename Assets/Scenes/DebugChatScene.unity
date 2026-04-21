@@ -402,7 +402,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFoundPhone.Core.ScenarioManager
   m_DialogueRunner: {fileID: 799380007}
   m_ChatController: {fileID: 1245452348}
-  m_StartNode: DQT_Start
+  m_StartNode: SP023_NarrationMargin_Start
   m_AutoStartYarn: 1
   m_DebugScenarioID: 
 --- !u!4 &799380009
@@ -557,8 +557,6 @@ MonoBehaviour:
   m_ChoiceButtonPrefab: {fileID: 0}
   m_ChoiceContainer: {fileID: 0}
   m_JapaneseFontAsset: {fileID: 0}
-  m_EnableTypewriterEffect: 1
-  m_TypewriterSpeed: 0.05
 --- !u!224 &1245452349
 RectTransform:
   m_ObjectHideFlags: 0
@@ -621,9 +619,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87d6bd7558d526244aa3a381d01931ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ProjectFoundPhone::ProjectFoundPhone.UI.ChatDialogueView
-  m_TypingIndicatorDuration: 0.8
-  m_PostMessageDelay: 0.4
-  m_EnableTapSkip: 1
   m_ShowDebugOverlay: 0
 --- !u!1 &1678649888
 GameObject:

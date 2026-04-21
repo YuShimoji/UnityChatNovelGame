@@ -14,7 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: ProjectFoundPhone::ProjectFoundPhone.Data.CharacterProfile
   m_CharacterID: pyramid
   m_DisplayName: Pyramid
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 21300000, guid: 4b588146790cd754ba7f12c50ebf73ac, type: 3}
   m_ThemeColor: {r: 0.55, g: 0.82, b: 0.6, a: 1}
   m_IsPlayer: 0
-  m_DisplayMode: 1
+  m_DisplayMode: 2
+  m_IconSide: 0
+  m_DefaultBubbleStylePreset: {fileID: 0}
+  m_TypingSpeed: 0
+  m_CustomTypingDelay: 0
+  m_DefaultOnlineStatus: 0
