@@ -51,4 +51,14 @@ MonoBehaviour:
   typingIndicatorFontSize: 21
   autoScrollDelay: 0.1
   imageFadeInDuration: 0.6
+  enableTypewriterEffect: 1
+  typewriterSpeed: 0.05
+  typingIndicatorDuration: 0.8
+  postMessageDelay: 0.4
+  showTimestamp: 0
+  showDayDivider: 1
+  showDeliveryStatus: 0
+  autoReadDelay: 2
+  deliveryReadColor: {r: 0.2901961, g: 0.5647059, b: 0.8509804, a: 1}
+  enableTapSkip: 1
   showInputField: 0

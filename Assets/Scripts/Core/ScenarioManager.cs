@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Threading;
 #if YARN_SPINNER
@@ -21,6 +22,7 @@ namespace ProjectFoundPhone.Core
     public class ScenarioManager : MonoBehaviour
     {
         private const string DefaultYarnProjectPath = "Assets/Resources/Yarn/Project.yarnproject";
+        private const string ChatTimeVariableName = "$chat_time";
         #region Private Fields
 #if YARN_SPINNER
         [SerializeField] private DialogueRunner m_DialogueRunner;
@@ -36,6 +38,12 @@ namespace ProjectFoundPhone.Core
         private BranchThreadState m_BranchThreadState = new BranchThreadState();
         private ChannelData m_CurrentChannel;
 
+        private struct RuntimeTypingSpeedOverride
+        {
+            public TypingSpeed Speed;
+            public float CustomDelaySeconds;
+        }
+
         /// <summary>現在のチャンネルID (セーブ/ロード用)</summary>
         public string CurrentChannelID => m_CurrentChannel != null ? m_CurrentChannel.ChannelID : null;
         public string DefaultStartNode => m_StartNode;
@@ -43,6 +51,13 @@ namespace ProjectFoundPhone.Core
         /// <summary>宣言済みサブスレッド (threadId -> SubthreadData)</summary>
         private readonly Dictionary<string, SubthreadData> m_DeclaredThreads
             = new Dictionary<string, SubthreadData>();
+
+        /// <summary>
+        /// セッション内だけ有効な表示オーバーライド。
+        /// Save/Load には保存しない。
+        /// </summary>
+        private readonly Dictionary<string, RuntimeTypingSpeedOverride> m_RuntimeTypingSpeedOverrides
+            = new Dictionary<string, RuntimeTypingSpeedOverride>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>サブスレッドが宣言されたときのイベント (threadId, displayName)</summary>
         public event Action<string, string> OnThreadDeclared;
@@ -66,7 +81,7 @@ namespace ProjectFoundPhone.Core
         private void Start()
         {
             RegisterCustomCommands();
-            
+
             // デバッグ用: IDが設定されていれば SOベースシナリオを自動再生
             if (!string.IsNullOrEmpty(m_DebugScenarioID))
             {
@@ -207,8 +222,15 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.AddCommandHandler<string, string, string>("DiscoverFragment", DiscoverFragmentCommand);
             m_DialogueRunner.AddCommandHandler<string, string>("AddFragmentNote", AddFragmentNoteCommand);
             m_DialogueRunner.AddCommandHandler<string>("BubbleStyle", BubbleStyleCommand);
-            m_DialogueRunner.AddCommandHandler<string>("Narration", NarrationCommand);
             m_DialogueRunner.AddCommandHandler<float, float, float, float>("BubbleMargin", BubbleMarginCommand);
+            m_DialogueRunner.AddCommandHandler<string>("Narration", NarrationCommand);
+            m_DialogueRunner.AddCommandHandler<string, string, string>("SetThreadMeta", SetThreadMetaCommand);
+            m_DialogueRunner.AddCommandHandler<string, string>("SetTypingSpeed", SetTypingSpeedCommand);
+            m_DialogueRunner.AddCommandHandler<string>("SetTime", SetTimeCommand);
+            m_DialogueRunner.AddCommandHandler("MarkDelivered", MarkDeliveredCommand);
+            m_DialogueRunner.AddCommandHandler("MarkRead", MarkReadCommand);
+            m_DialogueRunner.AddCommandHandler("DeleteLastMessage", DeleteLastMessageCommand);
+            m_DialogueRunner.AddCommandHandler<int>("DeleteMessage", DeleteMessageCommand);
 #endif
         }
 
@@ -246,8 +268,15 @@ namespace ProjectFoundPhone.Core
             m_DialogueRunner.RemoveCommandHandler("EndBranch");
             m_DialogueRunner.RemoveCommandHandler("SetBranchReflection");
             m_DialogueRunner.RemoveCommandHandler("BubbleStyle");
-            m_DialogueRunner.RemoveCommandHandler("Narration");
             m_DialogueRunner.RemoveCommandHandler("BubbleMargin");
+            m_DialogueRunner.RemoveCommandHandler("Narration");
+            m_DialogueRunner.RemoveCommandHandler("SetThreadMeta");
+            m_DialogueRunner.RemoveCommandHandler("SetTypingSpeed");
+            m_DialogueRunner.RemoveCommandHandler("SetTime");
+            m_DialogueRunner.RemoveCommandHandler("MarkDelivered");
+            m_DialogueRunner.RemoveCommandHandler("MarkRead");
+            m_DialogueRunner.RemoveCommandHandler("DeleteLastMessage");
+            m_DialogueRunner.RemoveCommandHandler("DeleteMessage");
 #endif
         }
         #endregion
@@ -281,7 +310,7 @@ namespace ProjectFoundPhone.Core
         {
             // Resourcesフォルダから画像を読み込み
             Sprite imageSprite = Resources.Load<Sprite>($"Images/{imageID}");
-            
+
             if (imageSprite == null)
             {
                 Debug.LogWarning($"ScenarioManager: Failed to load image from Resources/Images/{imageID}");
@@ -378,7 +407,7 @@ namespace ProjectFoundPhone.Core
         {
             // ResourcesフォルダからTopicDataを読み込み
             TopicData topicData = Resources.Load<TopicData>($"Topics/{topicID}");
-            
+
             if (topicData == null)
             {
                 Debug.LogWarning($"ScenarioManager: Failed to load TopicData from Resources/Topics/{topicID}");
@@ -521,7 +550,10 @@ namespace ProjectFoundPhone.Core
             }
             else
             {
-                SystemMessageCommand($"--- {dayNumber}日目 終了 ---");
+                if (ChatUIConfig.Instance.showDayDivider)
+                {
+                    SystemMessageCommand($"--- {dayNumber}日目 終了 ---");
+                }
             }
         }
 
@@ -894,12 +926,7 @@ namespace ProjectFoundPhone.Core
                 return;
             }
 
-            thread.ChatHistory.Add(new SavedChatMessage
-            {
-                Type = ChatMessageType.System,
-                CharacterID = null,
-                Text = text
-            });
+            thread.ChatHistory.Add(CreateSavedMessageRecord(ChatMessageType.System, null, text));
             thread.UnreadCount++;
             OnThreadMessageAdded?.Invoke(threadId);
         }
@@ -916,14 +943,34 @@ namespace ProjectFoundPhone.Core
                 return;
             }
 
-            thread.ChatHistory.Add(new SavedChatMessage
-            {
-                Type = ChatMessageType.Normal,
-                CharacterID = charID,
-                Text = text
-            });
+            thread.ChatHistory.Add(CreateSavedMessageRecord(ChatMessageType.Normal, charID, text));
             thread.UnreadCount++;
             OnThreadMessageAdded?.Invoke(threadId);
+        }
+
+        private SavedChatMessage CreateSavedMessageRecord(ChatMessageType type, string charID, string text)
+        {
+            return new SavedChatMessage
+            {
+                Type = type,
+                CharacterID = charID,
+                Text = text,
+                Timestamp = type == ChatMessageType.System ? null : GetCurrentMessageTimestamp(),
+                DeliveryStatus = type == ChatMessageType.System ? DeliveryStatus.None : ResolveInitialDeliveryStatus(charID)
+            };
+        }
+
+        private DeliveryStatus ResolveInitialDeliveryStatus(string charID)
+        {
+            if (string.IsNullOrEmpty(charID))
+            {
+                return DeliveryStatus.None;
+            }
+
+            bool isPlayer = CharacterDatabase.Instance != null
+                ? CharacterDatabase.Instance.IsPlayer(charID)
+                : string.Equals(charID, "player", StringComparison.OrdinalIgnoreCase);
+            return isPlayer ? DeliveryStatus.Sent : DeliveryStatus.None;
         }
 
         /// <summary>宣言済みスレッドを取得</summary>
@@ -1122,6 +1169,106 @@ namespace ProjectFoundPhone.Core
         public void ApplyBranchThreadState(BranchThreadState state)
         {
             m_BranchThreadState = state?.Clone() ?? new BranchThreadState();
+        }
+
+        /// <summary>
+        /// Save/Load をまたがない表示系オーバーライドをリセットする。
+        /// 現在は SP-024 S3 の typing override のみ。
+        /// </summary>
+        public void ResetSessionOnlyPresentationOverrides()
+        {
+            m_RuntimeTypingSpeedOverrides.Clear();
+        }
+
+        /// <summary>
+        /// キャラクターのタイピング速度オーバーライドを設定する。
+        /// TypingSpeed.Default を指定した場合は override を解除する。
+        /// </summary>
+        public void SetCharacterTypingSpeedOverride(string charID, TypingSpeed speed, float customDelaySeconds = 0f)
+        {
+            if (string.IsNullOrWhiteSpace(charID))
+            {
+                return;
+            }
+
+            if (speed == TypingSpeed.Default)
+            {
+                m_RuntimeTypingSpeedOverrides.Remove(charID);
+                return;
+            }
+
+            m_RuntimeTypingSpeedOverrides[charID] = new RuntimeTypingSpeedOverride
+            {
+                Speed = speed,
+                CustomDelaySeconds = Mathf.Max(0f, customDelaySeconds)
+            };
+        }
+
+        /// <summary>
+        /// 現在有効なタイピングインジケーター待機秒数を返す。
+        /// 優先順位: セッション override > CharacterProfile > ChatUIConfig 既定。
+        /// </summary>
+        public float ResolveTypingIndicatorDuration(string charID)
+        {
+            float defaultDuration = ChatUIConfig.Instance != null
+                ? ChatUIConfig.Instance.typingIndicatorDuration
+                : 0.8f;
+
+            if (string.IsNullOrWhiteSpace(charID))
+            {
+                return defaultDuration;
+            }
+
+            if (m_RuntimeTypingSpeedOverrides.TryGetValue(charID, out var runtimeOverride))
+            {
+                return ResolveTypingIndicatorDuration(runtimeOverride.Speed, runtimeOverride.CustomDelaySeconds, defaultDuration);
+            }
+
+            TypingSpeed profileSpeed = CharacterDatabase.Instance != null
+                ? CharacterDatabase.Instance.GetTypingSpeed(charID)
+                : TypingSpeed.Default;
+            float profileCustomDelay = CharacterDatabase.Instance != null
+                ? CharacterDatabase.Instance.GetCustomTypingDelay(charID)
+                : 0f;
+
+            return ResolveTypingIndicatorDuration(profileSpeed, profileCustomDelay, defaultDuration);
+        }
+
+        public string GetCurrentMessageTimestamp()
+        {
+            string normalizedName = NormalizeVariableName(ChatTimeVariableName);
+#if YARN_SPINNER
+            if (m_DialogueRunner != null
+                && m_DialogueRunner.VariableStorage != null
+                && m_DialogueRunner.VariableStorage.TryGetValue<string>(normalizedName, out string timestamp)
+                && !string.IsNullOrWhiteSpace(timestamp))
+            {
+                return timestamp.Trim();
+            }
+#endif
+            return null;
+        }
+
+        private static float ResolveTypingIndicatorDuration(TypingSpeed speed, float customDelaySeconds, float defaultDuration)
+        {
+            switch (speed)
+            {
+                case TypingSpeed.Instant:
+                    return 0f;
+                case TypingSpeed.Fast:
+                    return 0.3f;
+                case TypingSpeed.Normal:
+                    return 0.8f;
+                case TypingSpeed.Slow:
+                    return 1.5f;
+                case TypingSpeed.VerySlow:
+                    return 3.0f;
+                case TypingSpeed.Custom:
+                    return Mathf.Max(0f, customDelaySeconds);
+                case TypingSpeed.Default:
+                default:
+                    return Mathf.Max(0f, defaultDuration);
+            }
         }
 
         /// <summary>
@@ -1385,6 +1532,185 @@ namespace ProjectFoundPhone.Core
         {
             AddThreadMessageCommand(threadId, message);
         }
+
+        #region SP-023: テキスト表現コマンドハンドラ
+
+        /// <summary>
+        /// <<SetThreadMeta "threadId" "field" "value">> -- スレッドのメタデータを設定
+        /// </summary>
+        private void SetThreadMetaCommand(string threadId, string field, string value)
+        {
+            if (!m_DeclaredThreads.TryGetValue(threadId, out SubthreadData thread))
+            {
+                Debug.LogWarning($"ScenarioManager: SetThreadMeta - thread '{threadId}' not found.");
+                return;
+            }
+
+            switch (field.ToLowerInvariant())
+            {
+                case "difficulty":
+                    if (int.TryParse(value, out int diff))
+                        thread.Difficulty = Mathf.Clamp(diff, 0, 5);
+                    break;
+                case "length":
+                    thread.EstimatedLength = value;
+                    break;
+                case "desc":
+                case "description":
+                    thread.Description = value;
+                    break;
+                case "level":
+                    thread.RequiredLevel = value;
+                    break;
+                case "reward":
+                    thread.RewardHint = value;
+                    break;
+                default:
+                    Debug.LogWarning($"ScenarioManager: SetThreadMeta - unknown field '{field}'.");
+                    break;
+            }
+
+            // サイドバー表示を更新
+            var threadSwitcher = FindFirstObjectByType<ThreadSwitcherController>();
+            threadSwitcher?.RefreshThreadDisplay(threadId);
+        }
+
+        /// <summary>
+        /// <<SetTypingSpeed "charId" "speed">>
+        /// セッション内だけ有効なタイピング速度 override を設定する。
+        /// speed: default / instant / fast / normal / slow / veryslow / custom:1.2
+        /// </summary>
+        private void SetTypingSpeedCommand(string charID, string speedSpec)
+        {
+            if (string.IsNullOrWhiteSpace(charID))
+            {
+                Debug.LogWarning("ScenarioManager: SetTypingSpeed - charID is empty.");
+                return;
+            }
+
+            if (TryParseTypingSpeedSpec(speedSpec, out TypingSpeed speed, out float customDelaySeconds))
+            {
+                SetCharacterTypingSpeedOverride(charID, speed, customDelaySeconds);
+                return;
+            }
+
+            Debug.LogWarning($"ScenarioManager: SetTypingSpeed - invalid speed '{speedSpec}'.");
+        }
+
+        private void SetTimeCommand(string timestamp)
+        {
+            if (string.IsNullOrWhiteSpace(timestamp))
+            {
+                SetVariable(ChatTimeVariableName, string.Empty);
+                return;
+            }
+
+            string normalized = timestamp.Trim();
+            if (!DateTime.TryParseExact(normalized, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out _))
+            {
+                Debug.LogWarning($"ScenarioManager: SetTime - invalid timestamp '{timestamp}'. Expected HH:mm.");
+                return;
+            }
+
+            SetVariable(ChatTimeVariableName, normalized);
+        }
+
+        private void MarkDeliveredCommand()
+        {
+            if (m_ChatController == null)
+            {
+                Debug.LogWarning("ScenarioManager: MarkDelivered - ChatController not available.");
+                return;
+            }
+
+            m_ChatController.TryUpdateLastPlayerMessageDeliveryStatus(DeliveryStatus.Delivered);
+        }
+
+        private void MarkReadCommand()
+        {
+            if (m_ChatController == null)
+            {
+                Debug.LogWarning("ScenarioManager: MarkRead - ChatController not available.");
+                return;
+            }
+
+            m_ChatController.TryUpdateLastPlayerMessageDeliveryStatus(DeliveryStatus.Read);
+        }
+
+        private void DeleteLastMessageCommand()
+        {
+            if (m_ChatController == null)
+            {
+                Debug.LogWarning("ScenarioManager: DeleteLastMessage - ChatController not available.");
+                return;
+            }
+
+            m_ChatController.TryDeleteMessageFromEnd(1);
+        }
+
+        private void DeleteMessageCommand(int reverseIndex)
+        {
+            if (m_ChatController == null)
+            {
+                Debug.LogWarning("ScenarioManager: DeleteMessage - ChatController not available.");
+                return;
+            }
+
+            m_ChatController.TryDeleteMessageFromEnd(reverseIndex);
+        }
+
+        private static bool TryParseTypingSpeedSpec(string speedSpec, out TypingSpeed speed, out float customDelaySeconds)
+        {
+            speed = TypingSpeed.Default;
+            customDelaySeconds = 0f;
+
+            if (string.IsNullOrWhiteSpace(speedSpec))
+            {
+                return false;
+            }
+
+            string normalized = speedSpec.Trim().ToLowerInvariant();
+            if (normalized.StartsWith("custom:", StringComparison.Ordinal))
+            {
+                string value = normalized.Substring("custom:".Length);
+                if (float.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out float parsed))
+                {
+                    speed = TypingSpeed.Custom;
+                    customDelaySeconds = Mathf.Max(0f, parsed);
+                    return true;
+                }
+
+                return false;
+            }
+
+            switch (normalized)
+            {
+                case "default":
+                    speed = TypingSpeed.Default;
+                    return true;
+                case "instant":
+                    speed = TypingSpeed.Instant;
+                    return true;
+                case "fast":
+                    speed = TypingSpeed.Fast;
+                    return true;
+                case "normal":
+                    speed = TypingSpeed.Normal;
+                    return true;
+                case "slow":
+                    speed = TypingSpeed.Slow;
+                    return true;
+                case "veryslow":
+                case "very_slow":
+                case "very-slow":
+                    speed = TypingSpeed.VerySlow;
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        #endregion
 
         /// <summary>
         /// EndBranch 時の反映メッセージを決定する。
@@ -1875,4 +2201,3 @@ namespace ProjectFoundPhone.Core
         #endregion
     }
 }
-

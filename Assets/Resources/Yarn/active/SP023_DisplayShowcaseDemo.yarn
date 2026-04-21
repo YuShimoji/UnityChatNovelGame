@@ -1,0 +1,69 @@
+/// SP-023 表示系の統合ショーケース
+/// 使い方: ScenarioManager の StartNode を "SP023_DisplayShowcase_Start" に設定して再生
+///
+/// 検収ポイント:
+///   1. BubbleStyle / Narration / BubbleMargin / SystemMessage / StartWait だけで完走する
+///   2. default / narration / thought / whisper / shout / announcement が duplicate / missing warning なしで読み込まれる
+///   3. BubbleMargin は 1 メッセージだけ効き、次メッセージで既定表示へ戻る
+
+title: SP023_DisplayShowcase_Start
+---
+<<SystemMessage "=== SP-023 Display Showcase ===">>
+<<StartWait 0.5>>
+
+<<set $speaker to "pyramid">>
+1/12: 既定の会話バブルです。ここを基準に以降の変化を見ます。
+<<StartWait 0.7>>
+
+<<BubbleStyle "default">>
+<<set $speaker to "player">>
+2/12: default は pass-through なので、通常表示のままです。
+<<StartWait 0.7>>
+
+<<Narration "3/12: 地の文は透明背景、グレー、イタリック、中央揃えで流れます。">>
+<<StartWait 0.7>>
+
+<<BubbleMargin 18 18 0 0>>
+<<set $speaker to "pyramid">>
+4/12: 左右だけを 18% 内側へ寄せたメッセージです。
+<<StartWait 0.7>>
+
+<<BubbleMargin 0 0 6 6>>
+<<set $speaker to "pyramid">>
+5/12: 今度は上下 6% の余白だけを追加します。
+<<StartWait 0.7>>
+
+<<set $speaker to "pyramid">>
+6/12: BubbleMargin は 1 回で消えるので、ここは通常レイアウトへ戻ります。
+<<StartWait 0.7>>
+
+<<BubbleStyle "thought">>
+<<set $speaker to "pyramid">>
+7/12: thought は少し暗く、内省寄りのバブルとして見分けられる想定です。
+<<StartWait 0.7>>
+
+<<BubbleStyle "whisper">>
+<<set $speaker to "pyramid">>
+8/12: whisper は控えめな色と少し小さい文字で、囁き感を出します。
+<<StartWait 0.7>>
+
+<<BubbleStyle "shout">>
+<<set $speaker to "pyramid">>
+9/12: shout は強い赤と太字で、注意喚起や叫びに向けた演出です。
+<<StartWait 0.7>>
+
+<<BubbleStyle "announcement">>
+<<SystemMessage "10/12: announcement は全幅寄りの通知バナーとして使います。">>
+<<StartWait 0.7>>
+
+<<BubbleStyle "narration">>
+<<SystemMessage "11/12: narration preset を SystemMessage でも再利用できます。">>
+<<StartWait 0.7>>
+
+<<set $speaker to "player">>
+12/12: SP-023 の統合ショーケースはここで完了です。
+<<StartWait 0.5>>
+
+<<SystemMessage "=== Showcase Complete ===">>
+
+===

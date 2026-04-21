@@ -442,6 +442,11 @@ namespace ProjectFoundPhone.Core
 
             ScenarioManager scenarioManager = FindFirstObjectByType<ScenarioManager>();
 
+            if (scenarioManager != null)
+            {
+                scenarioManager.ResetSessionOnlyPresentationOverrides();
+            }
+
             // $halluci_coin を Yarn 変数に同期 (ロード直後のHCゲート評価に必要)
             if (scenarioManager != null)
             {
@@ -801,5 +806,4 @@ namespace ProjectFoundPhone.Core
         #endregion
     }
 }
-
 

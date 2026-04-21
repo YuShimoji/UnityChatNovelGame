@@ -48,6 +48,8 @@ namespace ProjectFoundPhone.UI
             public TextMeshProUGUI BadgeLabel;
             public TextMeshProUGUI TypeLabel;
             public Image ItemBg;
+            /// <summary>SP-023: メタデータ表示ラベル (説明 + 難易度等)</summary>
+            public TextMeshProUGUI MetaLabel;
         }
         private readonly List<ThreadEntry> m_Threads = new List<ThreadEntry>();
 
@@ -616,6 +618,33 @@ namespace ProjectFoundPhone.UI
 
             entry.ListItemObj = itemObj;
             entry.BadgeLabel = badgeLabel;
+
+            // SP-023: メタデータ行 (説明 + 難易度 + 報酬ヒント等)
+            if (threadData != null && HasMetadata(threadData))
+            {
+                var metaObj = new GameObject("Meta");
+                metaObj.transform.SetParent(itemObj.transform, false);
+                var metaRt = metaObj.AddComponent<RectTransform>();
+                metaRt.anchorMin = Vector2.zero;
+                metaRt.anchorMax = new Vector2(1f, 0f);
+                metaRt.pivot = new Vector2(0f, 1f);
+                metaRt.anchoredPosition = new Vector2(34f, 0f);
+                metaRt.sizeDelta = new Vector2(-40f, 16f);
+
+                var metaLabel = metaObj.AddComponent<TextMeshProUGUI>();
+                metaLabel.fontSize = 10f;
+                metaLabel.alignment = TextAlignmentOptions.TopLeft;
+                metaLabel.color = new Color(0.6f, 0.6f, 0.65f, 1f);
+                metaLabel.textWrappingMode = TMPro.TextWrappingModes.NoWrap;
+                metaLabel.overflowMode = TextOverflowModes.Ellipsis;
+                metaLabel.text = BuildMetaText(threadData);
+                AssignDefaultFont(metaLabel);
+                entry.MetaLabel = metaLabel;
+
+                // メタデータ行がある場合はアイテム高さを拡張
+                itemLayout.preferredHeight = 54f;
+            }
+
             m_Threads.Add(entry);
 
             // グループヘッダーの直後に配置
@@ -1139,6 +1168,129 @@ namespace ProjectFoundPhone.UI
             TMP_FontAsset[] fonts = Resources.FindObjectsOfTypeAll<TMP_FontAsset>();
             if (fonts.Length > 0) text.font = fonts[0];
         }
+
+        #region SP-023: メタデータ表示
+
+        /// <summary>
+        /// スレッドにメタデータ (説明・難易度等) が設定されているかを判定
+        /// </summary>
+        private static bool HasMetadata(SubthreadData data)
+        {
+            return data.Difficulty > 0
+                || !string.IsNullOrEmpty(data.Description)
+                || !string.IsNullOrEmpty(data.EstimatedLength)
+                || !string.IsNullOrEmpty(data.RewardHint);
+        }
+
+        /// <summary>
+        /// メタデータ行のテキストを組み立てる
+        /// </summary>
+        private static string BuildMetaText(SubthreadData data)
+        {
+            var parts = new List<string>();
+
+            if (data.Difficulty > 0)
+            {
+                string stars = new string('\u2605', data.Difficulty) + new string('\u2606', 5 - data.Difficulty);
+                parts.Add(stars);
+            }
+            if (!string.IsNullOrEmpty(data.EstimatedLength))
+            {
+                parts.Add(data.EstimatedLength);
+            }
+            if (!string.IsNullOrEmpty(data.RewardHint))
+            {
+                parts.Add(data.RewardHint);
+            }
+
+            string line = parts.Count > 0 ? string.Join(" | ", parts) : "";
+
+            if (!string.IsNullOrEmpty(data.Description))
+            {
+                line = string.IsNullOrEmpty(line) ? data.Description : $"{data.Description}\n{line}";
+            }
+
+            return line;
+        }
+
+        private TextMeshProUGUI EnsureMetaLabel(ThreadEntry entry, SubthreadData threadData)
+        {
+            if (entry == null || entry.ListItemObj == null || threadData == null)
+            {
+                return null;
+            }
+
+            if (entry.MetaLabel != null)
+            {
+                return entry.MetaLabel;
+            }
+
+            var metaObj = new GameObject("Meta");
+            metaObj.transform.SetParent(entry.ListItemObj.transform, false);
+
+            var metaRt = metaObj.AddComponent<RectTransform>();
+            metaRt.anchorMin = Vector2.zero;
+            metaRt.anchorMax = new Vector2(1f, 0f);
+            metaRt.pivot = new Vector2(0f, 1f);
+            metaRt.anchoredPosition = new Vector2(34f, 0f);
+            metaRt.sizeDelta = new Vector2(-40f, 16f);
+
+            var metaLabel = metaObj.AddComponent<TextMeshProUGUI>();
+            metaLabel.fontSize = 10f;
+            metaLabel.alignment = TextAlignmentOptions.TopLeft;
+            metaLabel.color = new Color(0.6f, 0.6f, 0.65f, 1f);
+            metaLabel.textWrappingMode = TMPro.TextWrappingModes.NoWrap;
+            metaLabel.overflowMode = TextOverflowModes.Ellipsis;
+            AssignDefaultFont(metaLabel);
+
+            entry.MetaLabel = metaLabel;
+            return metaLabel;
+        }
+
+        /// <summary>
+        /// 指定スレッドのメタデータ表示を更新する (SetThreadMeta 後に呼ばれる)
+        /// </summary>
+        public void RefreshThreadDisplay(string threadId)
+        {
+            var entry = m_Threads.Find(e => e.ThreadId == threadId);
+            if (entry == null) return;
+
+            var threadData = m_ScenarioManager?.GetDeclaredThread(threadId);
+            if (threadData == null) return;
+
+            LayoutElement itemLayout = entry.ListItemObj != null
+                ? entry.ListItemObj.GetComponent<LayoutElement>()
+                : null;
+
+            if (HasMetadata(threadData))
+            {
+                TextMeshProUGUI metaLabel = EnsureMetaLabel(entry, threadData);
+                if (metaLabel != null)
+                {
+                    metaLabel.text = BuildMetaText(threadData);
+                    metaLabel.gameObject.SetActive(true);
+                }
+
+                if (itemLayout != null)
+                {
+                    itemLayout.preferredHeight = 54f;
+                }
+            }
+            else
+            {
+                if (entry.MetaLabel != null)
+                {
+                    entry.MetaLabel.gameObject.SetActive(false);
+                }
+
+                if (itemLayout != null)
+                {
+                    itemLayout.preferredHeight = 42f;
+                }
+            }
+        }
+
+        #endregion
 
         #endregion
     }

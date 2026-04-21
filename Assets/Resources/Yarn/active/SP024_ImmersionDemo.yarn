@@ -1,0 +1,71 @@
+/// SP-024 S1 / S2 / S5 の局所検証デモ
+/// 使い方: ScenarioManager の StartNode を "SP024_Immersion_Start" に設定して再生
+///
+/// 推奨:
+///   1. ChatUIConfig.asset の showTimestamp / showDeliveryStatus を有効化してから再生する
+///   2. Save/Load 後も footer と tombstone が維持されるかはこのノードの途中状態で確認する
+///
+/// 検収ポイント:
+///   1. SetTime で時刻が継続し、SystemMessage / Narration には出ない
+///   2. MarkDelivered / MarkRead が直前のプレイヤーメッセージだけを書き換える
+///   3. DeleteLastMessage / DeleteMessage 2 が tombstone 化し、時刻を保持する
+
+title: SP024_Immersion_Start
+---
+<<SystemMessage "=== SP-024 Immersion Demo ===">>
+<<StartWait 0.5>>
+
+<<SetTime "14:32">>
+<<set $speaker to "player">>
+1/10: これは 14:32 のプレイヤーメッセージです。
+<<StartWait 0.6>>
+<<MarkDelivered>>
+<<StartWait 0.6>>
+<<MarkRead>>
+<<StartWait 0.6>>
+
+<<set $speaker to "pyramid">>
+2/10: NPC メッセージには既読チェックを出しません。
+<<StartWait 0.6>>
+
+<<SystemMessage "3/10: SystemMessage にはタイムスタンプを出さない想定です。">>
+<<StartWait 0.6>>
+
+<<SetTime "14:35">>
+<<set $speaker to "player">>
+4/10: ここから 14:35 に切り替わります。
+<<StartWait 0.6>>
+
+<<set $speaker to "player">>
+5/10: この送信は DeleteLastMessage で tombstone に変わります。
+<<StartWait 0.6>>
+<<DeleteLastMessage>>
+<<StartWait 0.6>>
+
+<<set $speaker to "pyramid">>
+6/10: tombstone 後も後続メッセージは通常どおり流れます。
+<<StartWait 0.6>>
+
+<<set $speaker to "player">>
+7/10: この送信は Delivered まで進めてから残します。
+<<StartWait 0.6>>
+<<MarkDelivered>>
+<<StartWait 0.6>>
+
+<<set $speaker to "player">>
+8/10: この送信のひとつ前を DeleteMessage 2 で削除対象にします。
+<<StartWait 0.6>>
+<<DeleteMessage 2>>
+<<StartWait 0.6>>
+
+<<Narration "9/10: Narration にも時刻は出ないことを確認してください。">>
+<<StartWait 0.6>>
+
+<<SetTime "">>
+<<set $speaker to "player">>
+10/10: SetTime を空文字で戻したので、ここには時刻が出ません。
+<<StartWait 0.5>>
+
+<<SystemMessage "=== SP-024 Immersion Demo Complete ===">>
+
+===

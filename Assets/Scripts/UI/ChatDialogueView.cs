@@ -26,6 +26,7 @@ namespace ProjectFoundPhone.UI
 
         private DialogueRunner? m_DialogueRunner;
         private ChatController? m_ChatController;
+        private ScenarioManager? m_ScenarioManager;
         private TextMeshProUGUI? m_DebugOverlayText;
         private GameObject? m_DebugOverlayObj;
         private bool m_DebugOverlayExpanded = false;
@@ -55,6 +56,7 @@ namespace ProjectFoundPhone.UI
         {
             // キャッシュして毎回のFindを回避
             m_ChatController = FindFirstObjectByType<ChatController>();
+            m_ScenarioManager = FindFirstObjectByType<ScenarioManager>();
         }
 
         private void Update()
@@ -115,6 +117,11 @@ namespace ProjectFoundPhone.UI
                 m_ChatController = FindFirstObjectByType<ChatController>();
             }
 
+            if (m_ScenarioManager == null)
+            {
+                m_ScenarioManager = FindFirstObjectByType<ScenarioManager>();
+            }
+
             string lineText = dialogueLine?.TextWithoutCharacterName.Text ?? string.Empty;
 
             UpdateDebugState(dialogueLine);
@@ -146,16 +153,23 @@ namespace ProjectFoundPhone.UI
                 bool isPlayer = charID == "player";
                 if (!isPlayer && !m_FastForwardEnabled)
                 {
-                    m_ChatController.ShowTypingIndicator(true);
+                    float indicatorSeconds = m_ScenarioManager != null
+                        ? m_ScenarioManager.ResolveTypingIndicatorDuration(charID)
+                        : UIConfig.typingIndicatorDuration;
+                    int indicatorMs = Mathf.Max(0, (int)(indicatorSeconds * 1000f));
 
-                    // タイピングインジケーター表示時間
-                    // m_LineSkipCts のみで制御し、Yarn の NextContentToken は混ぜない。
-                    // NextContentToken を混入させると、前の行のキャンセル状態がリークして
-                    // 自動スキップが発生する原因になる。
-                    int indicatorMs = (int)(UIConfig.typingIndicatorDuration * 1000);
-                    await DelayWithSkip(indicatorMs);
+                    if (indicatorMs > 0)
+                    {
+                        m_ChatController.ShowTypingIndicator(true);
 
-                    m_ChatController.ShowTypingIndicator(false);
+                        // タイピングインジケーター表示時間
+                        // m_LineSkipCts のみで制御し、Yarn の NextContentToken は混ぜない。
+                        // NextContentToken を混入させると、前の行のキャンセル状態がリークして
+                        // 自動スキップが発生する原因になる。
+                        await DelayWithSkip(indicatorMs);
+
+                        m_ChatController.ShowTypingIndicator(false);
+                    }
 
                     // 遅延中に Yarn 側からスキップが来た場合は早期完了
                     if (token.IsNextContentRequested)

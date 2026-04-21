@@ -138,13 +138,32 @@ namespace ProjectFoundPhone.UI
             }
 
             // TextMeshPro のテキストをクリアし、表示状態をリセット
-            var textComponent = obj.GetComponentInChildren<TMPro.TextMeshProUGUI>();
-            if (textComponent != null)
+            var textComponents = obj.GetComponentsInChildren<TMPro.TextMeshProUGUI>(true);
+            foreach (var textComponent in textComponents)
             {
                 // タイプライター tween が残っていればキル
                 DG.Tweening.DOTween.Kill(textComponent, complete: false);
                 textComponent.text = string.Empty;
                 textComponent.maxVisibleCharacters = int.MaxValue;
+            }
+
+            var footer = obj.transform.Find("PresentationFooter");
+            if (footer != null)
+            {
+                footer.gameObject.SetActive(false);
+            }
+
+            var bodyText = obj.transform.Find("Text");
+            if (bodyText != null)
+            {
+                var textRect = bodyText.GetComponent<RectTransform>();
+                if (textRect != null)
+                {
+                    textRect.anchorMin = Vector2.zero;
+                    textRect.anchorMax = Vector2.one;
+                    textRect.offsetMin = new Vector2(10f, 10f);
+                    textRect.offsetMax = new Vector2(-10f, -10f);
+                }
             }
 
             // MessageBubble の状態をリセット（矛盾指摘用データ）

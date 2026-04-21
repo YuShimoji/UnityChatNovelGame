@@ -16,6 +16,17 @@ namespace ProjectFoundPhone.Data
     }
 
     /// <summary>
+    /// プレイヤーメッセージの送達状態 (SP-024 S2 のデータ契約先行)
+    /// </summary>
+    public enum DeliveryStatus
+    {
+        None,
+        Sent,
+        Delivered,
+        Read
+    }
+
+    /// <summary>
     /// 1件のチャットメッセージを表すシリアライズ可能なクラス
     /// </summary>
     [Serializable]
@@ -32,6 +43,30 @@ namespace ProjectFoundPhone.Data
         /// 矛盾指摘システム用の識別タグ（Yarn #line: タグまたはカスタムID）
         /// </summary>
         public string LineTag;
+
+        /// <summary>
+        /// このメッセージに実際に適用された BubbleStylePreset の ID。
+        /// null の場合は通常表示。Save/Load 後の視覚表現維持に使う。
+        /// </summary>
+        public string BubbleStylePresetId;
+
+        /// <summary>
+        /// ゲーム内時刻 ("HH:mm")。null の場合は非表示。
+        /// SP-024 S1 のデータ契約先行。
+        /// </summary>
+        public string Timestamp;
+
+        /// <summary>
+        /// プレイヤーメッセージの送達状態。
+        /// SP-024 S2 のデータ契約先行。
+        /// </summary>
+        public DeliveryStatus DeliveryStatus = DeliveryStatus.None;
+
+        /// <summary>
+        /// 削除痕として扱うかどうか。
+        /// SP-024 S5 のデータ契約先行。
+        /// </summary>
+        public bool IsDeleted = false;
     }
 
     /// <summary>

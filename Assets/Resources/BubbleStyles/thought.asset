@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a71c4b8f2e9d0347b52c8f1a6e3d9b42, type: 3}
+  m_Name: thought
+  m_EditorClassIdentifier: ProjectFoundPhone::ProjectFoundPhone.Data.BubbleStylePreset
+  presetId: thought
+  displayName: Thought
+  overrideBackgroundColor: 1
+  backgroundColor: {r: 0.18, g: 0.19, b: 0.26, a: 0.82}
+  backgroundAlpha: 0.82
+  bubbleSprite: {fileID: 0}
+  cornerRadius: -1
+  overrideShadow: 1
+  shadowEnabled: 1
+  shadowColor: {r: 0, g: 0, b: 0, a: 0.28}
+  shadowDistance: {x: 2, y: -2}
+  overrideTextColor: 1
+  textColor: {r: 0.88, g: 0.9, b: 0.96, a: 1}
+  fontSize: -1
+  fontStyle: 2
+  textAlignment: 257
+  paddingLeft: -1
+  paddingRight: -1
+  paddingTop: -1
+  paddingBottom: -1
+  suppressWrapper: 0

@@ -1,0 +1,38 @@
+/// SP-023 ローカル拡張差分 (`IconSide` / `SetThreadMeta`) の局所検証デモ
+/// 使い方: ScenarioManager の StartNode を "SP023_LocalExtensions_Start" に設定して再生
+///
+/// 検収ポイント:
+///   1. `sp023_local_meta` に難易度 / 想定尺 / 説明 / 報酬ヒントを順に設定すると、左サイドバーのメタ行が即時更新される
+///   2. `pyramid` に `Assets/Resources/Images/debug_image_01.png` を一時割当し、DisplayMode = IconAndName で再生すると IconSide の左右差を見比べられる
+///   3. `pyramid` の IconSide を Auto / Left / Right に切り替えた際、同じメッセージでもアイコン位置だけが変わる
+
+title: SP023_LocalExtensions_Start
+---
+<<SystemMessage "=== SP-023 Local Extensions: SetThreadMeta / IconSide 検証 ===">>
+<<StartWait 0.5>>
+
+<<DeclareThreadTyped "sp023_local_meta" "C" "SP-023 局所検証">>
+<<AddThreadMessage "sp023_local_meta" "サイドバーのメタ行が空の状態から始まります。">>
+<<StartWait 0.5>>
+
+<<SetThreadMeta "sp023_local_meta" "difficulty" "3">>
+<<SetThreadMeta "sp023_local_meta" "length" "中">>
+<<SetThreadMeta "sp023_local_meta" "description" "Pyramid 由来の表示検証スレッド">>
+<<SetThreadMeta "sp023_local_meta" "reward" "サイドバー即時更新を確認">>
+<<AddThreadMessage "sp023_local_meta" "difficulty / length / description / reward が順次表示されることを確認してください。">>
+<<StartWait 0.8>>
+
+<<SystemMessage "Pyramid に debug_image_01.png を一時割当し、DisplayMode = IconAndName のまま IconSide を Auto / Left / Right で比較します。">>
+<<StartWait 0.8>>
+
+<<set $speaker to "pyramid">>
+同じプロフィールで IconSide を切り替えたとき、アイコンの左右だけが変われば OK です。
+<<StartWait 0.8>>
+
+<<set $speaker to "player">>
+比較用のプレイヤーメッセージです。Pyramid の左右差だけを見てください。
+<<StartWait 0.5>>
+
+<<SystemMessage "=== 局所検証完了。結果を確認後、必要ならアイコン変更を保存せず戻してください ===">>
+
+===

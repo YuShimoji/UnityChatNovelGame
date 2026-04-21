@@ -152,6 +152,22 @@ namespace ProjectFoundPhone.Data
         [Tooltip("メッセージ表示後の余韻時間（秒）")]
         public float postMessageDelay = 0.4f;
 
+        [Header("Immersion")]
+        [Tooltip("タイムスタンプ表示のグローバル切替")]
+        public bool showTimestamp = false;
+
+        [Tooltip("EndDay 時の区切りバー表示")]
+        public bool showDayDivider = true;
+
+        [Tooltip("既読/配信マーク表示のグローバル切替")]
+        public bool showDeliveryStatus = false;
+
+        [Tooltip("Sent → Delivered → Read の自動遷移待機秒数。0 で無効")]
+        public float autoReadDelay = 2f;
+
+        [Tooltip("既読状態のチェックマーク色")]
+        public Color deliveryReadColor = new Color(0.2901961f, 0.5647059f, 0.8509804f, 1f);
+
         [Header("Tap Skip")]
         [Tooltip("画面タップでメッセージ送り / スキップを有効にする")]
         public bool enableTapSkip = true;

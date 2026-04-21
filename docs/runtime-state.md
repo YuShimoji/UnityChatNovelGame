@@ -1,19 +1,19 @@
 # Runtime State
 
-**Updated**: 2026-04-20（表示系デモ計画ドキュメント同期。Block 2 実装状態は変更なし）
+**Updated**: 2026-04-21（origin/main 同期 + SP-023 ローカル拡張差分/追加 preset/検証 Yarn + SP-024 S1/S2/S5 UI 接続 / 検証 Yarn を反映）
 
 ## Current Position
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
 - lane: **UI/Engine**（SP-023 / SP-024 の 9 Block 実装・Block 毎検収方式）
-- slice: **SP-023 Block 2 (S2 Narration + S3 BubbleMargin) 実装完了・ユーザー画面検証待ち**
-- next_recommended_slice: **Block 2 画面検収 → OK なら Block 3 (SP-023 S4 IconSide) 着手**
-- subsequent_recommended_slice: **Block 3 (IconSide) → Block 4 (フリックスレッド切替) → Block 5 (SubthreadData メタ+サイドバー)**
-- later_recommended_slice: **Block 6 (プリセット 4 種) → Block 7 SP-024 S3 タイピング速度 → Block 8 S1+S2 → Block 9 S4+S5**
-- active_artifact: ChatController / ScenarioManager / BubbleStylePreset SO / narration・default preset asset
-- artifact_surface: ChatController / ChatDialogueView / ChatUIConfig / ScenarioManager / BubbleStyleDatabase
-- last_change_relation: docs（2026-04-20: 表示デモ計画の再監査結果を `docs/plans/display-batch-showcase.md` に反映）
+- slice: **origin/main の Block 2 状態に、ローカル SP-023 拡張差分 + Block 6 preset / 検証 Yarn + SP-024 S1/S2/S3/S5 実装 / defaultBubbleStylePreset を反映済み**
+- next_recommended_slice: **`SP023_NarrationMargin_Start` → `SP023_LocalExtensions_Start` → `SP023_DisplayShowcase_Start` の Unity 画面検収**
+- subsequent_recommended_slice: **`SP024_Immersion_Start` による SP-024 S1/S2/S5 の Unity 見た目確認、または S4 (オンライン状態 UI) / Block 4 (フリックスレッド切替) の設計固定**
+- later_recommended_slice: **SP-024 S4 (オンライン状態表示)**
+- active_artifact: ChatController / ChatDialogueView / ScenarioManager / CharacterProfile / SaveData / SubthreadData / ThreadSwitcherController / BubbleStyle assets / SP023 demo yarns / SP024_ImmersionDemo
+- artifact_surface: ChatController / ChatDialogueView / ChatUIConfig / ScenarioManager / CharacterDatabase / ThreadSwitcherController
+- last_change_relation: sync（2026-04-21: origin/main fast-forward + stash 再適用マージ）
 - plan_file: `C:\Users\thank\.claude\plans\hazy-tumbling-feigenbaum.md` （9 Block 分割の実行プラン） / `docs/plans/display-batch-showcase.md`（表示系デモ・修正版・リポジトリ正本）
 
 ## Counters
@@ -26,7 +26,7 @@
 - tests_last_run: 2026-04-09 (EditMode pass / PlayMode pass)
 - mock_files: 0
 - spec_entries: 42 (`docs/spec-index.json` 配列長、検証用。SP-023/SP-024 追加)
-- todo_fixme_hack: ChatController.cs:1296 に 1 件残存 (FEATURE_STATUS_AUDIT W-6 参照)
+- todo_fixme_hack: ChatController.cs:2020 に 1 件残存 (FEATURE_STATUS_AUDIT W-6 参照)
 - obsolete_marks: ContradictionPair.UnlockTopic x2
 
 ## Visual Evidence
@@ -34,6 +34,16 @@
 - last_visual_audit_path: docs/archive/verification-evidence/VerticalSliceSmokeGate_20260403_*.png (参考。パスのみ保持、追跡は廃止)
 
 ## Session Log
+
+### 2026-04-21（同期再開・ローカル差分再適用）
+
+- **Git**: `origin/main` へ fast-forward 済み。stash 退避後に再適用し、競合を手動統合。
+- **統合方針**: `BubbleStylePreset` / `BubbleStyleDatabase` はリモートの static レジストリ実装を採用し、ローカル差分は `IconSide` / `SetThreadMeta` / `SubthreadData` メタ / サイドバーメタ表示に絞って再適用。
+- **追加**: `Assets/Resources/BubbleStyles/` に `thought` / `shout` / `whisper` / `announcement`、`Assets/Resources/Yarn/active/` に `SP023_LocalExtensionsDemo.yarn` / `SP023_DisplayShowcaseDemo.yarn` を追加。
+- **補修**: `ChatController` の重複アイコン生成を解消し、`ThreadSwitcherController` がメタ追加後に `MetaLabel` を動的生成できるよう修正。
+- **追加実装**: `CharacterProfile.defaultBubbleStylePreset`、SP-024 S3 の `TypingSpeed` / `<<SetTypingSpeed>>` / `ScenarioManager` セッション override、`SavedChatMessage` の SP-024 データ契約 (`Timestamp` / `DeliveryStatus` / `IsDeleted`) を先行反映。
+- **追加**: `Assets/Resources/Yarn/active/` に `SP024_ImmersionDemo.yarn` (`SP024_Immersion_Start`) を追加し、SP-024 S1/S2/S5 の局所検証導線を分離。
+- **未検証**: Unity Editor での Block 2 / LocalExtensions / DisplayShowcase の画面確認、`SP024_Immersion_Start` による S1/S2/S5 の画面確認、および S3 の待機時間差確認。
 
 ### 2026-04-20（表示系デモ計画の再監査・ドキュメント同期）
 
@@ -63,16 +73,15 @@
   2. 6 メッセージの見た目確認 (narration 透明背景/細長いバブル/上下余白/自動リセット)
   3. OK なら Block 3 (SP-023 S4 IconSide) 着手
 - **判断ポイント (保留)**:
-  - SP-023 S10 (CharacterProfile.defaultBubbleStylePreset 採用): Block 2 検収後に判断
   - フリック閾値 15%: Block 4 実装後に実機体感で判断
-- **副次観察**: SP023_BubbleStyleDemo でタイピングインジケーターが非表示 (SP-023 変更とは無関係)。Block 7 (SP-024 S3 タイピング速度実装) で挙動を見直す
+- **副次観察**: SP023_BubbleStyleDemo で見えていたタイピングインジケーター差は、SP-024 S3 最小実装でキャラ別待機秒数へ切り替え済み。最終判断は Unity 実機確認待ち。
 
 ### 2026-04-15 session 2（Editor 整備 + テキスト表現仕様）
 
 - **Editor メニュー統一**: 全 29 MenuItem を `Tools/FoundPhone/` 配下に統一 (12 ファイル変更)。サブメニュー: Scene Setup / Setup / Verification / Tests / Debug。Yarn Content Validator 重複削除
 - **ChatUIConfig タイミング集約**: typewriterSpeed / typingIndicatorDuration / postMessageDelay / enableTypewriterEffect / enableTapSkip を SO に移行 (3 ファイル)。画像フェードイン 0.6f ハードコード修正
 - **SP-023 テキスト表現仕様** (新設 `23_text_presentation.md`): BubbleMargin (% 指定)、BubbleStylePreset (7 プリセット)、narration (地の文)、IconSide (アイコン向き)、フリックスレッド切替、サブクエスト統合 (SP-016/017/022/BL-003)、B/C/D 保留領域 (S10-12)
-- **SP-024 チャット没入仕様** (新設 `24_chat_immersion.md`): タイムスタンプ、既読/配信マーク (DeliveryStatus)、キャラ別タイピングパターン (TypingSpeed 7 段階)、オンライン状態 (OnlineStatus)、メッセージ削除痕。新規 Yarn コマンド 7 個。全機能 ChatUIConfig オン/オフ切替 (既定オフ)
+- **SP-024 チャット没入仕様** (`24_chat_immersion.md`): タイムスタンプ、既読/配信マーク (DeliveryStatus)、キャラ別タイピングパターン (TypingSpeed 7 段階)、オンライン状態 (OnlineStatus)、メッセージ削除痕。2026-04-21 時点で S1/S2/S3/S5 は UI 接続と Save/Load 復元まで反映済みで、残りは S4 のオンライン状態 UI。
 - **SP-023 Worker 実装**: BubbleStylePreset SO / IconSide / フリック切替の .cs が未コミットで存在。検収後にコミット予定
 - **spec-index**: SP-023 + SP-024 追加 (計 42 エントリ)
 
@@ -150,5 +159,3 @@
 ---
 
 2026-04-08 以前の Session Log は [docs/archive/runtime-state-session-log-2026-03_04.md](archive/runtime-state-session-log-2026-03_04.md) に切出済み (session 10〜22)。
-
-

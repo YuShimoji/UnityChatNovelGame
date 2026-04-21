@@ -353,28 +353,28 @@
   {
     "id": "BL-003",
     "title": "スレッド柔軟メタデータ (難易度星・入口情報)",
-    "status": "todo",
-    "pct": 0,
+    "status": "done",
+    "pct": 100,
     "cat": "ui",
-    "file": null,
-    "summary": "スレッドに難易度星、推奨レベル等の柔軟なメタデータを設定可能にする。DeclaredThread/ChannelData SOの拡張、サイドバーUIでの表示"
+    "file": "docs/StorySpec/23_text_presentation.md",
+    "summary": "SP-023 S7 として統合実装。SubthreadData に Difficulty/EstimatedLength/Description/RequiredLevel/RewardHint を追加。<<SetThreadMeta>> Yarn コマンドで設定。ThreadSwitcherController サイドバーにメタデータ行を表示"
   },
   {
     "id": "SP-023",
     "title": "テキスト表現仕様 (バブル位置・リッチテキスト)",
-    "status": "draft",
-    "pct": 10,
+    "status": "partial",
+    "pct": 85,
     "cat": "ui",
     "file": "docs/StorySpec/23_text_presentation.md",
-    "summary": "テキスト表現の統合仕様。(1)BubbleMargin: 上下左右%指定で次メッセージの占有範囲を制御、(2)BubbleStylePreset SO: バブルタイプ追加(default/narration/thought/shout/whisper/system/announcement)で色・形状・影・フォントを切替、(3)narrationプリセット: 背景なし地の文パターン、(4)IconSide: キャラ単位でアイコン左右を明示指定、(5)フリックスレッド切替: 左右スワイプでスレッド順送り、(6)サブクエストスレッド統合: SP-016/017/022/BL-003の散在仕様を集約+メタデータ拡張(難易度星・説明・報酬ヒント)+Ch1サンプル9本+解放トリガー5パターン。S10-12: キャラクター表現(B)/バブル挙動(C)/レイアウト拡張(D)の保留領域を確認時期付きで記録"
+    "summary": "テキスト表現の統合仕様。(1)BubbleMargin: 上下左右%指定で次メッセージの占有範囲を制御、(2)BubbleStylePreset SO: バブルタイプ追加(default/narration/thought/shout/whisper/system/announcement)で色・形状・影・フォントを切替、(3)narrationプリセット: 背景なし地の文パターン、(4)IconSide: キャラ単位でアイコン左右を明示指定、(5)フリックスレッド切替: 左右スワイプでスレッド順送り、(6)サブクエストスレッド統合: SP-016/017/022/BL-003の散在仕様を集約+メタデータ拡張(難易度星・説明・報酬ヒント)+Ch1サンプル9本+解放トリガー5パターン。Block 6 preset 4 種、`SP023_LocalExtensions_Start` / `SP023_DisplayShowcase_Start`、`CharacterProfile.defaultBubbleStylePreset`、視覚拡張の吸収方針を追加済み。残課題は Unity 画面検収とフリック切替"
   },
   {
     "id": "SP-024",
     "title": "チャット没入仕様",
-    "status": "draft",
-    "pct": 0,
+    "status": "partial",
+    "pct": 25,
     "cat": "ui",
     "file": "docs/StorySpec/24_chat_immersion.md",
-    "summary": "スマホチャットアプリのリアリティ補強。全機能ChatUIConfigでオン/オフ切替(既定オフ=従来互換)。S1:タイムスタンプ(SetTimeコマンド+Day区切りバー)、S2:既読/配信マーク(DeliveryStatus enum+MarkRead/MarkDelivered)、S3:タイピングパターン(CharacterProfile.typingSpeed+TypingSpeed enum 7段階+SetTypingSpeedコマンド)、S4:オンライン状態(OnlineStatus enum+ドット表示+SetOnlineStatusコマンド)、S5:メッセージ削除痕(DeleteLastMessage/DeleteMessage+isDeletedフラグ)。新規Yarnコマンド7個、SavedChatMessage拡張3フィールド、CharacterProfile拡張3フィールド、ChatUIConfig拡張9フィールド"
+    "summary": "スマホチャットアプリのリアリティ補強。全機能ChatUIConfigでオン/オフ切替(既定オフ=従来互換)。S3 の最小実装として CharacterProfile.typingSpeed + TypingSpeed enum + SetTypingSpeed コマンド + ChatDialogueView の待機秒数解決を反映済み。S1/S2/S5 は SavedChatMessage の data contract (timestamp / deliveryStatus / isDeleted) を先行追加。S4 は defaultOnlineStatus を CharacterProfile に先行追加。残課題は UI 表示と残りコマンド群"
   }
 ]

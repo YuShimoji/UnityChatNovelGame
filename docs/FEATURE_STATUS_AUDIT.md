@@ -1,6 +1,6 @@
 # Feature Status Audit
 
-**監査日**: 2026-03-30
+**監査日**: 2026-04-21
 **監査対象**: FoundPhone (UnityChatNovelGame) 全コードベース
 **ブランチ**: main
 
@@ -14,10 +14,10 @@
 | テストファイル | **7**（EditMode **4** + PlayMode テスト **2** + `PlayModeTestHelpers` **1**） | **2026-04-09 Dレーン再突合** |
 | PlayMode テストケース | **8**（`VerticalSliceSmokeGatePlayModeTests` 4 + `ScenarioFlowPlayModeTests` 4） | **2026-04-09 Dレーン再突合** |
 | EditMode テストケース | **75**（`CoreLogic` 33 + `Contradiction` 30 + `SaveSystem` 8 + `InventoryTab` 4） | **2026-04-09 Dレーン再突合** |
-| Yarnファイル (active) | 6 | session 19 (4件 archive 移動後) |
+| Yarnファイル (active) | 11 | 2026-04-21 実測 (`SP023_LocalExtensionsDemo` / `SP023_DisplayShowcaseDemo` / `SP024_ImmersionDemo` 追加後) |
 | Yarnファイル (archive) | 5 | session 19 |
-| Yarnコマンド | 24 | |
-| 仕様エントリ (spec-index) | **40** (done 23 / partial 10 / draft 2 / todo 5、`docs/spec-index.json` 配列長) | 2026-04-15 実測 (EN-008 削除反映) |
+| Yarnコマンド | **33** (`SetTypingSpeed`, `SetTime`, `MarkDelivered`, `MarkRead`, `DeleteLastMessage`, `DeleteMessage` を含む) | 2026-04-21 |
+| 仕様エントリ (spec-index) | **42** (`docs/spec-index.json` 配列長) | 2026-04-21 実測 |
 | TODO/FIXME/HACK | 1件 (ChatController.cs:1241) | session 19 |
 | [Obsolete] マーク | 2件 (ContradictionPair.UnlockTopic x2) | |
 | docs ファイル数 | ~30 (archive除く) | |
@@ -132,7 +132,7 @@ Unity Editor 再生を要する個別確認項目 (旧 U-1〜U-10 / C-1〜C-3 �
 | W-3 | ContradictionFeedbackController のシーンセットアップ | INFO | SUBSEQUENT 発動時にセットアップ |
 | W-4 | MessageTaggedコマンド | — | 削除済み (session 11) |
 | W-5 | ContradictionPairの[Obsolete]フィールド (UnlockTopic) | LOW | SerializeFieldのため削除するとSO壊れる。放置 |
-| W-6 | ChatController.cs:1296 TODO (ステータスバールーティング) | LOW | 将来のUI拡張時に対応 |
+| W-6 | ChatController.cs:2020 TODO (ステータスバールーティング) | LOW | 将来のUI拡張時に対応 |
 
 ---
 

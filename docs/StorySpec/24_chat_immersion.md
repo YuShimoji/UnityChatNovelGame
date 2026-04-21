@@ -1,8 +1,10 @@
 # SP-024: チャット没入仕様
 
-**ステータス**: draft
+**ステータス**: partial
 **カテゴリ**: ui
 **作成日**: 2026-04-15
+
+2026-04-21 時点で、S3 の最小実装 (CharacterProfile の typing preset + `<<SetTypingSpeed>>` + `ChatDialogueView` の待機秒数解決) に加え、S1/S2/S5 は `ChatController` / `ScenarioManager` / `ChatUIConfig` まで含めて実装済み。具体的には `<<SetTime>>`、`<<MarkDelivered>>`、`<<MarkRead>>`、`<<DeleteLastMessage>>`、`<<DeleteMessage>>` が登録され、タイムスタンプ・既読/配信マーク・削除痕の Save/Load 復元まで接続済み。検証用 Yarn は `Assets/Resources/Yarn/active/SP024_ImmersionDemo.yarn` (`SP024_Immersion_Start`) を使う。未接続なのは S4 のオンライン状態 UI のみ。
 
 ---
 
@@ -13,6 +15,10 @@ FoundPhone は「拾ったスマホの中を覗く」チャット型 VN。チャ
 ---
 
 ## 2. タイムスタンプ
+
+補足:
+- `showTimestamp` と `showDeliveryStatus` をオンにした状態で `SP024_Immersion_Start` を再生すると、S1/S2/S5 をまとめて見た目確認できる
+- `SP024_Immersion_Start` は scene を変更せず StartNode 差し替えだけで回せる局所検証ノード
 
 ### 2.1 データ
 
@@ -132,7 +138,7 @@ Player: これを送信する
 
 | フィールド | 型 | 既定 | 説明 |
 |-----------|-----|------|------|
-| typingSpeed | TypingSpeed | Normal | タイピング速度プリセット |
+| typingSpeed | TypingSpeed | Default | タイピング速度プリセット |
 | customTypingDelay | float | 0.0 | typingSpeed=Custom のときの秒数 |
 
 ```csharp
@@ -153,10 +159,13 @@ public enum TypingSpeed
 ChatDialogueView.RunLineAsync で:
 
 ```
-1. CharacterDatabase.Instance.GetProfile(charID) を取得
-2. profile.typingSpeed が Default → ChatUIConfig.typingIndicatorDuration を使用
-3. profile.typingSpeed が Custom → profile.customTypingDelay を使用
-4. それ以外 → enum に対応する固定値を使用
+1. `ScenarioManager` のセッション override を確認
+2. override がなければ `CharacterDatabase.Instance.GetProfile(charID)` を取得
+3. profile.typingSpeed が Default → ChatUIConfig.typingIndicatorDuration を使用
+4. profile.typingSpeed が Custom → profile.customTypingDelay を使用
+5. それ以外 → enum に対応する固定値を使用
+
+2026-04-21 の最小実装では、この解決ロジックは **NPC 発話前の typing indicator 待機秒数** のみに適用する。タイプライターの 1 文字あたり速度はまだグローバルのまま。
 ```
 
 ### 4.4 Yarn コマンドによる動的変更
@@ -195,6 +204,8 @@ public enum OnlineStatus
     Hidden      // ドット非表示 (存在を隠す)
 }
 ```
+
+オンライン状態や派生アイコンは「感情の固定表現」ではなく、通信状態・異常状態・更新状態などの state key を前提に扱う。感情差分は必要になった時だけ別レイヤーで検討する。
 
 ### 5.2 Yarn コマンド
 
@@ -322,7 +333,7 @@ SavedChatMessage に追加するフィールド一覧:
 | `Assets/Scripts/Data/SaveData.cs` | SavedChatMessage に timestamp/deliveryStatus/isDeleted 追加 |
 | `Assets/Scripts/UI/ChatController.cs` | タイムスタンプ表示、既読マーク表示、削除痕バブル、オンラインドット |
 | `Assets/Scripts/UI/ChatDialogueView.cs` | キャラ別 typingIndicatorDuration 解決ロジック |
-| `Assets/Scripts/Core/ScenarioManager.cs` | 新規 Yarn コマンド 7 個の登録 |
+| `Assets/Scripts/Core/ScenarioManager.cs` | `SetTypingSpeed` 実装、残りコマンド群の受け皿 |
 
 ---
 
@@ -330,10 +341,10 @@ SavedChatMessage に追加するフィールド一覧:
 
 | 順序 | スライス | 依存 |
 |------|---------|------|
-| 1 | S3: タイピングパターン (CharacterProfile 拡張 + ChatDialogueView 修正) | なし |
-| 2 | S1: タイムスタンプ (SavedChatMessage 拡張 + バブル表示) | なし |
-| 3 | S2: 既読/配信マーク | S1 (タイムスタンプ横に表示) |
-| 4 | S4: オンライン状態 | なし |
-| 5 | S5: メッセージ削除痕 | なし |
+| 1 | S3: タイピングパターン (CharacterProfile 拡張 + ChatDialogueView 修正) | なし | 実装済み |
+| 2 | S1: タイムスタンプ (SavedChatMessage 拡張 + バブル表示) | なし | 実装済み |
+| 3 | S2: 既読/配信マーク | S1 (タイムスタンプ横に表示) | 実装済み |
+| 4 | S4: オンライン状態 | なし | 未実装 |
+| 5 | S5: メッセージ削除痕 | なし | 実装済み |
 
-S3 を最優先としたのは、既存のハードコード (全キャラ統一 0.8s) の解消が即座に体感改善につながるため。
+次の推奨順は、SP-023 の画面検収を閉じた後に S1/S2/S5 の Unity 見た目確認、その次に S4 のオンライン状態 UI です。

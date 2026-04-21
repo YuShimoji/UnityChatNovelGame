@@ -22,6 +22,13 @@ namespace ProjectFoundPhone.Data
                 if (s_Instance == null)
                 {
                     s_Instance = FindFirstObjectByType<CharacterDatabase>();
+                    if (s_Instance == null)
+                    {
+                        var runtimeObject = new GameObject("CharacterDatabase");
+                        s_Instance = runtimeObject.AddComponent<CharacterDatabase>();
+                        DontDestroyOnLoad(runtimeObject);
+                        Debug.Log("CharacterDatabase: Scene instance not found. Auto-created runtime singleton.");
+                    }
                 }
                 return s_Instance;
             }
@@ -137,6 +144,53 @@ namespace ProjectFoundPhone.Data
         {
             CharacterProfile profile = GetProfile(characterID);
             return profile?.Icon;
+        }
+
+        /// <summary>
+        /// 指定IDのアイコン配置を取得
+        /// </summary>
+        /// <param name="characterID">キャラクターID</param>
+        /// <returns>アイコン配置。プロファイル未登録時は Auto</returns>
+        public IconSide GetIconSide(string characterID)
+        {
+            CharacterProfile profile = GetProfile(characterID);
+            return profile?.IconSide ?? IconSide.Auto;
+        }
+
+        /// <summary>
+        /// 指定IDの既定バブルスタイルを取得
+        /// </summary>
+        public BubbleStylePreset GetDefaultBubbleStylePreset(string characterID)
+        {
+            CharacterProfile profile = GetProfile(characterID);
+            return profile?.DefaultBubbleStylePreset;
+        }
+
+        /// <summary>
+        /// 指定IDのタイピング速度プリセットを取得
+        /// </summary>
+        public TypingSpeed GetTypingSpeed(string characterID)
+        {
+            CharacterProfile profile = GetProfile(characterID);
+            return profile?.TypingSpeed ?? TypingSpeed.Default;
+        }
+
+        /// <summary>
+        /// 指定IDの custom typing delay を取得
+        /// </summary>
+        public float GetCustomTypingDelay(string characterID)
+        {
+            CharacterProfile profile = GetProfile(characterID);
+            return profile?.CustomTypingDelay ?? 0f;
+        }
+
+        /// <summary>
+        /// 指定IDの既定オンライン状態を取得
+        /// </summary>
+        public OnlineStatus GetDefaultOnlineStatus(string characterID)
+        {
+            CharacterProfile profile = GetProfile(characterID);
+            return profile?.DefaultOnlineStatus ?? OnlineStatus.Online;
         }
 
         /// <summary>

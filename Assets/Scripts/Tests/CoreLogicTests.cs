@@ -2,6 +2,7 @@
 using UnityEditor;
 using NUnit.Framework;
 using ProjectFoundPhone.Data;
+using ProjectFoundPhone.Core;
 using ProjectFoundPhone.UI;
 
 using System.Collections.Generic;
@@ -40,6 +41,14 @@ namespace ProjectFoundPhone.Tests
             so.FindProperty("m_Result").objectReferenceValue = result;
             so.ApplyModifiedPropertiesWithoutUndo();
             return recipe;
+        }
+
+        private BubbleStylePreset CreateBubbleStylePreset(string presetId)
+        {
+            BubbleStylePreset preset = ScriptableObject.CreateInstance<BubbleStylePreset>();
+            preset.presetId = presetId;
+            preset.displayName = presetId;
+            return preset;
         }
         #endregion
 
@@ -316,6 +325,44 @@ namespace ProjectFoundPhone.Tests
                 Assert.AreEqual(1.5f, floatToken.ToObject<float>(), 0.001f);
             }
         }
+
+        [Test]
+        public void SaveData_Serialization_PreservesMessagePresentationMetadata()
+        {
+            SaveData original = new SaveData(2);
+            original.ChatHistory.Add(new SavedChatMessage
+            {
+                Type = ChatMessageType.Normal,
+                CharacterID = "player",
+                Text = "送信済みメッセージ",
+                BubbleStylePresetId = "thought",
+                Timestamp = "14:32",
+                DeliveryStatus = DeliveryStatus.Read,
+                IsDeleted = false
+            });
+            original.ChatHistory.Add(new SavedChatMessage
+            {
+                Type = ChatMessageType.Normal,
+                CharacterID = "pyramid",
+                Text = "このメッセージは削除されました",
+                Timestamp = "14:33",
+                DeliveryStatus = DeliveryStatus.None,
+                IsDeleted = true
+            });
+
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(original, Newtonsoft.Json.Formatting.Indented);
+            SaveData deserialized = Newtonsoft.Json.JsonConvert.DeserializeObject<SaveData>(json);
+
+            Assert.IsNotNull(deserialized);
+            Assert.AreEqual(2, deserialized.ChatHistory.Count);
+            Assert.AreEqual("14:32", deserialized.ChatHistory[0].Timestamp);
+            Assert.AreEqual(DeliveryStatus.Read, deserialized.ChatHistory[0].DeliveryStatus);
+            Assert.AreEqual("thought", deserialized.ChatHistory[0].BubbleStylePresetId);
+            Assert.IsFalse(deserialized.ChatHistory[0].IsDeleted);
+            Assert.AreEqual("14:33", deserialized.ChatHistory[1].Timestamp);
+            Assert.AreEqual(DeliveryStatus.None, deserialized.ChatHistory[1].DeliveryStatus);
+            Assert.IsTrue(deserialized.ChatHistory[1].IsDeleted);
+        }
         #endregion
 
         #region CharacterProfile Tests
@@ -349,6 +396,35 @@ namespace ProjectFoundPhone.Tests
             CharacterProfile profile = CreateCharacterProfile("test", "Test", expected, false);
 
             Assert.AreEqual(expected, profile.ThemeColor);
+        }
+
+        [Test]
+        public void CharacterProfile_DefaultBubbleStylePreset_ReturnsSetValue()
+        {
+            BubbleStylePreset preset = CreateBubbleStylePreset("thought");
+            CharacterProfile profile = CreateCharacterProfile("npc_style", "Styled", Color.gray, false);
+
+            SerializedObject so = new SerializedObject(profile);
+            so.FindProperty("m_DefaultBubbleStylePreset").objectReferenceValue = preset;
+            so.ApplyModifiedPropertiesWithoutUndo();
+
+            Assert.AreEqual(preset, profile.DefaultBubbleStylePreset);
+        }
+
+        [Test]
+        public void CharacterProfile_TypingAndStatusSettings_ReturnSetValues()
+        {
+            CharacterProfile profile = CreateCharacterProfile("npc_timing", "Timing", Color.white, false);
+
+            SerializedObject so = new SerializedObject(profile);
+            so.FindProperty("m_TypingSpeed").enumValueIndex = (int)TypingSpeed.VerySlow;
+            so.FindProperty("m_CustomTypingDelay").floatValue = 1.25f;
+            so.FindProperty("m_DefaultOnlineStatus").enumValueIndex = (int)OnlineStatus.Away;
+            so.ApplyModifiedPropertiesWithoutUndo();
+
+            Assert.AreEqual(TypingSpeed.VerySlow, profile.TypingSpeed);
+            Assert.AreEqual(1.25f, profile.CustomTypingDelay, 0.001f);
+            Assert.AreEqual(OnlineStatus.Away, profile.DefaultOnlineStatus);
         }
         #endregion
 
@@ -484,6 +560,53 @@ namespace ProjectFoundPhone.Tests
 
             Assert.AreEqual("Archivist", m_Database.GetDisplayName("npc_003"));
 
+            TeardownCharacterDatabase();
+        }
+
+        [Test]
+        public void CharacterDatabase_ReturnsDefaultBubbleStyleAndTypingSettings()
+        {
+            BubbleStylePreset preset = CreateBubbleStylePreset("whisper");
+            CharacterProfile profile = CreateCharacterProfile("npc_004", "Whisperer", Color.gray, false);
+
+            SerializedObject so = new SerializedObject(profile);
+            so.FindProperty("m_DefaultBubbleStylePreset").objectReferenceValue = preset;
+            so.FindProperty("m_TypingSpeed").enumValueIndex = (int)TypingSpeed.Slow;
+            so.FindProperty("m_CustomTypingDelay").floatValue = 2.4f;
+            so.FindProperty("m_DefaultOnlineStatus").enumValueIndex = (int)OnlineStatus.Offline;
+            so.ApplyModifiedPropertiesWithoutUndo();
+
+            SetupCharacterDatabase(profile);
+
+            Assert.AreEqual(preset, m_Database.GetDefaultBubbleStylePreset("npc_004"));
+            Assert.AreEqual(TypingSpeed.Slow, m_Database.GetTypingSpeed("npc_004"));
+            Assert.AreEqual(2.4f, m_Database.GetCustomTypingDelay("npc_004"), 0.001f);
+            Assert.AreEqual(OnlineStatus.Offline, m_Database.GetDefaultOnlineStatus("npc_004"));
+
+            TeardownCharacterDatabase();
+        }
+
+        [Test]
+        public void ScenarioManager_TypingOverride_UsesRuntimeValueAndResetsOnClear()
+        {
+            CharacterProfile profile = CreateCharacterProfile("npc_005", "Slowpoke", Color.white, false);
+            SerializedObject profileSo = new SerializedObject(profile);
+            profileSo.FindProperty("m_TypingSpeed").enumValueIndex = (int)TypingSpeed.Slow;
+            profileSo.ApplyModifiedPropertiesWithoutUndo();
+            SetupCharacterDatabase(profile);
+
+            GameObject scenarioObject = new GameObject("ScenarioManager");
+            ScenarioManager scenarioManager = scenarioObject.AddComponent<ScenarioManager>();
+
+            Assert.AreEqual(1.5f, scenarioManager.ResolveTypingIndicatorDuration("npc_005"), 0.001f);
+
+            scenarioManager.SetCharacterTypingSpeedOverride("npc_005", TypingSpeed.Custom, 2.25f);
+            Assert.AreEqual(2.25f, scenarioManager.ResolveTypingIndicatorDuration("npc_005"), 0.001f);
+
+            scenarioManager.ResetSessionOnlyPresentationOverrides();
+            Assert.AreEqual(1.5f, scenarioManager.ResolveTypingIndicatorDuration("npc_005"), 0.001f);
+
+            Object.DestroyImmediate(scenarioObject);
             TeardownCharacterDatabase();
         }
         #endregion

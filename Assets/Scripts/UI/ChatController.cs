@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using ProjectFoundPhone.Core;
 using ProjectFoundPhone.Data;
@@ -19,6 +20,11 @@ namespace ProjectFoundPhone.UI
     [RequireComponent(typeof(ScrollRect))]
     public class ChatController : MonoBehaviour, IBeginDragHandler, IEndDragHandler
     {
+        private const string DeletedMessageText = "このメッセージは削除されました";
+        private const float FooterTextHeight = 18f;
+        private const float FooterSpacing = 4f;
+        private const float FooterHorizontalPadding = 12f;
+
         #region Private Fields
         [SerializeField] private ScrollRect m_ScrollRect;
         [SerializeField] private VerticalLayoutGroup m_LayoutGroup;
@@ -111,6 +117,15 @@ namespace ProjectFoundPhone.UI
 
         /// <summary>ScrollRect の RectTransform キャッシュ（バブル幅計算用）</summary>
         private RectTransform m_ScrollRectTransform;
+
+        /// <summary>表示中履歴と1対1で対応するレンダリング済みバブル。</summary>
+        private readonly List<GameObject> m_RenderedMessageObjects = new List<GameObject>();
+
+        /// <summary>プレイヤーメッセージの自動既読遷移 Coroutine。</summary>
+        private readonly Dictionary<int, Coroutine> m_AutoDeliveryCoroutines = new Dictionary<int, Coroutine>();
+
+        private ScenarioManager m_ScenarioManager;
+        private ScenarioManager ScenarioManagerRef => m_ScenarioManager ??= FindFirstObjectByType<ScenarioManager>();
         #endregion
 
         #region Unity Lifecycle
@@ -372,6 +387,528 @@ namespace ProjectFoundPhone.UI
             m_LastScrollPosition = verticalPos;
         }
 
+        private static SavedChatMessage CloneSavedChatMessage(SavedChatMessage source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            return new SavedChatMessage
+            {
+                Type = source.Type,
+                CharacterID = source.CharacterID,
+                Text = source.Text,
+                ImageResourcePath = source.ImageResourcePath,
+                LineTag = source.LineTag,
+                BubbleStylePresetId = source.BubbleStylePresetId,
+                Timestamp = source.Timestamp,
+                DeliveryStatus = source.DeliveryStatus,
+                IsDeleted = source.IsDeleted
+            };
+        }
+
+        private bool IsPlayerCharacter(string charID)
+        {
+            if (string.IsNullOrEmpty(charID))
+            {
+                return false;
+            }
+
+            return CharacterDatabase.Instance != null
+                ? CharacterDatabase.Instance.IsPlayer(charID)
+                : string.Equals(charID, "player", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private SavedChatMessage CreateRuntimeMessageRecord(
+            ChatMessageType type,
+            string charID,
+            string text = null,
+            string lineTag = null,
+            string imageResourcePath = null)
+        {
+            return new SavedChatMessage
+            {
+                Type = type,
+                CharacterID = charID,
+                Text = text,
+                LineTag = lineTag,
+                ImageResourcePath = imageResourcePath,
+                Timestamp = type == ChatMessageType.System ? null : ScenarioManagerRef?.GetCurrentMessageTimestamp(),
+                DeliveryStatus = type == ChatMessageType.System || !IsPlayerCharacter(charID)
+                    ? DeliveryStatus.None
+                    : DeliveryStatus.Sent,
+                IsDeleted = false
+            };
+        }
+
+        private TextMeshProUGUI GetBubbleBodyText(GameObject bubble)
+        {
+            if (bubble == null)
+            {
+                return null;
+            }
+
+            Transform textTransform = bubble.transform.Find("Text");
+            if (textTransform != null)
+            {
+                return textTransform.GetComponent<TextMeshProUGUI>();
+            }
+
+            TextMeshProUGUI[] candidates = bubble.GetComponentsInChildren<TextMeshProUGUI>(true);
+            return candidates.FirstOrDefault(candidate => candidate != null && candidate.gameObject.name != "FooterText");
+        }
+
+        private void ResetBubbleBodyTextLayout(TextMeshProUGUI textComponent)
+        {
+            if (textComponent == null)
+            {
+                return;
+            }
+
+            RectTransform textRect = textComponent.GetComponent<RectTransform>();
+            if (textRect == null)
+            {
+                return;
+            }
+
+            textRect.anchorMin = Vector2.zero;
+            textRect.anchorMax = Vector2.one;
+            textRect.offsetMin = new Vector2(10f, 10f);
+            textRect.offsetMax = new Vector2(-10f, -10f);
+        }
+
+        private TextMeshProUGUI EnsureBubbleFooterText(GameObject bubble)
+        {
+            if (bubble == null)
+            {
+                return null;
+            }
+
+            Transform footerTransform = bubble.transform.Find("PresentationFooter");
+            if (footerTransform == null)
+            {
+                GameObject footerObj = new GameObject("PresentationFooter", typeof(RectTransform));
+                footerObj.transform.SetParent(bubble.transform, false);
+
+                RectTransform footerRect = footerObj.GetComponent<RectTransform>();
+                footerRect.anchorMin = new Vector2(0f, 0f);
+                footerRect.anchorMax = new Vector2(1f, 0f);
+                footerRect.pivot = new Vector2(0.5f, 0f);
+                footerRect.offsetMin = new Vector2(FooterHorizontalPadding, 6f);
+                footerRect.offsetMax = new Vector2(-FooterHorizontalPadding, 6f + FooterTextHeight);
+
+                GameObject footerTextObj = new GameObject("FooterText", typeof(RectTransform));
+                footerTextObj.transform.SetParent(footerObj.transform, false);
+                RectTransform footerTextRect = footerTextObj.GetComponent<RectTransform>();
+                footerTextRect.anchorMin = Vector2.zero;
+                footerTextRect.anchorMax = Vector2.one;
+                footerTextRect.offsetMin = Vector2.zero;
+                footerTextRect.offsetMax = Vector2.zero;
+
+                TextMeshProUGUI footerText = footerTextObj.AddComponent<TextMeshProUGUI>();
+                footerText.enableAutoSizing = false;
+                footerText.raycastTarget = false;
+                footerText.textWrappingMode = TextWrappingModes.NoWrap;
+                footerText.fontStyle = FontStyles.Normal;
+                if (m_JapaneseFontAsset != null)
+                {
+                    footerText.font = m_JapaneseFontAsset;
+                }
+                else if (TMP_Settings.defaultFontAsset != null)
+                {
+                    footerText.font = TMP_Settings.defaultFontAsset;
+                }
+
+                footerObj.SetActive(false);
+                return footerText;
+            }
+
+            Transform footerTextTransform = footerTransform.Find("FooterText");
+            if (footerTextTransform == null)
+            {
+                return null;
+            }
+
+            return footerTextTransform.GetComponent<TextMeshProUGUI>();
+        }
+
+        private void HideBubbleFooter(GameObject bubble)
+        {
+            if (bubble == null)
+            {
+                return;
+            }
+
+            Transform footer = bubble.transform.Find("PresentationFooter");
+            if (footer != null)
+            {
+                footer.gameObject.SetActive(false);
+            }
+
+            TextMeshProUGUI bodyText = GetBubbleBodyText(bubble);
+            if (bodyText == null)
+            {
+                return;
+            }
+
+            RectTransform textRect = bodyText.GetComponent<RectTransform>();
+            if (textRect != null)
+            {
+                Vector2 offsetMin = textRect.offsetMin;
+                offsetMin.y = 10f;
+                textRect.offsetMin = offsetMin;
+            }
+        }
+
+        private static string GetDeliveryGlyph(DeliveryStatus status)
+        {
+            switch (status)
+            {
+                case DeliveryStatus.Sent:
+                    return "✓";
+                case DeliveryStatus.Delivered:
+                case DeliveryStatus.Read:
+                    return "✓✓";
+                default:
+                    return string.Empty;
+            }
+        }
+
+        private string BuildFooterMarkup(SavedChatMessage message, Color baseTextColor, DeliveryStatus? deliveryOverride = null)
+        {
+            if (message == null || message.Type == ChatMessageType.System)
+            {
+                return string.Empty;
+            }
+
+            bool showTimestamp = UIConfig.showTimestamp && !string.IsNullOrWhiteSpace(message.Timestamp);
+            DeliveryStatus footerStatus = deliveryOverride ?? message.DeliveryStatus;
+            bool showStatus = UIConfig.showDeliveryStatus
+                && !message.IsDeleted
+                && footerStatus != DeliveryStatus.None
+                && IsPlayerCharacter(message.CharacterID);
+
+            if (!showTimestamp && !showStatus)
+            {
+                return string.Empty;
+            }
+
+            List<string> parts = new List<string>(2);
+            if (showTimestamp)
+            {
+                Color timestampColor = baseTextColor;
+                timestampColor.a = Mathf.Clamp01(baseTextColor.a * 0.5f);
+                parts.Add($"<color=#{ColorUtility.ToHtmlStringRGBA(timestampColor)}>{message.Timestamp}</color>");
+            }
+
+            if (showStatus)
+            {
+                Color statusColor = footerStatus == DeliveryStatus.Read
+                    ? UIConfig.deliveryReadColor
+                    : new Color(0.75f, 0.75f, 0.78f, 0.9f);
+                parts.Add($"<color=#{ColorUtility.ToHtmlStringRGBA(statusColor)}>{GetDeliveryGlyph(footerStatus)}</color>");
+            }
+
+            return string.Join("  ", parts);
+        }
+
+        private void UpdateBubbleFooter(GameObject bubble, SavedChatMessage message, string charID, DeliveryStatus? widthPreviewStatus = null)
+        {
+            TextMeshProUGUI footerText = EnsureBubbleFooterText(bubble);
+            TextMeshProUGUI bodyText = GetBubbleBodyText(bubble);
+            if (footerText == null || bodyText == null)
+            {
+                return;
+            }
+
+            Color baseTextColor = bodyText.color;
+            string markup = BuildFooterMarkup(message, baseTextColor, widthPreviewStatus);
+            if (string.IsNullOrEmpty(markup))
+            {
+                HideBubbleFooter(bubble);
+                return;
+            }
+
+            footerText.text = markup;
+            footerText.fontSize = Mathf.Max(12f, UIConfig.messageFontSize * GetResponsiveFontScale() * 0.6f);
+            footerText.alignment = IsPlayerCharacter(charID)
+                ? TextAlignmentOptions.MidlineRight
+                : TextAlignmentOptions.MidlineLeft;
+
+            Transform footer = footerText.transform.parent;
+            if (footer != null)
+            {
+                footer.gameObject.SetActive(true);
+            }
+
+            RectTransform textRect = bodyText.GetComponent<RectTransform>();
+            if (textRect != null)
+            {
+                Vector2 offsetMin = textRect.offsetMin;
+                offsetMin.y = 10f + FooterTextHeight + FooterSpacing;
+                textRect.offsetMin = offsetMin;
+            }
+        }
+
+        private float GetFooterPreferredWidth(GameObject bubble)
+        {
+            Transform footerTransform = bubble != null ? bubble.transform.Find("PresentationFooter") : null;
+            if (footerTransform == null || !footerTransform.gameObject.activeSelf)
+            {
+                return 0f;
+            }
+
+            TextMeshProUGUI footerText = footerTransform.GetComponentInChildren<TextMeshProUGUI>(true);
+            if (footerText == null)
+            {
+                return 0f;
+            }
+
+            footerText.ForceMeshUpdate();
+            return footerText.preferredWidth + (FooterHorizontalPadding * 2f);
+        }
+
+        private float GetFooterReservedHeight(GameObject bubble)
+        {
+            Transform footerTransform = bubble != null ? bubble.transform.Find("PresentationFooter") : null;
+            if (footerTransform == null || !footerTransform.gameObject.activeSelf)
+            {
+                return 0f;
+            }
+
+            TextMeshProUGUI footerText = footerTransform.GetComponentInChildren<TextMeshProUGUI>(true);
+            if (footerText == null)
+            {
+                return 0f;
+            }
+
+            footerText.ForceMeshUpdate();
+            return footerText.preferredHeight + FooterSpacing + 4f;
+        }
+
+        private void UpdateImageBubbleFooter(GameObject bubble, SavedChatMessage message, string charID, float contentHeight = -1f, DeliveryStatus? widthPreviewStatus = null)
+        {
+            TextMeshProUGUI footerText = EnsureBubbleFooterText(bubble);
+            if (footerText == null)
+            {
+                return;
+            }
+
+            Color baseColor = IsPlayerCharacter(charID) ? UIConfig.playerTextColor : UIConfig.npcTextColor;
+            string markup = BuildFooterMarkup(message, baseColor, widthPreviewStatus);
+
+            Transform imageContent = bubble != null ? bubble.transform.Find("ImageContent") : null;
+            RectTransform imageRect = imageContent != null ? imageContent.GetComponent<RectTransform>() : null;
+
+            if (string.IsNullOrEmpty(markup))
+            {
+                HideBubbleFooter(bubble);
+                if (imageRect != null)
+                {
+                    imageRect.offsetMin = new Vector2(12f, 12f);
+                    imageRect.offsetMax = new Vector2(-12f, -12f);
+                }
+                return;
+            }
+
+            footerText.text = markup;
+            footerText.fontSize = Mathf.Max(12f, UIConfig.messageFontSize * GetResponsiveFontScale() * 0.6f);
+            footerText.alignment = IsPlayerCharacter(charID)
+                ? TextAlignmentOptions.MidlineRight
+                : TextAlignmentOptions.MidlineLeft;
+            footerText.transform.parent.gameObject.SetActive(true);
+
+            float footerReserve = FooterTextHeight + FooterSpacing;
+            if (imageRect != null)
+            {
+                imageRect.offsetMin = new Vector2(12f, 12f + footerReserve);
+                imageRect.offsetMax = new Vector2(-12f, -12f);
+            }
+
+            if (contentHeight >= 0f)
+            {
+                LayoutElement layout = bubble.GetComponent<LayoutElement>();
+                if (layout != null)
+                {
+                    layout.preferredHeight = contentHeight + 24f + footerReserve;
+                }
+            }
+        }
+
+        private void ApplyDeletedBubbleVisuals(GameObject bubble, TextMeshProUGUI bodyText)
+        {
+            if (bubble == null || bodyText == null)
+            {
+                return;
+            }
+
+            Image bubbleBackground = bubble.GetComponent<Image>();
+            if (bubbleBackground != null)
+            {
+                bubbleBackground.color = new Color(0.72f, 0.72f, 0.76f, 0.3f);
+            }
+
+            bodyText.fontStyle = FontStyles.Italic;
+            bodyText.color = new Color(0.86f, 0.86f, 0.9f, 0.85f);
+            bodyText.alignment = TextAlignmentOptions.TopLeft;
+        }
+
+        private void CancelAutoDeliveryCoroutine(int messageIndex)
+        {
+            if (m_AutoDeliveryCoroutines.TryGetValue(messageIndex, out Coroutine coroutine) && coroutine != null)
+            {
+                StopCoroutine(coroutine);
+            }
+
+            m_AutoDeliveryCoroutines.Remove(messageIndex);
+        }
+
+        private void StopAllAutoDeliveryCoroutines()
+        {
+            foreach (Coroutine coroutine in m_AutoDeliveryCoroutines.Values)
+            {
+                if (coroutine != null)
+                {
+                    StopCoroutine(coroutine);
+                }
+            }
+
+            m_AutoDeliveryCoroutines.Clear();
+        }
+
+        private void StartAutoDeliveryProgressIfNeeded(int messageIndex, SavedChatMessage message)
+        {
+            if (message == null
+                || message.IsDeleted
+                || message.DeliveryStatus != DeliveryStatus.Sent
+                || !IsPlayerCharacter(message.CharacterID)
+                || UIConfig.autoReadDelay <= 0f)
+            {
+                return;
+            }
+
+            CancelAutoDeliveryCoroutine(messageIndex);
+            m_AutoDeliveryCoroutines[messageIndex] = StartCoroutine(AutoAdvanceDeliveryStatus(messageIndex));
+        }
+
+        private IEnumerator AutoAdvanceDeliveryStatus(int messageIndex)
+        {
+            yield return new WaitForSecondsRealtime(UIConfig.autoReadDelay);
+            if (!TryAutoAdvanceDeliveryStatus(messageIndex, DeliveryStatus.Sent, DeliveryStatus.Delivered))
+            {
+                m_AutoDeliveryCoroutines.Remove(messageIndex);
+                yield break;
+            }
+
+            yield return new WaitForSecondsRealtime(UIConfig.autoReadDelay);
+            TryAutoAdvanceDeliveryStatus(messageIndex, DeliveryStatus.Delivered, DeliveryStatus.Read);
+            m_AutoDeliveryCoroutines.Remove(messageIndex);
+        }
+
+        private bool TryAutoAdvanceDeliveryStatus(int messageIndex, DeliveryStatus expectedCurrent, DeliveryStatus nextStatus)
+        {
+            if (messageIndex < 0 || messageIndex >= m_ChatHistory.Count)
+            {
+                return false;
+            }
+
+            SavedChatMessage message = m_ChatHistory[messageIndex];
+            if (message == null || message.IsDeleted || message.DeliveryStatus != expectedCurrent)
+            {
+                return false;
+            }
+
+            message.DeliveryStatus = nextStatus;
+            RefreshRenderedMessageFooter(messageIndex);
+            return true;
+        }
+
+        private void RefreshRenderedMessageFooter(int messageIndex)
+        {
+            if (messageIndex < 0 || messageIndex >= m_RenderedMessageObjects.Count || messageIndex >= m_ChatHistory.Count)
+            {
+                return;
+            }
+
+            GameObject bubble = m_RenderedMessageObjects[messageIndex];
+            SavedChatMessage message = m_ChatHistory[messageIndex];
+            if (bubble == null || message == null)
+            {
+                return;
+            }
+
+            switch (message.Type)
+            {
+                case ChatMessageType.Normal:
+                    UpdateBubbleFooter(bubble, message, message.CharacterID);
+                    break;
+                case ChatMessageType.Image:
+                    UpdateImageBubbleFooter(bubble, message, message.CharacterID);
+                    break;
+            }
+
+            Canvas.ForceUpdateCanvases();
+        }
+
+        private int FindLastPlayerMessageIndex()
+        {
+            for (int i = m_ChatHistory.Count - 1; i >= 0; i--)
+            {
+                SavedChatMessage message = m_ChatHistory[i];
+                if (message == null || message.IsDeleted || !IsPlayerCharacter(message.CharacterID))
+                {
+                    continue;
+                }
+
+                if (message.Type == ChatMessageType.Normal || message.Type == ChatMessageType.Image)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        private int FindDeletableMessageIndexFromEnd(int reverseIndex)
+        {
+            if (reverseIndex <= 0)
+            {
+                return -1;
+            }
+
+            int remaining = reverseIndex;
+            for (int i = m_ChatHistory.Count - 1; i >= 0; i--)
+            {
+                SavedChatMessage message = m_ChatHistory[i];
+                if (message == null || message.IsDeleted)
+                {
+                    continue;
+                }
+
+                if (message.Type != ChatMessageType.Normal && message.Type != ChatMessageType.Image)
+                {
+                    continue;
+                }
+
+                remaining--;
+                if (remaining == 0)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        private void RebuildCurrentHistory()
+        {
+            List<SavedChatMessage> snapshot = m_ChatHistory
+                .Select(CloneSavedChatMessage)
+                .ToList();
+            RestoreChatHistory(snapshot);
+        }
+
         /// <summary>
         /// テーマカラーとバブルスプライトのみを適用する（ラッパー生成なし）。
         /// ConfigureBubble の前にテキスト色を確定させたい場合に使用。
@@ -410,7 +947,7 @@ namespace ProjectFoundPhone.UI
             // 角丸スプライト + 影を適用
             ApplyBubbleVisuals(bubble);
 
-            TextMeshProUGUI textComponent = bubble.GetComponentInChildren<TextMeshProUGUI>();
+            TextMeshProUGUI textComponent = GetBubbleBodyText(bubble);
             if (textComponent != null)
             {
                 if (isAnnotationCard)
@@ -435,7 +972,7 @@ namespace ProjectFoundPhone.UI
         /// <param name="bubble">設定対象のバブルGameObject</param>
         /// <param name="charID">キャラクターID</param>
         /// <param name="isConsecutive">前回と同じ話者の連続メッセージか</param>
-        private void ConfigureBubble(GameObject bubble, string charID, bool isConsecutive = false)
+        private void ConfigureBubble(GameObject bubble, string charID, bool isConsecutive = false, BubbleStylePreset bubbleStylePreset = null, SavedChatMessage messageData = null)
         {
             bool isPlayer = CharacterDatabase.Instance != null
                 ? CharacterDatabase.Instance.IsPlayer(charID)
@@ -447,57 +984,49 @@ namespace ProjectFoundPhone.UI
 
             bool isAnnotationCard = m_ActiveThreadType == ThreadType.Annotation;
 
-            // バブル背景色を決定
             Image bubbleBackground = bubble.GetComponent<Image>();
             if (bubbleBackground != null)
             {
                 if (isAnnotationCard)
                 {
-                    // A型(注釈): 型色ベースのカード背景
                     Color typeColor = GetThreadTypeColor(ThreadType.Annotation);
                     bubbleBackground.color = Color.Lerp(new Color(0.15f, 0.15f, 0.2f, 0.85f), typeColor, 0.15f);
                 }
                 else if (m_ActiveThreadType.HasValue)
                 {
-                    // B/C/分岐: 型色ティント（キャラ色に12%混合）
                     Color typeColor = GetThreadTypeColor(m_ActiveThreadType.Value);
                     bubbleBackground.color = Color.Lerp(themeColor, typeColor, 0.12f);
                 }
                 else
                 {
-                    // メインスレッド: 通常
                     bubbleBackground.color = themeColor;
                 }
             }
 
-            // 角丸スプライト + 影を適用
             ApplyBubbleVisuals(bubble);
 
-            // MessageBubble の m_OriginalColor を同期（プール再利用時の色汚染防止）
             MessageBubble mb = bubble.GetComponent<MessageBubble>();
             if (mb != null)
             {
                 mb.SyncOriginalColor();
             }
 
-            // バブルの LayoutElement: CreateMessageBubble で設定済みの preferredWidth を維持
-            // flexibleWidth = 0 でテキスト幅フィットを実現
-
             if (m_ScrollRect == null || m_ScrollRect.content == null) return;
 
-            // ラッパーで配置を実現
-            string wrapperName = isAnnotationCard ? "AnnotationRow" : (isPlayer ? "PlayerRow" : "NpcRow");
+            bool useFullWidth = bubbleStylePreset != null && bubbleStylePreset.suppressWrapper;
+            string wrapperName = useFullWidth ? "PresetFullWidthRow"
+                : isAnnotationCard ? "AnnotationRow" : (isPlayer ? "PlayerRow" : "NpcRow");
             GameObject wrapper = new GameObject(wrapperName,
                 typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(LayoutElement), typeof(ContentSizeFitter));
             wrapper.transform.SetParent(m_ScrollRect.content, false);
             wrapper.transform.SetSiblingIndex(bubble.transform.GetSiblingIndex());
 
             HorizontalLayoutGroup hlg = wrapper.GetComponent<HorizontalLayoutGroup>();
-            hlg.childForceExpandWidth = false; // テキスト幅にフィット (バブルの preferredWidth を尊重)
+            hlg.childForceExpandWidth = useFullWidth;
             hlg.childForceExpandHeight = false;
-            hlg.childControlWidth = true;      // HLG が子要素の幅を制御
+            hlg.childControlWidth = true;
             hlg.childControlHeight = true;
-            hlg.spacing = UIConfig.iconBubbleSpacing; // アイコンとバブルの間隔
+            hlg.spacing = useFullWidth ? 0f : UIConfig.iconBubbleSpacing;
 
             int edgePad = UIConfig.wrapperEdgePadding;
             float containerWidth = GetContainerWidth();
@@ -508,22 +1037,24 @@ namespace ProjectFoundPhone.UI
             int topPad = isConsecutive ? 2 : vPad;
             int bottomPad = vPad;
 
-            if (isAnnotationCard)
+            if (useFullWidth)
             {
-                // A型(注釈): 中央配置、対称マージン
+                hlg.padding = new RectOffset(edgePad, edgePad, topPad, bottomPad);
+                hlg.childAlignment = TextAnchor.MiddleCenter;
+            }
+            else if (isAnnotationCard)
+            {
                 int symPad = edgePad * 2;
                 hlg.padding = new RectOffset(symPad, symPad, topPad, bottomPad);
                 hlg.childAlignment = TextAnchor.MiddleCenter;
             }
             else
             {
-                // 通常: パディングで片側にマージン → 左 or 右寄せ
                 hlg.padding = isPlayer
                     ? new RectOffset(sideMargin, edgePad, topPad, bottomPad)
                     : new RectOffset(edgePad, sideMargin, topPad, bottomPad);
             }
 
-            // SP-023 §2.2: <<BubbleMargin>> による % 指定が pending なら上書き
             if (m_PendingBubbleMarginPercent.HasValue)
             {
                 Vector4 mp = m_PendingBubbleMarginPercent.Value;
@@ -543,61 +1074,49 @@ namespace ProjectFoundPhone.UI
             wrapperFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
             wrapperFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            // キャラクターアイコンを追加（A型注釈カードでは省略）
-            if (!isAnnotationCard && UIConfig.showCharacterIcon && !string.IsNullOrEmpty(charID) && !isConsecutive)
+            IconSide iconSide = CharacterDatabase.Instance != null
+                ? CharacterDatabase.Instance.GetIconSide(charID)
+                : IconSide.Auto;
+            bool iconOnRight = iconSide == IconSide.Right || (iconSide == IconSide.Auto && isPlayer);
+            var profile = CharacterDatabase.Instance?.GetProfile(charID);
+            bool shouldShowCharacterIcon = profile != null
+                && profile.Icon != null
+                && profile.DisplayMode != CharacterDisplayMode.NameOnly
+                && (messageData == null || !messageData.IsDeleted);
+
+            GameObject iconObj = null;
+
+            if (!isAnnotationCard && !useFullWidth && UIConfig.showCharacterIcon && !string.IsNullOrEmpty(charID)
+                && !isConsecutive && shouldShowCharacterIcon)
             {
-                GameObject iconObj = CreateCharacterIcon(charID);
+                iconObj = CreateCharacterIcon(charID);
                 if (iconObj != null)
                 {
                     iconObj.transform.SetParent(wrapper.transform, false);
-                    // NPC: アイコン→バブル、Player: バブル→アイコン
-                    if (isPlayer)
-                    {
-                        iconObj.transform.SetAsLastSibling();
-                    }
-                    else
-                    {
-                        iconObj.transform.SetAsFirstSibling();
-                    }
                 }
             }
 
             bubble.transform.SetParent(wrapper.transform, false);
 
-            // アイコン表示 (A型注釈カードでは省略、NPC + DisplayMode がアイコン含む場合のみ)
-            if (!isAnnotationCard && !isPlayer)
+            if (iconObj != null)
             {
-                var profile = CharacterDatabase.Instance?.GetProfile(charID);
-                if (profile != null && profile.Icon != null &&
-                    profile.DisplayMode != CharacterDisplayMode.NameOnly)
+                if (iconOnRight)
                 {
-                    hlg.childForceExpandWidth = false;
-
-                    GameObject iconObj = new GameObject("CharIcon",
-                        typeof(RectTransform), typeof(Image), typeof(LayoutElement));
-                    iconObj.transform.SetParent(wrapper.transform, false);
+                    bubble.transform.SetAsFirstSibling();
+                    iconObj.transform.SetAsLastSibling();
+                }
+                else
+                {
                     iconObj.transform.SetAsFirstSibling();
-
-                    Image iconImage = iconObj.GetComponent<Image>();
-                    iconImage.sprite = profile.Icon;
-                    iconImage.preserveAspect = true;
-                    iconImage.raycastTarget = false;
-
-                    LayoutElement iconLayout = iconObj.GetComponent<LayoutElement>();
-                    iconLayout.preferredWidth = 36f;
-                    iconLayout.preferredHeight = 36f;
-                    iconLayout.minWidth = 36f;
-                    iconLayout.flexibleWidth = 0f;
+                    bubble.transform.SetAsLastSibling();
                 }
             }
 
-            // テキストの色を調整
-            TextMeshProUGUI textComponent = bubble.GetComponentInChildren<TextMeshProUGUI>();
+            TextMeshProUGUI textComponent = GetBubbleBodyText(bubble);
             if (textComponent != null)
             {
                 if (isAnnotationCard)
                 {
-                    // 注釈カード: 型色で統一
                     Color typeColor = GetThreadTypeColor(ThreadType.Annotation);
                     textComponent.color = new Color(
                         Mathf.Min(typeColor.r + 0.3f, 1f),
@@ -682,7 +1201,7 @@ namespace ProjectFoundPhone.UI
         /// <param name="text">メッセージテキスト</param>
         /// <param name="isConsecutive">前回と同じ話者の連続メッセージか</param>
         /// <returns>生成されたGameObject</returns>
-        private GameObject CreateMessageBubble(string charID, string text, bool isConsecutive = false)
+        private GameObject CreateMessageBubble(string charID, string text, SavedChatMessage messageData, bool isConsecutive = false, BubbleStylePreset bubbleStylePreset = null)
         {
             using var _ = s_CreateMessageBubbleMarker.Auto();
 
@@ -732,19 +1251,15 @@ namespace ProjectFoundPhone.UI
             }
 
             // テキストコンポーネントの取得または作成（ConfigureBubble の前に必要）
-            TextMeshProUGUI textComponent = messageBubble.GetComponentInChildren<TextMeshProUGUI>();
+            TextMeshProUGUI textComponent = GetBubbleBodyText(messageBubble);
             if (textComponent == null)
             {
                 GameObject textObj = new GameObject("Text");
                 textObj.transform.SetParent(messageBubble.transform, false);
                 textComponent = textObj.AddComponent<TextMeshProUGUI>();
-
-                RectTransform textRect = textComponent.GetComponent<RectTransform>();
-                textRect.anchorMin = new Vector2(0, 0);
-                textRect.anchorMax = new Vector2(1, 1);
-                textRect.offsetMin = new Vector2(10, 10);
-                textRect.offsetMax = new Vector2(-10, -10);
             }
+            ResetBubbleBodyTextLayout(textComponent);
+            EnsureBubbleFooterText(messageBubble);
 
             // フォント・書式プロパティを設定（プール再利用時のリセット兼用）
             float fontScale = GetResponsiveFontScale();
@@ -769,10 +1284,15 @@ namespace ProjectFoundPhone.UI
             bool isPlayerMsg = CharacterDatabase.Instance != null
                 ? CharacterDatabase.Instance.IsPlayer(charID) : charID == "player";
             bool isAnnotationCard = m_ActiveThreadType == ThreadType.Annotation;
+            bool isDeleted = messageData != null && messageData.IsDeleted;
 
             string finalText;
             string nameLineText = null; // 名前行の幅計算用 (名前がある場合のみ)
-            if (isAnnotationCard)
+            if (isDeleted)
+            {
+                finalText = DeletedMessageText;
+            }
+            else if (isAnnotationCard)
             {
                 // A型(注釈)スレッド: 情報カード表示。キャラクター名は省略し中央テキスト
                 finalText = text;
@@ -810,7 +1330,7 @@ namespace ProjectFoundPhone.UI
             }
             // サブスレッド内: マークアップ ([link:...], [artifact:...]) を TMP リッチテキストに変換
             bool hasLinks = false;
-            if (m_ActiveThreadType.HasValue)
+            if (!isDeleted && m_ActiveThreadType.HasValue)
             {
                 string before = finalText;
                 finalText = ChatTextParser.ParseThreadMarkup(finalText);
@@ -850,25 +1370,29 @@ namespace ProjectFoundPhone.UI
                 naturalTextWidth = preferredSize.x;
             }
             float fitWidth = Mathf.Min(naturalTextWidth + textPadH + safetyMargin, maxBubbleWidth);
+            DeliveryStatus? footerPreviewStatus = messageData != null && messageData.DeliveryStatus != DeliveryStatus.None
+                ? DeliveryStatus.Read
+                : (DeliveryStatus?)null;
+            UpdateBubbleFooter(messageBubble, messageData, charID, footerPreviewStatus);
+            fitWidth = Mathf.Max(fitWidth, GetFooterPreferredWidth(messageBubble) + safetyMargin);
 
             // バブル幅を仮確定 (ConfigureBubble 後に FinalizeBubbleSize で最終調整)
             layoutElement.preferredWidth = fitWidth;
             layoutElement.flexibleWidth = 0f;
 
             // バブルの最終処理（ラッパー生成 + 配置）
-            ConfigureBubble(messageBubble, charID, isConsecutive);
+            ConfigureBubble(messageBubble, charID, isConsecutive, bubbleStylePreset, messageData);
 
             // BubbleStylePreset: ConfigureBubble の後に適用 (背景・影・テキストを上書き)
-            BubbleStylePreset pendingPreset = null;
-            if (!string.IsNullOrEmpty(m_PendingBubbleStylePresetId))
+            if (isDeleted)
             {
-                pendingPreset = BubbleStyleDatabase.Get(m_PendingBubbleStylePresetId);
-                m_PendingBubbleStylePresetId = null;
+                ApplyDeletedBubbleVisuals(messageBubble, textComponent);
             }
-            if (pendingPreset != null)
+            else if (bubbleStylePreset != null)
             {
-                ApplyBubbleStylePreset(messageBubble, textComponent, pendingPreset);
+                ApplyBubbleStylePreset(messageBubble, textComponent, bubbleStylePreset);
             }
+            UpdateBubbleFooter(messageBubble, messageData, charID);
 
             // ラッパー内での最終幅に基づいて高さを再計算
             FinalizeBubbleSize(messageBubble, minH);
@@ -1059,7 +1583,7 @@ namespace ProjectFoundPhone.UI
         /// <param name="text">メッセージテキスト</param>
         public void AddMessage(string charID, string text)
         {
-            AddMessage(charID, text, null);
+            AddMessage(charID, text, null, null);
         }
 
         /// <summary>
@@ -1085,6 +1609,44 @@ namespace ProjectFoundPhone.UI
             m_PendingBubbleStylePresetId = presetId;
         }
 
+        private static string GetBubbleStylePresetId(BubbleStylePreset preset)
+        {
+            if (preset == null)
+            {
+                return null;
+            }
+
+            if (!string.IsNullOrEmpty(preset.presetId))
+            {
+                return preset.presetId;
+            }
+
+            Debug.LogWarning($"[ChatController] BubbleStylePreset '{preset.name}' に presetId が設定されていません。");
+            return null;
+        }
+
+        private BubbleStylePreset ResolveBubbleStylePreset(string charID, out string presetId)
+        {
+            presetId = null;
+
+            if (!string.IsNullOrEmpty(m_PendingBubbleStylePresetId))
+            {
+                presetId = m_PendingBubbleStylePresetId;
+                return BubbleStyleDatabase.Get(m_PendingBubbleStylePresetId);
+            }
+
+            BubbleStylePreset defaultPreset = CharacterDatabase.Instance != null
+                ? CharacterDatabase.Instance.GetDefaultBubbleStylePreset(charID)
+                : null;
+            presetId = GetBubbleStylePresetId(defaultPreset);
+            return defaultPreset;
+        }
+
+        private void ConsumePendingBubbleStylePreset()
+        {
+            m_PendingBubbleStylePresetId = null;
+        }
+
         /// <summary>
         /// 次に生成する 1 メッセージにラッパーマージン (%) を適用する (SP-023 §2.2)。
         /// 値はコンテナ幅に対するパーセント (0-100)。負値は 0 に丸める。
@@ -1099,6 +1661,49 @@ namespace ProjectFoundPhone.UI
                 Mathf.Max(0f, bottomPercent));
         }
 
+        public bool TryUpdateLastPlayerMessageDeliveryStatus(DeliveryStatus status)
+        {
+            int messageIndex = FindLastPlayerMessageIndex();
+            if (messageIndex < 0)
+            {
+                return false;
+            }
+
+            SavedChatMessage message = m_ChatHistory[messageIndex];
+            if (message == null || message.IsDeleted || status <= message.DeliveryStatus)
+            {
+                return false;
+            }
+
+            CancelAutoDeliveryCoroutine(messageIndex);
+            message.DeliveryStatus = status;
+            RefreshRenderedMessageFooter(messageIndex);
+            return true;
+        }
+
+        public bool TryDeleteMessageFromEnd(int reverseIndex)
+        {
+            int messageIndex = FindDeletableMessageIndexFromEnd(reverseIndex);
+            if (messageIndex < 0)
+            {
+                return false;
+            }
+
+            CancelAutoDeliveryCoroutine(messageIndex);
+
+            SavedChatMessage message = m_ChatHistory[messageIndex];
+            message.Type = ChatMessageType.Normal;
+            message.Text = DeletedMessageText;
+            message.ImageResourcePath = null;
+            message.LineTag = null;
+            message.IsDeleted = true;
+            message.DeliveryStatus = DeliveryStatus.None;
+            message.BubbleStylePresetId = null;
+
+            RebuildCurrentHistory();
+            return true;
+        }
+
         /// <summary>
         /// LineTag 付きメッセージをチャットに追加（矛盾指摘システム対応）
         /// </summary>
@@ -1106,6 +1711,11 @@ namespace ProjectFoundPhone.UI
         /// <param name="text">メッセージテキスト</param>
         /// <param name="lineTag">矛盾判定用の識別タグ（null なら通常メッセージ）</param>
         public void AddMessage(string charID, string text, string lineTag)
+        {
+            AddMessage(charID, text, lineTag, null);
+        }
+
+        public void AddMessage(string charID, string text, string lineTag, SavedChatMessage existingMessage)
         {
             using var _ = s_AddMessageMarker.Auto();
 
@@ -1115,38 +1725,66 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
+            SavedChatMessage messageRecord = existingMessage != null
+                ? CloneSavedChatMessage(existingMessage)
+                : CreateRuntimeMessageRecord(ChatMessageType.Normal, charID, text, lineTag);
+            if (messageRecord == null)
+            {
+                return;
+            }
+
+            messageRecord.Type = ChatMessageType.Normal;
+            messageRecord.CharacterID = charID;
+            messageRecord.Text = messageRecord.IsDeleted ? DeletedMessageText : text;
+            messageRecord.LineTag = messageRecord.IsDeleted ? null : (lineTag ?? messageRecord.LineTag);
+            messageRecord.ImageResourcePath = null;
+            if (messageRecord.IsDeleted)
+            {
+                messageRecord.DeliveryStatus = DeliveryStatus.None;
+                messageRecord.BubbleStylePresetId = null;
+            }
+
+            string appliedPresetId = null;
+            BubbleStylePreset appliedPreset = null;
+            if (!messageRecord.IsDeleted)
+            {
+                appliedPreset = ResolveBubbleStylePreset(charID, out appliedPresetId);
+            }
+
+            if (string.IsNullOrEmpty(messageRecord.BubbleStylePresetId))
+            {
+                messageRecord.BubbleStylePresetId = appliedPresetId;
+            }
+
             // 履歴に記録（復元中は二重記録しない）
             if (!m_IsRestoringHistory)
             {
-                m_ChatHistory.Add(new SavedChatMessage
-                {
-                    Type = ChatMessageType.Normal,
-                    CharacterID = charID,
-                    Text = text,
-                    LineTag = lineTag
-                });
+                m_ChatHistory.Add(messageRecord);
             }
 
             // 連続メッセージ判定
             bool isConsecutive = (charID == m_LastSpeaker);
 
             // メッセージバブルの生成と追加
-            GameObject messageBubble = CreateMessageBubble(charID, text, isConsecutive);
+            GameObject messageBubble = CreateMessageBubble(charID, messageRecord.Text, messageRecord, isConsecutive, appliedPreset);
             if (messageBubble == null)
             {
                 Debug.LogError($"[AddMessage] CreateMessageBubble returned null for charID='{charID}', text='{text}'");
                 return;
             }
+            m_RenderedMessageObjects.Add(messageBubble);
+
+            ConsumePendingBubbleStylePreset();
 
             // LineTag が設定されている場合、MessageBubble コンポーネントをアタッチ
-            if (!string.IsNullOrEmpty(lineTag))
+            if (!string.IsNullOrEmpty(messageRecord.LineTag) && !messageRecord.IsDeleted)
             {
                 MessageBubble bubble = messageBubble.GetComponent<MessageBubble>();
                 if (bubble == null)
                 {
                     bubble = messageBubble.AddComponent<MessageBubble>();
                 }
-                bubble.Initialize(lineTag, messageBubble.GetComponent<UnityEngine.UI.Image>());
+                bubble.Initialize(messageRecord.LineTag, messageBubble.GetComponent<UnityEngine.UI.Image>());
 
                 // 矛盾指摘のポインターイベントを受け取るために raycastTarget を有効化
                 Image bubbleImg = messageBubble.GetComponent<Image>();
@@ -1154,6 +1792,12 @@ namespace ProjectFoundPhone.UI
                 {
                     bubbleImg.raycastTarget = true;
                 }
+            }
+
+            int messageIndex = m_ChatHistory.Count - 1;
+            if (!m_IsRestoringHistory && messageIndex >= 0)
+            {
+                StartAutoDeliveryProgressIfNeeded(messageIndex, messageRecord);
             }
 
             // 話者を更新
@@ -1169,6 +1813,11 @@ namespace ProjectFoundPhone.UI
         /// <param name="imageSprite">表示する画像Sprite</param>
         public void AddImageMessage(string charID, Sprite imageSprite)
         {
+            AddImageMessage(charID, imageSprite, null);
+        }
+
+        public void AddImageMessage(string charID, Sprite imageSprite, SavedChatMessage existingMessage)
+        {
             using var _ = s_AddImageMessageMarker.Auto();
 
             if (imageSprite == null)
@@ -1177,15 +1826,25 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
+            SavedChatMessage messageRecord = existingMessage != null
+                ? CloneSavedChatMessage(existingMessage)
+                : CreateRuntimeMessageRecord(ChatMessageType.Image, charID, imageResourcePath: imageSprite.name);
+            if (messageRecord == null)
+            {
+                return;
+            }
+
+            messageRecord.Type = ChatMessageType.Image;
+            messageRecord.CharacterID = charID;
+            messageRecord.ImageResourcePath = imageSprite.name;
+            messageRecord.Text = null;
+            messageRecord.LineTag = null;
+            messageRecord.IsDeleted = false;
+
             // 履歴に記録（復元中は二重記録しない）
             if (!m_IsRestoringHistory)
             {
-                m_ChatHistory.Add(new SavedChatMessage
-                {
-                    Type = ChatMessageType.Image,
-                    CharacterID = charID,
-                    ImageResourcePath = imageSprite.name
-                });
+                m_ChatHistory.Add(messageRecord);
             }
 
             // 遅延初期化: ImageBubblePrefabが未設定の場合はランタイム生成
@@ -1227,6 +1886,8 @@ namespace ProjectFoundPhone.UI
                 }
             }
 
+            float renderedImageHeight = -1f;
+            bool renderedAsTextFallback = imageContent == null;
             if (imageContent != null)
             {
                 imageContent.sprite = imageSprite;
@@ -1245,6 +1906,7 @@ namespace ProjectFoundPhone.UI
                         width = height * aspectRatio;
                     }
                     imgRect.sizeDelta = new Vector2(width, height);
+                    renderedImageHeight = height;
                 }
 
                 // 画像のフェードイン演出
@@ -1254,7 +1916,7 @@ namespace ProjectFoundPhone.UI
             else
             {
                 // フォールバック: テキストとして画像名を表示
-                TextMeshProUGUI textComponent = imageBubble.GetComponentInChildren<TextMeshProUGUI>();
+                TextMeshProUGUI textComponent = GetBubbleBodyText(imageBubble);
                 if (textComponent != null)
                 {
                     // 表示名をCharacterDatabaseから取得（fallback: IDそのまま）
@@ -1262,6 +1924,7 @@ namespace ProjectFoundPhone.UI
                         ? CharacterDatabase.Instance.GetDisplayName(charID)
                         : charID;
                     textComponent.text = $"{displayName}: [Image: {imageSprite.name}]";
+                    ResetBubbleBodyTextLayout(textComponent);
                 }
             }
 
@@ -1273,11 +1936,40 @@ namespace ProjectFoundPhone.UI
             imgLayout.preferredWidth = imgBubbleWidth;
             imgLayout.flexibleWidth = 0f;
 
+            DeliveryStatus? footerPreviewStatus = messageRecord.DeliveryStatus != DeliveryStatus.None
+                ? DeliveryStatus.Read
+                : (DeliveryStatus?)null;
+            if (renderedAsTextFallback)
+            {
+                UpdateBubbleFooter(imageBubble, messageRecord, charID, footerPreviewStatus);
+                imgLayout.preferredWidth = Mathf.Max(imgLayout.preferredWidth, GetFooterPreferredWidth(imageBubble));
+            }
+            else
+            {
+                UpdateImageBubbleFooter(imageBubble, messageRecord, charID, renderedImageHeight, footerPreviewStatus);
+                imgLayout.preferredWidth = Mathf.Max(imgLayout.preferredWidth, GetFooterPreferredWidth(imageBubble));
+            }
+
             // 連続メッセージ判定
             bool isConsecutive = (charID == m_LastSpeaker);
 
             // バブルの最終処理（配置、アニメーション、スクロール）
             FinalizeBubble(imageBubble, charID, isConsecutive);
+            if (renderedAsTextFallback)
+            {
+                UpdateBubbleFooter(imageBubble, messageRecord, charID);
+            }
+            else
+            {
+                UpdateImageBubbleFooter(imageBubble, messageRecord, charID, renderedImageHeight);
+            }
+            m_RenderedMessageObjects.Add(imageBubble);
+
+            int messageIndex = m_ChatHistory.Count - 1;
+            if (!m_IsRestoringHistory && messageIndex >= 0)
+            {
+                StartAutoDeliveryProgressIfNeeded(messageIndex, messageRecord);
+            }
 
             // 話者を更新
             m_LastSpeaker = charID;
@@ -1296,12 +1988,31 @@ namespace ProjectFoundPhone.UI
         /// <param name="text">システムメッセージのテキスト</param>
         public void AddSystemMessage(string text)
         {
+            AddSystemMessage(text, null);
+        }
+
+        public void AddSystemMessage(string text, SavedChatMessage existingMessage)
+        {
             using var _ = s_AddSystemMessageMarker.Auto();
 
             if (string.IsNullOrEmpty(text))
             {
                 return;
             }
+
+            SavedChatMessage messageRecord = existingMessage != null
+                ? CloneSavedChatMessage(existingMessage)
+                : CreateRuntimeMessageRecord(ChatMessageType.System, null, text);
+            if (messageRecord == null)
+            {
+                return;
+            }
+            messageRecord.Type = ChatMessageType.System;
+            messageRecord.Text = text;
+            messageRecord.CharacterID = null;
+            messageRecord.Timestamp = null;
+            messageRecord.DeliveryStatus = DeliveryStatus.None;
+            messageRecord.IsDeleted = false;
 
             // ルーティング分岐: 端末状態通知 vs 進行通知
             // 将来的に status カテゴリはステータスバー/トーストへ移行する
@@ -1311,11 +2022,11 @@ namespace ProjectFoundPhone.UI
             // 履歴に記録（復元中は二重記録しない）
             if (!m_IsRestoringHistory)
             {
-                m_ChatHistory.Add(new SavedChatMessage
+                if (string.IsNullOrEmpty(messageRecord.BubbleStylePresetId))
                 {
-                    Type = ChatMessageType.System,
-                    Text = text
-                });
+                    messageRecord.BubbleStylePresetId = m_PendingBubbleStylePresetId;
+                }
+                m_ChatHistory.Add(messageRecord);
             }
 
             if (m_ScrollRect == null || m_ScrollRect.content == null)
@@ -1364,7 +2075,7 @@ namespace ProjectFoundPhone.UI
                 bubbleBackground = systemBubble.AddComponent<Image>();
                 bubbleBackground.color = new Color(0.15f, 0.15f, 0.2f, 0.7f);
             }
-            // サブスレッド内: 型色でシステムメッセージ背景をティント
+
             if (m_ActiveThreadType.HasValue)
             {
                 Color typeColor = GetThreadTypeColor(m_ActiveThreadType.Value);
@@ -1402,21 +2113,16 @@ namespace ProjectFoundPhone.UI
             sizeFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
 
             // テキストコンポーネントの取得または作成
-            TextMeshProUGUI textComponent = systemBubble.GetComponentInChildren<TextMeshProUGUI>();
+            TextMeshProUGUI textComponent = GetBubbleBodyText(systemBubble);
             if (textComponent == null)
             {
                 GameObject textObj = new GameObject("Text");
                 textObj.transform.SetParent(systemBubble.transform, false);
                 textComponent = textObj.AddComponent<TextMeshProUGUI>();
-
-                RectTransform textRect = textComponent.GetComponent<RectTransform>();
-                textRect.anchorMin = new Vector2(0, 0);
-                textRect.anchorMax = new Vector2(1, 1);
-                textRect.offsetMin = new Vector2(10, 10);
-                textRect.offsetMax = new Vector2(-10, -10);
             }
+            ResetBubbleBodyTextLayout(textComponent);
+            HideBubbleFooter(systemBubble);
 
-            // プール再利用時にも確実にシステムメッセージ用の設定を適用
             textComponent.fontSize = UIConfig.systemMessageFontSize;
             textComponent.color = UIConfig.systemMessageTextColor;
             textComponent.alignment = TextAlignmentOptions.Center;
@@ -1444,7 +2150,7 @@ namespace ProjectFoundPhone.UI
             if (!string.IsNullOrEmpty(m_PendingBubbleStylePresetId))
             {
                 var preset = BubbleStyleDatabase.Get(m_PendingBubbleStylePresetId);
-                m_PendingBubbleStylePresetId = null;
+                ConsumePendingBubbleStylePreset();
                 if (preset != null)
                 {
                     ApplyBubbleStylePreset(systemBubble, textComponent, preset);
@@ -1460,6 +2166,7 @@ namespace ProjectFoundPhone.UI
             {
                 AutoScroll();
             }
+            m_RenderedMessageObjects.Add(systemBubble);
 
             // システムメッセージ後は連続が途切れる
             m_LastSpeaker = null;
@@ -1827,6 +2534,8 @@ namespace ProjectFoundPhone.UI
 
         private void OnDisable()
         {
+            StopAllAutoDeliveryCoroutines();
+
             if (m_AutoScrollScheduled)
             {
                 CancelInvoke(nameof(PerformAutoScroll));
@@ -2393,6 +3102,9 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
+            StopAllAutoDeliveryCoroutines();
+            m_RenderedMessageObjects.Clear();
+
             // チャプター遷移時の状態汚染を防止: スクロール状態をリセット
             m_IsUserScrolling = false;
             m_IsUserDragging = false;
@@ -2423,6 +3135,7 @@ namespace ProjectFoundPhone.UI
                 }
                 m_ChatHistory.Clear();
                 m_TypingIndicator = null;
+                m_RenderedMessageObjects.Clear();
                 if (m_TopSpacer != null) m_TopSpacer.transform.SetAsFirstSibling();
                 return;
             }
@@ -2457,6 +3170,7 @@ namespace ProjectFoundPhone.UI
             if (m_TopSpacer != null) m_TopSpacer.transform.SetAsFirstSibling();
 
             m_ChatHistory.Clear();
+            m_RenderedMessageObjects.Clear();
 
             // 連続メッセージ状態をリセット
             m_LastSpeaker = null;
@@ -2485,6 +3199,7 @@ namespace ProjectFoundPhone.UI
                 return;
             }
 
+            m_ChatHistory.AddRange(history.Select(CloneSavedChatMessage));
             m_IsRestoringHistory = true;
             try
             {
@@ -2497,10 +3212,18 @@ namespace ProjectFoundPhone.UI
                             // AddMessage → CreateMessageBubble で名前が再付加されるため、
                             // 復元前にストリップして二重表示を防止する。
                             string bodyText = ChatTextParser.StripNamePrefix(msg.Text);
-                            AddMessage(msg.CharacterID, bodyText, msg.LineTag);
+                            if (!string.IsNullOrEmpty(msg.BubbleStylePresetId))
+                            {
+                                SetNextBubbleStyle(msg.BubbleStylePresetId);
+                            }
+                            AddMessage(msg.CharacterID, bodyText, msg.LineTag, msg);
                             break;
                         case ChatMessageType.System:
-                            AddSystemMessage(msg.Text);
+                            if (!string.IsNullOrEmpty(msg.BubbleStylePresetId))
+                            {
+                                SetNextBubbleStyle(msg.BubbleStylePresetId);
+                            }
+                            AddSystemMessage(msg.Text, msg);
                             break;
                         case ChatMessageType.Image:
                             if (!string.IsNullOrEmpty(msg.ImageResourcePath))
@@ -2508,12 +3231,16 @@ namespace ProjectFoundPhone.UI
                                 Sprite sprite = Resources.Load<Sprite>(msg.ImageResourcePath);
                                 if (sprite != null)
                                 {
-                                    AddImageMessage(msg.CharacterID, sprite);
+                                    AddImageMessage(msg.CharacterID, sprite, msg);
                                 }
                                 else
                                 {
                                     // 画像が見つからない場合はテキストでフォールバック
-                                    AddMessage(msg.CharacterID, $"[Image: {msg.ImageResourcePath}]");
+                                    SavedChatMessage fallback = CloneSavedChatMessage(msg) ?? new SavedChatMessage();
+                                    fallback.Type = ChatMessageType.Normal;
+                                    fallback.Text = $"[Image: {msg.ImageResourcePath}]";
+                                    fallback.ImageResourcePath = null;
+                                    AddMessage(msg.CharacterID, fallback.Text, msg.LineTag, fallback);
                                 }
                             }
                             break;
@@ -2759,7 +3486,7 @@ namespace ProjectFoundPhone.UI
             LayoutRebuilder.ForceRebuildLayoutImmediate(bubble.GetComponent<RectTransform>());
             Canvas.ForceUpdateCanvases();
 
-            TextMeshProUGUI textComponent = bubble.GetComponentInChildren<TextMeshProUGUI>();
+            TextMeshProUGUI textComponent = GetBubbleBodyText(bubble);
             if (textComponent == null) return;
 
             // テキストメッシュを最終幅で再生成
@@ -2769,8 +3496,9 @@ namespace ProjectFoundPhone.UI
             if (bubbleLayout != null)
             {
                 float textHeight = textComponent.preferredHeight;
+                float footerHeight = GetFooterReservedHeight(bubble);
                 // 名前行のline-height=80%やフォントメトリクス丸めの安全マージンを追加
-                bubbleLayout.preferredHeight = Mathf.Max(minHeight, textHeight + UIConfig.bubbleTextPadding + 4f);
+                bubbleLayout.preferredHeight = Mathf.Max(minHeight, textHeight + UIConfig.bubbleTextPadding + footerHeight + 4f);
             }
 
             // 最終レイアウト更新
@@ -2884,7 +3612,9 @@ namespace ProjectFoundPhone.UI
             // 角丸スプライト
             // NOTE: ?? は C# 参照 null のみ判定し Unity の "fake null" (Inspector 未設定の
             //       SerializedField) を透過する。Unity overloaded != で明示判定する。
-            Sprite sprite = UIConfig.bubbleSprite != null ? UIConfig.bubbleSprite : BubbleSpriteFactory.GetOrCreateRoundedSprite(UIConfig.bubbleCornerRadius);
+            Sprite sprite = UIConfig.bubbleSprite != null
+                ? UIConfig.bubbleSprite
+                : BubbleSpriteFactory.GetOrCreateRoundedSprite(UIConfig.bubbleCornerRadius);
             #if UNITY_EDITOR
             if (sprite == null)
             {

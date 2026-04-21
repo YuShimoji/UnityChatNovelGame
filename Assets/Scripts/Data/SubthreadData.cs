@@ -52,6 +52,23 @@ namespace ProjectFoundPhone.Data
         /// <summary>未読メッセージ数</summary>
         public int UnreadCount;
 
+        // --- SP-023 S7: メタデータ拡張 (BL-003 統合) ---
+
+        /// <summary>難易度 (星 1-5, 0=未設定)</summary>
+        public int Difficulty;
+
+        /// <summary>推定所要時間 (例: "短め", "中", "長め")</summary>
+        public string EstimatedLength;
+
+        /// <summary>スレッドの説明文 (サイドバー表示用)</summary>
+        public string Description;
+
+        /// <summary>推奨レベル/前提条件の表示テキスト (例: "Ch1 Day2 以降")</summary>
+        public string RequiredLevel;
+
+        /// <summary>報酬のヒント (例: "断片を入手可能")</summary>
+        public string RewardHint;
+
         /// <summary>スレッド内の会話履歴</summary>
         public List<SavedChatMessage> ChatHistory = new List<SavedChatMessage>();
     }

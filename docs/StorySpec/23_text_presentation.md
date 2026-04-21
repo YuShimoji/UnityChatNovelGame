@@ -1,6 +1,6 @@
 # SP-023: テキスト表現仕様
 
-**ステータス**: draft
+**ステータス**: partial (70%)
 **カテゴリ**: ui
 **作成日**: 2026-04-15
 **改訂日**: 2026-04-15
@@ -64,7 +64,7 @@ Pyramid: 右側に小さく表示
 
 **実装方針**:
 - ScenarioManager に `<<BubbleMargin>>` コマンドを登録
-- ChatController に `m_NextBubbleMargin` (Vector4?) フィールドを追加
+- ChatController に `m_PendingBubbleMarginPercent` フィールドを追加
 - ConfigureBubble() の HLG.padding 計算でコンテナ幅 * % を反映
 - 適用後に null リセット
 
@@ -112,6 +112,8 @@ fitWidth = Min(naturalTextWidth + padding + margin, maxBubbleWidth)
 | textAlignment | TextAlignmentOptions | TopLeft / Center 等 |
 | padding | RectOffset | バブル内パディング |
 
+将来的に背景・ノイズ・オーバーレイ・通信異常などの視覚効果が増える場合も、`presetId` は安定キーとして維持し、`BubbleStylePreset` に optional な asset reference / renderer hint を追加して吸収する。preset ごとの `if` 分岐や感情専用 enum を増やし続ける設計は避ける。
+
 ### 3.3 組み込みプリセット
 
 以下を初期プリセットとして提供する。
@@ -147,6 +149,7 @@ Pyramid: 通常のバブルに戻る
 - `<<BubbleStyle>>` は次の 1 メッセージにのみ適用、適用後にリセット
 - `<<BubbleMargin>>` と併用可能 (BubbleStyle が見た目、BubbleMargin が位置)
 - プリセットに定義がないフィールドは ChatUIConfig / CharacterProfile のフォールバック
+- 適用済み presetId は `SavedChatMessage.BubbleStylePresetId` に保存し、Save/Load 後も同じ見た目を復元する
 
 ### 3.5 地の文パターン (`narration`)
 
@@ -397,7 +400,7 @@ SubthreadData に以下を追加する。
 | `Assets/Scripts/UI/ChatTextParser.cs` | マークアップ変換・未閉じタグ補完・名前除去 |
 | `Assets/Scripts/UI/ThreadSwitcherController.cs` | サイドバー・スレッド切替・通知バナー |
 | `Assets/Scripts/Data/ChatUIConfig.cs` | 色・サイズ・タイミング・レイアウトの SO 一元管理 |
-| `Assets/Scripts/Data/CharacterProfile.cs` | キャラクター別テーマ色・表示モード・アイコン向き |
+| `Assets/Scripts/Data/CharacterProfile.cs` | キャラクター別テーマ色・表示モード・アイコン向き・既定バブルスタイル |
 | `Assets/Scripts/Data/SubthreadData.cs` | スレッドデータ・メタデータ |
 | `Assets/Scripts/Data/BubbleStylePreset.cs` | バブルスタイルプリセット (新設) |
 | `Assets/Scripts/Effects/GlitchEffect.cs` | 画面グリッチエフェクト |
@@ -407,15 +410,22 @@ SubthreadData に以下を追加する。
 
 ## 9. 実装順序 (推奨)
 
-| 順序 | スライス | 依存 |
-|------|---------|------|
-| 1 | BubbleStylePreset SO + `<<BubbleStyle>>` コマンド | なし |
-| 2 | narration プリセット + `<<Narration>>` 短縮形 | 1 |
-| 3 | `<<BubbleMargin>>` コマンド (% 指定) | なし |
-| 4 | CharacterProfile.iconSide (アイコン左右) | なし |
-| 5 | フリックスレッド切替 | なし |
-| 6 | SubthreadData メタデータ拡張 + サイドバー表示 | なし |
-| 7 | 追加プリセット (thought/shout/whisper/announcement) | 1 |
+| 順序 | スライス | 依存 | 実装状況 |
+|------|---------|------|---------|
+| 1 | BubbleStylePreset SO + `<<BubbleStyle>>` コマンド | なし | **実装済み** (BubbleStylePreset.cs, BubbleStyleDatabase.cs, ChatController, ScenarioManager) |
+| 2 | narration プリセット + `<<Narration>>` 短縮形 | 1 | **実装済み** (ScenarioManager + AddSystemMessage プリセット分岐) |
+| 3 | `<<BubbleMargin>>` コマンド (% 指定) | なし | **実装済み** (ChatController.m_PendingBubbleMarginPercent + ConfigureBubble + ScenarioManager) |
+| 4 | CharacterProfile.iconSide (アイコン左右) | なし | **実装済み** (IconSide enum + CharacterProfile + CharacterDatabase + ConfigureBubble) |
+| 5 | フリックスレッド切替 | なし | **未実装** (既存ドラッグ検出との競合あり、別途設計セッション推奨) |
+| 6 | SubthreadData メタデータ拡張 + サイドバー表示 | なし | **実装済み** (SubthreadData 5 フィールド + SetThreadMeta + ThreadSwitcherController メタ行) |
+| 7 | 追加プリセット (thought/shout/whisper/announcement) | 1 | **実装済み** (`Assets/Resources/BubbleStyles/` に 4 preset asset を追加。実機での値調整は継続) |
+
+### 残作業 (Unity Editor 側)
+
+- `Assets/Scenes/DebugChatScene.unity` で Start Node を `SP023_NarrationMargin_Start` にし、Narration 2 回 / 通常バブル / 左右マージン / 上下マージン / 自動リセットを確認
+- Start Node を `SP023_LocalExtensions_Start` に切り替え、`<<SetThreadMeta>>` 後のサイドバーメタ即時更新を確認
+- `pyramid` に一時的に `Assets/Resources/Images/debug_image_01.png` を割り当て、DisplayMode = `IconAndName` のまま `IconSide` を `Auto` / `Left` / `Right` で比較
+- Start Node を `SP023_DisplayShowcase_Start` に切り替え、`default` / `narration` / `thought` / `whisper` / `shout` / `announcement` が warning なしで読み込まれることを確認
 
 ---
 
@@ -425,9 +435,9 @@ SubthreadData に以下を追加する。
 
 | 項目 | 概要 | ステータス | 確認時期 |
 |------|------|-----------|---------|
-| キャラ別既定バブルスタイル | CharacterProfile に defaultBubbleStylePreset を追加し、キャラごとにバブルの見た目を変える | 保留: SP-023 S1 (BubbleStylePreset) 完了後に判断 | BubbleStylePreset 実装後 |
-| 表情/感情アイコン | CharacterProfile.m_Icon を感情ごとに差し替え可能にする (怒り/困惑/笑顔)。Yarn コマンドで動的切替 | 保留: BL-002 (ポートレートアイコン) 着手時に判断 | ポートレート実装後 |
-| AI 劣化ビジュアル | SP-005 の AI 壊れ方タイムラインと連動し、バブル単位で文字化け・ノイズ重畳・色漏れを表現。BubbleStylePreset の拡張で実現する案 | 保留: Ch3 以降のストーリーで必要性を判断 | Ch2-3 執筆中 |
+| キャラ別既定バブルスタイル | CharacterProfile に defaultBubbleStylePreset を持たせ、キャラ既定の見た目を `<<BubbleStyle>>` の明示指定より低優先で適用する | 実装済み: `CharacterProfile.defaultBubbleStylePreset` + `ChatController` の優先順位解決 | Unity 画面検収 |
+| 状態依存アイコン | アイコンを感情固定にせず、通信状態・更新状態・異常状態・役割変化などの state key で差し替える。将来は状態ごとの variant map で拡張する | 保留: BL-002 / SP-024 S4 と接続して判断 | 状態表示 UI 着手時 |
+| AI 劣化ビジュアル | SP-005 の AI 壊れ方タイムラインと連動し、バブル単位で文字化け・ノイズ重畳・色漏れを表現。`BubbleStylePreset` の optional effect asset / renderer 拡張で吸収する案 | 保留: Ch3 以降のストーリーで必要性を判断 | Ch2-3 執筆中 |
 
 ---
 
@@ -435,10 +445,10 @@ SubthreadData に以下を追加する。
 
 | 項目 | 概要 | ステータス | 確認時期 |
 |------|------|-----------|---------|
-| 入場アニメーション種別 | slide-left / slide-right / fade / scale-up をメッセージ単位で指定。BubbleStylePreset に entryAnimation フィールドを追加する案 | 保留: SP-023 S1 (BubbleStylePreset) 実装後に判断 | BubbleStylePreset 実装後 |
+| 入場アニメーション種別 | slide-left / slide-right / fade / scale-up をメッセージ単位で指定。固定 enum 追加だけでなく、preset 側の renderer hint / effect asset 参照で吸収する案 | 保留: SP-023 S1 (BubbleStylePreset) 実装後に判断 | BubbleStylePreset 実装後 |
 | メッセージ事後変化 | 表示済みバブルが時間経過で文字化け・消去・書き換えされる。AI 劣化ビジュアル (B 領域) と統合検討 | 保留: 工数大。Ch3 以降の演出需要で判断 | Ch3 以降 |
 | バブル内インタラクション | タップ可能なワード (展開セクション、詳細表示)。`<link>` タグの拡張で段階的に実装する案 | 保留: サブクエスト B 型 (Wiki 遷移) 着手時に判断 | B 型実装時 |
-| 音/振動 | 特定メッセージ表示時に SE やハプティクスを発火。BubbleStylePreset に soundEffect フィールドを追加する案 | 保留: SP-009 (Audio/Visual) と統合 | サウンド統合時 |
+| 音/振動 | 特定メッセージ表示時に SE やハプティクスを発火。BubbleStylePreset に直接固定フィールドを増やすより、演出拡張用の参照先を持たせる案を優先 | 保留: SP-009 (Audio/Visual) と統合 | サウンド統合時 |
 
 ---
 
