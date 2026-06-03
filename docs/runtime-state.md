@@ -1,19 +1,19 @@
 # Runtime State
 
-**Updated**: 2026-04-21（origin/main 同期 + SP-023 ローカル拡張差分/追加 preset/検証 Yarn + SP-024 S1/S2/S5 UI 接続 / 検証 Yarn を反映）
+**Updated**: 2026-06-03（ローカル Unity 6000.4.9f1 状態 + SP-023 / SP-024 表示検収前の引き継ぎを origin/main へ反映）
 
 ## Current Position
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
-- lane: **UI/Engine**（SP-023 / SP-024 の 9 Block 実装・Block 毎検収方式）
-- slice: **origin/main の Block 2 状態に、ローカル SP-023 拡張差分 + Block 6 preset / 検証 Yarn + SP-024 S1/S2/S3/S5 実装 / defaultBubbleStylePreset を反映済み**
-- next_recommended_slice: **`SP023_NarrationMargin_Start` → `SP023_LocalExtensions_Start` → `SP023_DisplayShowcase_Start` の Unity 画面検収**
+- lane: **UI/Engine**（SP-023 / SP-024 の表示検収再開）
+- slice: **ローカル追跡差分と再開文脈を main に固定し、別端末で pull 後すぐ検収へ戻れる状態**
+- next_recommended_slice: **Unity 6000.4.9f1 で `SP023_NarrationMargin_Start` → `SP023_LocalExtensions_Start` → `SP023_DisplayShowcase_Start` の Unity 画面検収**
 - subsequent_recommended_slice: **`SP024_Immersion_Start` による SP-024 S1/S2/S5 の Unity 見た目確認、または S4 (オンライン状態 UI) / Block 4 (フリックスレッド切替) の設計固定**
 - later_recommended_slice: **SP-024 S4 (オンライン状態表示)**
 - active_artifact: ChatController / ChatDialogueView / ScenarioManager / CharacterProfile / SaveData / SubthreadData / ThreadSwitcherController / BubbleStyle assets / SP023 demo yarns / SP024_ImmersionDemo
 - artifact_surface: ChatController / ChatDialogueView / ChatUIConfig / ScenarioManager / CharacterDatabase / ThreadSwitcherController
-- last_change_relation: sync（2026-04-21: origin/main fast-forward + stash 再適用マージ）
+- last_change_relation: sync（2026-06-03: local tracked Unity/project settings + handoff docs を remote 反映）
 - plan_file: `C:\Users\thank\.claude\plans\hazy-tumbling-feigenbaum.md` （9 Block 分割の実行プラン） / `docs/plans/display-batch-showcase.md`（表示系デモ・修正版・リポジトリ正本）
 
 ## Counters
@@ -34,6 +34,15 @@
 - last_visual_audit_path: docs/archive/verification-evidence/VerticalSliceSmokeGate_20260403_*.png (参考。パスのみ保持、追跡は廃止)
 
 ## Session Log
+
+### 2026-06-03（ローカル状態の remote 反映・別端末 handoff）
+
+- **目的**: 会話ログなしで別端末から再開できるよう、現在のローカル追跡差分・検証結果・残リスクを project-local docs に固定し、`origin/main` へ反映する。
+- **Unity / packages**: `ProjectVersion.txt` を 6000.4.9f1 に更新。`com.unity.nuget.newtonsoft-json` は 3.2.2。別端末は Unity 6000.4.9f1 で開く前提。
+- **Assets / settings**: `CharacterProfile_NPC_Pyramid.asset` は `m_IconSide: 2`。`NotoSansJP-Regular SDF.asset` は dynamic font cache が空の状態で保存されているため、日本語表示は次回の画面検収で重点確認。`EditorBuildSettings.asset` は Unity 再保存により `m_UseUCBPForAssetBundles` 行が削除されたのみ。
+- **Local-only**: `.codex/hooks.json` は絶対パスと未存在 script 参照を含むため、リモート対象外として `.gitignore` に追加。Codex/AI 向け正本は `AGENTS.md` と `docs/ai/*.md`。
+- **検証**: `git diff --check` pass、Packages JSON parse pass、Unity 6000.4.9f1 batchmode open exit code 0。ログ上は Licensing handshake の一時 error、MenuItem 重複 warning、MCPForUnity port 8765 info が残るが、batchmode は正常終了。
+- **未検証**: SP-023 3 本の画面検収、SP-024 S1/S2/S5 の画面検収、SDF cache reset 後の日本語表示、Pyramid `IconSide=2` の実表示。
 
 ### 2026-04-21（同期再開・ローカル差分再適用）
 

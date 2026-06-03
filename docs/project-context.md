@@ -7,10 +7,11 @@
 - 表形式の決定履歴: [docs/DECISION_LOG.md](DECISION_LOG.md)（必要時のみ）
 
 - プロジェクト名: FoundPhone (UnityChatNovelGame)
-- 環境: Unity 6.3 LTS (6000.3.6f1) / C# / Yarn Spinner 3.1.3 / DOTween
+- 環境: Unity 6000.4.9f1 / C# / Yarn Spinner 3.1.3 / DOTween
 - ブランチ戦略: trunk-based (main のみ)
 - 現フェーズ: プロトタイプ → α移行中
 - 直近の状態 (2026-04-10 リモート同期マージ、2026-04-09 handoff 追記):
+  - **運用 (2026-06-03)**: ローカル追跡差分と handoff 文脈を `origin/main` へ反映する同期ブロック。別端末の最短再開は Unity 6000.4.9f1 + `docs/HANDOFF.md`。`NotoSansJP-Regular SDF.asset` の dynamic cache reset 後の日本語表示は次回画面検収で重点確認
   - **運用 (2026-04-09)**: セッション引き継ぎで `main`≒`origin/main` を確認。計測用 `debug-*.log` は `.gitignore` でリポジトリ外に固定。再開の最短導線は `docs/HANDOFF.md` の Handoff snapshot
   - **技術 (session 21–22)**: PlayMode 失敗の根本原因は auto-start の missing_node:Start。HasNode 事前チェック + archive 除外 + TearDown（`UnityTearDown` + `StopScenario` + 待機）で修正。WORKFLOW_STATE_SSOT.md 廃止。Session 22: タイプライター同期（DOTween 完了待機）、DebugChatScene 整備、SaveManager AutoSaveIndicator 安全化、PlayMode **8**/8・EditMode 75/75 をローカルで通過（batch XML・共通ヘルパー分離済み）
   - **方向性修正 (2026-04-15)**: Ch 積み上げ構造の構造的ドリフトを修正。主軸を**エンジン能力マイルストーン**に切替。ガードレール（CLAUDE.md DEVELOPMENT PURPOSE）を実行計画より上位に再配置。SUBSEQUENT を通過ゲート（スキップ不可）に変更

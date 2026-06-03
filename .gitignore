@@ -85,6 +85,10 @@ debug-*.log
 # Special files
 **/nul
 
+# Local Codex runtime hooks can contain absolute machine paths; keep portable
+# project rules in AGENTS.md and docs/ai/*.md instead.
+.codex/hooks.json
+
 # Build artifacts (prevent accidental commits of Unity builds)
 *.exe
 *.dll

@@ -14,6 +14,7 @@
 | 2026-03-30 | 最も欲しいのは人間が執筆するためのシステム周り | active | パイプライン導線は実装済み。残りは Unity 実機検証と E2E 自動検証 |
 | 2026-04-15 | Ch積み上げでゲーム完成方向へのドリフト防止。エンジン能力マイルストーン中心の進行に切替 | active | CLAUDE.md ガードレール再権限化、project-context.md AXIS/LANE/SLICE/ROADMAP 改訂、INVARIANTS.md ドリフト検知 |
 | 2026-03-30 | なるべくプロジェクト内 docs だけで引き継げる状態にせよ | done | HANDOFF.md 新設 + runtime-state / project-context / OPERATOR_WORKFLOW / prompt-resume.md |
+| 2026-06-03 | handoff 時は全コンテキストをプロジェクト内に保持し、local tracked state を remote へ反映して別端末で即再開できるようにする | done | HANDOFF.md / runtime-state.md / project-context.md / git commit + push |
 
 ## 未反映の是正要求
 
