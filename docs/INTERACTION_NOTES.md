@@ -40,6 +40,8 @@
 - UI 値調整は Inspector 作業として扱い、セッション成果に含めない
 - handoff summary は Shared Focus / Non-Negotiables / Reused Canonical Context / New Fossils / Active Artifact / 現在地 / Expansion Risk / Next を明示する
 - handoff 前に `git status` と docs 反映確認を出す
+- 変更・選択肢・残作業が複数ある完了報告では、本文を補助する比較表を使う。固定英語ラベルを薄く並べる形式ではなく、実際の摩擦・効果・次の動きが伝わる自然な日本語にする
+- 完了報告の末尾には、次に入れる取っ掛かりを 2〜4 個出す。各入口はどの bottleneck を減らし、選ぶと次に何が可能になるかまで短く添える
 
 ## 運用ルール
 

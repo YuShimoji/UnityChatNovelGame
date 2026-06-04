@@ -103,7 +103,7 @@ jobs:
           projectPath: .
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           testMode: editmode
-          unityVersion: 6000.3.6f1
+          unityVersion: 6000.4.9f1
           artifactsPath: artifacts/editmode
           checkName: Unity EditMode Tests
 

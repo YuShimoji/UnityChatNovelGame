@@ -29,7 +29,7 @@ python -m http.server 3000
 
 ## 技術スタック
 
-- **エンジン**: Unity 6.3 LTS (6000.3.6f1)
+- **エンジン**: Unity 6000.4.9f1
 - **スクリプト言語**: Yarn Spinner 3.1.3
 - **エディタ**: VS Code + Yarn Spinner Extension
 - **UI**: DOTween + TextMeshPro

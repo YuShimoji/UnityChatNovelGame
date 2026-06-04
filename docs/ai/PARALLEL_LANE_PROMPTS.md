@@ -33,7 +33,7 @@
 
 ```text
 【コア】
-リポジトリ: FoundPhone (UnityChatNovelGame)。Unity 6000.3.6f1 前後（ProjectVersion.txt 準拠）。
+リポジトリ: FoundPhone (UnityChatNovelGame)。Unity 6000.4.9f1 前後（ProjectVersion.txt 準拠）。
 正典の優先順位: docs/project-context.md の CURRENT DEVELOPMENT AXIS / CURRENT LANE / CURRENT SLICE。
 ルート CLAUDE.md の DEVELOPMENT PURPOSE に従い、検証に必要な範囲外のフル執筆はしない。
 docs/archive/ は明示依頼がない限り読まない。
@@ -253,4 +253,3 @@ assistant 主。リリース判断文は user。
 
 - 本ファイルの位置づけ: **PLAN MODE 直前の「レーン別起票テンプレ」**。正式な開発プラン本文は `project-context` のスライス語彙と整合させること。
 - 読書順索引: `docs/ai/READ_ORDER.md` のタスク別に本ファイルを列挙済み（追加時はそこも更新）。
-

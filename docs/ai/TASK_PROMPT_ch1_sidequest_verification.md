@@ -6,7 +6,7 @@
 
 ## コンテキスト
 
-- リポジトリ: FoundPhone (UnityChatNovelGame)、Unity 6000.3.6f1、主レーンは `docs/project-context.md` の CURRENT（Ch1 + パイプライン）。
+- リポジトリ: FoundPhone (UnityChatNovelGame)、Unity 6000.4.9f1、主レーンは `docs/project-context.md` の CURRENT。
 - 「サブクエスト」は仕様 [docs/StorySpec/22_subquest_exploration_content.md](../StorySpec/22_subquest_exploration_content.md)（SP-022）に定義。エンジンは既存 Yarn コマンド（`DeclareThread*` / `CompleteThread` / `ManifestThread` 等）で表現済み。
 - **リポジトリ上は Ch1 にパイロットが既に存在**する（未着手は主に **Ch2 以降のサブ**と **Editor 通し検証の未記録**）。機械集計は SP-022 §4.1 参照。
 

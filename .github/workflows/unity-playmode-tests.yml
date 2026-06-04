@@ -101,7 +101,7 @@ jobs:
           projectPath: .
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           testMode: playmode
-          unityVersion: 6000.3.6f1
+          unityVersion: 6000.4.9f1
           artifactsPath: artifacts/playmode
           checkName: Unity PlayMode Tests
 

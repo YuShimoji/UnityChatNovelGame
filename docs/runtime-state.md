@@ -38,10 +38,10 @@
 ### 2026-06-03（ローカル状態の remote 反映・別端末 handoff）
 
 - **目的**: 会話ログなしで別端末から再開できるよう、現在のローカル追跡差分・検証結果・残リスクを project-local docs に固定し、`origin/main` へ反映する。
-- **Unity / packages**: `ProjectVersion.txt` を 6000.4.9f1 に更新。`com.unity.nuget.newtonsoft-json` は 3.2.2。別端末は Unity 6000.4.9f1 で開く前提。
+- **Unity / packages / CI**: `ProjectVersion.txt` を 6000.4.9f1 に更新。`com.unity.nuget.newtonsoft-json` は 3.2.2。GitHub Actions の EditMode / PlayMode `unityVersion` も 6000.4.9f1 に同期。別端末は Unity 6000.4.9f1 で開く前提。
 - **Assets / settings**: `CharacterProfile_NPC_Pyramid.asset` は `m_IconSide: 2`。`NotoSansJP-Regular SDF.asset` は dynamic font cache が空の状態で保存されているため、日本語表示は次回の画面検収で重点確認。`EditorBuildSettings.asset` は Unity 再保存により `m_UseUCBPForAssetBundles` 行が削除されたのみ。
 - **Local-only**: `.codex/hooks.json` は絶対パスと未存在 script 参照を含むため、リモート対象外として `.gitignore` に追加。Codex/AI 向け正本は `AGENTS.md` と `docs/ai/*.md`。
-- **検証**: `git diff --check` pass、Packages JSON parse pass、Unity 6000.4.9f1 batchmode open exit code 0。ログ上は Licensing handshake の一時 error、MenuItem 重複 warning、MCPForUnity port 8765 info が残るが、batchmode は正常終了。
+- **検証**: `git diff --check` pass、Packages JSON parse pass、Unity 6000.4.9f1 batchmode open exit code 0。ログ上は Licensing handshake の一時 error、DOTween Editor asmdef no scripts warning、`UnityEngine.UI.Tests.dll` skip、MenuItem 重複 warning、MCPForUnity info が残るが、batchmode は正常終了。
 - **未検証**: SP-023 3 本の画面検収、SP-024 S1/S2/S5 の画面検収、SDF cache reset 後の日本語表示、Pyramid `IconSide=2` の実表示。
 
 ### 2026-04-21（同期再開・ローカル差分再適用）

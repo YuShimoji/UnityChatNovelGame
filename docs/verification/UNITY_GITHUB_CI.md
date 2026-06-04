@@ -33,7 +33,7 @@
 
 ## バージョン
 
-プロジェクトの Editor 版は `ProjectSettings/ProjectVersion.txt` の `m_EditorVersion` とワークフローの `unityVersion` を揃える（現行 **6000.3.6f1**）。
+プロジェクトの Editor 版は `ProjectSettings/ProjectVersion.txt` の `m_EditorVersion` とワークフローの `unityVersion` を揃える（現行 **6000.4.9f1**）。
 
 ## 並行監査メモ（好機）
 

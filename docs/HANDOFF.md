@@ -20,6 +20,7 @@
 - `CharacterProfile_NPC_Pyramid.asset` の `m_IconSide` は `2`。SP-023 LocalExtensions の左右差確認で使う Pyramid 側の Inspector 状態として保持。
 - `NotoSansJP-Regular SDF.asset` は dynamic font asset の glyph / character cache が空に再保存された状態。`m_ClearDynamicDataOnBuild: 1` の動的再生成前提だが、表示フォントの実画面確認はまだ必要。
 - `ProjectSettings/EditorBuildSettings.asset` は Unity 6000.4.9f1 の再保存で `m_UseUCBPForAssetBundles` 行が落ちたのみ。Build Scene の順序・内容は `TitleScene` / `ContentAuthoring` / `DebugChatScene` / `MVPScene` のまま。
+- `.github/workflows/*unity*-tests.yml` の `unityVersion` も 6000.4.9f1 に同期済み。CI と `ProjectVersion.txt` の版数を揃えてから引き継ぐ。
 - `.codex/hooks.json` はこの端末の絶対パスを含み、参照先 hook script が存在しないためリモート対象外にした。project-local 正本は `AGENTS.md` と `docs/ai/*.md`。
 
 ## Current Focus
@@ -33,7 +34,7 @@
 - `git diff --check`: pass。
 - `Packages/manifest.json` / `Packages/packages-lock.json`: PowerShell `ConvertFrom-Json` で parse pass。
 - Unity 6000.4.9f1 batchmode open: exit code 0。Asset import / script compile は通過し、batchmode は正常終了。
-- Unity log の既知注意: Licensing handshake の一時 error、`Tools/FoundPhone/Verification/Scan DebugChatScene Missing Scripts` の MenuItem 重複 warning、終了時の MCPForUnity port 8765 info。今回の同期差分では未修正。
+- Unity log の既知注意: Licensing handshake の一時 error、DOTween Editor asmdef の no scripts warning、`UnityEngine.UI.Tests.dll` skip、`Tools/FoundPhone/Verification/Scan DebugChatScene Missing Scripts` の MenuItem 重複 warning、MCPForUnity info。今回の同期差分では未修正。
 - 画面検収は未実施。特に SDF cache reset 後の日本語表示と Pyramid `IconSide=2` は次回 Unity 目視で確認する。
 
 ## Safe Next Steps
