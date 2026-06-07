@@ -1,19 +1,19 @@
 # Runtime State
 
-**Updated**: 2026-06-03（ローカル Unity 6000.4.9f1 状態 + SP-023 / SP-024 表示検収前の引き継ぎを origin/main へ反映）
+**Updated**: 2026-06-08（origin/main 同期 + Codex 起動設定整理 + IconSide / SP-023 追加テストの引き継ぎ）
 
 ## Current Position
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
 - lane: **UI/Engine**（SP-023 / SP-024 の表示検収再開）
-- slice: **ローカル追跡差分と再開文脈を main に固定し、別端末で pull 後すぐ検収へ戻れる状態**
-- next_recommended_slice: **Unity 6000.4.9f1 で `SP023_NarrationMargin_Start` → `SP023_LocalExtensions_Start` → `SP023_DisplayShowcase_Start` の Unity 画面検収**
+- slice: **ローカル追跡差分と再開文脈を main に固定し、別端末で Codex 起動エラーなしに検収へ戻れる状態**
+- next_recommended_slice: **Unity 6000.4.9f1 で追加済み IconSide / SP-023 PlayMode を確認後、`SP023_NarrationMargin_Start` → `SP023_LocalExtensions_Start` → `SP023_DisplayShowcase_Start` の Unity 画面検収**
 - subsequent_recommended_slice: **`SP024_Immersion_Start` による SP-024 S1/S2/S5 の Unity 見た目確認、または S4 (オンライン状態 UI) / Block 4 (フリックスレッド切替) の設計固定**
 - later_recommended_slice: **SP-024 S4 (オンライン状態表示)**
 - active_artifact: ChatController / ChatDialogueView / ScenarioManager / CharacterProfile / SaveData / SubthreadData / ThreadSwitcherController / BubbleStyle assets / SP023 demo yarns / SP024_ImmersionDemo
 - artifact_surface: ChatController / ChatDialogueView / ChatUIConfig / ScenarioManager / CharacterDatabase / ThreadSwitcherController
-- last_change_relation: sync（2026-06-03: local tracked Unity/project settings + handoff docs を remote 反映）
+- last_change_relation: unblocker + test coverage + handoff（2026-06-08: Codex repo-local runtime override 削除、欠落 hook 参照削除、IconSide / SP-023 テスト追加、handoff docs 更新）
 - plan_file: `C:\Users\thank\.claude\plans\hazy-tumbling-feigenbaum.md` （9 Block 分割の実行プラン） / `docs/plans/display-batch-showcase.md`（表示系デモ・修正版・リポジトリ正本）
 
 ## Counters
@@ -34,6 +34,16 @@
 - last_visual_audit_path: docs/archive/verification-evidence/VerticalSliceSmokeGate_20260403_*.png (参考。パスのみ保持、追跡は廃止)
 
 ## Session Log
+
+### 2026-06-08（Codex 起動設定整理・追加テスト・remote 反映準備）
+
+- **目的**: Codex Thread 開始時の repo-local モデル固定エラーを解消し、同じ文脈を project-local docs に残したうえで、別端末が `main` pull 直後に再開できる状態へ戻す。
+- **Git**: `git fetch --prune origin` で `origin/main` が `bdf98c4` まで先行。ローカル差分を stash 退避し、`git pull --ff-only origin main` で fast-forward 後に stash 再適用。同期直後の `HEAD...origin/main` は `0 0`。
+- **Codex / assistant 設定**: tracked `.codex/config.toml` を削除し、`model = "gpt-5-codex"` / `approval_policy` / `sandbox_mode` の repo-local 固定を廃止。`docs/INVARIANTS.md` に、Codex 実行環境設定はユーザー側設定へ委ねるルールを追加。
+- **Claude local 設定**: `.claude/settings.local.json` から、存在しない `.claude/hooks/*.sh` 参照を削除。権限設定は維持。
+- **テスト差分**: `CoreLogicTests` に `CharacterProfile.IconSide` の既定値・設定値テストを追加。`ScenarioFlowPlayModeTests` に `SP023_NarrationMargin_Start` のバブル生成確認と、`DebugChatScene` 上の IconSide 左右配置確認を追加。
+- **検証境界**: `git diff --check` は空白エラーなし、`.claude/settings.local.json` は JSON parse pass、Codex 固定設定と欠落 hook 名の残存検索はヒットなし。この端末には Unity 6000.4.9f1 がないため、追加 EditMode / PlayMode 実行は未実施。
+- **次の所有者**: assistant / CI は追加テストの Unity 6000.4.9f1 実行確認を担当。ユーザーは SP-023 / SP-024 の画面検収判断を担当。
 
 ### 2026-06-03（ローカル状態の remote 反映・別端末 handoff）
 

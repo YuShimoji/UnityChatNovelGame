@@ -12,6 +12,7 @@
 - 現フェーズ: プロトタイプ → α移行中
 - 直近の状態 (2026-04-10 リモート同期マージ、2026-04-09 handoff 追記):
   - **運用 (2026-06-03)**: ローカル追跡差分と handoff 文脈を `origin/main` へ反映する同期ブロック。別端末の最短再開は Unity 6000.4.9f1 + `docs/HANDOFF.md`。`NotoSansJP-Regular SDF.asset` の dynamic cache reset 後の日本語表示は次回画面検収で重点確認
+  - **運用 (2026-06-08)**: Codex の repo-local `model` / `approval_policy` / `sandbox_mode` 固定を削除し、欠落 `.claude/hooks/*.sh` 参照も除去。`origin/main` 先行分を fast-forward で取り込み、追加の IconSide / SP-023 テストと handoff 文脈を project-local docs に固定
   - **運用 (2026-04-09)**: セッション引き継ぎで `main`≒`origin/main` を確認。計測用 `debug-*.log` は `.gitignore` でリポジトリ外に固定。再開の最短導線は `docs/HANDOFF.md` の Handoff snapshot
   - **技術 (session 21–22)**: PlayMode 失敗の根本原因は auto-start の missing_node:Start。HasNode 事前チェック + archive 除外 + TearDown（`UnityTearDown` + `StopScenario` + 待機）で修正。WORKFLOW_STATE_SSOT.md 廃止。Session 22: タイプライター同期（DOTween 完了待機）、DebugChatScene 整備、SaveManager AutoSaveIndicator 安全化、PlayMode **8**/8・EditMode 75/75 をローカルで通過（batch XML・共通ヘルパー分離済み）
   - **方向性修正 (2026-04-15)**: Ch 積み上げ構造の構造的ドリフトを修正。主軸を**エンジン能力マイルストーン**に切替。ガードレール（CLAUDE.md DEVELOPMENT PURPOSE）を実行計画より上位に再配置。SUBSEQUENT を通過ゲート（スキップ不可）に変更
@@ -23,7 +24,7 @@
 - 現在の系列: エンジン能力マイルストーン（M1: サブスレッド全型実機検証）+ 制作パイプライン実運用（既知 UI は UI_ISSUES.md へ）
 - ユーザーはデザイナー兼ライター。AI は Yarn 執筆ではなく制作ツール／パイプライン整備に注力
 - 値調整（フォント／色／タイミング）は Inspector。UI バグは UI_ISSUES.md に溜めて一括修正
-- PlayMode テスト: **8 件**。batch: `-executeMethod` で NUnit `.xml` + `.txt` 両出力
+- PlayMode テスト: tracked PlayMode フォルダは **10 件**（2026-06-08 に SP-023 / IconSide 2 件追加）。最後に記録済みの全体回帰ベースラインは 2026-04-09 の **8/8**。batch: `-executeMethod` で NUnit `.xml` + `.txt` 両出力
 - nightshift の変更品質が問題化しうる — 完成度優先。スレッド管理リファクタは IP-PC-002（PLAN MODE）
 - task-scout 指摘の残件: verification/ の実ラン記録拡充、E2E（EN-012）継続
 - 2026-03-30 session 19: `docs/verification/2026-03-30-playmode-batchmode-attempt.md`。`-runTests` は XML 未生成で終了する事例あり
@@ -189,7 +190,7 @@
 | 静的バリデーション | 自動 | YarnContentValidator (Editor) | done |
 | SO自動生成 | 自動 | YarnSOGenerator + Content Pipeline (Topic/Character/Channel 同期) | **done** |
 | Unity再生確認 | 手動 | ContentAuthoring シーン | done |
-| E2E自動検証 | 自動 | PlayMode **8** 件 + batch XML（.xml/.txt）。共通ヘルパー分離済み。全チャプター網羅は ETK 拡張で継続 | **partial（EN-012 目安 60%）** |
+| E2E自動検証 | 自動 | PlayMode フォルダ **10** 件 + batch XML（.xml/.txt）。共通ヘルパー分離済み。最後の記録済み全体回帰は 2026-04-09 の 8/8、2026-06-08 追加 2 件は Unity 6000.4.9f1 実行待ち。全チャプター網羅は ETK 拡張で継続 | **partial（EN-012 目安 60%）** |
 | 調整 | 手動 | Unity Inspector + Yarn編集 | done |
 | ビルド | 自動 | Unity Build Pipeline (モバイル) | 未設定 |
 | 配布 | 手動 | App Store / Google Play | 未設定 |

@@ -366,7 +366,7 @@ namespace ProjectFoundPhone.Tests
         #endregion
 
         #region CharacterProfile Tests
-        private CharacterProfile CreateCharacterProfile(string characterID, string displayName, Color themeColor, bool isPlayer)
+        private CharacterProfile CreateCharacterProfile(string characterID, string displayName, Color themeColor, bool isPlayer, IconSide iconSide = IconSide.Auto)
         {
             CharacterProfile profile = ScriptableObject.CreateInstance<CharacterProfile>();
             SerializedObject so = new SerializedObject(profile);
@@ -374,6 +374,7 @@ namespace ProjectFoundPhone.Tests
             so.FindProperty("m_DisplayName").stringValue = displayName;
             so.FindProperty("m_ThemeColor").colorValue = themeColor;
             so.FindProperty("m_IsPlayer").boolValue = isPlayer;
+            so.FindProperty("m_IconSide").enumValueIndex = (int)iconSide;
             so.ApplyModifiedPropertiesWithoutUndo();
             return profile;
         }
@@ -396,6 +397,22 @@ namespace ProjectFoundPhone.Tests
             CharacterProfile profile = CreateCharacterProfile("test", "Test", expected, false);
 
             Assert.AreEqual(expected, profile.ThemeColor);
+        }
+
+        [Test]
+        public void CharacterProfile_IconSide_DefaultsToAuto()
+        {
+            CharacterProfile profile = ScriptableObject.CreateInstance<CharacterProfile>();
+
+            Assert.AreEqual(IconSide.Auto, profile.IconSide);
+        }
+
+        [Test]
+        public void CharacterProfile_IconSide_ReturnsConfiguredValue()
+        {
+            CharacterProfile profile = CreateCharacterProfile("npc_icon", "NPC Icon", Color.white, false, IconSide.Right);
+
+            Assert.AreEqual(IconSide.Right, profile.IconSide);
         }
 
         [Test]
