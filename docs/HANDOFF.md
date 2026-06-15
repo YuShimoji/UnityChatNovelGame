@@ -10,6 +10,27 @@
 4. `docs/INVARIANTS.md`
 5. `docs/USER_REQUEST_LEDGER.md`
 
+## Handoff snapshot (2026-06-15 AI entry cleanup / local docs view)
+
+**本セッションの実施内容**:
+
+- `git fetch --prune origin` 後、`origin/main` 先行 1 commit (`9903ea5`) を `git pull --ff-only origin main` で取り込み。
+- tracked `.claude/settings.local.json` を削除し、`.codex/config.toml` / `.codex/*.toml` / `.claude/settings.local.json` を `.gitignore` に追加。Codex / Claude の model・承認・sandbox・機械固有パスは repo-local 正本にしない。
+- `AGENTS.md` / `CLAUDE.md` / `.claude/CLAUDE.md` を薄い入口ポインタへ戻し、日常ルールは `docs/REPO_LOCAL_RULES.md` に集約。
+- 古いルート `CLAUDE.md` 権威参照、Ch1 固定再開プロンプト、再利用テンプレート内の旧 Unity 版固定を調整。
+- 既存 Markdown 本文を移動・翻訳・要約せず、MkDocs Material 用のローカル閲覧面を追加。`mkdocs.yml` は `.mkdocs-view/` を docs_dir とし、`tools/generate-doc-nav.ps1 -PrepareView` で閲覧用コピーを作る。
+- 全体概観の入口として `docs/PROJECT_STATUS_DASHBOARD.md`、ターン単位計画として `docs/DEVELOPMENT_TURN_PLAN.md`、スクリーンショット索引として `docs/VISUAL_PROGRESS_INDEX.md` を追加。`Assets/Screenshots/` は MkDocs 閲覧用コピーにも含める。
+
+**ローカル閲覧**:
+
+```powershell
+pip install mkdocs-material
+.\tools\generate-doc-nav.ps1 -PrepareView
+python -m mkdocs serve -a 127.0.0.1:8000
+```
+
+`http://127.0.0.1:8000/` を Chrome / Edge / DeepL 拡張でページ翻訳し、翻訳は一時読解補助として扱う。
+
 ## Handoff snapshot (2026-06-08 remote sync / Codex config cleanup)
 
 **本セッションの実施内容**:
@@ -22,8 +43,8 @@
 - `NotoSansJP-Regular SDF.asset` は dynamic font asset の glyph / character cache が空に再保存された状態。`m_ClearDynamicDataOnBuild: 1` の動的再生成前提だが、表示フォントの実画面確認はまだ必要。
 - `ProjectSettings/EditorBuildSettings.asset` は Unity 6000.4.9f1 の再保存で `m_UseUCBPForAssetBundles` 行が落ちたのみ。Build Scene の順序・内容は `TitleScene` / `ContentAuthoring` / `DebugChatScene` / `MVPScene` のまま。
 - `.github/workflows/*unity*-tests.yml` の `unityVersion` も 6000.4.9f1 に同期済み。CI と `ProjectVersion.txt` の版数を揃えてから引き継ぐ。
-- `.codex/config.toml` は削除済み。Codex の `model` / `approval_policy` / `sandbox_mode` は repo-local に固定せず、ユーザー側・クライアント側設定を使う。再発防止は `docs/INVARIANTS.md` に固定。
-- `.claude/settings.local.json` から、存在しない `.claude/hooks/*.sh` 参照を削除。権限設定のみ残す。
+- `.codex/config.toml` は削除済み。Codex の実行環境は repo-local に固定せず、ユーザー側・クライアント側設定を使う。再発防止は `docs/INVARIANTS.md` に固定。
+- tracked `.claude/settings.local.json` も削除し、機械固有の権限・絶対パスは repo に持たせない方針へ寄せた。
 - `CharacterProfile.IconSide` の EditMode 2 件、`SP023_NarrationMargin_Start` と `DebugChatScene` の IconSide 配置 PlayMode 2 件を追加。画面検収の前に、実装面の回帰検出点を増やした。
 - この端末には Unity 6000.4.9f1 が未導入（`C:\Program Files\Unity\Hub\Editor` には 6000.3.3f1 / 6000.3.6f1 のみ）。Unity 実行検証は 6000.4.9f1 がある別端末または CI で行う。
 
@@ -36,8 +57,8 @@
 ## Verification / Trust
 
 - 2026-06-08: `git diff --check` は空白エラーなし（改行変換 warning のみ）。
-- 2026-06-08: `.claude/settings.local.json` は PowerShell `ConvertFrom-Json` で parse pass。
-- 2026-06-08: `gpt-5-codex` / `model =` / `approval_policy` / `sandbox_mode` / 欠落 hook 名の残存検索はヒットなし。
+- 2026-06-15: repo-local Codex 実行環境固定と tracked `.claude/settings.local.json` の残存検索は、ignore / invariants / rules 上の禁止記述を除きヒットなし。
+- 2026-06-15: `python -m mkdocs build` pass（Material for MkDocs の MkDocs 2.0 告知 warning は表示されるが build は正常終了）。
 - 2026-06-08: Unity 6000.4.9f1 がこの端末にないため、追加 EditMode / PlayMode の実行は未実施。
 - `git diff --check`: pass。
 - `Packages/manifest.json` / `Packages/packages-lock.json`: PowerShell `ConvertFrom-Json` で parse pass。
@@ -64,6 +85,9 @@
 ## Source Of Truth
 
 - 方針・スライス: `docs/project-context.md`
+- 全体概観: `docs/PROJECT_STATUS_DASHBOARD.md`
+- ターン単位プラン: `docs/DEVELOPMENT_TURN_PLAN.md`
+- 画面証跡索引: `docs/VISUAL_PROGRESS_INDEX.md`
 - 作業状態: `docs/runtime-state.md`
 - 決定履歴: `docs/DECISION_LOG.md`
 - 制作フロー: `docs/OPERATOR_WORKFLOW.md`

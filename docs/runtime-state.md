@@ -1,19 +1,19 @@
 # Runtime State
 
-**Updated**: 2026-06-08（origin/main 同期 + Codex 起動設定整理 + IconSide / SP-023 追加テストの引き継ぎ）
+**Updated**: 2026-06-15（origin/main 同期 + AI 入口薄型化 + local doc viewer 整備）
 
 ## Current Position
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
 - lane: **UI/Engine**（SP-023 / SP-024 の表示検収再開）
-- slice: **ローカル追跡差分と再開文脈を main に固定し、別端末で Codex 起動エラーなしに検収へ戻れる状態**
+- slice: **repo-local runtime pin と古い入口文書の固定を外し、既存 Markdown 正本を壊さずローカル閲覧・翻訳確認できる状態**
 - next_recommended_slice: **Unity 6000.4.9f1 で追加済み IconSide / SP-023 PlayMode を確認後、`SP023_NarrationMargin_Start` → `SP023_LocalExtensions_Start` → `SP023_DisplayShowcase_Start` の Unity 画面検収**
 - subsequent_recommended_slice: **`SP024_Immersion_Start` による SP-024 S1/S2/S5 の Unity 見た目確認、または S4 (オンライン状態 UI) / Block 4 (フリックスレッド切替) の設計固定**
 - later_recommended_slice: **SP-024 S4 (オンライン状態表示)**
 - active_artifact: ChatController / ChatDialogueView / ScenarioManager / CharacterProfile / SaveData / SubthreadData / ThreadSwitcherController / BubbleStyle assets / SP023 demo yarns / SP024_ImmersionDemo
 - artifact_surface: ChatController / ChatDialogueView / ChatUIConfig / ScenarioManager / CharacterDatabase / ThreadSwitcherController
-- last_change_relation: unblocker + test coverage + handoff（2026-06-08: Codex repo-local runtime override 削除、欠落 hook 参照削除、IconSide / SP-023 テスト追加、handoff docs 更新）
+- last_change_relation: unblocker + docs tooling（2026-06-15: origin/main fast-forward、tracked client-local settings 削除、AI 入口薄型化、MkDocs 閲覧面追加）
 - plan_file: `C:\Users\thank\.claude\plans\hazy-tumbling-feigenbaum.md` （9 Block 分割の実行プラン） / `docs/plans/display-batch-showcase.md`（表示系デモ・修正版・リポジトリ正本）
 
 ## Counters
@@ -35,14 +35,23 @@
 
 ## Session Log
 
+### 2026-06-15（AI 入口薄型化・ローカル docs viewer 整備）
+- **目的**: repo-local Codex 実行環境固定や機械固有 local settings を再発させず、既存 Markdown 正本を移動・要約・翻訳せずにブラウザで横断確認できる閲覧面を足す。
+- **同期**: `git fetch --prune origin` 後、`origin/main` 先行 1 commit を `git pull --ff-only origin main` で取り込み済み。
+- **AI / client 設定**: tracked `.claude/settings.local.json` を削除し、`.codex/config.toml` / `.codex/*.toml` / `.claude/settings.local.json` を `.gitignore` に追加。`AGENTS.md` / `CLAUDE.md` / `.claude/CLAUDE.md` は薄い入口ポインタに戻し、実行環境設定はユーザー側 client configuration へ委ねる。
+- **正本ルール**: `docs/REPO_LOCAL_RULES.md` を追加し、日常ルール、開発境界、Codex / client runtime config 境界、docs-only 検証方針を集約。古いルート入口文書への権威参照は `docs/REPO_LOCAL_RULES.md` / `docs/INVARIANTS.md` 参照へ付け替え。
+- **閲覧面**: MkDocs Material を第一候補として `mkdocs.yml` / `docs/index.md` / `tools/generate-doc-nav.ps1` を追加。既存 Markdown 本文は分類・閲覧対象として扱い、翻訳版や要約版の恒久ファイルは作らない。
+- **概観調整**: `docs/PROJECT_STATUS_DASHBOARD.md` で実装済み機能・今後の新機能・項目別実装・画面証跡・ターン単位計画の行き先を一枚化。`docs/DEVELOPMENT_TURN_PLAN.md` で日付ではなく Turn 0-6 の区切りに整理。`docs/VISUAL_PROGRESS_INDEX.md` で `Assets/Screenshots/` の既存 14 枚と次に撮るべき SP-023 / SP-024 画像名を明示。
+- **検証**: `python -m mkdocs build` pass。Material for MkDocs の MkDocs 2.0 告知 warning は表示されるが、viewer build 自体は正常終了。
+
 ### 2026-06-08（Codex 起動設定整理・追加テスト・remote 反映準備）
 
 - **目的**: Codex Thread 開始時の repo-local モデル固定エラーを解消し、同じ文脈を project-local docs に残したうえで、別端末が `main` pull 直後に再開できる状態へ戻す。
 - **Git**: `git fetch --prune origin` で `origin/main` が `bdf98c4` まで先行。ローカル差分を stash 退避し、`git pull --ff-only origin main` で fast-forward 後に stash 再適用。同期直後の `HEAD...origin/main` は `0 0`。
-- **Codex / assistant 設定**: tracked `.codex/config.toml` を削除し、`model = "gpt-5-codex"` / `approval_policy` / `sandbox_mode` の repo-local 固定を廃止。`docs/INVARIANTS.md` に、Codex 実行環境設定はユーザー側設定へ委ねるルールを追加。
-- **Claude local 設定**: `.claude/settings.local.json` から、存在しない `.claude/hooks/*.sh` 参照を削除。権限設定は維持。
+- **Codex / assistant 設定**: tracked `.codex/config.toml` を削除し、Codex 実行環境の repo-local 固定を廃止。`docs/INVARIANTS.md` に、Codex 実行環境設定はユーザー側設定へ委ねるルールを追加。
+- **Claude local 設定**: この時点では `.claude/settings.local.json` の欠落 hook 参照のみを除去。2026-06-15 に tracked local settings 自体を削除。
 - **テスト差分**: `CoreLogicTests` に `CharacterProfile.IconSide` の既定値・設定値テストを追加。`ScenarioFlowPlayModeTests` に `SP023_NarrationMargin_Start` のバブル生成確認と、`DebugChatScene` 上の IconSide 左右配置確認を追加。
-- **検証境界**: `git diff --check` は空白エラーなし、`.claude/settings.local.json` は JSON parse pass、Codex 固定設定と欠落 hook 名の残存検索はヒットなし。この端末には Unity 6000.4.9f1 がないため、追加 EditMode / PlayMode 実行は未実施。
+- **検証境界**: `git diff --check` は空白エラーなし、Codex 固定設定と欠落 hook 名の残存検索はヒットなし。この端末には Unity 6000.4.9f1 がないため、追加 EditMode / PlayMode 実行は未実施。
 - **次の所有者**: assistant / CI は追加テストの Unity 6000.4.9f1 実行確認を担当。ユーザーは SP-023 / SP-024 の画面検収判断を担当。
 
 ### 2026-06-03（ローカル状態の remote 反映・別端末 handoff）

@@ -7,11 +7,12 @@ Status: canonical
 2. `docs/ai/DECISION_GATES.md`
 3. `docs/ai/STATUS_AND_HANDOFF.md`
 4. `docs/ai/WORKFLOWS_AND_PHASES.md`
-5. `docs/INVARIANTS.md`
-6. `docs/USER_REQUEST_LEDGER.md`
-7. `docs/OPERATOR_WORKFLOW.md`
-8. `docs/INTERACTION_NOTES.md`
-9. runtime / context / registry / boundary docs
+5. `docs/REPO_LOCAL_RULES.md`
+6. `docs/INVARIANTS.md`
+7. `docs/USER_REQUEST_LEDGER.md`
+8. `docs/OPERATOR_WORKFLOW.md`
+9. `docs/INTERACTION_NOTES.md`
+10. runtime / context / registry / boundary docs
 
 ## Resume / Continue / Refresh
 ### Resume

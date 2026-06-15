@@ -5,7 +5,7 @@
 
 ## 検証環境
 
-- Unity 版: （Editor 実施時に記入）期待: `6000.3.6f1`
+- Unity 版: （Editor 実施時に記入）期待: `ProjectSettings/ProjectVersion.txt` と一致する版
 - ブランチ / コミット: `main` / `bc2bb9d`（2026-04-09 Bレーン記録時の HEAD）
 - StartNode（ContentAuthoring）: `Ch1_Day1_Opening`（[ch1.asset](../../Assets/Resources/Channels/ch1.asset) と一致）
 

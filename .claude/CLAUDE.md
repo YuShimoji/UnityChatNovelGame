@@ -1,9 +1,13 @@
 # CLAUDE.md (project adapter)
-# This file is intentionally thin.
-# Canonical source of truth lives in docs/ai/*.md and project-local canonical docs.
 
-Read documents in the order defined in:
-@../docs/ai/READ_ORDER.md
+This file is intentionally thin.
 
-Do not duplicate the shared ruleset here.
-Project-specific exceptions, if any, should be short and explicit below this line.
+Read first:
+
+1. `../docs/REPO_LOCAL_RULES.md`
+2. `../docs/ai/READ_ORDER.md`
+3. `../docs/HANDOFF.md`
+4. `../docs/runtime-state.md`
+
+Do not duplicate the shared ruleset here. Do not add local client permissions,
+hook paths, model pins, approval policy, or sandbox settings here.

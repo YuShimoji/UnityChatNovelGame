@@ -35,7 +35,7 @@
 【コア】
 リポジトリ: FoundPhone (UnityChatNovelGame)。Unity 6000.4.9f1 前後（ProjectVersion.txt 準拠）。
 正典の優先順位: docs/project-context.md の CURRENT DEVELOPMENT AXIS / CURRENT LANE / CURRENT SLICE。
-ルート CLAUDE.md の DEVELOPMENT PURPOSE に従い、検証に必要な範囲外のフル執筆はしない。
+`docs/REPO_LOCAL_RULES.md` と `docs/INVARIANTS.md` の責務境界に従い、検証に必要な範囲外のフル執筆はしない。
 docs/archive/ は明示依頼がない限り読まない。
 ```
 

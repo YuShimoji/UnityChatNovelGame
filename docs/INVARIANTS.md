@@ -25,7 +25,7 @@
 - **Yarn 執筆はユーザー (デザイナー/ライター) の仕事。AI はシステム・ツール・パイプラインを整備する**
 - 機能検証は DebugQuickTest / EngineTestKit で行う。本編 Yarn を実験台にしない
 - AI の判断は「前回の作業の反動」で振り子的に決めない。本当に必要なものを特定する
-- Codex のモデル・承認・sandbox など実行環境設定は repo-local 設定に固定しない。AGENTS.md と docs/ai/*.md は行動規則のみを持ち、実行環境はユーザー側設定に委ねる
+- Codex のモデル・承認・sandbox など実行環境設定は repo-local 設定に固定しない。`.codex/config.toml` / `.codex/*.toml` / `.claude/settings.local.json` は tracked project authority にしない。AGENTS.md と docs/*.md は行動規則のみを持ち、実行環境はユーザー側設定に委ねる
 - **ドリフト検知**: コンテンツ作業（Yarn 執筆・ノード追加・Day 前進）がセッション成果の主体となるパターンが 2 セッション連続した場合、次セッション冒頭で「エンジン/ツール能力の前進が停滞していないか」を自問し、ユーザーに報告する
 
 ## Spec Status Semantics

@@ -34,7 +34,7 @@ Unity Test Runner → PlayMode 全実行、または batch（`TestRunnerHelper` 
 ### 実行記録（追記用）
 
 - 日付: 2026-04-09（記録日。実行ベースは 2026-04-03 session 22）
-- Unity: `6000.3.6f1`
+- Unity: `ProjectSettings/ProjectVersion.txt` と一致する版
 - ブランチ / コミット: `main` / `dadc0ba`（記録時HEAD）
 - 結果サマリ: 8 / 8 passed（回帰ベースライン）
 

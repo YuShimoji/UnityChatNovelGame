@@ -2,7 +2,7 @@
 
 ## PROJECT CONTEXT
 
-**優先関係:** ルート `CLAUDE.md` の DEVELOPMENT PURPOSE とスコープ境界は本ファイルの実行計画より**上位**の制約である。実行計画がガードレールと矛盾する場合、ガードレールが優先される。衝突する場合はガードレール遵守方向に修正する。
+**優先関係:** `docs/REPO_LOCAL_RULES.md` と `docs/INVARIANTS.md` の責務境界は本ファイルの実行計画より**上位**の制約である。実行計画がガードレールと矛盾する場合、ガードレールが優先される。衝突する場合はガードレール遵守方向に修正する。
 
 - 表形式の決定履歴: [docs/DECISION_LOG.md](DECISION_LOG.md)（必要時のみ）
 
@@ -12,10 +12,10 @@
 - 現フェーズ: プロトタイプ → α移行中
 - 直近の状態 (2026-04-10 リモート同期マージ、2026-04-09 handoff 追記):
   - **運用 (2026-06-03)**: ローカル追跡差分と handoff 文脈を `origin/main` へ反映する同期ブロック。別端末の最短再開は Unity 6000.4.9f1 + `docs/HANDOFF.md`。`NotoSansJP-Regular SDF.asset` の dynamic cache reset 後の日本語表示は次回画面検収で重点確認
-  - **運用 (2026-06-08)**: Codex の repo-local `model` / `approval_policy` / `sandbox_mode` 固定を削除し、欠落 `.claude/hooks/*.sh` 参照も除去。`origin/main` 先行分を fast-forward で取り込み、追加の IconSide / SP-023 テストと handoff 文脈を project-local docs に固定
+  - **運用 (2026-06-08)**: Codex の repo-local 実行環境固定を削除し、欠落 `.claude/hooks/*.sh` 参照も除去。`origin/main` 先行分を fast-forward で取り込み、追加の IconSide / SP-023 テストと handoff 文脈を project-local docs に固定
   - **運用 (2026-04-09)**: セッション引き継ぎで `main`≒`origin/main` を確認。計測用 `debug-*.log` は `.gitignore` でリポジトリ外に固定。再開の最短導線は `docs/HANDOFF.md` の Handoff snapshot
   - **技術 (session 21–22)**: PlayMode 失敗の根本原因は auto-start の missing_node:Start。HasNode 事前チェック + archive 除外 + TearDown（`UnityTearDown` + `StopScenario` + 待機）で修正。WORKFLOW_STATE_SSOT.md 廃止。Session 22: タイプライター同期（DOTween 完了待機）、DebugChatScene 整備、SaveManager AutoSaveIndicator 安全化、PlayMode **8**/8・EditMode 75/75 をローカルで通過（batch XML・共通ヘルパー分離済み）
-  - **方向性修正 (2026-04-15)**: Ch 積み上げ構造の構造的ドリフトを修正。主軸を**エンジン能力マイルストーン**に切替。ガードレール（CLAUDE.md DEVELOPMENT PURPOSE）を実行計画より上位に再配置。SUBSEQUENT を通過ゲート（スキップ不可）に変更
+  - **方向性修正 (2026-04-15)**: Ch 積み上げ構造の構造的ドリフトを修正。主軸を**エンジン能力マイルストーン**に切替。ガードレール（`docs/REPO_LOCAL_RULES.md` / `docs/INVARIANTS.md`）を実行計画より上位に再配置。SUBSEQUENT を通過ゲート（スキップ不可）に変更
   - AI の役割: Yarn 執筆ではなく制作ツール・パイプライン・検証導線の整備（USER_REQUEST_LEDGER と整合）
   - 次の作業: エンジン能力マイルストーン 1（サブスレッド全型の実機検証）。DebugQuickTest で各スレッド型を確認し、不具合があればエンジン修正 + PlayMode テスト追加
 

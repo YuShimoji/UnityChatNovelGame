@@ -12,10 +12,11 @@
 | 2026-03-30 | 処理のアルゴリズムを明文化せよ | done | docs/DISPLAY_ALGORITHMS.md (EN-011) |
 | 2026-03-29 | デザイナーが容易にストーリー追加削除できるワークフロー確立 | done | Content Pipeline window + YarnSOGenerator の ChannelData 同期 + 推奨 StartNode 導線 |
 | 2026-03-30 | 最も欲しいのは人間が執筆するためのシステム周り | active | パイプライン導線は実装済み。残りは Unity 実機検証と E2E 自動検証 |
-| 2026-04-15 | Ch積み上げでゲーム完成方向へのドリフト防止。エンジン能力マイルストーン中心の進行に切替 | active | CLAUDE.md ガードレール再権限化、project-context.md AXIS/LANE/SLICE/ROADMAP 改訂、INVARIANTS.md ドリフト検知 |
+| 2026-04-15 | Ch積み上げでゲーム完成方向へのドリフト防止。エンジン能力マイルストーン中心の進行に切替 | active | docs/REPO_LOCAL_RULES.md / INVARIANTS.md ガードレール、project-context.md AXIS/LANE/SLICE/ROADMAP、ドリフト検知 |
 | 2026-03-30 | なるべくプロジェクト内 docs だけで引き継げる状態にせよ | done | HANDOFF.md 新設 + runtime-state / project-context / OPERATOR_WORKFLOW / prompt-resume.md |
 | 2026-06-03 | handoff 時は全コンテキストをプロジェクト内に保持し、local tracked state を remote へ反映して別端末で即再開できるようにする | done | HANDOFF.md / runtime-state.md / project-context.md / git commit + push |
-| 2026-06-08 | Codex Thread 開始時に repo-local モデル固定でエラーが出ないようにし、全コンテキストを project-local docs に保持して remote へ反映する | done | `.codex/config.toml` 削除 / `.claude/settings.local.json` 欠落 hook 参照削除 / INVARIANTS.md / HANDOFF.md / runtime-state.md / git commit + push |
+| 2026-06-08 | Codex Thread 開始時に repo-local モデル固定でエラーが出ないようにし、全コンテキストを project-local docs に保持して remote へ反映する | done | `.codex/config.toml` 削除 / INVARIANTS.md / HANDOFF.md / runtime-state.md / git commit + push |
+| 2026-06-15 | AI 入口文書を薄いポインタに戻し、repo-local runtime pin と機械固有 local settings を再発防止する | done | AGENTS.md / CLAUDE.md / .claude/CLAUDE.md / docs/REPO_LOCAL_RULES.md / .gitignore |
 
 ## 未反映の是正要求
 
@@ -25,7 +26,7 @@
 - done 済み仕様にも改善余地がある。新 Task や ENH を受け容れる構造を維持する (session 21)
 - テストをパスさせるために実装を変えない。テストの前提が古いなら、テスト側を現仕様に合わせる (session 21)
 - 機能一覧を提示する際、done = 完了済みで終わらせず、仮実装後に欲しい機能 (ENH) の受け入れ余地を見せる
-- ガードレール（CLAUDE.md DEVELOPMENT PURPOSE）は実行計画（project-context.md CURRENT AXIS）より上位 (2026-04-15 策定)
+- ガードレール（docs/REPO_LOCAL_RULES.md / INVARIANTS.md）は実行計画（project-context.md CURRENT AXIS）より上位 (2026-04-15 策定、2026-06-15 入口文書を薄型化)
 - セッション成果の第一指標は「エンジン/ツール能力の前進」。コンテンツのみ 2 セッション連続はドリフト警告 (2026-04-15 策定)
 - SUBSEQUENT はスキップ不可の通過ゲート。エンジン能力確認なしにフルコンテンツ執筆に進まない (2026-04-15 策定)
 

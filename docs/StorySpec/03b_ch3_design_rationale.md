@@ -5,7 +5,7 @@ Status: DRAFT
 
 ## 前提
 
-Ch1/Ch2 はエンジン検証用モックとして機能している (CLAUDE.md DEVELOPMENT PURPOSE)。
+Ch1/Ch2 はエンジン検証用モックとして機能している (`docs/REPO_LOCAL_RULES.md` / `docs/INVARIANTS.md` の開発境界)。
 Ch3 も同様に「コンテンツ制作」ではなく「エンジン基盤の未検証領域を埋める検証媒体」として位置づける。
 
 ## Ch1/Ch2 を深化させる案 vs Ch3 に進む案

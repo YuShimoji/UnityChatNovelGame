@@ -1,0 +1,124 @@
+site_name: UnityChatNovelGame Docs View
+site_description: Local browser view for repository Markdown auditing and page translation checks.
+docs_dir: .mkdocs-view
+site_dir: .mkdocs-site
+use_directory_urls: true
+
+theme:
+  name: material
+  language: ja
+  features:
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - toc.follow
+    - search.highlight
+
+plugins:
+  - search
+
+validation:
+  links:
+    not_found: ignore
+    anchors: ignore
+    absolute_links: ignore
+
+nav:
+  - Overview:
+      - Viewer Guide: index.md
+      - Project Status Dashboard: docs/PROJECT_STATUS_DASHBOARD.md
+      - Agent Entry: AGENTS.md
+      - Claude Entry: CLAUDE.md
+      - Resume Prompt: prompt-resume.md
+      - Project Overview: docs/PROJECT_OVERVIEW.md
+      - Visual Progress Index: docs/VISUAL_PROGRESS_INDEX.md
+      - Story Overview: docs/StorySpec/00_overview.md
+      - Wiki Home: docs/wiki/README.md
+      - Wiki Sidebar: docs/wiki/_sidebar.md
+  - Runtime State:
+      - Repo Local Rules: docs/REPO_LOCAL_RULES.md
+      - Development Turn Plan: docs/DEVELOPMENT_TURN_PLAN.md
+      - Handoff: docs/HANDOFF.md
+      - Runtime State: docs/runtime-state.md
+      - Project Context: docs/project-context.md
+      - Invariants: docs/INVARIANTS.md
+      - User Request Ledger: docs/USER_REQUEST_LEDGER.md
+      - Operator Workflow: docs/OPERATOR_WORKFLOW.md
+      - Interaction Notes: docs/INTERACTION_NOTES.md
+      - Decision Log: docs/DECISION_LOG.md
+  - Specs:
+      - StorySpec:
+          - README: docs/StorySpec/README.md
+          - Gameplay: docs/StorySpec/01_gdd_gameplay.md
+          - Story Bible: docs/StorySpec/02_story_bible.md
+          - Chapter Beats: docs/StorySpec/03_chapter_beats.md
+          - Ch1 Section Beats: docs/StorySpec/03a_ch1_section_beats.md
+          - Ch3 Design Rationale: docs/StorySpec/03b_ch3_design_rationale.md
+          - Ch4-9 Engine Requirements: docs/StorySpec/03c_ch4-9_engine_requirements.md
+          - Characters: docs/StorySpec/04_characters.md
+          - AI Models: docs/StorySpec/05_ai_models.md
+          - Hallucicoin: docs/StorySpec/06_hallucicoin.md
+          - Fragments: docs/StorySpec/07_fragments.md
+          - UI UX: docs/StorySpec/08_ui_ux.md
+          - Audio Visual: docs/StorySpec/09_audio_visual.md
+          - Monetization: docs/StorySpec/10_monetization.md
+          - Production Plan: docs/StorySpec/11_production_plan.md
+          - Reference Works: docs/StorySpec/12_reference_works.md
+          - Glossary: docs/StorySpec/13_glossary.md
+          - Interaction Mechanics: docs/StorySpec/14_interaction_mechanics.md
+          - Feature Triage 2026-03-10: docs/StorySpec/15_feature_triage_2026-03-10.md
+          - Subthread UI: docs/StorySpec/16_subthread_ui.md
+          - Unlock Triggers: docs/StorySpec/17_unlock_triggers.md
+          - Progress Visibility: docs/StorySpec/18_progress_visibility.md
+          - Chapter Transition: docs/StorySpec/19_chapter_transition.md
+          - Onboarding: docs/StorySpec/20_onboarding.md
+          - Branch Thread Spec: docs/StorySpec/21_branch_thread_spec.md
+          - Subquest Exploration Content: docs/StorySpec/22_subquest_exploration_content.md
+          - Text Presentation: docs/StorySpec/23_text_presentation.md
+          - Chat Immersion: docs/StorySpec/24_chat_immersion.md
+          - Open Questions: docs/StorySpec/99_open_questions.md
+          - Ch2 Later Consistency Note: docs/StorySpec/ch2_later_consistency_note.md
+          - Later Ch2 Playbook: docs/StorySpec/LATER_CH2_PLAYBOOK.md
+      - Autosave Design: docs/AUTOSAVE_DESIGN.md
+      - Display Algorithms: docs/DISPLAY_ALGORITHMS.md
+      - Engine Feature Inventory: docs/ENGINE_FEATURE_INVENTORY.md
+      - Save System README: docs/SaveSystem_README.md
+      - Spec Decisions: docs/SPEC_DECISIONS.md
+      - UI Implementation Spec: docs/UI_IMPLEMENTATION_SPEC.md
+  - Development Notes:
+      - AI Rules:
+          - Read Order: docs/ai/READ_ORDER.md
+          - Core Ruleset: docs/ai/CORE_RULESET.md
+          - Decision Gates: docs/ai/DECISION_GATES.md
+          - Status and Handoff: docs/ai/STATUS_AND_HANDOFF.md
+          - Workflows and Phases: docs/ai/WORKFLOWS_AND_PHASES.md
+          - Parallel Lane Prompts: docs/ai/PARALLEL_LANE_PROMPTS.md
+          - Ch1 Sidequest Verification Prompt: docs/ai/TASK_PROMPT_ch1_sidequest_verification.md
+      - Scenario Authoring Guide: docs/SCENARIO_AUTHORING_GUIDE.md
+      - Yarn Editing Pipeline: docs/YarnEditingPipeline.md
+      - Feature Registry: docs/FEATURE_REGISTRY.md
+      - Feature Status Audit: docs/FEATURE_STATUS_AUDIT.md
+      - UI Issues: docs/UI_ISSUES.md
+      - Display Batch Showcase Plan: docs/plans/display-batch-showcase.md
+  - Artifacts:
+      - Evidence Reuse: docs/EVIDENCE_REUSE.md
+      - Performance Baseline Raw: docs/PerformanceBaseline_RAW.md
+      - Performance Baseline 20260421 133743: docs/PerformanceBaseline_RAW_20260421_133743.md
+      - Performance Baseline 20260421 134751: docs/PerformanceBaseline_RAW_20260421_134751.md
+      - Performance Baseline 20260421 161335: docs/PerformanceBaseline_RAW_20260421_161335.md
+      - Verification:
+          - PlayMode Batchmode Attempt 2026-03-30: docs/verification/2026-03-30-playmode-batchmode-attempt.md
+          - PlayMode Batch Execute 2026-03-31: docs/verification/2026-03-31-playmode-batch-execute.md
+          - Next Plan Prep 2026-04-08: docs/verification/2026-04-08-next-plan-prep.md
+          - Spec Gap Radar 2026-04-08: docs/verification/2026-04-08-spec-gap-radar.md
+          - PlayMode 8 Results 2026-04-09: docs/verification/2026-04-09-playmode-8-results.md
+          - Ch1 Day1-3 Preflight 2026-04-10: docs/verification/2026-04-10-ch1-day1-3-preflight.md
+          - Subsequent Completion Report 2026-04-10: docs/verification/2026-04-10-subsequent-completion-report.md
+          - Unity GitHub CI: docs/verification/UNITY_GITHUB_CI.md
+          - Templates:
+              - README: docs/verification/templates/README.md
+              - Ch1 Subquest Gap Template: docs/verification/templates/2026-04-08-ch1-subquest-gap-template.md
+              - PlayMode 8 Results Template: docs/verification/templates/2026-04-10-playmode-8-results-TEMPLATE.md
+              - Subsequent Playthrough and Tests: docs/verification/templates/SUBSEQUENT_playthrough_and_tests.md
+  - Misc:
+      - MCP For Unity README: Assets/MCPForUnity/README.md

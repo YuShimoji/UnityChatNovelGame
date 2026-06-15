@@ -85,10 +85,13 @@ debug-*.log
 # Special files
 **/nul
 
-# Local Codex runtime hooks can contain absolute machine paths; keep portable
-# project rules in AGENTS.md and docs/ai/*.md instead.
+# Local AI client runtime config can contain model/runtime pins or absolute paths.
+# Keep portable project rules in AGENTS.md and docs/*.md instead.
+.codex/config.toml
+.codex/*.toml
 .codex/hooks.json
 .codex/hooks/
+.claude/settings.local.json
 
 # Build artifacts (prevent accidental commits of Unity builds)
 *.exe
@@ -103,6 +106,11 @@ debug-*.log
 # Evidence build artifacts
 docs/evidence/**/MonoBleedingEdge/
 docs/evidence/**/*.exe
+
+# Local documentation viewer output
+.mkdocs-view/
+.mkdocs-site/
+site/
 docs/evidence/**/*.dll
 docs/evidence/**/UnityChatNovelGame_Data/
 
