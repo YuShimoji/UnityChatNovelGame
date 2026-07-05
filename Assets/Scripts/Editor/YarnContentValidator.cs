@@ -52,6 +52,28 @@ namespace ProjectFoundPhone.Editor
         private int m_InfoCount;
         private bool m_HasRun;
 
+        public readonly struct ValidationSummary
+        {
+            public ValidationSummary(int errorCount, int warningCount, int infoCount, int resultCount)
+            {
+                ErrorCount = errorCount;
+                WarningCount = warningCount;
+                InfoCount = infoCount;
+                ResultCount = resultCount;
+            }
+
+            public int ErrorCount { get; }
+            public int WarningCount { get; }
+            public int InfoCount { get; }
+            public int ResultCount { get; }
+            public bool HasErrors => ErrorCount > 0;
+
+            public string ToDisplayText()
+            {
+                return $"errors={ErrorCount}, warnings={WarningCount}, info={InfoCount}";
+            }
+        }
+
         [MenuItem("Tools/FoundPhone/Yarn Content Validator", false, 20)]
         public static void ShowWindow()
         {
@@ -64,13 +86,10 @@ namespace ProjectFoundPhone.Editor
         /// </summary>
         public static int ValidateAllYarnFilesLogToConsole()
         {
-            List<ValidationResult> results = BuildValidationResults(
-                out int errorCount,
-                out int warningCount,
-                out int infoCount);
+            ValidationSummary summary = BuildValidationSummary(out List<ValidationResult> results);
 
             Debug.Log(
-                $"YarnContentValidator (batch): errors={errorCount}, warnings={warningCount}, info={infoCount}.");
+                $"YarnContentValidator (batch): {summary.ToDisplayText()}.");
 
             foreach (ValidationResult result in results)
             {
@@ -92,7 +111,12 @@ namespace ProjectFoundPhone.Editor
                 }
             }
 
-            return errorCount;
+            return summary.ErrorCount;
+        }
+
+        public static ValidationSummary GetValidationSummary()
+        {
+            return BuildValidationSummary(out _);
         }
 
         private void OnGUI()
@@ -138,6 +162,12 @@ namespace ProjectFoundPhone.Editor
             m_Results = BuildValidationResults(out m_ErrorCount, out m_WarningCount, out m_InfoCount);
             m_HasRun = true;
             Repaint();
+        }
+
+        private static ValidationSummary BuildValidationSummary(out List<ValidationResult> results)
+        {
+            results = BuildValidationResults(out int errorCount, out int warningCount, out int infoCount);
+            return new ValidationSummary(errorCount, warningCount, infoCount, results.Count);
         }
 
         private static List<ValidationResult> BuildValidationResults(

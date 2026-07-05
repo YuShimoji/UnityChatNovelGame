@@ -119,13 +119,16 @@ Assets/Resources/Yarn/active/Ch1_Day1.yarn
 
 - `Ch{N}_{シーン名}` （例: `Ch1_Opening`, `Ch1_MarcoIntro`）
 
-### Step 4: SO を同期する
+### Step 4: 検証して SO を同期する
 
-Unity 側で `Tools > FoundPhone > Content Pipeline` を開き、以下を実行:
+Unity 側で `Tools > FoundPhone > Writer Cockpit` を開き、以下を実行:
 
-1. `Open Yarn Validator` で静的エラーを確認（単体メニュー: `Tools > FoundPhone > Yarn Content Validator`。従来の `Tools > Yarn Content Validator` も同一ウィンドウ）
-2. `Sync Authoring Assets` で TopicData / CharacterProfile / ChannelData を一括同期（メニュー `Tools > FoundPhone > Sync Yarn Authoring Assets` でも可。変更 0 件のときは「同期対象はありませんでした」と表示）
-3. 必要なら Inspector で DisplayName / Description / EnableHints を調整
+1. 外部エディタで `.yarn` を保存し、Unity に戻る
+2. `Refresh Nodes` で active Yarn file / node 数と推奨 Start Node を更新
+3. `Validate Then Sync` で静的エラー確認後に TopicData / CharacterProfile / ChannelData を同期
+4. 必要なら Inspector で DisplayName / Description / EnableHints を調整
+
+既存の `Tools > FoundPhone > Content Pipeline`、`Tools > FoundPhone > Yarn Content Validator`、`Tools > FoundPhone > Sync Yarn Authoring Assets` も引き続き使用可能。
 
 #### Step 4b: batchmode（Editor を閉じた状態 / CI）
 
@@ -144,7 +147,7 @@ Unity.exe -batchmode -quit -projectPath "<リポジトリルート>" -logFile "<
 
 1. Windsurf で .yarn ファイルを保存
 2. Unity に Alt+Tab で切り替え（自動インポート）
-3. **方法A**: `Content Pipeline` または Inspector の「Play from Node」で特定ノードをテスト
+3. **方法A**: `Writer Cockpit` または Inspector の「Play from Node」で特定ノードをテスト
 4. **方法B**: F12 で Debug Hub を開き、ノードを選択
 
 ### Step 6: イテレーション
@@ -277,12 +280,14 @@ title: Ch1_FindFragment
 4. **「Play from Node」** ボタンをクリック
 5. 自動で Play Mode に入り、選択ノードから再生開始
 
-### 方法A-2: Content Pipeline（推奨）
+### 方法A-2: Writer Cockpit（推奨）
 
-1. `Tools > FoundPhone > Content Pipeline` を開く
-2. `Sync Authoring Assets` で Yarn 由来の SO を同期
-3. Start Node を選ぶ（既定は `DQT_Start` 優先）
-4. `Apply Node To Scene` または `Play ContentAuthoring` を実行
+1. `Tools > FoundPhone > Writer Cockpit` を開く
+2. `Refresh Nodes` でノード一覧と推奨 Start Node を更新
+3. `Validate Then Sync` で Yarn 由来の SO を同期
+4. Start Node を選ぶ（既定は `DQT_Start` 優先）
+5. `Apply Node To ContentAuthoring Scene` または `Play ContentAuthoring From Selected Node` を実行
+6. `Last Action` と `ContentAuthoring` 欄で適用結果を確認
 
 ### 方法B: Debug Hub（ランタイム）
 
@@ -326,7 +331,7 @@ title: Ch1_FindFragment
 ## 9. チェックリスト: 新チャプター追加時
 
 - [ ] `.yarn` ファイルを `Assets/Resources/Yarn/active/` に作成
-- [ ] `Tools > FoundPhone > Content Pipeline` で `Sync Authoring Assets` を実行
+- [ ] `Tools > FoundPhone > Writer Cockpit` で `Validate Then Sync` を実行
 - [ ] 生成/同期された `ChannelData` の DisplayName / Description / ヒント方針を Inspector で確認
 - [ ] 全ノードに `title:` と `===` がある
 - [ ] 新キャラの CharacterProfile ScriptableObject を作成済み

@@ -13,15 +13,16 @@
 - 直近の状態 (2026-04-10 リモート同期マージ、2026-04-09 handoff 追記):
   - **運用 (2026-06-03)**: ローカル追跡差分と handoff 文脈を `origin/main` へ反映する同期ブロック。別端末の最短再開は Unity 6000.4.9f1 + `docs/HANDOFF.md`。`NotoSansJP-Regular SDF.asset` の dynamic cache reset 後の日本語表示は次回画面検収で重点確認
   - **運用 (2026-06-08)**: Codex の repo-local 実行環境固定を削除し、欠落 `.claude/hooks/*.sh` 参照も除去。`origin/main` 先行分を fast-forward で取り込み、追加の IconSide / SP-023 テストと handoff 文脈を project-local docs に固定
+  - **運用 (2026-07-06)**: Prompt により T+1 Writer / Designer Cockpit MVP を active slice に昇格。`Tools > FoundPhone > Writer Cockpit` で Yarn 保存後の Refresh / Validate / Sync / Apply / Play / Last Action / read-only Save status を一画面化。Unity 6000.4.9f1 は存在するが Package Manager `path undefined` で停止するため、次はその解消後に compile/menu/Apply/Play 確認
   - **運用 (2026-04-09)**: セッション引き継ぎで `main`≒`origin/main` を確認。計測用 `debug-*.log` は `.gitignore` でリポジトリ外に固定。再開の最短導線は `docs/HANDOFF.md` の Handoff snapshot
   - **技術 (session 21–22)**: PlayMode 失敗の根本原因は auto-start の missing_node:Start。HasNode 事前チェック + archive 除外 + TearDown（`UnityTearDown` + `StopScenario` + 待機）で修正。WORKFLOW_STATE_SSOT.md 廃止。Session 22: タイプライター同期（DOTween 完了待機）、DebugChatScene 整備、SaveManager AutoSaveIndicator 安全化、PlayMode **8**/8・EditMode 75/75 をローカルで通過（batch XML・共通ヘルパー分離済み）
   - **方向性修正 (2026-04-15)**: Ch 積み上げ構造の構造的ドリフトを修正。主軸を**エンジン能力マイルストーン**に切替。ガードレール（`docs/REPO_LOCAL_RULES.md` / `docs/INVARIANTS.md`）を実行計画より上位に再配置。SUBSEQUENT を通過ゲート（スキップ不可）に変更
   - AI の役割: Yarn 執筆ではなく制作ツール・パイプライン・検証導線の整備（USER_REQUEST_LEDGER と整合）
-  - 次の作業: エンジン能力マイルストーン 1（サブスレッド全型の実機検証）。DebugQuickTest で各スレッド型を確認し、不具合があればエンジン修正 + PlayMode テスト追加
+  - 次の作業: Unity 6000.4.9f1 の Package Manager `path undefined` を解消して Writer Cockpit を確認し、作者導線が通ったら SP-023 / SP-024 表示検収、またはエンジン能力マイルストーン 1（サブスレッド全型の実機検証）へ戻る
 
 ### 運用メモ
 
-- 現在の系列: エンジン能力マイルストーン（M1: サブスレッド全型実機検証）+ 制作パイプライン実運用（既知 UI は UI_ISSUES.md へ）
+- 現在の系列: Writer / Designer Cockpit による制作パイプライン実運用 + その後のエンジン能力マイルストーン復帰（既知 UI は UI_ISSUES.md へ）
 - ユーザーはデザイナー兼ライター。AI は Yarn 執筆ではなく制作ツール／パイプライン整備に注力
 - 値調整（フォント／色／タイミング）は Inspector。UI バグは UI_ISSUES.md に溜めて一括修正
 - PlayMode テスト: tracked PlayMode フォルダは **10 件**（2026-06-08 に SP-023 / IconSide 2 件追加）。最後に記録済みの全体回帰ベースラインは 2026-04-09 の **8/8**。batch: `-executeMethod` で NUnit `.xml` + `.txt` 両出力
@@ -44,31 +45,31 @@
 
 ## CURRENT LANE
 
-- 主レーン: **Engine**（未検証エンジン能力の実機検証 + 未実装機能のうち P0 の実装）
-- 副レーン: **Content**（エンジン能力検証に必要な範囲で既存コンテンツを使用）+ **Unlock**（制作パイプライン同期の実運用確認）
-- 優先理由: FEATURE_STATUS_AUDIT の未実装 15 件・未確認 13 件が「エンジン基盤は十分」を否定。コンテンツを載せる前に載せる先の能力を確認する
-- いまは深入りしないレーン: **UI_ISSUES.md 載せ項目の個別コード修正**、サウンド、マネタイズ、スレッド管理リファクタの本実装（IP-PC-002）
+- 主レーン: **Authoring Tooling**（Writer / Designer Cockpit MVP）
+- 副レーン: **Engine / UI Review**（Cockpit導線確認後に SP-023 / SP-024 表示検収へ戻る）
+- 優先理由: ユーザーは Yarn 執筆そのものより、ライター/デザイナーが迷わず保存・検証・同期・ノード再生できる GUI 導線を求めている。Content Pipeline の部品は揃っているが、一画面の作者UXが不足していた
+- いまは深入りしないレーン: Yarn本文執筆、Runtime Dashboard/DebugHub の広範なPrefab化、既存セーブデータ操作、UI_ISSUES.md 載せ項目の個別コード修正、サウンド、マネタイズ
 
 ---
 
 ## CURRENT SLICE
 
-- スライス名: **エンジン能力マイルストーン 1: サブスレッド全型の実機検証**
-- 目的: DeclareThread (A/B/C 型)、LatentCond/Manifest、BeginBranch/EndBranch の全パターンが ContentAuthoring で期待通りに動作することを確認し、不具合を修正する
-- ユーザー操作列: DebugQuickTest または最小 Yarn モックで各スレッド型を個別に再生 → 不具合があればエンジン修正 → 修正の確認再生
-- 成功状態: 全サブスレッド型が DebugQuickTest 上で正常動作し、不具合修正があれば PlayMode テストに追加されている
-- コンテンツの扱い: Ch1 既存コンテンツの再利用、または DQT への 1-2 ノード追加のみ。新規 Day/節の執筆はしない
+- スライス名: **Writer / Designer Cockpit MVP**
+- 目的: Yarn 保存 → Refresh Nodes → Validate → Sync Authoring Assets → Start Node 選択 → ContentAuthoring Apply/Play → Last Action / read-only Save status 確認を Unity Editor の一画面に集約する
+- ユーザー操作列: 外部エディタで `.yarn` 保存 → `Tools > FoundPhone > Writer Cockpit` → `Refresh Nodes` → `Validate Then Sync` → 推奨または任意 Start Node を選択 → `Apply Node To ContentAuthoring Scene` または `Play ContentAuthoring From Selected Node`
+- 成功状態: Cockpit が Unity menu から開け、active Yarn file/node 数、推奨/選択 Start Node、Validation summary、Sync result、ContentAuthoring status、Save/autosave read-only status、Last Action を表示し、既存 Content Pipeline を壊さず Apply/Play できる
+- コンテンツの扱い: 既存 active Yarn のみ使用。新規ストーリー本文は書かない
 - 今回はやらないこと: [横断保留](#横断保留) を参照
 
 ---
 
 ## NEXT RECOMMENDED SLICE（推奨・CURRENT の直後）
 
-- スライス名: **エンジン能力マイルストーン 2: セーブ/ロード完全性 + 章遷移の堅牢化**
-- 目的: Save/Load 後のスレッド状態・変数・UnreadCount が正しく復元されること、EndDay/章遷移が堅牢に動くことを検証・修正する
-- ユーザー操作列: Ch1 の既存コンテンツを使い、Save → Load → 状態確認。章遷移パスの確認。不具合修正 → PlayMode テスト追加
-- 成功状態: Save/Load ラウンドトリップの PlayMode テストが追加され pass。章遷移の堅牢性が確認済み
-- コンテンツの扱い: 既存 Ch1 コンテンツのみ使用。新規執筆はしない
+- スライス名: **Package Manager blocker解消 + Writer Cockpit Unity 確認**
+- 目的: Unity 6000.4.9f1 の Package Manager `path undefined` 停止を解消し、Cockpit の compile/menu/表示/Apply/Play を確認してから SP-023 / SP-024 の表示検収へ戻る
+- ユーザー操作列: Package Manager解決が通る状態にする → Unity 6000.4.9f1 batch open → `Tools > FoundPhone > Writer Cockpit` → `DQT_Start` または推奨ノードを Apply/Play → Last Action と ContentAuthoring status を確認 → SP-023 / SP-024 ノード検収へ進む
+- 成功状態: Package Manager解決とCockpit導線がUnity上で確認され、SP-023 / SP-024 の画面検収を再開できる
+- コンテンツの扱い: 既存 demo Yarn のみ使用。新規執筆はしない
 - 今回はやらないこと: [横断保留](#横断保留) を参照
 
 ---
@@ -116,8 +117,8 @@
 ## 推奨プランの読み方と手動意思決定（解説）
 
 - **四段スライスの意味**
-  - **CURRENT**: いま優先しているエンジン能力マイルストーン (M1: サブスレッド全型実機検証)
-  - **NEXT**: M2: セーブ/ロード完全性 + 章遷移堅牢化
+  - **CURRENT**: Writer / Designer Cockpit MVP（作者導線の一画面化）
+  - **NEXT**: Cockpit の Unity 確認後、SP-023 / SP-024 表示検収または M1: サブスレッド全型実機検証へ復帰
   - **SUBSEQUENT**: **通過ゲート（スキップ不可）**。エンジン能力レビュー + Ch1 フルコンテンツ執筆の解放判定。M1+M2 完了が発動条件
   - **LATER**: Ch1 フルコンテンツ前進 + P1 段階実装 (SUBSEQUENT 通過後)
 - **進行順序**: CURRENT → NEXT → SUBSEQUENT → LATER の順。SUBSEQUENT は通過ゲートであり、スキップ不可。エンジン能力の確認なしにフルコンテンツ執筆に進むことを防ぐ

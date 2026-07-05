@@ -31,6 +31,32 @@ python -m mkdocs serve -a 127.0.0.1:8000
 
 `http://127.0.0.1:8000/` を Chrome / Edge / DeepL 拡張でページ翻訳し、翻訳は一時読解補助として扱う。
 
+## Handoff snapshot (2026-07-06 Writer Cockpit MVP)
+
+**本セッションの実施内容**:
+
+- `Tools > FoundPhone > Writer Cockpit` を追加。Yarn 保存後の `Refresh Nodes` / `Validate All Yarn Files` / `Sync Authoring Assets` / `Validate Then Sync` / 推奨 Start Node 選択 / ContentAuthoring への Apply / Play / active Yarn フォルダ Ping/Open を一画面に集約。
+- `YarnContentValidator` に件数サマリ DTO、`YarnSOGenerator` に active Yarn file/node 数・同期待ち件数サマリ DTO を追加。既存 Validator / SO Generator の解析ロジックはコピーせず再利用。
+- `ContentPipelineWindow` の ContentAuthoring 適用処理を静的ヘルパー化し、既存 `Tools > FoundPhone > Content Pipeline` と Writer Cockpit が同じ Apply/Play 処理を通るようにした。
+- Save / autosave 欄は読み取り専用のファイル存在確認のみ。既存セーブデータの削除・ロード・上書き・移行は行わない。
+- `docs/YarnEditingPipeline.md` / `docs/OPERATOR_WORKFLOW.md` を Writer Cockpit 優先導線に更新し、`docs/PROJECT_COCKPIT.md` / `docs/PROJECT_PIPELINE.mmd` を追加。
+
+## Current Focus
+
+- 主目的: **Unity Package Manager の `path undefined` 解消後に Writer Cockpit compile / menu / Apply / Play 確認**
+- 続き: Unity **6000.4.9f1** は存在するが、2026-07-06 の batch open / Yarn validator batch は Package Manager 解決で停止。`Tools > FoundPhone > Writer Cockpit` のUnity上の到達性は未証明。
+- その後の候補: Package Manager ブロッカー解消後、Cockpit から `DQT_Start` または推奨ノードを Apply / Play し、問題なければ SP-023 / SP-024 表示検収へ戻る。
+
+## Validation note (2026-07-06 Writer Cockpit)
+
+- Unity executable: `C:\Program Files\Unity\Hub\Editor\6000.4.9f1\Editor\Unity.exe`
+- Batch logs:
+  - `Logs/writer-cockpit-unity-open-2026-07-06.log`
+  - `Logs/writer-cockpit-unity-open-2026-07-06-rerun.log`
+  - `Logs/writer-cockpit-yarn-validator-2026-07-06.log`
+- Result: all attempts stop before package load completes with `Failed to resolve packages: The "path" argument must be of type string. Received undefined. No packages loaded.`
+- Verification note: `docs/verification/2026-07-06-writer-cockpit-unity-validation.md`
+
 ## Handoff snapshot (2026-06-08 remote sync / Codex config cleanup)
 
 **本セッションの実施内容**:
@@ -48,7 +74,7 @@ python -m mkdocs serve -a 127.0.0.1:8000
 - `CharacterProfile.IconSide` の EditMode 2 件、`SP023_NarrationMargin_Start` と `DebugChatScene` の IconSide 配置 PlayMode 2 件を追加。画面検収の前に、実装面の回帰検出点を増やした。
 - この端末には Unity 6000.4.9f1 が未導入（`C:\Program Files\Unity\Hub\Editor` には 6000.3.3f1 / 6000.3.6f1 のみ）。Unity 実行検証は 6000.4.9f1 がある別端末または CI で行う。
 
-## Current Focus
+## Previous Focus (2026-06-08)
 
 - 主目的: **別端末で `main` を pull して SP-023 / SP-024 の表示検収を再開できる状態**
 - 続き: **SP-023 の Unity 画面検収 3 本** (`SP023_NarrationMargin_Start` → `SP023_LocalExtensions_Start` → `SP023_DisplayShowcase_Start`)。その前に、追加済みの IconSide / SP-023 PlayMode 2 件を 6000.4.9f1 環境で回すと差分の足場が固い。

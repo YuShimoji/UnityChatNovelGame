@@ -1,0 +1,13 @@
+flowchart LR
+    A["Write and save Yarn externally"] --> B["Writer Cockpit: Refresh Nodes"]
+    B --> C["Validate All Yarn Files"]
+    C --> D{"errors = 0"}
+    D -- "no" --> E["Fix Yarn and save again"]
+    E --> B
+    D -- "yes" --> F["Sync Authoring Assets"]
+    F --> G["Choose or use recommended Start Node"]
+    G --> H["Apply Node To ContentAuthoring Scene"]
+    H --> I["Play ContentAuthoring From Selected Node"]
+    I --> J["Review scene behavior"]
+    J --> K["Read-only save/autosave status"]
+    J --> E

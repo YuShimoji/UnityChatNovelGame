@@ -10,7 +10,7 @@ namespace ProjectFoundPhone.Editor
 {
     public sealed class ContentPipelineWindow : EditorWindow
     {
-        private const string ContentAuthoringScenePath = "Assets/Scenes/ContentAuthoring.unity";
+        internal const string ContentAuthoringScenePath = "Assets/Scenes/ContentAuthoring.unity";
 
         private string[] m_NodeNames = Array.Empty<string>();
         private int m_SelectedNodeIndex;
@@ -133,7 +133,7 @@ namespace ProjectFoundPhone.Editor
             m_SelectedNodeIndex = index >= 0 ? index : 0;
         }
 
-        private static void OpenContentAuthoringScene()
+        internal static void OpenContentAuthoringScene()
         {
             EditorSceneManager.OpenScene(ContentAuthoringScenePath, OpenSceneMode.Single);
         }
@@ -145,19 +145,33 @@ namespace ProjectFoundPhone.Editor
                 return;
             }
 
+            string selectedNode = m_NodeNames[m_SelectedNodeIndex];
+            if (!ApplyNodeToContentAuthoringScene(selectedNode, enterPlayMode, out string statusMessage))
+            {
+                EditorUtility.DisplayDialog("Content Pipeline", statusMessage, "OK");
+            }
+        }
+
+        internal static bool ApplyNodeToContentAuthoringScene(
+            string selectedNode,
+            bool enterPlayMode,
+            out string statusMessage)
+        {
+            if (string.IsNullOrWhiteSpace(selectedNode))
+            {
+                statusMessage = "Start Node が選択されていません。";
+                return false;
+            }
+
             OpenContentAuthoringScene();
 
             ScenarioManager scenarioManager = FindScenarioManagerInOpenScene();
             if (scenarioManager == null)
             {
-                EditorUtility.DisplayDialog(
-                    "Content Pipeline",
-                    "ContentAuthoring シーン内に ScenarioManager が見つかりませんでした。",
-                    "OK");
-                return;
+                statusMessage = "ContentAuthoring シーン内に ScenarioManager が見つかりませんでした。";
+                return false;
             }
 
-            string selectedNode = m_NodeNames[m_SelectedNodeIndex];
             SerializedObject serializedObject = new SerializedObject(scenarioManager);
             serializedObject.FindProperty("m_StartNode").stringValue = selectedNode;
             serializedObject.FindProperty("m_AutoStartYarn").boolValue = true;
@@ -171,6 +185,25 @@ namespace ProjectFoundPhone.Editor
             {
                 EditorApplication.isPlaying = true;
             }
+
+            statusMessage = enterPlayMode
+                ? $"ContentAuthoring に StartNode={selectedNode} を適用し、Play Mode を開始します。"
+                : $"ContentAuthoring に StartNode={selectedNode} を適用しました。";
+            return true;
+        }
+
+        internal static string GetContentAuthoringSceneStatus()
+        {
+            ScenarioManager scenarioManager = FindScenarioManagerInOpenScene();
+            if (scenarioManager == null)
+            {
+                return "ContentAuthoring シーン未オープン、または ScenarioManager 未検出";
+            }
+
+            SerializedObject serializedObject = new SerializedObject(scenarioManager);
+            string startNode = serializedObject.FindProperty("m_StartNode").stringValue;
+            bool autoStart = serializedObject.FindProperty("m_AutoStartYarn").boolValue;
+            return $"ContentAuthoring open: StartNode={startNode}, AutoStartYarn={autoStart}";
         }
 
         private static ScenarioManager FindScenarioManagerInOpenScene()

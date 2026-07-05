@@ -1,19 +1,19 @@
 # Runtime State
 
-**Updated**: 2026-06-15（origin/main 同期 + AI 入口薄型化 + local doc viewer 整備）
+**Updated**: 2026-07-06（Writer Cockpit Unity validation attempt: Package Manager blocker）
 
 ## Current Position
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
-- lane: **UI/Engine**（SP-023 / SP-024 の表示検収再開）
-- slice: **repo-local runtime pin と古い入口文書の固定を外し、既存 Markdown 正本を壊さずローカル閲覧・翻訳確認できる状態**
-- next_recommended_slice: **Unity 6000.4.9f1 で追加済み IconSide / SP-023 PlayMode を確認後、`SP023_NarrationMargin_Start` → `SP023_LocalExtensions_Start` → `SP023_DisplayShowcase_Start` の Unity 画面検収**
-- subsequent_recommended_slice: **`SP024_Immersion_Start` による SP-024 S1/S2/S5 の Unity 見た目確認、または S4 (オンライン状態 UI) / Block 4 (フリックスレッド切替) の設計固定**
+- lane: **Authoring Tooling**（Writer / Designer Cockpit MVP）
+- slice: **Yarn 保存 → 検証 → SO同期 → Start Node 適用/再生 → save status 確認をUnity Editor一画面に集約する**
+- next_recommended_slice: **Unity 6000.4.9f1 の Package Manager `path undefined` ブロッカーを解消し、`Tools > FoundPhone > Writer Cockpit` の compile/menu/表示/Apply/Play を確認**
+- subsequent_recommended_slice: **Cockpit 導線確認後、SP-023 / SP-024 の表示検収へ戻る**
 - later_recommended_slice: **SP-024 S4 (オンライン状態表示)**
-- active_artifact: ChatController / ChatDialogueView / ScenarioManager / CharacterProfile / SaveData / SubthreadData / ThreadSwitcherController / BubbleStyle assets / SP023 demo yarns / SP024_ImmersionDemo
-- artifact_surface: ChatController / ChatDialogueView / ChatUIConfig / ScenarioManager / CharacterDatabase / ThreadSwitcherController
-- last_change_relation: unblocker + docs tooling（2026-06-15: origin/main fast-forward、tracked client-local settings 削除、AI 入口薄型化、MkDocs 閲覧面追加）
+- active_artifact: WriterCockpitWindow / ContentPipelineWindow / YarnContentValidator / YarnSOGenerator / ContentAuthoring / active Yarn files
+- artifact_surface: Editor tooling only (`Tools > FoundPhone > Writer Cockpit`; existing Content Pipeline preserved)
+- last_change_relation: authoring workflow upgrade + validation blocker captured（2026-07-06: Writer Cockpit MVP、Validator/SO sync summary DTO、ContentAuthoring apply helper、Unity 6000.4.9f1 Package Manager blocker記録）
 - plan_file: `C:\Users\thank\.claude\plans\hazy-tumbling-feigenbaum.md` （9 Block 分割の実行プラン） / `docs/plans/display-batch-showcase.md`（表示系デモ・修正版・リポジトリ正本）
 
 ## Counters
@@ -35,7 +35,26 @@
 
 ## Session Log
 
+### 2026-07-06（Writer / Designer Cockpit MVP）
+
+- **目的**: ライター/デザイナーが Yarn 保存後に Unity Editor 上で node/status 確認、Validate、SO Sync、Start Node 適用、Play、Last Action、read-only Save / autosave 状態確認まで一画面で回せるようにする。
+- **Editor tooling**: `Assets/Scripts/Editor/WriterCockpitWindow.cs` を追加し、`Tools > FoundPhone > Writer Cockpit` を新設。既存 `ContentPipelineWindow` はメニュー維持のまま、ContentAuthoring Apply/Play 処理を共有ヘルパー化。
+- **Reuse boundary**: `YarnContentValidator` は件数サマリ、`YarnSOGenerator` は active Yarn file/node 数と同期待ち件数を返す DTO を追加。大きな解析ロジックのコピーはしていない。
+- **Save safety**: Cockpit の Save / autosave 欄は `Application.persistentDataPath` 配下の既定ファイル名存在確認のみ。既存セーブデータの削除・ロード・上書き・移行はしない。
+- **Docs**: `docs/YarnEditingPipeline.md` / `docs/OPERATOR_WORKFLOW.md` を Writer Cockpit 優先導線に更新。`docs/PROJECT_COCKPIT.md` / `docs/PROJECT_PIPELINE.mmd` を追加。
+- **検証境界**: active Yarn は 11 files / 74 node titles を PowerShell + `rg` で確認。`git diff --check` は空白エラーなし。当該チェックポイント時点では Unity compile/menu確認は未実施。
+
+### 2026-07-06（Writer Cockpit Unity integration validation attempt）
+
+- **目的**: Unity 6000.4.9f1 で Writer Cockpit の compile/menu 到達性と、非破壊 Yarn validator batch の実行可否を確認する。
+- **Unity availability**: `C:\Program Files\Unity\Hub\Editor\6000.4.9f1\Editor\Unity.exe` が存在。ProjectVersion も `6000.4.9f1`。
+- **実行**: batch open を2回、`ContentPipelineBatch.RunYarnValidatorBatch` を1回実行。ログは ignored の `Logs/` 配下に保存。
+- **結果**: すべて Package Manager 解決で停止し、`Failed to resolve packages: The "path" argument must be of type string. Received undefined. No packages loaded.` を出して return code 1 終了。Writer Cockpit / Content Pipeline のUnity上のmenu到達性は未証明。
+- **静的監査**: `manifest.json` / `packages-lock.json` は PowerShell `ConvertFrom-Json` parse pass。`WriterCockpitWindow.cs` は Editor-only `#if UNITY_EDITOR`、`ProjectFoundPhone.Editor` namespace、`MenuItem("Tools/FoundPhone/Writer Cockpit")` を確認。`SaveGame` / `LoadGame` / `DeleteSave` / `AutoSave` 呼び出しはなく、save status は `File.Exists` のみ。
+- **検証ノート**: `docs/verification/2026-07-06-writer-cockpit-unity-validation.md`。
+
 ### 2026-06-15（AI 入口薄型化・ローカル docs viewer 整備）
+
 - **目的**: repo-local Codex 実行環境固定や機械固有 local settings を再発させず、既存 Markdown 正本を移動・要約・翻訳せずにブラウザで横断確認できる閲覧面を足す。
 - **同期**: `git fetch --prune origin` 後、`origin/main` 先行 1 commit を `git pull --ff-only origin main` で取り込み済み。
 - **AI / client 設定**: tracked `.claude/settings.local.json` を削除し、`.codex/config.toml` / `.codex/*.toml` / `.claude/settings.local.json` を `.gitignore` に追加。`AGENTS.md` / `CLAUDE.md` / `.claude/CLAUDE.md` は薄い入口ポインタに戻し、実行環境設定はユーザー側 client configuration へ委ねる。

@@ -42,6 +42,42 @@ namespace ProjectFoundPhone.Editor
         private int m_TotalChannelRefs;
         private bool m_HasScanned;
 
+        public readonly struct AuthoringScanSummary
+        {
+            public AuthoringScanSummary(
+                int yarnFileCount,
+                int nodeCount,
+                int topicReferenceCount,
+                int speakerReferenceCount,
+                int channelReferenceCount,
+                int missingTopicCount,
+                int missingCharacterCount,
+                int channelSyncItemCount,
+                string[] nodeNames)
+            {
+                YarnFileCount = yarnFileCount;
+                NodeCount = nodeCount;
+                TopicReferenceCount = topicReferenceCount;
+                SpeakerReferenceCount = speakerReferenceCount;
+                ChannelReferenceCount = channelReferenceCount;
+                MissingTopicCount = missingTopicCount;
+                MissingCharacterCount = missingCharacterCount;
+                ChannelSyncItemCount = channelSyncItemCount;
+                NodeNames = nodeNames ?? Array.Empty<string>();
+            }
+
+            public int YarnFileCount { get; }
+            public int NodeCount { get; }
+            public int TopicReferenceCount { get; }
+            public int SpeakerReferenceCount { get; }
+            public int ChannelReferenceCount { get; }
+            public int MissingTopicCount { get; }
+            public int MissingCharacterCount { get; }
+            public int ChannelSyncItemCount { get; }
+            public int PendingChangeCount => MissingTopicCount + MissingCharacterCount + ChannelSyncItemCount;
+            public string[] NodeNames { get; }
+        }
+
         [MenuItem("Tools/FoundPhone/Yarn SO Generator")]
         public static void ShowWindow()
         {
@@ -76,6 +112,21 @@ namespace ProjectFoundPhone.Editor
             }
 
             return changedCount;
+        }
+
+        public static AuthoringScanSummary GetAuthoringScanSummary()
+        {
+            ScanResult scanResult = ScanActiveYarnFiles();
+            return new AuthoringScanSummary(
+                scanResult.YarnFileCount,
+                scanResult.NodeNames.Length,
+                scanResult.TotalTopicRefs,
+                scanResult.TotalSpeakerRefs,
+                scanResult.TotalChannelRefs,
+                scanResult.MissingTopics.Count,
+                scanResult.MissingCharacters.Count,
+                scanResult.ChannelSyncItems.Count,
+                scanResult.NodeNames);
         }
 
         public static string[] GetActiveYarnNodeNames()
@@ -419,6 +470,7 @@ namespace ProjectFoundPhone.Editor
 
             return new ScanResult
             {
+                YarnFileCount = yarnFiles.Length,
                 MissingTopics = missingTopics,
                 MissingCharacters = missingCharacters,
                 ChannelSyncItems = channelSyncItems,
@@ -817,6 +869,7 @@ namespace ProjectFoundPhone.Editor
 
         private sealed class ScanResult
         {
+            public int YarnFileCount;
             public List<MissingTopic> MissingTopics;
             public List<MissingCharacter> MissingCharacters;
             public List<ChannelSyncInfo> ChannelSyncItems;

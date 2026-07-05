@@ -27,6 +27,7 @@ nav:
   - Overview:
       - Viewer Guide: index.md
       - Project Status Dashboard: docs/PROJECT_STATUS_DASHBOARD.md
+      - Project Cockpit: docs/PROJECT_COCKPIT.md
       - Agent Entry: AGENTS.md
       - Claude Entry: CLAUDE.md
       - Resume Prompt: prompt-resume.md
@@ -114,6 +115,7 @@ nav:
           - PlayMode 8 Results 2026-04-09: docs/verification/2026-04-09-playmode-8-results.md
           - Ch1 Day1-3 Preflight 2026-04-10: docs/verification/2026-04-10-ch1-day1-3-preflight.md
           - Subsequent Completion Report 2026-04-10: docs/verification/2026-04-10-subsequent-completion-report.md
+          - Writer Cockpit Unity Validation 2026-07-06: docs/verification/2026-07-06-writer-cockpit-unity-validation.md
           - Unity GitHub CI: docs/verification/UNITY_GITHUB_CI.md
           - Templates:
               - README: docs/verification/templates/README.md

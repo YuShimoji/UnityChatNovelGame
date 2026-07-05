@@ -6,9 +6,9 @@
 
 1. シナリオ設計 (手動: ビート表 → セクションビート)
 2. Yarn 執筆 (手動: VSCode + Yarn Spinner Extension)
-3. 静的バリデーション (自動: YarnContentValidator — Editor メニュー)
-4. SO 同期 (自動: Content Pipeline / YarnSOGenerator)
-5. Unity 再生確認 (手動: ContentAuthoring シーン or Content Pipeline から即再生)
+3. 静的バリデーション (自動: Writer Cockpit / YarnContentValidator)
+4. SO 同期 (自動: Writer Cockpit / YarnSOGenerator)
+5. Unity 再生確認 (手動: ContentAuthoring シーン or Writer Cockpit から即再生)
 6. 調整 (手動: Inspector + Yarn 編集)
 7. ビルド (未設定)
 
@@ -20,6 +20,7 @@
 
 ### S-4 / SO 同期
 - 旧痛点だった ChannelData 手動作成依存は解消
+- 通常導線は `Tools > FoundPhone > Writer Cockpit`。`Refresh Nodes` → `Validate Then Sync` → `Apply/Play` の順に、Last Action と同期件数を同じ画面で確認する
 - ただし DisplayName / Description / EnableHints など人間判断の値は Inspector 確認が必要
 - 手動の代わりに batchmode から同期する場合は `docs/YarnEditingPipeline.md` の Step 4b（`ContentPipelineBatch` の `-executeMethod`）を参照。プロジェクトを別 Unity が開いていると batch はロックで失敗する
 
@@ -27,6 +28,7 @@
 - 微修正→手動検証ループが5セッション分の時間を消費した (session 13-17)
 - 改善策: 値の調整は Inspector で自律的に行い、セッションに持ち込まない
 - まず `DQT_Start` で導線確認し、その後に本編ノードへ進む
+- Writer Cockpit の Save / autosave 欄は読み取り専用のファイル存在確認。セーブ削除・上書き・移行はここでは行わない
 
 ### S-6 / 調整
 - ScriptableObject (.asset) とコード (.cs) のデフォルト値のずれが検出しにくい
