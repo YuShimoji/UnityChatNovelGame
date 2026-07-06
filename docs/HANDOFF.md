@@ -41,11 +41,22 @@ python -m mkdocs serve -a 127.0.0.1:8000
 - Save / autosave 欄は読み取り専用のファイル存在確認のみ。既存セーブデータの削除・ロード・上書き・移行は行わない。
 - `docs/YarnEditingPipeline.md` / `docs/OPERATOR_WORKFLOW.md` を Writer Cockpit 優先導線に更新し、`docs/PROJECT_COCKPIT.md` / `docs/PROJECT_PIPELINE.mmd` を追加。
 
+## Handoff snapshot (2026-07-06 Package Manager recovery / validation resume)
+
+**本セッションの実施内容**:
+
+- `git fetch --prune origin` 後、`origin/main` 先行 1 commit (`2c6b11d`) を `git pull --ff-only origin main` で取り込み。作業ツリーは source 差分なしから開始。
+- Unity 6000.4.9f1 の `path undefined` は、`Packages/packages-lock.json` 削除、`Library/PackageManager` の generated cache 削除、`Packages/manifest.json` の一時補正で再現。`manifest.json` / `packages-lock.json` / package cache の JSON 破損ではない。
+- `Library/PackageManager` の generated cache を退避から復元し、`Packages/manifest.json` / `Packages/packages-lock.json` の UTC タイムスタンプを ProjectCache metadata と合わせることで、ローカル batch open は Package Manager 登録、script compile、return code 0 まで復旧。
+- `Packages/manifest.json` の `com.unity.test-framework` は `2.0.1` 指定だが、lock / local cache / Unity 6000.4.9f1 built-in metadata は `1.6.0`。一時的に manifest を `1.6.0` へ合わせても fresh resolve は直らなかったため、source 変更は残していない。
+- 非破壊 Yarn validator batch は `errors=0, warnings=33, info=3`、`Scanned 11 files, 74 nodes, 24 #line: tags, 42 declared variables` まで到達。警告は既存の unknown command / unknown character / undeclared variable 系。
+
 ## Current Focus
 
-- 主目的: **Unity Package Manager の `path undefined` 解消後に Writer Cockpit compile / menu / Apply / Play 確認**
-- 続き: Unity **6000.4.9f1** は存在するが、2026-07-06 の batch open / Yarn validator batch は Package Manager 解決で停止。`Tools > FoundPhone > Writer Cockpit` のUnity上の到達性は未証明。
-- その後の候補: Package Manager ブロッカー解消後、Cockpit から `DQT_Start` または推奨ノードを Apply / Play し、問題なければ SP-023 / SP-024 表示検収へ戻る。
+- 主目的: **復旧済みの local Package Manager cache 状態を維持し、Writer Cockpit の interactive menu / Apply / Play を確認**
+- 続き: Unity **6000.4.9f1** の batch open / compile と非破壊 Yarn validator batch は到達済み。`Tools > FoundPhone > Writer Cockpit` と `Tools > FoundPhone > Content Pipeline` は MenuItem source を確認済みだが、interactive Editor 上のメニュー表示と Cockpit 操作は未確認。
+- 注意: `Library/PackageManager` の generated cache 削除、`Packages/packages-lock.json` 再生成、`Packages/manifest.json` 変更は `path undefined` を再発させる。次は fresh resolve 復旧ではなく、現在の復旧済みローカル状態で Cockpit UI を確認するのが最短。
+- その後の候補: Cockpit から `DQT_Start` または推奨ノードを Apply / Play し、問題なければ SP-023 / SP-024 表示検収へ戻る。
 
 ## Validation note (2026-07-06 Writer Cockpit)
 
@@ -54,7 +65,10 @@ python -m mkdocs serve -a 127.0.0.1:8000
   - `Logs/writer-cockpit-unity-open-2026-07-06.log`
   - `Logs/writer-cockpit-unity-open-2026-07-06-rerun.log`
   - `Logs/writer-cockpit-yarn-validator-2026-07-06.log`
-- Result: all attempts stop before package load completes with `Failed to resolve packages: The "path" argument must be of type string. Received undefined. No packages loaded.`
+- Recovery logs:
+  - `Logs/writer-cockpit-cache-utc-timestamp-restored-2026-07-06.log`（batch open / compile / return code 0）
+  - `Logs/writer-cockpit-final-yarn-validator-2026-07-06.log`（Yarn validator batch: errors=0, warnings=33, info=3）
+- Result: original attempts stopped before package load with `Failed to resolve packages: The "path" argument must be of type string. Received undefined. No packages loaded.` The local validation loop is now recovered through PackageManager cache/timestamp restoration, but fresh Package Manager resolution remains fragile.
 - Verification note: `docs/verification/2026-07-06-writer-cockpit-unity-validation.md`
 
 ## Handoff snapshot (2026-06-08 remote sync / Codex config cleanup)

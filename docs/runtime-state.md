@@ -1,6 +1,6 @@
 # Runtime State
 
-**Updated**: 2026-07-06（Writer Cockpit Unity validation attempt: Package Manager blocker）
+**Updated**: 2026-07-06（Writer Cockpit Package Manager recovery / batch validation）
 
 ## Current Position
 
@@ -8,12 +8,12 @@
 - branch: main
 - lane: **Authoring Tooling**（Writer / Designer Cockpit MVP）
 - slice: **Yarn 保存 → 検証 → SO同期 → Start Node 適用/再生 → save status 確認をUnity Editor一画面に集約する**
-- next_recommended_slice: **Unity 6000.4.9f1 の Package Manager `path undefined` ブロッカーを解消し、`Tools > FoundPhone > Writer Cockpit` の compile/menu/表示/Apply/Play を確認**
+- next_recommended_slice: **復旧済みの Package Manager cache 状態を維持し、`Tools > FoundPhone > Writer Cockpit` の interactive menu / 表示 / Apply / Play を確認**
 - subsequent_recommended_slice: **Cockpit 導線確認後、SP-023 / SP-024 の表示検収へ戻る**
 - later_recommended_slice: **SP-024 S4 (オンライン状態表示)**
 - active_artifact: WriterCockpitWindow / ContentPipelineWindow / YarnContentValidator / YarnSOGenerator / ContentAuthoring / active Yarn files
 - artifact_surface: Editor tooling only (`Tools > FoundPhone > Writer Cockpit`; existing Content Pipeline preserved)
-- last_change_relation: authoring workflow upgrade + validation blocker captured（2026-07-06: Writer Cockpit MVP、Validator/SO sync summary DTO、ContentAuthoring apply helper、Unity 6000.4.9f1 Package Manager blocker記録）
+- last_change_relation: authoring workflow upgrade + local validation recovery（2026-07-06: Writer Cockpit MVP、Validator/SO sync summary DTO、ContentAuthoring apply helper、Package Manager cache/timestamp 復旧、batch compile / Yarn validator 到達）
 - plan_file: `C:\Users\thank\.claude\plans\hazy-tumbling-feigenbaum.md` （9 Block 分割の実行プラン） / `docs/plans/display-batch-showcase.md`（表示系デモ・修正版・リポジトリ正本）
 
 ## Counters
@@ -52,6 +52,16 @@
 - **結果**: すべて Package Manager 解決で停止し、`Failed to resolve packages: The "path" argument must be of type string. Received undefined. No packages loaded.` を出して return code 1 終了。Writer Cockpit / Content Pipeline のUnity上のmenu到達性は未証明。
 - **静的監査**: `manifest.json` / `packages-lock.json` は PowerShell `ConvertFrom-Json` parse pass。`WriterCockpitWindow.cs` は Editor-only `#if UNITY_EDITOR`、`ProjectFoundPhone.Editor` namespace、`MenuItem("Tools/FoundPhone/Writer Cockpit")` を確認。`SaveGame` / `LoadGame` / `DeleteSave` / `AutoSave` 呼び出しはなく、save status は `File.Exists` のみ。
 - **検証ノート**: `docs/verification/2026-07-06-writer-cockpit-unity-validation.md`。
+
+### 2026-07-06（Package Manager recovery / Writer Cockpit batch validation）
+
+- **目的**: 添付Promptの次スライスに従い、Package Manager `path undefined` を復旧または精密化し、Writer Cockpit の compile / validator 到達性を確認する。
+- **同期**: `git fetch --prune origin` 後、`origin/main` 先行 1 commit (`2c6b11d`) を fast-forward で取り込み。source は clean。
+- **診断**: `Packages/manifest.json` / `Packages/packages-lock.json` / `ProjectSettings/PackageManagerSettings.asset` を確認。package JSON 破損や local path dependency は見つからず。`com.unity.test-framework` は manifest `2.0.1`、lock / cache / Unity built-in metadata `1.6.0` の差があるが、manifest を一時的に `1.6.0` へ合わせても fresh resolve は直らなかったため source 変更は残していない。
+- **再現条件**: `Packages/packages-lock.json` 削除、`Library/PackageManager` generated cache 削除、または manifest 変更で `Failed to resolve packages: The "path" argument must be of type string. Received undefined. No packages loaded.` が再発。registry access 前の local Package Manager 解決で落ちる。
+- **復旧**: 退避した `Library/PackageManager/ProjectCache` / `ProjectCache.md5` / `projectResolution.json` を戻し、`Packages/manifest.json` / `Packages/packages-lock.json` の `LastWriteTimeUtc` を ProjectCache metadata に合わせることで batch open は復旧。`Logs/writer-cockpit-cache-utc-timestamp-restored-2026-07-06.log` で Package Manager 39 packages 登録、batch quit、return code 0。
+- **追加検証**: `Logs/writer-cockpit-final-yarn-validator-2026-07-06.log` で非破壊 Yarn validator batch 到達。`errors=0, warnings=33, info=3` / `Scanned 11 files, 74 nodes, 24 #line: tags, 42 declared variables`。警告は既存の unknown command / unknown character / undeclared variable 系。
+- **残り**: Interactive Unity Editor で `Tools > FoundPhone > Writer Cockpit` の実メニュー表示、Cockpit 表示、Apply / Play は未確認。次は `Library/PackageManager` や `packages-lock.json` を触らずに interactive 確認する。
 
 ### 2026-06-15（AI 入口薄型化・ローカル docs viewer 整備）
 

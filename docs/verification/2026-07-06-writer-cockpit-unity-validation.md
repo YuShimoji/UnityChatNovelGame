@@ -18,25 +18,45 @@ Validate the Writer Cockpit MVP added under `Tools > FoundPhone > Writer Cockpit
 Unity.exe -batchmode -quit -projectPath <repo> -logFile Logs\writer-cockpit-unity-open-2026-07-06.log
 Unity.exe -batchmode -quit -projectPath <repo> -logFile Logs\writer-cockpit-unity-open-2026-07-06-rerun.log
 Unity.exe -batchmode -quit -projectPath <repo> -logFile Logs\writer-cockpit-yarn-validator-2026-07-06.log -executeMethod ProjectFoundPhone.Editor.ContentPipelineBatch.RunYarnValidatorBatch
+Unity.exe -batchmode -quit -projectPath <repo> -logFile Logs\writer-cockpit-cache-utc-timestamp-restored-2026-07-06.log
+Unity.exe -batchmode -quit -projectPath <repo> -logFile Logs\writer-cockpit-final-yarn-validator-2026-07-06.log -executeMethod ProjectFoundPhone.Editor.ContentPipelineBatch.RunYarnValidatorBatch
 ```
 
 `Logs/` is ignored by `.gitignore`; the logs are local evidence only.
 
 ## Result
 
-Unity 6000.4.9f1 launches, but all validation attempts stop during Package Manager resolution before the Writer Cockpit menu or Yarn validator batch can be proven.
+Unity 6000.4.9f1 now reaches package registration, script compilation, and batch quit when the local generated Package Manager cache and the `Packages/manifest.json` / `Packages/packages-lock.json` timestamps match the cache metadata.
 
-Observed log line:
+Passing batch-open evidence:
 
 ```text
-Failed to resolve packages: The "path" argument must be of type string. Received undefined. No packages loaded.
+[Package Manager] Restoring resolved packages state from cache
+[Package Manager] Registered 39 packages:
+Batchmode quit successfully invoked - shutting down!
+Application will terminate with return code 0
 ```
 
-The log then exits with:
+The previous blocker is still reproducible if Package Manager is forced onto a fresh resolve path. Removing `Packages/packages-lock.json`, removing only `Library/PackageManager/ProjectCache*` / `projectResolution.json`, or changing `Packages/manifest.json` invalidates the cache and returns:
 
 ```text
+[Package Manager] The "path" argument must be of type string. Received undefined
+Failed to resolve packages: The "path" argument must be of type string. Received undefined. No packages loaded.
 Application will terminate with return code 1
 ```
+
+This happens before registry access is visible in the logs. It is not explained by malformed package JSON: `Packages/manifest.json`, `Packages/packages-lock.json`, `Assets/MCPForUnity/package.json`, and package cache `package.json` files parse, and no invalid required package fields were found.
+
+`Packages/manifest.json` asks for `com.unity.test-framework` `2.0.1`, while the checked-in lock, local package cache, and Unity 6000.4.9f1 built-in package metadata resolve `com.unity.test-framework` as `1.6.0`. A trial manifest correction to `1.6.0` did not fix the fresh-resolve `path undefined` failure, so no manifest/lock source change was kept.
+
+Non-mutating Yarn validator batch reached the validator:
+
+```text
+YarnContentValidator (batch): errors=0, warnings=33, info=3.
+Scanned 11 files, 74 nodes, 24 #line: tags, 42 declared variables
+```
+
+The validator process returned exit code 0. The warnings are the existing unknown command / unknown character / undeclared variable warnings surfaced by the validator; they are not Package Manager or compile failures.
 
 ## Static Checks Completed
 
@@ -50,10 +70,12 @@ Application will terminate with return code 1
 
 ## Status
 
-- Writer Cockpit compile/menu reachability: not proven.
-- Existing Content Pipeline compile/menu reachability: not proven in this run.
-- Root blocker: Unity Package Manager resolution fails before package load / asset refresh completion.
+- Writer Cockpit compile reachability: proven by Unity 6000.4.9f1 batch open after Package Manager cache/timestamp recovery.
+- Writer Cockpit menu source reachability: statically proven by `MenuItem("Tools/FoundPhone/Writer Cockpit", false, 19)`.
+- Existing Content Pipeline menu source reachability: statically proven by `MenuItem("Tools/FoundPhone/Content Pipeline")`.
+- Interactive menu presence: not proven; no interactive Unity window was opened.
+- Root blocker narrowed: fresh Package Manager resolution is still fragile and fails with `path undefined`; the local validation path currently depends on coherent generated `Library/PackageManager` cache metadata and matching source-file timestamps.
 
 ## Next Move
 
-Resolve the Package Manager `path undefined` failure, then rerun the same Unity 6000.4.9f1 batch open and non-mutating Yarn validator batch.
+Use the current restored Package Manager cache state to open Unity interactively and verify `Tools > FoundPhone > Writer Cockpit` appears, then test Apply / Play from the Cockpit. Do not delete `Library/PackageManager` or regenerate `Packages/packages-lock.json` as a first step; that re-enters the `path undefined` failure.
