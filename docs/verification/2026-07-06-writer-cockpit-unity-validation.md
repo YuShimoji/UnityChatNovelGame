@@ -1,6 +1,7 @@
 # Writer Cockpit Unity Validation Attempt
 
 Date: 2026-07-06
+Last rechecked: 2026-07-07
 
 ## Scope
 
@@ -20,6 +21,8 @@ Unity.exe -batchmode -quit -projectPath <repo> -logFile Logs\writer-cockpit-unit
 Unity.exe -batchmode -quit -projectPath <repo> -logFile Logs\writer-cockpit-yarn-validator-2026-07-06.log -executeMethod ProjectFoundPhone.Editor.ContentPipelineBatch.RunYarnValidatorBatch
 Unity.exe -batchmode -quit -projectPath <repo> -logFile Logs\writer-cockpit-cache-utc-timestamp-restored-2026-07-06.log
 Unity.exe -batchmode -quit -projectPath <repo> -logFile Logs\writer-cockpit-final-yarn-validator-2026-07-06.log -executeMethod ProjectFoundPhone.Editor.ContentPipelineBatch.RunYarnValidatorBatch
+Unity.exe -batchmode -quit -projectPath <repo> -logFile Logs\writer-cockpit-unity-open-2026-07-07.log
+Unity.exe -batchmode -quit -projectPath <repo> -logFile Logs\writer-cockpit-yarn-validator-2026-07-07.log -executeMethod ProjectFoundPhone.Editor.ContentPipelineBatch.RunYarnValidatorBatch
 ```
 
 `Logs/` is ignored by `.gitignore`; the logs are local evidence only.
@@ -57,6 +60,32 @@ Scanned 11 files, 74 nodes, 24 #line: tags, 42 declared variables
 ```
 
 The validator process returned exit code 0. The warnings are the existing unknown command / unknown character / undeclared variable warnings surfaced by the validator; they are not Package Manager or compile failures.
+
+## Recheck (2026-07-07)
+
+After `git pull --ff-only` reported the local `main` branch was already up to date, the restored local Package Manager state was revalidated without changing package source files or generated caches.
+
+Batch open still reaches the recovered path:
+
+```text
+[Package Manager] Restoring resolved packages state from cache
+[Package Manager] Registered 39 packages:
+DisplayProgressbar: Compiling Scripts
+*** Tundra build success (0.19 seconds), 0 items updated, 326 evaluated
+Batchmode quit successfully invoked - shutting down!
+Application will terminate with return code 0
+```
+
+The non-mutating Yarn validator batch also still reaches the validator:
+
+```text
+YarnContentValidator (batch): errors=0, warnings=33, info=3.
+Scanned 11 files, 74 nodes, 24 #line: tags, 42 declared variables
+```
+
+`Packages/manifest.json` and `Packages/packages-lock.json` still parse as JSON. `Assets/MCPForUnity/package.json` also parses and contains required package identity fields (`name`, `version`, `displayName`). No `file:`, `../`, absolute Windows path, or package `path` field was found in the inspected package manifests/settings. The known manifest/lock mismatch remains: manifest requests `com.unity.test-framework` `2.0.1`, while lock/cache resolve built-in `1.6.0`.
+
+No interactive Unity Editor menu pass was performed in this recheck. `Tools > FoundPhone > Writer Cockpit` and `Tools > FoundPhone > Content Pipeline` remain static `MenuItem` sources only until a visible Editor pass confirms the actual menu and Cockpit UI.
 
 ## Static Checks Completed
 

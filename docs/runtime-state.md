@@ -1,6 +1,6 @@
 # Runtime State
 
-**Updated**: 2026-07-06（Writer Cockpit Package Manager recovery / batch validation）
+**Updated**: 2026-07-07（Writer Cockpit validation recheck / next interactive pass）
 
 ## Current Position
 
@@ -13,7 +13,7 @@
 - later_recommended_slice: **SP-024 S4 (オンライン状態表示)**
 - active_artifact: WriterCockpitWindow / ContentPipelineWindow / YarnContentValidator / YarnSOGenerator / ContentAuthoring / active Yarn files
 - artifact_surface: Editor tooling only (`Tools > FoundPhone > Writer Cockpit`; existing Content Pipeline preserved)
-- last_change_relation: authoring workflow upgrade + local validation recovery（2026-07-06: Writer Cockpit MVP、Validator/SO sync summary DTO、ContentAuthoring apply helper、Package Manager cache/timestamp 復旧、batch compile / Yarn validator 到達）
+- last_change_relation: authoring workflow upgrade + local validation recovery（2026-07-07: remote 同期後も Package Manager cache 経由で batch compile / Yarn validator 到達を再確認）
 - plan_file: `C:\Users\thank\.claude\plans\hazy-tumbling-feigenbaum.md` （9 Block 分割の実行プラン） / `docs/plans/display-batch-showcase.md`（表示系デモ・修正版・リポジトリ正本）
 
 ## Counters
@@ -34,6 +34,16 @@
 - last_visual_audit_path: docs/archive/verification-evidence/VerticalSliceSmokeGate_20260403_*.png (参考。パスのみ保持、追跡は廃止)
 
 ## Session Log
+
+### 2026-07-07（Writer Cockpit validation recheck）
+
+- **目的**: リモート同期後のローカル `main` が、添付Promptの Package Manager recovery 完了条件をまだ満たすか再確認し、次の作業判断を固める。
+- **同期**: `git pull --ff-only` は `Already up to date.`。開始時と再確認時の作業ツリーは source 差分なし。
+- **Package diagnostics**: Unity 6000.4.9f1 executable と `ProjectVersion.txt` は一致。`Packages/manifest.json` / `Packages/packages-lock.json` / `Assets/MCPForUnity/package.json` は JSON parse pass。`Packages/` 直下に package.json はなく、`file:` / `../` / 絶対 Windows path / package `path` field は検出なし。既知差分として `com.unity.test-framework` は manifest `2.0.1`、lock/cache `1.6.0` のまま。
+- **Batch validation**: `Logs/writer-cockpit-unity-open-2026-07-07.log` で Package Manager cache restore、39 packages 登録、script compile、return code 0 を確認。
+- **Yarn validator**: `Logs/writer-cockpit-yarn-validator-2026-07-07.log` で `errors=0, warnings=33, info=3` / `Scanned 11 files, 74 nodes, 24 #line: tags, 42 declared variables` を確認。警告は既存 Yarn 診断で、Package Manager / compile failure ではない。
+- **静的到達性**: `Tools > FoundPhone > Writer Cockpit` と `Tools > FoundPhone > Content Pipeline` の `MenuItem` source を再確認。Writer Cockpit の save status は `File.Exists` の read-only 確認のみで、SaveGame / LoadGame / DeleteSave 呼び出しはない。
+- **残り**: interactive Unity Editor 上で Cockpit 実メニュー、画面表示、Apply / Play は未確認。次は generated Package Manager cache や package source を触らず、復旧済みローカル状態のまま visible Editor pass を行う。
 
 ### 2026-07-06（Writer / Designer Cockpit MVP）
 

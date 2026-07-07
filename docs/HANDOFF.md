@@ -54,7 +54,7 @@ python -m mkdocs serve -a 127.0.0.1:8000
 ## Current Focus
 
 - 主目的: **復旧済みの local Package Manager cache 状態を維持し、Writer Cockpit の interactive menu / Apply / Play を確認**
-- 続き: Unity **6000.4.9f1** の batch open / compile と非破壊 Yarn validator batch は到達済み。`Tools > FoundPhone > Writer Cockpit` と `Tools > FoundPhone > Content Pipeline` は MenuItem source を確認済みだが、interactive Editor 上のメニュー表示と Cockpit 操作は未確認。
+- 続き: 2026-07-07 にリモート同期後のローカル `main` で Unity **6000.4.9f1** の batch open / compile と非破壊 Yarn validator batch を再確認済み。`Tools > FoundPhone > Writer Cockpit` と `Tools > FoundPhone > Content Pipeline` は MenuItem source を確認済みだが、interactive Editor 上のメニュー表示と Cockpit 操作は未確認。
 - 注意: `Library/PackageManager` の generated cache 削除、`Packages/packages-lock.json` 再生成、`Packages/manifest.json` 変更は `path undefined` を再発させる。次は fresh resolve 復旧ではなく、現在の復旧済みローカル状態で Cockpit UI を確認するのが最短。
 - その後の候補: Cockpit から `DQT_Start` または推奨ノードを Apply / Play し、問題なければ SP-023 / SP-024 表示検収へ戻る。
 
@@ -68,6 +68,9 @@ python -m mkdocs serve -a 127.0.0.1:8000
 - Recovery logs:
   - `Logs/writer-cockpit-cache-utc-timestamp-restored-2026-07-06.log`（batch open / compile / return code 0）
   - `Logs/writer-cockpit-final-yarn-validator-2026-07-06.log`（Yarn validator batch: errors=0, warnings=33, info=3）
+- 2026-07-07 recheck logs:
+  - `Logs/writer-cockpit-unity-open-2026-07-07.log`（Package Manager cache restore / 39 packages / script compile / return code 0）
+  - `Logs/writer-cockpit-yarn-validator-2026-07-07.log`（Yarn validator batch: errors=0, warnings=33, info=3 / 11 files / 74 nodes）
 - Result: original attempts stopped before package load with `Failed to resolve packages: The "path" argument must be of type string. Received undefined. No packages loaded.` The local validation loop is now recovered through PackageManager cache/timestamp restoration, but fresh Package Manager resolution remains fragile.
 - Verification note: `docs/verification/2026-07-06-writer-cockpit-unity-validation.md`
 
