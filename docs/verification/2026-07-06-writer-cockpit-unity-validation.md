@@ -1,7 +1,7 @@
 # Writer Cockpit Unity Validation Attempt
 
 Date: 2026-07-06
-Last rechecked: 2026-07-07
+Last rechecked: 2026-07-11
 
 ## Scope
 
@@ -87,6 +87,55 @@ Scanned 11 files, 74 nodes, 24 #line: tags, 42 declared variables
 
 No interactive Unity Editor menu pass was performed in this recheck. `Tools > FoundPhone > Writer Cockpit` and `Tools > FoundPhone > Content Pipeline` remain static `MenuItem` sources only until a visible Editor pass confirms the actual menu and Cockpit UI.
 
+## Recheck (2026-07-11)
+
+After fast-forwarding `main` to `51dc8bc`, the ignored local evidence described above was not present in this workspace:
+
+- `Library/PackageManager/ProjectCache`: missing
+- `Library/PackageManager/ProjectCache.md5`: missing
+- tracked source: clean and at `origin/main`
+
+A normal Unity 6000.4.9f1 batch open reproduced `path undefined` and returned 1. A separate `UPM_CACHE_ROOT` did not change the result, and removing the stale 6000.3.6f1 `projectResolution.json` did not change it either.
+
+Running Unity Package Manager's diagnostic `resolve` command with console logging exposed the actual stack:
+
+```text
+TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined
+    at Object.join (node:path:513:7)
+    at getDeprecatedGlobalConfigRoot (...)
+    at getDeprecatedGlobalConfigFilePath (...)
+    at getDeprecatedGlobalConfig (...)
+```
+
+The Codex / PowerShell child environment did not define the standard Windows `ALLUSERSPROFILE` variable. Supplying `C:\ProgramData` to the target process only made the same isolated manifest/lock resolve return 0.
+
+The real project was then opened from no ProjectCache state with the same process-local value:
+
+- fresh resolve completed in 42.78 seconds
+- 39 packages registered
+- scripts compiled successfully
+- batch quit returned 0
+- `ProjectCache`, `ProjectCache.md5`, and `projectResolution.json` were regenerated
+
+`tools/run-unity.ps1` now provides this process-local repair without changing user or system environment variables. A second wrapper batch open restored the resolved package state from cache, compiled the changed Editor assembly, and returned 0.
+
+The wrapper Yarn validator also returned 0 with:
+
+```text
+YarnContentValidator (batch): errors=0, warnings=33, info=3.
+Scanned 11 files, 74 nodes, 24 #line: tags, 42 declared variables
+```
+
+Of the 33 warnings, 24 are registered runtime commands that are missing from `YarnContentValidator.KnownCommands`. The remaining warnings are 9 uses of the intentionally unknown debug character ID. This is a Validator trust issue, not a package or compile failure.
+
+Local logs:
+
+- `Logs/dev-readiness-fixed-env-unity-open-2026-07-11.log`
+- `Logs/dev-readiness-wrapper-open-2026-07-11.log`
+- `Logs/dev-readiness-wrapper-yarn-validator-2026-07-11.log`
+
+The logs remain ignored machine-local evidence. The durable handoff is `docs/SUPERVISOR_REPORT.md`.
+
 ## Static Checks Completed
 
 - `ProjectSettings/ProjectVersion.txt` requires `6000.4.9f1`.
@@ -99,12 +148,15 @@ No interactive Unity Editor menu pass was performed in this recheck. `Tools > Fo
 
 ## Status
 
-- Writer Cockpit compile reachability: proven by Unity 6000.4.9f1 batch open after Package Manager cache/timestamp recovery.
+- Fresh package resolution: proven locally when the standard Windows common-application-data environment is present.
+- Reproducible agent launcher: `tools/run-unity.ps1`.
+- Writer Cockpit compile reachability: proven by Unity 6000.4.9f1 fresh resolve and wrapper recheck.
 - Writer Cockpit menu source reachability: statically proven by `MenuItem("Tools/FoundPhone/Writer Cockpit", false, 19)`.
 - Existing Content Pipeline menu source reachability: statically proven by `MenuItem("Tools/FoundPhone/Content Pipeline")`.
 - Interactive menu presence: not proven; no interactive Unity window was opened.
-- Root blocker narrowed: fresh Package Manager resolution is still fragile and fails with `path undefined`; the local validation path currently depends on coherent generated `Library/PackageManager` cache metadata and matching source-file timestamps.
+- Root blocker resolved for this launcher path: missing `ALLUSERSPROFILE` in the calling environment caused `getDeprecatedGlobalConfigRoot` to pass undefined to Node path handling.
+- Validator summary trust: needs repair because 24 registered commands are reported as unknown.
 
 ## Next Move
 
-Use the current restored Package Manager cache state to open Unity interactively and verify `Tools > FoundPhone > Writer Cockpit` appears, then test Apply / Play from the Cockpit. Do not delete `Library/PackageManager` or regenerate `Packages/packages-lock.json` as a first step; that re-enters the `path undefined` failure.
+Run `.\tools\run-unity.ps1`, verify `Tools > FoundPhone > Writer Cockpit` appears, and complete one `DQT_Start` Refresh → Validate Then Sync → Apply / Play loop. Then repair Validator command drift and establish the current EditMode 73 / PlayMode 10 baseline after isolating save data.

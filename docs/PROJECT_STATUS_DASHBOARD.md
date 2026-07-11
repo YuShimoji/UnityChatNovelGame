@@ -7,6 +7,7 @@
 | 知りたいこと | 最初に見るファイル | そこで分かること | 補助で見る場所 |
 |---|---|---|---|
 | いま何をしているか | `docs/HANDOFF.md` | 直近の焦点、Safe Next Steps、検証境界 | `docs/runtime-state.md` |
+| 監修判断と長期目標 | `docs/SUPERVISOR_REPORT.md` | 現在の信頼評価、残作業、G0-G13、Human Authority | `docs/project-context.md` |
 | 現在の開発軸 | `docs/project-context.md` | CURRENT / NEXT / SUBSEQUENT / LATER の流れ | `docs/DEVELOPMENT_TURN_PLAN.md` |
 | 実装済み機能 | `docs/FEATURE_STATUS_AUDIT.md` | 実装済み・未確認・未実装の表 | `docs/ENGINE_FEATURE_INVENTORY.md` |
 | 今後の新機能 | `docs/FEATURE_REGISTRY.md` | ENH 候補、状態、次フェーズ | `docs/FEATURE_STATUS_AUDIT.md` §4 |

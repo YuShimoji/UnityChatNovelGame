@@ -14,11 +14,12 @@
   - **運用 (2026-06-03)**: ローカル追跡差分と handoff 文脈を `origin/main` へ反映する同期ブロック。別端末の最短再開は Unity 6000.4.9f1 + `docs/HANDOFF.md`。`NotoSansJP-Regular SDF.asset` の dynamic cache reset 後の日本語表示は次回画面検収で重点確認
   - **運用 (2026-06-08)**: Codex の repo-local 実行環境固定を削除し、欠落 `.claude/hooks/*.sh` 参照も除去。`origin/main` 先行分を fast-forward で取り込み、追加の IconSide / SP-023 テストと handoff 文脈を project-local docs に固定
   - **運用 (2026-07-06)**: Prompt により T+1 Writer / Designer Cockpit MVP を active slice に昇格。`Tools > FoundPhone > Writer Cockpit` で Yarn 保存後の Refresh / Validate / Sync / Apply / Play / Last Action / read-only Save status を一画面化。Unity 6000.4.9f1 は存在するが Package Manager `path undefined` で停止するため、次はその解消後に compile/menu/Apply/Play 確認
+  - **運用 (2026-07-11)**: fresh resolve の `path undefined` は package JSON ではなく、Codex / PowerShell 子環境の標準 Windows 変数 `ALLUSERSPROFILE` 欠落が直接原因と判明。`tools/run-unity.ps1` で process-local に補完し、ProjectCache 欠落状態から 39 packages 登録、compile、return code 0 を確認。次は Writer Cockpit interactive 受入
   - **運用 (2026-04-09)**: セッション引き継ぎで `main`≒`origin/main` を確認。計測用 `debug-*.log` は `.gitignore` でリポジトリ外に固定。再開の最短導線は `docs/HANDOFF.md` の Handoff snapshot
   - **技術 (session 21–22)**: PlayMode 失敗の根本原因は auto-start の missing_node:Start。HasNode 事前チェック + archive 除外 + TearDown（`UnityTearDown` + `StopScenario` + 待機）で修正。WORKFLOW_STATE_SSOT.md 廃止。Session 22: タイプライター同期（DOTween 完了待機）、DebugChatScene 整備、SaveManager AutoSaveIndicator 安全化、PlayMode **8**/8・EditMode 75/75 をローカルで通過（batch XML・共通ヘルパー分離済み）
   - **方向性修正 (2026-04-15)**: Ch 積み上げ構造の構造的ドリフトを修正。主軸を**エンジン能力マイルストーン**に切替。ガードレール（`docs/REPO_LOCAL_RULES.md` / `docs/INVARIANTS.md`）を実行計画より上位に再配置。SUBSEQUENT を通過ゲート（スキップ不可）に変更
   - AI の役割: Yarn 執筆ではなく制作ツール・パイプライン・検証導線の整備（USER_REQUEST_LEDGER と整合）
-  - 次の作業: Unity 6000.4.9f1 の Package Manager `path undefined` を解消して Writer Cockpit を確認し、作者導線が通ったら SP-023 / SP-024 表示検収、またはエンジン能力マイルストーン 1（サブスレッド全型の実機検証）へ戻る
+  - 次の作業: `tools/run-unity.ps1` から Writer Cockpit の interactive loop を1回受け入れ、Validator command registry drift と現行回帰基準を閉じた後、SP-023 / SP-024 表示検収と M1 へ戻る
 
 ### 運用メモ
 
@@ -47,7 +48,7 @@
 
 - 主レーン: **Authoring Tooling**（Writer / Designer Cockpit MVP）
 - 副レーン: **Engine / UI Review**（Cockpit導線確認後に SP-023 / SP-024 表示検収へ戻る）
-- 優先理由: ユーザーは Yarn 執筆そのものより、ライター/デザイナーが迷わず保存・検証・同期・ノード再生できる GUI 導線を求めている。Content Pipeline の部品は揃っているが、一画面の作者UXが不足していた
+- 優先理由: 一画面の作者UXは実装・compile 済みだが、interactive Apply / Play と Validator warning の信頼性が未受入。作者導線を実在させる最後の確認が現在の bottleneck
 - いまは深入りしないレーン: Yarn本文執筆、Runtime Dashboard/DebugHub の広範なPrefab化、既存セーブデータ操作、UI_ISSUES.md 載せ項目の個別コード修正、サウンド、マネタイズ
 
 ---
@@ -58,6 +59,7 @@
 - 目的: Yarn 保存 → Refresh Nodes → Validate → Sync Authoring Assets → Start Node 選択 → ContentAuthoring Apply/Play → Last Action / read-only Save status 確認を Unity Editor の一画面に集約する
 - ユーザー操作列: 外部エディタで `.yarn` 保存 → `Tools > FoundPhone > Writer Cockpit` → `Refresh Nodes` → `Validate Then Sync` → 推奨または任意 Start Node を選択 → `Apply Node To ContentAuthoring Scene` または `Play ContentAuthoring From Selected Node`
 - 成功状態: Cockpit が Unity menu から開け、active Yarn file/node 数、推奨/選択 Start Node、Validation summary、Sync result、ContentAuthoring status、Save/autosave read-only status、Last Action を表示し、既存 Content Pipeline を壊さず Apply/Play できる
+- 現在の残り: fresh resolve / compile は通過。visible Editor 上の menu / window / Apply / Play / Last Action が未確認
 - コンテンツの扱い: 既存 active Yarn のみ使用。新規ストーリー本文は書かない
 - 今回はやらないこと: [横断保留](#横断保留) を参照
 
@@ -65,10 +67,10 @@
 
 ## NEXT RECOMMENDED SLICE（推奨・CURRENT の直後）
 
-- スライス名: **Package Manager blocker解消 + Writer Cockpit Unity 確認**
-- 目的: Unity 6000.4.9f1 の Package Manager `path undefined` 停止を解消し、Cockpit の compile/menu/表示/Apply/Play を確認してから SP-023 / SP-024 の表示検収へ戻る
-- ユーザー操作列: Package Manager解決が通る状態にする → Unity 6000.4.9f1 batch open → `Tools > FoundPhone > Writer Cockpit` → `DQT_Start` または推奨ノードを Apply/Play → Last Action と ContentAuthoring status を確認 → SP-023 / SP-024 ノード検収へ進む
-- 成功状態: Package Manager解決とCockpit導線がUnity上で確認され、SP-023 / SP-024 の画面検収を再開できる
+- スライス名: **Validator 信頼回復 + 現行回帰基準化**
+- 目的: Writer Cockpit の Validation summary を信頼可能にし、Unity 6000.4.9f1 上の EditMode 73 / PlayMode 10 を安全な現行基準として記録する
+- 作業列: runtime command 登録と Validator known list のドリフト解消 → 偽陽性回帰テスト → save data 退避または test data 隔離 → EditMode / PlayMode batch → 日付付き XML / txt 記録
+- 成功状態: 登録済み command の unknown warning が 0、実 warning が分類可能、現行83テストの合否と残失敗が説明可能
 - コンテンツの扱い: 既存 demo Yarn のみ使用。新規執筆はしない
 - 今回はやらないこと: [横断保留](#横断保留) を参照
 
@@ -117,8 +119,8 @@
 ## 推奨プランの読み方と手動意思決定（解説）
 
 - **四段スライスの意味**
-  - **CURRENT**: Writer / Designer Cockpit MVP（作者導線の一画面化）
-  - **NEXT**: Cockpit の Unity 確認後、SP-023 / SP-024 表示検収または M1: サブスレッド全型実機検証へ復帰
+  - **CURRENT**: Writer / Designer Cockpit MVP の interactive 受入
+  - **NEXT**: Validator 信頼回復 + 現行83テスト基準化。その後 SP-023 / SP-024 表示検収または M1へ復帰
   - **SUBSEQUENT**: **通過ゲート（スキップ不可）**。エンジン能力レビュー + Ch1 フルコンテンツ執筆の解放判定。M1+M2 完了が発動条件
   - **LATER**: Ch1 フルコンテンツ前進 + P1 段階実装 (SUBSEQUENT 通過後)
 - **進行順序**: CURRENT → NEXT → SUBSEQUENT → LATER の順。SUBSEQUENT は通過ゲートであり、スキップ不可。エンジン能力の確認なしにフルコンテンツ執筆に進むことを防ぐ

@@ -134,14 +134,18 @@ Unity 側で `Tools > FoundPhone > Writer Cockpit` を開き、以下を実行:
 
 同一プロジェクトを **別の Unity プロセスが開いていると batch は失敗**する（ロック）。`-batchmode -quit` と併用し、ログは `-logFile` で任意パスへ。
 
-```text
-Unity.exe -batchmode -quit -projectPath "<リポジトリルート>" -logFile "<ログパス>" ^
-  -executeMethod ProjectFoundPhone.Editor.ContentPipelineBatch.RunValidateThenSyncBatch
+terminal / agent からは、ProjectVersion の Unity を選び Windows 標準環境を子プロセスへ補う wrapper を使う。
+
+```powershell
+.\tools\run-unity.ps1 -BatchMode -Quit `
+  -LogFile 'Logs\validate-then-sync.log' `
+  -ExecuteMethod 'ProjectFoundPhone.Editor.ContentPipelineBatch.RunValidateThenSyncBatch'
 ```
 
 - 検証のみ: `RunYarnValidatorBatch`（終了コード 1 = Yarn 静的エラーあり）
 - 同期のみ: `RunSyncAuthoringAssetsBatch`
 - 検証後に同期: `RunValidateThenSyncBatch`（エラー時は Sync しない）
+- wrapper は user / system 環境変数を変更しない。詳細は `docs/SUPERVISOR_REPORT.md`
 
 ### Step 5: 動作確認
 

@@ -100,6 +100,7 @@ function Get-Category([string]$repoPath) {
         "docs/DEVELOPMENT_TURN_PLAN.md",
         "docs/REPO_LOCAL_RULES.md",
         "docs/HANDOFF.md",
+        "docs/SUPERVISOR_REPORT.md",
         "docs/runtime-state.md",
         "docs/project-context.md",
         "docs/INVARIANTS.md",

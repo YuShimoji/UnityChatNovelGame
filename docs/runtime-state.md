@@ -1,20 +1,20 @@
 # Runtime State
 
-**Updated**: 2026-07-07（Writer Cockpit validation recheck / next interactive pass）
+**Updated**: 2026-07-11（fresh Package Manager resolve / development readiness / supervisor handoff）
 
 ## Current Position
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
-- lane: **Authoring Tooling**（Writer / Designer Cockpit MVP）
-- slice: **Yarn 保存 → 検証 → SO同期 → Start Node 適用/再生 → save status 確認をUnity Editor一画面に集約する**
-- next_recommended_slice: **復旧済みの Package Manager cache 状態を維持し、`Tools > FoundPhone > Writer Cockpit` の interactive menu / 表示 / Apply / Play を確認**
-- subsequent_recommended_slice: **Cockpit 導線確認後、SP-023 / SP-024 の表示検収へ戻る**
-- later_recommended_slice: **SP-024 S4 (オンライン状態表示)**
+- lane: **Authoring Tooling acceptance**（Writer / Designer Cockpit MVP）
+- slice: **wrapper 経由で Writer Cockpit の Refresh → Validate Then Sync → Apply / Play → Last Action を interactive 受入する**
+- next_recommended_slice: **Validator command registry drift の解消 + save data 隔離後の EditMode 73 / PlayMode 10 基準化**
+- subsequent_recommended_slice: **SP-023 / SP-024 の表示検収へ戻る**
+- later_recommended_slice: **M1 サブスレッド全型 → M2 状態完全性 → M3 alpha gate**
 - active_artifact: WriterCockpitWindow / ContentPipelineWindow / YarnContentValidator / YarnSOGenerator / ContentAuthoring / active Yarn files
 - artifact_surface: Editor tooling only (`Tools > FoundPhone > Writer Cockpit`; existing Content Pipeline preserved)
-- last_change_relation: authoring workflow upgrade + local validation recovery（2026-07-07: remote 同期後も Package Manager cache 経由で batch compile / Yarn validator 到達を再確認）
-- plan_file: `C:\Users\thank\.claude\plans\hazy-tumbling-feigenbaum.md` （9 Block 分割の実行プラン） / `docs/plans/display-batch-showcase.md`（表示系デモ・修正版・リポジトリ正本）
+- last_change_relation: direct unblocker（2026-07-11: missing `ALLUSERSPROFILE` を process-local に補い、fresh resolve / compile を再現可能化）
+- plan_file: `docs/SUPERVISOR_REPORT.md`（現状・G0-G13 目標案） / `docs/plans/display-batch-showcase.md`（表示系デモ正本）
 
 ## Counters
 
@@ -23,7 +23,7 @@
 
 ## Quantitative Metrics (0 を目指す指標のみ、件数追跡は廃止)
 
-- tests_last_run: 2026-04-09 (EditMode pass / PlayMode pass)
+- tests_last_run: 2026-04-09 full suite (EditMode / PlayMode pass)。2026-07-11 は compile + non-mutating Yarn validator のみ
 - mock_files: 0
 - spec_entries: 42 (`docs/spec-index.json` 配列長、検証用。SP-023/SP-024 追加)
 - todo_fixme_hack: ChatController.cs:2020 に 1 件残存 (FEATURE_STATUS_AUDIT W-6 参照)
@@ -34,6 +34,19 @@
 - last_visual_audit_path: docs/archive/verification-evidence/VerticalSliceSmokeGate_20260403_*.png (参考。パスのみ保持、追跡は廃止)
 
 ## Session Log
+
+### 2026-07-11（remote sync / fresh Package Manager resolve / supervisor handoff）
+
+- **同期**: `2c6b11d` → `51dc8bc` を fast-forward。同期直後の `HEAD...origin/main` は `0/0`。
+- **ライブ差分**: tracked docs が記録していた `ProjectCache` と 2026-07-07 logs は現ワークスペースに存在せず、通常 batch open は fresh resolve で `path undefined` / return code 1。
+- **根因**: UPM stack trace は `getDeprecatedGlobalConfigRoot()` の `path.join`。Codex / PowerShell 子環境で標準 `ALLUSERSPROFILE` が欠落していた。
+- **復旧**: process-local に `C:\ProgramData` を補完し、隔離 resolve exit 0。実リポジトリでも 39 packages、script compile、return code 0。
+- **tooling**: `tools/run-unity.ps1` を追加。user/system environment は変更せず、ProjectVersion から Unity を選ぶ。
+- **auto-dirty fix**: `BuildSettingsHelper` の早期 AssetDatabase null による ContentAuthoring scene reorder を filesystem check へ変更。wrapper 再起動で Build Settings 内容差分なし。
+- **validator**: errors=0 / warnings=33 / info=3、11 files / 74 nodes。warning 33件中24件は登録済み command の偽陽性。
+- **docs viewer**: `generate-doc-nav.ps1 -PrepareView` + `mkdocs build --strict` pass。ignored PerformanceBaseline raw pagesは nav 外の INFO のみ。
+- **未確認**: interactive Cockpit、EditMode 73 / PlayMode 10、SP-023/024 visual acceptance。全テストは save data 隔離後に実行する。
+- **handoff**: `docs/SUPERVISOR_REPORT.md` に trust、残作業、Human Authority、G0-G13 を固定。
 
 ### 2026-07-07（Writer Cockpit validation recheck）
 

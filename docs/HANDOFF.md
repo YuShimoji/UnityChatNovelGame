@@ -5,10 +5,23 @@
 ## まず読む
 
 1. `docs/HANDOFF.md`
-2. `docs/project-context.md`
-3. `docs/runtime-state.md`
-4. `docs/INVARIANTS.md`
-5. `docs/USER_REQUEST_LEDGER.md`
+2. `docs/SUPERVISOR_REPORT.md`
+3. `docs/project-context.md`
+4. `docs/runtime-state.md`
+5. `docs/INVARIANTS.md`
+6. `docs/USER_REQUEST_LEDGER.md`
+
+## Handoff snapshot (2026-07-11 remote sync / development readiness)
+
+**本セッションの実施内容**:
+
+- `git fetch --prune origin` → `git pull --ff-only origin main` で `51dc8bc` へ fast-forward。同期直後の `HEAD...origin/main` は `0/0`。
+- fresh Package Manager resolve の `path undefined` は package JSON ではなく、Codex / PowerShell 子環境で標準 Windows 変数 `ALLUSERSPROFILE` が欠落していたことが直接原因。
+- process-local に `C:\ProgramData` を補うと、ProjectCache 欠落状態から fresh resolve、39 packages 登録、script compile、return code 0 まで到達。
+- `tools/run-unity.ps1` を追加。必要 Unity 版を `ProjectVersion.txt` から読み、環境変数は子プロセス内だけ補完する。
+- `BuildSettingsHelper` の早期初期化で ContentAuthoring scene が末尾へ移動する問題を、AssetDatabase ではなくファイル存在確認へ変えて解消。wrapper 経由の再起動で Build Settings の内容差分なし。
+- 非破壊 Yarn validator は errors=0 / warnings=33 / info=3、11 files / 74 nodes。warning 33件中24件は登録済みコマンドを未知扱いする偽陽性。
+- 詳細な信頼評価、残作業、G0-G13 目標案は `docs/SUPERVISOR_REPORT.md`。
 
 ## Handoff snapshot (2026-06-15 AI entry cleanup / local docs view)
 
@@ -53,10 +66,21 @@ python -m mkdocs serve -a 127.0.0.1:8000
 
 ## Current Focus
 
-- 主目的: **復旧済みの local Package Manager cache 状態を維持し、Writer Cockpit の interactive menu / Apply / Play を確認**
-- 続き: 2026-07-07 にリモート同期後のローカル `main` で Unity **6000.4.9f1** の batch open / compile と非破壊 Yarn validator batch を再確認済み。`Tools > FoundPhone > Writer Cockpit` と `Tools > FoundPhone > Content Pipeline` は MenuItem source を確認済みだが、interactive Editor 上のメニュー表示と Cockpit 操作は未確認。
-- 注意: `Library/PackageManager` の generated cache 削除、`Packages/packages-lock.json` 再生成、`Packages/manifest.json` 変更は `path undefined` を再発させる。次は fresh resolve 復旧ではなく、現在の復旧済みローカル状態で Cockpit UI を確認するのが最短。
-- その後の候補: Cockpit から `DQT_Start` または推奨ノードを Apply / Play し、問題なければ SP-023 / SP-024 表示検収へ戻る。
+- 主目的: **wrapper から Writer Cockpit を interactive 起動し、Refresh → Validate Then Sync → Apply / Play → Last Action を1回受け入れる**
+- 現在: Unity **6000.4.9f1** は fresh resolve / 39 packages / compile / return code 0。生成 cache への依存ではなく、欠落した標準 Windows 環境変数を process-local に補う再現可能な入口がある。
+- 次の assistant-owned work: Validator の登録済み command 偽陽性24件を解消し、save data を隔離して現行 EditMode 73 / PlayMode 10 の基準を取る。
+- 次の shared work: `DQT_Start` または推奨ノードを Cockpit から Apply / Play。受入後に SP-023 / SP-024 表示検収へ戻る。
+- 注意: `Library/` / `Logs/` は ignored local evidence。成功していても別端末の正本にしない。
+
+## Validation note (2026-07-11 development readiness)
+
+- Launcher: `tools/run-unity.ps1`
+- Fresh resolve / compile: `Logs/dev-readiness-fixed-env-unity-open-2026-07-11.log`
+- Wrapper compile recheck: `Logs/dev-readiness-wrapper-open-2026-07-11.log`
+- Yarn validator: `Logs/dev-readiness-wrapper-yarn-validator-2026-07-11.log`
+- Result: fresh resolve 42.78秒、39 packages、Tundra success、return code 0。
+- Validator: errors=0 / warnings=33 / info=3。unknown command 24件は現 runtime 登録と Validator の known list のドリフト。
+- 未確認: interactive menu / window / Apply / Play、現行83テスト、SP-023/024 visual acceptance。
 
 ## Validation note (2026-07-06 Writer Cockpit)
 
@@ -111,14 +135,14 @@ python -m mkdocs serve -a 127.0.0.1:8000
 
 ## Safe Next Steps
 
-1. 別端末では `git pull origin main` 後、Unity **6000.4.9f1** で開く。Codex 起動時は repo-local `.codex/config.toml` が存在しない前提。
-2. 可能なら Unity Test Runner / batch で `CharacterProfile_IconSide_*`、`SP023_NarrationMargin_Start_EmitsExpectedBubbles`、`DebugChatScene_IconSide_ReordersCharacterIcons` を先に確認する。
-3. `Assets/Scenes/DebugChatScene.unity` で Start Node を `SP023_NarrationMargin_Start` にし、6 メッセージを検収。
-4. `pyramid` に `Assets/Resources/Images/debug_image_01.png` を一時割当し、DisplayMode = `IconAndName` のまま `SP023_LocalExtensions_Start` を再生して `SetThreadMeta` 即時反映と `IconSide` 左右差を確認。
-5. `SP023_DisplayShowcase_Start` を再生し、6 preset が warning なしで読み込まれることを確認。
-6. 3 本とも OK なら、`ChatUIConfig.asset` で `showTimestamp` / `showDeliveryStatus` を有効化し、Start Node を `SP024_Immersion_Start` に切り替えて S1/S2/S5 の見た目確認へ進む。
-7. `SP024_Immersion_Start` では `SetTime` 継続、`MarkDelivered` / `MarkRead`、`DeleteLastMessage` / `DeleteMessage 2`、Narration/System の時刻非表示をまとめて確認する。
-8. SP-024 の見た目確認後、次スライスは `docs/plans/display-batch-showcase.md` を参照しつつ S4 または Block 4 を選択。
+1. `.\tools\run-unity.ps1` で Unity **6000.4.9f1** を開く。
+2. `Tools > FoundPhone > Writer Cockpit` を開き、active file/node count と推奨 node を確認。
+3. `DQT_Start` または推奨ノードで Refresh → Validate Then Sync → Apply → Play を1回通す。
+4. Last Action / ContentAuthoring status を確認し、interactive 受入を OK / NG で記録。
+5. assistant は Validator の known command drift を直し、偽陽性を回帰テストで固定。
+6. save data を退避または隔離した後、EditMode 73 / PlayMode 10 の現行結果を記録。
+7. ここまで通ったら SP-023 3ノード → `SP024_Immersion_Start` の表示検収へ進む。
+8. M1 → M2 → M3 の gate 前に full Ch1 authoring へ進まない。
 
 補足:
 - SP-023 仕様: `docs/StorySpec/23_text_presentation.md`
@@ -127,6 +151,7 @@ python -m mkdocs serve -a 127.0.0.1:8000
 
 ## Source Of Truth
 
+- 監修役AI向け現状・目標案: `docs/SUPERVISOR_REPORT.md`
 - 方針・スライス: `docs/project-context.md`
 - 全体概観: `docs/PROJECT_STATUS_DASHBOARD.md`
 - ターン単位プラン: `docs/DEVELOPMENT_TURN_PLAN.md`

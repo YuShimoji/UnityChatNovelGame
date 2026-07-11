@@ -20,7 +20,11 @@ public static class BuildSettingsHelper
         };
 
         const string contentAuthoringScenePath = "Assets/Scenes/ContentAuthoring.unity";
-        if (AssetDatabase.LoadAssetAtPath<SceneAsset>(contentAuthoringScenePath) != null)
+        string contentAuthoringSceneFullPath = System.IO.Path.Combine(
+            UnityEngine.Application.dataPath,
+            "Scenes",
+            "ContentAuthoring.unity");
+        if (System.IO.File.Exists(contentAuthoringSceneFullPath))
         {
             requiredScenes.Insert(1, contentAuthoringScenePath);
         }
