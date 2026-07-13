@@ -1,6 +1,6 @@
 # Runtime State
 
-**Updated**: 2026-07-11（fresh Package Manager resolve / development readiness / supervisor handoff）
+**Updated**: 2026-07-13（remote parity / cross-terminal handoff）
 
 ## Current Position
 
@@ -34,6 +34,14 @@
 - last_visual_audit_path: docs/archive/verification-evidence/VerticalSliceSmokeGate_20260403_*.png (参考。パスのみ保持、追跡は廃止)
 
 ## Session Log
+
+### 2026-07-13（remote parity / cross-terminal handoff）
+
+- **目的**: 現在の全コンテキストを project-local docs に保持し、別端末が会話ログなしで `main` から再開できる状態をリモートへ固定する。
+- **同期**: `git fetch --all --prune` と `git pull --ff-only origin main` を実行。同期前の作業ツリーは clean、`main` / `origin/main` は `fa8eb8b`、`HEAD...@{u}` は `0/0`。
+- **状態**: コード、Yarn、scene、asset の追加変更なし。active slice は Writer / Designer Cockpit MVP の interactive 受入のまま。
+- **残作業**: 目的は作者導線の実在確認と検証信頼性の回復。効果は Writer Cockpit を日常制作入口として受け入れ、現行回帰基準を固定すること。要件は Unity 6000.4.9f1、`tools/run-unity.ps1`、既存 save data の隔離。状態は interactive Cockpit、EditMode 73 / PlayMode 10、SP-023/024 visual acceptance が未確認。shared owner は Cockpit Apply / Play の受入、assistant owner は Validator command drift 解消と83テスト実行。次の move は `docs/HANDOFF.md` の Safe Next Steps 1 から順に実行する。
+- **境界**: ignored `Library/` / `Logs/` は別端末へ移送しない。再現可能な tracked source / docs / wrapper のみを remote authority とする。
 
 ### 2026-07-11（remote sync / fresh Package Manager resolve / supervisor handoff）
 

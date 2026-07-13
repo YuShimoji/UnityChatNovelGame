@@ -11,6 +11,15 @@
 5. `docs/INVARIANTS.md`
 6. `docs/USER_REQUEST_LEDGER.md`
 
+## Handoff snapshot (2026-07-13 remote parity / cross-terminal resume)
+
+**本セッションの実施内容**:
+
+- `git fetch --all --prune` と `git pull --ff-only origin main` を実行。`main` / `origin/main` は `fa8eb8b` で一致し、`HEAD...@{u}` は `0/0`、開始時の作業ツリーは clean。
+- コード、Yarn、scene、asset の新規変更はなし。2026-07-11 の development-readiness 状態と `docs/SUPERVISOR_REPORT.md` の G0-G13 をそのまま正本として維持。
+- 別端末の最短再開は本ファイルの `Current Focus` / `Safe Next Steps`。最初の共有作業は Writer Cockpit の interactive 受入、次の assistant-owned work は Validator command drift 解消と現行83テスト基準化。
+- ignored の `Library/` / `Logs/` はリモート引き継ぎ対象ではない。別端末では `tools/run-unity.ps1` を再現可能な Unity 入口として使う。
+
 ## Handoff snapshot (2026-07-11 remote sync / development readiness)
 
 **本セッションの実施内容**:
