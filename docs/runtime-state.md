@@ -1,6 +1,6 @@
 # Runtime State
 
-**Updated**: 2026-07-13（remote parity / cross-terminal handoff）
+**Updated**: 2026-07-17（remote sync / development readiness refresh）
 
 ## Current Position
 
@@ -23,7 +23,7 @@
 
 ## Quantitative Metrics (0 を目指す指標のみ、件数追跡は廃止)
 
-- tests_last_run: 2026-04-09 full suite (EditMode / PlayMode pass)。2026-07-11 は compile + non-mutating Yarn validator のみ
+- tests_last_run: 2026-04-09 full suite (EditMode / PlayMode pass)。2026-07-17 は compile + non-mutating Yarn validator のみ
 - mock_files: 0
 - spec_entries: 42 (`docs/spec-index.json` 配列長、検証用。SP-023/SP-024 追加)
 - todo_fixme_hack: ChatController.cs:2020 に 1 件残存 (FEATURE_STATUS_AUDIT W-6 参照)
@@ -34,6 +34,18 @@
 - last_visual_audit_path: docs/archive/verification-evidence/VerticalSliceSmokeGate_20260403_*.png (参考。パスのみ保持、追跡は廃止)
 
 ## Session Log
+
+### 2026-07-17（remote sync / development readiness refresh）
+
+- **開始状態**: 2026-07-15 の検証記録4ファイルが未コミットで存在。差分をレビューし、code / Yarn / scene / asset の残留変更がないことを確認して保持した。
+- **同期**: `git fetch --prune origin` → `git pull --ff-only origin main` を実行し、pull は `Already up to date.`。同期起点の `main` / `origin/main` は `7eb09c0`、`HEAD...origin/main` は `0/0`。
+- **toolchain**: Unity 6000.4.9f1 executable と ProjectVersion が一致。`Packages/manifest.json` / `Packages/packages-lock.json` は parse pass。wrapper batch open は 39 packages の cache restore、Tundra success、0 items updated / 326 evaluated、batchmode 正常終了。
+- **validator**: errors=0 / warnings=33 / info=3、11 files / 74 nodes / 24 `#line:` tags / 42 declared variables。既知の command registry drift は未解消。
+- **tests**: 静的な属性数は EditMode 73 / PlayMode 10。save data 隔離前のため全83テストは未実行し、結果として扱わない。
+- **docs viewer**: `generate-doc-nav.ps1 -PrepareView` と `uvx --from mkdocs-material mkdocs build --strict` は pass。PerformanceBaseline raw pages の nav 外 INFO のみ。
+- **warning**: Unity 起動時に `VerificationMenu` と `MissingScriptScanner` の同一 `MenuItem` 重複警告が再現。compile blocker ではなく、後続の小さな Editor tooling 整理対象。UnityConnect CDN timeout と MkDocs 将来互換性告知も非阻害。
+- **state**: Unity 実行由来の tracked 差分なし。active slice は Writer Cockpit interactive 受入のまま。`Library/` / `Logs/` は ignored local evidence であり、remote authority ではない。
+- **next move**: shared owner が Writer Cockpit の Refresh → Validate Then Sync → Apply / Play → Last Action を1回受け入れる。次に assistant owner が Validator command drift と安全な83テスト基準化を閉じる。
 
 ### 2026-07-13（remote parity / cross-terminal handoff）
 

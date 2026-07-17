@@ -1,8 +1,8 @@
 # 監修役AI向け現状報告
 
-**更新日**: 2026-07-11
+**更新日**: 2026-07-17
 **対象**: FoundPhone / UnityChatNovelGame
-**同期起点**: `main` / `51dc8bc`（同期時点で `origin/main` と ahead/behind `0/0`）
+**同期起点**: `main` / `7eb09c0`（同期時点で `origin/main` と ahead/behind `0/0`）
 **役割**: 監修役AIが会話ログなしで、信頼できる現在地、残る判断、推奨順序、製品化までの目標を判断するための引き継ぎ正本。
 
 ## 1. 結論
@@ -13,8 +13,8 @@
 
 | 判定対象 | 現在の判定 | 根拠 |
 |---|---|---|
-| Git / ソース同期 | 開発可能 | `git fetch --prune origin` → `git pull --ff-only origin main`。同期直後の `HEAD...origin/main` は `0/0` |
-| Unity batch open / compile | 開発可能 | fresh resolve で 39 packages 登録、Tundra compile success、return code 0 |
+| Git / ソース同期 | 開発可能 | 2026-07-17 に `git fetch --prune origin` → `git pull --ff-only origin main`。同期起点の `HEAD` / `origin/main` は `7eb09c0`、ahead/behind `0/0` |
+| Unity batch open / compile | 開発可能 | 2026-07-17 に 39 packages の cache restore、Tundra compile success、326 items evaluated、batchmode 正常終了 |
 | agent / terminal からの再現 | 開発可能 | `tools/run-unity.ps1` が欠落した標準 Windows 環境変数を子プロセス内だけ補完 |
 | Yarn 静的検証 | エラーなし、警告の信頼性に課題 | errors=0 / warnings=33 / info=3。警告33件中24件は登録済みコマンドを未知扱いする偽陽性 |
 | Writer Cockpit interactive 操作 | 未受入 | menu source と compile は確認済み。実ウィンドウ、Apply、Play、Last Action は visible Editor 未確認 |
@@ -49,11 +49,10 @@ FoundPhone を、モバイル優先のチャット／ビジュアルノベルゲ
 
 ### リモート同期
 
-- 開始時の作業ツリーは clean。
-- `main` は `origin/main` を追跡。
-- `2c6b11d` から `51dc8bc` へ fast-forward。
-- 取り込まれた変更は Writer Cockpit 検証記録を中心とする docs 4ファイル。
-- 同期直後の tracked parity は `0/0`。
+- 2026-07-17 の開始時は、2026-07-15 の検証記録4ファイルが未コミット。差分をレビューし、code / Yarn / scene / asset の残留変更がないことを確認して保持した。
+- `git fetch --prune origin` と `git pull --ff-only origin main` を実行し、pull は `Already up to date.`。
+- `main` / `origin/main` は `7eb09c0`、同期直後の tracked parity は `0/0`。
+- 2026-07-13 の最新コミットは cross-terminal handoff 更新のみ。コード、Yarn、scene、asset の追加変更はない。
 
 ### Package Manager 根因
 
@@ -88,29 +87,29 @@ fresh resolve 後の初回初期化で、`BuildSettingsHelper` が `ContentAutho
 
 ### 確認済み
 
-1. **fresh package resolve**
-   - resolve: 42.78秒
-   - registered packages: 39
+1. **package resolve / restore**
+   - 2026-07-11: ProjectCache 欠落状態から fresh resolve 42.78秒、39 packages、return code 0
+   - 2026-07-17: 現 checkout で 39 packages の cache restore を再確認
    - `dev.yarnspinner.unity@3.1.3`
    - `com.unity.nuget.newtonsoft-json@3.2.2`
-   - return code 0
+   - log: `Logs/development-readiness-unity-open-2026-07-17.log`（ignored local evidence）
 
 2. **script compile**
-   - 初回: 325 items updated / 326 evaluated
-   - wrapper 再実行: 3 items updated / 326 evaluated
-   - Tundra build success
-   - C# compile error なし
+   - 2026-07-17: Tundra build success
+   - 0 items updated / 326 evaluated
+   - batchmode 正常終了、C# compile error なし
 
 3. **Package Manager local state**
    - `ProjectCache` / `ProjectCache.md5` / `projectResolution.json` を再生成
    - すべて ignored local evidence。リモート正本にはしない
 
 4. **Yarn validator**
-   - exit code 0
+   - 2026-07-17 に wrapper から再実行
    - errors=0 / warnings=33 / info=3
    - 11 files / 74 nodes / 24 `#line:` tags / 42 declared variables
    - warning 内訳: unknown command 24、unknown character 9
    - info の主な残り: undeclared variable 2
+   - log: `Logs/development-readiness-yarn-validator-2026-07-17.log`（ignored local evidence）
 
 5. **静的集計**
    - spec entries: 42
@@ -119,9 +118,15 @@ fresh resolve 後の初回初期化で、`BuildSettingsHelper` が `ContentAutho
    - 実コード TODO: `ChatController` の将来 status routing 1件
 
 6. **ドキュメント閲覧面**
-   - `generate-doc-nav.ps1 -PrepareView` 完走
-   - `mkdocs build --strict` exit 0
+   - 2026-07-17: `generate-doc-nav.ps1 -PrepareView` 完走
+   - `uvx --from mkdocs-material mkdocs build --strict` exit 0
    - ignored PerformanceBaseline raw pagesは nav 外の INFO。欠落ファイル参照は削除
+
+7. **非阻害 warning**
+   - Unity: `VerificationMenu` と `MissingScriptScanner` が同じ `Tools/FoundPhone/Verification/Scan DebugChatScene Missing Scripts` を登録
+   - UnityConnect: 終了時の public CDN request timeout
+   - docs: `uvx` の provider 推奨と MkDocs 2.0 将来互換性告知
+   - いずれも今回の compile、validator、strict docs build の終了コードを失敗にはしていない
 
 ### 未実行
 
@@ -137,6 +142,8 @@ fresh resolve 後の初回初期化で、`BuildSettingsHelper` が `ContentAutho
 ### trusted
 
 - 同期起点で `main` と `origin/main` が一致していたこと。
+- 2026-07-17 の現 checkout で package restore、Tundra compile、batchmode 正常終了を再確認したこと。
+- 2026-07-17 の Yarn validator が errors=0 / warnings=33 / info=3 で完走したこと。
 - `ALLUSERSPROFILE` 欠落が fresh resolve の直接原因だったこと。
 - process-local 補完で隔離 resolve と実プロジェクト fresh resolve が成功したこと。
 - Unity 6000.4.9f1 の package registration と script compile。
@@ -152,6 +159,7 @@ fresh resolve 後の初回初期化で、`BuildSettingsHelper` が `ContentAutho
 - SP-023 / SP-024 の実表示、日本語 SDF、IconSide。
 - Save / Load、Unread、Branch、削除痕、EndDay、章遷移の状態同値。
 - fresh clone / 別端末。今回証明したのはこの端末と wrapper 経路。
+- Verification メニューの同名 `MenuItem` 重複。Writer Cockpit の compile blocker ではないが、Editor menu の診断ノイズになる。
 
 ### dangerous / rollback candidate
 
@@ -195,6 +203,7 @@ Ch1 製品縦断              [#----] 20-30%  full authoring解放ゲート前
 | D3 | Build Settings に ContentAuthoring / DebugChatScene / MVPScene が enabled。production scene列ではない | Android production build前に Build Profile と scene責務を確定 | assistant + user。G10 smoke と G11 product buildで分離 |
 | D4 | SP-023フリック、SP-024 S4、B/C rich UI、候補ENH | candidate / hold のまま。Human Authority と value path 未通過 | user approval後のみ実装 |
 | D5 | UI_ISSUES 3件 | 個別修正禁止。3-5件単位またはM6 UI batch | shared。再現情報だけ保持 |
+| D6 | Verification メニューの同名 `MenuItem` 重複 | compile blocker ではないが、起動時 warning と menu owner の曖昧さを残す | assistant。R1 または次の Editor tooling 小スライスで単一 owner に整理し、batch open で warning 消失を確認 |
 
 ## 8. 推奨目標列
 
@@ -287,5 +296,7 @@ M3 通過前は G1 → G2 → M1 → M2 → M3 が一本道。M3 通過後に初
 ## 13. 監修役AIへの最終指示
 
 最初の判断は新機能選択ではない。G1 の interactive 受入を閉じ、その直後に G1.1 Validator 信頼回復と G1.2 現行回帰を小さく完了させる。その後に SP-023/024 表示受入へ戻り、M1 → M2 → M3 を通過する。
+
+M3 通過後の最遠推奨線は、G6 Ch1製品縦断 → G7 E2E/CI量産耐性 → G8 Ch2制作スケール → G9製品UX統合 → G10 Android技術smoke → G11 Android製品ビルド → G12 Ch3-9・音・Beta・収益化・配布 → G13 1.x運用である。これは依存順を示す監修用の目標提案であり、候補機能、コンテンツ量、署名、広告、配布判断を先行承認するものではない。
 
 報告時は、コード存在、batch compile、interactive受入、テスト通過、human visual approval を混同しない。各成果を別の信頼レベルとして記録する。

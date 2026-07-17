@@ -11,6 +11,19 @@
 5. `docs/INVARIANTS.md`
 6. `docs/USER_REQUEST_LEDGER.md`
 
+## Handoff snapshot (2026-07-17 remote sync / development readiness refresh)
+
+**本セッションの実施内容**:
+
+- 開始時は 2026-07-15 の検証記録4ファイルが未コミットで存在。差分をレビューし、code / Yarn / scene / asset の残留変更がないことを確認して保持した。
+- `git fetch --prune origin` → `git pull --ff-only origin main` を実行し、pull は `Already up to date.`。同期起点の `main` / `origin/main` は `7eb09c0`、`HEAD...origin/main` は `0/0`。
+- Unity 6000.4.9f1、`Packages/manifest.json`、`Packages/packages-lock.json`、`tools/run-unity.ps1` を確認。package JSON は parse pass。
+- wrapper 経由の batch open は 39 packages の cache restore、Tundra success、0 items updated / 326 evaluated、batchmode 正常終了。compile / fatal error なし、Unity 実行由来の tracked 差分なし。
+- 非破壊 Yarn validator は errors=0 / warnings=33 / info=3、11 files / 74 nodes。テスト定義は静的に EditMode 73 / PlayMode 10。全83テストは save data 隔離前のため未実行。
+- docs viewer は `generate-doc-nav.ps1 -PrepareView` と `uvx --from mkdocs-material mkdocs build --strict` が pass。
+- Unity 起動時に Verification メニューの重複登録警告が1件再現。compile blocker ではないが、`VerificationMenu` と `MissingScriptScanner` の同一 `MenuItem` は後続で整理する。
+- active slice と actor 境界は変更なし。shared owner は Writer Cockpit の interactive Apply / Play 受入、assistant owner は Validator command drift 解消と安全な83テスト基準化。
+
 ## Handoff snapshot (2026-07-13 remote parity / cross-terminal resume)
 
 **本セッションの実施内容**:
@@ -80,6 +93,15 @@ python -m mkdocs serve -a 127.0.0.1:8000
 - 次の assistant-owned work: Validator の登録済み command 偽陽性24件を解消し、save data を隔離して現行 EditMode 73 / PlayMode 10 の基準を取る。
 - 次の shared work: `DQT_Start` または推奨ノードを Cockpit から Apply / Play。受入後に SP-023 / SP-024 表示検収へ戻る。
 - 注意: `Library/` / `Logs/` は ignored local evidence。成功していても別端末の正本にしない。
+
+## Validation note (2026-07-17 current checkout)
+
+- Git: `main` / `origin/main` は `7eb09c0`、ahead/behind `0/0`。Unity 実行由来の code / scene / asset 差分なし。
+- Unity: `Logs/development-readiness-unity-open-2026-07-17.log` で 39 packages、Tundra success、326 evaluated、batchmode 正常終了。
+- Yarn: `Logs/development-readiness-yarn-validator-2026-07-17.log` で errors=0 / warnings=33 / info=3、11 files / 74 nodes / 24 `#line:` tags / 42 declared variables。
+- 静的テスト定義: EditMode 73 / PlayMode 10。実行結果ではない。
+- 非阻害 warning: Verification メニューの同名 `MenuItem` 重複、UnityConnect の CDN timeout、MkDocs の将来互換性告知。いずれも今回の終了コードを失敗にはしていない。
+- 未確認: Writer Cockpit interactive menu / window / Apply / Play、現行83テスト、SP-023/024 visual acceptance。
 
 ## Validation note (2026-07-11 development readiness)
 
