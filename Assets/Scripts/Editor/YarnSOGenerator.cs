@@ -53,7 +53,8 @@ namespace ProjectFoundPhone.Editor
                 int missingTopicCount,
                 int missingCharacterCount,
                 int channelSyncItemCount,
-                string[] nodeNames)
+                string[] nodeNames,
+                YarnNodeSourceLocation[] nodeLocations)
             {
                 YarnFileCount = yarnFileCount;
                 NodeCount = nodeCount;
@@ -64,6 +65,7 @@ namespace ProjectFoundPhone.Editor
                 MissingCharacterCount = missingCharacterCount;
                 ChannelSyncItemCount = channelSyncItemCount;
                 NodeNames = nodeNames ?? Array.Empty<string>();
+                NodeLocations = nodeLocations ?? Array.Empty<YarnNodeSourceLocation>();
             }
 
             public int YarnFileCount { get; }
@@ -76,6 +78,21 @@ namespace ProjectFoundPhone.Editor
             public int ChannelSyncItemCount { get; }
             public int PendingChangeCount => MissingTopicCount + MissingCharacterCount + ChannelSyncItemCount;
             public string[] NodeNames { get; }
+            public YarnNodeSourceLocation[] NodeLocations { get; }
+        }
+
+        public readonly struct YarnNodeSourceLocation
+        {
+            public YarnNodeSourceLocation(string nodeName, string assetPath, int titleLine)
+            {
+                NodeName = nodeName ?? string.Empty;
+                AssetPath = assetPath ?? string.Empty;
+                TitleLine = titleLine;
+            }
+
+            public string NodeName { get; }
+            public string AssetPath { get; }
+            public int TitleLine { get; }
         }
 
         [MenuItem("Tools/FoundPhone/Yarn SO Generator")]
@@ -126,7 +143,38 @@ namespace ProjectFoundPhone.Editor
                 scanResult.MissingTopics.Count,
                 scanResult.MissingCharacters.Count,
                 scanResult.ChannelSyncItems.Count,
-                scanResult.NodeNames);
+                scanResult.NodeNames,
+                scanResult.NodeLocations);
+        }
+
+        public static YarnNodeSourceLocation[] ParseNodeSourceLocations(
+            string assetPath,
+            IEnumerable<string> lines)
+        {
+            if (lines == null)
+            {
+                return Array.Empty<YarnNodeSourceLocation>();
+            }
+
+            var locations = new List<YarnNodeSourceLocation>();
+            int lineNumber = 0;
+            foreach (string rawLine in lines)
+            {
+                lineNumber++;
+                Match titleMatch = TitleRegex.Match((rawLine ?? string.Empty).Trim());
+                if (!titleMatch.Success)
+                {
+                    continue;
+                }
+
+                string nodeName = titleMatch.Groups[1].Value.Trim();
+                if (!string.IsNullOrWhiteSpace(nodeName))
+                {
+                    locations.Add(new YarnNodeSourceLocation(nodeName, assetPath, lineNumber));
+                }
+            }
+
+            return locations.ToArray();
         }
 
         public static string[] GetActiveYarnNodeNames()
@@ -361,6 +409,7 @@ namespace ProjectFoundPhone.Editor
             var speakerRefs = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
             var channelBuilders = new Dictionary<int, ChannelSpecBuilder>();
             var nodeNames = new HashSet<string>(StringComparer.Ordinal);
+            var nodeLocations = new List<YarnNodeSourceLocation>();
 
             string[] yarnFiles = Directory.GetFiles(fullDir, "*.yarn");
             foreach (string filePath in yarnFiles)
@@ -368,6 +417,8 @@ namespace ProjectFoundPhone.Editor
                 string fileName = Path.GetFileName(filePath);
                 string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
                 string[] lines = File.ReadAllLines(filePath);
+                string assetPath = $"{ActiveYarnDir}/{fileName}";
+                nodeLocations.AddRange(ParseNodeSourceLocations(assetPath, lines));
 
                 ChannelFileMatch channelFileMatch = ParseChannelFileName(fileNameWithoutExtension);
 
@@ -477,7 +528,12 @@ namespace ProjectFoundPhone.Editor
                 TotalTopicRefs = topicRefs.Count,
                 TotalSpeakerRefs = speakerRefs.Count,
                 TotalChannelRefs = channelBuilders.Count,
-                NodeNames = nodeNames.OrderBy(nodeName => nodeName, StringComparer.Ordinal).ToArray()
+                NodeNames = nodeNames.OrderBy(nodeName => nodeName, StringComparer.Ordinal).ToArray(),
+                NodeLocations = nodeLocations
+                    .OrderBy(location => location.NodeName, StringComparer.Ordinal)
+                    .ThenBy(location => location.AssetPath, StringComparer.Ordinal)
+                    .ThenBy(location => location.TitleLine)
+                    .ToArray()
             };
         }
 
@@ -877,6 +933,7 @@ namespace ProjectFoundPhone.Editor
             public int TotalSpeakerRefs;
             public int TotalChannelRefs;
             public string[] NodeNames;
+            public YarnNodeSourceLocation[] NodeLocations;
         }
 
         private sealed class ChannelSpecBuilder

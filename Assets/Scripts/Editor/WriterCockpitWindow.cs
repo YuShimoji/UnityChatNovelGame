@@ -13,11 +13,18 @@ namespace ProjectFoundPhone.Editor
         private const int ManualSaveSlotCount = 3;
 
         private Vector2 m_ScrollPosition;
+        private Vector2 m_NodeListScrollPosition;
+        private Vector2 m_DiagnosticScrollPosition;
         private YarnSOGenerator.AuthoringScanSummary m_ScanSummary;
         private YarnContentValidator.ValidationSummary m_LastValidationSummary;
+        private YarnContentValidator.ValidationReport m_LastValidationReport;
         private string[] m_NodeNames = Array.Empty<string>();
+        private YarnSOGenerator.YarnNodeSourceLocation[] m_NodeLocations =
+            Array.Empty<YarnSOGenerator.YarnNodeSourceLocation>();
         private string m_RecommendedNode = "Start";
+        private string m_NodeFilter = string.Empty;
         private string m_LastAction = "未実行";
+        private string m_SourceOpenStatus;
         private string m_ContentAuthoringStatus = "未確認";
         private string m_SaveStatus = "未確認";
         private string m_ScanError;
@@ -26,6 +33,9 @@ namespace ProjectFoundPhone.Editor
         private bool m_HasScanSummary;
         private bool m_HasValidationSummary;
         private bool m_HasSyncResult;
+        private bool m_ShowErrors = true;
+        private bool m_ShowWarnings = true;
+        private bool m_ShowInfo = true;
 
         [MenuItem("Tools/FoundPhone/Writer Cockpit", false, 19)]
         public static void ShowWindow()
@@ -37,6 +47,10 @@ namespace ProjectFoundPhone.Editor
 
         private void OnEnable()
         {
+            // ValidationReport is intentionally session-only. Do not retain a serialized
+            // summary without its drilldown rows across a domain reload.
+            m_LastValidationReport = null;
+            m_HasValidationSummary = false;
             RefreshAuthoringStatus(recordAsAction: false);
         }
 
@@ -57,6 +71,9 @@ namespace ProjectFoundPhone.Editor
 
             EditorGUILayout.Space(8);
             DrawNodeSelector();
+
+            EditorGUILayout.Space(8);
+            DrawDiagnostics();
 
             EditorGUILayout.Space(8);
             EditorGUILayout.HelpBox($"Last Action: {m_LastAction}", MessageType.None);
@@ -158,16 +175,146 @@ namespace ProjectFoundPhone.Editor
 
         private void DrawNodeSelector()
         {
-            EditorGUILayout.LabelField("Start Node", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("Node Search And Source", EditorStyles.boldLabel);
 
-            if (m_NodeNames.Length == 0)
+            if (m_NodeLocations.Length == 0)
             {
                 EditorGUILayout.HelpBox("active/ 内の Yarn node を取得できませんでした。", MessageType.Warning);
                 return;
             }
 
-            m_SelectedNodeIndex = Mathf.Clamp(m_SelectedNodeIndex, 0, m_NodeNames.Length - 1);
-            m_SelectedNodeIndex = EditorGUILayout.Popup("Selected Node", m_SelectedNodeIndex, m_NodeNames);
+            m_NodeFilter = EditorGUILayout.TextField("Node Search", m_NodeFilter);
+            YarnSOGenerator.YarnNodeSourceLocation[] filteredLocations =
+                WriterCockpitNavigation.FilterNodeLocations(m_NodeLocations, m_NodeFilter);
+
+            EditorGUILayout.LabelField(
+                $"{filteredLocations.Length} / {m_NodeLocations.Length} nodes",
+                EditorStyles.miniLabel);
+
+            float listHeight = Mathf.Clamp(filteredLocations.Length * 23f + 4f, 48f, 170f);
+            m_NodeListScrollPosition = EditorGUILayout.BeginScrollView(
+                m_NodeListScrollPosition,
+                GUILayout.Height(listHeight));
+
+            if (filteredLocations.Length == 0)
+            {
+                EditorGUILayout.HelpBox("一致するNodeがありません。検索語を変更してください。", MessageType.Warning);
+            }
+
+            string selectedNode = GetSelectedNodeOrFallback();
+            foreach (YarnSOGenerator.YarnNodeSourceLocation location in filteredLocations)
+            {
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    bool selected = string.Equals(selectedNode, location.NodeName, StringComparison.Ordinal);
+                    bool choose = GUILayout.Toggle(
+                        selected,
+                        location.NodeName,
+                        "Button",
+                        GUILayout.Height(21));
+                    if (choose && !selected)
+                    {
+                        int fullIndex = Array.IndexOf(m_NodeNames, location.NodeName);
+                        if (fullIndex >= 0)
+                        {
+                            m_SelectedNodeIndex = fullIndex;
+                            selectedNode = location.NodeName;
+                            m_SourceOpenStatus = null;
+                        }
+                    }
+
+                    EditorGUILayout.LabelField(
+                        $"{Path.GetFileName(location.AssetPath)}:{location.TitleLine}",
+                        EditorStyles.miniLabel,
+                        GUILayout.Width(210));
+                }
+            }
+
+            EditorGUILayout.EndScrollView();
+
+            if (!TryGetSelectedNodeLocation(out YarnSOGenerator.YarnNodeSourceLocation selectedLocation))
+            {
+                EditorGUILayout.HelpBox("選択Nodeのsource locationが見つかりません。Refreshしてください。", MessageType.Warning);
+                return;
+            }
+
+            EditorGUILayout.LabelField("Selected Node", selectedLocation.NodeName);
+            EditorGUILayout.LabelField(
+                "Source",
+                $"{selectedLocation.AssetPath}:{selectedLocation.TitleLine}",
+                EditorStyles.wordWrappedLabel);
+
+            if (GUILayout.Button("Open Selected Source At Line", GUILayout.Height(26)))
+            {
+                OpenSourceAtLine(selectedLocation.AssetPath, selectedLocation.TitleLine);
+            }
+
+            if (!string.IsNullOrWhiteSpace(m_SourceOpenStatus))
+            {
+                EditorGUILayout.HelpBox(m_SourceOpenStatus, MessageType.None);
+            }
+        }
+
+        private void DrawDiagnostics()
+        {
+            EditorGUILayout.LabelField("Validator Diagnostics", EditorStyles.boldLabel);
+            if (m_LastValidationReport == null)
+            {
+                EditorGUILayout.HelpBox(
+                    "Validate All Yarn Files または Validate Then Sync でfile/line付き結果を表示します。",
+                    MessageType.Info);
+                return;
+            }
+
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                m_ShowErrors = GUILayout.Toggle(m_ShowErrors, $"Error {m_LastValidationSummary.ErrorCount}", "Button");
+                m_ShowWarnings = GUILayout.Toggle(m_ShowWarnings, $"Warning {m_LastValidationSummary.WarningCount}", "Button");
+                m_ShowInfo = GUILayout.Toggle(m_ShowInfo, $"Info {m_LastValidationSummary.InfoCount}", "Button");
+            }
+
+            YarnContentValidator.ValidationResult[] visibleResults = m_LastValidationReport.Results
+                .Where(result =>
+                    result.Level == YarnContentValidator.ValidationLevel.Error && m_ShowErrors ||
+                    result.Level == YarnContentValidator.ValidationLevel.Warning && m_ShowWarnings ||
+                    result.Level == YarnContentValidator.ValidationLevel.Info && m_ShowInfo)
+                .ToArray();
+
+            m_DiagnosticScrollPosition = EditorGUILayout.BeginScrollView(
+                m_DiagnosticScrollPosition,
+                GUILayout.Height(Mathf.Clamp(visibleResults.Length * 42f + 4f, 58f, 220f)));
+
+            foreach (YarnContentValidator.ValidationResult result in visibleResults)
+            {
+                DrawDiagnosticResult(result);
+            }
+
+            EditorGUILayout.EndScrollView();
+        }
+
+        private void DrawDiagnosticResult(YarnContentValidator.ValidationResult result)
+        {
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                EditorGUILayout.LabelField(result.Level.ToString(), GUILayout.Width(58));
+                using (new EditorGUILayout.VerticalScope())
+                {
+                    string location = string.IsNullOrWhiteSpace(result.File) || result.Line <= 0
+                        ? "(summary)"
+                        : $"{result.File}:{result.Line}";
+                    EditorGUILayout.LabelField(location, EditorStyles.miniLabel);
+                    EditorGUILayout.LabelField(result.Message, EditorStyles.wordWrappedLabel);
+                }
+
+                using (new EditorGUI.DisabledGroupScope(
+                    string.IsNullOrWhiteSpace(result.File) || result.Line <= 0))
+                {
+                    if (GUILayout.Button("Open", GUILayout.Width(54), GUILayout.Height(34)))
+                    {
+                        OpenSourceAtLine(result.File, result.Line);
+                    }
+                }
+            }
         }
 
         private void RefreshAuthoringStatus(bool recordAsAction)
@@ -178,6 +325,8 @@ namespace ProjectFoundPhone.Editor
             {
                 m_ScanSummary = YarnSOGenerator.GetAuthoringScanSummary();
                 m_NodeNames = m_ScanSummary.NodeNames ?? Array.Empty<string>();
+                m_NodeLocations = m_ScanSummary.NodeLocations ??
+                    Array.Empty<YarnSOGenerator.YarnNodeSourceLocation>();
                 m_RecommendedNode = YarnSOGenerator.GetRecommendedStartNode(m_NodeNames);
                 m_HasScanSummary = true;
                 m_ScanError = null;
@@ -186,6 +335,7 @@ namespace ProjectFoundPhone.Editor
             catch (Exception ex)
             {
                 m_NodeNames = Array.Empty<string>();
+                m_NodeLocations = Array.Empty<YarnSOGenerator.YarnNodeSourceLocation>();
                 m_RecommendedNode = "Start";
                 m_HasScanSummary = false;
                 m_ScanError = $"Yarn authoring scan failed: {ex.Message}";
@@ -207,7 +357,8 @@ namespace ProjectFoundPhone.Editor
         {
             try
             {
-                m_LastValidationSummary = YarnContentValidator.GetValidationSummary();
+                m_LastValidationReport = YarnContentValidator.GetValidationReport();
+                m_LastValidationSummary = m_LastValidationReport.Summary;
                 m_HasValidationSummary = true;
                 m_LastAction = $"Validation complete: {m_LastValidationSummary.ToDisplayText()}.";
             }
@@ -236,7 +387,8 @@ namespace ProjectFoundPhone.Editor
         {
             try
             {
-                m_LastValidationSummary = YarnContentValidator.GetValidationSummary();
+                m_LastValidationReport = YarnContentValidator.GetValidationReport();
+                m_LastValidationSummary = m_LastValidationReport.Summary;
                 m_HasValidationSummary = true;
 
                 if (m_LastValidationSummary.HasErrors)
@@ -319,6 +471,34 @@ namespace ProjectFoundPhone.Editor
             m_SelectedNodeIndex = Mathf.Clamp(m_SelectedNodeIndex, 0, m_NodeNames.Length - 1);
             selectedNode = m_NodeNames[m_SelectedNodeIndex];
             return !string.IsNullOrWhiteSpace(selectedNode);
+        }
+
+        private bool TryGetSelectedNodeLocation(
+            out YarnSOGenerator.YarnNodeSourceLocation selectedLocation)
+        {
+            selectedLocation = default;
+            if (!TryGetSelectedNode(out string selectedNode))
+            {
+                return false;
+            }
+
+            foreach (YarnSOGenerator.YarnNodeSourceLocation location in m_NodeLocations)
+            {
+                if (string.Equals(location.NodeName, selectedNode, StringComparison.Ordinal))
+                {
+                    selectedLocation = location;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void OpenSourceAtLine(string assetPath, int line)
+        {
+            WriterCockpitNavigation.TryOpenAssetAtLine(assetPath, line, out m_SourceOpenStatus);
+            m_LastAction = m_SourceOpenStatus;
+            Repaint();
         }
 
         private string GetSelectedNodeOrFallback()

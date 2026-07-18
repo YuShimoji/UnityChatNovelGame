@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,29 +21,11 @@ namespace ProjectFoundPhone.Editor
     {
         private const string ActiveYarnDir = "Assets/Resources/Yarn/active";
 
-        // 26 registered custom commands (ScenarioManager + ChatDialogueView)
-        private static readonly HashSet<string> KnownCommands = new HashSet<string>
-        {
-            "Message", "StartWait", "SkipWait", "UnlockTopic", "Glitch",
-            "SystemMessage", "Typing", "EndDay", "DeclareThread", "DeclareThreadTyped",
-            "AddThreadMessage", "AddThreadChat", "Chat", "DeclareThreadLatent",
-            "ManifestThread", "CompleteThread", "DeclareThreadLatentCond",
-            "BeginBranch", "EndBranch", "SetBranchReflection", "DiscoverFragment",
-            "AddFragmentNote", "AddHalluciCoin", "AutoBeginBranch", "Image", "set"
-        };
-
         // Yarn built-in commands
         private static readonly HashSet<string> BuiltInCommands = new HashSet<string>
         {
             "jump", "stop", "wait", "declare", "if", "elseif", "else",
             "endif", "set", "call"
-        };
-
-        // Known character IDs from CharacterDatabase
-        private static readonly HashSet<string> KnownCharacters = new HashSet<string>
-        {
-            "player", "pyramid", "marco", "bernardo", "mason", "oliver",
-            "system", "narrator"
         };
 
         private Vector2 m_ScrollPosition;
@@ -74,6 +57,41 @@ namespace ProjectFoundPhone.Editor
             }
         }
 
+        public enum ValidationLevel
+        {
+            Error,
+            Warning,
+            Info
+        }
+
+        public readonly struct ValidationResult
+        {
+            public ValidationResult(ValidationLevel level, string file, int line, string message)
+            {
+                Level = level;
+                File = file ?? string.Empty;
+                Line = line;
+                Message = message ?? string.Empty;
+            }
+
+            public ValidationLevel Level { get; }
+            public string File { get; }
+            public int Line { get; }
+            public string Message { get; }
+        }
+
+        public sealed class ValidationReport
+        {
+            public ValidationReport(ValidationSummary summary, IEnumerable<ValidationResult> results)
+            {
+                Summary = summary;
+                Results = results?.ToArray() ?? Array.Empty<ValidationResult>();
+            }
+
+            public ValidationSummary Summary { get; }
+            public ValidationResult[] Results { get; }
+        }
+
         [MenuItem("Tools/FoundPhone/Yarn Content Validator", false, 20)]
         public static void ShowWindow()
         {
@@ -86,12 +104,13 @@ namespace ProjectFoundPhone.Editor
         /// </summary>
         public static int ValidateAllYarnFilesLogToConsole()
         {
-            ValidationSummary summary = BuildValidationSummary(out List<ValidationResult> results);
+            ValidationReport report = GetValidationReport();
+            ValidationSummary summary = report.Summary;
 
             Debug.Log(
                 $"YarnContentValidator (batch): {summary.ToDisplayText()}.");
 
-            foreach (ValidationResult result in results)
+            foreach (ValidationResult result in report.Results)
             {
                 string prefix = string.IsNullOrEmpty(result.File) || result.Line <= 0
                     ? ""
@@ -99,10 +118,10 @@ namespace ProjectFoundPhone.Editor
 
                 switch (result.Level)
                 {
-                    case ResultLevel.Error:
+                    case ValidationLevel.Error:
                         Debug.LogError($"{prefix}{result.Message}");
                         break;
-                    case ResultLevel.Warning:
+                    case ValidationLevel.Warning:
                         Debug.LogWarning($"{prefix}{result.Message}");
                         break;
                     default:
@@ -116,7 +135,42 @@ namespace ProjectFoundPhone.Editor
 
         public static ValidationSummary GetValidationSummary()
         {
-            return BuildValidationSummary(out _);
+            return GetValidationReport().Summary;
+        }
+
+        public static ValidationReport GetValidationReport()
+        {
+            List<ValidationResult> results = BuildValidationResults(
+                out int errorCount,
+                out int warningCount,
+                out int infoCount);
+            var summary = new ValidationSummary(errorCount, warningCount, infoCount, results.Count);
+            return new ValidationReport(summary, results);
+        }
+
+        public static bool IsKnownCommand(string command)
+        {
+            return IsKnownCommand(command, YarnAuthoringRegistry.GetRegisteredCommandNames());
+        }
+
+        public static bool TryGetUnknownCommandDiagnostic(
+            string command,
+            string file,
+            int line,
+            out ValidationResult result)
+        {
+            if (IsKnownCommand(command))
+            {
+                result = default;
+                return false;
+            }
+
+            result = new ValidationResult(
+                ValidationLevel.Warning,
+                file,
+                line,
+                $"Unknown command '<<{command}>>'. Is it registered in runtime command handlers?");
+            return true;
         }
 
         private void OnGUI()
@@ -159,15 +213,13 @@ namespace ProjectFoundPhone.Editor
 
         private void RunValidationGui()
         {
-            m_Results = BuildValidationResults(out m_ErrorCount, out m_WarningCount, out m_InfoCount);
+            ValidationReport report = GetValidationReport();
+            m_Results = report.Results.ToList();
+            m_ErrorCount = report.Summary.ErrorCount;
+            m_WarningCount = report.Summary.WarningCount;
+            m_InfoCount = report.Summary.InfoCount;
             m_HasRun = true;
             Repaint();
-        }
-
-        private static ValidationSummary BuildValidationSummary(out List<ValidationResult> results)
-        {
-            results = BuildValidationResults(out int errorCount, out int warningCount, out int infoCount);
-            return new ValidationSummary(errorCount, warningCount, infoCount, results.Count);
         }
 
         private static List<ValidationResult> BuildValidationResults(
@@ -181,18 +233,18 @@ namespace ProjectFoundPhone.Editor
             int warnCount = 0;
             int infoC = 0;
 
-            void AddResult(ResultLevel level, string file, int line, string message)
+            void AddResult(ValidationLevel level, string file, int line, string message)
             {
-                results.Add(new ValidationResult { Level = level, File = file, Line = line, Message = message });
+                results.Add(new ValidationResult(level, file, line, message));
                 switch (level)
                 {
-                    case ResultLevel.Error:
+                    case ValidationLevel.Error:
                         errCount++;
                         break;
-                    case ResultLevel.Warning:
+                    case ValidationLevel.Warning:
                         warnCount++;
                         break;
-                    case ResultLevel.Info:
+                    case ValidationLevel.Info:
                         infoC++;
                         break;
                 }
@@ -201,7 +253,7 @@ namespace ProjectFoundPhone.Editor
             string fullDir = Path.GetFullPath(ActiveYarnDir);
             if (!Directory.Exists(fullDir))
             {
-                AddResult(ResultLevel.Error, "", 0, $"Directory not found: {ActiveYarnDir}");
+                AddResult(ValidationLevel.Error, "", 0, $"Directory not found: {ActiveYarnDir}");
                 errorCount = errCount;
                 warningCount = warnCount;
                 infoCount = infoC;
@@ -211,7 +263,7 @@ namespace ProjectFoundPhone.Editor
             string[] yarnFiles = Directory.GetFiles(fullDir, "*.yarn");
             if (yarnFiles.Length == 0)
             {
-                AddResult(ResultLevel.Warning, "", 0, "No .yarn files found in active directory");
+                AddResult(ValidationLevel.Warning, "", 0, "No .yarn files found in active directory");
                 errorCount = errCount;
                 warningCount = warnCount;
                 infoCount = infoC;
@@ -226,10 +278,12 @@ namespace ProjectFoundPhone.Editor
             var allVariableUsages = new List<(string file, int line, string variable)>();
             var allSpeakers = new List<(string file, int line, string speaker)>();
             var allCommands = new List<(string file, int line, string command, string fullLine)>();
+            HashSet<string> registeredCommands = YarnAuthoringRegistry.GetRegisteredCommandNames();
+            HashSet<string> knownCharacters = YarnAuthoringRegistry.GetKnownCharacterIds();
 
             foreach (string filePath in yarnFiles)
             {
-                string relativePath = Path.GetFileName(filePath);
+                string relativePath = $"{ActiveYarnDir}/{Path.GetFileName(filePath)}";
                 string[] lines = File.ReadAllLines(filePath);
 
                 for (int i = 0; i < lines.Length; i++)
@@ -305,7 +359,7 @@ namespace ProjectFoundPhone.Editor
             {
                 if (!allNodes.Contains(target))
                 {
-                    AddResult(ResultLevel.Error, file, line,
+                    AddResult(ValidationLevel.Error, file, line,
                         $"Jump to undefined node '{target}'");
                 }
             }
@@ -317,7 +371,7 @@ namespace ProjectFoundPhone.Editor
                 {
                     string locs = string.Join(", ",
                         locations.Select(l => $"{l.file}:{l.line}"));
-                    AddResult(ResultLevel.Error, locations[0].file, locations[0].line,
+                    AddResult(ValidationLevel.Error, locations[0].file, locations[0].line,
                         $"Duplicate #line: tag '{tag}' found at: {locs}");
                 }
             }
@@ -325,20 +379,20 @@ namespace ProjectFoundPhone.Editor
             // Check unknown commands
             foreach (var (file, line, command, _) in allCommands)
             {
-                if (!KnownCommands.Contains(command) && !BuiltInCommands.Contains(command))
+                if (!IsKnownCommand(command, registeredCommands))
                 {
-                    AddResult(ResultLevel.Warning, file, line,
-                        $"Unknown command '<<{command}>>'. Is it registered in ScenarioManager?");
+                    AddResult(ValidationLevel.Warning, file, line,
+                        $"Unknown command '<<{command}>>'. Is it registered in runtime command handlers?");
                 }
             }
 
             // Check unknown character IDs
             foreach (var (file, line, speaker) in allSpeakers)
             {
-                if (!KnownCharacters.Contains(speaker))
+                if (!knownCharacters.Contains(speaker))
                 {
-                    AddResult(ResultLevel.Warning, file, line,
-                        $"Unknown character ID '{speaker}'. Is it in CharacterDatabase?");
+                    AddResult(ValidationLevel.Warning, file, line,
+                        $"Unknown character ID '{speaker}'. Is there a CharacterProfile asset?");
                 }
             }
 
@@ -355,13 +409,13 @@ namespace ProjectFoundPhone.Editor
                     }
 
                     undeclaredVars.Add(variable);
-                    AddResult(ResultLevel.Info, file, line,
+                    AddResult(ValidationLevel.Info, file, line,
                         $"Variable '{variable}' used without <<declare>> in active Yarn files (may be declared in Yarn Project settings)");
                 }
             }
 
             // Summary info
-            AddResult(ResultLevel.Info, "", 0,
+            AddResult(ValidationLevel.Info, "", 0,
                 $"Scanned {yarnFiles.Length} files, {allNodes.Count} nodes, {allLineTags.Count} #line: tags, {allVariableDeclarations.Count} declared variables");
 
             errorCount = errCount;
@@ -380,8 +434,8 @@ namespace ProjectFoundPhone.Editor
         {
             MessageType msgType = result.Level switch
             {
-                ResultLevel.Error => MessageType.Error,
-                ResultLevel.Warning => MessageType.Warning,
+                ValidationLevel.Error => MessageType.Error,
+                ValidationLevel.Warning => MessageType.Warning,
                 _ => MessageType.Info
             };
 
@@ -392,14 +446,10 @@ namespace ProjectFoundPhone.Editor
             EditorGUILayout.HelpBox($"{prefix}{result.Message}", msgType);
         }
 
-        private enum ResultLevel { Error, Warning, Info }
-
-        private struct ValidationResult
+        private static bool IsKnownCommand(string command, ISet<string> registeredCommands)
         {
-            public ResultLevel Level;
-            public string File;
-            public int Line;
-            public string Message;
+            return !string.IsNullOrWhiteSpace(command) &&
+                (BuiltInCommands.Contains(command) || registeredCommands.Contains(command));
         }
     }
 }
