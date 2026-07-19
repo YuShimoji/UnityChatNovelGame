@@ -1,6 +1,6 @@
 # Project Cockpit
 
-最終更新: 2026-07-11
+最終更新: 2026-07-19
 
 ## North Star
 
@@ -8,20 +8,24 @@ FoundPhone を、ライター/デザイナーが Yarn を外部エディタで�
 
 ## Current Active Slice
 
-Writer / Designer Cockpit MVP の interactive 受入。
+Writer Cockpit source navigationの受入済み状態を維持し、公開面はSites-native lightweight chat demoの別laneへ進める。
 
 - Unity menu: `Tools > FoundPhone > Writer Cockpit`
 - Main script: `Assets/Scripts/Editor/WriterCockpitWindow.cs`
-- 目的: Yarn 保存後の `Refresh Nodes` / `Validate Then Sync` / `Apply` / `Play` / Last Action / 読み取り専用 Save 状態を一画面に集める
-- 現在: fresh package resolve と Editor assembly compile は通過。visible menu / window / Apply / Play は未確認
-- 範囲外: Yarn本文執筆、Runtime Dashboard/DebugHub のPrefab化、既存セーブデータの書き換え・削除
+- 作者導線: 74 Node検索 → source path/line → structured diagnostics → source jump。既存`Refresh` / `Validate Then Sync` / `Apply` / `Play`を維持
+- 現在: targeted EditMode 14/14、Unity compile、active Yarn `errors=0 / warnings=0 / info=3`がpass。External Script Editorでの実jumpは未設定環境のためhuman review debt
+- 公開面: direct Unity Web routeはmodule/public scene/navigation不足でblocked。Sites-native lightweight chat demoがactive successor
+- 範囲外: Yarn本文執筆、Runtime Dashboard/DebugHub、既存save data変更、Unity module導入、Site公開
 
 ## Roadmap Strip
 
 ```text
 G0 development readiness      [#####] local complete
-G1 Writer Cockpit acceptance  [####-] active
-G1.1/1.2 validator + tests    [##---] next
+G1 source navigation lane     [#####] accepted
+G1.1 validator trust          [#####] active Yarn warnings 0
+G1.2 full regression          [##---] save isolation pending
+P1 Sites-native demo          [#----] successor; separate lane
+P2 direct Unity Web route     [-----] blocked
 G2 SP-023/SP-024 display QA   [##---] queued
 M1/M2 engine confidence       [#----] later
 Mobile build/release          [-----] deferred
@@ -30,11 +34,14 @@ Mobile build/release          [-----] deferred
 ## Capability Grid
 
 ```text
-Yarn node discovery       [#####] active file/node count + recommended node
-Static validation summary [###--] errors=0; 24 unknown-command warnings are false positives
+Yarn node discovery       [#####] 74 nodes + search + source path/title line
+Structured diagnostics    [#####] severity/file/line/message + source action
+Validator registry trust  [#####] errors=0 / warnings=0 / info=3 on active Yarn
 Authoring SO sync         [#####] pending count + changed/no-change result
 ContentAuthoring apply    [####-] shared helper compiled; interactive acceptance pending
 Save status confidence    [###--] read-only file presence only
+Sites-native demo         [#----] successor selected; artifact not built
+Direct Unity Web          [-----] module and public gameplay route blocked
 Runtime UI refactor       [-----] intentionally not in this slice
 ```
 
@@ -43,21 +50,21 @@ Runtime UI refactor       [-----] intentionally not in this slice
 | Gate | State | Requirement |
 |------|-------|-------------|
 | Fresh package resolve | pass locally | process-local standard Windows environment restoration + 39 packages |
-| Cockpit access | batch-ready | Editor assemblies compile; interactive menu still needs a visible Editor pass |
+| Cockpit source navigation | accepted | Node search/source line/diagnostic drilldown checked; targeted tests 14/14 |
+| External editor jump | human review debt | implementation fails closed; Unity External Script Editor must be selected by human |
 | Existing Content Pipeline | preserved | `Tools > FoundPhone > Content Pipeline` remains available |
 | Save safety | guarded | Cockpit only checks save/autosave file presence |
 | Unity validation | reproducible locally | `tools/run-unity.ps1` reaches fresh resolve / cache restore / compile / return code 0 |
-| Validator trust | needs repair | 33 warnings include 24 registered-command false positives |
+| Validator trust | pass for active Yarn | runtime handlers / CharacterProfile registry; errors 0 / warnings 0 / info 3 |
+| Direct Unity Web | blocked | Web Build Support absent; valid public gameplay scene/navigation absent |
+| Sites-native publication | successor only | separate lane and local review artifact required; no Site has been published |
 | Visual review | deferred | SP-023 / SP-024 display review remains next lane |
 
 ## Last Worker Checkpoint
 
-- Added Editor-only Writer Cockpit MVP.
-- Added small status DTOs to Yarn validator / SO generator for reuse.
-- Shared ContentAuthoring apply/play logic with the existing Content Pipeline window.
-- Identified the fresh resolve root cause as missing `ALLUSERSPROFILE` in the calling shell, not malformed package JSON.
-- Added `tools/run-unity.ps1` to restore that value for the child process without changing user/system environment.
-- Regenerated Package Manager state from no ProjectCache, registered 39 packages, compiled scripts, and reached return code 0.
-- Prevented early Editor initialization from moving ContentAuthoring to the end of Build Settings.
-- Ran non-mutating Yarn validator batch: `errors=0`, `warnings=33`, `info=3`; warnings are existing content/command diagnostics, not compile or Package Manager failures.
-- Detailed trust, residual work, and G0-G13 proposal: `docs/SUPERVISOR_REPORT.md`.
+- Integrated accepted editor commit from base `55cb0d20`: Node search, source path/title line, external-editor action, structured Validator drilldown.
+- Replaced duplicated Validator command/character lists with runtime handler and CharacterProfile asset discovery. Active Yarn is `errors=0 / warnings=0 / info=3`.
+- Revalidated the integrated tree with targeted EditMode 14/14, Unity 6000.4.9f1 batch compile, and non-mutating Yarn validator.
+- Preserved the existing Content Pipeline Apply/Play helpers and read-only Save status; full 83 tests remain gated by save-data isolation.
+- Integrated `docs/verification/sites-publication-feasibility.md`. Direct Unity Web remains unproven and blocked; Sites-native lightweight demo is the bounded successor.
+- Detailed trust, residual work, and successor boundaries: `docs/SUPERVISOR_REPORT.md`.

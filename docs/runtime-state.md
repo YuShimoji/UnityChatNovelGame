@@ -1,19 +1,19 @@
 # Runtime State
 
-**Updated**: 2026-07-17（remote sync / development readiness refresh）
+**Updated**: 2026-07-19（accepted parallel results integration）
 
 ## Current Position
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
-- lane: **Authoring Tooling acceptance**（Writer / Designer Cockpit MVP）
-- slice: **wrapper 経由で Writer Cockpit の Refresh → Validate Then Sync → Apply / Play → Last Action を interactive 受入する**
-- next_recommended_slice: **Validator command registry drift の解消 + save data 隔離後の EditMode 73 / PlayMode 10 基準化**
-- subsequent_recommended_slice: **SP-023 / SP-024 の表示検収へ戻る**
-- later_recommended_slice: **M1 サブスレッド全型 → M2 状態完全性 → M3 alpha gate**
-- active_artifact: WriterCockpitWindow / ContentPipelineWindow / YarnContentValidator / YarnSOGenerator / ContentAuthoring / active Yarn files
+- lane: **Authoring Tooling integrated / publication successor bounded**
+- slice: **accepted Writer Cockpit navigationとSites feasibility evidenceをmainへ統合した状態**
+- next_recommended_slice: **別laneのSites-native lightweight chat demoをpublic deploymentなしのlocal artifactから開始**
+- subsequent_recommended_slice: **External Script Editor line jumpの人間環境レビュー + Writer Cockpit Apply / Play再受入**
+- later_recommended_slice: **save data隔離後のfull 83 tests → SP-023 / SP-024表示検収 → M1/M2/M3**
+- active_artifact: WriterCockpitWindow / WriterCockpitNavigation / YarnContentValidator / YarnAuthoringRegistry / YarnSOGenerator / Sites feasibility evidence
 - artifact_surface: Editor tooling only (`Tools > FoundPhone > Writer Cockpit`; existing Content Pipeline preserved)
-- last_change_relation: direct unblocker（2026-07-11: missing `ALLUSERSPROFILE` を process-local に補い、fresh resolve / compile を再現可能化）
+- last_change_relation: accepted parallel integration（Node source navigation、structured diagnostics、Validator registry drift解消、publication blocker正本化）
 - plan_file: `docs/SUPERVISOR_REPORT.md`（現状・G0-G13 目標案） / `docs/plans/display-batch-showcase.md`（表示系デモ正本）
 
 ## Counters
@@ -23,7 +23,7 @@
 
 ## Quantitative Metrics (0 を目指す指標のみ、件数追跡は廃止)
 
-- tests_last_run: 2026-04-09 full suite (EditMode / PlayMode pass)。2026-07-17 は compile + non-mutating Yarn validator のみ
+- tests_last_run: 2026-07-19 targeted WriterCockpitNavigation EditMode 14/14 pass。full suiteは2026-04-09基準のまま
 - mock_files: 0
 - spec_entries: 42 (`docs/spec-index.json` 配列長、検証用。SP-023/SP-024 追加)
 - todo_fixme_hack: ChatController.cs:2020 に 1 件残存 (FEATURE_STATUS_AUDIT W-6 参照)
@@ -34,6 +34,16 @@
 - last_visual_audit_path: docs/archive/verification-evidence/VerticalSliceSmokeGate_20260403_*.png (参考。パスのみ保持、追跡は廃止)
 
 ## Session Log
+
+### 2026-07-19（accepted parallel results integration）
+
+- **開始状態**: primary `main` / `origin/main` は `55cb0d20`、ahead/behind `0/0`、worktree clean。editor accepted commit `23e4b635` はbase `55cb0d20`の直系で、Sites/Yarn本文/package/BuildSettingsへの変更なし。
+- **editor integration**: 一時integration branchへ競合なくcherry-pick。Writer Cockpitに74 Node検索、source asset/1-based title行、diagnostic drilldown、file/line source jumpを追加。Refresh / Validate / Sync / Validate Then Sync / Apply / Playは維持し、Save statusは`File.Exists`だけのread-only。
+- **validator**: runtime literal `AddCommandHandler`とCharacterProfile assetをsource of truthに変更。active Yarnは `errors=0 / warnings=0 / info=3`、11 files / 74 nodes。故意の未知command/characterを検出する回帰testは維持。
+- **targeted validation**: detached integration validation worktreeでEditMode 14/14 pass、Unity 6000.4.9f1 batch compile return code 0、非破壊Yarn validator return code 0。Unity実行由来のtracked差分なし。full 83 tests / PlayMode全体は未実行。
+- **publication evidence**: `docs/verification/sites-publication-feasibility.md` を統合。Web Build Supportなし、`MVPScene.unity`欠落、TitleSceneの公開不可scene依存によりdirect Unity Web routeはblocked。互換性・build・公開成功は未証明。
+- **human review debt**: External Script Editor未設定のため実file/line jumpは未確認。アプリ選択を自動化せず、安全な未設定statusまでをaccepted evidenceとする。
+- **next move**: publication successorは別laneのSites-native lightweight chat demo。public operationなしのlocal artifactから開始し、Unity module導入・public scene修復・公開は別gateとする。
 
 ### 2026-07-17（remote sync / development readiness refresh）
 

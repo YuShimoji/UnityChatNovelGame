@@ -1,27 +1,29 @@
 # 監修役AI向け現状報告
 
-**更新日**: 2026-07-17
+**更新日**: 2026-07-19
 **対象**: FoundPhone / UnityChatNovelGame
-**同期起点**: `main` / `7eb09c0`（同期時点で `origin/main` と ahead/behind `0/0`）
+**統合起点**: `main` / `55cb0d20`（開始時に `origin/main` と ahead/behind `0/0`）
 **役割**: 監修役AIが会話ログなしで、信頼できる現在地、残る判断、推奨順序、製品化までの目標を判断するための引き継ぎ正本。
 
 ## 1. 結論
 
-このリポジトリは、**追跡ソースの同期と Unity 6000.4.9f1 の fresh package resolve / script compile まで復旧し、コード・ツール開発を再開できる状態**になった。
+このリポジトリは、**Writer Cockpitの作者向けsource navigationと診断drilldownを受け入れ、active YarnのValidator driftを解消した状態**になった。公開経路の調査結果も正本化したが、direct Unity Web routeはblockedであり、Sites-native lightweight chat demoが別laneのactive successorである。
 
 ただし、現在の受け入れ状態は次のように分ける。
 
 | 判定対象 | 現在の判定 | 根拠 |
 |---|---|---|
-| Git / ソース同期 | 開発可能 | 2026-07-17 に `git fetch --prune origin` → `git pull --ff-only origin main`。同期起点の `HEAD` / `origin/main` は `7eb09c0`、ahead/behind `0/0` |
-| Unity batch open / compile | 開発可能 | 2026-07-17 に 39 packages の cache restore、Tundra compile success、326 items evaluated、batchmode 正常終了 |
+| Git / ソース同期 | 統合可能 | 2026-07-19 開始時の`main` / `origin/main`は`55cb0d20`、ahead/behind `0/0`。accepted editor commitは同baseの直系 |
+| Unity batch open / compile | 開発可能 | accepted editor treeをUnity 6000.4.9f1で再実行し、batchmode return code 0。tracked差分なし |
 | agent / terminal からの再現 | 開発可能 | `tools/run-unity.ps1` が欠落した標準 Windows 環境変数を子プロセス内だけ補完 |
-| Yarn 静的検証 | エラーなし、警告の信頼性に課題 | errors=0 / warnings=33 / info=3。警告33件中24件は登録済みコマンドを未知扱いする偽陽性 |
-| Writer Cockpit interactive 操作 | 未受入 | menu source と compile は確認済み。実ウィンドウ、Apply、Play、Last Action は visible Editor 未確認 |
+| Yarn 静的検証 | active Yarnで信頼回復 | errors=0 / warnings=0 / info=3。以前の33 warningsはcommand/character registry driftとして解消 |
+| Writer Cockpit navigation | lane受入 | 74 Node検索、source path/line、diagnostic一覧をaccepted laneで確認。targeted EditMode 14/14 |
+| External editor jump | 人間環境レビュー待ち | fail-closed実装は確認済み。Unity External Script Editor未設定のため実file/line移動は未証明 |
 | 現行 Unity テスト全体 | 未更新 | 静的には EditMode 73 / PlayMode 10。保存済み全体回帰は旧 8 PlayMode 基準 |
+| Unity Web publication | blocked / 未証明 | Web Build Supportなし、有効なpublic gameplay sceneなし。Sites-native demoを別laneの後継とする |
 | 最終モバイル製品 | 未到達 | Android/iOS build、署名、配布、Ch3-9、サウンド、広告、Beta は後続 |
 
-したがって、次の一本道は **Writer Cockpit interactive 受入 → Validator 信頼回復 → 現行回帰基準化** である。新しい大機能へ分岐する段階ではない。
+作者基盤の次は、**人間環境でsource jumpと必要なApply / Playを再確認しつつ、公開面はUnity blockerから独立したSites-native lightweight chat demoを別laneで作る**。Site公開、Unity module導入、public scene修復はこの判断に含めない。
 
 ## 2. Shared Focus / 北極星
 
@@ -32,7 +34,8 @@
 ```text
 Yarn 保存
   → Refresh Nodes
-  → Validate
+  → Node検索 / source path・line確認
+  → Validate / file・line診断
   → SO Sync
   → Start Node 選択
   → ContentAuthoring Apply / Play
@@ -46,6 +49,13 @@ AI の主担当はエンジン、ツール、パイプライン、検証導線�
 FoundPhone を、モバイル優先のチャット／ビジュアルノベルゲームとして iOS / Android に配布可能な状態へ持っていく。F2P + 広告、Ch3以降のサウンド統合は高位方針として存在するが、現在の実装スライスではない。
 
 ## 3. 今回の同期と復旧
+
+### 2026-07-19 parallel lane integration
+
+- editor accepted commit `23e4b635`の親がbase `55cb0d20`であること、Yarn本文・Sites surface・package・Build Settingsを変更していないことを確認し、一時integration branchへ競合なくcherry-pickした。
+- Sites siblingは`docs/verification/sites-publication-feasibility.md`だけが未追跡で、その他の変更なし。同文書だけを読み取り統合し、sibling worktreeは変更していない。
+- Writer Cockpit navigationのaccepted evidenceは74 Node検索、source asset/line表示、structured diagnostics、active Yarn `errors=0 / warnings=0 / info=3`。External Script Editor実jumpは未確認のまま維持する。
+- Unity Web routeはWeb Build Support、valid public gameplay scene、TitleSceneからのpublic navigationが欠ける。Sites-native lightweight chat demoをpublic deploymentなしの別lane successorとする。
 
 ### リモート同期
 
@@ -104,12 +114,12 @@ fresh resolve 後の初回初期化で、`BuildSettingsHelper` が `ContentAutho
    - すべて ignored local evidence。リモート正本にはしない
 
 4. **Yarn validator**
-   - 2026-07-17 に wrapper から再実行
-   - errors=0 / warnings=33 / info=3
+   - 2026-07-19 にaccepted editor treeをwrapperから再実行
+   - errors=0 / warnings=0 / info=3
    - 11 files / 74 nodes / 24 `#line:` tags / 42 declared variables
-   - warning 内訳: unknown command 24、unknown character 9
+   - 変更前warning 33件: registered command 24、既存`unknown` CharacterProfile 9。変更後のunknown command / character偽陽性は0
    - info の主な残り: undeclared variable 2
-   - log: `Logs/development-readiness-yarn-validator-2026-07-17.log`（ignored local evidence）
+   - integration log: `Logs/integration-yarn-validator-2026-07-19.log`（detached validation worktreeのignored local evidence）
 
 5. **静的集計**
    - spec entries: 42
@@ -122,18 +132,30 @@ fresh resolve 後の初回初期化で、`BuildSettingsHelper` が `ContentAutho
    - `uvx --from mkdocs-material mkdocs build --strict` exit 0
    - ignored PerformanceBaseline raw pagesは nav 外の INFO。欠落ファイル参照は削除
 
-7. **非阻害 warning**
+7. **Writer Cockpit targeted integration**
+   - `ProjectFoundPhone.Editor.Tests` 14/14 pass
+   - Node index/source line/filter、known/unknown registry、active Yarn false-positive 0、安全なmissing-file処理を確認
+   - Unity 6000.4.9f1 batch open/compile return code 0、実行後tracked差分なし
+
+8. **Publication feasibility**
+   - `docs/verification/sites-publication-feasibility.md`をtracked authorityへ統合
+   - Unity Web build/package/HTTP/MIME/browser runtime/Sites compatibilityは未検証
+   - Site作成・deployment、Unity module導入、Build Settings変更は未実施
+
+9. **非阻害 warning**
    - Unity: `VerificationMenu` と `MissingScriptScanner` が同じ `Tools/FoundPhone/Verification/Scan DebugChatScene Missing Scripts` を登録
    - UnityConnect: 終了時の public CDN request timeout
    - docs: `uvx` の provider 推奨と MkDocs 2.0 将来互換性告知
    - いずれも今回の compile、validator、strict docs build の終了コードを失敗にはしていない
 
-### 未実行
+### 未実行 / 人間環境レビュー
 
-- interactive Unity Editor での Writer Cockpit 実操作。
+- 設定済みExternal Script EditorでのNode/diagnostic file-line jump。
+- Writer CockpitのApply / Play / Last Actionを含む既存loopの本統合後再実行。
 - EditMode 73 / PlayMode 10 の全件実行。
 - SP-023 / SP-024 の画面検収。
 - Save / Load state equality と章遷移の横断検証。
+- Unity Web build、local hosting、browser smoke、Sites publication。
 
 全テストを直ちに実行しなかった理由は、既存テストに `Application.persistentDataPath` の save slot を削除するものがあるため。実行前に実ユーザーデータ退避または test data 隔離が必要である。
 
@@ -142,24 +164,28 @@ fresh resolve 後の初回初期化で、`BuildSettingsHelper` が `ContentAutho
 ### trusted
 
 - 同期起点で `main` と `origin/main` が一致していたこと。
+- accepted editor commitがbaseの直系で、許可されたEditor/test/verification filesだけを変更していたこと。
 - 2026-07-17 の現 checkout で package restore、Tundra compile、batchmode 正常終了を再確認したこと。
-- 2026-07-17 の Yarn validator が errors=0 / warnings=33 / info=3 で完走したこと。
+- 2026-07-19 のtargeted EditMode 14/14、batch compile、Yarn validator `errors=0 / warnings=0 / info=3`。
 - `ALLUSERSPROFILE` 欠落が fresh resolve の直接原因だったこと。
 - process-local 補完で隔離 resolve と実プロジェクト fresh resolve が成功したこと。
 - Unity 6000.4.9f1 の package registration と script compile。
 - wrapper 経由の再実行が cache restore と compile success に到達したこと。
-- Writer Cockpit / Content Pipeline の menu source と Editor assembly compile。
-- Yarn validator が errors=0 で完走したこと。
+- Writer CockpitのNode検索、source location、diagnostic drilldownのaccepted interactive evidence。
+- runtime handler / CharacterProfile registryから既存false-positiveが0になることと、故意のunknownを回帰testが検出すること。
+- Sites feasibility文書が記録するmodule/scene/navigation blocker。これはUnity Web compatibility成功の証明ではない。
 
 ### needs re-check
 
-- Writer Cockpit の実 menu、window layout、Refresh、Validate Then Sync、Apply、Play、Last Action。
-- Validator warning 33件の意味。unknown command 24件は登録表ドリフトによる偽陽性。
+- 設定済みExternal Script Editorでの実file/line jump。
+- Writer CockpitのApply、Play、Last Actionを含む既存loopの本統合後interactive再確認。
 - 現行 83 テストの Unity 6000.4.9f1 ベースライン。
 - SP-023 / SP-024 の実表示、日本語 SDF、IconSide。
 - Save / Load、Unread、Branch、削除痕、EndDay、章遷移の状態同値。
 - fresh clone / 別端末。今回証明したのはこの端末と wrapper 経路。
 - Verification メニューの同名 `MenuItem` 重複。Writer Cockpit の compile blocker ではないが、Editor menu の診断ノイズになる。
+- Direct Unity Web build / package size / MIME / browser runtime。Web moduleとpublic gameplay routeが揃うまでblocked。
+- Sites-native demoはsuccessor候補が選ばれただけで、artifactもSiteもまだ存在しない。
 
 ### dangerous / rollback candidate
 
@@ -172,9 +198,11 @@ fresh resolve 後の初回初期化で、`BuildSettingsHelper` が `ContentAutho
 以下はスケジュール用の概算で、品質保証値ではない。
 
 ```text
-Writer Cockpit 実装       [####-] 80-90%  compile済み、interactive受入待ち
+Writer Cockpit navigation [#####] accepted  source検索・診断drilldown・targeted test済み
+Writer Cockpit full loop  [####-] 80-90%  Apply/Play再受入とexternal editor実jump待ち
 エンジン alpha 能力       [###--] 60-70%  主要能力あり、M1/M2横断実証待ち
 自動検証・CI              [##---] 35-45%  資産あり、現行全体基準とE2E不足
+Sites-native publication  [#----] successor確定、artifact/公開は未着手
 Ch1 製品縦断              [#----] 20-30%  full authoring解放ゲート前
 最終モバイル製品          [#----] 20-30%  build / distribution /後半content未着手
 ```
@@ -185,9 +213,11 @@ Ch1 製品縦断              [#----] 20-30%  full authoring解放ゲート前
 
 | ID | 目的 | 効果 | 必要条件 | 現在地 | 主担当 / 所有物 | 次の動き |
 |---|---|---|---|---|---|---|
-| R0 | Writer Cockpit interactive 受入 | 作者導線を実使用可能へ上げる | Unity 6000.4.9f1、復旧済み package state | compile 済み、visible UI 未確認 | shared。assistant=技術導線、user=操作感判断 | wrapper で Editor 起動、`DQT_Start` を Apply / Play |
-| R1 | Validator 信頼回復 | warning を作者が判断可能な信号へ戻す | ScenarioManager 登録コマンドとの同期方法 | unknown command 24件が偽陽性 | assistant / Validator と回帰テスト | registry drift を防ぐ小スライス |
+| R0 | Writer Cockpit full-loop受入 | accepted navigationと既存Apply/Playを日常導線として閉じる | External Script Editorの人間選択、Unity 6000.4.9f1 | search/source/diagnostics accepted。実jumpとApply/Play再確認待ち | shared。assistant=技術導線、user=editor/操作感判断 | NodeとdiagnosticのOpen各1回、必要なら`DQT_Start`をApply / Play |
+| R1 | Validator信頼維持 | 実warningだけを作者が判断可能にする | runtime registration方式をliteral handlerから変える際のtest更新 | active Yarn errors 0 / warnings 0 / info 3、targeted 14/14 | assistant / registry helper + tests | 新registration方式を導入する時だけextractorを拡張 |
 | R2 | 現行回帰基準化 | 73 EditMode / 10 PlayMode を現行基準にする | save data 退避または test data 隔離 | 最終全体記録は旧8 PlayMode | assistant/CI / XML・txt結果 | データ安全策の後に batch 実行 |
+| P1 | Sites-native lightweight demo | Unity blockerと独立して公開UXをreview可能にする | 新しいSites-native lane、public deployment禁止 | successor selected、artifactなし | Web / Sites owner | local review artifactのcontractを定義して別dispatch |
+| P2 | Direct Unity Web再調査 | Unity runtimeのhost互換性を実測する | Web Build Support、有効なpublic gameplay sceneとnavigation | blocked、build outputなし | user + Unity lane | module/scene gateが両方解消した時だけ再dispatch |
 | R3 | SP-023 / 024 表示契約 | 実装済み表示能力を受理し M1へ戻る | R0、ユーザーの画面判断 | demo Yarn とコードあり、証跡なし | shared / visual evidence | SP-023 3ノード → SP-024 S1/S2/S5 |
 | R4 | M1 全スレッド型 | A/B/C、Latent、Branch を本編外で信頼可能にする | R2、DebugQuickTest / ETK | 個別実装あり、横断証明なし | assistant / harness + PlayMode | 最小モックと状態観測を追加 |
 | R5 | M2 状態完全性 | Save→Load→続行と章遷移の破綻を防ぐ | R4、test data 隔離 | 実装あり、同値検証不足 | assistant / round-trip tests | Unread、Branch、subthread、EndDay を固定 |
@@ -200,7 +230,7 @@ Ch1 製品縦断              [#----] 20-30%  full authoring解放ゲート前
 |---|---|---|---|
 | D1 | `ScenarioManager` は command 33件を登録するが解除は31件で、`DiscoverFragment` / `AddFragmentNote` が欠落。再 enable 時の handler 重複リスク | 現在の compile blocker ではない。R1 と同じ command registry 監査で扱える | assistant。R1 の回帰テストと一緒に対称性を固定 |
 | D2 | `FEATURE_STATUS_AUDIT.md` のファイル数・テスト数・TODO行、`spec-index.json` の旧8 PlayMode / SP-024進捗が現物より古い | M3 再監査前に更新。今ここで status を推測昇格しない | supervisor/shared。R2結果後に正本更新 |
-| D3 | Build Settings に ContentAuthoring / DebugChatScene / MVPScene が enabled。production scene列ではない | Android production build前に Build Profile と scene責務を確定 | assistant + user。G10 smoke と G11 product buildで分離 |
+| D3 | Build Settingsはproduction/public scene列ではなく、参照する`MVPScene.unity`も現treeに存在しない | Android product buildまたはdirect Unity Web再調査前にscene責務を確定。現在は変更禁止 | assistant + user。G10/G11またはP2の明示laneで分離 |
 | D4 | SP-023フリック、SP-024 S4、B/C rich UI、候補ENH | candidate / hold のまま。Human Authority と value path 未通過 | user approval後のみ実装 |
 | D5 | UI_ISSUES 3件 | 個別修正禁止。3-5件単位またはM6 UI batch | shared。再現情報だけ保持 |
 | D6 | Verification メニューの同名 `MenuItem` 重複 | compile blocker ではないが、起動時 warning と menu owner の曖昧さを残す | assistant。R1 または次の Editor tooling 小スライスで単一 owner に整理し、batch open で warning 消失を確認 |
@@ -214,8 +244,8 @@ Ch1 製品縦断              [#----] 20-30%  full authoring解放ゲート前
 | 順 | 目標 | 主成果物 / 完了条件 | 依存・リスク | actor / owner |
 |---|---|---|---|---|
 | G0 | 開発環境再現性 | fresh resolve、compile、再利用可能 launcher。**この端末では達成** | 別端末は未証明。ignored cacheを正本化しない | assistant/tool / launcher・検証記録 |
-| G1 | Writer Cockpit 受入 | visible menu、Refresh、Validate Then Sync、Apply、Play、Last Action が1ループ成功 | ContentAuthoring scene を保存する点に注意 | shared / user判断 + tool |
-| G1.1 | Validator 信頼回復 | 登録済み command の偽陽性 0、実 warning を分類可能 | runtime登録表との二重管理を避ける | assistant / validator + tests |
+| G1 | Writer Cockpit 受入 | navigation laneはaccepted。残りは設定済みEditor jumpとApply/Play/Last Actionの1ループ | ContentAuthoring scene保存とhuman editor選択に注意 | shared / user判断 + tool |
+| G1.1 | Validator 信頼回復 | **active Yarnで達成**: 登録済みcommand/character偽陽性0、targeted test 14/14 | literal handler以外へ登録方式を変える時はextractor更新 | assistant / validator + tests |
 | G1.2 | 現行回帰 | EditMode 73 / PlayMode 10 の日付付き結果 | save data 隔離必須 | assistant/CI / test artifacts |
 | G2 | SP-023/024 表示受入 | SP-023 3ノード、SP-024 S1/S2/S5、日本語SDF、IconSide の OK/NG と証跡 | 値調整は Inspector。個別修正ループ禁止 | shared / visual evidence |
 | G3 / M1 | サブスレッド全型 | A/B/C、Latent、Branch、知識転送、Complete を ETK + PlayMode で実証 | B/C rich UI を判断前に作り込まない | assistant / engine harness |
@@ -232,7 +262,7 @@ Ch1 製品縦断              [#----] 20-30%  full authoring解放ゲート前
 
 ## 9. 将来の意味ある分岐
 
-M3 通過前は G1 → G2 → M1 → M2 → M3 が一本道。M3 通過後に初めて次の分岐が意味を持つ。
+製品本体は G1 → G2 → M1 → M2 → M3 が一本道。これと独立したpublication probeとして、Sites-native lightweight chat demoだけは別laneで先行可能である。direct Unity Webはblocker解消前に再開しない。
 
 | 分岐 | 目的 | 強くなる点 | 主な代償 | 最適な状況 |
 |---|---|---|---|---|
@@ -247,6 +277,8 @@ M3 通過前は G1 → G2 → M1 → M2 → M3 が一本道。M3 通過後に初
 - B型 Wiki、C型成果物カード、解放通知の体験仕様。
 - タイピングインジケーター中のタップをスキップに含めるか。
 - 遷移時の色変化の正しい見た目。
+- Unity Preferencesで使うExternal Script Editorの選択。
+- Web Build Support導入、public gameplay scene責務、Site作成・公開判断。
 - Android / iOS の投入順、identifier、署名、広告位置、同意、privacy。
 - Beta 合格指標、最終コンテンツ量、サウンド制作範囲。
 
@@ -256,6 +288,7 @@ M3 通過前は G1 → G2 → M1 → M2 → M3 が一本道。M3 通過後に初
 - UI_ISSUES を1件ずつコード修正して手動確認ループを回す。
 - `Library/PackageManager` や lock を理由なく削除する。
 - Validatorの errors=0 だけで warning の信頼性問題を無視する。
+- Unity Web blockerを回避するためにmoduleを自動導入、公開不可sceneを混入、またはSiteを公開する。
 - candidate ENH を承認なしで実装する。
 - M1/M2/M3 を飛ばして full Ch1、Ch2、サウンド、広告へ進む。
 - ignored `Library/` や `Logs/` をリモート再現性の根拠にする。
@@ -295,7 +328,7 @@ M3 通過前は G1 → G2 → M1 → M2 → M3 が一本道。M3 通過後に初
 
 ## 13. 監修役AIへの最終指示
 
-最初の判断は新機能選択ではない。G1 の interactive 受入を閉じ、その直後に G1.1 Validator 信頼回復と G1.2 現行回帰を小さく完了させる。その後に SP-023/024 表示受入へ戻り、M1 → M2 → M3 を通過する。
+G1.1 Validator信頼回復とWriter Cockpit navigation laneは受入済み。製品本体は、人間環境でExternal Script Editor jumpと必要なApply/Play loopを閉じ、save data隔離後のG1.2、SP-023/024、M1 → M2 → M3へ進む。公開面は別laneのSites-native lightweight chat demoをlocal artifactから開始し、direct Unity Webはmodule/public scene/navigation gateが揃うまでblockedとする。
 
 M3 通過後の最遠推奨線は、G6 Ch1製品縦断 → G7 E2E/CI量産耐性 → G8 Ch2制作スケール → G9製品UX統合 → G10 Android技術smoke → G11 Android製品ビルド → G12 Ch3-9・音・Beta・収益化・配布 → G13 1.x運用である。これは依存順を示す監修用の目標提案であり、候補機能、コンテンツ量、署名、広告、配布判断を先行承認するものではない。
 

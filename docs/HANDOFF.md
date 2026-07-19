@@ -11,6 +11,18 @@
 5. `docs/INVARIANTS.md`
 6. `docs/USER_REQUEST_LEDGER.md`
 
+## Handoff snapshot (2026-07-19 accepted parallel results integration)
+
+**本セッションの実施内容**:
+
+- 同期起点の `main` / `origin/main` は `55cb0d20c1d92a21e6e6ecb0db5d2fdbdfe562d7`、ahead/behind `0/0`、worktree clean。受入済み editor commit `23e4b635` がこの base の直系であることと、Yarn本文・Sites surface・package・Build Settingsを変更していないことを確認して統合した。
+- Writer Cockpitに74 Nodeの検索、Yarn asset pathと1-based `title:` 行、file/line付きValidator drilldown、設定済みExternal Script Editorへのsource jumpを追加。Refresh / Validate / Sync / Validate Then Sync / Apply / Playとread-only Save statusは維持した。
+- runtime command handlerとCharacterProfile assetをValidator registryのsource of truthにし、active Yarnの結果を `errors=0 / warnings=0 / info=3` へ更新。以前のwarning 33件は登録済みcommand 24件と既存`unknown` profile 9件のregistry driftだった。
+- targeted `WriterCockpitNavigation` EditModeは14/14 pass。Unity 6000.4.9f1 batch open/compileと非破壊Yarn validatorはいずれもreturn code 0。full 83 testsとpersistent save dataに触れるtestは未実行。
+- `docs/verification/sites-publication-feasibility.md` を正本へ追加。Unity Web Build Supportが未導入で、`MVPScene.unity`も存在せず、`TitleScene`から公開可能なgameplay sceneへ遷移できないため、direct Unity Web routeは未証明のままblocked。
+- 公開面の次候補は別laneのSites-native lightweight chat demo。Site作成・公開、Unity module導入、public scene修復はこの統合では行っていない。
+- source jump実装は安全にfail closedするが、この端末のUnity External Script Editorが未設定のため、実file/line移動は人間環境レビュー負債として残る。Apply / Playの共有処理もcompile上は維持したが、本統合では対話再生していない。
+
 ## Handoff snapshot (2026-07-17 remote sync / development readiness refresh)
 
 **本セッションの実施内容**:
@@ -88,11 +100,20 @@ python -m mkdocs serve -a 127.0.0.1:8000
 
 ## Current Focus
 
-- 主目的: **wrapper から Writer Cockpit を interactive 起動し、Refresh → Validate Then Sync → Apply / Play → Last Action を1回受け入れる**
-- 現在: Unity **6000.4.9f1** は fresh resolve / 39 packages / compile / return code 0。生成 cache への依存ではなく、欠落した標準 Windows 環境変数を process-local に補う再現可能な入口がある。
-- 次の assistant-owned work: Validator の登録済み command 偽陽性24件を解消し、save data を隔離して現行 EditMode 73 / PlayMode 10 の基準を取る。
-- 次の shared work: `DQT_Start` または推奨ノードを Cockpit から Apply / Play。受入後に SP-023 / SP-024 表示検収へ戻る。
-- 注意: `Library/` / `Logs/` は ignored local evidence。成功していても別端末の正本にしない。
+- 主目的: **受入済みWriter Cockpit navigationを作者導線として維持し、公開面は別laneのSites-native lightweight chat demoへ進める**
+- 現在: 74 Node検索、source path/line、diagnostic drilldown、active Yarn `errors=0 / warnings=0 / info=3` はtargeted test / batch compile / validatorで確認済み。既存Apply / Play導線とread-only Save statusは維持されている。
+- 次の publication lane: Unity runtimeや欠落sceneに依存しないSites-native lightweight chat demoを、public deploymentなしのreviewable local artifactから開始する。新laneの明示権限が必要。
+- 次の shared review: 人間がUnity PreferencesでExternal Script Editorを選択し、Nodeとdiagnosticのsource jumpを各1回確認する。必要ならCockpitからApply / Playの既存interactive loopも再受入する。
+- blocker: direct Unity Web routeはWeb Build Support欠落、有効なpublic gameplay scene欠落、TitleSceneの公開不可scene依存によりblocked。module導入・scene修復・公開は別判断。
+- 注意: `Library/` / `Logs/` はignored local evidence。full 83 testsはsave data隔離前に実行しない。
+
+## Validation note (2026-07-19 parallel integration)
+
+- Targeted EditMode: `ProjectFoundPhone.Editor.Tests` / `WriterCockpitNavigation` 14/14 pass。
+- Unity: 6000.4.9f1 batch open/compile return code 0。実行後のvalidation worktreeにtracked差分なし。
+- Yarn: `errors=0 / warnings=0 / info=3`、11 files / 74 nodes / 24 `#line:` tags / 42 declared variables。unknown command / unknown character偽陽性は0。
+- Source navigation: `SP024_Immersion_Start` → `Assets/Resources/Yarn/active/SP024_ImmersionDemo.yarn:13`の表示はaccepted laneで確認済み。設定済みExternal Script Editorで開く実動作は未確認。
+- Publication: `docs/verification/sites-publication-feasibility.md` がWeb module / public scene / navigation blockerを記録。Unity Web compatibilityやSites公開成功は主張しない。
 
 ## Validation note (2026-07-17 current checkout)
 
