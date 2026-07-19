@@ -119,7 +119,7 @@ fresh resolve 後の初回初期化で、`BuildSettingsHelper` が `ContentAutho
    - 11 files / 74 nodes / 24 `#line:` tags / 42 declared variables
    - 変更前warning 33件: registered command 24、既存`unknown` CharacterProfile 9。変更後のunknown command / character偽陽性は0
    - info の主な残り: undeclared variable 2
-   - integration log: `Logs/integration-yarn-validator-2026-07-19.log`（detached validation worktreeのignored local evidence）
+   - integration実行ログはdetached validation worktreeのignored evidenceとして生成し、結果を本報告へ転記後にworktreeとともにcleanup済み。tracked tests/docsを再現可能な正本とする
 
 5. **静的集計**
    - spec entries: 42
