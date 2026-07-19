@@ -1,13 +1,23 @@
 flowchart LR
-    A["Write and save Yarn externally"] --> B["Writer Cockpit: Refresh Nodes"]
-    B --> C["Validate All Yarn Files"]
-    C --> D{"errors = 0"}
-    D -- "no" --> E["Fix Yarn and save again"]
-    E --> B
-    D -- "yes" --> F["Sync Authoring Assets"]
-    F --> G["Choose or use recommended Start Node"]
-    G --> H["Apply Node To ContentAuthoring Scene"]
-    H --> I["Play ContentAuthoring From Selected Node"]
-    I --> J["Review scene behavior"]
-    J --> K["Read-only save/autosave status"]
-    J --> E
+    subgraph Authoring["Unity authoring canonical lane"]
+        A["Write and save Yarn externally"] --> B["Writer Cockpit: Refresh Nodes"]
+        B --> C["Validate All Yarn Files"]
+        C --> D{"errors = 0"}
+        D -- "no" --> E["Fix Yarn and save again"]
+        E --> B
+        D -- "yes" --> F["Sync Authoring Assets"]
+        F --> G["Choose or use recommended Start Node"]
+        G --> H["Apply Node To ContentAuthoring Scene"]
+        H --> I["Play ContentAuthoring From Selected Node"]
+        I --> J["Review scene behavior"]
+        J --> K["Read-only save/autosave status"]
+        J --> E
+    end
+
+    subgraph Publication["Separated Sites preview / publication lane"]
+        L["Tracked Sites-native demo package<br/>non-canon fixture"] --> M["Local HTTP + responsive + accessibility validation"]
+        M --> N["Human / Web Supervisor private preview import"]
+        N --> O{"Actual Sites runtime compatible?"}
+        O -- "no or unverified" --> P["Keep private and record review debt"]
+        O -- "yes" --> Q["Separate public-deployment decision<br/>not authorized by integration lane"]
+    end

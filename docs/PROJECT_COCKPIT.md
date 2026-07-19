@@ -8,13 +8,13 @@ FoundPhone を、ライター/デザイナーが Yarn を外部エディタで�
 
 ## Current Active Slice
 
-Writer Cockpit source navigationの受入済み状態を維持し、公開面はSites-native lightweight chat demoの別laneへ進める。
+Writer Cockpit source navigationの受入済み状態とtracked Sites-native demo packageを維持し、公開面をprivate preview human gateへ渡す。
 
 - Unity menu: `Tools > FoundPhone > Writer Cockpit`
 - Main script: `Assets/Scripts/Editor/WriterCockpitWindow.cs`
 - 作者導線: 74 Node検索 → source path/line → structured diagnostics → source jump。既存`Refresh` / `Validate Then Sync` / `Apply` / `Play`を維持
 - 現在: targeted EditMode 14/14、Unity compile、active Yarn `errors=0 / warnings=0 / info=3`がpass。External Script Editorでの実jumpは未設定環境のためhuman review debt
-- 公開面: direct Unity Web routeはmodule/public scene/navigation不足でblocked。Sites-native lightweight chat demoがactive successor
+- 公開面: `sites/foundphone-demo/`はlocal HTTP/browser smoke済みのtracked non-canon package。次はHuman / Web Supervisorのprivate previewでactual Sites compatibilityを確認
 - 範囲外: Yarn本文執筆、Runtime Dashboard/DebugHub、既存save data変更、Unity module導入、Site公開
 
 ## Roadmap Strip
@@ -24,7 +24,7 @@ G0 development readiness      [#####] local complete
 G1 source navigation lane     [#####] accepted
 G1.1 validator trust          [#####] active Yarn warnings 0
 G1.2 full regression          [##---] save isolation pending
-P1 Sites-native demo          [#----] successor; separate lane
+P1 Sites-native demo          [###--] tracked package; private preview pending
 P2 direct Unity Web route     [-----] blocked
 G2 SP-023/SP-024 display QA   [##---] queued
 M1/M2 engine confidence       [#----] later
@@ -40,7 +40,7 @@ Validator registry trust  [#####] errors=0 / warnings=0 / info=3 on active Yarn
 Authoring SO sync         [#####] pending count + changed/no-change result
 ContentAuthoring apply    [####-] shared helper compiled; interactive acceptance pending
 Save status confidence    [###--] read-only file presence only
-Sites-native demo         [#----] successor selected; artifact not built
+Sites-native demo         [###--] tracked local package; 2 routes + responsive/a11y smoke pass
 Direct Unity Web          [-----] module and public gameplay route blocked
 Runtime UI refactor       [-----] intentionally not in this slice
 ```
@@ -57,7 +57,7 @@ Runtime UI refactor       [-----] intentionally not in this slice
 | Unity validation | reproducible locally | `tools/run-unity.ps1` reaches fresh resolve / cache restore / compile / return code 0 |
 | Validator trust | pass for active Yarn | runtime handlers / CharacterProfile registry; errors 0 / warnings 0 / info 3 |
 | Direct Unity Web | blocked | Web Build Support absent; valid public gameplay scene/navigation absent |
-| Sites-native publication | successor only | separate lane and local review artifact required; no Site has been published |
+| Sites-native publication | private-preview gate ready | tracked packageとimport briefあり。actual Sites compatibility/private access/keyboardは未検証。no Site published |
 | Visual review | deferred | SP-023 / SP-024 display review remains next lane |
 
 ## Last Worker Checkpoint
@@ -67,4 +67,6 @@ Runtime UI refactor       [-----] intentionally not in this slice
 - Revalidated the integrated tree with targeted EditMode 14/14, Unity 6000.4.9f1 batch compile, and non-mutating Yarn validator.
 - Preserved the existing Content Pipeline Apply/Play helpers and read-only Save status; full 83 tests remain gated by save-data isolation.
 - Integrated `docs/verification/sites-publication-feasibility.md`. Direct Unity Web remains unproven and blocked; Sites-native lightweight demo is the bounded successor.
+- Integrated `sites/foundphone-demo/` and `tools/sites/` from a read-only sibling with exact pre-repair SHA-256 parity. Local HTTP, both routes, restart, desktop/mobile/narrow, accessibility smoke, prohibited-pattern audit passed.
+- Next publication unlock is Human / Web Supervisor private preview import. Actual Sites compatibility, private access, keyboard activation, and any public deployment remain unverified/unexecuted.
 - Detailed trust, residual work, and successor boundaries: `docs/SUPERVISOR_REPORT.md`.

@@ -2,12 +2,12 @@
 
 **更新日**: 2026-07-19
 **対象**: FoundPhone / UnityChatNovelGame
-**統合起点**: `main` / `55cb0d20`（開始時に `origin/main` と ahead/behind `0/0`）
+**統合起点**: `main` / `b4e92ecb`（開始時に `origin/main` と ahead/behind `0/0`）
 **役割**: 監修役AIが会話ログなしで、信頼できる現在地、残る判断、推奨順序、製品化までの目標を判断するための引き継ぎ正本。
 
 ## 1. 結論
 
-このリポジトリは、**Writer Cockpitの作者向けsource navigationと診断drilldownを受け入れ、active YarnのValidator driftを解消した状態**になった。公開経路の調査結果も正本化したが、direct Unity Web routeはblockedであり、Sites-native lightweight chat demoが別laneのactive successorである。
+このリポジトリは、**Writer Cockpitの作者向けsource navigationと診断drilldownを受け入れ、active YarnのValidator driftを解消し、Sites-native lightweight chat demoを再現可能なtracked packageとして統合した状態**になった。direct Unity Web routeはblockedのままだが、非canonのSites-native packageはlocal HTTP/browser smokeを通過し、次のprivate preview human gateへ渡せる。
 
 ただし、現在の受け入れ状態は次のように分ける。
 
@@ -21,9 +21,10 @@
 | External editor jump | 人間環境レビュー待ち | fail-closed実装は確認済み。Unity External Script Editor未設定のため実file/line移動は未証明 |
 | 現行 Unity テスト全体 | 未更新 | 静的には EditMode 73 / PlayMode 10。保存済み全体回帰は旧 8 PlayMode 基準 |
 | Unity Web publication | blocked / 未証明 | Web Build Supportなし、有効なpublic gameplay sceneなし。Sites-native demoを別laneの後継とする |
+| Sites-native local package | private-preview gate ready | tracked static packageで両分岐、restart、desktop/mobile/narrow、a11y smoke、HTTP/MIMEを確認。actual Sites runtimeは未検証 |
 | 最終モバイル製品 | 未到達 | Android/iOS build、署名、配布、Ch3-9、サウンド、広告、Beta は後続 |
 
-作者基盤の次は、**人間環境でsource jumpと必要なApply / Playを再確認しつつ、公開面はUnity blockerから独立したSites-native lightweight chat demoを別laneで作る**。Site公開、Unity module導入、public scene修復はこの判断に含めない。
+作者基盤の次は、**人間環境でsource jumpと必要なApply / Playを再確認しつつ、公開面はtracked Sites-native packageをChatGPT Sitesのprivate previewへ取り込みactual runtimeを確認する**。Site作成/import/private access確認はHuman / Web Supervisor gateで、public deployment、Unity module導入、public scene修復はこの統合に含めない。
 
 ## 2. Shared Focus / 北極星
 
@@ -49,6 +50,14 @@ AI の主担当はエンジン、ツール、パイプライン、検証導線�
 FoundPhone を、モバイル優先のチャット／ビジュアルノベルゲームとして iOS / Android に配布可能な状態へ持っていく。F2P + 広告、Ch3以降のサウンド統合は高位方針として存在するが、現在の実装スライスではない。
 
 ## 3. 今回の同期と復旧
+
+### 2026-07-19 Sites-native demo repository integration
+
+- primary `main` / `origin/main`は開始時`b4e92ecb`、ahead/behind `0/0`、clean。fetch後も同一で、`integrate/sites-native-demo`へ分離して統合した。
+- source siblingはbase `55cb0d20`の`spike/sites-native-chat-demo`で、変更は許可surfaceの未追跡10ファイルのみ。全ファイルを実読し、統合直後のSHA-256が全件一致した。siblingはread-onlyのまま。
+- `sites/foundphone-demo/`と`tools/sites/`をtracked artifact化。contentは`non-canon verification fixture`で、Ch1/Yarn canon、external dependency、backend/auth/storage/analytics、PII、payment、secret、live store linkなし。
+- JSON/graph/JS/server/wrapper/prohibited-pattern、HTTP 200/MIME、青信号/白ノイズ両ending、restart、desktop/390px/320px、overflow、focus/live/progress、consoleを再検証。自動Enter/Space activationだけは未証明。
+- `SITES_IMPORT_BRIEF.md`を実装と一致させ、repository path、entry point、serve command、private preview checklist、public/monetization boundaryを明示。actual Sites compatibility、private preview、public deploymentは未実施。
 
 ### 2026-07-19 parallel lane integration
 
@@ -142,7 +151,12 @@ fresh resolve 後の初回初期化で、`BuildSettingsHelper` が `ContentAutho
    - Unity Web build/package/HTTP/MIME/browser runtime/Sites compatibilityは未検証
    - Site作成・deployment、Unity module導入、Build Settings変更は未実施
 
-9. **非阻害 warning**
+9. **Sites-native local package**
+   - `sites/foundphone-demo/`、`tools/sites/`、`docs/verification/sites-native-demo-validation.md`をtracked artifactとして統合
+   - local static packageのHTTP/MIME、両分岐、restart、desktop/mobile/narrow、accessibility smoke、禁止機能監査をpass
+   - actual Sites runtime compatibility、private access、public deploymentは未検証/未実施
+
+10. **非阻害 warning**
    - Unity: `VerificationMenu` と `MissingScriptScanner` が同じ `Tools/FoundPhone/Verification/Scan DebugChatScene Missing Scripts` を登録
    - UnityConnect: 終了時の public CDN request timeout
    - docs: `uvx` の provider 推奨と MkDocs 2.0 将来互換性告知
@@ -155,7 +169,7 @@ fresh resolve 後の初回初期化で、`BuildSettingsHelper` が `ContentAutho
 - EditMode 73 / PlayMode 10 の全件実行。
 - SP-023 / SP-024 の画面検収。
 - Save / Load state equality と章遷移の横断検証。
-- Unity Web build、local hosting、browser smoke、Sites publication。
+- Unity Web build、ChatGPT Sites private preview/import/private access、Sites public publication。
 
 全テストを直ちに実行しなかった理由は、既存テストに `Application.persistentDataPath` の save slot を削除するものがあるため。実行前に実ユーザーデータ退避または test data 隔離が必要である。
 
@@ -185,7 +199,7 @@ fresh resolve 後の初回初期化で、`BuildSettingsHelper` が `ContentAutho
 - fresh clone / 別端末。今回証明したのはこの端末と wrapper 経路。
 - Verification メニューの同名 `MenuItem` 重複。Writer Cockpit の compile blocker ではないが、Editor menu の診断ノイズになる。
 - Direct Unity Web build / package size / MIME / browser runtime。Web moduleとpublic gameplay routeが揃うまでblocked。
-- Sites-native demoはsuccessor候補が選ばれただけで、artifactもSiteもまだ存在しない。
+- Sites-native packageはtracked local artifactとして存在し、local validation済み。actual Sites compatibility/private access/実キーボードはprivate previewまで未確認で、Site自体はまだ存在しない。
 
 ### dangerous / rollback candidate
 
@@ -202,7 +216,7 @@ Writer Cockpit navigation [#####] accepted  source検索・診断drilldown・tar
 Writer Cockpit full loop  [####-] 80-90%  Apply/Play再受入とexternal editor実jump待ち
 エンジン alpha 能力       [###--] 60-70%  主要能力あり、M1/M2横断実証待ち
 自動検証・CI              [##---] 35-45%  資産あり、現行全体基準とE2E不足
-Sites-native publication  [#----] successor確定、artifact/公開は未着手
+Sites-native publication  [###--] tracked local package済み、private preview/publication未実施
 Ch1 製品縦断              [#----] 20-30%  full authoring解放ゲート前
 最終モバイル製品          [#----] 20-30%  build / distribution /後半content未着手
 ```
@@ -216,7 +230,7 @@ Ch1 製品縦断              [#----] 20-30%  full authoring解放ゲート前
 | R0 | Writer Cockpit full-loop受入 | accepted navigationと既存Apply/Playを日常導線として閉じる | External Script Editorの人間選択、Unity 6000.4.9f1 | search/source/diagnostics accepted。実jumpとApply/Play再確認待ち | shared。assistant=技術導線、user=editor/操作感判断 | NodeとdiagnosticのOpen各1回、必要なら`DQT_Start`をApply / Play |
 | R1 | Validator信頼維持 | 実warningだけを作者が判断可能にする | runtime registration方式をliteral handlerから変える際のtest更新 | active Yarn errors 0 / warnings 0 / info 3、targeted 14/14 | assistant / registry helper + tests | 新registration方式を導入する時だけextractorを拡張 |
 | R2 | 現行回帰基準化 | 73 EditMode / 10 PlayMode を現行基準にする | save data 退避または test data 隔離 | 最終全体記録は旧8 PlayMode | assistant/CI / XML・txt結果 | データ安全策の後に batch 実行 |
-| P1 | Sites-native lightweight demo | Unity blockerと独立して公開UXをreview可能にする | 新しいSites-native lane、public deployment禁止 | successor selected、artifactなし | Web / Sites owner | local review artifactのcontractを定義して別dispatch |
+| P1 | Sites-native lightweight demo | Unity blockerと独立して公開UXをreview可能にする | tracked package、public deployment禁止 | local package統合・local smoke pass。actual Sites runtime/private access/keyboard未確認 | Human + Web Supervisor / private preview | import briefに従いprivate previewへ取り込み、両分岐・network・keyboard・responsiveをOK/NG記録 |
 | P2 | Direct Unity Web再調査 | Unity runtimeのhost互換性を実測する | Web Build Support、有効なpublic gameplay sceneとnavigation | blocked、build outputなし | user + Unity lane | module/scene gateが両方解消した時だけ再dispatch |
 | R3 | SP-023 / 024 表示契約 | 実装済み表示能力を受理し M1へ戻る | R0、ユーザーの画面判断 | demo Yarn とコードあり、証跡なし | shared / visual evidence | SP-023 3ノード → SP-024 S1/S2/S5 |
 | R4 | M1 全スレッド型 | A/B/C、Latent、Branch を本編外で信頼可能にする | R2、DebugQuickTest / ETK | 個別実装あり、横断証明なし | assistant / harness + PlayMode | 最小モックと状態観測を追加 |
@@ -328,7 +342,7 @@ Ch1 製品縦断              [#----] 20-30%  full authoring解放ゲート前
 
 ## 13. 監修役AIへの最終指示
 
-G1.1 Validator信頼回復とWriter Cockpit navigation laneは受入済み。製品本体は、人間環境でExternal Script Editor jumpと必要なApply/Play loopを閉じ、save data隔離後のG1.2、SP-023/024、M1 → M2 → M3へ進む。公開面は別laneのSites-native lightweight chat demoをlocal artifactから開始し、direct Unity Webはmodule/public scene/navigation gateが揃うまでblockedとする。
+G1.1 Validator信頼回復とWriter Cockpit navigation laneは受入済み。製品本体は、人間環境でExternal Script Editor jumpと必要なApply/Play loopを閉じ、save data隔離後のG1.2、SP-023/024、M1 → M2 → M3へ進む。公開面はtracked Sites-native packageをHuman / Web Supervisorのprivate previewへ渡しactual runtimeを確認する。direct Unity Webはmodule/public scene/navigation gateが揃うまでblocked、public deploymentは別Human Gateとする。
 
 M3 通過後の最遠推奨線は、G6 Ch1製品縦断 → G7 E2E/CI量産耐性 → G8 Ch2制作スケール → G9製品UX統合 → G10 Android技術smoke → G11 Android製品ビルド → G12 Ch3-9・音・Beta・収益化・配布 → G13 1.x運用である。これは依存順を示す監修用の目標提案であり、候補機能、コンテンツ量、署名、広告、配布判断を先行承認するものではない。
 

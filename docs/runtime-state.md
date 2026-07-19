@@ -1,19 +1,19 @@
 # Runtime State
 
-**Updated**: 2026-07-19（accepted parallel results integration）
+**Updated**: 2026-07-19（Sites-native demo repository integration）
 
 ## Current Position
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
-- lane: **Authoring Tooling integrated / publication successor bounded**
-- slice: **accepted Writer Cockpit navigationとSites feasibility evidenceをmainへ統合した状態**
-- next_recommended_slice: **別laneのSites-native lightweight chat demoをpublic deploymentなしのlocal artifactから開始**
+- lane: **Authoring Tooling integrated / Sites-native private-preview gate ready**
+- slice: **accepted Writer Cockpit navigationとtracked Sites-native demo packageをmainへ統合した状態**
+- next_recommended_slice: **Human / Web Supervisorがtracked packageをChatGPT Sites private previewへ取り込み、actual runtimeを検証**
 - subsequent_recommended_slice: **External Script Editor line jumpの人間環境レビュー + Writer Cockpit Apply / Play再受入**
 - later_recommended_slice: **save data隔離後のfull 83 tests → SP-023 / SP-024表示検収 → M1/M2/M3**
-- active_artifact: WriterCockpitWindow / WriterCockpitNavigation / YarnContentValidator / YarnAuthoringRegistry / YarnSOGenerator / Sites feasibility evidence
-- artifact_surface: Editor tooling only (`Tools > FoundPhone > Writer Cockpit`; existing Content Pipeline preserved)
-- last_change_relation: accepted parallel integration（Node source navigation、structured diagnostics、Validator registry drift解消、publication blocker正本化）
+- active_artifact: WriterCockpitWindow / WriterCockpitNavigation / YarnContentValidator / YarnAuthoringRegistry / YarnSOGenerator / `sites/foundphone-demo/` / `tools/sites/`
+- artifact_surface: Editor tooling + separated static web demo package（non-canon fixture。Unity/Yarn正本とは非接続）
+- last_change_relation: source siblingの許可surfaceをhash照合して最新mainへ再構成し、local HTTP/browser/docs validationを再実行
 - plan_file: `docs/SUPERVISOR_REPORT.md`（現状・G0-G13 目標案） / `docs/plans/display-batch-showcase.md`（表示系デモ正本）
 
 ## Counters
@@ -34,6 +34,16 @@
 - last_visual_audit_path: docs/archive/verification-evidence/VerticalSliceSmokeGate_20260403_*.png (参考。パスのみ保持、追跡は廃止)
 
 ## Session Log
+
+### 2026-07-19（Sites-native demo repository integration）
+
+- **開始状態**: primary `main` / `origin/main`は`b4e92ecb4f05a923b9177138fcf026fcfb561bba`、ahead/behind `0/0`、worktree clean。`git fetch --prune origin`後も不変。
+- **source audit**: read-only sibling `spike/sites-native-chat-demo`はbase `55cb0d20`で、未追跡変更は`sites/foundphone-demo/**`、`tools/sites/**`、`docs/verification/sites-native-demo-validation.md`のみ。全10ファイルを実読し、統合直後のSHA-256が全件一致。siblingは変更なし。
+- **tracked artifact**: `sites/foundphone-demo/`、`tools/sites/`、検証正本をrepository artifact化。`SITES_IMPORT_BRIEF.md`にrepository path、entry point、serve command、private preview/public gateを補完。
+- **targeted validation**: JSON parse、7-node graph到達性、JS/static-server/PowerShell wrapper syntax、禁止pattern audit、HTTP 200/MIME/nosniff/no-storeをpass。port `4318`の一時serverは検証後停止。
+- **browser**: 青信号/白ノイズ両ending、route差、restart初期化、`1280x900` / `390x844` / `320x700`、横overflowなし、48px choice、3px focus ring、ARIA live/progress、console warning/error 0を確認。外部runtime URL、form/input、auth/storage/analytics/payment/secret/live destinationなし。
+- **quality debt**: 自動化されたEnter/Space activationは状態遷移を証明できず、native control semantics/focus pathだけを確認。actual Sites runtime compatibility、private access、実キーボードはprivate previewのHuman Gate。
+- **boundary**: ChatGPT Site作成、private preview import、public deployment、Unity Web module、scene/asset/Yarn/package変更、full 83 testsは未実施。direct Unity Web routeはblocked継続。
 
 ### 2026-07-19（accepted parallel results integration）
 

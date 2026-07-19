@@ -11,6 +11,17 @@
 5. `docs/INVARIANTS.md`
 6. `docs/USER_REQUEST_LEDGER.md`
 
+## Handoff snapshot (2026-07-19 Sites-native demo repository integration)
+
+**本セッションの実施内容**:
+
+- 開始時のprimary `main` / `origin/main`は`b4e92ecb4f05a923b9177138fcf026fcfb561bba`、ahead/behind `0/0`、worktree clean。`git fetch --prune origin`後も同一だったため、`integrate/sites-native-demo`で統合した。
+- read-only source sibling `UnityChatNovelGame-sites-native-chat-demo`の未追跡変更は、許可された`sites/foundphone-demo/**`、`tools/sites/**`、`docs/verification/sites-native-demo-validation.md`だけだった。10ファイルを実読し、統合直後のSHA-256が全件一致することを確認した。siblingは変更していない。
+- `sites/foundphone-demo/`をtracked repository artifactにし、`tools/sites/serve-demo.ps1`と静的server/validatorを同梱した。内容は`non-canon verification fixture`で、Ch1/Yarn canon、backend、auth、storage、analytics、PII収集、決済、live store linkを含まない。
+- port `4318`の一時HTTP serverでHTML/CSS/JS/JSONの`200`とMIME、青信号/白ノイズの異なるending、restart、desktop/390px/320px、横overflowなし、focus/live region/progress semantics、console warning/error 0、外部runtime URLなしを再確認した。serverは検証後に停止し、URLを稼働中とは扱わない。
+- `SITES_IMPORT_BRIEF.md`にrepository path、entry point、local serve command、private preview checklistとpublic gateを固定した。actual ChatGPT Sites compatibilityとprivate accessは未検証で、次はHuman / Web Supervisorによるprivate preview gateである。Site作成・import・public deploymentは実施していない。
+- 自動化されたEnter/Space activationは今回も状態遷移を証明できなかった。native button/link、focus移動、3px focus-visible ringは確認済みだが、実キーボード完走はprivate previewのhuman review debtとして残す。
+
 ## Handoff snapshot (2026-07-19 accepted parallel results integration)
 
 **本セッションの実施内容**:
@@ -100,12 +111,21 @@ python -m mkdocs serve -a 127.0.0.1:8000
 
 ## Current Focus
 
-- 主目的: **受入済みWriter Cockpit navigationを作者導線として維持し、公開面は別laneのSites-native lightweight chat demoへ進める**
-- 現在: 74 Node検索、source path/line、diagnostic drilldown、active Yarn `errors=0 / warnings=0 / info=3` はtargeted test / batch compile / validatorで確認済み。既存Apply / Play導線とread-only Save statusは維持されている。
-- 次の publication lane: Unity runtimeや欠落sceneに依存しないSites-native lightweight chat demoを、public deploymentなしのreviewable local artifactから開始する。新laneの明示権限が必要。
+- 主目的: **受入済みWriter Cockpit navigationとtracked Sites-native demo packageを維持し、公開面をprivate preview human gateへ渡す**
+- 現在: 74 Node検索、source path/line、diagnostic drilldown、active Yarn `errors=0 / warnings=0 / info=3`は受入済み。`sites/foundphone-demo/`はclone後にlocal HTTPで再現できるtracked artifactになり、両分岐・restart・responsive・accessibility smokeを通過した。
+- 次の publication gate: Human / Web Supervisorが`sites/foundphone-demo/SITES_IMPORT_BRIEF.md`を使い、ChatGPT Sitesのprivate previewへ取り込んでactual runtime compatibility、private access、keyboard、network、desktop/mobileを確認する。Site作成/import/publicationは本統合では未実施。
 - 次の shared review: 人間がUnity PreferencesでExternal Script Editorを選択し、Nodeとdiagnosticのsource jumpを各1回確認する。必要ならCockpitからApply / Playの既存interactive loopも再受入する。
 - blocker: direct Unity Web routeはWeb Build Support欠落、有効なpublic gameplay scene欠落、TitleSceneの公開不可scene依存によりblocked。module導入・scene修復・公開は別判断。
-- 注意: `Library/` / `Logs/` はignored local evidence。full 83 testsはsave data隔離前に実行しない。
+- 注意: `Library/` / `Logs/` はignored local evidence。full 83 testsはsave data隔離前に実行しない。Sites packageは非canon fixtureであり、actual Sites compatibilityや公開受入を意味しない。
+
+## Validation note (2026-07-19 Sites-native demo integration)
+
+- Repository package: `sites/foundphone-demo/`、entry point `index.html`、local wrapper `tools/sites/serve-demo.ps1`。
+- Static validation: JSON parse、7-node graph、choice targets、全node到達性、JS/server/wrapper syntax、禁止pattern auditはpass。
+- HTTP: port `4318`で`/`、`/styles.css`、`/app.js`、`/content/demo.json`が`200`。MIME、`nosniff`、`no-store`を確認。
+- Browser: 青信号/白ノイズの異なるending、restartで`進行 1 / 6`・未選択・message 1件へ初期化、desktop `1280x900`、mobile `390x844`、narrow `320x700`で横overflowなし。
+- Accessibility: skip link、native controls、choice focus移動、3px focus-visible、aria-live、progressbar semantics、reduced-motion CSSを確認。Enter/Space自動化は未証明でhuman review debt。
+- Boundaries: console warning/error 0、外部runtime URL/resource 0、form/input/auth/storage/analytics/payment/secret/live destinationなし。actual Sites private preview/public deploymentは未実施。
 
 ## Validation note (2026-07-19 parallel integration)
 
@@ -187,14 +207,12 @@ python -m mkdocs serve -a 127.0.0.1:8000
 
 ## Safe Next Steps
 
-1. `.\tools\run-unity.ps1` で Unity **6000.4.9f1** を開く。
-2. `Tools > FoundPhone > Writer Cockpit` を開き、active file/node count と推奨 node を確認。
-3. `DQT_Start` または推奨ノードで Refresh → Validate Then Sync → Apply → Play を1回通す。
-4. Last Action / ContentAuthoring status を確認し、interactive 受入を OK / NG で記録。
-5. assistant は Validator の known command drift を直し、偽陽性を回帰テストで固定。
-6. save data を退避または隔離した後、EditMode 73 / PlayMode 10 の現行結果を記録。
-7. ここまで通ったら SP-023 3ノード → `SP024_Immersion_Start` の表示検収へ進む。
-8. M1 → M2 → M3 の gate 前に full Ch1 authoring へ進まない。
+1. Human / Web Supervisorが`sites/foundphone-demo/SITES_IMPORT_BRIEF.md`とtracked packageをChatGPT Sitesのprivate previewへ取り込む。public publishはしない。
+2. private previewで両分岐、restart、desktop/mobile、実キーボード、network、private accessを再確認し、actual Sites compatibilityをOK/NGで記録する。
+3. public deployment、custom domain、live store link、PII/auth/payment追加は別のHuman Gateまで行わない。
+4. Unity laneでは`.\tools\run-unity.ps1`でUnity **6000.4.9f1**を開き、External Script Editor jumpと必要なWriter Cockpit Apply / Playを再受入する。
+5. save dataを退避または隔離した後、EditMode 73 / PlayMode 10の現行結果を記録する。
+6. ここまで通ったらSP-023 3ノード → `SP024_Immersion_Start`の表示検収へ進み、M1 → M2 → M3のgate前にfull Ch1 authoringへ進まない。
 
 補足:
 - SP-023 仕様: `docs/StorySpec/23_text_presentation.md`

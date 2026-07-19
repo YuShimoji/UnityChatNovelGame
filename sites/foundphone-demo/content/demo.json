@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "id": "foundphone-signal-fixture-v1",
+    "version": "1.0.0",
+    "contentLabel": "Prototype content / not final story",
+    "canonStatus": "non-canon verification fixture",
+    "locale": "ja-JP"
+  },
+  "intro": {
+    "eyebrow": "STATIC SIGNAL PROBE",
+    "heading": "拾った端末に、短い通信が届く。",
+    "summary": "選択によって応答が変わる、軽量なチャットノベル操作デモです。物語本編の内容は含みません。",
+    "startLabel": "デモを開始"
+  },
+  "participants": {
+    "system": {
+      "label": "SYSTEM",
+      "role": "system"
+    },
+    "relay": {
+      "label": "Unknown relay",
+      "role": "relay"
+    },
+    "player": {
+      "label": "You",
+      "role": "player"
+    }
+  },
+  "flow": {
+    "start": "fixture_notice",
+    "totalSteps": 6,
+    "nodes": {
+      "fixture_notice": {
+        "type": "message",
+        "speaker": "system",
+        "text": "接続テストを開始します。この会話は機能確認用のフィクスチャで、物語本編ではありません。",
+        "next": "relay_question"
+      },
+      "relay_question": {
+        "type": "message",
+        "speaker": "relay",
+        "text": "拾った端末の受信表示を確認して。画面の端では、どちらが見える？",
+        "next": "signal_choice"
+      },
+      "signal_choice": {
+        "type": "choice",
+        "prompt": "端末の状態をひとつ選んで返信してください。",
+        "options": [
+          {
+            "id": "blue_signal",
+            "label": "青い点滅が見える",
+            "reply": "青い点が、ゆっくり点滅している。",
+            "next": "blue_response"
+          },
+          {
+            "id": "white_noise",
+            "label": "白いノイズが見える",
+            "reply": "白いノイズが、細い帯になっている。",
+            "next": "noise_response"
+          }
+        ]
+      },
+      "blue_response": {
+        "type": "message",
+        "speaker": "relay",
+        "text": "青い点滅なら、短い信号はまだ通る。こちらの返答も届いているはず。",
+        "next": "common_closing"
+      },
+      "noise_response": {
+        "type": "message",
+        "speaker": "relay",
+        "text": "白い帯なら、記録の再生だけが残っている。今の返答は端末側に保存された。",
+        "next": "common_closing"
+      },
+      "common_closing": {
+        "type": "message",
+        "speaker": "relay",
+        "text": "確認できた。返答によって記録が分岐した。ここで検証用通信を終了する。",
+        "next": "fixture_ending"
+      },
+      "fixture_ending": {
+        "type": "ending",
+        "heading": "Signal test complete",
+        "body": "短いチャット、選択分岐、進行状態のローカル確認が完了しました。",
+        "defaultOutcome": "分岐情報はありません。",
+        "outcomes": {
+          "blue_signal": "青い信号ルート: 双方向の短い通信が残っている、という検証用結果です。",
+          "white_noise": "白いノイズルート: 端末内の記録再生だけが残る、という検証用結果です。"
+        }
+      }
+    }
+  }
+}
