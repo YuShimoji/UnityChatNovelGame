@@ -41,5 +41,5 @@ semantic event は browser 内の `foundphone:event` とローカル console に
 
 - account、login、email/name capture、database、storage、analytics、secret はない。
 - checkout、payment form、card data、transaction、live store link はない。
-- actual ChatGPT Sites runtime への package compatibility は、private preview に import するまで未検証。
-- public deployment は human gate。この artifact は Site を作成・公開しない。
+- 2026-07-20のSites runtime変換とOwner-only deploymentは`docs/verification/2026-07-20-sites-private-runtime-validation.md`に記録済み。この静的artifactはportableな入力正本として維持する。
+- hosted実画面はOwner認証後review待ち。public access、workspace共有、custom domainはhuman gateまで行わない。

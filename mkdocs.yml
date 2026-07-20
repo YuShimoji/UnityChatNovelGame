@@ -113,6 +113,9 @@ nav:
           - Ch1 Day1-3 Preflight 2026-04-10: docs/verification/2026-04-10-ch1-day1-3-preflight.md
           - Subsequent Completion Report 2026-04-10: docs/verification/2026-04-10-subsequent-completion-report.md
           - Writer Cockpit Unity Validation 2026-07-06: docs/verification/2026-07-06-writer-cockpit-unity-validation.md
+          - Sites Private Runtime Validation 2026-07-20: docs/verification/2026-07-20-sites-private-runtime-validation.md
+          - Sites-native Demo Validation: docs/verification/sites-native-demo-validation.md
+          - Sites Publication Feasibility: docs/verification/sites-publication-feasibility.md
           - Unity GitHub CI: docs/verification/UNITY_GITHUB_CI.md
           - Templates:
               - README: docs/verification/templates/README.md

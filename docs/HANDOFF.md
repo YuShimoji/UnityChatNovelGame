@@ -11,6 +11,18 @@
 5. `docs/INVARIANTS.md`
 6. `docs/USER_REQUEST_LEDGER.md`
 
+## Handoff snapshot (2026-07-21 private Sites runtime / cross-terminal sync)
+
+**本セッションの実施内容**:
+
+- 開始時の`main` / `origin/main`は`1e582639b5730e787debd20d2131147e6515032d`、ahead/behind `0/0`、worktree clean。`git fetch --prune origin`後も同一だった。
+- Sites project `appgprj_6a5ddb11908081918180da7797957e63`を再取得し、active、`custom` access、allowlist user 1、workspace/tenant group 0、Version 1、deployment succeededを確認した。Ownerの識別子、短期credential、token、期限付きURLは保存していない。
+- static input `sites/foundphone-demo/`はVinext / React / Worker互換へ等価変換済み。Sites source commitは`29c5245d1f0a21802a98c0009c038f48cd746eca`で、Version 1のsource SHAと一致する。変換sourceのmachine-local worktreeはcleanだが、別端末の正本にはしない。
+- local Worker runtimeで両分岐、異なるcontinuation/outcome、restart、Enter/Space、focus、ARIA live/progress、reduced-motion、320–430px横overflowなしを確認。`content/demo.json`はbuild-time importの表示正本で、外部通信、auth、storage、database、form、analytics、payment、secret、live store linkは追加していない。
+- private deployment APIの結果はSites control plane上で`type=publish` / `current_live_url`、`current_preview_url=null`と表現される。これはproduction-class hosted URLだが、accessはOwner-onlyのままでpublic access、workspace共有、custom domainは行っていない。
+- 未認証でprivate URLを開くとSites標準の`Continue with ChatGPT` gateが表示された。認証自動化禁止に従ってOwner sign-inは行わず、実hosted app本文の最終reviewはUser / Web Supervisorへ残した。
+- 詳細、変換対応、ID、archive provenance、別端末の再取得手順は`docs/verification/2026-07-20-sites-private-runtime-validation.md`へ固定した。
+
 ## Handoff snapshot (2026-07-19 Sites-native demo repository integration)
 
 **本セッションの実施内容**:
@@ -111,12 +123,22 @@ python -m mkdocs serve -a 127.0.0.1:8000
 
 ## Current Focus
 
-- 主目的: **受入済みWriter Cockpit navigationとtracked Sites-native demo packageを維持し、公開面をprivate preview human gateへ渡す**
-- 現在: 74 Node検索、source path/line、diagnostic drilldown、active Yarn `errors=0 / warnings=0 / info=3`は受入済み。`sites/foundphone-demo/`はclone後にlocal HTTPで再現できるtracked artifactになり、両分岐・restart・responsive・accessibility smokeを通過した。
-- 次の publication gate: Human / Web Supervisorが`sites/foundphone-demo/SITES_IMPORT_BRIEF.md`を使い、ChatGPT Sitesのprivate previewへ取り込んでactual runtime compatibility、private access、keyboard、network、desktop/mobileを確認する。Site作成/import/publicationは本統合では未実施。
+- 主目的: **受入済みWriter Cockpit navigationとOwner-only Sites runtimeを維持し、hosted app本文のOwner認証後reviewを閉じる**
+- 現在: 74 Node検索、source path/line、diagnostic drilldown、active Yarn `errors=0 / warnings=0 / info=3`は受入済み。`sites/foundphone-demo/`はportableな静的入力正本、Sites Version 1はsource `29c5245d...`のprivate hosted runtimeとして存在する。
+- 次の publication gate: User / Web SupervisorがOwnerとしてprivate URLを開き、hosted app本文の両分岐、restart、keyboard、network、320–430pxを確認する。Site作成、source push、Version 1、Owner-only deploymentは完了済みで、public/shared accessは未承認のまま。
 - 次の shared review: 人間がUnity PreferencesでExternal Script Editorを選択し、Nodeとdiagnosticのsource jumpを各1回確認する。必要ならCockpitからApply / Playの既存interactive loopも再受入する。
 - blocker: direct Unity Web routeはWeb Build Support欠落、有効なpublic gameplay scene欠落、TitleSceneの公開不可scene依存によりblocked。module導入・scene修復・公開は別判断。
-- 注意: `Library/` / `Logs/` はignored local evidence。full 83 testsはsave data隔離前に実行しない。Sites packageは非canon fixtureであり、actual Sites compatibilityや公開受入を意味しない。
+- 注意: `Library/` / `Logs/` はignored local evidence。full 83 testsはsave data隔離前に実行しない。Sites packageは非canon fixtureであり、hosted runtimeが存在しても本編・最終ストーリー・public公開の受入を意味しない。
+
+## Validation note (2026-07-20 Sites private runtime)
+
+- URL: `https://foundphone-signal-preview.thankyoukass.chatgpt.site`。Sites標準sign-in gateの先はOwner manual review待ち。
+- Access: `custom` / allowed user 1 / workspace group 0 / tenant group 0。2026-07-21再取得。
+- Source/version: Sites source `29c5245d...` = Version 1 source SHA。deployment `appgdep_6a5ddc134b508191ab81ab6dd44765aa`はsucceeded。
+- Runtime mapping: static HTML/CSS/JSをReact/Vinextへ変換し、`content/demo.json`をbuild-time import。internal README/briefは非表示。
+- Validation: `npm run lint`、`npm test`（build + 3/3）、local Worker両分岐、restart、keyboard/focus、responsive、prohibited-capability auditをpass。
+- Remaining: Owner sign-in後の実hosted本文、network panel、両分岐の最終OK/NG。public/shared access、custom domainは禁止継続。
+- Detail: `docs/verification/2026-07-20-sites-private-runtime-validation.md`。
 
 ## Validation note (2026-07-19 Sites-native demo integration)
 
@@ -207,9 +229,9 @@ python -m mkdocs serve -a 127.0.0.1:8000
 
 ## Safe Next Steps
 
-1. Human / Web Supervisorが`sites/foundphone-demo/SITES_IMPORT_BRIEF.md`とtracked packageをChatGPT Sitesのprivate previewへ取り込む。public publishはしない。
-2. private previewで両分岐、restart、desktop/mobile、実キーボード、network、private accessを再確認し、actual Sites compatibilityをOK/NGで記録する。
-3. public deployment、custom domain、live store link、PII/auth/payment追加は別のHuman Gateまで行わない。
+1. User / Web SupervisorがOwnerとして`https://foundphone-signal-preview.thankyoukass.chatgpt.site`を開き、Sites標準sign-in後のhosted app本文を確認する。
+2. Owner-only accessを変えずに、両分岐、restart、desktop/mobile、実キーボード、networkを再確認し、actual hosted runtimeをOK/NGで記録する。
+3. public access、workspace共有、custom domain、live store link、PII/auth/payment追加は別のHuman Gateまで行わない。
 4. Unity laneでは`.\tools\run-unity.ps1`でUnity **6000.4.9f1**を開き、External Script Editor jumpと必要なWriter Cockpit Apply / Playを再受入する。
 5. save dataを退避または隔離した後、EditMode 73 / PlayMode 10の現行結果を記録する。
 6. ここまで通ったらSP-023 3ノード → `SP024_Immersion_Start`の表示検収へ進み、M1 → M2 → M3のgate前にfull Ch1 authoringへ進まない。
@@ -222,6 +244,7 @@ python -m mkdocs serve -a 127.0.0.1:8000
 ## Source Of Truth
 
 - 監修役AI向け現状・目標案: `docs/SUPERVISOR_REPORT.md`
+- Sites private runtime検証・再取得: `docs/verification/2026-07-20-sites-private-runtime-validation.md`
 - 方針・スライス: `docs/project-context.md`
 - 全体概観: `docs/PROJECT_STATUS_DASHBOARD.md`
 - ターン単位プラン: `docs/DEVELOPMENT_TURN_PLAN.md`

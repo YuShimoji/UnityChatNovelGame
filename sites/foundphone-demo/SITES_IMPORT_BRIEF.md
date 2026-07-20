@@ -2,7 +2,7 @@
 
 ## Artifact Purpose
 
-FoundPhone / chat-novel 方向の最小 interaction を、Unity Web Build Support や Unity gameplay scene に依存せず private review する静的 prototype。公開物や製品版ではなく、Sites private preview に渡す前段の入力 package である。
+FoundPhone / chat-novel 方向の最小 interaction を、Unity Web Build Support や Unity gameplay scene に依存せず private review する静的 prototype。公開物や製品版ではなく、Sites runtimeへ変換するportableな入力 packageである。2026-07-20のprivate runtime変換結果は`docs/verification/2026-07-20-sites-private-runtime-validation.md`を正とする。
 
 ## Repository Location / Entry Point / Local Serve
 
@@ -42,7 +42,7 @@ Private preview で次を入力条件として使う。
 ## Private Preview Checklist
 
 - [ ] package の全ファイルが import される
-- [ ] `content/demo.json` の fetch が成功する
+- [ ] `content/demo.json` が表示正本としてfetchまたはbuild-time importされる
 - [ ] intro から ending まで keyboard で完走できる
 - [ ] 2つの choice が異なる continuation / outcome を表示する
 - [ ] restart で state と message list が初期化される
@@ -52,11 +52,11 @@ Private preview で次を入力条件として使う。
 - [ ] form、personal-data input、transaction UI が追加されていない
 - [ ] preview access が private のまま
 
-実際の Sites runtime との package compatibility は、この private preview import が完了するまで **未検証**。
+2026-07-20にVinext / React / Worker互換のSites runtimeへ等価変換し、local runtime validationとOwner-only deploymentまでは完了した。残るgateはOwner認証後のhosted画面reviewである。
 
 ## Public Deployment Gate
 
-deployment URL は production 扱い。公開範囲、content、権利、privacy、branding、最終 CTA を人間が確認するまで publish しない。この lane は actual ChatGPT Site を作成せず、public deployment も行わない。
+deployment URL は production-classとして扱う。private deployment APIで作成したSites runtimeは`custom` access / Owner 1名 / group 0のまま維持する。Sites control plane上の`type=publish` / `current_live_url`をpublic accessと読み替えず、public access、workspace共有、custom domainは別のHuman Gateまで行わない。
 
 ## External Monetization Boundary
 

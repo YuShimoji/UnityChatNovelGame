@@ -1,5 +1,7 @@
 # Sites-native FoundPhone Demo Validation
 
+> 2026-07-19の静的package統合記録。後続のSites runtime変換、Owner-only access、Version 1、deployment、未完了のOwner認証後reviewは`docs/verification/2026-07-20-sites-private-runtime-validation.md`を正とする。
+
 ## Top Strip
 
 | Field | Value |

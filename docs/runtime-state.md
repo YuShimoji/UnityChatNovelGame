@@ -1,19 +1,19 @@
 # Runtime State
 
-**Updated**: 2026-07-19（Sites-native demo repository integration）
+**Updated**: 2026-07-21（Sites private runtime / cross-terminal sync）
 
 ## Current Position
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
-- lane: **Authoring Tooling integrated / Sites-native private-preview gate ready**
-- slice: **accepted Writer Cockpit navigationとtracked Sites-native demo packageをmainへ統合した状態**
-- next_recommended_slice: **Human / Web Supervisorがtracked packageをChatGPT Sites private previewへ取り込み、actual runtimeを検証**
+- lane: **Authoring Tooling integrated / Sites owner-only hosted review pending**
+- slice: **accepted Writer Cockpit navigation、portable static package、Sites Version 1 private runtimeを引き継いだ状態**
+- next_recommended_slice: **User / Web SupervisorがOwner sign-in後のhosted app本文を両分岐・keyboard・network・responsiveで受け入れる**
 - subsequent_recommended_slice: **External Script Editor line jumpの人間環境レビュー + Writer Cockpit Apply / Play再受入**
 - later_recommended_slice: **save data隔離後のfull 83 tests → SP-023 / SP-024表示検収 → M1/M2/M3**
-- active_artifact: WriterCockpitWindow / WriterCockpitNavigation / YarnContentValidator / YarnAuthoringRegistry / YarnSOGenerator / `sites/foundphone-demo/` / `tools/sites/`
-- artifact_surface: Editor tooling + separated static web demo package（non-canon fixture。Unity/Yarn正本とは非接続）
-- last_change_relation: source siblingの許可surfaceをhash照合して最新mainへ再構成し、local HTTP/browser/docs validationを再実行
+- active_artifact: WriterCockpitWindow / WriterCockpitNavigation / YarnContentValidator / YarnAuthoringRegistry / YarnSOGenerator / `sites/foundphone-demo/` / `tools/sites/` / Sites project `appgprj_6a5ddb11908081918180da7797957e63`
+- artifact_surface: Editor tooling + portable static input + Owner-only Sites hosted runtime（non-canon fixture。Unity/Yarn正本とは非接続）
+- last_change_relation: static sourceをSites runtimeへ等価変換し、source/version/deployment/accessを再取得してproject-local verificationへ固定
 - plan_file: `docs/SUPERVISOR_REPORT.md`（現状・G0-G13 目標案） / `docs/plans/display-batch-showcase.md`（表示系デモ正本）
 
 ## Counters
@@ -34,6 +34,15 @@
 - last_visual_audit_path: docs/archive/verification-evidence/VerticalSliceSmokeGate_20260403_*.png (参考。パスのみ保持、追跡は廃止)
 
 ## Session Log
+
+### 2026-07-21（Sites private runtime / cross-terminal sync）
+
+- **開始状態**: `main` / `origin/main`は`1e582639`、ahead/behind `0/0`、worktree clean。fetch後も不変。
+- **Sites control plane**: project `appgprj_6a5ddb11908081918180da7797957e63`はactive、`custom` access、user 1、group 0。Version 1 source `29c5245d...`、deployment succeededを再取得。
+- **runtime**: static HTML/CSS/JSをVinext/Reactへ等価変換。`content/demo.json`はbuild-time importの表示正本。local Workerで両分岐、restart、Enter/Space、focus、ARIA、320–430px、禁止機能監査をpass。
+- **platform boundary**: private deployment APIを使用したが、Sitesは`type=publish` / `current_live_url`として返す。accessはOwner-onlyで、public/shared access、custom domainは未実施。
+- **remaining gate**: private URLのSites標準sign-in gateまでは確認。Owner認証後のhosted app本文は未確認で、User / Web Supervisorが両分岐、network、keyboard、responsiveを最終reviewする。
+- **portable handoff**: 詳細は`docs/verification/2026-07-20-sites-private-runtime-validation.md`。machine-local visualization worktree/tokenを再開前提にしない。
 
 ### 2026-07-19（Sites-native demo repository integration）
 
