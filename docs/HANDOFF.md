@@ -11,6 +11,18 @@
 5. `docs/INVARIANTS.md`
 6. `docs/USER_REQUEST_LEDGER.md`
 
+## Handoff snapshot (2026-07-26 remote sync / development readiness)
+
+**本セッションの実施内容**:
+
+- `main` / `origin/main`は`73aef720933a630024b2e6ee460a02e74f70bf94`、ahead/behind `0/0`、worktree cleanで開始。`git fetch --prune origin`後の`git pull --ff-only origin main`は`Already up to date.`だった。
+- Unity 6000.4.9f1を`tools/run-unity.ps1`からbatch起動し、39 packages、Tundra success、334 evaluated、return code 0、検証由来のcode / scene / asset差分なしを確認した。
+- Yarn validatorはerrors 0 / warnings 0 / info 3、11 files / 74 nodes / 24 `#line:` tags / 42 variables。static Sites fixture validatorとstrict docs buildもpassした。
+- 現行ソースは基礎EditMode 73 + PlayMode 10 + targeted Editor 14 = 97 test cases。2026-07-19のEditor 14/14は有効だが、基礎83件はpersistent saveを削除するtestがあるため今回未実行。
+- Sitesはread-onlyでactive、custom access、allowed user 1、group 0、Version 1、deployment succeededを再確認した。設定変更、共有拡大、public publishは行っていない。
+- direct Unity WebはWebGLSupport、有効なpublic gameplay scene、navigationが欠けたままblocked。
+- 実測詳細は`docs/verification/2026-07-26-development-readiness.md`、監修判断と最遠目標は`docs/SUPERVISOR_REPORT.md`を参照する。
+
 ## Handoff snapshot (2026-07-21 private Sites runtime / cross-terminal sync)
 
 **本セッションの実施内容**:
@@ -123,12 +135,13 @@ python -m mkdocs serve -a 127.0.0.1:8000
 
 ## Current Focus
 
-- 主目的: **受入済みWriter Cockpit navigationとOwner-only Sites runtimeを維持し、hosted app本文のOwner認証後reviewを閉じる**
-- 現在: 74 Node検索、source path/line、diagnostic drilldown、active Yarn `errors=0 / warnings=0 / info=3`は受入済み。`sites/foundphone-demo/`はportableな静的入力正本、Sites Version 1はsource `29c5245d...`のprivate hosted runtimeとして存在する。
+- 主目的: **実セーブを保護した現行回帰基準を作り、人間環境のWriter Cockpit full loopとOwner-only hosted本文reviewを閉じる**
+- 現在: リモートparity、Unity compile、Yarn validator、strict docs、static fixtureは2026-07-26に再確認済み。74 Node検索、source path/line、diagnostic drilldownも受入済み。Sites Version 1はsource `29c5245d...`のprivate hosted runtimeとして存在する。
 - 次の publication gate: User / Web SupervisorがOwnerとしてprivate URLを開き、hosted app本文の両分岐、restart、keyboard、network、320–430pxを確認する。Site作成、source push、Version 1、Owner-only deploymentは完了済みで、public/shared accessは未承認のまま。
 - 次の shared review: 人間がUnity PreferencesでExternal Script Editorを選択し、Nodeとdiagnosticのsource jumpを各1回確認する。必要ならCockpitからApply / Playの既存interactive loopも再受入する。
 - blocker: direct Unity Web routeはWeb Build Support欠落、有効なpublic gameplay scene欠落、TitleSceneの公開不可scene依存によりblocked。module導入・scene修復・公開は別判断。
-- 注意: `Library/` / `Logs/` はignored local evidence。full 83 testsはsave data隔離前に実行しない。Sites packageは非canon fixtureであり、hosted runtimeが存在しても本編・最終ストーリー・public公開の受入を意味しない。
+- 次のassistant lane: test専用pathまたは退避手順を設計し、基礎83件を安全に実行して全97件の現行内訳を日付付きで固定する。
+- 注意: `Library/` / `Logs/` はignored local evidence。基礎83 testsはsave data隔離前に実行しない。Sites packageは非canon fixtureであり、hosted runtimeが存在しても本編・最終ストーリー・public公開の受入を意味しない。
 
 ## Validation note (2026-07-20 Sites private runtime)
 
@@ -233,7 +246,7 @@ python -m mkdocs serve -a 127.0.0.1:8000
 2. Owner-only accessを変えずに、両分岐、restart、desktop/mobile、実キーボード、networkを再確認し、actual hosted runtimeをOK/NGで記録する。
 3. public access、workspace共有、custom domain、live store link、PII/auth/payment追加は別のHuman Gateまで行わない。
 4. Unity laneでは`.\tools\run-unity.ps1`でUnity **6000.4.9f1**を開き、External Script Editor jumpと必要なWriter Cockpit Apply / Playを再受入する。
-5. save dataを退避または隔離した後、EditMode 73 / PlayMode 10の現行結果を記録する。
+5. assistant laneではsave dataを退避またはtest専用pathへ隔離し、基礎EditMode 73 / PlayMode 10を実行する。targeted Editor 14を含む全97件の内訳と結果を日付付きで記録する。
 6. ここまで通ったらSP-023 3ノード → `SP024_Immersion_Start`の表示検収へ進み、M1 → M2 → M3のgate前にfull Ch1 authoringへ進まない。
 
 補足:

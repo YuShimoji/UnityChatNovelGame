@@ -1,6 +1,6 @@
 # Feature Status Audit
 
-**監査日**: 2026-04-21
+**監査日**: 2026-04-21（定量値のみ2026-07-26再集計）
 **監査対象**: FoundPhone (UnityChatNovelGame) 全コードベース
 **ブランチ**: main
 
@@ -11,14 +11,14 @@
 | 項目 | 数値 | 最終更新 |
 |------|------|----------|
 | 実装ファイル (.cs) | 66 (テスト除く) / 71 (テスト含む) | session 19 実測（要再スキャン時は `runtime-state` 参照） |
-| テストファイル | **7**（EditMode **4** + PlayMode テスト **2** + `PlayModeTestHelpers` **1**） | **2026-04-09 Dレーン再突合** |
-| PlayMode テストケース | **8**（`VerticalSliceSmokeGatePlayModeTests` 4 + `ScenarioFlowPlayModeTests` 4） | **2026-04-09 Dレーン再突合** |
-| EditMode テストケース | **75**（`CoreLogic` 33 + `Contradiction` 30 + `SaveSystem` 8 + `InventoryTab` 4） | **2026-04-09 Dレーン再突合** |
+| テストファイル | **8**（基礎EditMode **4** + Editor targeted **1** + PlayMode **2** + `PlayModeTestHelpers` **1**） | **2026-07-26 属性再集計** |
+| PlayMode テストケース | **10**（`VerticalSliceSmokeGatePlayModeTests` 4 + `ScenarioFlowPlayModeTests` 6） | **2026-07-26 属性再集計、実行結果ではない** |
+| EditMode テストケース | **87**（基礎73 + `ProjectFoundPhone.Editor.Tests` 14） | **2026-07-26 属性再集計。Editor 14/14は2026-07-19、基礎73は未実行** |
 | Yarnファイル (active) | 11 | 2026-04-21 実測 (`SP023_LocalExtensionsDemo` / `SP023_DisplayShowcaseDemo` / `SP024_ImmersionDemo` 追加後) |
 | Yarnファイル (archive) | 5 | session 19 |
 | Yarnコマンド | **33** (`SetTypingSpeed`, `SetTime`, `MarkDelivered`, `MarkRead`, `DeleteLastMessage`, `DeleteMessage` を含む) | 2026-04-21 |
 | 仕様エントリ (spec-index) | **42** (`docs/spec-index.json` 配列長) | 2026-04-21 実測 |
-| TODO/FIXME/HACK | 1件 (ChatController.cs:1241) | session 19 |
+| TODO/FIXME/HACK | 1件 (`ChatController.cs:2020`) | 2026-07-26 再確認 |
 | [Obsolete] マーク | 2件 (ContradictionPair.UnlockTopic x2) | |
 | docs ファイル数 | ~30 (archive除く) | |
 

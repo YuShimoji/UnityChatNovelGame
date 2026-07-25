@@ -18,11 +18,12 @@
   - **運用 (2026-07-13)**: `main` / `origin/main` を `fa8eb8b`、`HEAD...@{u}` を `0/0` で再確認。コード・Yarn・scene・asset の追加変更はなく、別端末は `docs/HANDOFF.md` の Current Focus / Safe Next Steps から Writer Cockpit interactive 受入を再開する
   - **運用 (2026-07-17)**: 2026-07-15 の未コミット docs 4件をレビューして保持し、`main` / `origin/main` を `7eb09c0`、ahead/behind `0/0` で再同期。現 checkout で Unity 6000.4.9f1 batch open / Tundra compile / Yarn validator errors=0 / strict docs build を再確認。全83テストと Writer Cockpit interactive 受入は未実行のまま、active slice と owner 境界を維持
   - **運用 (2026-07-21)**: tracked static fixtureをSites-native Vinext/React runtimeへ等価変換し、Owner-only accessのVersion 1をhost。source/version/deployment/accessのIDと変換対応を`docs/verification/2026-07-20-sites-private-runtime-validation.md`へ固定。次はOwner sign-in後のhosted本文reviewで、public/shared accessは未承認
+  - **運用 (2026-07-26)**: `73aef720`で`main` / `origin/main` parity 0/0とfast-forward pull済みを確認。Unity 6000.4.9f1 compile、Yarn errors 0 / warnings 0、strict docs、static Sites fixtureを再検証。現行test定義は基礎83 + targeted Editor 14 = 97で、次はpersistent saveを保護するtest isolationと基礎83件の現行基準化
   - **運用 (2026-04-09)**: セッション引き継ぎで `main`≒`origin/main` を確認。計測用 `debug-*.log` は `.gitignore` でリポジトリ外に固定。再開の最短導線は `docs/HANDOFF.md` の Handoff snapshot
   - **技術 (session 21–22)**: PlayMode 失敗の根本原因は auto-start の missing_node:Start。HasNode 事前チェック + archive 除外 + TearDown（`UnityTearDown` + `StopScenario` + 待機）で修正。WORKFLOW_STATE_SSOT.md 廃止。Session 22: タイプライター同期（DOTween 完了待機）、DebugChatScene 整備、SaveManager AutoSaveIndicator 安全化、PlayMode **8**/8・EditMode 75/75 をローカルで通過（batch XML・共通ヘルパー分離済み）
   - **方向性修正 (2026-04-15)**: Ch 積み上げ構造の構造的ドリフトを修正。主軸を**エンジン能力マイルストーン**に切替。ガードレール（`docs/REPO_LOCAL_RULES.md` / `docs/INVARIANTS.md`）を実行計画より上位に再配置。SUBSEQUENT を通過ゲート（スキップ不可）に変更
   - AI の役割: Yarn 執筆ではなく制作ツール・パイプライン・検証導線の整備（USER_REQUEST_LEDGER と整合）
-  - 次の作業: `tools/run-unity.ps1` から Writer Cockpit の interactive loop を1回受け入れ、Validator command registry drift と現行回帰基準を閉じた後、SP-023 / SP-024 表示検収と M1 へ戻る
+  - 次の作業: assistantはsave data isolationと基礎83件の現行回帰を閉じる。人間はWriter Cockpit interactive loopとOwner-only hosted本文を並行受入し、その後SP-023 / SP-024表示検収とM1へ戻る
 
 ### 運用メモ
 
@@ -51,7 +52,7 @@
 
 - 主レーン: **Authoring Tooling**（Writer / Designer Cockpit MVP）
 - 副レーン: **Engine / UI Review**（Cockpit導線確認後に SP-023 / SP-024 表示検収へ戻る）
-- 優先理由: 一画面の作者UXは実装・compile 済みだが、interactive Apply / Play と Validator warning の信頼性が未受入。作者導線を実在させる最後の確認が現在の bottleneck
+- 優先理由: 一画面の作者UX、source navigation、Validator warning信頼性は実装・compile・targeted test済み。残るbottleneckはinteractive Apply / Play、人間設定のsource jump、実セーブを保護した基礎83件の現行回帰
 - いまは深入りしないレーン: Yarn本文執筆、Runtime Dashboard/DebugHub の広範なPrefab化、既存セーブデータ操作、UI_ISSUES.md 載せ項目の個別コード修正、サウンド、マネタイズ
 
 ---
@@ -70,10 +71,10 @@
 
 ## NEXT RECOMMENDED SLICE（推奨・CURRENT の直後）
 
-- スライス名: **Validator 信頼回復 + 現行回帰基準化**
-- 目的: Writer Cockpit の Validation summary を信頼可能にし、Unity 6000.4.9f1 上の EditMode 73 / PlayMode 10 を安全な現行基準として記録する
-- 作業列: runtime command 登録と Validator known list のドリフト解消 → 偽陽性回帰テスト → save data 退避または test data 隔離 → EditMode / PlayMode batch → 日付付き XML / txt 記録
-- 成功状態: 登録済み command の unknown warning が 0、実 warning が分類可能、現行83テストの合否と残失敗が説明可能
+- スライス名: **Save-isolated current regression baseline**
+- 目的: Unity 6000.4.9f1上の基礎EditMode 73 / PlayMode 10を、実ユーザーsaveへ触れない現行基準として記録する
+- 作業列: testが触れるpersistent pathを列挙 → test専用pathまたは安全な退避/復元を設計 → 基礎83件batch → targeted Editor 14の再実行判断 → 日付付きXML / txt記録
+- 成功状態: 実ユーザーsaveに変更なし、基礎83件の合否と残失敗を説明可能、全97件のassembly別結果が追跡可能
 - コンテンツの扱い: 既存 demo Yarn のみ使用。新規執筆はしない
 - 今回はやらないこと: [横断保留](#横断保留) を参照
 
@@ -123,7 +124,7 @@
 
 - **四段スライスの意味**
   - **CURRENT**: Writer / Designer Cockpit MVP の interactive 受入
-  - **NEXT**: Validator 信頼回復 + 現行83テスト基準化。その後 SP-023 / SP-024 表示検収または M1へ復帰
+  - **NEXT**: save-isolated現行83テスト基準化。targeted Editor 14と合わせて97件の現在地を固定し、その後SP-023 / SP-024表示検収またはM1へ復帰
   - **SUBSEQUENT**: **通過ゲート（スキップ不可）**。エンジン能力レビュー + Ch1 フルコンテンツ執筆の解放判定。M1+M2 完了が発動条件
   - **LATER**: Ch1 フルコンテンツ前進 + P1 段階実装 (SUBSEQUENT 通過後)
 - **進行順序**: CURRENT → NEXT → SUBSEQUENT → LATER の順。SUBSEQUENT は通過ゲートであり、スキップ不可。エンジン能力の確認なしにフルコンテンツ執筆に進むことを防ぐ

@@ -1,19 +1,19 @@
 # Runtime State
 
-**Updated**: 2026-07-21（Sites private runtime / cross-terminal sync）
+**Updated**: 2026-07-26（remote sync / development readiness）
 
 ## Current Position
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
-- lane: **Authoring Tooling integrated / Sites owner-only hosted review pending**
-- slice: **accepted Writer Cockpit navigation、portable static package、Sites Version 1 private runtimeを引き継いだ状態**
-- next_recommended_slice: **User / Web SupervisorがOwner sign-in後のhosted app本文を両分岐・keyboard・network・responsiveで受け入れる**
-- subsequent_recommended_slice: **External Script Editor line jumpの人間環境レビュー + Writer Cockpit Apply / Play再受入**
-- later_recommended_slice: **save data隔離後のfull 83 tests → SP-023 / SP-024表示検収 → M1/M2/M3**
+- lane: **Authoring Tooling regression baseline / Owner-only hosted review in parallel**
+- slice: **2026-07-26のremote parity・compile・validator・docs・fixture再検証を起点に、安全な基礎83 test baselineを作る**
+- next_recommended_slice: **assistantがsave data isolationを設計し、基礎EditMode 73 / PlayMode 10を日付付きで実行する**
+- subsequent_recommended_slice: **External Script Editor line jump + Writer Cockpit Apply / Play受入、Owner sign-in後のhosted本文reviewを並行して閉じる**
+- later_recommended_slice: **SP-023 / SP-024表示検収 → M1全スレッド型 → M2状態完全性 → M3 alpha gate**
 - active_artifact: WriterCockpitWindow / WriterCockpitNavigation / YarnContentValidator / YarnAuthoringRegistry / YarnSOGenerator / `sites/foundphone-demo/` / `tools/sites/` / Sites project `appgprj_6a5ddb11908081918180da7797957e63`
 - artifact_surface: Editor tooling + portable static input + Owner-only Sites hosted runtime（non-canon fixture。Unity/Yarn正本とは非接続）
-- last_change_relation: static sourceをSites runtimeへ等価変換し、source/version/deployment/accessを再取得してproject-local verificationへ固定
+- last_change_relation: `73aef720`のremote parityからUnity / Yarn / docs / fixture / Sites accessをread-only再検証し、次のtest isolation laneを確定
 - plan_file: `docs/SUPERVISOR_REPORT.md`（現状・G0-G13 目標案） / `docs/plans/display-batch-showcase.md`（表示系デモ正本）
 
 ## Counters
@@ -23,7 +23,7 @@
 
 ## Quantitative Metrics (0 を目指す指標のみ、件数追跡は廃止)
 
-- tests_last_run: 2026-07-19 targeted WriterCockpitNavigation EditMode 14/14 pass。full suiteは2026-04-09基準のまま
+- tests_last_run: 2026-07-19 targeted WriterCockpitNavigation EditMode 14/14 pass。2026-07-26時点の定義は基礎EditMode 73 + PlayMode 10 + targeted Editor 14 = 97。基礎83はsave isolation待ち
 - mock_files: 0
 - spec_entries: 42 (`docs/spec-index.json` 配列長、検証用。SP-023/SP-024 追加)
 - todo_fixme_hack: ChatController.cs:2020 に 1 件残存 (FEATURE_STATUS_AUDIT W-6 参照)
@@ -34,6 +34,16 @@
 - last_visual_audit_path: docs/archive/verification-evidence/VerticalSliceSmokeGate_20260403_*.png (参考。パスのみ保持、追跡は廃止)
 
 ## Session Log
+
+### 2026-07-26（remote sync / development readiness）
+
+- **Git**: `main` / `origin/main`は`73aef720`、ahead/behind `0/0`。fetch後のfast-forward pullはAlready up to date。
+- **Unity**: 6000.4.9f1、39 packages、Tundra success、334 evaluated、return code 0。検証由来のtracked code / scene / asset差分なし。
+- **Validator/docs/fixture**: Yarn errors 0 / warnings 0 / info 3、strict MkDocs pass、FoundPhone static fixture validator pass。
+- **tests**: 現行定義97件。persistent saveを削除するtestがあるため、基礎83件と全97件は隔離前に実行していない。
+- **Sites**: active / custom / allowed user 1 / group 0 / Version 1 / deployment succeededをread-only再確認。公開設定変更なし、Owner hosted本文reviewは継続。
+- **blocker**: direct Unity Webはmodule / valid public scene / navigation欠落でblocked継続。
+- **detail**: `docs/verification/2026-07-26-development-readiness.md`。
 
 ### 2026-07-21（Sites private runtime / cross-terminal sync）
 

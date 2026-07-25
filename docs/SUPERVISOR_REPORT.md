@@ -1,30 +1,30 @@
 # 監修役AI向け現状報告
 
-**更新日**: 2026-07-21
+**更新日**: 2026-07-26
 **対象**: FoundPhone / UnityChatNovelGame
-**同期起点**: `main` / `1e582639`（2026-07-21開始時に`origin/main`とahead/behind `0/0`）
+**同期起点**: `main` / `73aef720`（2026-07-26開始時に`origin/main`とahead/behind `0/0`、`pull --ff-only`はAlready up to date）
 **役割**: 監修役AIが会話ログなしで、信頼できる現在地、残る判断、推奨順序、製品化までの目標を判断するための引き継ぎ正本。
 
 ## 1. 結論
 
-このリポジトリは、**Writer Cockpitの作者向けsource navigationと診断drilldownを受け入れ、active YarnのValidator driftを解消し、Sites-native lightweight chat demoをportableなtracked inputとOwner-only hosted runtimeの二層で引き継げる状態**になった。direct Unity Web routeはblockedのままだが、非canonのSites Version 1はlocal Worker QAとprivate deploymentを通過し、残りはOwner sign-in後のhosted本文reviewである。
+このリポジトリは、**2026-07-26にリモート同期、Unity 6000.4.9f1 batch compile、active Yarn validator、strict docs build、静的Sites fixtureを再検証し、次のEditor / test整備を開始できる状態**である。Writer Cockpit navigationとOwner-only Sites Version 1は維持されている。direct Unity Web routeはblocked、hosted本文とWriter Cockpit full loopは人間受入待ち、基礎83件の全回帰は実セーブ隔離待ちである。
 
 ただし、現在の受け入れ状態は次のように分ける。
 
 | 判定対象 | 現在の判定 | 根拠 |
 |---|---|---|
-| Git / ソース同期 | 統合可能 | 2026-07-19 開始時の`main` / `origin/main`は`55cb0d20`、ahead/behind `0/0`。accepted editor commitは同baseの直系 |
-| Unity batch open / compile | 開発可能 | accepted editor treeをUnity 6000.4.9f1で再実行し、batchmode return code 0。tracked差分なし |
+| Git / ソース同期 | 開発可能 | `73aef720`で`main` / `origin/main` ahead/behind `0/0`。fetch後のfast-forward pullはAlready up to date |
+| Unity batch open / compile | 開発可能 | 2026-07-26にUnity 6000.4.9f1、39 packages、Tundra success、334 evaluated、return code 0。tracked差分なし |
 | agent / terminal からの再現 | 開発可能 | `tools/run-unity.ps1` が欠落した標準 Windows 環境変数を子プロセス内だけ補完 |
 | Yarn 静的検証 | active Yarnで信頼回復 | errors=0 / warnings=0 / info=3。以前の33 warningsはcommand/character registry driftとして解消 |
 | Writer Cockpit navigation | lane受入 | 74 Node検索、source path/line、diagnostic一覧をaccepted laneで確認。targeted EditMode 14/14 |
 | External editor jump | 人間環境レビュー待ち | fail-closed実装は確認済み。Unity External Script Editor未設定のため実file/line移動は未証明 |
-| 現行 Unity テスト全体 | 未更新 | 静的には EditMode 73 / PlayMode 10。保存済み全体回帰は旧 8 PlayMode 基準 |
+| 現行 Unity テスト全体 | 定義97件 / 全体結果未更新 | 基礎EditMode 73 + PlayMode 10、targeted Editor 14。Editor 14/14は2026-07-19、基礎83はsave data隔離待ち |
 | Unity Web publication | blocked / 未証明 | Web Build Supportなし、有効なpublic gameplay sceneなし。Sites-native demoを別laneの後継とする |
 | Sites-native hosted runtime | private hosted / Owner review待ち | tracked static input、Sites source `29c5245d...`、Version 1、custom user 1/group 0、deployment success。local Workerで両分岐・keyboard・responsiveを確認 |
 | 最終モバイル製品 | 未到達 | Android/iOS build、署名、配布、Ch3-9、サウンド、広告、Beta は後続 |
 
-作者基盤の次は、**人間環境でsource jumpと必要なApply / Playを再確認しつつ、公開面はOwnerとしてprivate URLへsign-inしてhosted app本文を確認する**。source push、Version 1、Owner-only deploymentは完了済み。public/shared access、custom domain、Unity module導入、public scene修復は別のHuman Gateである。
+作者基盤の次は、**assistantがsave dataを隔離して基礎83件を現行基準化し、人間がsource jump / Apply / PlayとOwner-only hosted本文を並行受入する**。source push、Version 1、Owner-only deploymentは完了済み。public/shared access、custom domain、Unity module導入、public scene修復は別のHuman Gateである。
 
 ## 2. Shared Focus / 北極星
 
@@ -50,6 +50,15 @@ AI の主担当はエンジン、ツール、パイプライン、検証導線�
 FoundPhone を、モバイル優先のチャット／ビジュアルノベルゲームとして iOS / Android に配布可能な状態へ持っていく。F2P + 広告、Ch3以降のサウンド統合は高位方針として存在するが、現在の実装スライスではない。
 
 ## 3. 今回の同期と復旧
+
+### 2026-07-26 remote sync / development readiness
+
+- `main` / `origin/main`は`73aef720`、ahead/behind `0/0`、worktree cleanで開始。`fetch --prune`後の`pull --ff-only`は`Already up to date.`で、取り込む新規commitはなかった。
+- Unity 6000.4.9f1をwrapperからbatch起動し、39 packages登録、Tundra compile success、334 evaluated、return code 0、code / scene / asset差分なしを確認した。
+- Yarn validatorはerrors 0 / warnings 0 / info 3、11 files / 74 nodes。static Sites fixture validatorとstrict docs buildもpassした。
+- 現行テスト定義は基礎EditMode 73 + PlayMode 10 + targeted Editor 14 = 97件。実セーブを削除するtestがあるため、基礎83件と全97件の一括実行は隔離前に行っていない。
+- Sites control planeはread-onlyで再取得し、active、custom access、allowed user 1、group 0、Version 1、deployment succeededを確認した。access / deployment /公開設定は変更していない。
+- 詳細なコマンド、境界、warningは`docs/verification/2026-07-26-development-readiness.md`を正本とする。
 
 ### 2026-07-21 Sites private runtime / cross-terminal sync
 
@@ -118,13 +127,14 @@ fresh resolve 後の初回初期化で、`BuildSettingsHelper` が `ContentAutho
 1. **package resolve / restore**
    - 2026-07-11: ProjectCache 欠落状態から fresh resolve 42.78秒、39 packages、return code 0
    - 2026-07-17: 現 checkout で 39 packages の cache restore を再確認
+   - 2026-07-26: 現 checkoutで39 packages登録、return code 0を再確認
    - `dev.yarnspinner.unity@3.1.3`
    - `com.unity.nuget.newtonsoft-json@3.2.2`
-   - log: `Logs/development-readiness-unity-open-2026-07-17.log`（ignored local evidence）
+   - log: `Logs/development-readiness-unity-open-2026-07-26.log`（ignored local evidence）
 
 2. **script compile**
-   - 2026-07-17: Tundra build success
-   - 0 items updated / 326 evaluated
+   - 2026-07-26: Tundra build success
+   - 1 item updated / 334 evaluated
    - batchmode 正常終了、C# compile error なし
 
 3. **Package Manager local state**
@@ -132,28 +142,29 @@ fresh resolve 後の初回初期化で、`BuildSettingsHelper` が `ContentAutho
    - すべて ignored local evidence。リモート正本にはしない
 
 4. **Yarn validator**
-   - 2026-07-19 にaccepted editor treeをwrapperから再実行
+   - 2026-07-26 に現checkoutをwrapperから再実行
    - errors=0 / warnings=0 / info=3
    - 11 files / 74 nodes / 24 `#line:` tags / 42 declared variables
    - 変更前warning 33件: registered command 24、既存`unknown` CharacterProfile 9。変更後のunknown command / character偽陽性は0
-   - info の主な残り: undeclared variable 2
-   - integration実行ログはdetached validation worktreeのignored evidenceとして生成し、結果を本報告へ転記後にworktreeとともにcleanup済み。tracked tests/docsを再現可能な正本とする
+   - info はproject settings由来の可能性があるundeclared variable通知。errors / warningsとして扱わない
+   - log: `Logs/development-readiness-yarn-validator-2026-07-26.log`（ignored local evidence）
 
 5. **静的集計**
    - spec entries: 42
    - done 24 / partial 12 / draft 2 / todo 4
-   - EditMode 73 / PlayMode 10
+   - 基礎EditMode 73 / PlayMode 10 / targeted Editor 14、合計97
+   - 2026-07-19のtargeted Editorは14/14 pass。基礎83件は今回未実行
    - 実コード TODO: `ChatController` の将来 status routing 1件
 
 6. **ドキュメント閲覧面**
-   - 2026-07-17: `generate-doc-nav.ps1 -PrepareView` 完走
+   - 2026-07-26: `generate-doc-nav.ps1 -PrepareView` 完走
    - `uvx --from mkdocs-material mkdocs build --strict` exit 0
    - ignored PerformanceBaseline raw pagesは nav 外の INFO。欠落ファイル参照は削除
 
 7. **Writer Cockpit targeted integration**
-   - `ProjectFoundPhone.Editor.Tests` 14/14 pass
+   - 2026-07-19: `ProjectFoundPhone.Editor.Tests` 14/14 pass
    - Node index/source line/filter、known/unknown registry、active Yarn false-positive 0、安全なmissing-file処理を確認
-   - Unity 6000.4.9f1 batch open/compile return code 0、実行後tracked差分なし
+   - 2026-07-26: Unity 6000.4.9f1 batch open/compile return code 0、実行後tracked code / scene / asset差分なし
 
 8. **Publication feasibility**
    - `docs/verification/sites-publication-feasibility.md`をtracked authorityへ統合
@@ -164,7 +175,7 @@ fresh resolve 後の初回初期化で、`BuildSettingsHelper` が `ContentAutho
    - `sites/foundphone-demo/`、`tools/sites/`、`docs/verification/sites-native-demo-validation.md`をtracked artifactとして統合
    - local static packageのHTTP/MIME、両分岐、restart、desktop/mobile/narrow、accessibility smoke、禁止機能監査をpass
    - Vinext/React/Workerへ等価変換し、`npm run lint`、build + Node tests 3/3、local Workerの両分岐・keyboard・responsiveをpass
-   - Sites Version 1、source SHA、Owner-only access、deployment successを確認。hosted本文だけOwner sign-in後review待ち
+   - 2026-07-26にSites projectをread-only再取得。Version 1、source SHA、custom allowed user 1 / group 0、deployment successを維持。hosted本文だけOwner sign-in後review待ち
 
 10. **非阻害 warning**
    - Unity: `VerificationMenu` と `MissingScriptScanner` が同じ `Tools/FoundPhone/Verification/Scan DebugChatScene Missing Scripts` を登録
@@ -176,20 +187,20 @@ fresh resolve 後の初回初期化で、`BuildSettingsHelper` が `ContentAutho
 
 - 設定済みExternal Script EditorでのNode/diagnostic file-line jump。
 - Writer CockpitのApply / Play / Last Actionを含む既存loopの本統合後再実行。
-- EditMode 73 / PlayMode 10 の全件実行。
+- 基礎EditMode 73 / PlayMode 10、およびtargeted Editor 14を合わせた全97件の同日実行。
 - SP-023 / SP-024 の画面検収。
 - Save / Load state equality と章遷移の横断検証。
 - Unity Web build、Sites hosted本文のOwner sign-in後review、Sites public/shared access。
 
-全テストを直ちに実行しなかった理由は、既存テストに `Application.persistentDataPath` の save slot を削除するものがあるため。実行前に実ユーザーデータ退避または test data 隔離が必要である。
+全テストを直ちに実行しなかった理由は、`SaveSystemTests`とPlayMode helperが`Application.persistentDataPath`の`SaveData_*.json`を削除するため。実行前に実ユーザーデータ退避またはtest data隔離が必要である。
 
 ## 5. Current Trust Assessment
 
 ### trusted
 
-- 同期起点で `main` と `origin/main` が一致していたこと。
+- 2026-07-26に`main`と`origin/main`が`73aef720`で一致し、fast-forward pull後もahead/behind 0/0だったこと。
 - accepted editor commitがbaseの直系で、許可されたEditor/test/verification filesだけを変更していたこと。
-- 2026-07-17 の現 checkout で package restore、Tundra compile、batchmode 正常終了を再確認したこと。
+- 2026-07-26の現checkoutで39 packages、Tundra compile、batchmode正常終了を再確認したこと。
 - 2026-07-19 のtargeted EditMode 14/14、batch compile、Yarn validator `errors=0 / warnings=0 / info=3`。
 - `ALLUSERSPROFILE` 欠落が fresh resolve の直接原因だったこと。
 - process-local 補完で隔離 resolve と実プロジェクト fresh resolve が成功したこと。
@@ -206,7 +217,7 @@ fresh resolve 後の初回初期化で、`BuildSettingsHelper` が `ContentAutho
 
 - 設定済みExternal Script Editorでの実file/line jump。
 - Writer CockpitのApply、Play、Last Actionを含む既存loopの本統合後interactive再確認。
-- 現行 83 テストの Unity 6000.4.9f1 ベースライン。
+- 基礎83件とtargeted Editor 14を合わせた現行97件のUnity 6000.4.9f1ベースライン。
 - SP-023 / SP-024 の実表示、日本語 SDF、IconSide。
 - Save / Load、Unread、Branch、削除痕、EndDay、章遷移の状態同値。
 - fresh clone / 別端末。今回証明したのはこの端末と wrapper 経路。
@@ -242,8 +253,8 @@ Ch1 製品縦断              [#----] 20-30%  full authoring解放ゲート前
 | ID | 目的 | 効果 | 必要条件 | 現在地 | 主担当 / 所有物 | 次の動き |
 |---|---|---|---|---|---|---|
 | R0 | Writer Cockpit full-loop受入 | accepted navigationと既存Apply/Playを日常導線として閉じる | External Script Editorの人間選択、Unity 6000.4.9f1 | search/source/diagnostics accepted。実jumpとApply/Play再確認待ち | shared。assistant=技術導線、user=editor/操作感判断 | NodeとdiagnosticのOpen各1回、必要なら`DQT_Start`をApply / Play |
-| R1 | Validator信頼維持 | 実warningだけを作者が判断可能にする | runtime registration方式をliteral handlerから変える際のtest更新 | active Yarn errors 0 / warnings 0 / info 3、targeted 14/14 | assistant / registry helper + tests | 新registration方式を導入する時だけextractorを拡張 |
-| R2 | 現行回帰基準化 | 73 EditMode / 10 PlayMode を現行基準にする | save data 退避または test data 隔離 | 最終全体記録は旧8 PlayMode | assistant/CI / XML・txt結果 | データ安全策の後に batch 実行 |
+| R1 | Validator信頼維持 | 実warningだけを作者が判断可能にする | runtime registration方式をliteral handlerから変える際のtest更新 | 2026-07-26 active Yarn errors 0 / warnings 0 / info 3、targeted 14/14は2026-07-19 | assistant / registry helper + tests | 新registration方式を導入する時だけextractorを拡張 |
+| R2 | 現行回帰基準化 | 基礎83件を安全に実行し、全97件の現在地を固定する | save data退避またはtest専用path隔離 | 定義はEditMode 73 / PlayMode 10 / Editor 14。基礎全体結果は旧8 PlayMode基準 | assistant/CI / isolation + XML・txt結果 | 削除対象pathを隔離して基礎83件をbatch実行 |
 | P1 | Sites-native lightweight demo | Unity blockerと独立してprivate UXをreview可能にする | Owner sign-in、access変更禁止 | static input、Sites Version 1、Owner-only access、deployment、local runtime keyboard/両分岐まで完了。hosted本文未確認 | User + Web Supervisor / hosted review | private URLへsign-inし、両分岐・network・keyboard・responsiveをOK/NG記録 |
 | P2 | Direct Unity Web再調査 | Unity runtimeのhost互換性を実測する | Web Build Support、有効なpublic gameplay sceneとnavigation | blocked、build outputなし | user + Unity lane | module/scene gateが両方解消した時だけ再dispatch |
 | R3 | SP-023 / 024 表示契約 | 実装済み表示能力を受理し M1へ戻る | R0、ユーザーの画面判断 | demo Yarn とコードあり、証跡なし | shared / visual evidence | SP-023 3ノード → SP-024 S1/S2/S5 |
@@ -257,7 +268,7 @@ Ch1 製品縦断              [#----] 20-30%  full authoring解放ゲート前
 | ID | 目的 / 影響 | 必要条件・状態 | owner / next |
 |---|---|---|---|
 | D1 | `ScenarioManager` は command 33件を登録するが解除は31件で、`DiscoverFragment` / `AddFragmentNote` が欠落。再 enable 時の handler 重複リスク | 現在の compile blocker ではない。R1 と同じ command registry 監査で扱える | assistant。R1 の回帰テストと一緒に対称性を固定 |
-| D2 | `FEATURE_STATUS_AUDIT.md` のファイル数・テスト数・TODO行、`spec-index.json` の旧8 PlayMode / SP-024進捗が現物より古い | M3 再監査前に更新。今ここで status を推測昇格しない | supervisor/shared。R2結果後に正本更新 |
+| D2 | `FEATURE_STATUS_AUDIT.md`の機能判定本文と`spec-index.json`の旧8 PlayMode / SP-024進捗が現物より古い | テスト件数とTODO位置は2026-07-26再集計済み。機能statusはM3再監査前に更新し、推測昇格しない | supervisor/shared。R2結果後に結果列を更新 |
 | D3 | Build Settingsはproduction/public scene列ではなく、参照する`MVPScene.unity`も現treeに存在しない | Android product buildまたはdirect Unity Web再調査前にscene責務を確定。現在は変更禁止 | assistant + user。G10/G11またはP2の明示laneで分離 |
 | D4 | SP-023フリック、SP-024 S4、B/C rich UI、候補ENH | candidate / hold のまま。Human Authority と value path 未通過 | user approval後のみ実装 |
 | D5 | UI_ISSUES 3件 | 個別修正禁止。3-5件単位またはM6 UI batch | shared。再現情報だけ保持 |
@@ -274,7 +285,7 @@ Ch1 製品縦断              [#----] 20-30%  full authoring解放ゲート前
 | G0 | 開発環境再現性 | fresh resolve、compile、再利用可能 launcher。**この端末では達成** | 別端末は未証明。ignored cacheを正本化しない | assistant/tool / launcher・検証記録 |
 | G1 | Writer Cockpit 受入 | navigation laneはaccepted。残りは設定済みEditor jumpとApply/Play/Last Actionの1ループ | ContentAuthoring scene保存とhuman editor選択に注意 | shared / user判断 + tool |
 | G1.1 | Validator 信頼回復 | **active Yarnで達成**: 登録済みcommand/character偽陽性0、targeted test 14/14 | literal handler以外へ登録方式を変える時はextractor更新 | assistant / validator + tests |
-| G1.2 | 現行回帰 | EditMode 73 / PlayMode 10 の日付付き結果 | save data 隔離必須 | assistant/CI / test artifacts |
+| G1.2 | 現行回帰 | 基礎EditMode 73 / PlayMode 10とtargeted Editor 14、合計97件のassembly別・日付付き結果 | save data隔離必須。失敗を仕様差と不具合へ分類 | assistant/CI / isolation + test artifacts |
 | G2 | SP-023/024 表示受入 | SP-023 3ノード、SP-024 S1/S2/S5、日本語SDF、IconSide の OK/NG と証跡 | 値調整は Inspector。個別修正ループ禁止 | shared / visual evidence |
 | G3 / M1 | サブスレッド全型 | A/B/C、Latent、Branch、知識転送、Complete を ETK + PlayMode で実証 | B/C rich UI を判断前に作り込まない | assistant / engine harness |
 | G4 / M2 | 状態完全性と章遷移 | Save→Load state equality、EndDay、章完了、再開で重複・欠落なし | schema versioning は Beta 前に必要 | assistant / tests |

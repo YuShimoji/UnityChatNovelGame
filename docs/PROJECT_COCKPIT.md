@@ -1,6 +1,6 @@
 # Project Cockpit
 
-最終更新: 2026-07-21
+最終更新: 2026-07-26
 
 ## North Star
 
@@ -8,7 +8,7 @@ FoundPhone を、ライター/デザイナーが Yarn を外部エディタで�
 
 ## Current Active Slice
 
-Writer Cockpit source navigationの受入済み状態とOwner-only Sites Version 1を維持し、hosted app本文のOwner認証後reviewを閉じる。
+2026-07-26のremote parityと開発環境再検証を起点に、実セーブを保護した基礎83件の現行回帰を作る。Writer Cockpit full loopとOwner-only Sites本文は人間が並行受入する。
 
 - Unity menu: `Tools > FoundPhone > Writer Cockpit`
 - Main script: `Assets/Scripts/Editor/WriterCockpitWindow.cs`
@@ -23,7 +23,7 @@ Writer Cockpit source navigationの受入済み状態とOwner-only Sites Version
 G0 development readiness      [#####] local complete
 G1 source navigation lane     [#####] accepted
 G1.1 validator trust          [#####] active Yarn warnings 0
-G1.2 full regression          [##---] save isolation pending
+G1.2 current regression       [##---] 97 defined; base 83 save isolation pending
 P1 Sites-native demo          [####-] private hosted runtime; Owner review pending
 P2 direct Unity Web route     [-----] blocked
 G2 SP-023/SP-024 display QA   [##---] queued
@@ -49,7 +49,7 @@ Runtime UI refactor       [-----] intentionally not in this slice
 
 | Gate | State | Requirement |
 |------|-------|-------------|
-| Fresh package resolve | pass locally | process-local standard Windows environment restoration + 39 packages |
+| Remote parity / compile | pass locally 2026-07-26 | `73aef720` parity 0/0、39 packages、Tundra success |
 | Cockpit source navigation | accepted | Node search/source line/diagnostic drilldown checked; targeted tests 14/14 |
 | External editor jump | human review debt | implementation fails closed; Unity External Script Editor must be selected by human |
 | Existing Content Pipeline | preserved | `Tools > FoundPhone > Content Pipeline` remains available |
@@ -65,7 +65,7 @@ Runtime UI refactor       [-----] intentionally not in this slice
 - Integrated accepted editor commit from base `55cb0d20`: Node search, source path/title line, external-editor action, structured Validator drilldown.
 - Replaced duplicated Validator command/character lists with runtime handler and CharacterProfile asset discovery. Active Yarn is `errors=0 / warnings=0 / info=3`.
 - Revalidated the integrated tree with targeted EditMode 14/14, Unity 6000.4.9f1 batch compile, and non-mutating Yarn validator.
-- Preserved the existing Content Pipeline Apply/Play helpers and read-only Save status; full 83 tests remain gated by save-data isolation.
+- Preserved the existing Content Pipeline Apply/Play helpers and read-only Save status; current definitions are base 83 + targeted Editor 14 = 97, with base 83 gated by save-data isolation.
 - Integrated `docs/verification/sites-publication-feasibility.md`. Direct Unity Web remains unproven and blocked; Sites-native lightweight demo is the bounded successor.
 - Integrated `sites/foundphone-demo/` and `tools/sites/` from a read-only sibling with exact pre-repair SHA-256 parity. Local HTTP, both routes, restart, desktop/mobile/narrow, accessibility smoke, prohibited-pattern audit passed.
 - Sites Version 1をOwner-onlyでhostし、source/version/access/deploymentを再取得。local runtimeではactual React/Worker build、keyboard、両分岐、responsiveを確認済み。

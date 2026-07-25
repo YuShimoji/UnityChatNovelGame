@@ -40,5 +40,5 @@
 ## まだ不確実なところ
 
 - `Assets/Screenshots/` の画像は MVP 期の見た目確認として有用だが、SP-023 / SP-024 の最新検収スクリーンショットではない。
-- `FEATURE_STATUS_AUDIT.md` の件数は 2026-04-21 基準のため、追加テスト後の全体再スキャンは別ターンで行う。
+- `FEATURE_STATUS_AUDIT.md` の機能判定本文は 2026-04-21 基準。テスト件数とTODO位置だけは2026-07-26に再集計し、現行97件（基礎83 + Editor 14）へ更新した。
 - `project-context.md` の長期ログは履歴として厚い。日常の進行判断は `HANDOFF.md` と `DEVELOPMENT_TURN_PLAN.md` を優先する。

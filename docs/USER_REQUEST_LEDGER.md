@@ -19,6 +19,7 @@
 | 2026-06-15 | AI 入口文書を薄いポインタに戻し、repo-local runtime pin と機械固有 local settings を再発防止する | done | AGENTS.md / CLAUDE.md / .claude/CLAUDE.md / docs/REPO_LOCAL_RULES.md / .gitignore |
 | 2026-07-20 | FoundPhone静的fixtureをSites-native private reviewへ変換し、非canon表示、両分岐、mobile/a11y、禁止機能、Owner-only/public禁止を維持する | hosted runtime done / Owner review pending | `sites/foundphone-demo/` / `docs/verification/2026-07-20-sites-private-runtime-validation.md` / Sites Version 1 |
 | 2026-07-21 | 全コンテキストをproject-local authorityへ保持し、localをremoteへ反映して別端末から即再開可能にする | done | HANDOFF.md / runtime-state.md / project-context.md / verification / git commit + push |
+| 2026-07-26 | リモート最新をlocalへ取り込み、開発可能性を再検証し、監修役AI向け詳細報告と可能な限り先の条件付き目標をproject-localに残す | local handoff done / remote反映未実施 | `docs/verification/2026-07-26-development-readiness.md` / `SUPERVISOR_REPORT.md` / `HANDOFF.md` / `runtime-state.md` |
 
 ## 未反映の是正要求
 
