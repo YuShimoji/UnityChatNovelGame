@@ -155,6 +155,15 @@ h1 {
   line-height: 1.75;
 }
 
+.content-origin {
+  margin: 0.9rem 0 0;
+  color: var(--dim);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.72rem;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
 .intro-actions,
 .ending-actions {
   display: grid;
@@ -244,6 +253,10 @@ h1 {
   gap: 1rem;
 }
 
+.chat-toolbar > div {
+  min-width: 0;
+}
+
 .connection-state {
   display: flex;
   align-items: center;
@@ -264,11 +277,13 @@ h1 {
 
 .thread-title {
   margin-top: 0.25rem;
-  font-size: 1.45rem;
+  font-size: clamp(1.05rem, 5vw, 1.45rem);
   letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
 }
 
 .text-button {
+  flex: 0 0 auto;
   padding: 0.45rem 0.2rem;
   color: var(--muted);
   background: none;
@@ -276,6 +291,7 @@ h1 {
   cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 0.25rem;
+  white-space: nowrap;
 }
 
 .progress-wrap {
@@ -309,12 +325,48 @@ h1 {
 
 .message-list {
   display: flex;
-  flex: 1;
   flex-direction: column;
   gap: 0.85rem;
-  margin: 1.5rem 0 0;
+  margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.chat-screen {
+  display: flex;
+  height: calc(100dvh - 8.5rem);
+  min-height: 34rem;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chat-surface {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  margin-top: 1rem;
+  padding: 0.75rem 0.35rem 0.45rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-medium);
+  touch-action: pan-y;
+  transition: border-color 150ms ease-out, background-color 150ms ease-out;
+}
+
+.chat-surface[data-advance-ready="true"] {
+  border-color: rgba(142, 231, 209, 0.11);
+  background: rgba(142, 231, 209, 0.018);
+  cursor: pointer;
+}
+
+.message-viewport {
+  min-height: 0;
+  flex: 1;
+  padding: 0.2rem 0.35rem 1rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 }
 
 .message {
@@ -376,7 +428,8 @@ h1 {
 }
 
 .choice-region {
-  margin-top: 1rem;
+  flex: 0 0 auto;
+  margin: 0.75rem 0.35rem 0;
   padding: 1rem;
   border: 1px solid rgba(142, 231, 209, 0.26);
   border-radius: var(--radius-medium);
@@ -414,9 +467,19 @@ h1 {
   background: var(--surface-soft);
 }
 
+.surface-hint {
+  margin: 0.7rem 0.35rem 0;
+  color: var(--dim);
+  font-size: 0.7rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
 .chat-controls {
   position: sticky;
   bottom: 0;
+  z-index: 2;
+  flex: 0 0 auto;
   padding: 1rem 0 max(0.25rem, env(safe-area-inset-bottom));
   background: linear-gradient(transparent, var(--surface) 28%);
 }
@@ -496,8 +559,21 @@ footer {
     font-size: 1.85rem;
   }
 
+  .thread-title {
+    font-size: 0.9rem;
+  }
+
   .prototype-label {
     font-size: 0.68rem;
+  }
+
+  .chat-screen {
+    height: min(720px, calc(100dvh - 13.5rem));
+    min-height: 32rem;
+  }
+
+  .message {
+    max-width: 92%;
   }
 }
 

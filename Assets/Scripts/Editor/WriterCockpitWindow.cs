@@ -27,6 +27,7 @@ namespace ProjectFoundPhone.Editor
         private string m_SourceOpenStatus;
         private string m_ContentAuthoringStatus = "未確認";
         private string m_SaveStatus = "未確認";
+        private string m_SitesPreviewStatus = "未出力";
         private string m_ScanError;
         private int m_SelectedNodeIndex;
         private int m_LastSyncChangedCount;
@@ -101,6 +102,8 @@ namespace ProjectFoundPhone.Editor
                 DrawStatusRow("Last sync", BuildLastSyncText());
                 DrawStatusRow("ContentAuthoring", m_ContentAuthoringStatus);
                 DrawStatusRow("Save / autosave", m_SaveStatus);
+                DrawStatusRow("Sites preview output", SitesPreviewExporter.GeneratedPackageAssetPath);
+                DrawStatusRow("Sites preview status", m_SitesPreviewStatus);
             }
         }
 
@@ -156,6 +159,14 @@ namespace ProjectFoundPhone.Editor
                     {
                         ApplySelectedNodeToContentAuthoring(enterPlayMode: true);
                     }
+                }
+            }
+
+            using (new EditorGUI.DisabledGroupScope(m_NodeNames.Length == 0))
+            {
+                if (GUILayout.Button("Export Sites Preview Package", GUILayout.Height(28)))
+                {
+                    ExportSelectedSitesPreviewPackage();
                 }
             }
 
@@ -428,6 +439,37 @@ namespace ProjectFoundPhone.Editor
             {
                 EditorUtility.DisplayDialog("Writer Cockpit", statusMessage, "OK");
             }
+        }
+
+        private void ExportSelectedSitesPreviewPackage()
+        {
+            if (!TryGetSelectedNodeLocation(
+                    out YarnSOGenerator.YarnNodeSourceLocation selectedLocation))
+            {
+                m_SitesPreviewStatus = "失敗: 選択Nodeのsource locationがありません。";
+                m_LastAction = "Sites preview export failed: Refresh NodesしてNodeを選択してください。";
+                return;
+            }
+
+            SitesPreviewExportResult result = SitesPreviewExporter.Export(selectedLocation);
+            if (!result.Success)
+            {
+                m_SitesPreviewStatus = $"失敗: {result.Message}";
+                m_LastAction =
+                    $"Sites preview export failed for {selectedLocation.NodeName}: {result.Message}";
+                return;
+            }
+
+            string shortIdentity = result.PackageIdentitySha256.Length >= 12
+                ? result.PackageIdentitySha256.Substring(0, 12)
+                : result.PackageIdentitySha256;
+            m_SitesPreviewStatus =
+                $"{selectedLocation.NodeName} / {result.DisplayLineCount} lines / " +
+                $"{result.UnsupportedConstructCount} unsupported / {shortIdentity}";
+            m_LastAction =
+                $"Sites preview exported: {result.OutputPath} " +
+                $"(identity {result.PackageIdentitySha256}).";
+            Repaint();
         }
 
         private void SelectRecommendedNode()

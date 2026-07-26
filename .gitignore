@@ -114,6 +114,9 @@ site/
 docs/evidence/**/*.dll
 docs/evidence/**/UnityChatNovelGame_Data/
 
+# Writer Cockpit local Sites Preview Package output
+/sites/foundphone-demo/content/generated-preview.json
+
 # Scene backups
 *.unity.backup
 

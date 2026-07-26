@@ -89,8 +89,11 @@ const runtimeSurface = [html, css, app, contents.get("content/demo.json") ?? ""]
 assert(html.includes('lang="ja"'), "document language must be declared");
 assert(html.includes('aria-live="polite"'), "an aria-live status region is required");
 assert(html.includes("Prototype content / not final story"), "prototype label must exist before JavaScript loads");
+assert(html.includes('id="chat-surface"'), "stable chat advance surface is required");
+assert(html.includes('id="content-origin"'), "content origin label is required");
 assert(css.includes(":focus-visible"), "readable focus-visible styling is required");
 assert(css.includes("prefers-reduced-motion"), "reduced-motion path is required");
+assert(css.includes("touch-action: pan-y"), "chat surface must preserve vertical scroll gestures");
 
 for (const eventName of ["demo_started", "choice_selected", "demo_completed", "outbound_store_intent"]) {
   assert(app.includes(`"${eventName}"`), `semantic event name is missing: ${eventName}`);
@@ -109,7 +112,12 @@ for (const [pattern, label] of prohibitedPatterns) {
 }
 
 assert(!/<form\b/i.test(html), "forms are outside this slice");
-assert(app.includes('fetch("./content/demo.json"'), "content must load from content/demo.json");
+assert(app.includes('"./content/demo.json"'), "default fixture path must remain content/demo.json");
+assert(app.includes('"./content/generated-preview.json"'), "generated Package v1 path must be explicit");
+assert(app.includes("POINTER_DRAG_THRESHOLD_PX"), "scroll/drag threshold guard is required");
+assert(app.includes("isProtectedAdvanceTarget"), "interactive targets must be excluded from surface advance");
+assert(app.includes("lineInProgress"), "future two-stage line completion boundary is required");
+assert(app.includes("bindKeyboardActivation"), "Enter/Space activation guard is required");
 assert(!/localStorage|sessionStorage|indexedDB|document\.cookie/i.test(app), "persistent browser storage is prohibited");
 
 if (failures.length > 0) {
@@ -123,4 +131,4 @@ if (failures.length > 0) {
 console.log("FoundPhone demo validation: PASS");
 console.log(`Required files: ${requiredFiles.length}`);
 console.log(`Demo nodes: ${Object.keys(demo.flow.nodes).length}`);
-console.log("Choice branching, non-canon label, accessibility hooks, and prohibited-pattern audit passed.");
+console.log("Choice branching, Package v1 mode, stable tap surface, accessibility hooks, and prohibited-pattern audit passed.");

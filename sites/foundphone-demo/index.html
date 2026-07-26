@@ -28,6 +28,9 @@
         <p class="intro-copy" id="intro-summary">
           選択によって応答が変わる、軽量なチャットノベル操作デモです。
         </p>
+        <p class="content-origin" id="content-origin">
+          Content: manually-authored non-canon fixture / content/demo.json
+        </p>
 
         <div class="intro-actions">
           <button class="button button-primary" id="start-button" type="button" disabled>
@@ -67,15 +70,23 @@
           </div>
         </div>
 
-        <ol class="message-list" id="message-list" aria-live="polite" aria-relevant="additions"></ol>
+        <div class="chat-surface" id="chat-surface" data-advance-ready="false" data-line-in-progress="false">
+          <div class="message-viewport" id="message-viewport">
+            <ol class="message-list" id="message-list" aria-live="polite" aria-relevant="additions"></ol>
+          </div>
 
-        <div class="choice-region" id="choice-region" aria-labelledby="choice-prompt" hidden>
-          <p id="choice-prompt"></p>
-          <div class="choice-list" id="choice-list"></div>
+          <div class="choice-region" id="choice-region" aria-labelledby="choice-prompt" hidden>
+            <p id="choice-prompt"></p>
+            <div class="choice-list" id="choice-list"></div>
+          </div>
+
+          <p class="surface-hint">メッセージ表示後は会話面をタップして進行できます。</p>
         </div>
 
         <div class="chat-controls">
-          <button class="button button-primary" id="advance-button" type="button" hidden>続ける</button>
+          <button class="button button-primary" id="advance-button" type="button" hidden>
+            続ける
+          </button>
         </div>
       </section>
 

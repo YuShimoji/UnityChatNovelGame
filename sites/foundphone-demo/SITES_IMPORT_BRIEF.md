@@ -14,6 +14,14 @@ FoundPhone / chat-novel 方向の最小 interaction を、Unity Web Build Suppor
 
 HTMLを`file://`で直接開かず、同一originのHTTP配信で`content/demo.json`を読み込む。Node.js以外のpackage install、backend、framework、CDNは不要。
 
+### Local authoring bridge
+
+- default: `http://127.0.0.1:4173/` → 手動作成fixture `content/demo.json`
+- generated: `http://127.0.0.1:4173/?content=generated` → Writer Cockpit出力 `content/generated-preview.json`
+- Package schema: `foundphone.sites-preview-package` version `1`
+- generated packageはlocal-onlyで、Node / source path / title line / source-content hash / deterministic identity / ordered display lines / unsupported diagnosticsを保持する
+- hosted Sites Version 1とmachine-local React/Vinext sourceはこのbridgeのwrite targetではない
+
 ## File Inventory
 
 | Path | Purpose |
@@ -22,6 +30,7 @@ HTMLを`file://`で直接開かず、同一originのHTTP配信で`content/demo.j
 | `styles.css` | mobile-first visual language、focus、reduced motion |
 | `app.js` | local state machine、choice、progress、local-only events |
 | `content/demo.json` | presentation から分離した非カノン fixture content |
+| `content/generated-preview.json` | Writer Cockpitが生成するignored local Package v1。手編集しない |
 | `README.md` | local serve / validation / boundary |
 | `SITES_IMPORT_BRIEF.md` | Sites private preview handoff |
 
