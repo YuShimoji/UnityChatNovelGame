@@ -2,7 +2,7 @@
 
 **更新日**: 2026-07-27
 **対象**: FoundPhone / UnityChatNovelGame
-**同期起点**: `main` / `2f3753495dbb4dbdce1bf3fac763a057ac1442d2`（`origin/main`およびGitHub readbackとahead/behind `0/0`）
+**同期identity**: 同期開始base `2f3753495dbb4dbdce1bf3fac763a057ac1442d2`。現在は本正本を含む`HEAD`が`origin/main` / GitHub readbackとahead/behind `0/0`
 **役割**: 監修役AIが会話ログなしで、信頼できる現在地、残る判断、推奨順序、製品化までの目標を判断するための引き継ぎ正本。
 
 ## 1. 結論
@@ -13,7 +13,7 @@
 
 | 判定対象 | 現在の判定 | 根拠 |
 |---|---|---|
-| Git / ソース同期 | 開発可能 | `main` / `origin/main` / GitHub readbackは`2f37534`、ahead/behind `0/0`。review branchのlocal / originは`e059e4b` |
+| Git / ソース同期 | 開発可能 | 同期開始baseは`2f37534`。本正本を含む現在の`HEAD` / `origin/main` / GitHub readbackはahead/behind `0/0`。review branchのlocal / originは`e059e4b` |
 | Unity batch open / compile | 開発可能 | 2026-07-26にUnity 6000.4.9f1、39 packages、Tundra success、334 evaluated、return code 0。tracked差分なし |
 | agent / terminal からの再現 | 開発可能 | `tools/run-unity.ps1` が欠落した標準 Windows 環境変数を子プロセス内だけ補完 |
 | Yarn 静的検証 | active Yarnで信頼回復 | errors=0 / warnings=0 / info=3。以前の33 warningsはcommand/character registry driftとして解消 |
@@ -54,9 +54,9 @@ FoundPhone を、モバイル優先のチャット／ビジュアルノベルゲ
 
 ### 2026-07-27 remote parity / Sites authoring bridge access
 
-- `git fetch --prune origin`後、primary `main`、`origin/main`、GitHub `refs/heads/main`は`2f3753495dbb4dbdce1bf3fac763a057ac1442d2`で一致し、ahead/behind `0/0`、tracked worktreeはclean。pull対象はなかった。
+- `git fetch --prune origin`後の同期開始baseは、primary `main`、`origin/main`、GitHub `refs/heads/main`が`2f3753495dbb4dbdce1bf3fac763a057ac1442d2`で一致し、ahead/behind `0/0`、tracked worktreeはcleanだった。pull対象はなかった。本正本を含む現在の`HEAD`もnormal push後に`origin/main` / GitHub readbackとahead/behind `0/0`を再確認した。
 - `73aef720..2f37534`は2026-07-26 development-readinessの正本9件だけで、source、Yarn、scene、Packages、ProjectSettingsを変更しないdocs-only commitとしてremote反映済み。
-- review branch `codex/sites-authoring-bridge-v1`、`origin/codex/sites-authoring-bridge-v1`は`e059e4b758f9e39641b5368301ede837f930724d`で一致し、親は現main `2f37534`。19 files、1545 insertions / 30 deletionsのcandidateで、mainへ未統合。
+- review branch `codex/sites-authoring-bridge-v1`、`origin/codex/sites-authoring-bridge-v1`は`e059e4b758f9e39641b5368301ede837f930724d`で一致し、親は同期開始base `2f37534`。19 files、1545 insertions / 30 deletionsのcandidateで、現在のmainへ未統合。
 - exact candidateをUnity 6000.4.9f1でbatch open/compileしreturn code 0。`ProjectFoundPhone.Editor.Tests`は18/18 pass。visible Editorをexact project pathと`WriterCockpitWindow.ShowWindow`で起動し、Writer Cockpitと`Export Sites Preview Package`を実画面で確認した。
 - candidateのtracked serve wrapperをport 4327で起動し、fixture / CSS / JS / demo JSON / legitimate generated Package v1 / query routeのHTTP 200、MIME、`nosniff`、`no-store`を確認。fixtureとgeneratedをブラウザで開始し、console warning/error 0。検証serverは停止した。
 - 過去の`recipient_open=failed`時に開かれていたproject pathとstderrは残っていないため、過去原因は断定しない。現在はexact remote branch、commit、Unity direct window、preview commandが検証済み。

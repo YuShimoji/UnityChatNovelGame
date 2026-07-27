@@ -11,9 +11,9 @@
 - next_recommended_slice: **User / Supervisorが`origin/codex/sites-authoring-bridge-v1@e059e4b`のWriter Cockpit exportとfixture/generated previewをOK/NGで受け入れる**
 - subsequent_recommended_slice: **assistantがmain上でsave data isolationを設計し、基礎EditMode 73 / PlayMode 10を日付付きで実行する**
 - later_recommended_slice: **SP-023 / SP-024表示検収 → M1全スレッド型 → M2状態完全性 → M3 alpha gate**
-- active_artifact: main `2f37534` / review branch `e059e4b` / WriterCockpitWindow / SitesPreview Package v1 / `sites/foundphone-demo/` / Owner-only Sites Version 1
+- active_artifact: main `HEAD`（本正本を含み`origin/main` / GitHub readbackとparity。同期開始baseは`2f37534`）/ review branch `e059e4b` / WriterCockpitWindow / SitesPreview Package v1 / `sites/foundphone-demo/` / Owner-only Sites Version 1
 - artifact_surface: mainのEditor tooling + remote review branchのUnity/Yarn→static preview bridge + portable static input + Owner-only hosted runtime（すべて受入・統合・公開gateを分離）
-- last_change_relation: `main=origin/main=2f37534`をfetch/readbackし、`origin/codex/sites-authoring-bridge-v1=e059e4b`のcompile・18/18・direct window・local HTTP accessをevidence-onlyで固定
+- last_change_relation: 同期開始base `2f37534`をfetch/readback後、本正本を含む`HEAD=origin/main=GitHub readback`のparity `0/0`をnormal push後に確認し、`origin/codex/sites-authoring-bridge-v1=e059e4b`のcompile・18/18・direct window・local HTTP accessをevidence-onlyで固定
 - plan_file: `docs/SUPERVISOR_REPORT.md`（現状・G0-G13 目標案） / `docs/plans/display-batch-showcase.md`（表示系デモ正本）
 
 ## Counters
@@ -37,7 +37,7 @@
 
 ### 2026-07-27（remote parity / Sites authoring bridge access）
 
-- **Git**: `git fetch --prune origin`後、primary `main`、`origin/main`、GitHub readbackは`2f3753495dbb4dbdce1bf3fac763a057ac1442d2`でahead/behind `0/0`、tracked clean。review branchはlocal / originとも`e059e4b758f9e39641b5368301ede837f930724d`、親は`2f37534`。PR / mergeなし。
+- **Git**: `git fetch --prune origin`後の同期開始baseは、primary `main`、`origin/main`、GitHub readbackが`2f3753495dbb4dbdce1bf3fac763a057ac1442d2`でahead/behind `0/0`、tracked clean。本正本を含む現在の`HEAD`もnormal push後に`origin/main` / GitHub readbackとparity `0/0`を確認した。review branchはlocal / originとも`e059e4b758f9e39641b5368301ede837f930724d`、親は同期開始base`2f37534`。PR / mergeなし。
 - **candidate Unity**: Unity 6000.4.9f1 batch compile return code 0、targeted Editor 18/18。exact candidateをdirect `ShowWindow`で起動し、Writer Cockpitと`Export Sites Preview Package`を可視確認。Apply / Play / Last Actionと人間の作者UX受入は未実施。
 - **candidate preview**: tracked wrapperをport 4327で起動し、fixture / CSS / JS / demo JSON / generated Package / query routeのHTTP 200とMIMEを確認。fixtureとgeneratedをブラウザ開始、console warning/error 0。serverは停止。
 - **boundary**: candidateはremoteで再取得可能だがmainへ未統合。generated JSON、Unity logs、Library、UserSettings、MkDocs出力は端末ローカルでcommitしない。Sites deployment/access、public visibility、Yarn canon、runtime UI、save、Packages、ProjectSettingsは変更なし。

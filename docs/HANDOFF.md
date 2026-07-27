@@ -15,8 +15,8 @@
 
 **本セッションの実施内容**:
 
-- `git fetch --prune origin`後、primary `main`、`origin/main`、GitHub readbackは`2f3753495dbb4dbdce1bf3fac763a057ac1442d2`で一致し、ahead/behind `0/0`、tracked worktreeはclean。`73aef720..2f37534`は2026-07-26 development-readiness正本9件だけで、source / Yarn / scene / package変更を含まない。
-- review branch `codex/sites-authoring-bridge-v1`と`origin/codex/sites-authoring-bridge-v1`は`e059e4b758f9e39641b5368301ede837f930724d`で一致し、親は現main `2f37534`。このcandidateはmainへ未統合で、受入・merge・releaseを意味しない。
+- `git fetch --prune origin`後の同期開始baseは、primary `main`、`origin/main`、GitHub readbackが`2f3753495dbb4dbdce1bf3fac763a057ac1442d2`で一致し、ahead/behind `0/0`、tracked worktreeはcleanだった。`73aef720..2f37534`は2026-07-26 development-readiness正本9件だけで、source / Yarn / scene / package変更を含まない。本snapshotを含む現在の`HEAD`はnormal push後に`origin/main` / GitHub readbackとのparity `0/0`を再確認し、exact delivery SHAは別端末で`git rev-parse HEAD`から取得する。
+- review branch `codex/sites-authoring-bridge-v1`と`origin/codex/sites-authoring-bridge-v1`は`e059e4b758f9e39641b5368301ede837f930724d`で一致し、親は同期開始base `2f37534`。このcandidateは現在のmainへ未統合で、受入・merge・releaseを意味しない。
 - exact candidateをUnity 6000.4.9f1でbatch compileしreturn code 0、対象Editor testsは18/18 pass。可視Editorをexact project pathと`WriterCockpitWindow.ShowWindow`で起動し、Writer Cockpitと`Export Sites Preview Package`操作を実画面で確認した。
 - tracked `tools/sites/serve-demo.ps1`をport 4327で起動し、fixture、CSS、JavaScript、`content/demo.json`、legitimate generated Package v1、`?content=generated`のHTTP 200 / MIME / `nosniff` / `no-store`を確認。fixtureとgeneratedをブラウザで開始し、console warning/error 0。検証serverは停止済み。
 - ユーザーの過去の`recipient_open=failed`は有効な証拠として保持する。当時開いていたproject pathとstderrは残っていないため原因を断定せず、現在はremoteで再取得可能なexact branchと直接起動経路が検証済みと記録する。
