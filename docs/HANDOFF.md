@@ -11,6 +11,17 @@
 5. `docs/INVARIANTS.md`
 6. `docs/USER_REQUEST_LEDGER.md`
 
+## Handoff snapshot (2026-07-27 remote parity / Sites authoring bridge access)
+
+**本セッションの実施内容**:
+
+- `git fetch --prune origin`後、primary `main`、`origin/main`、GitHub readbackは`2f3753495dbb4dbdce1bf3fac763a057ac1442d2`で一致し、ahead/behind `0/0`、tracked worktreeはclean。`73aef720..2f37534`は2026-07-26 development-readiness正本9件だけで、source / Yarn / scene / package変更を含まない。
+- review branch `codex/sites-authoring-bridge-v1`と`origin/codex/sites-authoring-bridge-v1`は`e059e4b758f9e39641b5368301ede837f930724d`で一致し、親は現main `2f37534`。このcandidateはmainへ未統合で、受入・merge・releaseを意味しない。
+- exact candidateをUnity 6000.4.9f1でbatch compileしreturn code 0、対象Editor testsは18/18 pass。可視Editorをexact project pathと`WriterCockpitWindow.ShowWindow`で起動し、Writer Cockpitと`Export Sites Preview Package`操作を実画面で確認した。
+- tracked `tools/sites/serve-demo.ps1`をport 4327で起動し、fixture、CSS、JavaScript、`content/demo.json`、legitimate generated Package v1、`?content=generated`のHTTP 200 / MIME / `nosniff` / `no-store`を確認。fixtureとgeneratedをブラウザで開始し、console warning/error 0。検証serverは停止済み。
+- ユーザーの過去の`recipient_open=failed`は有効な証拠として保持する。当時開いていたproject pathとstderrは残っていないため原因を断定せず、現在はremoteで再取得可能なexact branchと直接起動経路が検証済みと記録する。
+- `Library/`、`Logs/`、`UserSettings/`、MkDocs出力はignored端末ローカル状態として保持し、commit対象外。push済みなのは既存mainとreview branchのみで、PR、merge、deploy、Sites access/public visibility変更は行っていない。
+
 ## Handoff snapshot (2026-07-26 remote sync / development readiness)
 
 **本セッションの実施内容**:
@@ -135,10 +146,11 @@ python -m mkdocs serve -a 127.0.0.1:8000
 
 ## Current Focus
 
-- 主目的: **実セーブを保護した現行回帰基準を作り、人間環境のWriter Cockpit full loopとOwner-only hosted本文reviewを閉じる**
-- 現在: リモートparity、Unity compile、Yarn validator、strict docs、static fixtureは2026-07-26に再確認済み。74 Node検索、source path/line、diagnostic drilldownも受入済み。Sites Version 1はsource `29c5245d...`のprivate hosted runtimeとして存在する。
+- 主目的: **remoteで再取得可能なSites authoring bridge candidateを人間受入へ渡し、実セーブを保護した現行回帰基準とOwner-only hosted本文reviewを並行して閉じる**
+- 現在: primary `main=origin/main=2f37534`。review branch `origin/codex/sites-authoring-bridge-v1=e059e4b`はmainの直系1 commitで、Unity compile、targeted 18/18、Writer Cockpit直通表示、fixture/generated local preview accessまで検証済み。mainへの統合と人間受入は未実施。
+- 次の bridge gate: User / Supervisorがexact candidateのWriter Cockpitとfixture/generated previewを開き、作者導線としてOK/NGを記録する。OKでも自動mergeせず、main統合は別の明示判断とする。
 - 次の publication gate: User / Web SupervisorがOwnerとしてprivate URLを開き、hosted app本文の両分岐、restart、keyboard、network、320–430pxを確認する。Site作成、source push、Version 1、Owner-only deploymentは完了済みで、public/shared accessは未承認のまま。
-- 次の shared review: 人間がUnity PreferencesでExternal Script Editorを選択し、Nodeとdiagnosticのsource jumpを各1回確認する。必要ならCockpitからApply / Playの既存interactive loopも再受入する。
+- 次の shared review: 人間がUnity PreferencesでExternal Script Editorを選択し、Nodeとdiagnosticのsource jumpを各1回確認する。Cockpit windowの存在はcandidateで実証済みだが、Apply / Play / Last Actionと生成操作の人間受入は残る。
 - blocker: direct Unity Web routeはWeb Build Support欠落、有効なpublic gameplay scene欠落、TitleSceneの公開不可scene依存によりblocked。module導入・scene修復・公開は別判断。
 - 次のassistant lane: test専用pathまたは退避手順を設計し、基礎83件を安全に実行して全97件の現行内訳を日付付きで固定する。
 - 注意: `Library/` / `Logs/` はignored local evidence。基礎83 testsはsave data隔離前に実行しない。Sites packageは非canon fixtureであり、hosted runtimeが存在しても本編・最終ストーリー・public公開の受入を意味しない。
@@ -242,12 +254,12 @@ python -m mkdocs serve -a 127.0.0.1:8000
 
 ## Safe Next Steps
 
-1. User / Web SupervisorがOwnerとして`https://foundphone-signal-preview.thankyoukass.chatgpt.site`を開き、Sites標準sign-in後のhosted app本文を確認する。
-2. Owner-only accessを変えずに、両分岐、restart、desktop/mobile、実キーボード、networkを再確認し、actual hosted runtimeをOK/NGで記録する。
-3. public access、workspace共有、custom domain、live store link、PII/auth/payment追加は別のHuman Gateまで行わない。
-4. Unity laneでは`.\tools\run-unity.ps1`でUnity **6000.4.9f1**を開き、External Script Editor jumpと必要なWriter Cockpit Apply / Playを再受入する。
-5. assistant laneではsave dataを退避またはtest専用pathへ隔離し、基礎EditMode 73 / PlayMode 10を実行する。targeted Editor 14を含む全97件の内訳と結果を日付付きで記録する。
-6. ここまで通ったらSP-023 3ノード → `SP024_Immersion_Start`の表示検収へ進み、M1 → M2 → M3のgate前にfull Ch1 authoringへ進まない。
+1. User / Supervisorが`origin/codex/sites-authoring-bridge-v1`のexact commit `e059e4b`を開き、Writer Cockpitのexport導線とfixture/generated previewをOK/NGで記録する。review選択はmain統合承認を意味しない。
+2. assistant laneではmain上でsave dataを退避またはtest専用pathへ隔離し、基礎EditMode 73 / PlayMode 10を実行する。mainのtargeted Editor 14とcandidateの18件を混同せず、assembly / SHA別に記録する。
+3. User / Web SupervisorがOwnerとして`https://foundphone-signal-preview.thankyoukass.chatgpt.site`を開き、Sites標準sign-in後のhosted app本文を確認する。
+4. Owner-only accessを変えずに、両分岐、restart、desktop/mobile、実キーボード、networkを再確認し、actual hosted runtimeをOK/NGで記録する。
+5. public access、workspace共有、custom domain、live store link、PII/auth/payment追加は別のHuman Gateまで行わない。
+6. bridge受入と安全な回帰基準化後、SP-023 3ノード → `SP024_Immersion_Start`の表示検収へ進み、M1 → M2 → M3のgate前にfull Ch1 authoringへ進まない。
 
 補足:
 - SP-023 仕様: `docs/StorySpec/23_text_presentation.md`

@@ -19,6 +19,7 @@
   - **運用 (2026-07-17)**: 2026-07-15 の未コミット docs 4件をレビューして保持し、`main` / `origin/main` を `7eb09c0`、ahead/behind `0/0` で再同期。現 checkout で Unity 6000.4.9f1 batch open / Tundra compile / Yarn validator errors=0 / strict docs build を再確認。全83テストと Writer Cockpit interactive 受入は未実行のまま、active slice と owner 境界を維持
   - **運用 (2026-07-21)**: tracked static fixtureをSites-native Vinext/React runtimeへ等価変換し、Owner-only accessのVersion 1をhost。source/version/deployment/accessのIDと変換対応を`docs/verification/2026-07-20-sites-private-runtime-validation.md`へ固定。次はOwner sign-in後のhosted本文reviewで、public/shared accessは未承認
   - **運用 (2026-07-26)**: `73aef720`で`main` / `origin/main` parity 0/0とfast-forward pull済みを確認。Unity 6000.4.9f1 compile、Yarn errors 0 / warnings 0、strict docs、static Sites fixtureを再検証。現行test定義は基礎83 + targeted Editor 14 = 97で、次はpersistent saveを保護するtest isolationと基礎83件の現行基準化
+  - **運用 (2026-07-27)**: `main` / `origin/main` / GitHub readbackを`2f37534`、ahead/behind 0/0で確認。remote review branch `origin/codex/sites-authoring-bridge-v1=e059e4b`は現mainの直系1 commitで、Unity compile、targeted Editor 18/18、Writer Cockpit direct window、fixture/generated local preview accessまで検証済み。main統合・人間受入・deployは未実施
   - **運用 (2026-04-09)**: セッション引き継ぎで `main`≒`origin/main` を確認。計測用 `debug-*.log` は `.gitignore` でリポジトリ外に固定。再開の最短導線は `docs/HANDOFF.md` の Handoff snapshot
   - **技術 (session 21–22)**: PlayMode 失敗の根本原因は auto-start の missing_node:Start。HasNode 事前チェック + archive 除外 + TearDown（`UnityTearDown` + `StopScenario` + 待機）で修正。WORKFLOW_STATE_SSOT.md 廃止。Session 22: タイプライター同期（DOTween 完了待機）、DebugChatScene 整備、SaveManager AutoSaveIndicator 安全化、PlayMode **8**/8・EditMode 75/75 をローカルで通過（batch XML・共通ヘルパー分離済み）
   - **方向性修正 (2026-04-15)**: Ch 積み上げ構造の構造的ドリフトを修正。主軸を**エンジン能力マイルストーン**に切替。ガードレール（`docs/REPO_LOCAL_RULES.md` / `docs/INVARIANTS.md`）を実行計画より上位に再配置。SUBSEQUENT を通過ゲート（スキップ不可）に変更
@@ -50,20 +51,20 @@
 
 ## CURRENT LANE
 
-- 主レーン: **Authoring Tooling**（Writer / Designer Cockpit MVP）
+- 主レーン: **Authoring Tooling**（Writer / Designer Cockpit MVP + Sites Authoring Bridge review）
 - 副レーン: **Engine / UI Review**（Cockpit導線確認後に SP-023 / SP-024 表示検収へ戻る）
-- 優先理由: 一画面の作者UX、source navigation、Validator warning信頼性は実装・compile・targeted test済み。残るbottleneckはinteractive Apply / Play、人間設定のsource jump、実セーブを保護した基礎83件の現行回帰
+- 優先理由: 一画面の作者UX、source navigation、Validator warning信頼性に加え、remote review branchではYarn→Package v1→local preview bridgeとexact accessが実装・compile・targeted test済み。残るbottleneckはcandidateの人間受入とmain統合判断、interactive Apply / Play、人間設定のsource jump、実セーブを保護した基礎83件の現行回帰
 - いまは深入りしないレーン: Yarn本文執筆、Runtime Dashboard/DebugHub の広範なPrefab化、既存セーブデータ操作、UI_ISSUES.md 載せ項目の個別コード修正、サウンド、マネタイズ
 
 ---
 
 ## CURRENT SLICE
 
-- スライス名: **Writer / Designer Cockpit MVP**
-- 目的: Yarn 保存 → Refresh Nodes → Validate → Sync Authoring Assets → Start Node 選択 → ContentAuthoring Apply/Play → Last Action / read-only Save status 確認を Unity Editor の一画面に集約する
+- スライス名: **Writer / Designer Cockpit MVP + Sites Authoring Bridge review**
+- 目的: 既存の作者loopに加え、非canon検証nodeを決定的Package v1としてlocal static previewへ渡すcandidateが、実際に作者から到達可能かを受け入れる
 - ユーザー操作列: 外部エディタで `.yarn` 保存 → `Tools > FoundPhone > Writer Cockpit` → `Refresh Nodes` → `Validate Then Sync` → 推奨または任意 Start Node を選択 → `Apply Node To ContentAuthoring Scene` または `Play ContentAuthoring From Selected Node`
-- 成功状態: Cockpit が Unity menu から開け、active Yarn file/node 数、推奨/選択 Start Node、Validation summary、Sync result、ContentAuthoring status、Save/autosave read-only status、Last Action を表示し、既存 Content Pipeline を壊さず Apply/Play できる
-- 現在の残り: fresh resolve / compile は通過。visible Editor 上の menu / window / Apply / Play / Last Action が未確認
+- 成功状態: CockpitがUnityから開け、既存Apply/Playを維持し、選択した非canon検証nodeのPackage exportとfixture/generated previewを人間が迷わず実行できる。candidate受入後もmain統合は別判断とする
+- 現在の残り: review branch `e059e4b`はdirect window、Export操作の存在、compile、18/18、fixture/generated HTTP/browser accessまで実証。実Export操作、Apply / Play / Last Action、External Script Editor jumpの人間受入とmain統合判断が未完了
 - コンテンツの扱い: 既存 active Yarn のみ使用。新規ストーリー本文は書かない
 - 今回はやらないこと: [横断保留](#横断保留) を参照
 

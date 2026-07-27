@@ -1,19 +1,19 @@
 # Runtime State
 
-**Updated**: 2026-07-26（remote sync / development readiness）
+**Updated**: 2026-07-27（remote parity / Sites authoring bridge access）
 
 ## Current Position
 
 - project: FoundPhone (UnityChatNovelGame)
 - branch: main
-- lane: **Authoring Tooling regression baseline / Owner-only hosted review in parallel**
-- slice: **2026-07-26のremote parity・compile・validator・docs・fixture再検証を起点に、安全な基礎83 test baselineを作る**
-- next_recommended_slice: **assistantがsave data isolationを設計し、基礎EditMode 73 / PlayMode 10を日付付きで実行する**
-- subsequent_recommended_slice: **External Script Editor line jump + Writer Cockpit Apply / Play受入、Owner sign-in後のhosted本文reviewを並行して閉じる**
+- lane: **Authoring Tooling bridge review / save-isolated regression baseline / Owner-only hosted review**
+- slice: **remoteで再取得可能なSites authoring bridge candidateを人間受入へ渡し、mainの技術基準と未統合candidateの証拠を分離する**
+- next_recommended_slice: **User / Supervisorが`origin/codex/sites-authoring-bridge-v1@e059e4b`のWriter Cockpit exportとfixture/generated previewをOK/NGで受け入れる**
+- subsequent_recommended_slice: **assistantがmain上でsave data isolationを設計し、基礎EditMode 73 / PlayMode 10を日付付きで実行する**
 - later_recommended_slice: **SP-023 / SP-024表示検収 → M1全スレッド型 → M2状態完全性 → M3 alpha gate**
-- active_artifact: WriterCockpitWindow / WriterCockpitNavigation / YarnContentValidator / YarnAuthoringRegistry / YarnSOGenerator / `sites/foundphone-demo/` / `tools/sites/` / Sites project `appgprj_6a5ddb11908081918180da7797957e63`
-- artifact_surface: Editor tooling + portable static input + Owner-only Sites hosted runtime（non-canon fixture。Unity/Yarn正本とは非接続）
-- last_change_relation: `73aef720`のremote parityからUnity / Yarn / docs / fixture / Sites accessをread-only再検証し、次のtest isolation laneを確定
+- active_artifact: main `2f37534` / review branch `e059e4b` / WriterCockpitWindow / SitesPreview Package v1 / `sites/foundphone-demo/` / Owner-only Sites Version 1
+- artifact_surface: mainのEditor tooling + remote review branchのUnity/Yarn→static preview bridge + portable static input + Owner-only hosted runtime（すべて受入・統合・公開gateを分離）
+- last_change_relation: `main=origin/main=2f37534`をfetch/readbackし、`origin/codex/sites-authoring-bridge-v1=e059e4b`のcompile・18/18・direct window・local HTTP accessをevidence-onlyで固定
 - plan_file: `docs/SUPERVISOR_REPORT.md`（現状・G0-G13 目標案） / `docs/plans/display-batch-showcase.md`（表示系デモ正本）
 
 ## Counters
@@ -23,7 +23,7 @@
 
 ## Quantitative Metrics (0 を目指す指標のみ、件数追跡は廃止)
 
-- tests_last_run: 2026-07-19 targeted WriterCockpitNavigation EditMode 14/14 pass。2026-07-26時点の定義は基礎EditMode 73 + PlayMode 10 + targeted Editor 14 = 97。基礎83はsave isolation待ち
+- tests_last_run: mainは2026-07-19 targeted WriterCockpitNavigation EditMode 14/14。review branch `e059e4b`は2026-07-27 `ProjectFoundPhone.Editor.Tests` 18/18。mainの基礎EditMode 73 + PlayMode 10はsave isolation待ちで、candidate結果をmain全97件の結果には数えない
 - mock_files: 0
 - spec_entries: 42 (`docs/spec-index.json` 配列長、検証用。SP-023/SP-024 追加)
 - todo_fixme_hack: ChatController.cs:2020 に 1 件残存 (FEATURE_STATUS_AUDIT W-6 参照)
@@ -34,6 +34,14 @@
 - last_visual_audit_path: docs/archive/verification-evidence/VerticalSliceSmokeGate_20260403_*.png (参考。パスのみ保持、追跡は廃止)
 
 ## Session Log
+
+### 2026-07-27（remote parity / Sites authoring bridge access）
+
+- **Git**: `git fetch --prune origin`後、primary `main`、`origin/main`、GitHub readbackは`2f3753495dbb4dbdce1bf3fac763a057ac1442d2`でahead/behind `0/0`、tracked clean。review branchはlocal / originとも`e059e4b758f9e39641b5368301ede837f930724d`、親は`2f37534`。PR / mergeなし。
+- **candidate Unity**: Unity 6000.4.9f1 batch compile return code 0、targeted Editor 18/18。exact candidateをdirect `ShowWindow`で起動し、Writer Cockpitと`Export Sites Preview Package`を可視確認。Apply / Play / Last Actionと人間の作者UX受入は未実施。
+- **candidate preview**: tracked wrapperをport 4327で起動し、fixture / CSS / JS / demo JSON / generated Package / query routeのHTTP 200とMIMEを確認。fixtureとgeneratedをブラウザ開始、console warning/error 0。serverは停止。
+- **boundary**: candidateはremoteで再取得可能だがmainへ未統合。generated JSON、Unity logs、Library、UserSettings、MkDocs出力は端末ローカルでcommitしない。Sites deployment/access、public visibility、Yarn canon、runtime UI、save、Packages、ProjectSettingsは変更なし。
+- **next**: ownerがexact candidateをOK/NG判断し、受入後もmain統合は別指示とする。assistantはmainのsave-isolated基礎83件へ進める。
 
 ### 2026-07-26（remote sync / development readiness）
 
