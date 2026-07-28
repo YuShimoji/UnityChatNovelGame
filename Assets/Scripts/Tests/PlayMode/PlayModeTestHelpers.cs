@@ -19,9 +19,58 @@ namespace ProjectFoundPhone.Tests
     /// </summary>
     public static class PlayModeTestHelpers
     {
+        private const string TestSaveDirectoryEnvironmentVariable =
+            "FOUNDPHONE_TEST_SAVE_DIRECTORY";
+        private const string TestSaveRootEnvironmentVariable =
+            "FOUNDPHONE_TEST_SAVE_ROOT";
+        private const string TestSaveRootDirectoryName = "FoundPhoneTests";
+
         public const string EvidenceRelativePath = "docs/verification";
         public const float SceneLoadTimeoutSeconds = 10f;
         public const float ChatMessageTimeoutSeconds = 5f;
+
+        public static string RequireIsolatedSaveDirectory()
+        {
+            string configuredDirectory =
+                Environment.GetEnvironmentVariable(TestSaveDirectoryEnvironmentVariable);
+            Assert.That(
+                configuredDirectory,
+                Is.Not.Null.And.Not.Empty,
+                $"Run Unity tests through tools/run-unity.ps1 -IsolateTestSaveData. "
+                + $"{TestSaveDirectoryEnvironmentVariable} is not configured.");
+
+            string fullDirectory = Path.GetFullPath(configuredDirectory);
+            string configuredRoot =
+                Environment.GetEnvironmentVariable(TestSaveRootEnvironmentVariable);
+            Assert.That(
+                configuredRoot,
+                Is.Not.Null.And.Not.Empty,
+                $"{TestSaveRootEnvironmentVariable} is not configured.");
+
+            string allowedRoot = Path.GetFullPath(configuredRoot);
+            Assert.That(
+                Path.GetFileName(allowedRoot),
+                Is.EqualTo(TestSaveRootDirectoryName),
+                $"{TestSaveRootEnvironmentVariable} must end with {TestSaveRootDirectoryName}.");
+            string allowedPrefix =
+                allowedRoot.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                + Path.DirectorySeparatorChar;
+
+            Assert.That(
+                fullDirectory.StartsWith(allowedPrefix, StringComparison.OrdinalIgnoreCase),
+                Is.True,
+                $"{TestSaveDirectoryEnvironmentVariable} must be under {allowedRoot}.");
+            Assert.That(
+                string.Equals(
+                    fullDirectory,
+                    Path.GetFullPath(Application.persistentDataPath),
+                    StringComparison.OrdinalIgnoreCase),
+                Is.False,
+                "The isolated test directory must not equal Application.persistentDataPath.");
+
+            Directory.CreateDirectory(fullDirectory);
+            return fullDirectory;
+        }
 
         public static IEnumerator LoadSceneWithTimeout(string sceneName, float timeoutSeconds)
         {
@@ -122,7 +171,9 @@ namespace ProjectFoundPhone.Tests
 
         public static void CleanupSaveSlot(int slotNumber)
         {
-            string filePath = Path.Combine(Application.persistentDataPath, $"SaveData_{slotNumber}.json");
+            string filePath = Path.Combine(
+                RequireIsolatedSaveDirectory(),
+                $"SaveData_{slotNumber}.json");
             if (File.Exists(filePath))
             {
                 File.Delete(filePath);

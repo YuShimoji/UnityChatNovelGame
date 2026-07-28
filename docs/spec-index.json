@@ -321,7 +321,7 @@
     "pct": 60,
     "cat": "infra",
     "file": null,
-    "summary": "PlayMode テスト: SmokeGate 4件 + ScenarioFlow 4件 = 計8テストケース。共通ヘルパー分離済み。teardown DialogueException 対策済み (UnityTearDown + StopScenario)。batch XML 出力対応済み。実行記録テンプレ: docs/verification/2026-04-10-playmode-8-results-TEMPLATE.md。残(本スコープ): Ch3 入口ノードの短い PlayMode 1 ケース、ETK 全コマンド網羅、Phase A の自動化候補(HUMAN_AUTHORITY)。本編 Ch1〜Ch3 の手動一気通しは EN-012 外 — SUBSEQUENT / オペレーター判断の手動検証"
+    "summary": "PlayMode テスト: SmokeGate 4件 + ScenarioFlow 6件 = 計10テストケース。共通ヘルパー、teardown DialogueException 対策、batch XML、実saveを保護するtest save isolationを実装。2026-07-28にPlayMode 10/10、基礎EditMode 73/73、targeted Editor 14/14を実行。記録: docs/verification/2026-07-28-save-isolated-regression.md。残(本スコープ): Ch3 入口ノードの短い PlayMode 1 ケース、ETK 全コマンド網羅、Phase A の自動化候補(HUMAN_AUTHORITY)。本編 Ch1〜Ch3 の手動一気通しは EN-012 外 — SUBSEQUENT / オペレーター判断の手動検証"
   },
   {
     "id": "EN-013",

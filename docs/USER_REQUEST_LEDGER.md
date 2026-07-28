@@ -23,6 +23,7 @@
 | 2026-07-10 | リポジトリを開かなくても現在地を確認でき、main に追随して自動更新される閲覧面を持つ | active | MkDocs build は利用可能。GitHub Pages workflow と初回 Pages 設定は未実施 |
 | 2026-07-26 | リモート最新をlocalへ取り込み、開発可能性を再検証し、監修役AI向け詳細報告と条件付き目標をproject-localに残す | done | `docs/verification/2026-07-26-development-readiness.md` / `SUPERVISOR_REPORT.md` / `HANDOFF.md` / `runtime-state.md` |
 | 2026-07-27 | Sites authoring bridge候補をremoteで再取得可能にし、人間受入・main統合・hosted/public releaseを別ゲートとして引き継ぐ | review-ready / human gate pending | `origin/codex/sites-authoring-bridge-v1@e059e4b` / `docs/HANDOFF.md` / `docs/SUPERVISOR_REPORT.md` |
+| 2026-07-28 | dirtyなローカル正本整理と3コミット先のremote mainを片方も失わず統合し、許可済みスライスを実装・検証・git follow-throughまで完了する | AI所有範囲done / human gates pending | `codex/reconcile-authoring-bridge-state` / `docs/verification/2026-07-28-save-isolated-regression.md` / `HANDOFF.md` / `runtime-state.md` |
 
 ## 継続して効く是正要求
 

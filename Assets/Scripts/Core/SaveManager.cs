@@ -64,6 +64,12 @@ namespace ProjectFoundPhone.Core
         /// オートセーブインジケーターの表示秒数
         /// </summary>
         private const float AutoSaveIndicatorDuration = 1f;
+
+#if UNITY_EDITOR
+        private const string TestSaveDirectoryEnvironmentVariable = "FOUNDPHONE_TEST_SAVE_DIRECTORY";
+        private const string TestSaveRootEnvironmentVariable = "FOUNDPHONE_TEST_SAVE_ROOT";
+        private const string TestSaveRootDirectoryName = "FoundPhoneTests";
+#endif
         #endregion
 
         #region Private Fields
@@ -679,7 +685,57 @@ namespace ProjectFoundPhone.Core
         private string GetSaveFilePath(int slotNumber)
         {
             string fileName = $"{m_SaveFilePrefix}_{slotNumber}{m_SaveFileExtension}";
-            return Path.Combine(Application.persistentDataPath, fileName);
+            return Path.Combine(GetSaveDirectoryPath(), fileName);
+        }
+
+        private static string GetSaveDirectoryPath()
+        {
+#if UNITY_EDITOR
+            string isolatedDirectory =
+                Environment.GetEnvironmentVariable(TestSaveDirectoryEnvironmentVariable);
+            if (!string.IsNullOrWhiteSpace(isolatedDirectory))
+            {
+                string fullDirectory = Path.GetFullPath(isolatedDirectory);
+                string configuredRoot =
+                    Environment.GetEnvironmentVariable(TestSaveRootEnvironmentVariable);
+                if (string.IsNullOrWhiteSpace(configuredRoot))
+                {
+                    throw new InvalidOperationException(
+                        $"{TestSaveRootEnvironmentVariable} is required with "
+                        + $"{TestSaveDirectoryEnvironmentVariable}.");
+                }
+
+                string allowedRoot = Path.GetFullPath(configuredRoot);
+                if (!string.Equals(
+                        Path.GetFileName(allowedRoot),
+                        TestSaveRootDirectoryName,
+                        StringComparison.Ordinal))
+                {
+                    throw new InvalidOperationException(
+                        $"{TestSaveRootEnvironmentVariable} must end with "
+                        + $"{TestSaveRootDirectoryName}.");
+                }
+
+                string allowedPrefix =
+                    allowedRoot.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                    + Path.DirectorySeparatorChar;
+
+                if (!fullDirectory.StartsWith(allowedPrefix, StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(
+                        fullDirectory,
+                        Path.GetFullPath(Application.persistentDataPath),
+                        StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new InvalidOperationException(
+                        $"{TestSaveDirectoryEnvironmentVariable} must be under {allowedRoot} "
+                        + "and must not equal Application.persistentDataPath.");
+                }
+
+                Directory.CreateDirectory(fullDirectory);
+                return fullDirectory;
+            }
+#endif
+            return Application.persistentDataPath;
         }
         #endregion
 
@@ -806,4 +862,3 @@ namespace ProjectFoundPhone.Core
         #endregion
     }
 }
-

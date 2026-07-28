@@ -19,6 +19,13 @@ namespace ProjectFoundPhone.Tests
     {
         private const int SaveSlot = 0;
 
+        [UnitySetUp]
+        public IEnumerator SetUpSaveIsolation()
+        {
+            PlayModeTestHelpers.RequireIsolatedSaveDirectory();
+            yield return null;
+        }
+
         private static CharacterProfile CreateRuntimeCharacterProfile(string characterID, string displayName, bool isPlayer, IconSide iconSide, Sprite iconSprite)
         {
             CharacterProfile profile = ScriptableObject.CreateInstance<CharacterProfile>();

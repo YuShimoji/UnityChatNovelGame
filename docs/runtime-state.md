@@ -33,6 +33,13 @@
   - Writer Cockpitと`Export Sites Preview Package`を可視Editorで確認
   - fixture/generated Package v1のHTTP 200、MIME、`nosniff`、`no-store`、browser開始、console warning/error 0
   - candidateはmain未統合。PR、merge、deploy、Sites access変更なし
+- 2026-07-28 save-isolated regression:
+  - `tools/run-unity.ps1 -IsolateTestSaveData`とEditor限定save overrideを追加。未指定の`-runTests`はUnity起動前に拒否
+  - `ProjectFoundPhone.Tests` EditMode 73/73 pass、failed / skipped / inconclusive 0、0.462秒
+  - `ProjectFoundPhone.PlayModeTests` PlayMode 10/10 pass、failed / skipped / inconclusive 0、19.322秒
+  - `ProjectFoundPhone.Editor.Tests` EditMode 14/14 pass、failed / skipped / inconclusive 0、1.817秒
+  - 実`SaveData_99.json`の実行前後SHA-256は`8FB0F337313517E93ABDBE0372ED4B2C5E5C11AF54FBC035B78F0988E5197537`で不変
+  - 詳細は`docs/verification/2026-07-28-save-isolated-regression.md`
 - Sites hosted runtime:
   - Version 1 sourceとdeployment success、Owner-only accessを確認
   - local runtimeで両分岐、restart、keyboard、focus、ARIA、320–430px、禁止機能監査をpass
@@ -53,8 +60,8 @@
 
 ## テスト安全条件
 
-- 基礎テスト定義はEditMode 73 / PlayMode 10。targeted Editorはmain 14、bridge candidate 18であり、assembly / SHA別に記録する。
-- 基礎83件には`Application.persistentDataPath`のsave slotを削除するテストがある。実行前にtest dataを専用pathへ隔離する。
+- 基礎テストはEditMode 73 / PlayMode 10、targeted Editorはmain 14、bridge candidate 18。assembly / SHA別に記録する。
+- CLI testは`tools/run-unity.ps1 -IsolateTestSaveData`を必須入口にする。launcherとtest helperは未設定・root逸脱・実`persistentDataPath`一致をfail-closedで拒否する。
 - External Script Editorのfile / line jump、Writer CockpitのApply / Play / Last Action、bridge Exportの操作感はinteractive人間環境レビュー待ち。
 - direct Unity WebはWeb Build Support、有効なpublic gameplay scene、TitleSceneからのnavigationが揃うまでblocked。
 

@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using NUnit.Framework;
 using System.Collections;
-using System.IO;
 using ProjectFoundPhone.Core;
 using ProjectFoundPhone.Data;
 
@@ -19,6 +18,7 @@ namespace ProjectFoundPhone.Tests
         [SetUp]
         public void Setup()
         {
+            TestSaveDataIsolation.RequireDirectory();
             m_SaveManagerObject = new GameObject("SaveManager");
             m_SaveManager = m_SaveManagerObject.AddComponent<SaveManager>();
         }
@@ -31,14 +31,7 @@ namespace ProjectFoundPhone.Tests
                 Object.DestroyImmediate(m_SaveManagerObject);
             }
 
-            for (int i = 0; i < 3; i++)
-            {
-                string filePath = Path.Combine(Application.persistentDataPath, $"SaveData_{i}.json");
-                if (File.Exists(filePath))
-                {
-                    File.Delete(filePath);
-                }
-            }
+            TestSaveDataIsolation.CleanupSaveSlots(0, 1, 2, SaveManager.AutoSaveSlot);
         }
 
         [Test]
@@ -83,6 +76,9 @@ namespace ProjectFoundPhone.Tests
 
             Assert.IsTrue(success);
             Assert.IsTrue(m_SaveManager.HasSaveInSlot(0));
+            Assert.IsTrue(
+                System.IO.File.Exists(TestSaveDataIsolation.GetSaveFilePath(0)),
+                "Save file was not written to the isolated test directory.");
         }
 
         [UnityTest]

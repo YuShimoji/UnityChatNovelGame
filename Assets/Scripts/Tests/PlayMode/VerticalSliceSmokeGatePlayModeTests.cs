@@ -13,6 +13,13 @@ namespace ProjectFoundPhone.Tests
     {
         private const int SaveSlot = 0;
 
+        [UnitySetUp]
+        public IEnumerator SetUpSaveIsolation()
+        {
+            PlayModeTestHelpers.RequireIsolatedSaveDirectory();
+            yield return null;
+        }
+
         [UnityTest]
         public IEnumerator VerticalSlice_SmokeFlow_TitleToChat_SaveLoad()
         {

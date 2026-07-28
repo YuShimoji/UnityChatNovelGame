@@ -11,9 +11,9 @@
 | 項目 | 数値 | 最終更新 |
 |------|------|----------|
 | 実装ファイル (.cs) | 66 (テスト除く) / 71 (テスト含む) | session 19 実測（要再スキャン時は `runtime-state` 参照） |
-| テストファイル | **8**（基礎EditMode **4** + Editor targeted **1** + PlayMode **2** + `PlayModeTestHelpers` **1**） | **2026-07-26 属性再集計** |
-| PlayMode テストケース | **10**（`VerticalSliceSmokeGatePlayModeTests` 4 + `ScenarioFlowPlayModeTests` 6） | **2026-07-26 属性再集計、実行結果ではない** |
-| EditMode テストケース | **87**（基礎73 + `ProjectFoundPhone.Editor.Tests` 14） | **2026-07-26 属性再集計。Editor 14/14は2026-07-19、基礎73は未実行** |
+| テストファイル | **9**（基礎EditMode **5**、Editor targeted **1**、PlayMode **2**、`PlayModeTestHelpers` **1**） | **2026-07-28 save isolation helper追加後** |
+| PlayMode テストケース | **10**（`VerticalSliceSmokeGatePlayModeTests` 4 + `ScenarioFlowPlayModeTests` 6） | **2026-07-28 10/10 pass** |
+| EditMode テストケース | **87**（基礎73 + `ProjectFoundPhone.Editor.Tests` 14） | **2026-07-28 87/87 pass** |
 | Yarnファイル (active) | 11 | 2026-04-21 実測 (`SP023_LocalExtensionsDemo` / `SP023_DisplayShowcaseDemo` / `SP024_ImmersionDemo` 追加後) |
 | Yarnファイル (archive) | 5 | session 19 |
 | Yarnコマンド | **33** (`SetTypingSpeed`, `SetTime`, `MarkDelivered`, `MarkRead`, `DeleteLastMessage`, `DeleteMessage` を含む) | 2026-04-21 |

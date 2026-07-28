@@ -19,11 +19,18 @@ environment variables.
 .\tools\run-unity.ps1 -BatchMode -Quit `
     -LogFile 'Logs\yarn-validator.log' `
     -ExecuteMethod 'ProjectFoundPhone.Editor.ContentPipelineBatch.RunYarnValidatorBatch'
+
+.EXAMPLE
+.\tools\run-unity.ps1 -BatchMode -IsolateTestSaveData `
+    -LogFile 'Logs\editmode-tests.log' `
+    -AdditionalArguments @('-runTests', '-testPlatform', 'EditMode',
+        '-testResults', 'Logs\editmode-tests.xml')
 #>
 param(
     [string]$UnityPath,
     [switch]$BatchMode,
     [switch]$Quit,
+    [switch]$IsolateTestSaveData,
     [string]$LogFile,
     [string]$ExecuteMethod,
     [string[]]$AdditionalArguments,
@@ -59,6 +66,30 @@ if (-not (Test-Path -LiteralPath $UnityPath)) {
 if ([string]::IsNullOrWhiteSpace($env:ALLUSERSPROFILE)) {
     $env:ALLUSERSPROFILE = [Environment]::GetFolderPath(
         [Environment+SpecialFolder]::CommonApplicationData)
+}
+
+$previousTestSaveRoot = $null
+$previousTestSaveDirectory = $null
+if ($IsolateTestSaveData) {
+    $previousTestSaveRoot = [Environment]::GetEnvironmentVariable(
+        'FOUNDPHONE_TEST_SAVE_ROOT', 'Process')
+    $previousTestSaveDirectory = [Environment]::GetEnvironmentVariable(
+        'FOUNDPHONE_TEST_SAVE_DIRECTORY', 'Process')
+    $testSaveRoot = Join-Path ([System.IO.Path]::GetTempPath()) 'FoundPhoneTests'
+    $testSaveDirectory = Join-Path $testSaveRoot (
+        'unity-{0}-{1}' -f $PID, [Guid]::NewGuid().ToString('N'))
+    [System.IO.Directory]::CreateDirectory($testSaveDirectory) | Out-Null
+    [Environment]::SetEnvironmentVariable(
+        'FOUNDPHONE_TEST_SAVE_ROOT', $testSaveRoot, 'Process')
+    [Environment]::SetEnvironmentVariable(
+        'FOUNDPHONE_TEST_SAVE_DIRECTORY', $testSaveDirectory, 'Process')
+    Write-Output "Unity test save data isolated at: $testSaveDirectory"
+}
+
+if ($null -ne $AdditionalArguments -and
+    $AdditionalArguments -contains '-runTests' -and
+    -not $IsolateTestSaveData) {
+    throw 'Unity test runs require -IsolateTestSaveData to protect persistent user saves.'
 }
 
 $unityArguments = @('-projectPath', $repoRoot)
@@ -106,7 +137,17 @@ if ($BatchMode) {
     $startParameters.WindowStyle = 'Hidden'
 }
 
-$process = Start-Process @startParameters
+$process = $null
+try {
+    $process = Start-Process @startParameters
+} finally {
+    if ($IsolateTestSaveData) {
+        [Environment]::SetEnvironmentVariable(
+            'FOUNDPHONE_TEST_SAVE_ROOT', $previousTestSaveRoot, 'Process')
+        [Environment]::SetEnvironmentVariable(
+            'FOUNDPHONE_TEST_SAVE_DIRECTORY', $previousTestSaveDirectory, 'Process')
+    }
+}
 
 if ($Wait -or $BatchMode) {
     $process.WaitForExit()
