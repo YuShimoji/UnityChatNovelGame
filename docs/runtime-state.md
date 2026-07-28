@@ -12,7 +12,7 @@
 | C# / scripting | Unity project defaults |
 | Yarn Spinner | 3.1.3 |
 | Remote main | `197116d` |
-| 作業ブランチ | `codex/reconcile-authoring-bridge-state` |
+| 作業ブランチ | `codex/reconcile-authoring-bridge-state`。同名のorigin branchへpush済み、ahead / behind `0/0` |
 | Active authoring surface | `Tools > FoundPhone > Writer Cockpit` |
 | Active runtime scene | `ContentAuthoring` / `DebugChatScene` |
 | Bridge candidate | `origin/codex/sites-authoring-bridge-v1@e059e4b`、main未統合 |

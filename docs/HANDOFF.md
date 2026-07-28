@@ -7,7 +7,7 @@
 ## 現在地
 
 - プロジェクト: FoundPhone / UnityChatNovelGame
-- 作業ブランチ: `codex/reconcile-authoring-bridge-state`
+- 作業ブランチ: `codex/reconcile-authoring-bridge-state`。`origin/codex/reconcile-authoring-bridge-state`へpush済みで、ahead / behind `0/0`
 - リモート基準: `origin/main` は `197116d`。開始時の `73aef720` から3コミット先で、2026-07-26 development readiness と2026-07-27 Sites authoring bridge引継ぎを含む
 - ローカル正本整理: 開始時から存在した追跡文書27件の変更は、旧 Cockpit / Dashboard / Turn Plan を廃止し、ライブ状態・環境事実・監修判断を分離する一貫した整理として独立コミットに保全。最新リモート3コミット上へ統合済み
 - 現在の開発スライス: AI所有のsave-isolated現行97テストは完了。Sites authoring bridge候補とOwner-only hosted本文の人間受入を、main統合・公開ゲートと混同せず閉じる
@@ -27,7 +27,7 @@
 
 | 経路 | 現在の判断 | 残る確認 |
 |---|---|---|
-| Git | `origin/main=197116d`上へ開始差分をrebaseし、正本7文書の競合を解消 | 最終commitとremote branchへのpush |
+| Git | `origin/main=197116d`上へ開始差分をrebaseし、正本7文書の競合を解消。作業ブランチをremoteへpushしahead / behind `0/0` | main統合は監修判断後の別操作 |
 | Unity / C# | isolation付きbatch compile exit 0。テスト実行後のcode / scene / asset / package副作用なし | interactive操作は人間環境で確認 |
 | Writer Cockpit | main navigationは14/14、bridge candidateは18/18 | candidateのExport操作とApply / Play / Last Actionの人間受入 |
 | 現行回帰 | EditMode 73/73、PlayMode 10/10、targeted Editor 14/14。failed / skipped 0 | 次のengine変更時もassembly別に継続 |

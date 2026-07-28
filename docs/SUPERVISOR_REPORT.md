@@ -2,7 +2,7 @@
 
 **更新日**: 2026-07-28
 **対象**: FoundPhone / UnityChatNovelGame
-**同期基準**: `origin/main=197116d`。開始時のdetached `73aef720`と追跡文書27件の差分を独立コミットへ保全し、最新リモート3コミット上へ統合済み
+**同期基準**: `origin/main=197116d`。開始時のdetached `73aef720`と追跡文書27件の差分を独立コミットへ保全し、最新リモート3コミット上へ統合済み。作業ブランチ`origin/codex/reconcile-authoring-bridge-state`は現在HEADとahead / behind `0/0`
 **役割**: 監修役AIが会話ログなしで、信頼できる現在地、残る判断、推奨順序、製品化までの目標を判断するための引き継ぎ正本。
 
 ## 1. 結論
@@ -62,7 +62,7 @@ FoundPhone を、モバイル優先のチャット／ビジュアルノベルゲ
 
 ### 2026-07-27 remote parity / Sites authoring bridge access
 
-- `git fetch --prune origin`後の同期開始baseは、primary `main`、`origin/main`、GitHub `refs/heads/main`が`2f3753495dbb4dbdce1bf3fac763a057ac1442d2`で一致し、ahead/behind `0/0`、tracked worktreeはcleanだった。pull対象はなかった。本正本を含む現在の`HEAD`もnormal push後に`origin/main` / GitHub readbackとahead/behind `0/0`を再確認した。
+- 2026-07-27の同期開始baseは、primary `main`、`origin/main`、GitHub `refs/heads/main`が`2f3753495dbb4dbdce1bf3fac763a057ac1442d2`で一致し、ahead / behind `0/0`、tracked worktreeはcleanだった。当時のmainへのnormal push後も同一性をreadbackした。その後mainは`197116d`まで進み、現在のauthority整理とsave-isolated regressionは`origin/codex/reconcile-authoring-bridge-state`に分離してpush済みである。
 - `73aef720..2f37534`は2026-07-26 development-readinessの正本9件だけで、source、Yarn、scene、Packages、ProjectSettingsを変更しないdocs-only commitとしてremote反映済み。
 - review branch `codex/sites-authoring-bridge-v1`、`origin/codex/sites-authoring-bridge-v1`は`e059e4b758f9e39641b5368301ede837f930724d`で一致し、親は同期開始base `2f37534`。19 files、1545 insertions / 30 deletionsのcandidateで、現在のmainへ未統合。
 - exact candidateをUnity 6000.4.9f1でbatch open/compileしreturn code 0。`ProjectFoundPhone.Editor.Tests`は18/18 pass。visible Editorをexact project pathと`WriterCockpitWindow.ShowWindow`で起動し、Writer Cockpitと`Export Sites Preview Package`を実画面で確認した。
@@ -407,7 +407,7 @@ Ch1 製品縦断              [#----] 20-30%  full authoring解放ゲート前
 
 ## 13. 監修役AIへの最終指示
 
-`origin/main=197116d`をbaseにauthority整理とsave-isolated regressionを統合し、現行97/97 passを確認した。review branch `origin/codex/sites-authoring-bridge-v1=e059e4b`は技術的にreview-readyだがmain未統合である。最初の判断は、User / Supervisorがexact candidateのWriter Cockpit exportとfixture/generated previewをOK/NGで受け入れること。OKでもPR/mergeは別指示まで行わない。
+`origin/main=197116d`をbaseにauthority整理とsave-isolated regressionを統合し、現行97/97 passを確認した。成果は`origin/codex/reconcile-authoring-bridge-state`へpush済みで、作業HEADとのahead / behindは`0/0`。review branch `origin/codex/sites-authoring-bridge-v1=e059e4b`は技術的にreview-readyだがmain未統合である。最初の判断は、User / Supervisorがexact candidateのWriter Cockpit exportとfixture/generated previewをOK/NGで受け入れること。OKでもPR/mergeは別指示まで行わない。
 
 G1.1 Validator信頼回復、Writer Cockpit navigation、G1.2現行回帰は受入済み。製品本体は、人間環境でExternal Script Editor jumpと必要なApply/Play loopを閉じ、SP-023/024、M1 → M2 → M3へ進む。公開面はOwner-only Sites Version 1まで到達しており、次はOwner sign-in後のhosted本文reviewだけを行う。direct Unity Webはmodule/public scene/navigation gateが揃うまでblocked、public/shared accessは別Human Gateとする。
 
