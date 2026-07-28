@@ -1,8 +1,8 @@
-この repo を再開します。まず `AGENTS.md` → `docs/REPO_LOCAL_RULES.md` → `docs/ai/READ_ORDER.md` → `docs/HANDOFF.md` → `docs/runtime-state.md` の順に必要範囲だけ読み、既知文脈の再質問をせずに現状復帰してください。
+この repo を再開します。まず `AGENTS.md` → `docs/REPO_LOCAL_RULES.md` → `docs/HANDOFF.md` を読み、active artifact に直接必要な正本だけを追加してください。`docs/ai/READ_ORDER.md` は owner が不明なときの索引です。既知文脈を再質問せずに現状復帰してください。
 
 復帰後の前提:
 
-- **主目的:** `docs/HANDOFF.md` の Current Focus と Safe Next Steps に従う。古い Ch1 固定や前スライスの勢いだけで進めない
+- **主目的:** `docs/HANDOFF.md` のライブ現在地と次入口に従う。古い Ch1 固定や前スライスの勢いだけで進めない
 - AI の役割は Yarn 執筆ではなく、ツール・パイプライン・検証導線の整備
 - 制作フローの入口は `docs/HANDOFF.md`
 - Content Pipeline / YarnSOGenerator の実機確認は、上記主目的を進めるための**実走**として HANDOFF・project-context に従う（単独の最優先タスクではない）
@@ -12,4 +12,4 @@
 再開時の最初の行動:
 
 - `git status --short --branch` で状態確認
-- `docs/HANDOFF.md` の Safe Next Steps に沿って進める
+- `docs/HANDOFF.md` の active artifact、bottleneck、次入口に沿って進める

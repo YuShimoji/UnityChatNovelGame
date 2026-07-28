@@ -1,68 +1,85 @@
 # WORKFLOWS_AND_PHASES.md
-Ruleset-Version: v18
+Ruleset-Version: v19
 Status: canonical
 
-## Recommended read order on resume / continue / refresh
-1. `docs/ai/CORE_RULESET.md`
-2. `docs/ai/DECISION_GATES.md`
-3. `docs/ai/STATUS_AND_HANDOFF.md`
-4. `docs/ai/WORKFLOWS_AND_PHASES.md`
-5. `docs/REPO_LOCAL_RULES.md`
-6. `docs/INVARIANTS.md`
-7. `docs/USER_REQUEST_LEDGER.md`
-8. `docs/OPERATOR_WORKFLOW.md`
-9. `docs/INTERACTION_NOTES.md`
-10. runtime / context / registry / boundary docs
+## 通常の再開
 
-## Resume / Continue / Refresh
-### Resume
-Recover project-local canonical context first, then identify the active artifact and bottleneck.
+通常は次の 3 段だけで開始する。
 
-### Continue
-Do not rely on momentum. Re-check whether the current block still matches the bottleneck, actor, and value path.
+1. `docs/REPO_LOCAL_RULES.md`
+2. `docs/HANDOFF.md`
+3. 今回の active artifact に直接関係する正本
 
-### Refresh / Reanchor / Scan
-These are read-only unless the user explicitly asks for mutation in the current block.
-Do not auto-fill newly initialized project docs and commit them as “refresh work”.
-Initialization may be prepared, but long-lived writes belong to an explicit write block.
+`docs/runtime-state.md` は環境・検証条件が必要なとき、`docs/project-context.md` は長期方向を変えるときにだけ読む。全正本の全文読了を開始条件にしない。`docs/ai/READ_ORDER.md` は正本の所在を探す索引であり、毎回の必読リストではない。
 
-## Task-scout requirements
-A scout pass should include, when relevant:
-- active artifact and bottleneck
-- stale evidence / visual evidence freshness
-- user-carried constraints
-- re-ask risk
-- canonical coverage
-- value path risk
-- bottleneck substitution risk
-- actor risk
+## 監修 AI から開発 AI へ渡す単位
 
-## Manual verification pattern
-- Put verification items in normal text, not inside the ask field.
-- Ask only for `OK / NG` or a short result code.
-- Ask for next direction separately.
+Prompt はファイル別・工程別の細切れ指示ではなく、終端まで閉じられる **Work Packet** を 1 つ渡す。テンプレートは `docs/ai/PARALLEL_LANE_PROMPTS.md` を使う。
 
-## Option generation
-Each major option should show:
-- lane (`Advance`, `Audit`, `Excise`, `Unlock` or another justified lane)
-- actor
-- owner artifact
-- bottleneck addressed
-- what becomes possible if done
+Work Packet が持つ情報は次に限定する。
 
-Avoid options whose main meaning is merely commit / not commit / cleanup only / end.
+- 達成したい成果状態と、それが今必要な理由
+- 現在そうなっていない根拠と current bottleneck
+- 固定済み事項、開発側の裁量、範囲外
+- 完了判定と必要な証拠
+- 高手戻りなので先に決める方向がある場合、その 1 件
+- CLOSE で更新する正本
+- 共通停止条件への参照
 
-## Workflow-proof examples
-Good workflow-proof tasks:
-- validate that the human-authoring path runs once end-to-end
-- confirm the operator can use the designed toolchain without improvising new steps
-- move a verification target into a debug harness instead of using main content as the experiment bed
+監修 AI はファイルごとの手順を過剰指定せず、成果・境界・判断点を所有する。開発 AI は手段選択、関連修正、狭い検証、現在地更新を所有する。
 
-## Interaction safety
-Do not compress unrelated intents into one ask.
-Do not use markdown tables in a short ask field.
-Do not present broad re-explanation prompts when canonical context already exists.
+## 1 スライスの進め方
 
-## Commit and push hygiene
-Commit/push are not primary next-direction choices.
-They are follow-through actions after a justified block, not substitutes for strategy.
+### ORIENT
+
+- `HANDOFF` と該当正本から active artifact、bottleneck、完了判定を回復する。
+- 既知文脈をユーザーへ聞き直さない。
+- 実装依頼が明示されていれば、可逆な範囲は承認済みとして次へ進む。
+
+### DIRECTION CHECK（必要な場合だけ）
+
+レイアウト、視覚文法、アニメーション、ローカライズ方針、新しいコンテンツ方向など、主観的で手戻りの大きい判断にだけ使う。
+
+- 同じ条件で比べられる 2–3 案を出す。
+- 各案の仮説、利得、コスト、推奨理由、最小見本を示す。
+- 確認時に、選択が承認する本番統合範囲と受入条件を明記する。その条件が明記されていれば、方向選択は同じ範囲の実装承認を兼ねる。
+- 選択は `1 案を approve` / `全案 hold` / `reject`。選択案への必須修正は 1 点までとし、比較案そのものを反復研磨しない。
+- 方向選定後は、細部ごとに止まらず承認済み範囲をバッチ完遂する。選ばれなかった一時試作は CLOSE で除去し、必要な判断記録だけを `FEATURE_REGISTRY` / `DECISION_LOG` に残す。
+
+### EXECUTE
+
+- 実装、必要な関連修正、テストやツールの追随を同じブロックで進める。
+- 軽微な警告、通常の実装判断、可逆な仮定では停止しない。
+- UI の偶発的問題は `UI_ISSUES.md` に集約し、主スライスを微修正ループへ変えない。
+- ストーリー、キャラクターの声、最終的な美意識はユーザー所有のままにする。AI は比較案、モック、システム支援を行える。
+
+### VERIFY
+
+- 変更面に最も近い狭い検証を実行する。テスト量そのものを進捗にしない。
+- 複数の微修正は終端でまとめて確認する。目視は見た目・挙動が変わり、かつ自動確認で代替できない場合だけ。
+- 依存追加、DB/save/auth/API 契約、破壊的変更、仕様衝突が判明した場合はここまでの安全な証拠をまとめて停止する。
+
+### CLOSE
+
+別の Audit Prompt を待たず、同じ Work Packet の中で閉じる。
+
+- `git status` と relevant diff を確認する。
+- `HANDOFF.md` のライブ現在地を置換する。
+- 環境・検証条件が変わった場合だけ `runtime-state.md` を更新する。
+- 長期方向が変わった場合だけ `project-context.md`、機能判断が変わった場合だけ `FEATURE_REGISTRY.md` / `DECISION_LOG.md` を更新する。
+- 画面証拠、実装監査、UI issue など固有の事実が変わった場合は、その owner document / evidence index も同じ CLOSE で更新する。
+- 完了報告は成果を先に述べ、検証、残る不確実性、異なる bottleneck を解く 2–4 個の次入口を示す。
+
+## 途中報告の頻度
+
+- 開始時: 何を成果状態と見て、最初に何を確認するか。
+- 途中: 60 秒以上の処理、方針変更、実ブロッカーがあるときだけ。
+- 終了時: 完了報告を 1 回。軽微な進捗報告を許可待ちに変えない。
+
+## 並行作業
+
+並行化は工程別ではなく、相互に独立した調査・検証へ使う。主実装のファイル編集とライブ現在地更新は 1 owner に寄せる。docs 更新を独立レーンへ追い出さず、主スライスの CLOSE に含める。
+
+## Commit / push
+
+Commit と push は成果の配送であり、進路選択肢ではない。ユーザーが依頼した範囲、または既定の配送フローが明確なときだけ実行する。

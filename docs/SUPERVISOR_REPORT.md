@@ -1,8 +1,8 @@
 # 監修役AI向け現状報告
 
-**更新日**: 2026-07-27
+**更新日**: 2026-07-28
 **対象**: FoundPhone / UnityChatNovelGame
-**同期identity**: 同期開始base `2f3753495dbb4dbdce1bf3fac763a057ac1442d2`。現在は本正本を含む`HEAD`が`origin/main` / GitHub readbackとahead/behind `0/0`
+**同期基準**: `origin/main=197116d`。開始時のdetached `73aef720`と追跡文書27件の差分を独立コミットへ保全し、最新リモート3コミット上へ統合中
 **役割**: 監修役AIが会話ログなしで、信頼できる現在地、残る判断、推奨順序、製品化までの目標を判断するための引き継ぎ正本。
 
 ## 1. 結論
@@ -13,7 +13,7 @@
 
 | 判定対象 | 現在の判定 | 根拠 |
 |---|---|---|
-| Git / ソース同期 | 開発可能 | 同期開始baseは`2f37534`。本正本を含む現在の`HEAD` / `origin/main` / GitHub readbackはahead/behind `0/0`。review branchのlocal / originは`e059e4b` |
+| Git / ソース同期 | 統合作業中 | `origin/main=197116d`を取得済み。開始差分は独立コミットへ保全し、競合を正本7文書へ限定 |
 | Unity batch open / compile | 開発可能 | 2026-07-26にUnity 6000.4.9f1、39 packages、Tundra success、334 evaluated、return code 0。tracked差分なし |
 | agent / terminal からの再現 | 開発可能 | `tools/run-unity.ps1` が欠落した標準 Windows 環境変数を子プロセス内だけ補完 |
 | Yarn 静的検証 | active Yarnで信頼回復 | errors=0 / warnings=0 / info=3。以前の33 warningsはcommand/character registry driftとして解消 |
@@ -51,6 +51,12 @@ AI の主担当はエンジン、ツール、パイプライン、検証導線�
 FoundPhone を、モバイル優先のチャット／ビジュアルノベルゲームとして iOS / Android に配布可能な状態へ持っていく。F2P + 広告、Ch3以降のサウンド統合は高位方針として存在するが、現在の実装スライスではない。
 
 ## 3. 今回の同期と復旧
+
+### 2026-07-28 start-state preservation / authority reconciliation
+
+- detached `73aef720`上の追跡文書27件を、削除参照0・`git diff --check`・MkDocs strict buildで一貫したauthority整理と確認し、`codex/reconcile-authoring-bridge-state`の独立コミットへ保全した。
+- `git fetch --prune origin`で`origin/main=197116d`を取得。ローカルとリモートの重複は正本7文書だけで、コード、Yarn、scene、asset、packageには開始時独自差分がない。
+- ライブ現在地を`HANDOFF`、環境事実を`runtime-state`、長期軸を`project-context`へ分離するローカル構造を維持し、2026-07-26–27のbridge・readiness事実を移植する。
 
 ### 2026-07-27 remote parity / Sites authoring bridge access
 
@@ -134,6 +140,13 @@ fresh resolve 後の初回初期化で、`BuildSettingsHelper` が `ContentAutho
 ## 4. ライブ検証
 
 ### 確認済み
+
+0. **2026-07-21 current checkout readiness refresh**
+   - Git fast-forward: `51dc8bc` → `73aef720`、ahead/behind `0/0`
+   - package JSON parse、Sites static validator、docs strict build: pass
+   - Unity 6000.4.9f1: 39 packages、script compile、batch exit 0
+   - Yarn: errors 0 / warnings 0 / info 3、11 files / 74 nodes
+   - Writer Cockpit targeted EditMode: 14/14 pass、failed / skipped 0
 
 1. **package resolve / restore**
    - 2026-07-11: ProjectCache 欠落状態から fresh resolve 42.78秒、39 packages、return code 0
@@ -222,6 +235,8 @@ fresh resolve 後の初回初期化で、`BuildSettingsHelper` が `ContentAutho
 - 2026-07-27にprimary `main`、`origin/main`、GitHub readbackが`2f37534`で一致し、ahead/behind 0/0、tracked cleanだったこと。
 - review branchのlocal / originが`e059e4b`で一致し、親が現main `2f37534`であること。
 - exact candidateのUnity compile return code 0、targeted Editor 18/18、direct Writer Cockpit window、fixture/generated HTTP/browser access。
+- `73aef720` への fast-forward 後の current checkout で、Unity batch compile、Yarn validator、Writer Cockpit targeted 14/14、Sites static validator、strict docs buildを再現したこと。
+- 同期起点で `main` と `origin/main` が一致していたこと。
 - accepted editor commitがbaseの直系で、許可されたEditor/test/verification filesだけを変更していたこと。
 - 2026-07-26の現checkoutで39 packages、Tundra compile、batchmode正常終了を再確認したこと。
 - 2026-07-19 のtargeted EditMode 14/14、batch compile、Yarn validator `errors=0 / warnings=0 / info=3`。

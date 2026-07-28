@@ -1,72 +1,55 @@
 # STATUS_AND_HANDOFF.md
-Ruleset-Version: v18
+Ruleset-Version: v19
 Status: canonical
 
 ## Feature status semantics
-Keep priority separate from status.
 
-### Priority
-Priority answers: “How worth looking at is this item compared with others?”
-Examples: high / medium / low, or a ranked list.
+Priority and lifecycle status are separate.
 
-### Status
-Status answers: “What lifecycle state is this item in now?”
-Use these meanings strictly:
-- `proposed`: value is still being validated or the spec is incomplete
-- `approved`: specification and scope are defined enough for implementation to start, and the user has approved that move
-- `hold`: not rejected, but not the current move due to prerequisites, weak value path, timing, or other blockers
-- `rejected`: should not be pursued within the current product/workflow scope
-- `quarantined`: potentially contaminated or unauthorized batch-derived item; do not treat as a normal candidate until re-reviewed
+| Status | Meaning | Allowed work |
+|---|---|---|
+| `proposed` | Value, direction, or scope is still being evaluated | Research, comparison, and a disposable low-cost prototype. No production integration |
+| `approved` | Scope and acceptance conditions are defined, and the user has approved product implementation | Implementation may start and continue through related fixes, verification, and closeout |
+| `in-progress` | Approved implementation is active | Complete the approved slice; do not expand it silently |
+| `done` | The approved acceptance conditions and relevant verification are complete | Follow-up ideas return as new `proposed` items |
+| `hold` | Worth retaining, but a prerequisite, timing, or value path blocks it | No normal implementation |
+| `rejected` | Outside the current product or workflow direction | Do not re-enter without explicit re-evaluation |
+| `quarantined` | Provenance or authorization is uncertain | Review individually before any other transition |
 
-Selection of a `proposed` item for deeper review does **not** upgrade it to `approved`.
+Selecting a `proposed` item only for comparison is not product implementation approval. If a direction-check question explicitly states the bounded production integration and frozen acceptance conditions, selecting one option is approval for that stated integration. An explicit user request to implement a bounded item is likewise approval for that requested slice; do not ask for the same permission again.
 
 ## FEATURE_REGISTRY discipline
-For each feature candidate, keep at least:
-- short description
-- priority
-- status
-- rationale
-- integration point / value path note
-- actor / owner note when relevant
 
-`approved` requires all of the following:
-- clear input/output or scope boundary
-- no unresolved boundary violation
-- value path is stated
-- user approval for implementation is explicit
+Each major candidate should make the decision possible rather than merely accumulate an idea:
 
-If an unauthorized item appears in a proposal batch, quarantine the whole batch by default until individually re-reviewed.
+- hypothesis and user/workflow effect
+- integration point and bottleneck addressed
+- smallest comparable prototype or evidence
+- actor and owner artifact
+- acceptance condition that will be frozen after approval
+- priority and lifecycle status
 
-## Canonical context fields to surface in reports
-Use these report fields whenever relevant:
-- Non-Negotiables
-- Reused Canonical Context
-- New Fossils
-- Backlog Delta
-- Current Trust Assessment
+`approved` requires a clear boundary, a stated value path, no unresolved responsibility violation, and explicit user authorization for product implementation. `proposed` permits investigation and low-cost comparison without treating the result as shipped product work.
 
-## Current Trust Assessment
-When a thread has become noisy or risky, classify changes into:
-- trusted
-- needs re-check
-- dangerous / rollback candidate
-State why.
+## One live handoff
 
-## Handoff minimum
-A robust handoff should preserve:
-- shared focus
-- non-negotiables
-- current trust assessment
-- active artifact and bottleneck
-- recovered canonical context
-- feature/backlog status with strict semantics
-- safe next-thread plan
-- what not to do next
-- new fossils created in the current thread
+`docs/HANDOFF.md` is the sole live current-position page. Update it by replacing stale state, not by appending another historical snapshot. Git history owns history.
+
+A closeout keeps only what another session needs to act:
+
+- update date and current commit or working-tree relation
+- active artifact, current bottleneck, and achieved state
+- verification evidence and its freshness
+- remaining uncertainty or fragile local condition
+- 2–4 next entry points that solve different bottlenecks
+- explicit do-not-touch boundaries when relevant
+
+`docs/runtime-state.md` owns shareable environment and validation facts. `docs/project-context.md` owns durable direction and roadmap. Neither duplicates the live handoff.
+
+## Trust and uncertainty
+
+When evidence is stale, incomplete, or a local workaround is fragile, state that in natural language beside the affected claim. Do not bury it in a fixed report template and do not turn every uncertainty into a blocker.
 
 ## No progress laundering
-Do not claim progress merely because:
-- a doc was created during refresh
-- a framework-compliant report was produced
-- a low-friction helper feature was specified
-Report what became easier, safer, or more real for the actual artifact path.
+
+Do not claim progress merely because a document, framework-compliant report, test run, or audit exists. State what became usable, decidable, or less costly in the actual development path.

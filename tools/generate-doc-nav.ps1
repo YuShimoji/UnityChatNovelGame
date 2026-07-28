@@ -91,13 +91,12 @@ function Get-MarkdownFiles {
 
 function Get-Category([string]$repoPath) {
     if ($repoPath -in @("AGENTS.md", "CLAUDE.md", "prompt-resume.md", "docs/PROJECT_OVERVIEW.md") -or
-        $repoPath -in @("docs/PROJECT_STATUS_DASHBOARD.md", "docs/VISUAL_PROGRESS_INDEX.md") -or
+        $repoPath -eq "docs/VISUAL_PROGRESS_INDEX.md" -or
         $repoPath -like "docs/wiki/*") {
         return "Overview"
     }
 
     if ($repoPath -in @(
-        "docs/DEVELOPMENT_TURN_PLAN.md",
         "docs/REPO_LOCAL_RULES.md",
         "docs/HANDOFF.md",
         "docs/SUPERVISOR_REPORT.md",

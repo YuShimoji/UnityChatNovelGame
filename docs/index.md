@@ -11,10 +11,12 @@
 
 ## 概観の入口
 
-- 全体の見取り図: `docs/PROJECT_STATUS_DASHBOARD.md`
-- ターン単位の開発プラン: `docs/DEVELOPMENT_TURN_PLAN.md`
+- ライブ現在地と次の入口: `docs/HANDOFF.md`
+- 安定した全体像: `docs/PROJECT_OVERVIEW.md`
+- 長期の開発軸: `docs/project-context.md`
 - スクリーンショット配置: `docs/VISUAL_PROGRESS_INDEX.md`
-- 直近の再開手順: `docs/HANDOFF.md`
+
+Dashboard、Turn Plan、Project Cockpit に状態を複製する旧方式は 2026-07-10 に廃止した。現在地は `HANDOFF.md` だけを更新する。
 
 ## 分類方針
 
