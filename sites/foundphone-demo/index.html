@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="FoundPhone の操作感を確認する非カノン静的チャットデモ">
+  <title>FoundPhone Signal Test</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">デモ本体へ移動</a>
+
+  <div class="site-shell">
+    <header class="site-header" aria-label="Prototype status">
+      <span class="brand-mark" aria-hidden="true">FP</span>
+      <div>
+        <p class="brand-name">FoundPhone</p>
+        <p class="prototype-label" id="prototype-label">Prototype content / not final story</p>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="screen intro-screen" id="intro-screen" aria-labelledby="intro-title">
+        <p class="eyebrow" id="intro-eyebrow">STATIC SIGNAL PROBE</p>
+        <h1 id="intro-title">拾った端末に、短い通信が届く。</h1>
+        <p class="intro-copy" id="intro-summary">
+          選択によって応答が変わる、軽量なチャットノベル操作デモです。
+        </p>
+
+        <div class="intro-actions">
+          <button class="button button-primary" id="start-button" type="button" disabled>
+            デモを開始
+          </button>
+          <a class="button button-quiet" href="#project-notes">プロジェクト注記を見る</a>
+        </div>
+
+        <p class="load-status" id="load-status" role="status" aria-live="polite">
+          デモ内容を読み込んでいます。
+        </p>
+
+        <aside class="project-notes" id="project-notes" aria-labelledby="notes-title">
+          <h2 id="notes-title">このデモについて</h2>
+          <p>
+            本編の物語・台詞ではありません。バックエンド、ログイン、個人情報収集、購入機能を使わないローカル検証用です。
+          </p>
+        </aside>
+      </section>
+
+      <section class="screen chat-screen" id="chat-screen" aria-labelledby="thread-title" hidden>
+        <div class="chat-toolbar">
+          <div>
+            <p class="connection-state"><span aria-hidden="true"></span> LOCAL RELAY</p>
+            <h1 class="thread-title" id="thread-title" tabindex="-1">Unknown relay</h1>
+          </div>
+          <button class="text-button" id="toolbar-restart-button" type="button">最初から</button>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-copy">
+            <span id="progress-label">進行 0 / 6</span>
+            <span id="route-label">未選択</span>
+          </div>
+          <div class="progress-track" role="progressbar" aria-labelledby="progress-label" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0">
+            <span id="progress-fill"></span>
+          </div>
+        </div>
+
+        <ol class="message-list" id="message-list" aria-live="polite" aria-relevant="additions"></ol>
+
+        <div class="choice-region" id="choice-region" aria-labelledby="choice-prompt" hidden>
+          <p id="choice-prompt"></p>
+          <div class="choice-list" id="choice-list"></div>
+        </div>
+
+        <div class="chat-controls">
+          <button class="button button-primary" id="advance-button" type="button" hidden>続ける</button>
+        </div>
+      </section>
+
+      <section class="screen ending-screen" id="ending-screen" aria-labelledby="ending-title" hidden>
+        <p class="eyebrow">LOCAL SESSION COMPLETE</p>
+        <h1 id="ending-title" tabindex="-1">Signal test complete</h1>
+        <p id="ending-body"></p>
+        <div class="route-outcome" id="route-outcome" aria-live="polite"></div>
+
+        <div class="ending-actions">
+          <button class="button button-primary" id="ending-restart-button" type="button">デモをもう一度</button>
+          <button class="button button-quiet" id="future-release-button" type="button" aria-expanded="false" aria-controls="future-release-note">
+            今後のリリース注記
+          </button>
+        </div>
+
+        <p class="future-note" id="future-release-note" hidden>
+          将来のネイティブ版・ストア版への案内を置く想定です。現在はリンク、購入、予約、個人情報入力を提供していません。
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <p>Local static prototype. No account, tracking, or transaction.</p>
+    </footer>
+  </div>
+
+  <noscript>このローカルデモの進行には JavaScript が必要です。</noscript>
+</body>
+</html>
