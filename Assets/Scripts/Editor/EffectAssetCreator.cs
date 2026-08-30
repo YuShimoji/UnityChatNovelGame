@@ -1,5 +1,9 @@
+using System.IO;
 using UnityEngine;
 using UnityEditor;
+
+// Avoid namespace conflict with ProjectFoundPhone.Debug
+using Debug = UnityEngine.Debug;
 
 namespace ProjectFoundPhone.EditorTools
 {
@@ -29,13 +33,14 @@ namespace ProjectFoundPhone.EditorTools
             shape.radius = 0.5f;
 
             // Save as Prefab
+            Directory.CreateDirectory("Assets/Resources/Effects");
             string path = "Assets/Resources/Effects/Sparkle.prefab";
             PrefabUtility.SaveAsPrefabAsset(go, path);
             
             // Cleanup
             GameObject.DestroyImmediate(go);
             
-            UnityEngine.Debug.Log($"[EffectCreator] Created Sparkle prefab at {path}");
+            Debug.Log($"[EffectCreator] Created Sparkle prefab at {path}");
         }
     }
 }
