@@ -144,7 +144,7 @@ spec-index（SP-016）と整合。**初期スライスでは実装しない**。
 
 #### 6.4.2 実施状況（2026-04-09・Bレーン）
 
-- **静的整合の再確認**: [docs/archive/verification-lanes-2026-04/2026-04-09-blane-sp022-subsequent.md](../archive/verification-lanes-2026-04/2026-04-09-blane-sp022-subsequent.md) §2。C 型パイロットの `Declare*` / `CompleteThread` 対は取れる。
+- **静的整合の再確認**: docs/archive/verification-lanes-2026-04/2026-04-09-blane-sp022-subsequent.md §2。C 型パイロットの `Declare*` / `CompleteThread` 対は取れる。
 - **PlayMode batch / Editor 通し**: SUBSEQUENT 発動時に実施 (プロジェクト排他ロックに注意、G-ENV-20260409 のメモ参照)。
 - **P0 判定**: SUBSEQUENT 発動時の実測で確定。
 

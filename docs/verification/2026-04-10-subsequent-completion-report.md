@@ -54,7 +54,7 @@
 
 | 項目         | 対応 |
 | ---------- | ---- |
-| 静的整合の再確認 | 実施済み ([2026-04-09-blane-sp022-subsequent.md](../archive/verification-lanes-2026-04/2026-04-09-blane-sp022-subsequent.md) §2) |
+| 静的整合の再確認 | 実施済み (2026-04-09-blane-sp022-subsequent.md §2) |
 | Editor 手動通し | SUBSEQUENT 発動時にオペレーターが実施 (実施時に別ファイルで記録) |
 | PlayMode batch 全体 | SUBSEQUENT 発動時に実施 (プロジェクト排他ロックに注意) |
 
