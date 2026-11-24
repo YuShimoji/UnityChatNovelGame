@@ -15,10 +15,12 @@ namespace ProjectFoundPhone.Tests
     {
         private GameObject m_SaveManagerObject;
         private SaveManager m_SaveManager;
+        private SaveStorageIsolation m_StorageIsolation;
 
         [SetUp]
         public void Setup()
         {
+            m_StorageIsolation = new SaveStorageIsolation();
             m_SaveManagerObject = new GameObject("SaveManager");
             m_SaveManager = m_SaveManagerObject.AddComponent<SaveManager>();
         }
@@ -31,14 +33,7 @@ namespace ProjectFoundPhone.Tests
                 Object.DestroyImmediate(m_SaveManagerObject);
             }
 
-            for (int i = 0; i < 3; i++)
-            {
-                string filePath = Path.Combine(Application.persistentDataPath, $"SaveData_{i}.json");
-                if (File.Exists(filePath))
-                {
-                    File.Delete(filePath);
-                }
-            }
+            m_StorageIsolation?.Dispose();
         }
 
         [Test]
@@ -90,7 +85,9 @@ namespace ProjectFoundPhone.Tests
         {
             yield return null;
 
-            m_SaveManager.SaveGame(0);
+            Assert.IsTrue(m_SaveManager.SaveGame(0));
+            Assert.IsTrue(m_SaveManager.SaveGame(0), "An existing slot can be replaced.");
+            Assert.AreEqual(1, Directory.GetFiles(SaveStorageIsolation.DirectoryOverride).Length);
             bool success = m_SaveManager.LoadGame(0);
 
             Assert.IsTrue(success);

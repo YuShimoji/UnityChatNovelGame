@@ -1,6 +1,6 @@
 # Runtime State
 
-最終更新: 2026-07-28
+最終更新: 2026-11-25
 
 このファイルは共有可能な環境・検証条件だけを保持する。現在の作業判断は `docs/HANDOFF.md`、履歴はGit、監修判断は`docs/SUPERVISOR_REPORT.md`を参照する。
 
@@ -11,8 +11,8 @@
 | Unity | 6000.4.9f1 |
 | C# / scripting | Unity project defaults |
 | Yarn Spinner | 3.1.3 |
-| Remote main | `197116d` |
-| 作業ブランチ | `codex/reconcile-authoring-bridge-state` |
+| 改修前の基準 | `main@4c09dcd` |
+| NarrativeGen Unity SDK | `com.yushimoji.narrativegen@b56b822`（Git revision固定） |
 | Active authoring surface | `Tools > FoundPhone > Writer Cockpit` |
 | Active runtime scene | `ContentAuthoring` / `DebugChatScene` |
 | Bridge candidate | `origin/codex/sites-authoring-bridge-v1@e059e4b`、main未統合 |
@@ -38,12 +38,13 @@
   - local runtimeで両分岐、restart、keyboard、focus、ARIA、320–430px、禁止機能監査をpass
   - Owner sign-in後のhosted本文reviewは未実施
 
-## 今回の開始状態
+## 2026-11-25の検証
 
-- 開始HEADは`73aef720`のdetached状態で、追跡文書27件に未コミット変更、未追跡ファイルなし。
-- fetch前の`origin/main`は`2f37534`、fetch後は`197116d`へ更新され、開始HEADより3コミット先。
-- ローカル変更とリモート変更の重複は`HANDOFF`、`PROJECT_COCKPIT`、`PROJECT_STATUS_DASHBOARD`、`SUPERVISOR_REPORT`、`USER_REQUEST_LEDGER`、`project-context`、`runtime-state`の7件。
-- ローカル差分は旧重複正本3件の削除とauthority責務分離として独立コミットへ保全。リモート3コミットは最新実測事実として統合する。
+- Unity 6000.4.9f1でセーブ EditMode 8/8、既存チャットとセーブ PlayMode 4/4。セーブファイルの新規作成・上書き・読込、タイトルから通常チャットに入り保存と再読込を確認。
+- NarrativeGen C# SDK .NET 35/35。チーズバーガーの生成モデル2本で知覚イベントの有無、次の選択肢、0.1と0.12を展開した本文を照合。
+- C# SDKとTypeScript版で、生成5モデルの初手ごとに次の先頭選択肢を選ぶ12経路を比較。場面ID、選択肢ID、イベントID、展開本文が一致した。
+- SDK固定参照後、Unity PlayMode 5/5。実際の `cheeseburger-weight.json` を既存チャットに読み込み、探偵Aの `look_detective_a` → `verify_detective_a` で終端へ到達。同じ実行で既存回帰4件を確認。
+- 分岐スレッドの同じIDへのロード後再入場、取得情報の保持、持ち帰り選択、終了時のクリアをC#回帰試験で確認。
 
 ## Package Managerと起動条件
 
@@ -54,7 +55,7 @@
 ## テスト安全条件
 
 - 基礎テスト定義はEditMode 73 / PlayMode 10。targeted Editorはmain 14、bridge candidate 18であり、assembly / SHA別に記録する。
-- 基礎83件には`Application.persistentDataPath`のsave slotを削除するテストがある。実行前にtest dataを専用pathへ隔離する。
+- 保存操作を含むEditMode / PlayModeはテストごとに一意の一時フォルダを使う。通常の `Application.persistentDataPath` と分離する。
 - External Script Editorのfile / line jump、Writer CockpitのApply / Play / Last Action、bridge Exportの操作感はinteractive人間環境レビュー待ち。
 - direct Unity WebはWeb Build Support、有効なpublic gameplay scene、TitleSceneからのnavigationが揃うまでblocked。
 

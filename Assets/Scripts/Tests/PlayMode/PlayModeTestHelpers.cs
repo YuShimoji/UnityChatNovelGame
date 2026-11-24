@@ -120,22 +120,13 @@ namespace ProjectFoundPhone.Tests
             Debug.Log($"PlayModeTest: Evidence saved to {evidenceDir}");
         }
 
-        public static void CleanupSaveSlot(int slotNumber)
-        {
-            string filePath = Path.Combine(Application.persistentDataPath, $"SaveData_{slotNumber}.json");
-            if (File.Exists(filePath))
-            {
-                File.Delete(filePath);
-            }
-        }
-
         /// <summary>
         /// シーン破棄前にダイアログを停止する共通 teardown ヘルパー。
         /// StopScenario() → CancelActiveWait → DialogueRunner.Stop の順序で、
         /// Yarn VM が停止済みの状態で <<StartWait>> の CTS キャンセル継続が
         /// Continue() を呼んで DialogueException を起こす問題を回避する。
         /// </summary>
-        public static IEnumerator SafeTeardown(string evidenceLabel, int saveSlot = 0)
+        public static IEnumerator SafeTeardown(string evidenceLabel)
         {
             // Yarn VM の StopScenario → Continue() 競合で生じる既知の DialogueException を受け流す
             LogAssert.ignoreFailingMessages = true;
@@ -161,8 +152,6 @@ namespace ProjectFoundPhone.Tests
             {
                 CaptureEvidence(evidenceLabel);
             }
-
-            CleanupSaveSlot(saveSlot);
         }
     }
 }

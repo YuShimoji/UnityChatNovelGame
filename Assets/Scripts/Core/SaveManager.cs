@@ -2,10 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
-using System.IO;
 using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Yarn.Unity;
 using ProjectFoundPhone.Data;
@@ -37,11 +35,6 @@ namespace ProjectFoundPhone.Core
                     {
                         GameObject go = new GameObject("SaveManager");
                         s_Instance = go.AddComponent<SaveManager>();
-                        // EditMode / batch では DontDestroyOnLoad が例外になる（INVARIANTS: EditMode 境界）
-                        if (Application.isPlaying)
-                        {
-                            DontDestroyOnLoad(go);
-                        }
                     }
                 }
                 return s_Instance;
@@ -116,7 +109,10 @@ namespace ProjectFoundPhone.Core
                 return;
             }
             s_Instance = this;
-            DontDestroyOnLoad(gameObject);
+            if (Application.isPlaying)
+            {
+                DontDestroyOnLoad(gameObject);
+            }
         }
 
         private void OnDestroy()
@@ -145,13 +141,11 @@ namespace ProjectFoundPhone.Core
             try
             {
                 SaveData saveData = CreateSaveData(slotNumber);
-                string json = JsonConvert.SerializeObject(saveData, Formatting.Indented);
-                string filePath = GetSaveFilePath(slotNumber);
-
-                File.WriteAllText(filePath, json);
+                SaveSlotStorage storage = CreateStorage();
+                storage.Write(slotNumber, saveData);
                 m_CurrentSaveData = saveData;
 
-                Debug.Log($"SaveManager: Game saved to slot {slotNumber} at {filePath}");
+                Debug.Log($"SaveManager: Game saved to slot {slotNumber} at {storage.GetPath(slotNumber)}");
                 return true;
             }
             catch (Exception e)
@@ -322,17 +316,16 @@ namespace ProjectFoundPhone.Core
                 return false;
             }
 
-            string filePath = GetSaveFilePath(slotNumber);
-            if (!File.Exists(filePath))
+            SaveSlotStorage storage = CreateStorage();
+            if (!storage.Exists(slotNumber))
             {
-                Debug.LogWarning($"SaveManager: Save file not found at {filePath}");
+                Debug.LogWarning($"SaveManager: Save file not found at {storage.GetPath(slotNumber)}");
                 return false;
             }
 
             try
             {
-                string json = File.ReadAllText(filePath);
-                SaveData saveData = JsonConvert.DeserializeObject<SaveData>(json);
+                SaveData saveData = storage.Read(slotNumber);
 
                 if (saveData == null || !saveData.IsValid())
                 {
@@ -531,16 +524,16 @@ namespace ProjectFoundPhone.Core
                 return false;
             }
 
-            string filePath = GetSaveFilePath(slotNumber);
-            if (!File.Exists(filePath))
+            SaveSlotStorage storage = CreateStorage();
+            if (!storage.Exists(slotNumber))
             {
-                Debug.LogWarning($"SaveManager: Save file not found at {filePath}");
+                Debug.LogWarning($"SaveManager: Save file not found at {storage.GetPath(slotNumber)}");
                 return false;
             }
 
             try
             {
-                File.Delete(filePath);
+                storage.Delete(slotNumber);
                 if (m_CurrentSaveData != null && m_CurrentSaveData.SlotNumber == slotNumber)
                 {
                     m_CurrentSaveData = null;
@@ -569,8 +562,7 @@ namespace ProjectFoundPhone.Core
                 return false;
             }
 
-            string filePath = GetSaveFilePath(slotNumber);
-            return File.Exists(filePath);
+            return CreateStorage().Exists(slotNumber);
         }
 
         /// <summary>
@@ -585,16 +577,15 @@ namespace ProjectFoundPhone.Core
                 return null;
             }
 
-            string filePath = GetSaveFilePath(slotNumber);
-            if (!File.Exists(filePath))
+            SaveSlotStorage storage = CreateStorage();
+            if (!storage.Exists(slotNumber))
             {
                 return null;
             }
 
             try
             {
-                string json = File.ReadAllText(filePath);
-                return JsonConvert.DeserializeObject<SaveData>(json);
+                return storage.Read(slotNumber);
             }
             catch (Exception e)
             {
@@ -671,15 +662,12 @@ namespace ProjectFoundPhone.Core
             return slotNumber >= 0 && slotNumber < m_MaxSaveSlots;
         }
 
-        /// <summary>
-        /// セーブファイルのパスを取得
-        /// </summary>
-        /// <param name="slotNumber">セーブスロット番号</param>
-        /// <returns>セーブファイルの絶対パス</returns>
-        private string GetSaveFilePath(int slotNumber)
+        private SaveSlotStorage CreateStorage()
         {
-            string fileName = $"{m_SaveFilePrefix}_{slotNumber}{m_SaveFileExtension}";
-            return Path.Combine(Application.persistentDataPath, fileName);
+            return new SaveSlotStorage(
+                SaveStorageIsolation.DirectoryOverride ?? Application.persistentDataPath,
+                m_SaveFilePrefix,
+                m_SaveFileExtension);
         }
         #endregion
 

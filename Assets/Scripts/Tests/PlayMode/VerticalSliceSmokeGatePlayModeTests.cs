@@ -12,6 +12,19 @@ namespace ProjectFoundPhone.Tests
     public class VerticalSliceSmokeGatePlayModeTests
     {
         private const int SaveSlot = 0;
+        private SaveStorageIsolation m_StorageIsolation;
+
+        [SetUp]
+        public void IsolateSaves()
+        {
+            m_StorageIsolation = new SaveStorageIsolation();
+        }
+
+        [TearDown]
+        public void ReleaseSaveIsolation()
+        {
+            m_StorageIsolation?.Dispose();
+        }
 
         [UnityTest]
         public IEnumerator VerticalSlice_SmokeFlow_TitleToChat_SaveLoad()
@@ -153,7 +166,7 @@ namespace ProjectFoundPhone.Tests
         [UnityTearDown]
         public IEnumerator CaptureEvidenceOnFailure()
         {
-            yield return PlayModeTestHelpers.SafeTeardown("VerticalSliceSmokeGate", SaveSlot);
+            yield return PlayModeTestHelpers.SafeTeardown("VerticalSliceSmokeGate");
         }
 
     }

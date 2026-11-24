@@ -3,6 +3,7 @@
     "rootNamespace": "ProjectFoundPhone.Tests",
     "references": [
         "ProjectFoundPhone",
+        "NarrativeGen",
         "ProjectFoundPhone.Utils",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"

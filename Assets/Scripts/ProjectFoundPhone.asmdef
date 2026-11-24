@@ -3,6 +3,7 @@
     "rootNamespace": "ProjectFoundPhone",
     "references": [
         "Unity.TextMeshPro",
+        "NarrativeGen",
         "YarnSpinner.Unity",
         "Demigiant.DOTween"
     ],

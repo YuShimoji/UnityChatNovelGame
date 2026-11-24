@@ -1,16 +1,21 @@
 # Handoff
 
-最終更新: 2026-07-28
+最終更新: 2026-11-25
 
 会話ログなしで再開するための唯一のライブ現在地。履歴は追記せず Git に委ねる。詳細な監修判断は `docs/SUPERVISOR_REPORT.md`、環境条件は `docs/runtime-state.md` を参照する。
 
 ## 現在地
 
-- プロジェクト: FoundPhone / UnityChatNovelGame
-- 作業ブランチ: `codex/reconcile-authoring-bridge-state`
-- リモート基準: `origin/main` は `197116d`。開始時の `73aef720` から3コミット先で、2026-07-26 development readiness と2026-07-27 Sites authoring bridge引継ぎを含む
-- ローカル正本整理: 開始時から存在した追跡文書27件の変更は、旧 Cockpit / Dashboard / Turn Plan を廃止し、ライブ状態・環境事実・監修判断を分離する一貫した整理として独立コミットに保全した。現在は最新リモート事実と統合中
-- 現在の開発スライス: Sites authoring bridge候補の人間受入、save-isolated基礎83テスト、Owner-only hosted本文reviewを、統合・公開ゲートを混同せず閉じる
+- FoundPhone / UnityChatNovelGame のシナリオ基盤と、NarrativeGenからの再生を改修中。基準は `main@4c09dcd`。
+- セーブのファイル操作を `SaveSlotStorage`、分岐中の取得情報・持ち帰り選択を `BranchThreadSession` に分離した。Yarnの呼び出し、セーブJSON、スロット番号は既存の契約を使う。
+- NarrativeGenの互換修正済みSDK `b56b822` をUnityへ固定参照。生成JSONを `DebugChatScene` の既存チャットで選び進める。試遊はメモリ内の別セッションで、YarnやFoundPhoneの保存を起動しない。
+- 既存の基盤工程はSP-023/024の表示確認 → M1（A/B/C・Latent・Branch）→ M2（セーブの状態同値と章遷移）→ M3（alpha判定）。今回の分岐状態と保存の分離はM1/M2の改修に使う。詳細は[開発順序](project-context.md)。
+
+## NarrativeGenの試遊
+
+1. Unity 6000.4.9f1でこのプロジェクトを開く。
+2. `Tools > FoundPhone > Play NarrativeGen JSON...` で、NarrativeGenが保存または生成したモデルJSONを選ぶ。例はNarrativeGenの `models/generated/cheeseburger-weight.json`。
+3. Gameビューのチャットに出る選択肢を押す。終了時はPlay Modeを止める。Play Mode開始シーン設定は元に戻る。
 
 ## 取り込んだ能力
 
@@ -27,9 +32,9 @@
 | 経路 | 現在の判断 | 残る確認 |
 |---|---|---|
 | Git | `origin/main=197116d`を取得済み。開始差分は独立コミットへ保全し、競合範囲を正本7文書に限定 | 統合後の最終SHA、ahead/behind、push結果を確定する |
-| Unity / C# | mainの2026-07-26基準は39 packages、script compile、batch exit 0 | 今回branchでの狭い再検証 |
+| Unity / C# | Unity 6000.4.9f1で40 packages、PlayMode 5/5。生成JSONを2選択で終端まで再生し、既存チャットとセーブ4件も通過 | 配布PlayerとM1/M2全体 |
 | Writer Cockpit | main navigationは14/14、bridge candidateは18/18 | candidateのExport操作とApply / Play / Last Actionの人間受入 |
-| 基礎回帰 | EditMode 73 / PlayMode 10を静的集計済み | 実セーブを隔離して83件を現行Unityで実行 |
+| 基礎回帰 | スロット書込・削除をテスト専用フォルダに隔離。既存セーブ EditMode 8件、通常チャット PlayMode 4件が通過 | 対象外の基礎テストと章遷移の状態同値 |
 | Sites static package | fixture validator、両分岐、responsive / accessibility smokeを確認済み | hosted本文はOwner sign-in後review待ち |
 | Docs | 開始差分で削除参照0、`git diff --check`、MkDocs strict build pass | 最新事実統合後の再実行 |
 
@@ -38,7 +43,7 @@
 - bridge candidateはreview-readyだがmain未統合。人間の作者UX受入とmain統合判断は別ゲートであり、このスライスでは代行しない。
 - External Script Editorが設定された人間環境で、Nodeとdiagnosticの実file / line jumpは未受入。
 - Writer CockpitのApply / Play / Last ActionとExport操作の人間受入は未完了。
-- 基礎83テストは実ユーザーの`Application.persistentDataPath`を傷つけない隔離を確立してから実行する。
+- 既存予定の全型スレッドの実機確認、章遷移、配布ビルドでの再生は残る。
 - SitesはOwner-onlyのまま。hosted本文、network、両分岐、keyboard、320–430pxはOwner sign-in後の判定が必要。public/shared accessとcustom domainは未承認。
 - direct Unity WebはWeb Build Support、有効なpublic gameplay scene、TitleSceneからの公開導線が揃うまでblocked。
 
@@ -46,7 +51,7 @@
 
 | 入口 | 解く摩擦 | 完了すると可能になること | 前提 |
 |---|---|---|---|
-| Advance: save-isolated基礎83テスト | 全体回帰が旧8 PlayMode基準のまま | EditMode 73 / PlayMode 10を安全な現行基準として固定 | test data隔離 |
+| Advance: M1 スレッド全型 | 登録・顕在化・遷移がシーン/Yarnの管理に集中 | A/B/C・Latent・BranchをETKと通常シーンで確認し、保存・章遷移に使う状態を明確にする | SP-023/024の表示確認はユーザーと別途実施 |
 | Audit: bridge作者UX | 技術証拠と作者の操作感受入が分離したまま | candidateをOK/NGで一意に判定し、main統合判断へ進める | exact `e059e4b`、人間操作 |
 | Audit: Sites hosted本文 | private deploymentと実表示の間に認証ゲートが残る | Version 1の両分岐・network・keyboard・responsiveを正式受入 | Owner sign-in。access policyは変更しない |
 | Explore: SP-023 / SP-024表示比較 | 実装済み表示能力の画面証跡が不足 | portrait / wide比較からUIバッチ基準を凍結 | Writer Cockpit full-loop受入後 |

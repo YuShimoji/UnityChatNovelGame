@@ -35,7 +35,11 @@ namespace ProjectFoundPhone.Core
         private CancellationTokenSource m_WaitCancellation;
         private bool m_IsWaiting = false;
         private bool m_IsDestroying = false;
-        private BranchThreadState m_BranchThreadState = new BranchThreadState();
+#if UNITY_EDITOR
+        private bool m_IsNarrativeGenPreview;
+        private Coroutine m_NarrativeGenPreviewCoroutine;
+#endif
+        private readonly BranchThreadSession m_Branch = new BranchThreadSession();
         private ChannelData m_CurrentChannel;
 
         private struct RuntimeTypingSpeedOverride
@@ -81,6 +85,24 @@ namespace ProjectFoundPhone.Core
         private void Start()
         {
             RegisterCustomCommands();
+#if UNITY_EDITOR
+            string previewFile = NarrativeGenPreviewRequest.Consume(gameObject.scene.path);
+            if (previewFile != null)
+            {
+                m_IsNarrativeGenPreview = true;
+                try
+                {
+                    m_NarrativeGenPreviewCoroutine = StartCoroutine(
+                        new NarrativeGenPlayback(previewFile, m_ChatController).Play());
+                }
+                catch (Exception error)
+                {
+                    m_ChatController?.AddSystemMessage("NarrativeGen JSONを開けませんでした。");
+                    Debug.LogException(error);
+                }
+                return;
+            }
+#endif
 
             // デバッグ用: IDが設定されていれば SOベースシナリオを自動再生
             if (!string.IsNullOrEmpty(m_DebugScenarioID))
@@ -430,10 +452,10 @@ namespace ProjectFoundPhone.Core
             SetVariable<bool>(variableName, true);
 
             // 分岐内でトピック解錠された場合、TransferFlags に自動登録
-            if (m_BranchThreadState != null && m_BranchThreadState.IsActive)
+            if (m_Branch.IsActive)
             {
                 AddBranchTransferFlag(topicID);
-                Debug.Log($"ScenarioManager: Topic '{topicID}' auto-tracked in branch '{m_BranchThreadState.ActiveBranchId}'");
+                Debug.Log($"ScenarioManager: Topic '{topicID}' auto-tracked in branch '{m_Branch.ActiveBranchId}'");
             }
         }
 
@@ -1160,7 +1182,7 @@ namespace ProjectFoundPhone.Core
         /// </summary>
         public BranchThreadState GetBranchThreadStateSnapshot()
         {
-            return m_BranchThreadState?.Clone() ?? new BranchThreadState();
+            return m_Branch.Snapshot();
         }
 
         /// <summary>
@@ -1168,7 +1190,7 @@ namespace ProjectFoundPhone.Core
         /// </summary>
         public void ApplyBranchThreadState(BranchThreadState state)
         {
-            m_BranchThreadState = state?.Clone() ?? new BranchThreadState();
+            m_Branch.Restore(state);
         }
 
         /// <summary>
@@ -1276,21 +1298,7 @@ namespace ProjectFoundPhone.Core
         /// </summary>
         public void BeginBranchThread(string branchId)
         {
-            m_BranchThreadState ??= new BranchThreadState();
-
-            // ロード後の再実行で TransferFlags を失わないよう、
-            // 同一分岐が既にアクティブな場合は Clear しない
-            bool isSameBranchReentry = m_BranchThreadState.IsActive
-                && m_BranchThreadState.ActiveBranchId == branchId;
-
-            m_BranchThreadState.ActiveBranchId = branchId;
-            m_BranchThreadState.IsActive = true;
-            m_BranchThreadState.WasCompleted = false;
-
-            if (!isSameBranchReentry)
-            {
-                m_BranchThreadState.TransferFlags.Clear();
-            }
+            m_Branch.Begin(branchId);
         }
 
         /// <summary>
@@ -1298,16 +1306,7 @@ namespace ProjectFoundPhone.Core
         /// </summary>
         public void AddBranchTransferFlag(string flagId)
         {
-            if (string.IsNullOrWhiteSpace(flagId))
-            {
-                return;
-            }
-
-            m_BranchThreadState ??= new BranchThreadState();
-            if (!m_BranchThreadState.TransferFlags.Contains(flagId))
-            {
-                m_BranchThreadState.TransferFlags.Add(flagId);
-            }
+            m_Branch.TrackFlag(flagId);
         }
 
         /// <summary>
@@ -1315,18 +1314,7 @@ namespace ProjectFoundPhone.Core
         /// </summary>
         public void EndBranchThread(bool completed)
         {
-            m_BranchThreadState ??= new BranchThreadState();
-            m_BranchThreadState.IsActive = false;
-            m_BranchThreadState.WasCompleted = completed;
-
-            // 分岐関連の一時状態をクリア。
-            // 次の BeginBranch(別ID) でも TransferFlags.Clear() されるが、
-            // 同一ID再突入時に前回の残存データが混入するのを防止する。
-            m_BranchThreadState.TransferFlags.Clear();
-            m_BranchThreadState.TransferredFlags.Clear();
-            m_BranchThreadState.HiddenFlags.Clear();
-            m_BranchThreadState.SelectionApplied = false;
-            m_BranchThreadState.ReflectionMessage = null;
+            m_Branch.End(completed);
         }
 
         /// <summary>
@@ -1377,9 +1365,9 @@ namespace ProjectFoundPhone.Core
         /// </summary>
         private async YarnTask EndBranchCommand(bool completed, string mode)
         {
-            string branchId = m_BranchThreadState?.ActiveBranchId;
+            string branchId = m_Branch.ActiveBranchId;
             bool useSelectUI = string.Equals(mode, "select", StringComparison.OrdinalIgnoreCase);
-            int flagCount = m_BranchThreadState?.TransferFlags?.Count ?? 0;
+            int flagCount = m_Branch.TransferFlags.Count;
 
             // 知識転送選択UI: selectモード & TransferFlags >= 1
             if (useSelectUI && flagCount > 0)
@@ -1455,11 +1443,7 @@ namespace ProjectFoundPhone.Core
             // 分岐内で取得したトピック数をSubthreadDataに記録 (サイドバーバッジ用)
             if (branchId != null && m_DeclaredThreads.TryGetValue(branchId, out var branchThread))
             {
-                // SelectionApplied 時は TransferredFlags のカウント、それ以外は TransferFlags 全体
-                int topicCount = (m_BranchThreadState?.SelectionApplied == true)
-                    ? (m_BranchThreadState?.TransferredFlags?.Count ?? 0)
-                    : (m_BranchThreadState?.TransferFlags?.Count ?? 0);
-                branchThread.AcquiredTopicCount = topicCount;
+                branchThread.AcquiredTopicCount = m_Branch.ReportedFlags.Count;
             }
 
             // ブランチ状態を終了
@@ -1478,8 +1462,7 @@ namespace ProjectFoundPhone.Core
         /// </summary>
         private void SetBranchReflectionCommand(string text)
         {
-            m_BranchThreadState ??= new BranchThreadState();
-            m_BranchThreadState.ReflectionMessage = text;
+            m_Branch.ReflectionMessage = text;
         }
 
         /// <summary>
@@ -1719,20 +1702,13 @@ namespace ProjectFoundPhone.Core
         /// </summary>
         private string ResolveReflectionMessage()
         {
-            if (m_BranchThreadState == null) return null;
-
-            // Yarn作者が明示指定した場合はそのまま使用
-            if (!string.IsNullOrEmpty(m_BranchThreadState.ReflectionMessage))
+            if (!string.IsNullOrEmpty(m_Branch.ReflectionMessage))
             {
-                return m_BranchThreadState.ReflectionMessage;
+                return m_Branch.ReflectionMessage;
             }
 
-            // SelectionApplied 時は選択されたもののみ、それ以外は全TransferFlags
-            var flagsToReport = m_BranchThreadState.SelectionApplied
-                ? m_BranchThreadState.TransferredFlags
-                : m_BranchThreadState.TransferFlags;
-
-            if (flagsToReport != null && flagsToReport.Count > 0)
+            var flagsToReport = m_Branch.ReportedFlags;
+            if (flagsToReport.Count > 0)
             {
                 var topicNames = new List<string>();
                 foreach (var topicId in flagsToReport)
@@ -1752,9 +1728,7 @@ namespace ProjectFoundPhone.Core
         private List<TransferSelectionUI.TransferCandidate> BuildTransferCandidates()
         {
             var candidates = new List<TransferSelectionUI.TransferCandidate>();
-            if (m_BranchThreadState?.TransferFlags == null) return candidates;
-
-            foreach (var topicId in m_BranchThreadState.TransferFlags)
+            foreach (var topicId in m_Branch.TransferFlags)
             {
                 TopicData topicData = Resources.Load<TopicData>($"Topics/{topicId}");
                 candidates.Add(new TransferSelectionUI.TransferCandidate
@@ -1772,19 +1746,7 @@ namespace ProjectFoundPhone.Core
         /// </summary>
         private void ApplyTransferSelection(List<string> selectedIds)
         {
-            if (m_BranchThreadState == null) return;
-
-            m_BranchThreadState.SelectionApplied = true;
-            m_BranchThreadState.TransferredFlags = selectedIds ?? new List<string>();
-            m_BranchThreadState.HiddenFlags = new List<string>();
-
-            foreach (var topicId in m_BranchThreadState.TransferFlags)
-            {
-                if (!m_BranchThreadState.TransferredFlags.Contains(topicId))
-                {
-                    m_BranchThreadState.HiddenFlags.Add(topicId);
-                }
-            }
+            m_Branch.ApplySelection(selectedIds);
         }
 
         /// <summary>
@@ -1837,6 +1799,12 @@ namespace ProjectFoundPhone.Core
         public void StartScenario(string nodeName = null)
         {
 #if YARN_SPINNER
+#if UNITY_EDITOR
+            if (m_IsNarrativeGenPreview)
+            {
+                return;
+            }
+#endif
             string targetNode = nodeName ?? m_StartNode;
             if (!ValidateDialogueStart(targetNode))
             {
@@ -1954,6 +1922,18 @@ namespace ProjectFoundPhone.Core
         /// </summary>
         public void StopScenario()
         {
+#if UNITY_EDITOR
+            if (m_IsNarrativeGenPreview)
+            {
+                if (m_NarrativeGenPreviewCoroutine != null)
+                {
+                    StopCoroutine(m_NarrativeGenPreviewCoroutine);
+                    m_NarrativeGenPreviewCoroutine = null;
+                }
+                m_ChatController?.HideChoices();
+                return;
+            }
+#endif
 #if YARN_SPINNER
             if (m_DialogueRunner != null && m_DialogueRunner.IsDialogueRunning)
             {
@@ -1963,9 +1943,9 @@ namespace ProjectFoundPhone.Core
             CancelActiveWait();
 
             // 安全弁: シナリオ停止時に分岐状態をクリア
-            if (m_BranchThreadState != null && m_BranchThreadState.IsActive)
+            if (m_Branch.IsActive)
             {
-                Debug.Log($"ScenarioManager: Safety valve — clearing active branch '{m_BranchThreadState.ActiveBranchId}' on StopScenario");
+                Debug.Log($"ScenarioManager: Safety valve — clearing active branch '{m_Branch.ActiveBranchId}' on StopScenario");
                 EndBranchThread(false);
 
                 // メインスレッドに復帰

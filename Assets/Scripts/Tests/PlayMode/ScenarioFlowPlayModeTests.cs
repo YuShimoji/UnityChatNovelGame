@@ -18,6 +18,19 @@ namespace ProjectFoundPhone.Tests
     public class ScenarioFlowPlayModeTests
     {
         private const int SaveSlot = 0;
+        private SaveStorageIsolation m_StorageIsolation;
+
+        [SetUp]
+        public void IsolateSaves()
+        {
+            m_StorageIsolation = new SaveStorageIsolation();
+        }
+
+        [TearDown]
+        public void ReleaseSaveIsolation()
+        {
+            m_StorageIsolation?.Dispose();
+        }
 
         private static CharacterProfile CreateRuntimeCharacterProfile(string characterID, string displayName, bool isPlayer, IconSide iconSide, Sprite iconSprite)
         {
@@ -271,7 +284,7 @@ namespace ProjectFoundPhone.Tests
         [UnityTearDown]
         public IEnumerator TearDown()
         {
-            yield return PlayModeTestHelpers.SafeTeardown("ScenarioFlow", SaveSlot);
+            yield return PlayModeTestHelpers.SafeTeardown("ScenarioFlow");
         }
     }
 }

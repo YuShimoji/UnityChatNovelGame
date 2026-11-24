@@ -2353,6 +2353,8 @@ namespace ProjectFoundPhone.UI
 
 
 
+        internal bool IsChoicePromptVisible => m_ChoiceContainer != null && m_ChoiceContainer.gameObject.activeInHierarchy;
+
         /// <summary>
         /// 選択肢を表示する
         /// </summary>
