@@ -6,7 +6,7 @@
 
 ## 現在地
 
-- FoundPhone / UnityChatNovelGame のシナリオ基盤と、NarrativeGenからの再生を改修中。基準は `main@4c09dcd`。
+- FoundPhone / UnityChatNovelGame の開発は `main` から再開する。保存・分岐の分離と生成JSON試遊の動作確認版は `833cf92`。
 - セーブのファイル操作を `SaveSlotStorage`、分岐中の取得情報・持ち帰り選択を `BranchThreadSession` に分離した。Yarnの呼び出し、セーブJSON、スロット番号は既存の契約を使う。
 - NarrativeGenの互換修正済みSDK `b56b822` をUnityへ固定参照。生成JSONを `DebugChatScene` の既存チャットで選び進める。試遊はメモリ内の別セッションで、YarnやFoundPhoneの保存を起動しない。
 - 既存の基盤工程はSP-023/024の表示確認 → M1（A/B/C・Latent・Branch）→ M2（セーブの状態同値と章遷移）→ M3（alpha判定）。今回の分岐状態と保存の分離はM1/M2の改修に使う。詳細は[開発順序](project-context.md)。
@@ -31,7 +31,7 @@
 
 | 経路 | 現在の判断 | 残る確認 |
 |---|---|---|
-| Git | `origin/main=197116d`を取得済み。開始差分は独立コミットへ保全し、競合範囲を正本7文書に限定 | 統合後の最終SHA、ahead/behind、push結果を確定する |
+| Git | UnityChatNovelGameの `origin/main` に再開に必要な実装と手順を収録。NarrativeGenは互換修正済みSDKのコミット `b56b822` を参照 | 作業開始時に `main` を fast-forward で同期 |
 | Unity / C# | Unity 6000.4.9f1で40 packages、PlayMode 5/5。生成JSONを2選択で終端まで再生し、既存チャットとセーブ4件も通過 | 配布PlayerとM1/M2全体 |
 | Writer Cockpit | main navigationは14/14、bridge candidateは18/18 | candidateのExport操作とApply / Play / Last Actionの人間受入 |
 | 基礎回帰 | スロット書込・削除をテスト専用フォルダに隔離。既存セーブ EditMode 8件、通常チャット PlayMode 4件が通過 | 対象外の基礎テストと章遷移の状態同値 |
