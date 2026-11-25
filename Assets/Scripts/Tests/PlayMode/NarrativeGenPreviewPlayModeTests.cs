@@ -45,7 +45,7 @@ namespace ProjectFoundPhone.Tests
             }
 
             var model = Engine.LoadModel(File.ReadAllText(file));
-            var expected = Engine.StartSession(model);
+            var expected = new ScreenFrameBuilder(model);
             NarrativeGenPreviewRequest.Queue(file);
             try
             {
@@ -55,42 +55,26 @@ namespace ProjectFoundPhone.Tests
                 Assert.IsNotNull(chat);
 
                 int steps = 0;
-                IReadOnlyDictionary<string, HashSet<string>> descriptions = null;
-                IReadOnlyDictionary<string, int> templateUsage = null;
+                ScreenFrame previous = null;
                 while (true)
                 {
                     Assert.Less(steps, model.Nodes.Count, "The selected route did not reach an ending.");
-                    var choices = Engine.GetAvailableChoices(expected, model);
-                    var node = model.Nodes[expected.CurrentNodeId];
-                    var display = NarrativeDisplayText.ResolveNarrativeDisplayTextTracked(node.Text, model, expected,
-                        new ResolveNarrativeDisplayTextTrackedOptions
-                        {
-                            AppendConversationTemplates = true,
-                            DescriptionSeed = (int)expected.Time,
-                            DescriptionState = descriptions,
-                            TemplateUsageState = templateUsage
-                        });
-                    descriptions = display.DescriptionState;
-                    if (!string.IsNullOrEmpty(node.Text))
-                    {
-                        templateUsage = display.TemplateUsageState;
-                    }
-                    string text = display.Text;
-                    if (!string.IsNullOrWhiteSpace(node.Speaker))
-                    {
-                        text = string.IsNullOrEmpty(text) ? node.Speaker : node.Speaker + "\n" + text;
-                    }
-                    if (!string.IsNullOrEmpty(text))
+                    var frame = expected.Current;
+                    // Every line of the shared screen frame reaches the chat: speakers keep their
+                    // own bubbles, the place, notes and ending become system lines.
+                    foreach (var line in NarrativeGenChatScreen.Lines(frame, previous))
                     {
                         yield return WaitFor(
-                            () => chat.GetChatHistory().Any(message => message.Text == text),
-                            $"Chat did not show node '{expected.CurrentNodeId}'.");
+                            () => chat.GetChatHistory().Any(message => message.Text == line.Text
+                                && (line.Kind == NarrativeGenChatScreen.LineKind.System
+                                    || message.CharacterID == line.CharacterId)),
+                            $"Chat did not show '{line.Text}' at node '{frame.NodeId}'.");
                     }
 
-                    if (choices.Count == 0)
+                    var choices = NarrativeGenChatScreen.Choices(frame);
+                    if (frame.Ending || choices.Count == 0)
                     {
-                        yield return WaitFor(() => chat.GetChatHistory().Any(message => message.Text == "再生終了"),
-                            "The final chat message was not displayed.");
+                        Assert.IsTrue(frame.Ending, $"Node '{frame.NodeId}' has no selectable choice.");
                         break;
                     }
 
@@ -103,9 +87,10 @@ namespace ProjectFoundPhone.Tests
                         button = Object.FindObjectsByType<Button>(FindObjectsSortMode.None).FirstOrDefault(
                             candidate => candidate.name == buttonName && candidate.interactable);
                         return button != null;
-                    }, $"The choice for node '{expected.CurrentNodeId}' was not selectable.");
+                    }, $"The choice for node '{frame.NodeId}' was not selectable.");
                     button.onClick.Invoke();
-                    expected = Engine.ApplyChoice(expected, model, choices[pick].Id);
+                    previous = frame;
+                    expected.Choose(choices[pick].Id);
                     steps++;
                 }
 

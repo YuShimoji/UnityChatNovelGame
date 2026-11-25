@@ -12,7 +12,7 @@
 | C# / scripting | Unity project defaults |
 | Yarn Spinner | 3.1.3 |
 | 改修前の基準 | `main@4c09dcd` |
-| NarrativeGen Unity SDK | `com.yushimoji.narrativegen@b71b3f5`（Git revision固定） |
+| NarrativeGen Unity SDK | `com.yushimoji.narrativegen@43dc307`（Git revision固定。画面フレーム `ScreenFrameBuilder` を含む） |
 | Active authoring surface | `Tools > FoundPhone > Writer Cockpit` |
 | Active runtime scene | `ContentAuthoring` / `DebugChatScene` |
 | Bridge candidate | `origin/codex/sites-authoring-bridge-v1@e059e4b`、main未統合 |
@@ -40,6 +40,7 @@
 
 ## 保存・分岐・NarrativeGen試遊の検証
 
+- 2026-11-26、SDK `43dc307`へ更新し、試遊を画面フレームの描画へ置き換えた。Unity 6000.4.9f1のbatchでEditMode 90/90（新規`NarrativeGenChatScreenTests` 2件を含む）、PlayMode 11/11（試遊は画面フレームの全行がチャット履歴に出ることを照合）。NarrativeGen側でC#とTSのフレーム一致（4経路の全手順）を.NET 44/44で確認。試験でTMPの動的フォント資産に字形が足された差分は戻した。Unity実画面の目視は未実施。
 - 2026-11-26、SDKの.NET試験38/38。Studioの現行3作の各1経路が終端に到達し、「藍布の耳」の属性条件と「潮待ちの石段」の時刻条件を通過。Unity PlayModeは7/7。「六目の分銅」の話者名と本文を照合し、`look_baker` → `tell_baker_clerk` → `look_clerk` → `verify_baker` で結末に到達。試遊はセーブファイルを作らず、同じ実行で既存6件も通過。
 
 - 2026-11-25、Unity 6000.4.9f1でセーブ EditMode 8/8、既存チャットとセーブ PlayMode 4/4。セーブファイルの新規作成・上書き・読込、タイトルから通常チャットに入り保存と再読込を確認。

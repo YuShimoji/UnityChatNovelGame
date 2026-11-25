@@ -1,34 +1,31 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using NarrativeGen;
-using Session = NarrativeGen.Runtime.Session;
 using ProjectFoundPhone.UI;
 using UnityEngine;
 
 namespace ProjectFoundPhone.Core
 {
+    /// <summary>
+    /// Plays a NarrativeGen model in the chat. The SDK's ScreenFrameBuilder decides each
+    /// screen (the same frames as NarrativeGen Studio); NarrativeGenChatScreen draws it.
+    /// The preview is an in-memory session and never touches Yarn or FoundPhone saves.
+    /// </summary>
     internal sealed class NarrativeGenPlayback
     {
-        private readonly NarrativeModel m_Model;
+        private readonly ScreenFrameBuilder m_Screen;
         private readonly ChatController m_Chat;
-        private Session m_Session;
-        private IReadOnlyDictionary<string, HashSet<string>> m_Descriptions;
-        private IReadOnlyDictionary<string, int> m_TemplateUsage;
 
         public NarrativeGenPlayback(string file, ChatController chat)
         {
-            m_Model = LoadModel(file);
+            m_Screen = new ScreenFrameBuilder(LoadModel(file));
             m_Chat = chat != null ? chat : throw new ArgumentNullException(nameof(chat));
-            m_Session = Engine.StartSession(m_Model);
         }
 
         internal static void ValidateModelFile(string file)
         {
-            var model = LoadModel(file);
-            var session = Engine.StartSession(model);
-            Engine.GetAvailableChoices(session, model);
+            _ = new ScreenFrameBuilder(LoadModel(file)).Current;
         }
 
         private static NarrativeModel LoadModel(string file) => Engine.LoadModel(File.ReadAllText(file));
@@ -40,19 +37,19 @@ namespace ProjectFoundPhone.Core
             m_Chat.SetInputEnabled(false);
             m_Chat.ClearMessages();
 
-            while (TryReadCurrentTurn(out var text, out var choices, out var labels))
+            ScreenFrame previous = null;
+            while (true)
             {
-                m_Chat.AddSystemMessage(text);
-                if (choices.Count == 0)
+                ScreenFrame frame = m_Screen.Current;
+                Show(frame, previous);
+                var choices = NarrativeGenChatScreen.Choices(frame);
+                if (frame.Ending || choices.Count == 0)
                 {
-                    m_Chat.AddSystemMessage(m_Model.Nodes[m_Session.CurrentNodeId].Choices?.Count > 0
-                        ? "選べる選択肢がありません。"
-                        : "再生終了");
                     yield break;
                 }
 
                 int selection = -1;
-                m_Chat.ShowChoices(labels, index =>
+                m_Chat.ShowChoices(choices.ConvertAll(c => c.Label), index =>
                 {
                     if (selection < 0 && index >= 0 && index < choices.Count)
                     {
@@ -71,80 +68,39 @@ namespace ProjectFoundPhone.Core
                     yield break;
                 }
 
-                if (!TryApply(choices[selection].Id))
-                {
-                    yield break;
-                }
-
-                m_Chat.AddMessage("player", labels[selection]);
                 // The existing button handler fades and clears its prompt after invoking the callback.
                 // Wait for that cleanup before installing the next set of choices.
                 while (m_Chat.IsChoicePromptVisible)
                 {
                     yield return null;
                 }
-            }
-        }
 
-        private bool TryReadCurrentTurn(out string text, out IReadOnlyList<Choice> choices, out List<string> labels)
-        {
-            try
-            {
-                var node = m_Model.Nodes[m_Session.CurrentNodeId];
-                var display = Resolve(node.Text, appendTemplates: true);
-                text = string.IsNullOrWhiteSpace(node.Speaker)
-                    ? display.Text
-                    : string.IsNullOrEmpty(display.Text)
-                        ? node.Speaker
-                        : $"{node.Speaker}\n{display.Text}";
-                m_Descriptions = display.DescriptionState;
-                if (!string.IsNullOrEmpty(node.Text))
+                previous = frame;
+                try
                 {
-                    m_TemplateUsage = display.TemplateUsageState;
+                    m_Screen.Choose(choices[selection].Id);
                 }
-
-                choices = Engine.GetAvailableChoices(m_Session, m_Model);
-                labels = new List<string>(choices.Count);
-                foreach (var choice in choices)
+                catch (Exception error)
                 {
-                    labels.Add(Resolve(choice.Text, appendTemplates: false).Text);
+                    ReportPlaybackError(error);
+                    yield break;
                 }
-                return true;
-            }
-            catch (Exception error)
-            {
-                ReportPlaybackError(error);
-                text = string.Empty;
-                choices = Array.Empty<Choice>();
-                labels = new List<string>();
-                return false;
             }
         }
 
-        private bool TryApply(string choiceId)
+        private void Show(ScreenFrame frame, ScreenFrame previous)
         {
-            try
+            foreach (var line in NarrativeGenChatScreen.Lines(frame, previous))
             {
-                m_Session = Engine.ApplyChoice(m_Session, m_Model, choiceId);
-                return true;
-            }
-            catch (Exception error)
-            {
-                ReportPlaybackError(error);
-                return false;
-            }
-        }
-
-        private ResolveNarrativeDisplayTextTrackedResult Resolve(string text, bool appendTemplates)
-        {
-            return NarrativeDisplayText.ResolveNarrativeDisplayTextTracked(
-                text, m_Model, m_Session, new ResolveNarrativeDisplayTextTrackedOptions
+                if (line.Kind == NarrativeGenChatScreen.LineKind.System)
                 {
-                    AppendConversationTemplates = appendTemplates,
-                    DescriptionSeed = (int)m_Session.Time,
-                    DescriptionState = m_Descriptions,
-                    TemplateUsageState = m_TemplateUsage
-                });
+                    m_Chat.AddSystemMessage(line.Text);
+                }
+                else
+                {
+                    m_Chat.AddMessage(line.CharacterId, line.Text);
+                }
+            }
         }
 
         private void ReportPlaybackError(Exception error)
