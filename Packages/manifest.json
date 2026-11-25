@@ -12,7 +12,7 @@
     "com.unity.nuget.newtonsoft-json": "3.2.2",
     "com.unity.test-framework": "2.0.1",
     "com.unity.ugui": "2.0.0",
-    "com.yushimoji.narrativegen": "https://github.com/YuShimoji/NarrativeGen.git?path=/packages/sdk-unity#b56b822fb1407e370ef0153f65597d5c55f41c86",
+    "com.yushimoji.narrativegen": "https://github.com/YuShimoji/NarrativeGen.git?path=/packages/sdk-unity#b71b3f5c3929c5fc88991eac4bdb89f1d95160a6",
     "dev.yarnspinner.unity": "3.1.3",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.ai": "1.0.0",

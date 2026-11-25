@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NarrativeGen;
@@ -27,7 +28,7 @@ namespace ProjectFoundPhone.Tests
                 File.WriteAllText(file, @"{
                     ""startNode"":""start"",
                     ""nodes"":{
-                        ""start"":{""id"":""start"",""text"":""Opening"",""choices"":[
+                        ""start"":{""id"":""start"",""speaker"":""Narrator"",""text"":""Opening"",""choices"":[
                             {""id"":""short"",""text"":""Finish"",""target"":""end""},
                             {""id"":""look"",""text"":""Look"",""target"":""observe"",""effects"":[
                                 {""type"":""createEvent"",""id"":""observation"",""name"":""Observed evidence""}
@@ -54,16 +55,35 @@ namespace ProjectFoundPhone.Tests
                 Assert.IsNotNull(chat);
 
                 int steps = 0;
+                IReadOnlyDictionary<string, HashSet<string>> descriptions = null;
+                IReadOnlyDictionary<string, int> templateUsage = null;
                 while (true)
                 {
                     Assert.Less(steps, model.Nodes.Count, "The selected route did not reach an ending.");
                     var choices = Engine.GetAvailableChoices(expected, model);
-                    string body = NarrativeDisplayText.ResolveNarrativeDisplayTextTracked(
-                        model.Nodes[expected.CurrentNodeId].Text, model, expected).Text;
-                    if (!string.IsNullOrEmpty(body))
+                    var node = model.Nodes[expected.CurrentNodeId];
+                    var display = NarrativeDisplayText.ResolveNarrativeDisplayTextTracked(node.Text, model, expected,
+                        new ResolveNarrativeDisplayTextTrackedOptions
+                        {
+                            AppendConversationTemplates = true,
+                            DescriptionSeed = (int)expected.Time,
+                            DescriptionState = descriptions,
+                            TemplateUsageState = templateUsage
+                        });
+                    descriptions = display.DescriptionState;
+                    if (!string.IsNullOrEmpty(node.Text))
+                    {
+                        templateUsage = display.TemplateUsageState;
+                    }
+                    string text = display.Text;
+                    if (!string.IsNullOrWhiteSpace(node.Speaker))
+                    {
+                        text = string.IsNullOrEmpty(text) ? node.Speaker : node.Speaker + "\n" + text;
+                    }
+                    if (!string.IsNullOrEmpty(text))
                     {
                         yield return WaitFor(
-                            () => chat.GetChatHistory().Any(message => message.Text == body),
+                            () => chat.GetChatHistory().Any(message => message.Text == text),
                             $"Chat did not show node '{expected.CurrentNodeId}'.");
                     }
 

@@ -33,13 +33,13 @@
       }
     },
     "com.yushimoji.narrativegen": {
-      "version": "https://github.com/YuShimoji/NarrativeGen.git?path=/packages/sdk-unity#b56b822fb1407e370ef0153f65597d5c55f41c86",
+      "version": "https://github.com/YuShimoji/NarrativeGen.git?path=/packages/sdk-unity#b71b3f5c3929c5fc88991eac4bdb89f1d95160a6",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.2.1"
       },
-      "hash": "b56b822fb1407e370ef0153f65597d5c55f41c86"
+      "hash": "b71b3f5c3929c5fc88991eac4bdb89f1d95160a6"
     },
     "dev.yarnspinner.unity": {
       "version": "3.1.3",

@@ -1,6 +1,6 @@
 # Runtime State
 
-最終更新: 2026-11-25
+最終更新: 2026-11-26
 
 このファイルは共有可能な環境・検証条件だけを保持する。現在の作業判断は `docs/HANDOFF.md`、履歴はGit、監修判断は`docs/SUPERVISOR_REPORT.md`を参照する。
 
@@ -12,7 +12,7 @@
 | C# / scripting | Unity project defaults |
 | Yarn Spinner | 3.1.3 |
 | 改修前の基準 | `main@4c09dcd` |
-| NarrativeGen Unity SDK | `com.yushimoji.narrativegen@b56b822`（Git revision固定） |
+| NarrativeGen Unity SDK | `com.yushimoji.narrativegen@b71b3f5`（Git revision固定） |
 | Active authoring surface | `Tools > FoundPhone > Writer Cockpit` |
 | Active runtime scene | `ContentAuthoring` / `DebugChatScene` |
 | Bridge candidate | `origin/codex/sites-authoring-bridge-v1@e059e4b`、main未統合 |
@@ -38,9 +38,11 @@
   - local runtimeで両分岐、restart、keyboard、focus、ARIA、320–430px、禁止機能監査をpass
   - Owner sign-in後のhosted本文reviewは未実施
 
-## 2026-11-25の検証
+## 保存・分岐・NarrativeGen試遊の検証
 
-- Unity 6000.4.9f1でセーブ EditMode 8/8、既存チャットとセーブ PlayMode 4/4。セーブファイルの新規作成・上書き・読込、タイトルから通常チャットに入り保存と再読込を確認。
+- 2026-11-26、SDKの.NET試験38/38。Studioの現行3作の各1経路が終端に到達し、「藍布の耳」の属性条件と「潮待ちの石段」の時刻条件を通過。Unity PlayModeは7/7。「六目の分銅」の話者名と本文を照合し、`look_baker` → `tell_baker_clerk` → `look_clerk` → `verify_baker` で結末に到達。試遊はセーブファイルを作らず、同じ実行で既存6件も通過。
+
+- 2026-11-25、Unity 6000.4.9f1でセーブ EditMode 8/8、既存チャットとセーブ PlayMode 4/4。セーブファイルの新規作成・上書き・読込、タイトルから通常チャットに入り保存と再読込を確認。
 - NarrativeGen C# SDK .NET 35/35。チーズバーガーの生成モデル2本で知覚イベントの有無、次の選択肢、0.1と0.12を展開した本文を照合。
 - C# SDKとTypeScript版で、生成5モデルの初手ごとに次の先頭選択肢を選ぶ12経路を比較。場面ID、選択肢ID、イベントID、展開本文が一致した。
 - SDK固定参照後、Unity PlayMode 5/5。実際の `cheeseburger-weight.json` を既存チャットに読み込み、探偵Aの `look_detective_a` → `verify_detective_a` で終端へ到達。同じ実行で既存回帰4件を確認。

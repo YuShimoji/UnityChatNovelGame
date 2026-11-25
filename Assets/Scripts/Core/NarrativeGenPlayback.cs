@@ -92,7 +92,11 @@ namespace ProjectFoundPhone.Core
             {
                 var node = m_Model.Nodes[m_Session.CurrentNodeId];
                 var display = Resolve(node.Text, appendTemplates: true);
-                text = display.Text;
+                text = string.IsNullOrWhiteSpace(node.Speaker)
+                    ? display.Text
+                    : string.IsNullOrEmpty(display.Text)
+                        ? node.Speaker
+                        : $"{node.Speaker}\n{display.Text}";
                 m_Descriptions = display.DescriptionState;
                 if (!string.IsNullOrEmpty(node.Text))
                 {

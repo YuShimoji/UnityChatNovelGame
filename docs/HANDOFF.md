@@ -1,6 +1,6 @@
 # Handoff
 
-最終更新: 2026-11-25
+最終更新: 2026-11-26
 
 会話ログなしで再開するための唯一のライブ現在地。履歴は追記せず Git に委ねる。詳細な監修判断は `docs/SUPERVISOR_REPORT.md`、環境条件は `docs/runtime-state.md` を参照する。
 
@@ -8,13 +8,13 @@
 
 - FoundPhone / UnityChatNovelGame の開発は `main` から再開する。保存・分岐の分離と生成JSON試遊の動作確認版は `833cf92`。
 - セーブのファイル操作を `SaveSlotStorage`、分岐中の取得情報・持ち帰り選択を `BranchThreadSession` に分離した。Yarnの呼び出し、セーブJSON、スロット番号は既存の契約を使う。
-- NarrativeGenの互換修正済みSDK `b56b822` をUnityへ固定参照。生成JSONを `DebugChatScene` の既存チャットで選び進める。試遊はメモリ内の別セッションで、YarnやFoundPhoneの保存を起動しない。
+- NarrativeGen SDK `b71b3f5` をUnityへ固定参照。話者ラベルと物の属性に基づく選択肢条件に対応し、生成JSONの話者名・本文・選択肢を `DebugChatScene` の既存チャットで表示する。試遊はメモリ内の別セッションで、YarnやFoundPhoneの保存を起動しない。
 - 既存の基盤工程はSP-023/024の表示確認 → M1（A/B/C・Latent・Branch）→ M2（セーブの状態同値と章遷移）→ M3（alpha判定）。今回の分岐状態と保存の分離はM1/M2の改修に使う。詳細は[開発順序](project-context.md)。
 
 ## NarrativeGenの試遊
 
 1. Unity 6000.4.9f1でこのプロジェクトを開く。
-2. `Tools > FoundPhone > Play NarrativeGen JSON...` で、NarrativeGenが保存または生成したモデルJSONを選ぶ。例はNarrativeGenの `models/generated/cheeseburger-weight.json`。
+2. `Tools > FoundPhone > Play NarrativeGen JSON...` で、NarrativeGenが保存または生成したモデルJSONを選ぶ。例はNarrativeGenの `models/generated/brass-weight.json`（六目の分銅）。
 3. Gameビューのチャットに出る選択肢を押す。終了時はPlay Modeを止める。Play Mode開始シーン設定は元に戻る。
 
 ## 取り込んだ能力
@@ -31,8 +31,8 @@
 
 | 経路 | 現在の判断 | 残る確認 |
 |---|---|---|
-| Git | UnityChatNovelGameの `origin/main` に再開に必要な実装と手順を収録。NarrativeGenは互換修正済みSDKのコミット `b56b822` を参照 | 作業開始時に `main` を fast-forward で同期 |
-| Unity / C# | Unity 6000.4.9f1で40 packages、PlayMode 5/5。生成JSONを2選択で終端まで再生し、既存チャットとセーブ4件も通過 | 配布PlayerとM1/M2全体 |
+| Git | UnityChatNovelGameの `origin/main` に再開に必要な実装と手順を収録。NarrativeGenの `main` にあるSDKコミット `b71b3f5` を参照 | 作業開始時に `main` を fast-forward で同期 |
+| Unity / C# | Unity 6000.4.9f1でPlayMode 7/7。Editorメニューから「六目の分銅」を開き、実画面でも話者名と本文を確認して4選択で結末へ到達。通常のYarn、表示、セーブ再読込の検査6件も通過 | 配布PlayerとM1/M2全体 |
 | Writer Cockpit | main navigationは14/14、bridge candidateは18/18 | candidateのExport操作とApply / Play / Last Actionの人間受入 |
 | 基礎回帰 | スロット書込・削除をテスト専用フォルダに隔離。既存セーブ EditMode 8件、通常チャット PlayMode 4件が通過 | 対象外の基礎テストと章遷移の状態同値 |
 | Sites static package | fixture validator、両分岐、responsive / accessibility smokeを確認済み | hosted本文はOwner sign-in後review待ち |
