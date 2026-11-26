@@ -1,6 +1,6 @@
 # Handoff
 
-最終更新: 2026-11-26
+最終更新: 2026-11-27
 
 会話ログなしで再開するための唯一のライブ現在地。履歴は追記せず Git に委ねる。詳細な監修判断は `docs/SUPERVISOR_REPORT.md`、環境条件は `docs/runtime-state.md` を参照する。
 
@@ -14,10 +14,10 @@
 ## NarrativeGenの試遊
 
 1. Unity 6000.4.9f1でこのプロジェクトを開く。
-2. `Tools > FoundPhone > Play NarrativeGen JSON...` で、NarrativeGenが保存または生成したモデルJSONを選ぶ。例はNarrativeGenの `models/generated/brass-weight.json`（六目の分銅）。
-3. Gameビューのチャットに出る選択肢を押す。終了時はPlay Modeを止める。Play Mode開始シーン設定は元に戻る。
+2. `Tools > FoundPhone > Play NarrativeGen JSON...` で、NarrativeGenの [`models/examples/blue-selvedge.json`（藍布の耳）](https://github.com/YuShimoji/NarrativeGen/blob/main/models/examples/blue-selvedge.json) を選ぶ。
+3. [固定の選択経路・期待フレーム](https://github.com/YuShimoji/NarrativeGen/blob/main/packages/tests/NarrativeGen.Tests/ScreenFrames/blue-selvedge.json) の順に、Gameビューのチャットで結末まで進める。Studioと場所・話者・段落・話題と行き先・旅の手帳・結末を照合する。終了時はPlay Modeを止める。Play Mode開始シーン設定は元に戻る。
 
-同じフレームはWritingPageの`NarrativeScreenBridge.framesToMarkdown`でReader用の吹き出しにも書ける。表示の対応表はSP-SCREEN-001の「画面ごとの描き方」。
+Unity担当の次作業は手順3の実画面照合。WritingPageのReader用Markdownにも同じ期待フレームを使う。担当と完了条件は[3プロジェクトの申し送り](https://github.com/YuShimoji/NarrativeGen/blob/main/HANDOVER.md#unitychatnovelgamewritingpageとの接続)、表示項目はSP-SCREEN-001の「画面ごとの描き方」。配布Playerへの接続とFoundPhone本編のM1/M2はそれぞれ別工程。
 
 ## 取り込んだ能力
 
@@ -33,7 +33,7 @@
 
 | 経路 | 現在の判断 | 残る確認 |
 |---|---|---|
-| Git | UnityChatNovelGameの `origin/main` に再開に必要な実装と手順を収録。NarrativeGenの `main` にあるSDKコミット `b71b3f5` を参照 | 作業開始時に `main` を fast-forward で同期 |
+| Git | UnityChatNovelGameの `origin/main` に試遊の実装と手順を収録。`Packages/manifest.json` と `Packages/packages-lock.json` はフレームを含むNarrativeGen SDK `43dc307` で一致 | 作業開始時に `main` を fast-forward で同期 |
 | Unity / C# | Unity 6000.4.9f1でEditMode 90/90・PlayMode 11/11（2026-11-26、SDK `43dc307`）。画面フレームの対応はEditModeの`NarrativeGenChatScreenTests`、チャットへの到達はPlayModeの試遊で確認 | 画面フレーム版のチャットの実画面（人の目視は未）、配布PlayerとM1/M2全体 |
 | Writer Cockpit | main navigationは14/14、bridge candidateは18/18 | candidateのExport操作とApply / Play / Last Actionの人間受入 |
 | 基礎回帰 | スロット書込・削除をテスト専用フォルダに隔離。既存セーブ EditMode 8件、通常チャット PlayMode 4件が通過 | 対象外の基礎テストと章遷移の状態同値 |
