@@ -26,8 +26,6 @@ validation:
 nav:
   - Overview:
       - Viewer Guide: index.md
-      - Project Status Dashboard: docs/PROJECT_STATUS_DASHBOARD.md
-      - Project Cockpit: docs/PROJECT_COCKPIT.md
       - Agent Entry: AGENTS.md
       - Claude Entry: CLAUDE.md
       - Resume Prompt: prompt-resume.md
@@ -38,7 +36,6 @@ nav:
       - Wiki Sidebar: docs/wiki/_sidebar.md
   - Runtime State:
       - Repo Local Rules: docs/REPO_LOCAL_RULES.md
-      - Development Turn Plan: docs/DEVELOPMENT_TURN_PLAN.md
       - Handoff: docs/HANDOFF.md
       - Supervisor Report: docs/SUPERVISOR_REPORT.md
       - Runtime State: docs/runtime-state.md

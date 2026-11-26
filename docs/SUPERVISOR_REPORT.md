@@ -2,22 +2,22 @@
 
 **更新日**: 2026-07-21
 **対象**: FoundPhone / UnityChatNovelGame
-**同期起点**: `main` / `1e582639`（2026-07-21開始時に`origin/main`とahead/behind `0/0`）
+**同期基準**: `main` / `73aef720`（2026-07-21 に `51dc8bc` から 8 commits を fast-forward、`origin/main` と ahead/behind `0/0`）
 **役割**: 監修役AIが会話ログなしで、信頼できる現在地、残る判断、推奨順序、製品化までの目標を判断するための引き継ぎ正本。
 
 ## 1. 結論
 
-このリポジトリは、**Writer Cockpitの作者向けsource navigationと診断drilldownを受け入れ、active YarnのValidator driftを解消し、Sites-native lightweight chat demoをportableなtracked inputとOwner-only hosted runtimeの二層で引き継げる状態**になった。direct Unity Web routeはblockedのままだが、非canonのSites Version 1はlocal Worker QAとprivate deploymentを通過し、残りはOwner sign-in後のhosted本文reviewである。
+このリポジトリは、**Writer Cockpitの作者向けsource navigationと診断drilldownを受け入れ、active YarnのValidator driftを解消し、Sites-native lightweight chat demoをportableなtracked inputとOwner-only hosted runtimeの二層で引き継げる状態**になった。2026-07-21 の最新 `main` 取り込み後にも Unity compile、Yarn validator、Writer Cockpit targeted EditMode 14/14、Sites static validator、strict docs buildを再現したため、コード・ツール・文書の開発再開に阻害要因はない。direct Unity Web routeはblockedのままで、非canonのSites Version 1は残りのOwner sign-in後hosted本文reviewを待つ。
 
 ただし、現在の受け入れ状態は次のように分ける。
 
 | 判定対象 | 現在の判定 | 根拠 |
 |---|---|---|
-| Git / ソース同期 | 統合可能 | 2026-07-19 開始時の`main` / `origin/main`は`55cb0d20`、ahead/behind `0/0`。accepted editor commitは同baseの直系 |
-| Unity batch open / compile | 開発可能 | accepted editor treeをUnity 6000.4.9f1で再実行し、batchmode return code 0。tracked差分なし |
+| Git / ソース同期 | 最新基準へ到達 | `51dc8bc` から `73aef720` へ 8 commits を fast-forward。`HEAD...origin/main = 0/0`。同期前の docs 整理差分は復旧 stash を残して再適用・統合済み |
+| Unity batch open / compile | 開発可能 | 2026-07-21 の current checkout をUnity 6000.4.9f1で再実行し、39 packages、script compile、batch exit 0。Unity由来の tracked 差分なし |
 | agent / terminal からの再現 | 開発可能 | `tools/run-unity.ps1` が欠落した標準 Windows 環境変数を子プロセス内だけ補完 |
-| Yarn 静的検証 | active Yarnで信頼回復 | errors=0 / warnings=0 / info=3。以前の33 warningsはcommand/character registry driftとして解消 |
-| Writer Cockpit navigation | lane受入 | 74 Node検索、source path/line、diagnostic一覧をaccepted laneで確認。targeted EditMode 14/14 |
+| Yarn 静的検証 | active Yarnで信頼回復 | current checkoutでも errors=0 / warnings=0 / info=3、11 files / 74 nodes。以前の33 warningsはcommand/character registry driftとして解消 |
+| Writer Cockpit navigation | lane受入 | 74 Node検索、source path/line、diagnostic一覧をaccepted laneで確認。2026-07-21 再実行も targeted EditMode 14/14 |
 | External editor jump | 人間環境レビュー待ち | fail-closed実装は確認済み。Unity External Script Editor未設定のため実file/line移動は未証明 |
 | 現行 Unity テスト全体 | 未更新 | 静的には EditMode 73 / PlayMode 10。保存済み全体回帰は旧 8 PlayMode 基準 |
 | Unity Web publication | blocked / 未証明 | Web Build Supportなし、有効なpublic gameplay sceneなし。Sites-native demoを別laneの後継とする |
@@ -50,6 +50,16 @@ AI の主担当はエンジン、ツール、パイプライン、検証導線�
 FoundPhone を、モバイル優先のチャット／ビジュアルノベルゲームとして iOS / Android に配布可能な状態へ持っていく。F2P + 広告、Ch3以降のサウンド統合は高位方針として存在するが、現在の実装スライスではない。
 
 ## 3. 今回の同期と復旧
+
+### 2026-07-21 remote fast-forward / local readiness refresh
+
+- 同期前の `main` は `51dc8bc`、`origin/main` は 8 commits 先の `73aef720`。同期前から存在した docs 正本整理を `codex-pre-sync-2026-07-21-doc-restructure` として退避し、`git pull --ff-only origin main` で fast-forward 後に再適用した。
+- Handoff、runtime、decision log、request ledger、project context の競合は、リモートで増えた Writer Cockpit / Sites / 検証事実を保持しつつ、ライブ現在地を `HANDOFF`、環境条件を `runtime-state`、監修判断を本報告へ分ける方針で解消した。旧 Cockpit / Dashboard / Turn Plan の重複正本はローカル整理どおり廃止した。
+- package manifest / lock は変更せず JSON parse pass。`tools/run-unity.ps1` で Unity 6000.4.9f1 を起動し、39 packages、script compile、batch exit 0を確認した。
+- Yarn validatorは `errors=0 / warnings=0 / info=3`、11 files / 74 nodes / 24 `#line:` tags / 42 variables。Writer Cockpit専用 EditModeは14/14 pass、failed / skipped 0、1.46秒。
+- `node tools/sites/validate-demo.mjs` は required files 6、demo nodes 7、branching / non-canon label / accessibility hooks / prohibited-pattern auditをpass。docs nav生成とMkDocs strict buildもpassした。
+- Unity test logには一時的なLicensing access-token warningが出たが、process exit 0かつtest XML 14/14 pass。compile・test・開発再開を阻害する事象ではない。
+- 同期前の文書整理は未コミット差分として保持しており、復旧 stash もまだ削除していない。code、Yarn、scene、asset、package に今回独自の変更はない。
 
 ### 2026-07-21 Sites private runtime / cross-terminal sync
 
@@ -114,6 +124,13 @@ fresh resolve 後の初回初期化で、`BuildSettingsHelper` が `ContentAutho
 ## 4. ライブ検証
 
 ### 確認済み
+
+0. **2026-07-21 current checkout readiness refresh**
+   - Git fast-forward: `51dc8bc` → `73aef720`、ahead/behind `0/0`
+   - package JSON parse、Sites static validator、docs strict build: pass
+   - Unity 6000.4.9f1: 39 packages、script compile、batch exit 0
+   - Yarn: errors 0 / warnings 0 / info 3、11 files / 74 nodes
+   - Writer Cockpit targeted EditMode: 14/14 pass、failed / skipped 0
 
 1. **package resolve / restore**
    - 2026-07-11: ProjectCache 欠落状態から fresh resolve 42.78秒、39 packages、return code 0
@@ -187,6 +204,7 @@ fresh resolve 後の初回初期化で、`BuildSettingsHelper` が `ContentAutho
 
 ### trusted
 
+- `73aef720` への fast-forward 後の current checkout で、Unity batch compile、Yarn validator、Writer Cockpit targeted 14/14、Sites static validator、strict docs buildを再現したこと。
 - 同期起点で `main` と `origin/main` が一致していたこと。
 - accepted editor commitがbaseの直系で、許可されたEditor/test/verification filesだけを変更していたこと。
 - 2026-07-17 の現 checkout で package restore、Tundra compile、batchmode 正常終了を再確認したこと。

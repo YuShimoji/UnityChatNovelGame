@@ -6,11 +6,10 @@ status snapshot, roadmap, report template, or handoff log.
 ## Read Order
 
 1. `docs/REPO_LOCAL_RULES.md`
-2. `docs/ai/READ_ORDER.md`
-3. `docs/HANDOFF.md`
-4. `docs/runtime-state.md`
+2. `docs/HANDOFF.md`
+3. The canonical document directly related to the active artifact
 
-Read additional docs only when the current task needs them.
+Use `docs/ai/READ_ORDER.md` as a reference index only when the owner document is unclear. Read additional docs only when the current task needs them.
 
 ## Hard Rules
 
@@ -27,4 +26,4 @@ Read additional docs only when the current task needs them.
 - Project-local canonical docs override global Codex fallback rules.
 - `docs/REPO_LOCAL_RULES.md` owns daily operating rules and restart budget.
 - `docs/INVARIANTS.md` owns non-negotiable product and workflow boundaries.
-- `docs/HANDOFF.md` and `docs/runtime-state.md` own current state.
+- `docs/HANDOFF.md` owns the live current position; `docs/runtime-state.md` owns environment and validation facts.
