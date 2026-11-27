@@ -6,9 +6,9 @@
 
 - 表形式の決定履歴: [docs/DECISION_LOG.md](DECISION_LOG.md)（必要時のみ）
 
-- プロジェクト名: FoundPhone (UnityChatNovelGame)
+- プロジェクト名: UnityChatNovelGame。汎用アドベンチャーエンジンと、その上の作品 FoundPhone を開発する。
 - 環境: Unity 6000.4.9f1 / C# / Yarn Spinner 3.1.3 / DOTween
-- ブランチ戦略: trunk-based (main のみ)
+- 統合先は `main`。実装と表示比較は作業ブランチで検証する。
 - 現フェーズ: プロトタイプ → α移行中
 - ライブ現在地と直近の検証: `docs/HANDOFF.md`
 - 共有可能な環境条件: `docs/runtime-state.md`
@@ -105,7 +105,7 @@
 
 ### 基盤の改修方針
 
-- YarnとNarrativeGenはそれぞれのランタイムで進行と条件を決める。チャットは本文と選択肢を表示し、選択を実行元へ返す。生成JSONにFoundPhone本編の進行や保存を持たせない。
+- 作品選択は TitleScene。WritingPage の原稿は章・発言・図版・伏せ書きとして読み、NarrativeGen は同じ画面で選択 ID を SDK に返す。FoundPhone は Yarn のコマンド、チャット履歴、スロットを持つ。表示と進行の契約は[表示アルゴリズム](DISPLAY_ALGORITHMS.md)。
 - M1では、スレッドの登録・顕在化・完了・未読・分岐の状態をUIとYarnから分離する。既存の型と挙動を同じ試験入力で比較してから個別の接続を置き換える。
 - M2では、保存するゲーム状態とファイル書込、シーン起動と復元を分離する。既存セーブの読込、同じ地点からの続行、章切替後の再開を実際の操作で照合する。
 - M3では、通常のタイトル起動と物語の試遊導線の両方で、到達条件を同じ版で確認する。
@@ -135,9 +135,18 @@
 
 ---
 
-## FINAL DELIVERABLE IMAGE
+## 作品制作の入口と汎用化の範囲
 
-- 最終成果物: モバイル向けチャット/ビジュアルノベルゲームアプリ（FoundPhone）
+| 領域 | 使えるもの | 作品固有の境界・残る作業 |
+|---|---|---|
+| 執筆と取込 | WritingPage の読者HTMLを章・図版・リンク付きの Unity アセットに変換。モデルを指定すると本文に NarrativeGen 変数を展開し、原稿の選択を SDK に渡す | 入力は WritingPage の読者HTMLと固定 SDK に対応した JSON。日記の開閉は手を消費しない |
+| 画面と操作 | 著者の配色、会話枠と地の文、挿絵、二段組・縦積み、見出し分岐、折りたたみ、場面と指定箇所のアニメーション | 比較元は [WritingPage の日記・聞き込み4作とゲームブック分岐デモ](https://github.com/YuShimoji/WritingPage/tree/3245489957e96f406d89a71a47cf29f8b1ed8ff1/samples)。任意のCSS・縦書き・ルビはこの表示の対象外 |
+| 進行 | NarrativeGen の SDK が条件・訪問済み・結末を計算。FoundPhone の通常起動は ScenarioManager が Yarn を開始 | 本編のメッセージ・スレッド用コマンドは ChatController に依存。別表示へ移すときは同一入力で進行を照合する |
+| 保存と提供 | Windows 版はタイトルから起動できる。FoundPhone のセーブは既存のノード・変数・チャット履歴を復元。読書と聞き込みはメモリ内 | 作品共通の途中再開は未実装。モバイル実機・公開配布は未検証。FoundPhone の M1/M2 は上記の工程で扱う |
+
+## FoundPhone の製品目標
+
+- FoundPhone の最終成果物: モバイル向けチャット/ビジュアルノベルゲームアプリ
 - プラットフォーム: モバイル優先 (iOS/Android)
 - マネタイズ: F2P + 広告
 - サウンド: コンテンツ充実後に統合（Ch3以降）
@@ -156,7 +165,7 @@
 | 静的バリデーション | 自動 | YarnContentValidator (Editor) | done |
 | SO自動生成 | 自動 | YarnSOGenerator + Content Pipeline (Topic/Character/Channel 同期) | **done** |
 | Unity再生確認 | 手動 | ContentAuthoring シーン | done |
-| E2E自動検証 | 自動 | PlayMode フォルダ **10** 件 + batch XML（.xml/.txt）。共通ヘルパー分離済み。最後の記録済み全体回帰は 2026-04-09 の 8/8、2026-06-08 追加 2 件は Unity 6000.4.9f1 実行待ち。全チャプター網羅は ETK 拡張で継続 | **partial（EN-012 目安 60%）** |
+| E2E自動検証 | 自動 | 作品一覧・読書・ゲームブック・NarrativeGen・通常チャットの回帰は[検証条件](runtime-state.md)。FoundPhone の全章網羅は ETK 拡張で継続 | **partial（EN-012）** |
 | 調整 | 手動 | Unity Inspector + Yarn編集 | done |
 | ビルド | 自動 | Unity Build Pipeline (モバイル) | 未設定 |
 | 配布 | 手動 | App Store / Google Play | 未設定 |

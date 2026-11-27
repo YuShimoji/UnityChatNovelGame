@@ -6,18 +6,28 @@
 
 ## 現在地
 
-- FoundPhone / UnityChatNovelGame の開発は `main` から再開する。保存・分岐の分離と生成JSON試遊の動作確認版は `833cf92`。
+- 汎用アドベンチャーの作業ブランチは `adventure-reader`。Unity 6000.4.9f1で [TitleScene](../Assets/Scenes/TitleScene.unity) を開いて Play。作品一覧から WritingPage の日記・聞き込み4作とゲームブック分岐デモを読む、NarrativeGen の「藍布の耳」を遊ぶ、または FoundPhone の本編を開始できる。
 - セーブのファイル操作を `SaveSlotStorage`、分岐中の取得情報・持ち帰り選択を `BranchThreadSession` に分離した。Yarnの呼び出し、セーブJSON、スロット番号は既存の契約を使う。
 - NarrativeGen SDK `43dc307` をUnityへ固定参照。試遊はSDKの画面フレーム（NarrativeGenの[SP-SCREEN-001](https://github.com/YuShimoji/NarrativeGen/blob/main/docs/specs/screen-frame.md)）を `NarrativeGenChatScreen` がチャットへ描く。Studioの会話窓と同じく、話者「場所｜名前」を場所の行と話者名つき吹き出しに分け、段落ごとの吹き出し、話題と行き先（`→`）の選択肢、聞いた話題の「（済）」、旅の手帳の記録、依頼完了を出す。試遊はメモリ内の別セッションで、YarnやFoundPhoneの保存を起動しない。
 - 既存の基盤工程はSP-023/024の表示確認 → M1（A/B/C・Latent・Branch）→ M2（セーブの状態同値と章遷移）→ M3（alpha判定）。今回の分岐状態と保存の分離はM1/M2の改修に使う。詳細は[開発順序](project-context.md)。
 
-## NarrativeGenの試遊
+## WritingPage の作品を追加する
+
+WritingPage の読者表示で「HTMLとして保存」し、Unity の `Tools > Adventure > Prepare WritingPage HTML...` で開く[変換画面](../tools/prepare-adventure.html)に選ぶ。保存した `.adventure` を [Assets/Resources/Adventures](../Assets/Resources/Adventures) に置くと、次のタイトル起動から選べる。画像は埋め込みのまま取り込み、章の目次・前後移動・伏せ書きが動く。
+
+ゲームブックでは `[事務所に入る](#事務所)` で同名見出しへ移動できる。[WritingPage の分岐デモ原稿](https://github.com/YuShimoji/WritingPage/blob/3245489957e96f406d89a71a47cf29f8b1ed8ff1/samples/gamebook-styled-demo.md)と同じく会話枠と地の文を混在できる。変換時にモデルも選ぶと `{variable:枚数}` が現在値になり、`[受け取る](#choice/take)` でその手の選択を実行する。次のノードIDと一致する章・見出しへ進み、一致しなければ今の原稿を更新する。
+
+タイトルの「リンクと変数の見本」では、本文中の「三枚受け取る」を押すと受取記録が0枚から3枚に変わり、「枚数をゼロに戻す」が選べる。
+
+実行するゲームは [Assets/Resources/AdventureModels](../Assets/Resources/AdventureModels) に SDK 対応の JSON を置く。同梱例は[固定SDKと同じ版の「藍布の耳」](https://github.com/YuShimoji/NarrativeGen/blob/43dc3076990aff855927c82436c680b5c1d58a66/models/examples/blue-selvedge.json)。「七人目の渡し賃」は WritingPage の記録版を同梱。元ゲームの `perceptionPolicies` は固定 SDK の読込対象外。
+
+## NarrativeGenのチャット試遊
 
 1. Unity 6000.4.9f1でこのプロジェクトを開く。
 2. `Tools > FoundPhone > Play NarrativeGen JSON...` で、NarrativeGenの [`models/examples/blue-selvedge.json`（藍布の耳）](https://github.com/YuShimoji/NarrativeGen/blob/main/models/examples/blue-selvedge.json) を選ぶ。
 3. [固定の選択経路・期待フレーム](https://github.com/YuShimoji/NarrativeGen/blob/main/packages/tests/NarrativeGen.Tests/ScreenFrames/blue-selvedge.json) の順に、Gameビューのチャットで結末まで進める。Studioと場所・話者・段落・話題と行き先・旅の手帳・結末を照合する。終了時はPlay Modeを止める。Play Mode開始シーン設定は元に戻る。
 
-Unity担当の次作業は手順3の実画面照合。WritingPageのReader用Markdownにも同じ期待フレームを使う。担当と完了条件は[3プロジェクトの申し送り](https://github.com/YuShimoji/NarrativeGen/blob/main/HANDOVER.md#unitychatnovelgamewritingpageとの接続)、表示項目はSP-SCREEN-001の「画面ごとの描き方」。配布Playerへの接続とFoundPhone本編のM1/M2はそれぞれ別工程。
+Editor のチャット試遊は 6 選択で結末まで進め、Studio の場所・話者・段落・話題・手帳3件・依頼完了と照合済み（`79a6882`）。タイトルから開く新しい聞き込み画面にも同じ選択経路を使う。[3プロジェクトの申し送り](https://github.com/YuShimoji/NarrativeGen/blob/main/HANDOVER.md#unitychatnovelgamewritingpageとの接続)。
 
 ## 取り込んだ能力
 
@@ -33,8 +43,9 @@ Unity担当の次作業は手順3の実画面照合。WritingPageのReader用Mar
 
 | 経路 | 現在の判断 | 残る確認 |
 |---|---|---|
-| Git | UnityChatNovelGameの `origin/main` に試遊の実装と手順を収録。`Packages/manifest.json` と `Packages/packages-lock.json` はフレームを含むNarrativeGen SDK `43dc307` で一致 | 作業開始時に `main` を fast-forward で同期 |
-| Unity / C# | Unity 6000.4.9f1でEditMode 90/90・PlayMode 11/11（2026-11-26、SDK `43dc307`）。画面フレームの対応はEditModeの`NarrativeGenChatScreenTests`、チャットへの到達はPlayModeの試遊で確認 | 画面フレーム版のチャットの実画面（人の目視は未）、配布PlayerとM1/M2全体 |
+| Git | 既存のチャット試遊は `main`、読書・ゲームブック・モデル連携は `adventure-reader`。両方とも NarrativeGen SDK `43dc307` | 作者による表示の受入と main への取り込み |
+| Unity / C# | `adventure-reader` を Unity 6000.4.9f1で EditMode 91/91、PlayMode 15/15。タイトルから日記・分岐・変数連携・FoundPhoneのチャットとセーブを確認。1200×800と390×844で実画面・場面フェードを確認 | 作者による再現度の受入、モバイル実機、FoundPhone の M1/M2 全体 |
+| Windows x64 | 通常のBuild Settingsから作成した `Adventure.exe` を起動。作品一覧から「リンクと変数の見本」を開き、本文クリックで0枚→3枚→0枚を確認 | 他端末での動作と公開配布 |
 | Writer Cockpit | main navigationは14/14、bridge candidateは18/18 | candidateのExport操作とApply / Play / Last Actionの人間受入 |
 | 基礎回帰 | スロット書込・削除をテスト専用フォルダに隔離。既存セーブ EditMode 8件、通常チャット PlayMode 4件が通過 | 対象外の基礎テストと章遷移の状態同値 |
 | Sites static package | fixture validator、両分岐、responsive / accessibility smokeを確認済み | hosted本文はOwner sign-in後review待ち |
@@ -45,7 +56,7 @@ Unity担当の次作業は手順3の実画面照合。WritingPageのReader用Mar
 - bridge candidateはreview-readyだがmain未統合。人間の作者UX受入とmain統合判断は別ゲートであり、このスライスでは代行しない。
 - External Script Editorが設定された人間環境で、Nodeとdiagnosticの実file / line jumpは未受入。
 - Writer CockpitのApply / Play / Last ActionとExport操作の人間受入は未完了。
-- 既存予定の全型スレッドの実機確認、章遷移、配布ビルドでの再生は残る。
+- FoundPhone の全型スレッド・章遷移の実機確認、全作品共通の途中再開は残る。
 - SitesはOwner-onlyのまま。hosted本文、network、両分岐、keyboard、320–430pxはOwner sign-in後の判定が必要。public/shared accessとcustom domainは未承認。
 - direct Unity WebはWeb Build Support、有効なpublic gameplay scene、TitleSceneからの公開導線が揃うまでblocked。
 

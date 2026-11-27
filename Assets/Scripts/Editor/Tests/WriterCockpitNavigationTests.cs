@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using System;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
 
@@ -7,6 +8,24 @@ namespace ProjectFoundPhone.Editor.Tests
 {
     public class WriterCockpitNavigationTests
     {
+        [Test]
+        public void ProjectSourcesIncludeNestedScriptsAndHonorExclusions()
+        {
+            string folder = Path.Combine(Path.GetTempPath(), "yarn-project-" + Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(Path.Combine(folder, "story", "chapter"));
+            try
+            {
+                string project = Path.Combine(folder, "story.yarnproject");
+                File.WriteAllText(project, "{\"projectFileVersion\":2,\"baseLanguage\":\"en\",\"sourceFiles\":[\"story/**/*.yarn\"],\"excludeFiles\":[\"**/draft.yarn\"]}");
+                File.WriteAllText(Path.Combine(folder, "story", "chapter", "main.yarn"), "");
+                File.WriteAllText(Path.Combine(folder, "story", "draft.yarn"), "");
+                var files = YarnAuthoringRegistry.GetSourcePaths(project);
+                Assert.That(files.Length, Is.EqualTo(1));
+                Assert.That(files[0], Does.EndWith("/story/chapter/main.yarn"));
+            }
+            finally { Directory.Delete(folder, true); }
+        }
+
         [Test]
         public void ParseNodeSourceLocations_CapturesNodeFileAndTitleLine()
         {

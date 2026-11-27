@@ -19,6 +19,13 @@ namespace ProjectFoundPhone.UI
         [SerializeField] private SaveLoadUI m_SaveLoadUI;
         [SerializeField] private GameObject m_OptionsPanel;
 
+        private void Start()
+        {
+            var reader = GetComponent<AdventureReader>();
+            if (reader == null) reader = gameObject.AddComponent<AdventureReader>();
+            reader.ShowLibrary(StartNewGame);
+        }
+
         /// <summary>
         /// ニューゲームを開始
         /// </summary>

@@ -1,0 +1,78 @@
+.adventure {
+    flex-grow: 1;
+    background-color: #1e1e1e;
+    color: #f2eee6;
+    -unity-font-definition: url("../Font/static/NotoSansJP-Regular.ttf");
+    white-space: normal;
+}
+.adventure ScrollView { flex-grow: 1; }
+.adventure .unity-scroll-view__content-container { align-items: center; }
+.paper { width: 100%; max-width: 788px; padding: 24px 34px 42px 34px; }
+.paper.serif { -unity-font-definition: url("../Font/static/NotoSerifJP-Regular.otf"); }
+.compact .paper { padding: 14px 16px 28px 16px; }
+.adventure Label { white-space: normal; overflow: visible; flex-shrink: 0; }
+.adventure .title { -unity-font-style: bold; margin: 6px 0 18px 0; }
+.adventure .heading { -unity-font-style: bold; margin: 12px 0 10px 0; }
+.adventure .label, .adventure .kicker { -unity-font-style: bold; margin: 0 0 8px 0; }
+.adventure .kicker, .adventure .caption { color: #cec7ba; }
+.adventure .text, .adventure .caption { margin: 0 0 12px 0; }
+.adventure .caption { -unity-font-style: italic; }
+.columns { flex-direction: row; align-items: flex-start; }
+.columns > VisualElement { flex-grow: 1; flex-basis: 0; min-width: 0; }
+.columns.multiple > .note, .columns.multiple > .topics { margin-left: 18px; }
+.compact .columns { flex-direction: column; align-items: stretch; }
+.compact .columns > VisualElement { flex-basis: auto; flex-grow: 0; }
+.compact .columns.multiple > .note, .compact .columns.multiple > .topics { margin-left: 0; }
+.diary, .inquiry, .intertitle, .scene { margin: 8px 0 16px 0; }
+.inquiry { border-width: 1px; border-color: #585653; padding: 12px; }
+.inquiry > .heading { border-bottom-width: 1px; border-bottom-color: #585653; padding-bottom: 10px; }
+.note, .disclosure { background-color: #2d2c2b; padding: 12px; }
+.diary { font-size: 16px; }
+.diary .diary-day { -unity-font-style: bold; margin-bottom: 12px; }
+.diary .label { -unity-font-definition: url("../Font/static/NotoSansJP-Regular.ttf"); font-size: 14px; margin-bottom: 6px; }
+.diary .note { padding: 12px 16px; }
+.diary .caption { font-size: 14px; margin-bottom: 9px; }
+.turn, .disclosure { border-left-width: 2px; border-left-color: #bfbab0; margin-bottom: 8px; }
+.turn { padding: 4px 12px; }
+.turn.player { border-left-width: 0; border-right-width: 2px; border-right-color: #bfbab0; -unity-text-align: upper-right; }
+.intertitle { border-top-width: 1px; border-bottom-width: 1px; border-color: #68645c; padding: 12px 6px; -unity-text-align: middle-center; }
+.illustration { width: 100%; flex-shrink: 0; margin-bottom: 8px; }
+.navigation { flex-direction: row; flex-wrap: wrap; margin: 0 0 12px 0; }
+.adventure Button {
+    -unity-font-definition: url("../Font/static/NotoSansJP-Regular.ttf");
+    color: #f2eee6; white-space: normal; height: auto; min-height: 38px;
+    -unity-text-align: middle-left; padding: 7px 12px; margin: 0 6px 7px 0;
+    background-color: #302f2d; border-width: 1px; border-color: #585653; border-radius: 2px;
+}
+.adventure Button:hover, .adventure Button:focus { background-color: #42403c; border-color: #ccc6b8; }
+.adventure Button.library-item, .adventure Button.action { min-height: 46px; }
+.adventure Button.return-link { position: absolute; top: 8px; right: 17px; }
+.adventure Button.link { background-color: transparent; color: #bcd8e8; border-width: 0; border-bottom-width: 1px; border-bottom-color: #777; align-self: flex-start; padding-left: 0; }
+.adventure Button.link.card, .adventure Button.link.button, .adventure Button.link.choice { align-self: stretch; border-width: 1px; border-radius: 5px; padding: 9px 13px; margin-bottom: 7px; }
+.adventure Button.link.emphasis { border-left-width: 3px; padding-left: 10px; }
+.dialog { flex-direction: row; align-items: flex-start; margin: 12px 0; padding: 10px 14px; background-color: rgba(128,128,128,0.08); border-radius: 8px; }
+.dialog-body { flex-grow: 1; min-width: 0; }
+.avatar { width: 48px; height: 48px; flex-shrink: 0; margin-right: 12px; overflow: hidden; border-radius: 24px; }
+.dialog.right { flex-direction: row-reverse; -unity-text-align: upper-right; }
+.dialog.center { flex-direction: column; align-items: center; -unity-text-align: upper-center; }
+.dialog.bubble { background-color: rgba(74,144,226,0.1); border-width: 1px; border-color: rgba(74,144,226,0.3); border-radius: 16px; }
+.dialog.bordered { background-color: transparent; border-width: 2px; border-color: #ccc; border-radius: 4px; }
+.dialog.transparent { background-color: transparent; padding: 5px 0; }
+.textbox { border-left-width: 3px; border-left-color: #ccc; padding: 10px 14px; margin: 12px 0; }
+.textbox.dialogue { border-left-color: #4a90e2; }
+.textbox.monologue, .textbox.tilted-monologue { -unity-font-style: italic; opacity: 0.9; }
+.rule { border-top-width: 1px; border-color: #777; margin: 18px 0; }
+.reveal { margin: 6px 0; }
+.light-page .note, .light-page .topics, .light-page .disclosure { background-color: rgba(125,125,125,0.12); }
+.light-page .caption, .light-page .kicker, .light-page .unity-foldout__text { color: #514e4a; }
+.light-page Button { color: #272727; background-color: #f0eeea; border-color: #b2ada5; }
+.light-page Button.link { background-color: transparent; }
+.light-page .unity-foldout__checkmark { -unity-background-image-tint-color: #555; }
+.adventure .unity-foldout__toggle { white-space: normal; margin: 0; min-height: 32px; }
+.adventure .unity-foldout__text { white-space: normal; flex-shrink: 1; color: #eee9de; }
+.adventure .unity-foldout__content { margin-left: 0; padding-top: 8px; }
+.adventure .unity-foldout__checkmark, .adventure .unity-toggle__checkmark { -unity-background-image-tint-color: #ded8cc; }
+.adventure .unity-scroller--vertical { width: 12px; }
+.adventure .unity-scroller--vertical .unity-base-slider__tracker { background-color: #262626; }
+.adventure .unity-scroller--vertical .unity-base-slider__dragger { background-color: #76746f; border-width: 0; min-width: 8px; }
+.adventure .unity-scroller__low-button, .adventure .unity-scroller__high-button { display: none; }

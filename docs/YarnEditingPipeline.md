@@ -33,7 +33,7 @@ Assets/Resources/Yarn/
 ```
 
 `Project.yarnproject` の `sourceFiles` が `active/` 配下のみを対象とする。
-新しい `.yarn` ファイルは `active/` に配置すればコンパイル対象になる。
+新しい `.yarn` は `active/` の下を作品・章ごとに分けて配置できる。Validator と SO 生成も Yarn Project の include / exclude を読み、Writer Cockpit はサブフォルダーを含む元ファイルの行を開く。
 旧モックや不使用ファイルは `archive/` に移動するだけで除外できる。
 
 ---

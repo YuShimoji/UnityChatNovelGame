@@ -15,8 +15,7 @@ public static class BuildSettingsHelper
         var requiredScenes = new System.Collections.Generic.List<string>
         {
             "Assets/Scenes/TitleScene.unity",
-            "Assets/Scenes/DebugChatScene.unity",
-            "Assets/Scenes/MVPScene.unity"
+            "Assets/Scenes/DebugChatScene.unity"
         };
 
         const string contentAuthoringScenePath = "Assets/Scenes/ContentAuthoring.unity";
@@ -40,6 +39,8 @@ public static class BuildSettingsHelper
 
         foreach (EditorBuildSettingsScene scene in scenes)
         {
+            if (scene.path == "Assets/Scenes/MVPScene.unity" && !System.IO.File.Exists(scene.path))
+                continue;
             if (!requiredScenes.Contains(scene.path))
             {
                 reorderedScenes.Add(scene);

@@ -32,6 +32,10 @@ namespace ProjectFoundPhone.Data
         [Tooltip("ミニ統計、ヒントテキスト")]
         public float tinyFontSize = 11f;
 
+        [Header("Adventure reader")]
+        [Tooltip("場面の切替時間（秒）。0 で原稿のスクロール演出も停止する。")]
+        [Range(0f, 1f)] public float readerTransitionSeconds = 0.2f;
+
         [Header("Responsive Scaling")]
         [Tooltip("レスポンシブスケーリングが効き始める Canvas 幅 (px)")]
         public float responsiveBreakpoint = 900f;

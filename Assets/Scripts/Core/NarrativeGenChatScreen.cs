@@ -103,12 +103,7 @@ namespace ProjectFoundPhone.Core
             {
                 foreach (var choice in group.Choices)
                 {
-                    string label = group.Role == ScreenFrame.RoleTravel ? $"→ {choice.Text}" : choice.Text;
-                    if (group.Role == ScreenFrame.RoleTopic && choice.Visited)
-                    {
-                        label += "（済）";
-                    }
-                    result.Add((choice.Id, label));
+                    result.Add((choice.Id, NarrativeGenAdventurePage.ChoiceLabel(group.Role, choice)));
                 }
             }
             return result;

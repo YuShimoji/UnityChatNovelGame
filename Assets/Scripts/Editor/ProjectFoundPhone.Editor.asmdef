@@ -3,6 +3,7 @@
     "rootNamespace": "ProjectFoundPhone.Editor",
     "references": [
         "ProjectFoundPhone",
+        "NarrativeGen",
         "ProjectFoundPhone.Tests",
         "ProjectFoundPhone.Utils",
         "Unity.TextMeshPro",

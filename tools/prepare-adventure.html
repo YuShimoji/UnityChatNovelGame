@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'">
+<title>WritingPage の原稿を Unity に取り込む</title>
+<style>
+  :root { color-scheme: light dark; font: 1rem/1.7 system-ui, sans-serif; }
+  main { max-width: 38rem; margin: 12vh auto; padding: 1.5rem; }
+  h1 { font-size: 1.45rem; } input, a { font: inherit; }
+</style>
+<main>
+  <h1>WritingPage の原稿を Unity に取り込む</h1>
+  <p>読者表示で「HTMLとして保存」したファイルを選んでください。変換した原稿を Unity プロジェクトの <code>Assets/Resources/Adventures</code> に保存すると、タイトルの作品一覧に追加されます。</p>
+  <input id="source" type="file" accept=".html,.htm" aria-label="WritingPage の HTML">
+  <p><label>連動する NarrativeGen モデル（任意）<br><input id="model" type="file" accept=".json"></label></p>
+  <p role="status" id="status"></p><a id="save" hidden>Unity 用の原稿を保存</a>
+</main>
+<script>
+'use strict';
+function block(kind, text, children) {
+  const result = { kind };
+  if (text) result.text = text;
+  if (children && children.length) result.children = children;
+  return result;
+}
+function words(el) {
+  return el?.textContent.trim() || '';
+}
+async function prepare(html) {
+  // A detached template keeps scripts and remote images inert.
+  const template = document.createElement('template');
+  template.innerHTML = html;
+  const article = template.content.querySelector('article#manuscript-export');
+  if (!article) throw new Error('WritingPage の読者表示で保存した HTML を選んでください。');
+  const title = words(article.querySelector(':scope > h1')) || '本文';
+  const images = [];
+  const imageIds = new Map();
+  const style = {};
+  const sheet = new CSSStyleSheet();
+  sheet.replaceSync(Array.from(template.content.querySelectorAll('style'), el => el.textContent).join('\n'));
+  const swatch = document.createElement('canvas').getContext('2d');
+  function color(value) {
+    if (!value || !CSS.supports('color', value)) return undefined;
+    swatch.fillStyle = value;
+    return swatch.fillStyle.startsWith('#') ? swatch.fillStyle : undefined;
+  }
+  for (const rule of sheet.cssRules) {
+    if (rule.selectorText === 'body') {
+      style.background = color(rule.style.backgroundColor);
+      style.foreground = color(rule.style.color);
+      style.sans = /sans-serif/i.test(rule.style.fontFamily);
+      if (/^\d+(\.\d+)?px$/.test(rule.style.maxWidth)) style.width = parseFloat(rule.style.maxWidth);
+    }
+    if (rule.selectorText === 'a') style.link = color(rule.style.color);
+  }
+  style.reducedMotion = /<html\b[^>]*\bdata-reduce-motion=["']true["']/i.test(html);
+  const slug = value => value.toLowerCase().trim().replace(/[\s_]+/g, '-').replace(/[^\w\u3000-\u9fff\uf900-\ufaff-]/g, '');
+  async function picture(el) {
+    const src = el.getAttribute('src') || '';
+    if (!/^data:image\/(png|jpe?g|webp|gif);base64,/i.test(src)) {
+      throw new Error('埋め込み画像を読み込めません。' + (el.alt || ''));
+    }
+    if (!imageIds.has(src)) {
+      let packed = src;
+      if (!/^data:image\/(png|jpe?g);/i.test(src)) {
+        const img = new Image();
+        img.src = src;
+        await img.decode();
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const context = canvas.getContext('2d');
+        context.drawImage(img, 0, 0);
+        packed = canvas.toDataURL('image/png');
+        // Large opaque illustrations remain at source resolution. Keep alpha and small diagrams lossless.
+        if (packed.length > 1400000) {
+          const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+          let opaque = true;
+          for (let i = 3; i < pixels.length && opaque; i += 4) opaque = pixels[i] === 255;
+          if (opaque) {
+            const jpeg = canvas.toDataURL('image/jpeg', 0.95);
+            if (jpeg.length < packed.length) packed = jpeg;
+          }
+        }
+      }
+      imageIds.set(src, images.length);
+      images.push(packed.slice(packed.indexOf(',') + 1));
+    }
+    return { kind: 'image', text: el.alt || '', image: imageIds.get(src) };
+  }
+  async function children(el, omit) {
+    const result = [];
+    for (const child of el.children) {
+      if (child !== omit) result.push(...await read(child));
+    }
+    return result;
+  }
+  async function group(el, kind, titleSelector) {
+    const heading = titleSelector && el.querySelector(':scope > ' + titleSelector);
+    return [block(kind, words(heading), await children(el, heading))];
+  }
+  function paragraph(el, prefix = '') {
+    const items = [];
+    function visit(node, role = '') {
+      if (node.nodeType === Node.TEXT_NODE || node.tagName === 'BR') {
+        const value = node.tagName === 'BR' ? '\n' : node.textContent;
+        items.push({kind:'text', text:value, role}); return;
+      }
+      if (node.tagName === 'A') {
+        let href = node.getAttribute('href') || '';
+        const chapter = node.getAttribute('data-chapter-id');
+        if (chapter && (!href || href === '#')) href = 'chapter://' + chapter;
+        if (/^(https?:\/\/|chapter:\/\/|#)/i.test(href)) {
+          const modifier = href.match(/#style=(card|button|choice|emphasis)$/i);
+          if (modifier) href = href.slice(0, -modifier[0].length);
+          const css = Array.from(node.classList).find(c => c.startsWith('chapter-link--'));
+          items.push({kind:'link', text:words(node), target:href, role:modifier?.[1] || css?.slice(14) || role}); return;
+        }
+      }
+      if (node.tagName === 'STRONG' || node.tagName === 'B') role = 'bold';
+      if (node.tagName === 'EM' || node.tagName === 'I') role = 'italic';
+      for (const child of node.childNodes) visit(child, role);
+    }
+    if (prefix) items.push(block('text',prefix));
+    visit(el);
+    if (!items.some(i => i.target || i.role)) return [block('text', items.map(i => i.text).join('').trim())];
+    const visible = items.filter(i => i.text.trim());
+    if (visible.length === 1 && visible[0].kind === 'link') return visible;
+    return [block('inline', '', items)];
+  }
+  async function read(el) {
+    const result = await readElement(el);
+    const anchor = el.id || (/^H[1-6]$/.test(el.tagName) && slug(words(el)));
+    if (result.length && anchor) result[0].id = anchor;
+    return result;
+  }
+  async function readElement(el) {
+    const cls = el.classList;
+    const tag = el.tagName;
+    if (['STYLE','SCRIPT','NAV','TEMPLATE','IFRAME'].includes(tag) || el.hidden) return [];
+    if (cls.contains('zw-dialog') || cls.contains('zw-textbox') || cls.contains('zw-scroll')) {
+      const section = (await group(el, cls.contains('zw-dialog') ? 'dialog' : cls.contains('zw-textbox') ? 'textbox' : 'reveal'))[0];
+      section.role = Array.from(cls).filter(c => /^(zw-dialog|zw-textbox|zw-scroll)--/.test(c)).map(c => c.split('--')[1]).join(' ');
+      return [section];
+    }
+    if (cls.contains('zw-dialog__speaker')) return [block('label', words(el))];
+    if (cls.contains('zw-dialog__body') || cls.contains('zw-dialog__icon')) return group(el, cls.contains('zw-dialog__body') ? 'dialog-body' : 'avatar');
+    if (cls.contains('zw-dialog__content') || cls.contains('zw-scroll__content')) return el.querySelector('p') ? children(el) : paragraph(el);
+    if (tag === 'HR') return [block('rule')];
+    if (cls.contains('play-diary-scene')) return group(el, 'diary', 'header');
+    if (cls.contains('zw-inquiry')) return group(el, 'inquiry', 'header');
+    if (cls.contains('zw-intertitle')) return group(el, 'intertitle', 'header');
+    if (tag === 'DETAILS') return group(el, 'disclosure', 'summary');
+    if (cls.contains('play-diary-dialogue')) return group(el, 'dialogue');
+    if (cls.contains('play-diary-note')) return group(el, 'note');
+    if (cls.contains('zw-inquiry-side')) return group(el, 'topics');
+    if (cls.contains('play-diary-turn')) {
+      const turn = (await group(el, 'turn'))[0];
+      turn.role = el.dataset.speaker || 'unknown';
+      return [turn];
+    }
+    if (cls.contains('play-diary-caption')) {
+      return [block('label', Array.from(el.children, words).filter(Boolean).join('　') || words(el))];
+    }
+    if (tag === 'BLOCKQUOTE') return group(el, 'quote');
+    if (tag === 'IMG') return [await picture(el)];
+    if (/^H[1-6]$/.test(tag)) return [block('heading', words(el))];
+    if (tag === 'P' && el.querySelector('img')) {
+      const result = [];
+      for (const child of el.childNodes) {
+        if (child.nodeType === Node.TEXT_NODE && child.textContent.trim()) result.push(block('text', child.textContent.trim()));
+        else if (child.tagName === 'IMG') result.push(await picture(child));
+        else if (child.tagName && child.tagName !== 'BR') result.push(...await read(child));
+      }
+      return result;
+    }
+    if (tag === 'EM' || tag === 'FIGCAPTION' || (tag === 'P' && el.childNodes.length === 1 && el.firstElementChild?.tagName === 'EM')) return [block('caption', words(el))];
+    if ((tag === 'P' && el.childNodes.length === 1 && el.firstElementChild?.tagName === 'STRONG') || tag === 'STRONG') return [block('label', words(el))];
+    if (tag === 'LI') {
+      const list = el.parentElement;
+      const prefix = list.tagName === 'OL' ? (Array.from(list.children).indexOf(el) + Number(list.getAttribute('start') || 1)) + '. ' : '・';
+      return paragraph(el, prefix);
+    }
+    if (tag === 'P' || tag === 'A') return paragraph(el);
+    return el.children.length ? children(el) : (words(el) ? [block('text', words(el))] : []);
+  }
+  const pages = [];
+  const entries = Array.from(article.querySelectorAll(':scope > .play-diary-entry'));
+  for (const entry of entries.length ? entries : [article]) {
+    const heading = entry.querySelector(':scope > h1, :scope > h2');
+    const blocks = await children(entry, heading);
+    if (entry === article) {
+      while (blocks[0]?.kind === 'heading' && (blocks[0].text === title || blocks[0].text === '本文')) blocks.shift();
+    }
+    pages.push({ id: entry.id, title: words(heading) || title, blocks });
+  }
+  return { format: 'adventure-reader-v1', title, pages, images, style };
+}
+let lastUrl;
+const source = document.querySelector('#source');
+const model = document.querySelector('#model');
+const save = document.querySelector('#save');
+const statusLine = document.querySelector('#status');
+async function update() {
+  const file = source.files[0];
+  if (lastUrl) URL.revokeObjectURL(lastUrl);
+  save.hidden = true;
+  if (!file) { statusLine.textContent = ''; return; }
+  source.disabled = model.disabled = true;
+  statusLine.textContent = '変換中…';
+  try {
+    const book = await prepare(await file.text());
+    if (model.files.length) book.model = JSON.parse(await model.files[0].text());
+    lastUrl = URL.createObjectURL(new Blob([JSON.stringify(book)], { type: 'application/json' }));
+    save.href = lastUrl;
+    save.download = file.name.replace(/\.html?$/i, '') + '.adventure';
+    save.hidden = false;
+    statusLine.textContent = book.title + '　' + book.pages.length + '章・画像' + book.images.length + '枚';
+  } catch (error) { statusLine.textContent = error.message; }
+  finally { source.disabled = model.disabled = false; }
+}
+source.addEventListener('change', update);
+model.addEventListener('change', update);
+</script>
+</html>

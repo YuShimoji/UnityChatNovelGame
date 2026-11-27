@@ -17,6 +17,18 @@ UI バグ (振る舞いの問題) は `docs/UI_ISSUES.md` に記録し、3-5件�
 
 ---
 
+## アドベンチャーの読書・聞き込み画面
+
+タイトルから作品を選ぶ。WritingPage の読者表示で保存した HTML の章順、発言者、本文、図版とキャプションを使う。日記では発言と筆者の記録、聞き込みでは導入と話題を横に並べ、幅が足りないときは同じ順で縦に積む。場面字幕は中央、伏せ書きと旅の手帳は見出しで開閉する。章を往復しても開いた伏せ書きはそのまま読める。本文は原稿の指定に応じて同梱の Noto Serif JP または Noto Sans JP で表示する。
+
+NarrativeGen のゲームでは同じ読書画面にその手の `ScreenFrame` を描き、選択した ID を SDK に返す。手帳の開閉は手を進めず、結末では選択を閉じる。作品を開き直すと最初から読む。FoundPhone を選ぶと従来の Yarn・チャット・セーブを使う。
+
+読者HTMLの地色・文字色・会話枠・地の文・本文中のリンク位置を引き継ぐ。見出しや章へのリンクはその位置へ移動し、Webリンクはブラウザーで開く。ゲームブックの分岐と聞き込みの場面変更には短いフェードを使い、スクロール演出は原稿が指定した要素だけを表示位置で再生する。演出中も読めて選べる。原稿の動きを減らす設定を優先する。
+
+変換時に NarrativeGen の JSON を添えると、本文の `{variable:名前}` などを現在のセッションで展開する。原稿の `#choice/選択ID` リンクは SDK が許す選択だけを実行し、同名の見出しがあれば次の場面へ移る。本文の話題リンクと画面の選択肢は同じ操作を使う。
+
+本文用の[Noto Serif JP Regular](https://github.com/notofonts/noto-cjk/blob/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Serif/SubsetOTF/JP/NotoSerifJP-Regular.otf)は日本語版の配布ファイルをそのまま使用する。[SIL Open Font License](../Assets/StreamingAssets/NotoSerifJP-LICENSE.txt)をPlayerに同梱する。
+
 ## 1. メッセージ表示シーケンス
 
 Yarn の1行が画面に表示されるまでの全ステップ。

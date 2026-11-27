@@ -19,7 +19,6 @@ namespace ProjectFoundPhone.Editor
     /// </summary>
     public class YarnContentValidator : EditorWindow
     {
-        private const string ActiveYarnDir = "Assets/Resources/Yarn/active";
 
         // Yarn built-in commands
         private static readonly HashSet<string> BuiltInCommands = new HashSet<string>
@@ -178,7 +177,7 @@ namespace ProjectFoundPhone.Editor
             EditorGUILayout.Space(4);
             EditorGUILayout.LabelField("Yarn Content Validator", EditorStyles.boldLabel);
             EditorGUILayout.HelpBox(
-                $"active/ 内の .yarn ファイルを静的解析します。\n対象: {ActiveYarnDir}",
+                $"コンパイル対象の .yarn ファイルを静的解析します。\n対象: {YarnAuthoringRegistry.ProjectPath}",
                 MessageType.Info);
 
             EditorGUILayout.Space(4);
@@ -250,20 +249,23 @@ namespace ProjectFoundPhone.Editor
                 }
             }
 
-            string fullDir = Path.GetFullPath(ActiveYarnDir);
-            if (!Directory.Exists(fullDir))
+            string[] yarnFiles;
+            try
             {
-                AddResult(ValidationLevel.Error, "", 0, $"Directory not found: {ActiveYarnDir}");
+                yarnFiles = YarnAuthoringRegistry.GetSourcePaths();
+            }
+            catch (Exception error)
+            {
+                AddResult(ValidationLevel.Error, YarnAuthoringRegistry.ProjectPath, 0, error.Message);
                 errorCount = errCount;
                 warningCount = warnCount;
                 infoCount = infoC;
                 return results;
             }
 
-            string[] yarnFiles = Directory.GetFiles(fullDir, "*.yarn");
             if (yarnFiles.Length == 0)
             {
-                AddResult(ValidationLevel.Warning, "", 0, "No .yarn files found in active directory");
+                AddResult(ValidationLevel.Warning, YarnAuthoringRegistry.ProjectPath, 0, "No .yarn files matched the project.");
                 errorCount = errCount;
                 warningCount = warnCount;
                 infoCount = infoC;
@@ -281,10 +283,9 @@ namespace ProjectFoundPhone.Editor
             HashSet<string> registeredCommands = YarnAuthoringRegistry.GetRegisteredCommandNames();
             HashSet<string> knownCharacters = YarnAuthoringRegistry.GetKnownCharacterIds();
 
-            foreach (string filePath in yarnFiles)
+            foreach (string relativePath in yarnFiles)
             {
-                string relativePath = $"{ActiveYarnDir}/{Path.GetFileName(filePath)}";
-                string[] lines = File.ReadAllLines(filePath);
+                string[] lines = File.ReadAllLines(relativePath);
 
                 for (int i = 0; i < lines.Length; i++)
                 {

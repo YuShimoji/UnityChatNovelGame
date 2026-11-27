@@ -15,6 +15,17 @@ namespace ProjectFoundPhone.Editor
     /// </summary>
     public static class YarnAuthoringRegistry
     {
+        public const string ProjectPath = "Assets/Resources/Yarn/Project.yarnproject";
+
+        // Resolve the same include/exclude patterns that Yarn Spinner compiles.
+        public static string[] GetSourcePaths(string projectPath = ProjectPath)
+        {
+            var project = Yarn.Compiler.Project.LoadFromFile(Path.GetFullPath(projectPath));
+            string root = Path.GetDirectoryName(UnityEngine.Application.dataPath);
+            return project.SourceFiles.Select(file => Path.GetRelativePath(root, file).Replace('\\', '/'))
+                .OrderBy(path => path, StringComparer.Ordinal).ToArray();
+        }
+
         private const string RuntimeScriptsRoot = "Assets/Scripts";
         private const string CharacterAssetsRoot = "Assets/Resources/Characters";
 

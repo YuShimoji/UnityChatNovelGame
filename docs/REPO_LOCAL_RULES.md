@@ -31,7 +31,7 @@ UnityChatNovelGame の通常再開で読む短い front-door。ここには毎�
 
 ## Development Boundary
 
-- The project is a Unity chat / visual novel game, but AI work should primarily improve engine, tool, pipeline, and verification capacity.
+- The project is a Unity adventure engine. FoundPhone is its Yarn/chat game. Other works can use the manuscript reader or a NarrativeGen session. AI work primarily improves the engine, tools, pipeline, and verification.
 - Yarn story writing, character voice, and creative judgment belong to the user. Assistant work may scaffold, validate, or improve the workflow, but should not silently become the writer.
 - Content changes are valid when they are the smallest practical probe for an engine/tool capability. Content volume alone is not progress.
 - Values such as font, color, timing, and layout tuning are Inspector work unless a reusable system capability is missing.

@@ -15,7 +15,6 @@ namespace ProjectFoundPhone.Editor
     /// </summary>
     public class YarnSOGenerator : EditorWindow
     {
-        private const string ActiveYarnDir = "Assets/Resources/Yarn/active";
         private const string TopicsDir = "Assets/Resources/Topics";
         private const string CharactersDir = "Assets/Resources/Characters";
         private const string ChannelsDir = "Assets/Resources/Channels";
@@ -399,25 +398,17 @@ namespace ProjectFoundPhone.Editor
 
         private static ScanResult ScanActiveYarnFiles()
         {
-            string fullDir = Path.GetFullPath(ActiveYarnDir);
-            if (!Directory.Exists(fullDir))
-            {
-                throw new DirectoryNotFoundException($"YarnSOGenerator: Directory not found: {ActiveYarnDir}");
-            }
-
             var topicRefs = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
             var speakerRefs = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
             var channelBuilders = new Dictionary<int, ChannelSpecBuilder>();
             var nodeNames = new HashSet<string>(StringComparer.Ordinal);
             var nodeLocations = new List<YarnNodeSourceLocation>();
 
-            string[] yarnFiles = Directory.GetFiles(fullDir, "*.yarn");
-            foreach (string filePath in yarnFiles)
+            string[] yarnFiles = YarnAuthoringRegistry.GetSourcePaths();
+            foreach (string assetPath in yarnFiles)
             {
-                string fileName = Path.GetFileName(filePath);
-                string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
-                string[] lines = File.ReadAllLines(filePath);
-                string assetPath = $"{ActiveYarnDir}/{fileName}";
+                string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(assetPath);
+                string[] lines = File.ReadAllLines(assetPath);
                 nodeLocations.AddRange(ParseNodeSourceLocations(assetPath, lines));
 
                 ChannelFileMatch channelFileMatch = ParseChannelFileName(fileNameWithoutExtension);
@@ -429,13 +420,13 @@ namespace ProjectFoundPhone.Editor
                     Match unlockMatch = UnlockTopicRegex.Match(trimmed);
                     if (unlockMatch.Success)
                     {
-                        AddReference(topicRefs, unlockMatch.Groups[1].Value, fileName);
+                        AddReference(topicRefs, unlockMatch.Groups[1].Value, assetPath);
                     }
 
                     Match discoverMatch = DiscoverFragmentRegex.Match(trimmed);
                     if (discoverMatch.Success)
                     {
-                        AddReference(topicRefs, discoverMatch.Groups[1].Value, fileName);
+                        AddReference(topicRefs, discoverMatch.Groups[1].Value, assetPath);
                     }
 
                     Match speakerMatch = SpeakerRegex.Match(trimmed);
@@ -444,7 +435,7 @@ namespace ProjectFoundPhone.Editor
                         string speakerId = speakerMatch.Groups[1].Value;
                         if (!IgnoredSpeakers.Contains(speakerId))
                         {
-                            AddReference(speakerRefs, speakerId, fileName);
+                            AddReference(speakerRefs, speakerId, assetPath);
                         }
                     }
 
@@ -480,7 +471,7 @@ namespace ProjectFoundPhone.Editor
                         channelBuilders.Add(chapterNumber, builder);
                     }
 
-                    builder.RegisterNode(fileName, nodeName, dayNumber, suffix);
+                    builder.RegisterNode(assetPath, nodeName, dayNumber, suffix);
 
                     if (channelFileMatch.MatchesChapter(chapterNumber))
                     {

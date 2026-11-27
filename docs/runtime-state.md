@@ -1,6 +1,6 @@
 # Runtime State
 
-最終更新: 2026-11-26
+最終更新: 2026-11-27
 
 このファイルは共有可能な環境・検証条件だけを保持する。現在の作業判断は `docs/HANDOFF.md`、履歴はGit、監修判断は`docs/SUPERVISOR_REPORT.md`を参照する。
 
@@ -13,8 +13,9 @@
 | Yarn Spinner | 3.1.3 |
 | 改修前の基準 | `main@4c09dcd` |
 | NarrativeGen Unity SDK | `com.yushimoji.narrativegen@43dc307`（Git revision固定。画面フレーム `ScreenFrameBuilder` を含む） |
-| Active authoring surface | `Tools > FoundPhone > Writer Cockpit` |
-| Active runtime scene | `ContentAuthoring` / `DebugChatScene` |
+| 制作入口 | WritingPage の読者HTMLは `Tools > Adventure > Prepare WritingPage HTML...`、Yarn は `Tools > FoundPhone > Writer Cockpit` |
+| 実行シーン | `TitleScene` に作品一覧・読書・聞き込み、`ContentAuthoring` / `DebugChatScene` に FoundPhone 本編 |
+| Windows x64 | 標準の3シーンでビルド成功（エラー0）。960×720のWindows Playerで本文リンクをクリックし、受取記録の0→3→0を確認 |
 | Bridge candidate | `origin/codex/sites-authoring-bridge-v1@e059e4b`、main未統合 |
 | Sites static input | `sites/foundphone-demo/` |
 | Sites access | Version 1 deployed、Owner-only / custom user 1 / group 0 |
@@ -38,9 +39,11 @@
   - local runtimeで両分岐、restart、keyboard、focus、ARIA、320–430px、禁止機能監査をpass
   - Owner sign-in後のhosted本文reviewは未実施
 
-## 保存・分岐・NarrativeGen試遊の検証
+## 読書・ゲームブック・セーブの検証
 
-- 2026-11-26、SDK `43dc307`へ更新し、試遊を画面フレームの描画へ置き換えた。Unity 6000.4.9f1のbatchでEditMode 90/90（新規`NarrativeGenChatScreenTests` 2件を含む）、PlayMode 11/11（試遊は画面フレームの全行がチャット履歴に出ることを照合）。NarrativeGen側でC#とTSのフレーム一致（4経路の全手順）を.NET 44/44で確認。試験でTMPの動的フォント資産に字形が足された差分は戻した。Unity実画面の目視は未実施。
+- Unity 6000.4.9f1、`adventure-reader`。EditMode 91/91、PlayMode 15/15。日記・聞き込み4作14章6図版、ゲームブックの見出しリンクと復帰、日本語の変数表示と SDK 選択、固定経路6手の「藍布の耳」、従来のYarn・セーブを確認。1200×800 と 390×844 の実画面で段組・縦積みと場面アニメーションを確認。
+
+- SDK `43dc307` のチャット試遊は、フレームの各行をチャット履歴と照合。2026-11-27に「藍布の耳」の6選択をEditor実画面でも確認（`79a6882`）。NarrativeGen側ではC#とTSの4経路のフレームが一致（.NET 44/44）。
 - 2026-11-26、SDKの.NET試験38/38。Studioの現行3作の各1経路が終端に到達し、「藍布の耳」の属性条件と「潮待ちの石段」の時刻条件を通過。Unity PlayModeは7/7。「六目の分銅」の話者名と本文を照合し、`look_baker` → `tell_baker_clerk` → `look_clerk` → `verify_baker` で結末に到達。試遊はセーブファイルを作らず、同じ実行で既存6件も通過。
 
 - 2026-11-25、Unity 6000.4.9f1でセーブ EditMode 8/8、既存チャットとセーブ PlayMode 4/4。セーブファイルの新規作成・上書き・読込、タイトルから通常チャットに入り保存と再読込を確認。
@@ -57,7 +60,7 @@
 
 ## テスト安全条件
 
-- 基礎テスト定義はEditMode 73 / PlayMode 10。targeted Editorはmain 14、bridge candidate 18であり、assembly / SHA別に記録する。
+- 基礎テストは実行した版ごとに記録する。Writer Cockpit の bridge candidate `e059e4b` の対象試験は18件。
 - 保存操作を含むEditMode / PlayModeはテストごとに一意の一時フォルダを使う。通常の `Application.persistentDataPath` と分離する。
 - External Script Editorのfile / line jump、Writer CockpitのApply / Play / Last Action、bridge Exportの操作感はinteractive人間環境レビュー待ち。
 - direct Unity WebはWeb Build Support、有効なpublic gameplay scene、TitleSceneからのnavigationが揃うまでblocked。
